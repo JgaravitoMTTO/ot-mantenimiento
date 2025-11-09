@@ -1,0 +1,88 @@
+<!doctype html><html lang='es'><head><meta charset='utf-8'/><meta name='viewport' content='width=device-width, initial-scale=1'/><title>OTs de PEDRO QUIMBAYA TORRES</title><style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0;background:#f6f7fb;color:#0f172a;}
+header{position:sticky;top:0;background:#0ea5e9;color:#fff;padding:12px 16px;box-shadow:0 2px 6px rgba(0,0,0,.15);}
+h1{margin:0;font-size:18px;}
+.filters{display:flex;gap:10px;padding:10px 12px;align-items:center;background:#e2e8f0;}
+.filters label{font-size:13px;color:#334155;}
+.filters select{padding:6px 8px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;}
+nav.chips{display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px;background:#e2e8f0;border-top:1px solid #cbd5e1;}
+.chip{padding:6px 10px;border-radius:999px;background:#fff;border:1px solid #cbd5e1;text-decoration:none;color:#0f172a;font-size:13px;}
+section{padding:10px;}
+h2{font-size:14px;margin:10px 6px;color:#334155;}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;margin:8px 6px;padding:10px 12px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.card-hd{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.badge{font-size:11px;padding:3px 6px;border-radius:6px;border:1px solid #cbd5e1;background:#f8fafc;}
+.card h3{font-size:15px;margin:0;}
+.nro{display:inline-block;padding:4px 8px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;}
+.due-today{background:#ecfdf5;border-color:#22c55e;}
+.due-thisweek{background:#fff7ed;border-color:#fb923c;}
+.due-previous{background:#fef2f2;border-color:#ef4444;}
+.card-bd p{margin:4px 0;font-size:13px;line-height:1.25;}
+.empty{color:#64748b;font-size:13px;margin:8px;}
+.list{list-style:none;margin:0;padding:12px;}
+.list li{margin:8px 0;}
+.link{display:block;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;text-decoration:none;color:#0f172a;}
+.row-hoy{display:grid;grid-template-columns:120px 1fr 1fr;gap:8px;align-items:center;padding:6px 8px;border-bottom:1px dashed #cbd5e1;}
+.pill{display:inline-block;padding:4px 8px;background:#e2e8f0;border-radius:999px;}
+.OTAPR{background:#ecfeff;border-color:#06b6d4;}
+.OTPL{background:#fefce8;border-color:#eab308;}
+.OTPR{background:#fef2f2;border-color:#ef4444;}
+.OTRPR{background:#f1f5f9;border-color:#94a3b8;}
+.OTE{background:#e0f2fe;border-color:#3b82f6;}
+.OTD{background:#f1fdf4;border-color:#22c55e;}
+.OTCT{background:#ede9fe;border-color:#8b5cf6;}
+</style><script>function filtrar(){var fy=document.getElementById('fYear').value||'';var fw=document.getElementById('fWeek').value||'';document.querySelectorAll('.card').forEach(function(c){ var y=c.getAttribute('data-year'); var w=c.getAttribute('data-week'); var okY = !fy || (y==fy); var okW = !fw || (w==fw); c.style.display=(okY&&okW)?'block':'none';});}</script></head><body>
+<header><h1>OTs de PEDRO QUIMBAYA TORRES</h1></header>
+<section><h2>Indicadores de PEDRO QUIMBAYA TORRES</h2>
+<canvas id='chartIndicador' width='360' height='120' style='display:block;'></canvas></section>
+<nav class='chips'>
+<a href='#OTAPR' class='chip'>OTAPR</a>
+<a href='#OTPL' class='chip'>OTPL</a>
+<a href='#OTPR' class='chip'>OTPR</a>
+<a href='#OTRPR' class='chip'>OTRPR</a>
+<a href='#OTE' class='chip'>OTE</a>
+<a href='#OTD' class='chip'>OTD</a>
+<a href='#OTCT' class='chip'>OTCT</a>
+</nav>
+<section id='OTAPR'>
+<h2>OTAPR</h2>
+<p class='empty'>Sin OTs en este estado.</p>
+</section>
+<section id='OTPL'>
+<h2>OTPL</h2>
+<p class='empty'>Sin OTs en este estado.</p>
+</section>
+<section id='OTPR'>
+<h2>OTPR</h2>
+<p class='empty'>Sin OTs en este estado.</p>
+</section>
+<section id='OTRPR'>
+<h2>OTRPR</h2>
+<p class='empty'>Sin OTs en este estado.</p>
+</section>
+<section id='OTE'>
+<h2>OTE</h2>
+<p class='empty'>Sin OTs en este estado.</p>
+</section>
+<section id='OTD'>
+<h2>OTD</h2>
+<p class='empty'>Sin OTs en este estado.</p>
+</section>
+<section id='OTCT'>
+<h2>OTCT</h2>
+<p class='empty'>Sin OTs en este estado.</p>
+</section>
+<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+<script>
+if(!window.__chartTecRendered){
+  window.__chartTecRendered=true;
+  new Chart(document.getElementById('chartIndicador'),{
+    type:'bar',
+    data:{labels:['Asignadas','En Proceso (OTD)','Cerradas (OTCT)'],
+          datasets:[{label:'OTs',data:[0,0,0],
+          backgroundColor:['#0ea5e9','#fb923c','#22c55e'],borderWidth:0}]},
+    options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false}},
+             scales:{y:{beginAtZero:true,precision:0}}}
+  });
+}
+</script>
+<footer><p>Generado: 09/11/2025 09:12</p></footer></body></html>

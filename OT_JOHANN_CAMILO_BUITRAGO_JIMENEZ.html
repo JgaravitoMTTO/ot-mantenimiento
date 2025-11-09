@@ -1,0 +1,131 @@
+<!doctype html><html lang='es'><head><meta charset='utf-8'/><meta name='viewport' content='width=device-width, initial-scale=1'/><title>OTs de JOHANN CAMILO BUITRAGO JIMENEZ</title><style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0;background:#f6f7fb;color:#0f172a;}
+header{position:sticky;top:0;background:#0ea5e9;color:#fff;padding:12px 16px;box-shadow:0 2px 6px rgba(0,0,0,.15);}
+h1{margin:0;font-size:18px;}
+.filters{display:flex;gap:10px;padding:10px 12px;align-items:center;background:#e2e8f0;}
+.filters label{font-size:13px;color:#334155;}
+.filters select{padding:6px 8px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;}
+nav.chips{display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px;background:#e2e8f0;border-top:1px solid #cbd5e1;}
+.chip{padding:6px 10px;border-radius:999px;background:#fff;border:1px solid #cbd5e1;text-decoration:none;color:#0f172a;font-size:13px;}
+section{padding:10px;}
+h2{font-size:14px;margin:10px 6px;color:#334155;}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;margin:8px 6px;padding:10px 12px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.card-hd{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.badge{font-size:11px;padding:3px 6px;border-radius:6px;border:1px solid #cbd5e1;background:#f8fafc;}
+.card h3{font-size:15px;margin:0;}
+.nro{display:inline-block;padding:4px 8px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;}
+.due-today{background:#ecfdf5;border-color:#22c55e;}
+.due-thisweek{background:#fff7ed;border-color:#fb923c;}
+.due-previous{background:#fef2f2;border-color:#ef4444;}
+.card-bd p{margin:4px 0;font-size:13px;line-height:1.25;}
+.empty{color:#64748b;font-size:13px;margin:8px;}
+.list{list-style:none;margin:0;padding:12px;}
+.list li{margin:8px 0;}
+.link{display:block;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;text-decoration:none;color:#0f172a;}
+.row-hoy{display:grid;grid-template-columns:120px 1fr 1fr;gap:8px;align-items:center;padding:6px 8px;border-bottom:1px dashed #cbd5e1;}
+.pill{display:inline-block;padding:4px 8px;background:#e2e8f0;border-radius:999px;}
+.OTAPR{background:#ecfeff;border-color:#06b6d4;}
+.OTPL{background:#fefce8;border-color:#eab308;}
+.OTPR{background:#fef2f2;border-color:#ef4444;}
+.OTRPR{background:#f1f5f9;border-color:#94a3b8;}
+.OTE{background:#e0f2fe;border-color:#3b82f6;}
+.OTD{background:#f1fdf4;border-color:#22c55e;}
+.OTCT{background:#ede9fe;border-color:#8b5cf6;}
+</style><script>function filtrar(){var fy=document.getElementById('fYear').value||'';var fw=document.getElementById('fWeek').value||'';document.querySelectorAll('.card').forEach(function(c){ var y=c.getAttribute('data-year'); var w=c.getAttribute('data-week'); var okY = !fy || (y==fy); var okW = !fw || (w==fw); c.style.display=(okY&&okW)?'block':'none';});}</script></head><body>
+<header><h1>OTs de JOHANN CAMILO BUITRAGO JIMENEZ</h1></header>
+<section><h2>Indicadores de JOHANN CAMILO BUITRAGO JIMENEZ</h2>
+<canvas id='chartIndicador' width='360' height='120' style='display:block;'></canvas></section>
+<nav class='chips'>
+<a href='#OTAPR' class='chip'>OTAPR</a>
+<a href='#OTPL' class='chip'>OTPL</a>
+<a href='#OTPR' class='chip'>OTPR</a>
+<a href='#OTRPR' class='chip'>OTRPR</a>
+<a href='#OTE' class='chip'>OTE</a>
+<a href='#OTD' class='chip'>OTD</a>
+<a href='#OTCT' class='chip'>OTCT</a>
+</nav>
+<section id='OTAPR'>
+<h2>OTAPR</h2>
+<p class='empty'>Sin OTs en este estado.</p>
+</section>
+<section id='OTPL'>
+<h2>OTPL</h2>
+<p class='empty'>Sin OTs en este estado.</p>
+</section>
+<section id='OTPR'>
+<h2>OTPR</h2>
+<article class='card' data-year='2025' data-week='44'><div class='card-hd'><span class='badge OTPR'>OTPR</span><h3><a class='nro due-previous' href='https://docs.google.com/forms/d/e/1FAIpQLSf3e7yM0X_Z46D0lK0ybjCpLhG2rx6tzybFq76gW10Y4gq-IQ/viewform?usp=pp_url&amp;entry.818626418=484'>OT_484</a></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E4</p><p><strong>Prog.:</strong> 1/11/2025 &nbsp; <strong>Real:</strong> </p></div></article>
+<article class='card' data-year='2025' data-week='44'><div class='card-hd'><span class='badge OTPR'>OTPR</span><h3><a class='nro due-previous' href='https://docs.google.com/forms/d/e/1FAIpQLSf3e7yM0X_Z46D0lK0ybjCpLhG2rx6tzybFq76gW10Y4gq-IQ/viewform?usp=pp_url&amp;entry.818626418=485'>OT_485</a></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E5</p><p><strong>Prog.:</strong> 1/11/2025 &nbsp; <strong>Real:</strong> </p></div></article>
+<article class='card' data-year='2025' data-week='44'><div class='card-hd'><span class='badge OTPR'>OTPR</span><h3><a class='nro due-previous' href='https://docs.google.com/forms/d/e/1FAIpQLSf3e7yM0X_Z46D0lK0ybjCpLhG2rx6tzybFq76gW10Y4gq-IQ/viewform?usp=pp_url&amp;entry.818626418=486'>OT_486</a></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E6</p><p><strong>Prog.:</strong> 1/11/2025 &nbsp; <strong>Real:</strong> </p></div></article>
+<article class='card' data-year='2025' data-week='44'><div class='card-hd'><span class='badge OTPR'>OTPR</span><h3><a class='nro due-previous' href='https://docs.google.com/forms/d/e/1FAIpQLSf3e7yM0X_Z46D0lK0ybjCpLhG2rx6tzybFq76gW10Y4gq-IQ/viewform?usp=pp_url&amp;entry.818626418=487'>OT_487</a></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Inspección Diaria Compresores</p><p><strong>Prog.:</strong> 1/11/2025 &nbsp; <strong>Real:</strong> </p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTPR'>OTPR</span><h3><a class='nro due-thisweek' href='https://docs.google.com/forms/d/e/1FAIpQLSf3e7yM0X_Z46D0lK0ybjCpLhG2rx6tzybFq76gW10Y4gq-IQ/viewform?usp=pp_url&amp;entry.818626418=579'>OT_579</a></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) L6</p><p><strong>Prog.:</strong> 8/11/2025 &nbsp; <strong>Real:</strong> </p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTPR'>OTPR</span><h3><a class='nro due-thisweek' href='https://docs.google.com/forms/d/e/1FAIpQLSf3e7yM0X_Z46D0lK0ybjCpLhG2rx6tzybFq76gW10Y4gq-IQ/viewform?usp=pp_url&amp;entry.818626418=580'>OT_580</a></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) L7</p><p><strong>Prog.:</strong> 8/11/2025 &nbsp; <strong>Real:</strong> </p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTPR'>OTPR</span><h3><a class='nro due-thisweek' href='https://docs.google.com/forms/d/e/1FAIpQLSf3e7yM0X_Z46D0lK0ybjCpLhG2rx6tzybFq76gW10Y4gq-IQ/viewform?usp=pp_url&amp;entry.818626418=581'>OT_581</a></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) L9</p><p><strong>Prog.:</strong> 8/11/2025 &nbsp; <strong>Real:</strong> </p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTPR'>OTPR</span><h3><a class='nro due-thisweek' href='https://docs.google.com/forms/d/e/1FAIpQLSf3e7yM0X_Z46D0lK0ybjCpLhG2rx6tzybFq76gW10Y4gq-IQ/viewform?usp=pp_url&amp;entry.818626418=589'>OT_589</a></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Inspección Diaria Compresores</p><p><strong>Prog.:</strong> 8/11/2025 &nbsp; <strong>Real:</strong> </p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTPR'>OTPR</span><h3><a class='nro due-today' href='https://docs.google.com/forms/d/e/1FAIpQLSf3e7yM0X_Z46D0lK0ybjCpLhG2rx6tzybFq76gW10Y4gq-IQ/viewform?usp=pp_url&amp;entry.818626418=596'>OT_596</a></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) E4</p><p><strong>Prog.:</strong> 9/11/2025 &nbsp; <strong>Real:</strong> </p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTPR'>OTPR</span><h3><a class='nro due-today' href='https://docs.google.com/forms/d/e/1FAIpQLSf3e7yM0X_Z46D0lK0ybjCpLhG2rx6tzybFq76gW10Y4gq-IQ/viewform?usp=pp_url&amp;entry.818626418=597'>OT_597</a></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) E5</p><p><strong>Prog.:</strong> 9/11/2025 &nbsp; <strong>Real:</strong> </p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTPR'>OTPR</span><h3><a class='nro due-today' href='https://docs.google.com/forms/d/e/1FAIpQLSf3e7yM0X_Z46D0lK0ybjCpLhG2rx6tzybFq76gW10Y4gq-IQ/viewform?usp=pp_url&amp;entry.818626418=599'>OT_599</a></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) E7</p><p><strong>Prog.:</strong> 9/11/2025 &nbsp; <strong>Real:</strong> </p></div></article>
+</section>
+<section id='OTRPR'>
+<h2>OTRPR</h2>
+<p class='empty'>Sin OTs en este estado.</p>
+</section>
+<section id='OTE'>
+<h2>OTE</h2>
+<p class='empty'>Sin OTs en este estado.</p>
+</section>
+<section id='OTD'>
+<h2>OTD</h2>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_65</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) L6</p><p><strong>Prog.:</strong> 4/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Sin observaciones </p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_66</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) L7</p><p><strong>Prog.:</strong> 4/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Ninguno</p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_67</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) L9</p><p><strong>Prog.:</strong> 4/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Sin Observaciones </p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_68</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) E4</p><p><strong>Prog.:</strong> 4/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Poca agua</p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_69</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) E5</p><p><strong>Prog.:</strong> 4/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Poca agua</p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_70</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) E6</p><p><strong>Prog.:</strong> 4/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> No aplica </p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_71</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) E7</p><p><strong>Prog.:</strong> 4/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Sin Observaciones </p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_72</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Armar Paquetes de Filtros por maquina y Ubicación los días Viernes</p><p><strong>Prog.:</strong> 4/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Sin observaciones </p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_73</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E4</p><p><strong>Prog.:</strong> 4/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Ninguna</p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_74</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E5</p><p><strong>Prog.:</strong> 4/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> sin observaciones </p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_75</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E6</p><p><strong>Prog.:</strong> 4/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> sin observaciones </p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_76</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Inspección Diaria Compresores</p><p><strong>Prog.:</strong> 4/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Todo ok </p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_77</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) L6</p><p><strong>Prog.:</strong> 5/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> no aplica</p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_78</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) L7</p><p><strong>Prog.:</strong> 5/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> No aplica</p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_79</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) L9</p><p><strong>Prog.:</strong> 5/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Sin observaciones </p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_80</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) E4</p><p><strong>Prog.:</strong> 5/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Ninguno</p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_81</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) E5</p><p><strong>Prog.:</strong> 5/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Sin observaciones </p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_82</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) E6</p><p><strong>Prog.:</strong> 5/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Poca agua</p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_83</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) E7</p><p><strong>Prog.:</strong> 5/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Poca agua</p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_84</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Fabricar Filtros nuevos según daños, consumo y numero de usos</p><p><strong>Prog.:</strong> 5/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> No</p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_85</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E4</p><p><strong>Prog.:</strong> 5/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Sin observaciones </p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_86</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E5</p><p><strong>Prog.:</strong> 5/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Máquina parada por producción última limpieza 29/09/2025</p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_87</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E6</p><p><strong>Prog.:</strong> 5/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Ninguno</p></div></article>
+<article class='card' data-year='2025' data-week='40'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_88</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Inspección Diaria Compresores</p><p><strong>Prog.:</strong> 5/10/2025 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Ninguno</p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_526</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) E6</p><p><strong>Prog.:</strong> 5/11/2025 &nbsp; <strong>Real:</strong> 11/05/2025</p><p><strong>Obs:</strong> queda pendiente limpieza de filtros de las tolvas ya que al concertar la acción con el operador este manifiesta que esto puede truncar la operación de la maquina  </p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_527</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) E7</p><p><strong>Prog.:</strong> 5/11/2025 &nbsp; <strong>Real:</strong> 11/05/2025</p><p><strong>Obs:</strong> queda pendiente limpieza de filtros de las tolvas ya que al concertar la acción con el operador este manifiesta que  esto puede truncar la operación de la maquina  </p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_528</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E4</p><p><strong>Prog.:</strong> 5/11/2025 &nbsp; <strong>Real:</strong> 11/05/2025</p><p><strong>Obs:</strong> no aplica</p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_529</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E5</p><p><strong>Prog.:</strong> 5/11/2025 &nbsp; <strong>Real:</strong> 11/05/2025</p><p><strong>Obs:</strong> no aplica</p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_530</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E6</p><p><strong>Prog.:</strong> 5/11/2025 &nbsp; <strong>Real:</strong> 11/05/2025</p><p><strong>Obs:</strong> no aplica</p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_553</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Evacuar agua de pozos séptico de planta </p><p><strong>Prog.:</strong> 5/11/2025 &nbsp; <strong>Real:</strong> 11/05/2025</p><p><strong>Obs:</strong> no aplica</p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_586</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E4</p><p><strong>Prog.:</strong> 8/11/2025 &nbsp; <strong>Real:</strong> 11/08/2025</p><p><strong>Obs:</strong> No aplica </p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_587</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E5</p><p><strong>Prog.:</strong> 8/11/2025 &nbsp; <strong>Real:</strong> 11/08/2025</p><p><strong>Obs:</strong> No aplica </p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_588</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E6</p><p><strong>Prog.:</strong> 8/11/2025 &nbsp; <strong>Real:</strong> 11/08/2025</p><p><strong>Obs:</strong> No aplica </p></div></article>
+<article class='card' data-year='2025' data-week='45'><div class='card-hd'><span class='badge OTD'>OTD</span><h3><span class='nro due-today'>OT_598</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Limpieza de Filtros de Vacio (Bombas y Tolvas) E6</p><p><strong>Prog.:</strong> 9/11/2025 &nbsp; <strong>Real:</strong> 11/08/2025</p><p><strong>Obs:</strong> Limpieza de filtros de las tolvas</p></div></article>
+</section>
+<section id='OTCT'>
+<h2>OTCT</h2>
+<p class='empty'>Sin OTs en este estado.</p>
+</section>
+<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+<script>
+if(!window.__chartTecRendered){
+  window.__chartTecRendered=true;
+  new Chart(document.getElementById('chartIndicador'),{
+    type:'bar',
+    data:{labels:['Asignadas','En Proceso (OTD)','Cerradas (OTCT)'],
+          datasets:[{label:'OTs',data:[45,34,0],
+          backgroundColor:['#0ea5e9','#fb923c','#22c55e'],borderWidth:0}]},
+    options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false}},
+             scales:{y:{beginAtZero:true,precision:0}}}
+  });
+}
+</script>
+<footer><p>Generado: 09/11/2025 09:12</p></footer></body></html>
