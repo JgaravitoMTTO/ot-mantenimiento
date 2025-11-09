@@ -31,7 +31,7 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 .OTD{background:#f1fdf4;border-color:#22c55e;}
 .OTCT{background:#ede9fe;border-color:#8b5cf6;}
 </style><script>function filtrar(){var fy=document.getElementById('fYear').value||'';var fw=document.getElementById('fWeek').value||'';document.querySelectorAll('.card').forEach(function(c){ var y=c.getAttribute('data-year'); var w=c.getAttribute('data-week'); var okY = !fy || (y==fy); var okW = !fw || (w==fw); c.style.display=(okY&&okW)?'block':'none';});}</script></head><body>
-<header><h1>OTs de PEDRO QUIMBAYA TORRES</h1></header>
+<header><img src='logo_pelex.bmp' alt='PELEX' class='logo'><h1>OTs de PEDRO QUIMBAYA TORRES</h1></header>
 <section><h2>Indicadores de PEDRO QUIMBAYA TORRES</h2>
 <canvas id='chartIndicador' width='360' height='120' style='display:block;'></canvas></section>
 <nav class='chips'>
@@ -43,46 +43,32 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <a href='#OTD' class='chip'>OTD</a>
 <a href='#OTCT' class='chip'>OTCT</a>
 </nav>
-<section id='OTAPR'>
-<h2>OTAPR</h2>
+<section id='OTAPR'><h2>OTAPR</h2>
 <p class='empty'>Sin OTs en este estado.</p>
 </section>
-<section id='OTPL'>
-<h2>OTPL</h2>
+<section id='OTPL'><h2>OTPL</h2>
 <p class='empty'>Sin OTs en este estado.</p>
 </section>
-<section id='OTPR'>
-<h2>OTPR</h2>
+<section id='OTPR'><h2>OTPR</h2>
 <p class='empty'>Sin OTs en este estado.</p>
 </section>
-<section id='OTRPR'>
-<h2>OTRPR</h2>
+<section id='OTRPR'><h2>OTRPR</h2>
 <p class='empty'>Sin OTs en este estado.</p>
 </section>
-<section id='OTE'>
-<h2>OTE</h2>
+<section id='OTE'><h2>OTE</h2>
 <p class='empty'>Sin OTs en este estado.</p>
 </section>
-<section id='OTD'>
-<h2>OTD</h2>
+<section id='OTD'><h2>OTD</h2>
 <p class='empty'>Sin OTs en este estado.</p>
 </section>
-<section id='OTCT'>
-<h2>OTCT</h2>
+<section id='OTCT'><h2>OTCT</h2>
 <p class='empty'>Sin OTs en este estado.</p>
 </section>
 <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
 <script>
 if(!window.__chartTecRendered){
-  window.__chartTecRendered=true;
-  new Chart(document.getElementById('chartIndicador'),{
-    type:'bar',
-    data:{labels:['Asignadas','En Proceso (OTD)','Cerradas (OTCT)'],
-          datasets:[{label:'OTs',data:[0,0,0],
-          backgroundColor:['#0ea5e9','#fb923c','#22c55e'],borderWidth:0}]},
-    options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false}},
-             scales:{y:{beginAtZero:true,precision:0}}}
-  });
+window.__chartTecRendered=true;
+new Chart(document.getElementById('chartIndicador'),{type:'bar',data:{labels:['Asignadas','En Proceso (OTD)','Cerradas (OTCT)'],datasets:[{label:'OTs',data:[0,0,0],backgroundColor:['#0ea5e9','#fb923c','#22c55e'],borderWidth:0}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,precision:0}}}});
 }
 </script>
-<footer><p>Generado: 09/11/2025 09:12</p></footer></body></html>
+<footer><p>Generado: 09/11/2025 18:14</p></footer></body></html>

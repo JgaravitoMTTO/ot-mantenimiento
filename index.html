@@ -31,9 +31,9 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 .OTD{background:#f1fdf4;border-color:#22c55e;}
 .OTCT{background:#ede9fe;border-color:#8b5cf6;}
 </style></head><body>
-<header><h1>Dashboard General de Mantenimiento</h1></header>
+<header><img src='logo_pelex.bmp' alt='PELEX' class='logo'><h1>Dashboard General de Mantenimiento</h1></header>
 <section><h2>Distribución General de Estados</h2>
-<canvas id='chartEstados' width='360' height='120' style='display:block;'></canvas></section>
+<canvas id='chartEstados' width='720' height='240' style='display:block;margin:auto;'></canvas></section>
 <section><h2>Consulta por Técnico</h2><ul class='list'>
 <li><a class='link' href='OT_EDDY_SANTIAGO_RAMIREZ_SALGADO.html'>EDDY SANTIAGO RAMIREZ SALGADO</a></li>
 <li><a class='link' href='OT_EDWARD_MART_NEZ_FRANCO.html'>EDWARD MARTÍNEZ FRANCO</a></li>
@@ -63,13 +63,8 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
 <script>
 if(!window.__chartsRendered){
-  window.__chartsRendered=true;
-  new Chart(document.getElementById('chartEstados'),{
-    type:'pie',
-    data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD","OTCT"],datasets:[{data:[0,0,276,0,0,439,0],
-      backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e','#8b5cf6']}]},
-    options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}
-  });
+window.__chartsRendered=true;
+new Chart(document.getElementById('chartEstados'),{type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD","OTCT"],datasets:[{data:[0,0,276,0,0,439,0],backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e','#8b5cf6']}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
 }
 </script>
-<footer><p>Generado: 09/11/2025 09:12</p></footer></body></html>
+<footer><p>Generado: 09/11/2025 18:14</p></footer></body></html>
