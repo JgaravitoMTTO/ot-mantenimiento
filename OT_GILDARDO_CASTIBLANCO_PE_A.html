@@ -37,6 +37,9 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 .grid{width:100%;border-collapse:collapse;margin:8px 6px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;}
 .grid th,.grid td{font-size:13px;padding:6px 8px;border-bottom:1px solid #eef2f7;text-align:left;}
 .grid th{background:#f8fafc;color:#334155;font-weight:600;}
+.btn{display:inline-block;font-size:12px;padding:6px 10px;border-radius:8px;text-decoration:none;border:1px solid #cbd5e1;background:#fff;margin-left:8px}
+.btn-reprog{background:#fff7ed;border-color:#fb923c;color:#9a3412}
+.btn-reprog:hover{filter:brightness(0.95)}
 </style><script>function filtrar(){var fy=document.getElementById('fYear').value||'';var fw=document.getElementById('fWeek').value||'';document.querySelectorAll('.card').forEach(function(c){ var y=c.getAttribute('data-year'); var w=c.getAttribute('data-week'); var okY = !fy || (y==fy); var okW = !fw || (w==fw); c.style.display=(okY&&okW)?'block':'none';});}</script></head><body>
 <header><img src='logo_pelex.bmp' alt='PELEX' class='logo'><h1>OTs de GILDARDO CASTIBLANCO PEÑA</h1></header>
 <section><h2>Indicadores de GILDARDO CASTIBLANCO PEÑA</h2>
@@ -87,4 +90,4 @@ window.__chartsTecRendered=true;
 const c1=document.getElementById('chartAsignadasCT').getContext('2d');const c2=document.getElementById('chartTransito').getContext('2d');new Chart(c1,{ type:'bar', data:{labels:['Asignadas','Cerradas (OTCT)'],       datasets:[{label:'OTs',data:[0,0]}]}, options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false},  title:{display:true,text:'% Cerradas: 0,0%'}},scales:{y:{beginAtZero:true}}}});new Chart(c2,{ type:'bar', data:{labels:['OTAPR','OTPL','OTPR','OTRPR','OTE','OTD'],       datasets:[{label:'OTs',data:[0,0,0,0,0,0]}]}, options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
 }
 </script>
-<footer><p>Generado: 2025-11-10 15:54:57</p></footer></body></html>
+<footer><p>Generado: 2025-11-10 16:52:07</p></footer></body></html>
