@@ -31,10 +31,30 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 .OTE{background:#e0f2fe;border-color:#3b82f6;}
 .OTD{background:#f1fdf4;border-color:#22c55e;}
 .OTCT{background:#ede9fe;border-color:#8b5cf6;}
+.charts-row{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;margin:8px 6px;}
+.chart-box{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:8px 10px;}
+.chart-title{margin:6px 4px 4px;font-size:13px;color:#334155;font-weight:600;}
+.grid{width:100%;border-collapse:collapse;margin:8px 6px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;}
+.grid th,.grid td{font-size:13px;padding:6px 8px;border-bottom:1px solid #eef2f7;text-align:left;}
+.grid th{background:#f8fafc;color:#334155;font-weight:600;}
 </style></head><body>
 <header><img src='logo_pelex.bmp' alt='PELEX' class='logo'><h1>Dashboard General de Mantenimiento</h1></header>
 <section><h2>Distribución General de Estados</h2>
-<canvas id='chartEstados' width='720' height='240' style='display:block;margin:auto;'></canvas></section>
+<div class='charts-row'>
+  <div class='chart-box'><canvas id='chartEstados' width='520' height='220' style='display:block;margin-left:0;'></canvas></div>
+  <div class='chart-box'>
+  <table class='grid'>
+    <thead><tr><th>Estado</th><th>Cantidad</th><th>% del total</th></tr></thead><tbody>
+    <tr><td>OTAPR</td><td>0</td><td>0,0%</td></tr>
+    <tr><td>OTPL</td><td>0</td><td>0,0%</td></tr>
+    <tr><td>OTPR</td><td>276</td><td>38,6%</td></tr>
+    <tr><td>OTRPR</td><td>0</td><td>0,0%</td></tr>
+    <tr><td>OTE</td><td>0</td><td>0,0%</td></tr>
+    <tr><td>OTD</td><td>439</td><td>61,4%</td></tr>
+    <tr><td>OTCT</td><td>0</td><td>0,0%</td></tr>
+  </tbody></table>
+  </div>
+</div></section>
 <section><h2>Consulta por Técnico</h2><ul class='list'>
 <li><a class='link' href='OT_EDDY_SANTIAGO_RAMIREZ_SALGADO.html'>EDDY SANTIAGO RAMIREZ SALGADO</a></li>
 <li><a class='link' href='OT_EDWARD_MART_NEZ_FRANCO.html'>EDWARD MARTÍNEZ FRANCO</a></li>
@@ -68,4 +88,4 @@ window.__chartsRendered=true;
 new Chart(document.getElementById('chartEstados'),{type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD","OTCT"],datasets:[{data:[0,0,276,0,0,439,0],backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e','#8b5cf6']}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
 }
 </script>
-<footer><p>Generado: 2025-11-10 13:22:19</p></footer></body></html>
+<footer><p>Generado: 2025-11-10 13:46:08</p></footer></body></html>
