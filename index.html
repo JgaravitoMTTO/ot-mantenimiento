@@ -59,9 +59,9 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
     <table class='grid'><thead><tr><th>Estado</th><th>Cantidad</th><th>% del total</th></tr></thead><tbody>
       <tr><td>OTAPR</td><td>0</td><td>0,0%</td></tr>
       <tr><td>OTPL</td><td>170</td><td>17,4%</td></tr>
-      <tr><td>OTPR</td><td>122</td><td>12,5%</td></tr>
+      <tr><td>OTPR</td><td>24</td><td>2,5%</td></tr>
       <tr><td>OTRPR</td><td>0</td><td>0,0%</td></tr>
-      <tr><td>OTE</td><td>3</td><td>0,3%</td></tr>
+      <tr><td>OTE</td><td>101</td><td>10,3%</td></tr>
       <tr><td>OTD</td><td>1</td><td>0,1%</td></tr>
       <tr><td>OTCT</td><td>682</td><td>69,7%</td></tr>
     </tbody></table>
@@ -85,9 +85,9 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <div class='row-log'>
 <span class='chip'>OTAPR: <strong>0</strong></span>
 <span class='chip'>OTPL: <strong>0</strong></span>
-<span class='chip'>OTPR: <strong>19</strong></span>
+<span class='chip'>OTPR: <strong>0</strong></span>
 <span class='chip'>OTRPR: <strong>0</strong></span>
-<span class='chip'>OTE: <strong>3</strong></span>
+<span class='chip'>OTE: <strong>22</strong></span>
 <span class='chip'>OTD: <strong>0</strong></span>
 </div>
 <section><h2>OTs programadas para HOY</h2>
@@ -113,7 +113,7 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <script>
 try{
   new Chart(document.getElementById('chartEstados').getContext('2d'),{
-    type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,170,122,0,3,1],
+    type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,170,24,0,101,1],
     backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],borderWidth:1}]},
     options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}
   });
@@ -124,4 +124,4 @@ try{
   });
 }catch(e){console && console.error && console.error(e);}
 </script>
-<footer><p>Generado: 2025-11-21 13:28:16</p></footer></body></html>
+<footer><p>Generado: 2025-11-21 13:40:10</p></footer></body></html>
