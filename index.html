@@ -42,7 +42,7 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 .btn-reprog:hover{filter:brightness(0.95)}
 </style></head><body>
 <header><img src='logo_pelex.bmp' alt='PELEX' class='logo'><h1>Dashboard General de Mantenimiento</h1></header>
-<section><h2>Distribución General de Estados</h2>
+<section><h2>Distribución General de Estados (sin OTCT en la gráfica)</h2>
 <div class='charts-row'>
   <div class='chart-box'><canvas id='chartEstados' width='520' height='220' style='display:block;margin-left:0;'></canvas></div>
   <div class='chart-box'>
@@ -50,12 +50,19 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
     <thead><tr><th>Estado</th><th>Cantidad</th><th>% del total</th></tr></thead><tbody>
     <tr><td>OTAPR</td><td>0</td><td>0,0%</td></tr>
     <tr><td>OTPL</td><td>66</td><td>7,6%</td></tr>
-    <tr><td>OTPR</td><td>123</td><td>14,1%</td></tr>
+    <tr><td>OTPR</td><td>122</td><td>14,0%</td></tr>
     <tr><td>OTRPR</td><td>0</td><td>0,0%</td></tr>
     <tr><td>OTE</td><td>3</td><td>0,3%</td></tr>
-    <tr><td>OTD</td><td>0</td><td>0,0%</td></tr>
+    <tr><td>OTD</td><td>1</td><td>0,1%</td></tr>
     <tr><td>OTCT</td><td>682</td><td>78,0%</td></tr>
   </tbody></table>
+  </div>
+</div></section>
+<section><h2>Cumplimiento Semana ISO Anterior (2025-W46) — 78,8%</h2>
+<div class='charts-row'>
+  <div class='chart-box'>
+    <div class='chart-title'>OTCT vs Otros estados (semana anterior)</div>
+    <canvas id='chartCumplPrev' width='520' height='180'></canvas>
   </div>
 </div></section>
 <section><h2>Consulta por Técnico</h2><ul class='list'>
@@ -88,7 +95,8 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <script>
 if(!window.__chartsRendered){
 window.__chartsRendered=true;
-new Chart(document.getElementById('chartEstados'),{type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD","OTCT"],datasets:[{data:[0,66,123,0,3,0,682],backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e','#8b5cf6']}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+new Chart(document.getElementById('chartEstados'),{type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,66,122,0,3,1],backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e']}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+new Chart(document.getElementById('chartCumplPrev'),{type:'bar',data:{labels:['Cerradas (OTCT)','En proceso (otros)'],datasets:[{label:'OTs semana previa',data:[82,22]}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'% Cumplimiento: 78,8%'}},scales:{y:{beginAtZero:true}}});
 }
 </script>
-<footer><p>Generado: 2025-11-21 06:01:30</p></footer></body></html>
+<footer><p>Generado: 2025-11-21 08:01:59</p></footer></body></html>
