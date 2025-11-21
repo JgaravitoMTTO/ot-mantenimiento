@@ -41,57 +41,29 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 .btn-reprog{background:#fff7ed;border-color:#fb923c;color:#9a3412}
 .btn-reprog:hover{filter:brightness(0.95)}
 </style></head><body>
-<style>
-.top-meta{font-size:13px;color:#334155;margin:6px 0 14px 8px}
-.grid3{display:flex;gap:16px;align-items:flex-start;flex-wrap:nowrap}
-.grid3>.box{flex:1 1 0;min-width:280px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:10px}
-@media(max-width:900px){.grid3{flex-wrap:wrap}.grid3>.box{flex:1 1 100%}}
-.grid{width:100%;border-collapse:collapse}
-.grid th,.grid td{font-size:13px;padding:6px 8px;border-bottom:1px solid #eef2f7;text-align:left}
-.grid th{background:#f8fafc;color:#334155;font-weight:600}
-.subrow{display:flex;gap:16px;margin-top:14px}
-.subrow .box{flex:1 1 0}
-.title{font-size:14px;font-weight:600;color:#334155;margin:0 0 8px 0}
-</style>
 <header><img src='logo_pelex.bmp' alt='PELEX' class='logo'><h1>Dashboard General de Mantenimiento</h1></header>
-<div class='top-meta'>Semana ISO actual: <strong>2025-W47</strong> &nbsp;•&nbsp; Fecha: <strong>21/11/2025</strong> &nbsp;•&nbsp; Año: <strong>2025</strong></div>
-<section class='grid3'>
-<div class='box'><div class='title'>Estados totales actuales en el sistema (sin OTCT)</div>
-<canvas id='chartEstados' width='420' height='260'></canvas></div>
-<div class='box'><div class='title'>Totales por estado</div>
-<table class='grid'><thead><tr><th>Estado</th><th>Cantidad</th><th>% del total</th></tr></thead><tbody>
-<tr><td>OTAPR</td><td>0</td><td>0,0%</td></tr>
-<tr><td>OTPL</td><td>66</td><td>7,6%</td></tr>
-<tr><td>OTPR</td><td>122</td><td>14,0%</td></tr>
-<tr><td>OTRPR</td><td>0</td><td>0,0%</td></tr>
-<tr><td>OTE</td><td>3</td><td>0,3%</td></tr>
-<tr><td>OTD</td><td>1</td><td>0,1%</td></tr>
-<tr><td>OTCT</td><td>682</td><td>78,0%</td></tr>
-</tbody></table></div>
-<div class='box'><div class='title'>Cumplimiento semana anterior (2025-W46)</div>
-<canvas id='chartCumplPrev' width='420' height='260'></canvas></div>
+<div class='top-meta' style='font-size:13px;color:#334155;margin:6px 0 14px 8px'>Semana ISO actual: <strong>2025-W47</strong> &nbsp;•&nbsp; Fecha: <strong>21/11/2025</strong> &nbsp;•&nbsp; Año: <strong>2025</strong></div>
+<section><h2>Estados totales actuales en el sistema <small>(sin OTCT en la gráfica)</small></h2>
+<div class='charts-row'>
+  <div class='chart-box'><canvas id='chartEstados' width='520' height='220' style='display:block;margin-left:0;'></canvas></div>
+  <div class='chart-box'>
+    <table class='grid'>
+      <thead><tr><th>Estado</th><th>Cantidad</th><th>% del total</th></tr></thead><tbody>
+      <tr><td>OTAPR</td><td>0</td><td>0,0%</td></tr>
+      <tr><td>OTPL</td><td>170</td><td>17,4%</td></tr>
+      <tr><td>OTPR</td><td>122</td><td>12,5%</td></tr>
+      <tr><td>OTRPR</td><td>0</td><td>0,0%</td></tr>
+      <tr><td>OTE</td><td>3</td><td>0,3%</td></tr>
+      <tr><td>OTD</td><td>1</td><td>0,1%</td></tr>
+      <tr><td>OTCT</td><td>682</td><td>69,7%</td></tr>
+      </tbody></table>
+  </div>
+</div></section>
+<section><h2>OTs programadas para HOY</h2>
+<div class='row-hoy'><span class='pill'>OT_776</span><span class='txt'>SACAR AGUA DE INTERCAMBIADORES E4</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_777</span><span class='txt'>SACAR AGUA DE INTERCAMBIADORES E5</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_778</span><span class='txt'>SACAR AGUA DE INTERCAMBIADORES E6</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_779</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) L6</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_780</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) L7</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_781</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) L9</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_782</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E4</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_783</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E5</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_784</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E6</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_785</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E7</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_786</span><span class='txt'>Inspección Diaria Compresores</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div>
 </section>
-<section class='subrow'>
-<div class='box'><div class='title'>FrontLog (semana siguiente 2025-W48)</div>
-<table class='grid'><thead><tr><th>Estado</th><th>Cantidad</th></tr></thead><tbody>
-<tr><td>OTAPR</td><td>0</td></tr>
-<tr><td>OTPL</td><td>66</td></tr>
-<tr><td>OTPR</td><td>0</td></tr>
-<tr><td>OTRPR</td><td>0</td></tr>
-<tr><td>OTE</td><td>0</td></tr>
-<tr><td>OTD</td><td>0</td></tr>
-<tr><td>OTCT</td><td>0</td></tr>
-</tbody></table></div>
-<div class='box'><div class='title'>BackLog (semanas anteriores a 2025-W47)</div>
-<table class='grid'><thead><tr><th>Estado</th><th>Cantidad</th></tr></thead><tbody>
-<tr><td>OTAPR</td><td>0</td></tr>
-<tr><td>OTPL</td><td>0</td></tr>
-<tr><td>OTPR</td><td>19</td></tr>
-<tr><td>OTRPR</td><td>0</td></tr>
-<tr><td>OTE</td><td>3</td></tr>
-<tr><td>OTD</td><td>0</td></tr>
-<tr><td>OTCT</td><td>682</td></tr>
-</tbody></table></div>
+<section><h2>Backlog (semanas anteriores, sin OTCT)</h2>
+<div class='row-hoy'><span class='pill'>OT_645</span><span class='txt'>Rutina Tratamiento de Aguas</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_646</span><span class='txt'>Evacuar agua de pozos séptico de planta </span><span class='tec'>JOHANN CAMILO BUITRAGO JIMENEZ /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_680</span><span class='txt'>Inspección Diaria Compresores</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_681</span><span class='txt'>Armar Paquetes de Filtros por maquina y Ubicación los días Viernes</span><span class='tec'>JESÚS DAVID MOLINA PRIETO /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_682</span><span class='txt'>Fabricar Filtros nuevos según daños, consumo y numero de usos</span><span class='tec'>JESÚS DAVID MOLINA PRIETO /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_683</span><span class='txt'>SACAR AGUA DE INTERCAMBIADORES E4</span><span class='tec'>JUAN PABLO BALLESTEROS SANCHEZ /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_684</span><span class='txt'>SACAR AGUA DE INTERCAMBIADORES E5</span><span class='tec'>JUAN PABLO BALLESTEROS SANCHEZ /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_685</span><span class='txt'>SACAR AGUA DE INTERCAMBIADORES E6</span><span class='tec'>JUAN PABLO BALLESTEROS SANCHEZ /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_688</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) L9</span><span class='tec'>JESÚS DAVID MOLINA PRIETO /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_689</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E4</span><span class='tec'>JOHANN CAMILO BUITRAGO JIMENEZ /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_690</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E5</span><span class='tec'>JOHANN CAMILO BUITRAGO JIMENEZ /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_691</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E6</span><span class='tec'>JOHANN CAMILO BUITRAGO JIMENEZ /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_692</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E7</span><span class='tec'>JOHANN CAMILO BUITRAGO JIMENEZ /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_693</span><span class='txt'>Inspección Diaria Compresores</span><span class='tec'>JOHANN CAMILO BUITRAGO JIMENEZ /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_694</span><span class='txt'>SACAR AGUA DE INTERCAMBIADORES E4</span><span class='tec'>JUAN PABLO BALLESTEROS SANCHEZ /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_695</span><span class='txt'>SACAR AGUA DE INTERCAMBIADORES E5</span><span class='tec'>JUAN PABLO BALLESTEROS SANCHEZ /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_696</span><span class='txt'>SACAR AGUA DE INTERCAMBIADORES E6</span><span class='tec'>JUAN PABLO BALLESTEROS SANCHEZ /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_700</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E4</span><span class='tec'>JOHANN CAMILO BUITRAGO JIMENEZ /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_701</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E5</span><span class='tec'>JOHANN CAMILO BUITRAGO JIMENEZ /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_702</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E6</span><span class='tec'>JOHANN CAMILO BUITRAGO JIMENEZ /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_703</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E7</span><span class='tec'>JOHANN CAMILO BUITRAGO JIMENEZ /  /  / </span></div><div class='row-hoy'><span class='pill'>OT_704</span><span class='txt'>Inspección Diaria Compresores</span><span class='tec'>JOHANN CAMILO BUITRAGO JIMENEZ /  /  / </span></div>
 </section>
 <section><h2>Consulta por Técnico</h2><ul class='list'>
 <li><a class='link' href='OT_EDDY_SANTIAGO_RAMIREZ_SALGADO.html'>EDDY SANTIAGO RAMIREZ SALGADO</a></li>
@@ -108,19 +80,15 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 </ul></section>
 <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
 <script>
-document.addEventListener('DOMContentLoaded',function(){
- try{
-  const ctx1=document.getElementById('chartEstados').getContext('2d');
-  new Chart(ctx1,{type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,66,122,0,3,1],
-  backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],borderWidth:1}]},
-  options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
-  const ctx2=document.getElementById('chartCumplPrev').getContext('2d');
-  new Chart(ctx2,{type:'bar',data:{labels:['Cerradas (OTCT)','En proceso (otros)'],
-    datasets:[{label:'OTs',data:[82,22]}]},
-    options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false},
-    title:{display:true,text:'% Cumplimiento: 78,8%'}},
-    scales:{y:{beginAtZero:true}}});
- }catch(e){var pre=document.createElement('pre');pre.style.color='#b91c1c';pre.textContent='ERROR JS: '+e.message;document.body.appendChild(pre);} 
-});
+try{
+  var ctx1 = document.getElementById('chartEstados').getContext('2d');
+  new Chart(ctx1,{
+    type:'pie',
+    data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,170,122,0,3,1],
+      backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],
+      borderWidth:1}]},
+    options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}
+  });
+}catch(e){console && console.error && console.error(e);}
 </script>
-<footer><p>Generado: 2025-11-21 11:48:11</p></footer></body></html>
+<footer><p>Generado: 2025-11-21 12:09:10</p></footer></body></html>
