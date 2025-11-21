@@ -41,10 +41,25 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 .btn-reprog{background:#fff7ed;border-color:#fb923c;color:#9a3412}
 .btn-reprog:hover{filter:brightness(0.95)}
 </style></head><body>
+<style>
+.top-meta{font-size:13px;color:#334155;margin:6px 0 14px 8px}
+.charts-grid{display:flex;gap:16px;align-items:flex-start;flex-wrap:nowrap}
+.charts-grid>.chart-box{flex:1 1 0;min-width:280px}
+@media(max-width:900px){.charts-grid{flex-wrap:wrap}.charts-grid>.chart-box{flex:1 1 100%}}
+.controls{display:flex;gap:8px;align-items:center;margin:8px 0 16px 8px}
+.controls select{padding:6px 8px;border:1px solid #cbd5e1;border-radius:8px}
+</style>
 <header><img src='logo_pelex.bmp' alt='PELEX' class='logo'><h1>Dashboard General de Mantenimiento</h1></header>
-<section><h2>Distribución General de Estados (sin OTCT en la gráfica)</h2>
-<div class='charts-row'>
-  <div class='chart-box'><canvas id='chartEstados' width='520' height='220' style='display:block;margin-left:0;'></canvas></div>
+<div class='top-meta'>Semana ISO actual: <strong>2025-W47</strong> &nbsp;•&nbsp; Fecha: <strong>21/11/2025</strong> &nbsp;•&nbsp; Año: <strong>2025</strong></div>
+<section>
+<h2>Estados totales actuales en el sistema <small>(sin OTCT en la gráfica)</small></h2>
+<div class='controls'>
+  <label>Año:&nbsp;<select id='selYear'></select></label>
+  <label>Semana:&nbsp;<select id='selWeek'></select></label>
+  <span id='lblInfo' style='margin-left:8px;color:#475569'></span>
+</div>
+<div class='charts-grid'>
+  <div class='chart-box'><canvas id='chartEstados' width='420' height='260'></canvas></div>
   <div class='chart-box'>
     <table class='grid'>
       <thead><tr><th>Estado</th><th>Cantidad</th><th>% del total</th></tr></thead><tbody>
@@ -57,14 +72,12 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
       <tr><td>OTCT</td><td>682</td><td>78,0%</td></tr>
       </tbody></table>
   </div>
-</div></section>
-<section><h2>Cumplimiento Semana ISO Anterior (2025-W46) — 78,8%</h2>
-<div class='charts-row'>
   <div class='chart-box'>
-    <div class='chart-title'>OTCT vs Otros estados (semana anterior)</div>
-    <canvas id='chartCumplPrev' width='520' height='180'></canvas>
+    <div class='chart-title'>Cumplimiento semana seleccionada</div>
+    <canvas id='chartCumplPrev' width='420' height='260'></canvas>
   </div>
-</div></section>
+</div>
+</section>
 <section><h2>Consulta por Técnico</h2><ul class='list'>
 <li><a class='link' href='OT_EDDY_SANTIAGO_RAMIREZ_SALGADO.html'>EDDY SANTIAGO RAMIREZ SALGADO</a></li>
 <li><a class='link' href='OT_EDWARD_MART_NEZ_FRANCO.html'>EDWARD MARTÍNEZ FRANCO</a></li>
@@ -80,25 +93,50 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 </ul></section>
 <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
 <script>
-try{
-  var ctx1 = document.getElementById('chartEstados').getContext('2d');
-  new Chart(ctx1,{
-    type:'pie',
-    data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,66,122,0,3,1],
-      backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],
-      borderWidth:1}]},
-    options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}
-  });
-  var ctx2 = document.getElementById('chartCumplPrev').getContext('2d');
-  new Chart(ctx2,{
-    type:'bar',
-    data:{labels:['Cerradas (OTCT)','En proceso (otros)'],
-      datasets:[{label:'OTs semana previa',data:[82,22]}]},
-    options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false},
-      title:{display:true,text:'% Cumplimiento: 78.8%'}},
-      scales:{y:{beginAtZero:true}}
-    }
-  });
-}catch(e){console && console.error && console.error(e);}
+const estados = ["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD","OTCT"];
+const estadosSinCT = ["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"];
+const dataYW = {"2025-40":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":88},"2025-41":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":102},"2025-42":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":102},"2025-43":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":102},"2025-44":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":104},"2025-45":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":102},"2025-46":{"OTAPR":0,"OTPL":0,"OTPR":19,"OTRPR":0,"OTE":3,"OTD":0,"OTCT":82},"2025-47":{"OTAPR":0,"OTPL":0,"OTPR":103,"OTRPR":0,"OTE":0,"OTD":1,"OTCT":0},"2025-48":{"OTAPR":0,"OTPL":66,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":0}};
+const weeksByYear = {"2025":[40,41,42,43,44,45,46,47,48]};
+const defaults = {year:2025, week:46};
+var ctx1 = document.getElementById('chartEstados').getContext('2d');
+new Chart(ctx1,{type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,66,122,0,3,1],
+backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],borderWidth:1}]},
+options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+var ctx2 = document.getElementById('chartCumplPrev').getContext('2d');
+var barChart = new Chart(ctx2,{type:'bar',data:{labels:['Cerradas (OTCT)','En proceso (otros)'],
+datasets:[{label:'OTs semana',data:[0,0]}]},options:{responsive:false,maintainAspectRatio:false,
+plugins:{legend:{display:false},title:{display:true,text:'% Cumplimiento: 0%'}},scales:{y:{beginAtZero:true}}});
+(function(){
+  const selY=document.getElementById('selYear');
+  const selW=document.getElementById('selWeek');
+  const lbl=document.getElementById('lblInfo');
+  function fillYears(){
+    const years=Object.keys(weeksByYear).sort();
+    selY.innerHTML='';
+    years.forEach(function(y){var o=document.createElement('option');o.value=y;o.text=y;selY.appendChild(o);});
+  }
+  function fillWeeks(y){
+    var ws=(weeksByYear[y]||[]).slice().map(Number).sort(function(a,b){return a-b});
+    selW.innerHTML='';
+    ws.forEach(function(w){var o=document.createElement('option');o.value=w;o.text=('0'+w).slice(-2);selW.appendChild(o);});
+  }
+  function upd(){
+    var y=selY.value; var w=('0'+selW.value).slice(-2); var key=y+'-'+w;
+    var o=dataYW[key]||{};
+    var cerradas=(o['OTCT']||0);
+    var otros=0; estados.forEach(function(e){ if(e!=='OTCT'){ otros+= (o[e]||0); }});
+    barChart.data.datasets[0].data=[cerradas,otros];
+    var total=cerradas+otros; var pct= total? (cerradas*100/total):0;
+    barChart.options.plugins.title.text='% Cumplimiento: '+pct.toFixed(1)+'%';
+    barChart.update();
+    lbl.textContent='Semana ISO seleccionada: '+y+'-W'+w;
+  }
+  fillYears();
+  selY.value=String(2025); fillWeeks(selY.value);
+  selW.value=String(46);
+  selY.addEventListener('change',function(){ fillWeeks(this.value); if(selW.options.length){ selW.selectedIndex=selW.options.length-1;} upd(); });
+  selW.addEventListener('change',upd);
+  upd();
+})();
 </script>
-<footer><p>Generado: 2025-11-21 08:16:56</p></footer></body></html>
+<footer><p>Generado: 2025-11-21 10:38:04</p></footer></body></html>
