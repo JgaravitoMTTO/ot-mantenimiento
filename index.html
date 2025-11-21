@@ -43,50 +43,55 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 </style></head><body>
 <style>
 .top-meta{font-size:13px;color:#334155;margin:6px 0 14px 8px}
-.charts-grid{display:flex;gap:16px;align-items:flex-start;flex-wrap:nowrap}
-.charts-grid>.chart-box{flex:1 1 0;min-width:280px}
-@media(max-width:900px){.charts-grid{flex-wrap:wrap}.charts-grid>.chart-box{flex:1 1 100%}}
-.controls{display:flex;gap:8px;align-items:center;margin:8px 0 16px 8px}
-.controls select{padding:6px 8px;border:1px solid #cbd5e1;border-radius:8px}
-.hoy{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:8px;margin:10px}
-.row-hoy{display:grid;grid-template-columns:120px 1fr 1fr;gap:8px;align-items:center;padding:6px 8px;border-bottom:1px dashed #cbd5e1}
-.pill{display:inline-block;padding:4px 8px;background:#e2e8f0;border-radius:999px}
+.grid3{display:flex;gap:16px;align-items:flex-start;flex-wrap:nowrap}
+.grid3>.box{flex:1 1 0;min-width:280px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:10px}
+@media(max-width:900px){.grid3{flex-wrap:wrap}.grid3>.box{flex:1 1 100%}}
+.grid{width:100%;border-collapse:collapse}
+.grid th,.grid td{font-size:13px;padding:6px 8px;border-bottom:1px solid #eef2f7;text-align:left}
+.grid th{background:#f8fafc;color:#334155;font-weight:600}
+.subrow{display:flex;gap:16px;margin-top:14px}
+.subrow .box{flex:1 1 0}
+.title{font-size:14px;font-weight:600;color:#334155;margin:0 0 8px 0}
 </style>
 <header><img src='logo_pelex.bmp' alt='PELEX' class='logo'><h1>Dashboard General de Mantenimiento</h1></header>
 <div class='top-meta'>Semana ISO actual: <strong>2025-W47</strong> &nbsp;•&nbsp; Fecha: <strong>21/11/2025</strong> &nbsp;•&nbsp; Año: <strong>2025</strong></div>
-<section>
-<h2>Estados totales actuales en el sistema <small>(sin OTCT en la gráfica)</small></h2>
-<div class='controls'>
-  <label>Año:&nbsp;<select id='selYear'></select></label>
-  <label>Semana:&nbsp;<select id='selWeek'></select></label>
-  <span id='lblInfo' style='margin-left:8px;color:#475569'></span>
-</div>
-<div class='charts-grid'>
-  <div class='chart-box'><canvas id='chartEstados' width='420' height='260'></canvas></div>
-  <div class='chart-box'><table class='grid'><thead><tr><th>Estado</th><th>Cantidad</th><th>% del total</th></tr></thead><tbody>
-  <tr><td>OTAPR</td><td>0</td><td>0,0%</td></tr>
-  <tr><td>OTPL</td><td>66</td><td>7,6%</td></tr>
-  <tr><td>OTPR</td><td>122</td><td>14,0%</td></tr>
-  <tr><td>OTRPR</td><td>0</td><td>0,0%</td></tr>
-  <tr><td>OTE</td><td>3</td><td>0,3%</td></tr>
-  <tr><td>OTD</td><td>1</td><td>0,1%</td></tr>
-  <tr><td>OTCT</td><td>682</td><td>78,0%</td></tr>
-  </tbody></table></div>
-  <div class='chart-box'><div class='chart-title'>Cumplimiento semana seleccionada</div>
-    <canvas id='chartCumplPrev' width='420' height='260'></canvas></div>
-</div></section>
-<section class='hoy'><h2>OTs programadas para hoy (21/11/2025)</h2>
-<div class='row-hoy'><span class='pill'>OT_776</span><span class='txt'>SACAR AGUA DE INTERCAMBIADORES E4</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_777</span><span class='txt'>SACAR AGUA DE INTERCAMBIADORES E5</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_778</span><span class='txt'>SACAR AGUA DE INTERCAMBIADORES E6</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_779</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) L6</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_780</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) L7</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_781</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) L9</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_782</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E4</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_783</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E5</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_784</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E6</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_785</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E7</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_786</span><span class='txt'>Inspección Diaria Compresores</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div>
+<section class='grid3'>
+<div class='box'><div class='title'>Estados totales actuales en el sistema (sin OTCT)</div>
+<canvas id='chartEstados' width='420' height='260'></canvas></div>
+<div class='box'><div class='title'>Totales por estado</div>
+<table class='grid'><thead><tr><th>Estado</th><th>Cantidad</th><th>% del total</th></tr></thead><tbody>
+<tr><td>OTAPR</td><td>0</td><td>0,0%</td></tr>
+<tr><td>OTPL</td><td>66</td><td>7,6%</td></tr>
+<tr><td>OTPR</td><td>122</td><td>14,0%</td></tr>
+<tr><td>OTRPR</td><td>0</td><td>0,0%</td></tr>
+<tr><td>OTE</td><td>3</td><td>0,3%</td></tr>
+<tr><td>OTD</td><td>1</td><td>0,1%</td></tr>
+<tr><td>OTCT</td><td>682</td><td>78,0%</td></tr>
+</tbody></table></div>
+<div class='box'><div class='title'>Cumplimiento semana anterior (2025-W46)</div>
+<canvas id='chartCumplPrev' width='420' height='260'></canvas></div>
+</section>
+<section class='subrow'>
+<div class='box'><div class='title'>FrontLog (semana siguiente 2025-W48)</div>
+<table class='grid'><thead><tr><th>Estado</th><th>Cantidad</th></tr></thead><tbody>
+<tr><td>OTAPR</td><td>0</td></tr>
+<tr><td>OTPL</td><td>66</td></tr>
+<tr><td>OTPR</td><td>0</td></tr>
+<tr><td>OTRPR</td><td>0</td></tr>
+<tr><td>OTE</td><td>0</td></tr>
+<tr><td>OTD</td><td>0</td></tr>
+<tr><td>OTCT</td><td>0</td></tr>
+</tbody></table></div>
+<div class='box'><div class='title'>BackLog (semanas anteriores a 2025-W47)</div>
+<table class='grid'><thead><tr><th>Estado</th><th>Cantidad</th></tr></thead><tbody>
+<tr><td>OTAPR</td><td>0</td></tr>
+<tr><td>OTPL</td><td>0</td></tr>
+<tr><td>OTPR</td><td>19</td></tr>
+<tr><td>OTRPR</td><td>0</td></tr>
+<tr><td>OTE</td><td>3</td></tr>
+<tr><td>OTD</td><td>0</td></tr>
+<tr><td>OTCT</td><td>682</td></tr>
+</tbody></table></div>
 </section>
 <section><h2>Consulta por Técnico</h2><ul class='list'>
 <li><a class='link' href='OT_EDDY_SANTIAGO_RAMIREZ_SALGADO.html'>EDDY SANTIAGO RAMIREZ SALGADO</a></li>
@@ -103,54 +108,19 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 </ul></section>
 <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
 <script>
-window.addEventListener('DOMContentLoaded',function(){
+document.addEventListener('DOMContentLoaded',function(){
  try{
-  const estados=["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD","OTCT"];
-  const estadosSinCT=["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"];
-  const dataYW={"2025-40":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":88},"2025-41":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":102},"2025-42":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":102},"2025-43":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":102},"2025-44":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":104},"2025-45":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":102},"2025-46":{"OTAPR":0,"OTPL":0,"OTPR":19,"OTRPR":0,"OTE":3,"OTD":0,"OTCT":82},"2025-47":{"OTAPR":0,"OTPL":0,"OTPR":103,"OTRPR":0,"OTE":0,"OTD":1,"OTCT":0},"2025-48":{"OTAPR":0,"OTPL":66,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":0}};
-  const weeksByYear={"2025":[40,41,42,43,44,45,46,47,48]};
-  const defaults={year:2025,week:46};
-  var ctx1=document.getElementById('chartEstados').getContext('2d');
+  const ctx1=document.getElementById('chartEstados').getContext('2d');
   new Chart(ctx1,{type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,66,122,0,3,1],
   backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],borderWidth:1}]},
   options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
-  var ctx2=document.getElementById('chartCumplPrev').getContext('2d');
-  var barChart=new Chart(ctx2,{type:'bar',data:{labels:['Cerradas (OTCT)','En proceso (otros)'],
-  datasets:[{label:'OTs semana',data:[0,0]}]},options:{responsive:false,maintainAspectRatio:false,
-  plugins:{legend:{display:false},title:{display:true,text:'% Cumplimiento: 0%'}},scales:{y:{beginAtZero:true}}});
-  const selY=document.getElementById('selYear');
-  const selW=document.getElementById('selWeek');
-  const lbl=document.getElementById('lblInfo');
-  function fillYears(){
-    const yrs=Object.keys(weeksByYear||{}).sort(); selY.innerHTML='';
-    if(yrs.length===0){ selY.innerHTML='<option>'+ (new Date().getFullYear()) +'</option>'; return; }
-    yrs.forEach(function(y){var o=document.createElement('option');o.value=y;o.text=y;selY.appendChild(o);});
-  }
-  function fillWeeks(y){
-    var ws=(weeksByYear&&weeksByYear[y])? Object.keys(weeksByYear[y]).map(Number):[];
-    ws.sort(function(a,b){return a-b}); selW.innerHTML='';
-    if(ws.length===0){ selW.innerHTML='<option>47</option>'; return; }
-    ws.forEach(function(w){var o=document.createElement('option');o.value=w;o.text=('0'+w).slice(-2);selW.appendChild(o);});
-  }
-  function upd(){
-    var y=selY.value||2025; var w=('0'+(selW.value||47)).slice(-2); var key=y+'-'+w;
-    var o=dataYW[key]||{}; var cerr=(o['OTCT']||0); var otros=0;
-    estados.forEach(function(e){ if(e!=='OTCT'){ otros+=(o[e]||0);} });
-    barChart.data.datasets[0].data=[cerr,otros];
-    var tot=cerr+otros; var pct=tot? (cerr*100/tot):0;
-    barChart.options.plugins.title.text='% Cumplimiento: '+pct.toFixed(1)+'%';
-    barChart.update();
-    lbl.textContent='Semana ISO seleccionada: '+y+'-W'+w;
-  }
-  fillYears(); if(selY.options.length){ selY.value=String(2025); }
-  fillWeeks(selY.value||String(2025)); if(selW.options.length){ selW.value=String(46); }
-  selY.addEventListener('change',function(){ fillWeeks(this.value); if(selW.options.length){ selW.selectedIndex=selW.options.length-1;} upd();});
-  selW.addEventListener('change',upd);
-  upd();
- }catch(e){
-  var pre=document.createElement('pre'); pre.style.color='#b91c1c';
-  pre.textContent='ERROR JS: '+e.message; document.body.appendChild(pre);
- }
+  const ctx2=document.getElementById('chartCumplPrev').getContext('2d');
+  new Chart(ctx2,{type:'bar',data:{labels:['Cerradas (OTCT)','En proceso (otros)'],
+    datasets:[{label:'OTs',data:[82,22]}]},
+    options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false},
+    title:{display:true,text:'% Cumplimiento: 78,8%'}},
+    scales:{y:{beginAtZero:true}}});
+ }catch(e){var pre=document.createElement('pre');pre.style.color='#b91c1c';pre.textContent='ERROR JS: '+e.message;document.body.appendChild(pre);} 
 });
 </script>
-<footer><p>Generado: 2025-11-21 11:30:12</p></footer></body></html>
+<footer><p>Generado: 2025-11-21 11:48:11</p></footer></body></html>
