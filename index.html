@@ -46,16 +46,16 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <div class='charts-row'>
   <div class='chart-box'><canvas id='chartEstados' width='520' height='220' style='display:block;margin-left:0;'></canvas></div>
   <div class='chart-box'>
-  <table class='grid'>
-    <thead><tr><th>Estado</th><th>Cantidad</th><th>% del total</th></tr></thead><tbody>
-    <tr><td>OTAPR</td><td>0</td><td>0,0%</td></tr>
-    <tr><td>OTPL</td><td>66</td><td>7,6%</td></tr>
-    <tr><td>OTPR</td><td>122</td><td>14,0%</td></tr>
-    <tr><td>OTRPR</td><td>0</td><td>0,0%</td></tr>
-    <tr><td>OTE</td><td>3</td><td>0,3%</td></tr>
-    <tr><td>OTD</td><td>1</td><td>0,1%</td></tr>
-    <tr><td>OTCT</td><td>682</td><td>78,0%</td></tr>
-  </tbody></table>
+    <table class='grid'>
+      <thead><tr><th>Estado</th><th>Cantidad</th><th>% del total</th></tr></thead><tbody>
+      <tr><td>OTAPR</td><td>0</td><td>0,0%</td></tr>
+      <tr><td>OTPL</td><td>66</td><td>7,6%</td></tr>
+      <tr><td>OTPR</td><td>122</td><td>14,0%</td></tr>
+      <tr><td>OTRPR</td><td>0</td><td>0,0%</td></tr>
+      <tr><td>OTE</td><td>3</td><td>0,3%</td></tr>
+      <tr><td>OTD</td><td>1</td><td>0,1%</td></tr>
+      <tr><td>OTCT</td><td>682</td><td>78,0%</td></tr>
+      </tbody></table>
   </div>
 </div></section>
 <section><h2>Cumplimiento Semana ISO Anterior (2025-W46) — 78,8%</h2>
@@ -78,25 +78,27 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <li><a class='link' href='OT_MARIO_ENRIQUE_MENDOZA_DULCEY.html'>MARIO ENRIQUE MENDOZA DULCEY</a></li>
 <li><a class='link' href='OT_PEDRO_QUIMBAYA_TORRES.html'>PEDRO QUIMBAYA TORRES</a></li>
 </ul></section>
-<section><h2>OTs programadas para hoy (21/11/2025)</h2>
-<div class='row-hoy'><span class='pill'>OT_776</span><span class='txt'>SACAR AGUA DE INTERCAMBIADORES E4</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_777</span><span class='txt'>SACAR AGUA DE INTERCAMBIADORES E5</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_778</span><span class='txt'>SACAR AGUA DE INTERCAMBIADORES E6</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_779</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) L6</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_780</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) L7</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_781</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) L9</span><span class='tec'>MARIO ANDRES AREVALO RICO /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_782</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E4</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_783</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E5</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_784</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E6</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_785</span><span class='txt'>Limpieza de Filtros de Vacio (Bombas y Tolvas) E7</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div>
-<div class='row-hoy'><span class='pill'>OT_786</span><span class='txt'>Inspección Diaria Compresores</span><span class='tec'>LEISER STEVENS GARZON TORRES /  /  / </span></div>
-</section>
 <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
 <script>
-if(!window.__chartsRendered){
-window.__chartsRendered=true;
-new Chart(document.getElementById('chartEstados'),{type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,66,122,0,3,1],backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e']}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
-new Chart(document.getElementById('chartCumplPrev'),{type:'bar',data:{labels:['Cerradas (OTCT)','En proceso (otros)'],datasets:[{label:'OTs semana previa',data:[82,22]}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'% Cumplimiento: 78,8%'}},scales:{y:{beginAtZero:true}}});
-}
+try{
+  var ctx1 = document.getElementById('chartEstados').getContext('2d');
+  new Chart(ctx1,{
+    type:'pie',
+    data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,66,122,0,3,1],
+      backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],
+      borderWidth:1}]},
+    options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}
+  });
+  var ctx2 = document.getElementById('chartCumplPrev').getContext('2d');
+  new Chart(ctx2,{
+    type:'bar',
+    data:{labels:['Cerradas (OTCT)','En proceso (otros)'],
+      datasets:[{label:'OTs semana previa',data:[82,22]}]},
+    options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false},
+      title:{display:true,text:'% Cumplimiento: 78.8%'}},
+      scales:{y:{beginAtZero:true}}
+    }
+  });
+}catch(e){console && console.error && console.error(e);}
 </script>
-<footer><p>Generado: 2025-11-21 08:03:47</p></footer></body></html>
+<footer><p>Generado: 2025-11-21 08:16:56</p></footer></body></html>
