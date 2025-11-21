@@ -103,52 +103,54 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 </ul></section>
 <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
 <script>
-const estados = ["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD","OTCT"];
-const estadosSinCT = ["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"];
-const dataYW = {"2025-40":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":88},"2025-41":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":102},"2025-42":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":102},"2025-43":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":102},"2025-44":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":104},"2025-45":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":102},"2025-46":{"OTAPR":0,"OTPL":0,"OTPR":19,"OTRPR":0,"OTE":3,"OTD":0,"OTCT":82},"2025-47":{"OTAPR":0,"OTPL":0,"OTPR":103,"OTRPR":0,"OTE":0,"OTD":1,"OTCT":0},"2025-48":{"OTAPR":0,"OTPL":66,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":0}};
-const weeksByYear = {"2025":[40,41,42,43,44,45,46,47,48]};
-const defaults = {year:2025, week:46};
-var ctx1=document.getElementById('chartEstados').getContext('2d');
-new Chart(ctx1,{type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,66,122,0,3,1],
-backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],borderWidth:1}]},
-options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
-var ctx2=document.getElementById('chartCumplPrev').getContext('2d');
-var barChart=new Chart(ctx2,{type:'bar',data:{labels:['Cerradas (OTCT)','En proceso (otros)'],
-datasets:[{label:'OTs semana',data:[0,0]}]},options:{responsive:false,maintainAspectRatio:false,
-plugins:{legend:{display:false},title:{display:true,text:'% Cumplimiento: 0%'}},scales:{y:{beginAtZero:true}}});
-(function(){
- const selY=document.getElementById('selYear');
- const selW=document.getElementById('selWeek');
- const lbl=document.getElementById('lblInfo');
- function fillYears(){
-   const yrs=Object.keys(weeksByYear).sort(); selY.innerHTML='';
-   if(yrs.length===0){ selY.innerHTML='<option>'+ (new Date().getFullYear()) +'</option>'; return; }
-   yrs.forEach(function(y){var o=document.createElement('option');o.value=y;o.text=y;selY.appendChild(o);});
+window.addEventListener('DOMContentLoaded',function(){
+ try{
+  const estados=["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD","OTCT"];
+  const estadosSinCT=["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"];
+  const dataYW={"2025-40":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":88},"2025-41":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":102},"2025-42":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":102},"2025-43":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":102},"2025-44":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":104},"2025-45":{"OTAPR":0,"OTPL":0,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":102},"2025-46":{"OTAPR":0,"OTPL":0,"OTPR":19,"OTRPR":0,"OTE":3,"OTD":0,"OTCT":82},"2025-47":{"OTAPR":0,"OTPL":0,"OTPR":103,"OTRPR":0,"OTE":0,"OTD":1,"OTCT":0},"2025-48":{"OTAPR":0,"OTPL":66,"OTPR":0,"OTRPR":0,"OTE":0,"OTD":0,"OTCT":0}};
+  const weeksByYear={"2025":[40,41,42,43,44,45,46,47,48]};
+  const defaults={year:2025,week:46};
+  var ctx1=document.getElementById('chartEstados').getContext('2d');
+  new Chart(ctx1,{type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,66,122,0,3,1],
+  backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],borderWidth:1}]},
+  options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+  var ctx2=document.getElementById('chartCumplPrev').getContext('2d');
+  var barChart=new Chart(ctx2,{type:'bar',data:{labels:['Cerradas (OTCT)','En proceso (otros)'],
+  datasets:[{label:'OTs semana',data:[0,0]}]},options:{responsive:false,maintainAspectRatio:false,
+  plugins:{legend:{display:false},title:{display:true,text:'% Cumplimiento: 0%'}},scales:{y:{beginAtZero:true}}});
+  const selY=document.getElementById('selYear');
+  const selW=document.getElementById('selWeek');
+  const lbl=document.getElementById('lblInfo');
+  function fillYears(){
+    const yrs=Object.keys(weeksByYear||{}).sort(); selY.innerHTML='';
+    if(yrs.length===0){ selY.innerHTML='<option>'+ (new Date().getFullYear()) +'</option>'; return; }
+    yrs.forEach(function(y){var o=document.createElement('option');o.value=y;o.text=y;selY.appendChild(o);});
+  }
+  function fillWeeks(y){
+    var ws=(weeksByYear&&weeksByYear[y])? Object.keys(weeksByYear[y]).map(Number):[];
+    ws.sort(function(a,b){return a-b}); selW.innerHTML='';
+    if(ws.length===0){ selW.innerHTML='<option>47</option>'; return; }
+    ws.forEach(function(w){var o=document.createElement('option');o.value=w;o.text=('0'+w).slice(-2);selW.appendChild(o);});
+  }
+  function upd(){
+    var y=selY.value||2025; var w=('0'+(selW.value||47)).slice(-2); var key=y+'-'+w;
+    var o=dataYW[key]||{}; var cerr=(o['OTCT']||0); var otros=0;
+    estados.forEach(function(e){ if(e!=='OTCT'){ otros+=(o[e]||0);} });
+    barChart.data.datasets[0].data=[cerr,otros];
+    var tot=cerr+otros; var pct=tot? (cerr*100/tot):0;
+    barChart.options.plugins.title.text='% Cumplimiento: '+pct.toFixed(1)+'%';
+    barChart.update();
+    lbl.textContent='Semana ISO seleccionada: '+y+'-W'+w;
+  }
+  fillYears(); if(selY.options.length){ selY.value=String(2025); }
+  fillWeeks(selY.value||String(2025)); if(selW.options.length){ selW.value=String(46); }
+  selY.addEventListener('change',function(){ fillWeeks(this.value); if(selW.options.length){ selW.selectedIndex=selW.options.length-1;} upd();});
+  selW.addEventListener('change',upd);
+  upd();
+ }catch(e){
+  var pre=document.createElement('pre'); pre.style.color='#b91c1c';
+  pre.textContent='ERROR JS: '+e.message; document.body.appendChild(pre);
  }
- function fillWeeks(y){
-   var ws=(weeksByYear[y]||[]).slice();
-   if(typeof ws.map==='function'){ ws=ws.map(Number).sort(function(a,b){return a-b}); }
-   selW.innerHTML='';
-   if(ws.length===0){ selW.innerHTML='<option>1</option>'; return; }
-   ws.forEach(function(w){var o=document.createElement('option');o.value=w;o.text=('0'+w).slice(-2);selW.appendChild(o);});
- }
- function upd(){
-   var y=selY.value; var w=('0'+selW.value).slice(-2); var key=y+'-'+w;
-   var o=dataYW[key]||{}; var cerr=(o['OTCT']||0); var otros=0;
-   estados.forEach(function(e){ if(e!=='OTCT'){ otros+=(o[e]||0);} });
-   barChart.data.datasets[0].data=[cerr,otros];
-   var tot=cerr+otros; var pct=tot? (cerr*100/tot):0;
-   barChart.options.plugins.title.text='% Cumplimiento: '+pct.toFixed(1)+'%';
-   barChart.update();
-   lbl.textContent='Semana ISO seleccionada: '+y+'-W'+w;
- }
- fillYears();
- if(selY.options.length){ selY.value=String(2025); }
- fillWeeks(selY.value || String(2025));
- if(selW.options.length){ selW.value=String(46); }
- selY.addEventListener('change',function(){ fillWeeks(this.value); if(selW.options.length){ selW.selectedIndex=selW.options.length-1;} upd();});
- selW.addEventListener('change',upd);
- upd();
-})();
+});
 </script>
-<footer><p>Generado: 2025-11-21 11:15:16</p></footer></body></html>
+<footer><p>Generado: 2025-11-21 11:30:12</p></footer></body></html>
