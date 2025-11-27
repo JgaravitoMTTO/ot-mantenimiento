@@ -60,10 +60,10 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
       <tr><td>OTAPR</td><td>0</td><td>0,0%</td></tr>
       <tr><td>OTPL</td><td>137</td><td>13,3%</td></tr>
       <tr><td>OTPR</td><td>38</td><td>3,7%</td></tr>
-      <tr><td>OTRPR</td><td>1</td><td>0,1%</td></tr>
-      <tr><td>OTE</td><td>40</td><td>3,9%</td></tr>
-      <tr><td>OTD</td><td>0</td><td>0,0%</td></tr>
-      <tr><td>OTCT</td><td>812</td><td>79,0%</td></tr>
+      <tr><td>OTRPR</td><td>0</td><td>0,0%</td></tr>
+      <tr><td>OTE</td><td>34</td><td>3,3%</td></tr>
+      <tr><td>OTD</td><td>6</td><td>0,6%</td></tr>
+      <tr><td>OTCT</td><td>813</td><td>79,1%</td></tr>
     </tbody></table>
   </div>
   <div class='chart-box'>
@@ -86,7 +86,7 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <span class='chip'>OTAPR: <strong>0</strong></span>
 <span class='chip'>OTPL: <strong>0</strong></span>
 <span class='chip'>OTPR: <strong>0</strong></span>
-<span class='chip'>OTRPR: <strong>1</strong></span>
+<span class='chip'>OTRPR: <strong>0</strong></span>
 <span class='chip'>OTE: <strong>0</strong></span>
 <span class='chip'>OTD: <strong>0</strong></span>
 </div>
@@ -107,13 +107,13 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <li><a class='link' href='OT_PEDRO_QUIMBAYA_TORRES.html'>PEDRO QUIMBAYA TORRES</a></li>
 </ul></section>
 <section><h2>Backlog detallado (sin OTCT)</h2>
-<div class='row-hoy'><span class='pill'>OT_683</span><span class='txt'>SACAR AGUA DE INTERCAMBIADORES E4</span><span class='tec'>JUAN PABLO BALLESTEROS SANCHEZ /  /  / </span></div>
+<p class='empty' style='margin-left:8px'>No hay OTs en backlog.</p>
 </section>
 <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
 <script>
 try{
   new Chart(document.getElementById('chartEstados').getContext('2d'),{
-    type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,137,38,1,40,0],
+    type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,137,38,0,34,6],
     backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],borderWidth:1}]},
     options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}
   });
@@ -124,4 +124,4 @@ try{
   });
 }catch(e){console && console.error && console.error(e);}
 </script>
-<footer><p>Generado: 2025-11-26 17:33:26</p></footer></body></html>
+<footer><p>Generado: 2025-11-26 19:52:19</p></footer></body></html>
