@@ -60,9 +60,9 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
       <tr><td>OTAPR</td><td>0</td><td>0,0%</td></tr>
       <tr><td>OTPL</td><td>104</td><td>37,8%</td></tr>
       <tr><td>OTPR</td><td>106</td><td>38,5%</td></tr>
-      <tr><td>OTRPR</td><td>0</td><td>0,0%</td></tr>
-      <tr><td>OTE</td><td>61</td><td>22,2%</td></tr>
-      <tr><td>OTD</td><td>4</td><td>1,5%</td></tr>
+      <tr><td>OTRPR</td><td>1</td><td>0,4%</td></tr>
+      <tr><td>OTE</td><td>47</td><td>17,1%</td></tr>
+      <tr><td>OTD</td><td>17</td><td>6,2%</td></tr>
     </tbody></table>
   </div>
   <div class='chart-box'>
@@ -114,7 +114,7 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <script>
 try{
   new Chart(document.getElementById('chartEstados').getContext('2d'),{
-    type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,104,106,0,61,4],
+    type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,104,106,1,47,17],
     backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],borderWidth:1}]},
     options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}
   });
@@ -125,4 +125,4 @@ try{
   });
 }catch(e){console && console.error && console.error(e);}
 </script>
-<footer><p>Generado: 2025-11-28 14:51:31</p></footer></body></html>
+<footer><p>Generado: 2025-11-28 15:54:30</p></footer></body></html>
