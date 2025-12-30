@@ -2,7 +2,7 @@
 header{position:sticky;top:0;background:#ffffff;color:#0f172a;padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:4px solid #003366;}
 header img.logo{height:48px;margin-right:12px;}
 h1{margin:0;font-size:18px;font-weight:600;}
-.filters{display:flex;gap:10px;padding:10px 12px;align.items:center;background:#e2e8f0;}
+.filters{display:flex;gap:10px;padding:10px 12px;align-items:center;background:#e2e8f0;}
 .filters label{font-size:13px;color:#334155;}
 .filters select{padding:6px 8px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;}
 nav.chips{display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px;background:#e2e8f0;border-top:1px solid #cbd5e1;}
@@ -24,13 +24,6 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 .link{display:block;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;text-decoration:none;color:#0f172a;}
 .row-hoy{display:grid;grid-template-columns:120px 1fr 1fr;gap:8px;align-items:center;padding:6px 8px;border-bottom:1px dashed #cbd5e1;}
 .pill{display:inline-block;padding:4px 8px;background:#e2e8f0;border-radius:999px;}
-.OTAPR{background:#ecfeff;border-color:#06b6d4;}
-.OTPL{background:#fefce8;border-color:#eab308;}
-.OTPR{background:#fef2f2;border-color:#ef4444;}
-.OTRPR{background:#f1f5f9;border-color:#94a3b8;}
-.OTE{background:#e0f2fe;border-color:#3b82f6;}
-.OTD{background:#f1fdf4;border-color:#22c55e;}
-.OTCT{background:#ede9fe;border-color:#8b5cf6;}
 .charts-row{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;margin:8px 6px;}
 .chart-box{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:8px 10px;}
 .chart-title{margin:6px 4px 4px;font-size:13px;color:#334155;font-weight:600;}
@@ -160,9 +153,11 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 </section>
 <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
 <script>
-if(!window.__chartsTecRendered){
-window.__chartsTecRendered=true;
-const c1=document.getElementById('chartAsignadasCT').getContext('2d');const c2=document.getElementById('chartTransito').getContext('2d');new Chart(c1,{ type:'bar', data:{labels:['Asignadas','Cerradas (OTCT)'],       datasets:[{label:'OTs',data:[76,76]}]}, options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false},  title:{display:true,text:'% Cerradas: 100,0%'}},scales:{y:{beginAtZero:true}}}});new Chart(c2,{ type:'bar', data:{labels:['OTAPR','OTPL','OTPR','OTRPR','OTE','OTD'],       datasets:[{label:'OTs',data:[0,0,0,0,0,0]}]}, options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
-}
+try{
+const c1=document.getElementById('chartAsignadasCT').getContext('2d');
+const c2=document.getElementById('chartTransito').getContext('2d');
+new Chart(c1,{type:'bar',data:{labels:['Asignadas','Cerradas (OTCT)'],datasets:[{label:'OTs',data:[76,76]}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'% Cerradas: 100,0%'}},scales:{y:{beginAtZero:true}}}});
+new Chart(c2,{type:'bar',data:{labels:['OTAPR','OTPL','OTPR','OTRPR','OTE','OTD'],datasets:[{label:'OTs',data:[0,0,0,0,0,0]}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+}catch(e){console && console.error && console.error(e);}
 </script>
-<footer><p>Generado: 2025-12-30 17:01:06</p></footer></body></html>
+<footer><p>Generado: 2025-12-30 17:04:38</p></footer></body></html>
