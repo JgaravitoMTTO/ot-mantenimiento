@@ -38,7 +38,7 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <section><h2>Indicadores de EDDY SANTIAGO RAMIREZ SALGADO</h2>
 <div class='charts-row'>
 <div class='chart-box'>
-<div class='chart-title'>Asignadas vs Cerradas (OTCT) — 98% cerradas</div>
+<div class='chart-title'>Asignadas vs Cerradas (OTCT) — 100% cerradas</div>
 <canvas id='chartAsignadasCT' width='320' height='140'></canvas>
 </div>
 <div class='chart-box'>
@@ -65,7 +65,7 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <p class='empty'>Sin OTs en este estado.</p>
 </section>
 <section id='OTRPR'><h2>OTRPR</h2>
-<article class='card' data-year='2026' data-week='2'><div class='card-hd'><span class='badge OTRPR'>OTRPR</span><h3><span class='nro '>OT_1461</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Cambio de Filtros de Extrusoras E6</p><p><strong>Prog.:</strong> 8/01/2026 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Ya se habían cambiado y debido a la patada de la máquina por el rodillo bobinador no se habían ensuciado, se observa innecesario cambio de filtro </p></div></article>
+<p class='empty'>Sin OTs en este estado.</p>
 </section>
 <section id='OTE'><h2>OTE</h2>
 <p class='empty'>Sin OTs en este estado.</p>
@@ -108,6 +108,7 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <article class='card' data-year='2026' data-week='2'><div class='card-hd'><span class='badge OTCT'>OTCT</span><h3><span class='nro '>OT_1447</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E4</p><p><strong>Prog.:</strong> 7/01/2026 &nbsp; <strong>Real:</strong> 1/07/2026</p><p><strong>Obs:</strong> No aplica</p></div></article>
 <article class='card' data-year='2026' data-week='2'><div class='card-hd'><span class='badge OTCT'>OTCT</span><h3><span class='nro '>OT_1448</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E5</p><p><strong>Prog.:</strong> 7/01/2026 &nbsp; <strong>Real:</strong> 1/07/2026</p><p><strong>Obs:</strong> No aplica </p></div></article>
 <article class='card' data-year='2026' data-week='2'><div class='card-hd'><span class='badge OTCT'>OTCT</span><h3><span class='nro '>OT_1449</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E6</p><p><strong>Prog.:</strong> 7/01/2026 &nbsp; <strong>Real:</strong> 1/07/2026</p><p><strong>Obs:</strong> No aplica</p></div></article>
+<article class='card' data-year='2026' data-week='2'><div class='card-hd'><span class='badge OTCT'>OTCT</span><h3><span class='nro '>OT_1461</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> Cambio de Filtros de Extrusoras E6</p><p><strong>Prog.:</strong> 8/01/2026 &nbsp; <strong>Real:</strong> </p><p><strong>Obs:</strong> Ya se habían cambiado y debido a la patada de la máquina por el rodillo bobinador no se habían ensuciado, se observa innecesario cambio de filtro </p></div></article>
 <article class='card' data-year='2026' data-week='2'><div class='card-hd'><span class='badge OTCT'>OTCT</span><h3><span class='nro '>OT_1463</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E4</p><p><strong>Prog.:</strong> 8/01/2026 &nbsp; <strong>Real:</strong> 1/08/2026</p><p><strong>Obs:</strong> No aplica </p></div></article>
 <article class='card' data-year='2026' data-week='2'><div class='card-hd'><span class='badge OTCT'>OTCT</span><h3><span class='nro '>OT_1464</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E5</p><p><strong>Prog.:</strong> 8/01/2026 &nbsp; <strong>Real:</strong> 1/08/2026</p><p><strong>Obs:</strong> No aplica</p></div></article>
 <article class='card' data-year='2026' data-week='2'><div class='card-hd'><span class='badge OTCT'>OTCT</span><h3><span class='nro '>OT_1465</span></h3></div><div class='card-bd'><p><strong>Descripción:</strong> SACAR AGUA DE INTERCAMBIADORES E6</p><p><strong>Prog.:</strong> 8/01/2026 &nbsp; <strong>Real:</strong> 1/08/2026</p><p><strong>Obs:</strong> No aplica</p></div></article>
@@ -127,8 +128,8 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 try{
 const c1=document.getElementById('chartAsignadasCT').getContext('2d');
 const c2=document.getElementById('chartTransito').getContext('2d');
-new Chart(c1,{type:'bar',data:{labels:['Asignadas','Cerradas (OTCT)'],datasets:[{label:'OTs',data:[48,47]}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'% Cerradas: 97,9%'}},scales:{y:{beginAtZero:true}}}});
-new Chart(c2,{type:'bar',data:{labels:['OTAPR','OTPL','OTPR','OTRPR','OTE','OTD'],datasets:[{label:'OTs',data:[0,0,0,1,0,0]}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+new Chart(c1,{type:'bar',data:{labels:['Asignadas','Cerradas (OTCT)'],datasets:[{label:'OTs',data:[48,48]}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'% Cerradas: 100,0%'}},scales:{y:{beginAtZero:true}}}});
+new Chart(c2,{type:'bar',data:{labels:['OTAPR','OTPL','OTPR','OTRPR','OTE','OTD'],datasets:[{label:'OTs',data:[0,0,0,0,0,0]}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
 }catch(e){console && console.error && console.error(e);}
 </script>
-<footer><p>Generado: 2026-01-28 09:04:39</p></footer></body></html>
+<footer><p>Generado: 2026-01-28 09:06:39</p></footer></body></html>
