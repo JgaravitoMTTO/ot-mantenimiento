@@ -51,11 +51,11 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
   <div class='chart-box'>
     <table class='grid'><thead><tr><th>Estado</th><th>Cantidad</th><th>% del total</th></tr></thead><tbody>
       <tr><td>OTAPR</td><td>0</td><td>0,0%</td></tr>
-      <tr><td>OTPL</td><td>109</td><td>49,1%</td></tr>
+      <tr><td>OTPL</td><td>110</td><td>49,3%</td></tr>
       <tr><td>OTPR</td><td>24</td><td>10,8%</td></tr>
-      <tr><td>OTRPR</td><td>1</td><td>0,5%</td></tr>
-      <tr><td>OTE</td><td>44</td><td>19,8%</td></tr>
-      <tr><td>OTD</td><td>44</td><td>19,8%</td></tr>
+      <tr><td>OTRPR</td><td>1</td><td>0,4%</td></tr>
+      <tr><td>OTE</td><td>44</td><td>19,7%</td></tr>
+      <tr><td>OTD</td><td>44</td><td>19,7%</td></tr>
     </tbody></table>
   </div>
   <div class='chart-box'>
@@ -65,7 +65,7 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 </div></section>
 <h2 class='h2small'>Resumen global de cierre</h2>
 <div class='row-log'>
-<span class='chip'>OTs totales: <strong>1967</strong></span>
+<span class='chip'>OTs totales: <strong>1968</strong></span>
 <span class='chip'>OTCT (cerradas): <strong>1745</strong></span>
 <span class='chip'>% cerradas: <strong>88,7%</strong></span>
 </div>
@@ -107,7 +107,7 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <script>
 try{
   new Chart(document.getElementById('chartEstados').getContext('2d'),{
-    type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,109,24,1,44,44],backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],borderWidth:1}]},
+    type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,110,24,1,44,44],backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],borderWidth:1}]},
     options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}
   });
   new Chart(document.getElementById('chartPrevProgVsCT').getContext('2d'),{
@@ -116,4 +116,4 @@ try{
   });
 }catch(e){console && console.error && console.error(e);}
 </script>
-<footer><p>Generado: 2026-01-29 09:08:41</p></footer></body></html>
+<footer><p>Generado: 2026-01-29 16:18:41</p></footer></body></html>
