@@ -51,11 +51,11 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
   <div class='chart-box'>
     <table class='grid'><thead><tr><th>Estado</th><th>Cantidad</th><th>% del total</th></tr></thead><tbody>
       <tr><td>OTAPR</td><td>0</td><td>0,0%</td></tr>
-      <tr><td>OTPL</td><td>219</td><td>60,5%</td></tr>
-      <tr><td>OTPR</td><td>17</td><td>4,7%</td></tr>
+      <tr><td>OTPL</td><td>246</td><td>63,2%</td></tr>
+      <tr><td>OTPR</td><td>17</td><td>4,4%</td></tr>
       <tr><td>OTRPR</td><td>0</td><td>0,0%</td></tr>
-      <tr><td>OTE</td><td>60</td><td>16,6%</td></tr>
-      <tr><td>OTD</td><td>66</td><td>18,2%</td></tr>
+      <tr><td>OTE</td><td>58</td><td>14,9%</td></tr>
+      <tr><td>OTD</td><td>68</td><td>17,5%</td></tr>
     </tbody></table>
   </div>
   <div class='chart-box'>
@@ -65,9 +65,9 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 </div></section>
 <h2 class='h2small'>Resumen global de cierre</h2>
 <div class='row-log'>
-<span class='chip'>OTs totales: <strong>2118</strong></span>
+<span class='chip'>OTs totales: <strong>2145</strong></span>
 <span class='chip'>OTCT (cerradas): <strong>1756</strong></span>
-<span class='chip'>% cerradas: <strong>82,9%</strong></span>
+<span class='chip'>% cerradas: <strong>81,9%</strong></span>
 </div>
 <h2 class='h2small'>BackLog &nbsp;<small>(OTs con fecha anterior a la semana actual, sin OTCT)</small></h2>
 <div class='row-log'>
@@ -107,7 +107,7 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <script>
 try{
   new Chart(document.getElementById('chartEstados').getContext('2d'),{
-    type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,219,17,0,60,66],backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],borderWidth:1}]},
+    type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,246,17,0,58,68],backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],borderWidth:1}]},
     options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}
   });
   new Chart(document.getElementById('chartPrevProgVsCT').getContext('2d'),{
@@ -116,4 +116,4 @@ try{
   });
 }catch(e){console && console.error && console.error(e);}
 </script>
-<footer><p>Generado: 2026-02-01 09:41:45</p></footer></body></html>
+<footer><p>Generado: 2026-02-01 15:25:08</p></footer></body></html>
