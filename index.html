@@ -52,10 +52,10 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
     <table class='grid'><thead><tr><th>Estado</th><th>Cantidad</th><th>% del total</th></tr></thead><tbody>
       <tr><td>OTAPR</td><td>0</td><td>0,0%</td></tr>
       <tr><td>OTPL</td><td>116</td><td>35,7%</td></tr>
-      <tr><td>OTPR</td><td>39</td><td>12,0%</td></tr>
+      <tr><td>OTPR</td><td>17</td><td>5,2%</td></tr>
       <tr><td>OTRPR</td><td>0</td><td>0,0%</td></tr>
-      <tr><td>OTE</td><td>139</td><td>42,8%</td></tr>
-      <tr><td>OTD</td><td>31</td><td>9,5%</td></tr>
+      <tr><td>OTE</td><td>160</td><td>49,2%</td></tr>
+      <tr><td>OTD</td><td>32</td><td>9,8%</td></tr>
     </tbody></table>
   </div>
   <div class='chart-box'>
@@ -107,7 +107,7 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <script>
 try{
   new Chart(document.getElementById('chartEstados').getContext('2d'),{
-    type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,116,39,0,139,31],backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],borderWidth:1}]},
+    type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,116,17,0,160,32],backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],borderWidth:1}]},
     options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}
   });
   new Chart(document.getElementById('chartPrevProgVsCT').getContext('2d'),{
@@ -116,4 +116,4 @@ try{
   });
 }catch(e){console && console.error && console.error(e);}
 </script>
-<footer><p>Generado: 2026-02-26 13:56:26</p></footer></body></html>
+<footer><p>Generado: 2026-02-26 18:03:35</p></footer></body></html>
