@@ -22,7 +22,7 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 .list{list-style:none;margin:0;padding:12px;}
 .list li{margin:8px 0;}
 .link{display:block;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;text-decoration:none;color:#0f172a;}
-.row-hoy{display:grid;grid-template-columns:180px 1fr 1fr;gap:8px;align-items:center;padding:6px 8px;border-bottom:1px dashed #cbd5e1;}
+.row-hoy{display:grid;grid-template-columns:120px 1fr 1fr;gap:8px;align-items:center;padding:6px 8px;border-bottom:1px dashed #cbd5e1;}
 .pill{display:inline-block;padding:4px 8px;background:#e2e8f0;border-radius:999px;}
 .charts-row{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;margin:8px 6px;}
 .chart-box{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:8px 10px;}
@@ -33,8 +33,6 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 .btn{display:inline-block;font-size:12px;padding:6px 10px;border-radius:8px;text-decoration:none;border:1px solid #cbd5e1;background:#fff;margin-left:8px}
 .btn-reprog{background:#fff7ed;border-color:#fb923c;color:#9a3412}
 .btn-reprog:hover{filter:brightness(0.95)}
-.btn-pdf{background:#eef2ff;border-color:#6366f1;color:#3730a3}
-.btn-pdf:hover{filter:brightness(0.95)}
 </style><script>function filtrar(){var fy=document.getElementById('fYear').value||'';var fw=document.getElementById('fWeek').value||'';document.querySelectorAll('.card').forEach(function(c){ var y=c.getAttribute('data-year'); var w=c.getAttribute('data-week'); var okY = !fy || (y==fy); var okW = !fw || (w==fw); c.style.display=(okY&&okW)?'block':'none';});}</script></head><body>
 <header><img src='logo_pelex.bmp' alt='PELEX' class='logo'><h1>OTs de PEDRO QUIMBAYA TORRES</h1></header>
 <section><h2>Indicadores de PEDRO QUIMBAYA TORRES</h2>
@@ -83,4 +81,4 @@ new Chart(c1,{type:'bar',data:{labels:['Asignadas','Cerradas (OTCT)'],datasets:[
 new Chart(c2,{type:'bar',data:{labels:['OTAPR','OTPL','OTPR','OTRPR','OTE','OTD'],datasets:[{label:'OTs',data:[0,0,0,0,0,0]}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
 }catch(e){console && console.error && console.error(e);}
 </script>
-<footer><p>Generado: 2026-02-27 21:19:57</p></footer></body></html>
+<footer><p>Generado: 2026-02-28 07:52:29</p></footer></body></html>
