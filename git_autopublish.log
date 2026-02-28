@@ -43,3 +43,42 @@ To https://github.com/jgaravitomtto/ot-mantenimiento.git
 
 2026-02-28 14:42:15 | EXIT: 0
 2026-02-28 14:42:15 | == git add -A ==
+2026-02-28 14:42:16 | CMD: cmd /c cd /d "C:\Users\Mantenimiento\Documents\GitHub\ot-mantenimiento\" && "C:\Program Files\Git\cmd\git.exe" add -A
+2026-02-28 14:42:16 | ERR: warning: in the working copy of 'git_autopublish.log', LF will be replaced by CRLF the next time Git touches it
+
+2026-02-28 14:42:16 | EXIT: 0
+2026-02-28 14:42:16 | CMD: cmd /c cd /d "C:\Users\Mantenimiento\Documents\GitHub\ot-mantenimiento\" && "C:\Program Files\Git\cmd\git.exe" status --porcelain
+2026-02-28 14:42:16 | OUT: M  OT_EDDY_SANTIAGO_RAMIREZ_SALGADO.html
+M  OT_EDWARD_MART_NEZ_FRANCO.html
+M  OT_GILDARDO_CASTIBLANCO_PE_A.html
+M  OT_JES_S_DAVID_MOLINA_PRIETO.html
+M  OT_JOHANN_CAMILO_BUITRAGO_JIMENEZ.html
+M  OT_JORGE_ELIECER_JIMENEZ_GARCIA.html
+M  OT_JUAN_PABLO_BALLESTEROS_SANCHEZ.html
+M  OT_LEISER_STEVENS_GARZON_TORRES.html
+M  OT_MARIO_ANDRES_AREVALO_RICO.html
+M  OT_MARIO_ENRIQUE_MENDOZA_DULCEY.html
+M  OT_PEDRO_QUIMBAYA_TORRES.html
+MM git_autopublish.log
+M  index.html
+
+2026-02-28 14:42:16 | EXIT: 0
+2026-02-28 14:42:16 | == git commit ==
+2026-02-28 14:42:16 | CMD: cmd /c cd /d "C:\Users\Mantenimiento\Documents\GitHub\ot-mantenimiento\" && "C:\Program Files\Git\cmd\git.exe" commit --no-gpg-sign -m "Auto: actualización desde Excel 2026-02-28 14:42:16"
+2026-02-28 14:42:16 | OUT: [main f91a364] Auto: actualizaciÃ³n desde Excel 2026-02-28 14:42:16
+ 13 files changed, 279 insertions(+), 274 deletions(-)
+
+2026-02-28 14:42:16 | EXIT: 0
+2026-02-28 14:42:16 | == git push ==
+2026-02-28 14:42:18 | CMD: cmd /c cd /d "C:\Users\Mantenimiento\Documents\GitHub\ot-mantenimiento\" && "C:\Program Files\Git\cmd\git.exe" push origin main
+2026-02-28 14:42:18 | ERR: remote: This repository moved. Please use the new location:        
+remote:   https://github.com/JgaravitoMTTO/ot-mantenimiento.git        
+To https://github.com/jgaravitomtto/ot-mantenimiento.git
+   bcb75d1..f91a364  main -> main
+
+2026-02-28 14:42:18 | EXIT: 0
+2026-02-28 14:52:25 | CMD: cmd /c cd /d "C:\Users\Mantenimiento\Documents\GitHub\ot-mantenimiento\" && "C:\Program Files\Git\cmd\git.exe" rev-parse --is-inside-work-tree
+2026-02-28 14:52:25 | OUT: true
+
+2026-02-28 14:52:25 | EXIT: 0
+2026-02-28 14:52:25 | == git add -A ==
