@@ -1,0 +1,5 @@
+2026-02-28 14:40:19 | CMD: cmd /c cd /d "C:\Users\Mantenimiento\Documents\GitHub\ot-mantenimiento\" && "C:\Program Files\Git\cmd\git.exe" rev-parse --is-inside-work-tree
+2026-02-28 14:40:19 | OUT: true
+
+2026-02-28 14:40:19 | EXIT: 0
+2026-02-28 14:40:19 | == git add -A ==
