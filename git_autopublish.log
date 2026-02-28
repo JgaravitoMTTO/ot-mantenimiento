@@ -38,3 +38,8 @@ To https://github.com/jgaravitomtto/ot-mantenimiento.git
    228e60c..7008fce  main -> main
 
 2026-02-28 14:40:23 | EXIT: 0
+2026-02-28 14:42:15 | CMD: cmd /c cd /d "C:\Users\Mantenimiento\Documents\GitHub\ot-mantenimiento\" && "C:\Program Files\Git\cmd\git.exe" rev-parse --is-inside-work-tree
+2026-02-28 14:42:15 | OUT: true
+
+2026-02-28 14:42:15 | EXIT: 0
+2026-02-28 14:42:15 | == git add -A ==
