@@ -38,6 +38,13 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 .btn-reprog:hover{filter:brightness(0.95)}
 @media(max-width:520px){.row-hoy{grid-template-columns:1fr;gap:6px}.tec{color:#334155;font-size:12px}}
 </style></head><body>
+.filters{margin:10px 6px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.filters label{font-size:12px;font-weight:700;color:#0f172a}
+.filters select{font-size:12px;padding:6px 10px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;min-width:220px}
+.badge{display:inline-block;margin-left:8px;padding:3px 8px;border-radius:999px;border:1px solid #cbd5e1;background:#f8fafc;font-size:12px}
+.hl-new{background:#fff9c4}
+.hl-otct{background:#d9fbe0}
+.hl-otother{background:#ffd6e5}
 <style>
 body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0;background:#f6f7fb;color:#0f172a;}
 header{position:sticky;top:0;background:#ffffff;color:#0f172a;padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:4px solid #003366;}
@@ -99,6 +106,13 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 </style>
 <header><img src='logo_pelex.bmp' alt='PELEX' class='logo'><h1>Solicitudes de Producción a Mtto.</h1></header>
 <div class='top-actions'><a class='btnlink' href='index.html'>Volver al Dashboard</a></div>
+<div class='filters'>
+  <label>Equipo</label>
+  <select id='fEquipo'><option value=''>Todos</option></select>
+  <label>Solicitante</label>
+  <select id='fSolic'><option value=''>Todos</option></select>
+  <span class='badge' id='countShown'>0</span>
+</div>
 <section class='sol-wrap'>
 <article class='sol-card'><div class='sol-line'><span class='sol-k'>Solicitud:</span> SOL_0000044 &nbsp;&nbsp; <span class='sol-k'>Equipo:</span> L9</div><div class='sol-line'><span class='sol-k'>Descripción de la Solicitud:</span> Fuga de agua por bomba rodillo cast</div><div class='sol-line sol-meta'><span><span class='sol-k'>Solicitante:</span> Juan Carlos Mayorga</span><span class='tag'><span class='sol-k'>Prioridad:</span> No</span><span class='tag'><span class='sol-k'>Estado:</span> SOLNEW</span></div><div class='sol-line'><span class='sol-k'>Justificación de No aprobación si aplica:</span> </div><div class='sol-line'><span class='sol-k'>OT Creada:</span>  &nbsp;&nbsp; <span class='sol-k'>Estado de OT:</span> </div></article>
 <article class='sol-card'><div class='sol-line'><span class='sol-k'>Solicitud:</span> SOL_0000043 &nbsp;&nbsp; <span class='sol-k'>Equipo:</span> L9</div><div class='sol-line'><span class='sol-k'>Descripción de la Solicitud:</span> Lamparas de el segundo nivel no Funcionan</div><div class='sol-line sol-meta'><span><span class='sol-k'>Solicitante:</span> Mario A. Arevalo</span><span class='tag'><span class='sol-k'>Prioridad:</span> No</span><span class='tag'><span class='sol-k'>Estado:</span> SOLNEW</span></div><div class='sol-line'><span class='sol-k'>Justificación de No aprobación si aplica:</span> </div><div class='sol-line'><span class='sol-k'>OT Creada:</span>  &nbsp;&nbsp; <span class='sol-k'>Estado de OT:</span> </div></article>
@@ -144,5 +158,46 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <article class='sol-card'><div class='sol-line'><span class='sol-k'>Solicitud:</span> SOL_0000003 &nbsp;&nbsp; <span class='sol-k'>Equipo:</span> E4 (Macchi 1)</div><div class='sol-line'><span class='sol-k'>Descripción de la Solicitud:</span> Instalación filtros ventiladores refrigeración</div><div class='sol-line sol-meta'><span><span class='sol-k'>Solicitante:</span> Jorge Jiménez</span><span class='tag'><span class='sol-k'>Prioridad:</span> No</span><span class='tag'><span class='sol-k'>Estado:</span> SOLNEW</span></div><div class='sol-line'><span class='sol-k'>Justificación de No aprobación si aplica:</span> </div><div class='sol-line'><span class='sol-k'>OT Creada:</span>  &nbsp;&nbsp; <span class='sol-k'>Estado de OT:</span> </div></article>
 <article class='sol-card'><div class='sol-line'><span class='sol-k'>Solicitud:</span> SOL_0000002 &nbsp;&nbsp; <span class='sol-k'>Equipo:</span> E4 (Macchi 1)</div><div class='sol-line'><span class='sol-k'>Descripción de la Solicitud:</span> Fuga material cambia mallas</div><div class='sol-line sol-meta'><span><span class='sol-k'>Solicitante:</span> Jorge Jiménez</span><span class='tag'><span class='sol-k'>Prioridad:</span> No</span><span class='tag'><span class='sol-k'>Estado:</span> SOLNEW</span></div><div class='sol-line'><span class='sol-k'>Justificación de No aprobación si aplica:</span> </div><div class='sol-line'><span class='sol-k'>OT Creada:</span>  &nbsp;&nbsp; <span class='sol-k'>Estado de OT:</span> </div></article>
 <article class='sol-card'><div class='sol-line'><span class='sol-k'>Solicitud:</span> SOL_0000001 &nbsp;&nbsp; <span class='sol-k'>Equipo:</span> E4 (Macchi 1)</div><div class='sol-line'><span class='sol-k'>Descripción de la Solicitud:</span> Reubicación soporte mangueras IBC</div><div class='sol-line sol-meta'><span><span class='sol-k'>Solicitante:</span> Jorge Jiménez</span><span class='tag'><span class='sol-k'>Prioridad:</span> No</span><span class='tag'><span class='sol-k'>Estado:</span> SOLNEW</span></div><div class='sol-line'><span class='sol-k'>Justificación de No aprobación si aplica:</span> </div><div class='sol-line'><span class='sol-k'>OT Creada:</span>  &nbsp;&nbsp; <span class='sol-k'>Estado de OT:</span> </div></article>
+<script>
+function norm(s){return (s||'').toString().trim().toLowerCase();}
+function uniqAdd(sel, val){
+  if(!val) return;
+  const v = val.toString().trim();
+  const key = v.toLowerCase();
+  if(sel._set.has(key)) return;
+  sel._set.add(key);
+  const op=document.createElement('option'); op.value=v; op.textContent=v; sel.appendChild(op);
+}
+function populateFilters(){
+  const eq=document.getElementById('fEquipo');
+  const so=document.getElementById('fSolic');
+  eq._set=new Set(); so._set=new Set();
+  document.querySelectorAll('.sol-card').forEach(card=>{
+    uniqAdd(eq, card.getAttribute('data-equipo'));
+    uniqAdd(so, card.getAttribute('data-reporta'));
+  });
+}
+function applyFilter(){
+  const eqV=norm(document.getElementById('fEquipo').value);
+  const soV=norm(document.getElementById('fSolic').value);
+  let shown=0;
+  document.querySelectorAll('.sol-card').forEach(card=>{
+    const eq=norm(card.getAttribute('data-equipo'));
+    const so=norm(card.getAttribute('data-reporta'));
+    const okEq=(!eqV) || (eq===eqV);
+    const okSo=(!soV) || (so===soV);
+    const ok=okEq && okSo;
+    card.style.display = ok ? '' : 'none';
+    if(ok) shown++;
+  });
+  document.getElementById('countShown').textContent = shown + ' visibles';
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  populateFilters();
+  document.getElementById('fEquipo').addEventListener('change', applyFilter);
+  document.getElementById('fSolic').addEventListener('change', applyFilter);
+  applyFilter();
+});
+</script>
 </section>
-<footer><p>Generado: 2026-03-01 09:04:21</p></footer></body></html>
+<footer><p>Generado: 2026-03-01 09:18:31</p></footer></body></html>
