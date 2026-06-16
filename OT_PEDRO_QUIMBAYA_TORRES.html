@@ -22,6 +22,10 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 .list{list-style:none;margin:0;padding:12px;}
 .list li{margin:8px 0;}
 .link{display:block;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;text-decoration:none;color:#0f172a;}
+.link-tec{display:block;}
+.tec-name{display:block;font-weight:700;margin-bottom:5px;}
+.tec-resumen{display:flex;gap:6px;flex-wrap:wrap;font-size:12px;color:#334155;}
+.tec-count{display:inline-block;padding:3px 7px;border-radius:999px;border:1px solid #cbd5e1;background:#f8fafc;}
 .row-hoy{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:7px 8px;border-bottom:1px dashed #cbd5e1;}
 .otcell{display:flex;align-items:center;gap:6px;white-space:nowrap;}
 .pill{display:inline-block;padding:4px 8px;background:#e2e8f0;border-radius:999px;}
@@ -51,29 +55,29 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 </div>
 </div></section>
 <nav class='chips'>
-<a href='#OTAPR' class='chip'>OTAPR</a>
-<a href='#OTPL' class='chip'>OTPL</a>
-<a href='#OTPR' class='chip'>OTPR</a>
-<a href='#OTRPR' class='chip'>OTRPR</a>
-<a href='#OTE' class='chip'>OTE</a>
-<a href='#OTD' class='chip'>OTD</a>
+<a href='#OTAPR' class='chip'>OTAPR (0)</a>
+<a href='#OTPL' class='chip'>OTPL (0)</a>
+<a href='#OTPR' class='chip'>OTPR (0)</a>
+<a href='#OTRPR' class='chip'>OTRPR (0)</a>
+<a href='#OTE' class='chip'>OTE (0)</a>
+<a href='#OTD' class='chip'>OTD (0)</a>
 </nav>
-<section id='OTAPR'><h2>OTAPR</h2>
+<section id='OTAPR'><h2>OTAPR (0)</h2>
 <p class='empty'>Sin OTs en este estado.</p>
 </section>
-<section id='OTPL'><h2>OTPL</h2>
+<section id='OTPL'><h2>OTPL (0)</h2>
 <p class='empty'>Sin OTs en este estado.</p>
 </section>
-<section id='OTPR'><h2>OTPR</h2>
+<section id='OTPR'><h2>OTPR (0)</h2>
 <p class='empty'>Sin OTs en este estado.</p>
 </section>
-<section id='OTRPR'><h2>OTRPR</h2>
+<section id='OTRPR'><h2>OTRPR (0)</h2>
 <p class='empty'>Sin OTs en este estado.</p>
 </section>
-<section id='OTE'><h2>OTE</h2>
+<section id='OTE'><h2>OTE (0)</h2>
 <p class='empty'>Sin OTs en este estado.</p>
 </section>
-<section id='OTD'><h2>OTD</h2>
+<section id='OTD'><h2>OTD (0)</h2>
 <p class='empty'>Sin OTs en este estado.</p>
 </section>
 <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
@@ -85,4 +89,4 @@ new Chart(c1,{type:'bar',data:{labels:['Asignadas','Cerradas (OTCT)'],datasets:[
 new Chart(c2,{type:'bar',data:{labels:['OTAPR','OTPL','OTPR','OTRPR','OTE','OTD'],datasets:[{label:'OTs',data:[0,0,0,0,0,0]}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
 }catch(e){console && console.error && console.error(e);}
 </script>
-<footer><p>Generado: 2026-06-16 08:23:31</p></footer></body></html>
+<footer><p>Generado: 2026-06-16 10:25:46</p></footer></body></html>
