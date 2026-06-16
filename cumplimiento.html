@@ -1,0 +1,73 @@
+<!doctype html><html lang='es'><head><meta charset='utf-8'/><meta name='viewport' content='width=device-width, initial-scale=1'/><title>Cumplimiento semanal</title><style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0;background:#f6f7fb;color:#0f172a;}
+header{position:sticky;top:0;background:#ffffff;color:#0f172a;padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:4px solid #003366;}
+header img.logo{height:48px;margin-right:12px;}
+h1{margin:0;font-size:18px;font-weight:600;}
+.filters{display:flex;gap:10px;padding:10px 12px;align-items:center;background:#e2e8f0;}
+.filters label{font-size:13px;color:#334155;}
+.filters select{padding:6px 8px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;}
+nav.chips{display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px;background:#e2e8f0;border-top:1px solid #cbd5e1;}
+.chip{padding:6px 10px;border-radius:999px;background:#fff;border:1px solid #cbd5e1;text-decoration:none;color:#0f172a;font-size:13px;}
+section{padding:10px;}
+h2{font-size:14px;margin:10px 6px;color:#334155;}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;margin:8px 6px;padding:10px 12px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.card-hd{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.badge{font-size:11px;padding:3px 6px;border-radius:6px;border:1px solid #cbd5e1;background:#f8fafc;}
+.card h3{font-size:15px;margin:0;}
+.nro{display:inline-block;padding:4px 8px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;}
+.due-today{background:#ecfdf5;border-color:#22c55e;}
+.due-thisweek{background:#fff7ed;border-color:#fb923c;}
+.due-previous{background:#fef2f2;border-color:#ef4444;}
+.card-bd p{margin:4px 0;font-size:13px;line-height:1.25;}
+.empty{color:#64748b;font-size:13px;margin:8px;}
+.list{list-style:none;margin:0;padding:12px;}
+.list li{margin:8px 0;}
+.link{display:block;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;text-decoration:none;color:#0f172a;}
+.link-tec{display:block;}
+.tec-name{display:block;font-weight:700;margin-bottom:5px;}
+.tec-resumen{display:flex;gap:6px;flex-wrap:wrap;font-size:12px;color:#334155;}
+.tec-count{display:inline-block;padding:3px 7px;border-radius:999px;border:1px solid #cbd5e1;background:#f8fafc;}
+.row-hoy{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:7px 8px;border-bottom:1px dashed #cbd5e1;}
+.otcell{display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.pill{display:inline-block;padding:4px 8px;background:#e2e8f0;border-radius:999px;}
+.pdfbtn{display:inline-block;width:fit-content;white-space:nowrap;padding:3px 7px;border-radius:7px;background:#f8fafc;color:#003366;text-decoration:none;font-size:11px;border:1px solid #003366;line-height:1;}
+.pdfbtn:hover{background:#e2e8f0;}
+.charts-row{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;margin:8px 6px;}
+.chart-box{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:8px 10px;}
+.chart-title{margin:6px 4px 4px;font-size:13px;color:#334155;font-weight:600;}
+.grid{width:100%;border-collapse:collapse;margin:8px 6px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;}
+.grid th,.grid td{font-size:13px;padding:6px 8px;border-bottom:1px solid #eef2f7;text-align:left;}
+.grid th{background:#f8fafc;color:#334155;font-weight:600;}
+.btn{display:inline-block;font-size:12px;padding:6px 10px;border-radius:8px;text-decoration:none;border:1px solid #cbd5e1;background:#fff;margin-left:8px}
+.btn-reprog{background:#fff7ed;border-color:#fb923c;color:#9a3412}
+.btn-reprog:hover{filter:brightness(0.95)}
+@media(max-width:520px){.row-hoy{grid-template-columns:1fr;gap:6px}.tec{color:#334155;font-size:12px}}
+</style></head><body>
+<style>
+.top-meta{font-size:13px;color:#334155;margin:6px 0 14px 8px}
+.row-log{display:flex;gap:10px;flex-wrap:wrap;margin:10px 6px}
+.btnlink{display:inline-block;padding:8px 12px;border-radius:10px;background:#0f172a;color:#fff;text-decoration:none;font-weight:600}
+.btnlink:hover{opacity:.9}
+.year-box{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px;margin:12px 6px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.year-head{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:8px}
+.year-head h2{margin:0;font-size:16px;color:#0f172a}
+.year-stats{display:flex;gap:8px;flex-wrap:wrap}
+.stat{display:inline-block;padding:5px 9px;border-radius:999px;border:1px solid #cbd5e1;background:#f8fafc;font-size:12px}
+.chart-wrap{position:relative;width:100%;overflow-x:auto}
+.chart-wrap canvas{background:#fff;min-width:900px}
+</style>
+<header><img src='logo_pelex.bmp' alt='PELEX' class='logo'><h1>Cumplimiento semanal de OT</h1></header>
+<div class='top-meta'>Generado: <strong>2026-06-16 11:42:59</strong></div>
+<div class='row-log'>
+  <a class='btnlink' href='index.html'>Volver a Main</a>
+  <a class='btnlink' href='solicitudes.html'>Solicitudes</a>
+</div>
+<section class='year-box'><div class='year-head'><h2>Año 2026</h2><div class='year-stats'><span class='stat'>Programadas: <strong>3297</strong></span><span class='stat'>Cerradas: <strong>2879</strong></span><span class='stat'>Cumplimiento: <strong>87,3%</strong></span></div></div><div class='chart-wrap'><canvas id='chartCumplimiento_2026' width='1200' height='360'></canvas></div></section>
+<section class='year-box'><div class='year-head'><h2>Año 2025</h2><div class='year-stats'><span class='stat'>Programadas: <strong>1345</strong></span><span class='stat'>Cerradas: <strong>1345</strong></span><span class='stat'>Cumplimiento: <strong>100,0%</strong></span></div></div><div class='chart-wrap'><canvas id='chartCumplimiento_2025' width='1200' height='360'></canvas></div></section>
+<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+<script>
+try{
+new Chart(document.getElementById('chartCumplimiento_2026').getContext('2d'),{type:'bar',data:{labels:['W01','W02','W03','W04','W05','W06','W07','W08','W09','W10','W11','W12','W13','W14','W15','W16','W17','W18','W19','W20','W21','W22','W23','W24','W25','W26','W27','W28','W29','W30','W31','W32','W33','W34','W35','W36','W37','W38','W39','W40','W41','W42','W43','W44','W45','W46','W47','W48','W49','W50','W51','W52','W53'],datasets:[{label:'Programadas',data:[75,109,109,108,135,136,122,122,123,117,123,122,123,163,122,128,146,144,144,143,143,144,143,140,123,89,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],borderWidth:1},{label:'Cerradas',data:[75,109,109,108,135,136,122,122,123,117,123,122,123,125,122,128,146,144,144,143,142,144,63,36,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],borderWidth:1}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},title:{display:true,text:'Programadas vs Cerradas - 2026'}},scales:{y:{beginAtZero:true,ticks:{precision:0}}}}});
+new Chart(document.getElementById('chartCumplimiento_2025').getContext('2d'),{type:'bar',data:{labels:['W01','W02','W03','W04','W05','W06','W07','W08','W09','W10','W11','W12','W13','W14','W15','W16','W17','W18','W19','W20','W21','W22','W23','W24','W25','W26','W27','W28','W29','W30','W31','W32','W33','W34','W35','W36','W37','W38','W39','W40','W41','W42','W43','W44','W45','W46','W47','W48','W49','W50','W51','W52'],datasets:[{label:'Programadas',data:[11,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,88,102,102,102,104,102,104,104,105,104,104,104,108],borderWidth:1},{label:'Cerradas',data:[11,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,88,102,102,102,104,102,104,104,105,104,104,104,108],borderWidth:1}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},title:{display:true,text:'Programadas vs Cerradas - 2025'}},scales:{y:{beginAtZero:true,ticks:{precision:0}}}}});
+}catch(e){console && console.error && console.error(e);}
+</script>
+<footer><p>Generado: 2026-06-16 11:42:59</p></footer></body></html>
