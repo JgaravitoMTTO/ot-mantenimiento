@@ -40,6 +40,14 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 .btn{display:inline-block;font-size:12px;padding:6px 10px;border-radius:8px;text-decoration:none;border:1px solid #cbd5e1;background:#fff;margin-left:8px}
 .btn-reprog{background:#fff7ed;border-color:#fb923c;color:#9a3412}
 .btn-reprog:hover{filter:brightness(0.95)}
+.backlog-acc{margin:8px 6px;}
+.backlog-state{background:#fff;border:1px solid #e2e8f0;border-radius:12px;margin:8px 0;overflow:hidden;}
+.backlog-state summary{cursor:pointer;padding:10px 12px;font-weight:700;color:#0f172a;background:#f8fafc;list-style:none;display:flex;justify-content:space-between;gap:8px;align-items:center;}
+.backlog-state summary::-webkit-details-marker{display:none;}
+.backlog-state summary:after{content:'?';font-size:11px;color:#64748b;}
+.backlog-state[open] summary:after{content:'?';}
+.backlog-state .backlog-body{padding:4px 6px 10px;}
+.backlog-count{font-weight:600;color:#334155;font-size:12px;}
 @media(max-width:520px){.row-hoy{grid-template-columns:1fr;gap:6px}.tec{color:#334155;font-size:12px}}
 </style><script>function filtrar(){var fy=document.getElementById('fYear').value||'';var fw=document.getElementById('fWeek').value||'';document.querySelectorAll('.card').forEach(function(c){ var y=c.getAttribute('data-year'); var w=c.getAttribute('data-week'); var okY = !fy || (y==fy); var okW = !fw || (w==fw); c.style.display=(okY&&okW)?'block':'none';});}</script></head><body>
 <header><img src='logo_pelex.bmp' alt='PELEX' class='logo'><h1>OTs de PEDRO QUIMBAYA TORRES</h1></header>
@@ -91,4 +99,4 @@ new Chart(c2,{type:'bar',data:{labels:['OTAPR','OTPL','OTPR','OTRPR','OTE','OTD'
 new Chart(document.getElementById('chartCumplTecActual').getContext('2d'),{type:'bar',data:{labels:['W01','W02','W03','W04','W05','W06','W07','W08','W09','W10','W11','W12','W13','W14','W15','W16','W17','W18','W19','W20','W21','W22','W23','W24','W25','W26','W27','W28','W29','W30','W31','W32','W33','W34','W35','W36','W37','W38','W39','W40','W41','W42','W43','W44','W45','W46','W47','W48','W49','W50','W51','W52','W53'],datasets:[{type:'bar',label:'OTs del técnico',data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],borderWidth:1,yAxisID:'y'},{type:'bar',label:'Cerradas OTCT',data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],borderWidth:1,yAxisID:'y'},{type:'line',label:'% Cumplimiento',data:[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],borderWidth:2,tension:0.25,yAxisID:'y1'}]},options:{responsive:false,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom'},title:{display:true,text:'Cumplimiento semanal - PEDRO QUIMBAYA TORRES - 2026'},tooltip:{callbacks:{label:function(ctx){if(ctx.dataset.label==='% Cumplimiento'){return ctx.dataset.label+': '+ctx.parsed.y.toFixed(1)+'%';}return ctx.dataset.label+': '+ctx.parsed.y;}}}},scales:{y:{beginAtZero:true,position:'left',ticks:{precision:0},title:{display:true,text:'Cantidad de OT'}},y1:{beginAtZero:true,position:'right',min:0,max:100,grid:{drawOnChartArea:false},ticks:{callback:function(value){return value+'%';}},title:{display:true,text:'% Cumplimiento'}}}}});
 }catch(e){console && console.error && console.error(e);}
 </script>
-<footer><p>Generado: 2026-06-17 12:57:23</p></footer></body></html>
+<footer><p>Generado: 2026-06-17 13:15:40</p></footer></body></html>
