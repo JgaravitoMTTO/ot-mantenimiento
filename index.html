@@ -77,8 +77,8 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
       <tr><td>OTPL</td><td>181</td><td>62,2%</td></tr>
       <tr><td>OTPR</td><td>4</td><td>1,4%</td></tr>
       <tr><td>OTRPR</td><td>0</td><td>0,0%</td></tr>
-      <tr><td>OTE</td><td>106</td><td>36,4%</td></tr>
-      <tr><td>OTD</td><td>0</td><td>0,0%</td></tr>
+      <tr><td>OTE</td><td>104</td><td>35,7%</td></tr>
+      <tr><td>OTD</td><td>2</td><td>0,7%</td></tr>
     </tbody></table>
   </div>
   <div class='chart-box'>
@@ -108,7 +108,7 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <li><a class='link link-tec' href='OT_EDDY_SANTIAGO_RAMIREZ_SALGADO.html'><span class='tec-name'>EDDY SANTIAGO RAMIREZ SALGADO</span><span class='tec-resumen'><span class='tec-count'>OTPR: <strong>0</strong></span><span class='tec-count'>OTE: <strong>2</strong></span><span class='tec-count'>OTRPR: <strong>0</strong></span><span class='tec-count'>OTD: <strong>0</strong></span></span></a></li>
 <li><a class='link link-tec' href='OT_EDWARD_MART_NEZ_FRANCO.html'><span class='tec-name'>EDWARD MARTÍNEZ FRANCO</span><span class='tec-resumen'><span class='tec-count'>OTPR: <strong>1</strong></span><span class='tec-count'>OTE: <strong>22</strong></span><span class='tec-count'>OTRPR: <strong>0</strong></span><span class='tec-count'>OTD: <strong>0</strong></span></span></a></li>
 <li><a class='link link-tec' href='OT_GILDARDO_CASTIBLANCO_PE_A.html'><span class='tec-name'>GILDARDO CASTIBLANCO PEÑA</span><span class='tec-resumen'><span class='tec-count'>OTPR: <strong>0</strong></span><span class='tec-count'>OTE: <strong>2</strong></span><span class='tec-count'>OTRPR: <strong>0</strong></span><span class='tec-count'>OTD: <strong>0</strong></span></span></a></li>
-<li><a class='link link-tec' href='OT_JES_S_DAVID_MOLINA_PRIETO.html'><span class='tec-name'>JESÚS DAVID MOLINA PRIETO</span><span class='tec-resumen'><span class='tec-count'>OTPR: <strong>0</strong></span><span class='tec-count'>OTE: <strong>4</strong></span><span class='tec-count'>OTRPR: <strong>0</strong></span><span class='tec-count'>OTD: <strong>0</strong></span></span></a></li>
+<li><a class='link link-tec' href='OT_JES_S_DAVID_MOLINA_PRIETO.html'><span class='tec-name'>JESÚS DAVID MOLINA PRIETO</span><span class='tec-resumen'><span class='tec-count'>OTPR: <strong>0</strong></span><span class='tec-count'>OTE: <strong>2</strong></span><span class='tec-count'>OTRPR: <strong>0</strong></span><span class='tec-count'>OTD: <strong>2</strong></span></span></a></li>
 <li><a class='link link-tec' href='OT_JOHANN_CAMILO_BUITRAGO_JIMENEZ.html'><span class='tec-name'>JOHANN CAMILO BUITRAGO JIMENEZ</span><span class='tec-resumen'><span class='tec-count'>OTPR: <strong>1</strong></span><span class='tec-count'>OTE: <strong>13</strong></span><span class='tec-count'>OTRPR: <strong>0</strong></span><span class='tec-count'>OTD: <strong>0</strong></span></span></a></li>
 <li><a class='link link-tec' href='OT_JORGE_ELIECER_JIMENEZ_GARCIA.html'><span class='tec-name'>JORGE ELIECER JIMENEZ GARCIA</span><span class='tec-resumen'><span class='tec-count'>OTPR: <strong>0</strong></span><span class='tec-count'>OTE: <strong>16</strong></span><span class='tec-count'>OTRPR: <strong>0</strong></span><span class='tec-count'>OTD: <strong>0</strong></span></span></a></li>
 <li><a class='link link-tec' href='OT_JUAN_PABLO_BALLESTEROS_SANCHEZ.html'><span class='tec-name'>JUAN PABLO BALLESTEROS SANCHEZ</span><span class='tec-resumen'><span class='tec-count'>OTPR: <strong>1</strong></span><span class='tec-count'>OTE: <strong>7</strong></span><span class='tec-count'>OTRPR: <strong>0</strong></span><span class='tec-count'>OTD: <strong>0</strong></span></span></a></li>
@@ -124,11 +124,11 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 <script>
 try{
   new Chart(document.getElementById('chartEstados').getContext('2d'),{
-    type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,181,4,0,106,0],backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],borderWidth:1}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}
+    type:'pie',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,181,4,0,104,2],backgroundColor:['#06b6d4','#eab308','#ef4444','#94a3b8','#3b82f6','#22c55e'],borderWidth:1}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}
   });
   new Chart(document.getElementById('chartPrevProgVsCT').getContext('2d'),{
     type:'bar',data:{labels:['Programadas','Cerradas (OTCT)'],datasets:[{label:'OTs',data:[140,82]}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
   });
 }catch(e){console && console.error && console.error(e);}
 </script>
-<footer><p>Generado: 2026-06-18 10:23:31</p></footer></body></html>
+<footer><p>Generado: 2026-06-18 13:38:50</p></footer></body></html>
