@@ -22,6 +22,10 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 .list{list-style:none;margin:0;padding:12px;}
 .list li{margin:8px 0;}
 .link{display:block;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;text-decoration:none;color:#0f172a;}
+.link-tec{display:block;}
+.tec-name{display:block;font-weight:700;margin-bottom:5px;}
+.tec-resumen{display:flex;gap:6px;flex-wrap:wrap;font-size:12px;color:#334155;}
+.tec-count{display:inline-block;padding:3px 7px;border-radius:999px;border:1px solid #cbd5e1;background:#f8fafc;}
 .row-hoy{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:7px 8px;border-bottom:1px dashed #cbd5e1;}
 .otcell{display:flex;align-items:center;gap:6px;white-space:nowrap;}
 .pill{display:inline-block;padding:4px 8px;background:#e2e8f0;border-radius:999px;}
@@ -36,11 +40,14 @@ h2{font-size:14px;margin:10px 6px;color:#334155;}
 .btn{display:inline-block;font-size:12px;padding:6px 10px;border-radius:8px;text-decoration:none;border:1px solid #cbd5e1;background:#fff;margin-left:8px}
 .btn-reprog{background:#fff7ed;border-color:#fb923c;color:#9a3412}
 .btn-reprog:hover{filter:brightness(0.95)}
-.state-OTE,.OTE{background:#fff1f2!important;color:#7f1d1d!important;border-color:#ef4444!important;}
-.badge.OTE,.tag.state-OTE,.chip.state-OTE,.nro.state-OTE,.pill.state-OTE{background:linear-gradient(135deg,#fee2e2 0%,#fed7aa 100%)!important;color:#7f1d1d!important;border:1px solid #ef4444!important;font-weight:800;}
-.chip.state-OTE,.nro.state-OTE,.pill.state-OTE{box-shadow:0 0 0 2px rgba(239,68,68,.15);}
-.state-title.state-OTE{display:inline-block;padding:5px 9px;border-radius:999px;background:#fee2e2;color:#7f1d1d;border:1px solid #ef4444;}
-.grid td.state-OTE{font-weight:800;background:#fee2e2!important;color:#7f1d1d!important;border-left:4px solid #ef4444;}
+.backlog-acc{margin:8px 6px;}
+.backlog-state{background:#fff;border:1px solid #e2e8f0;border-radius:12px;margin:8px 0;overflow:hidden;}
+.backlog-state summary{cursor:pointer;padding:10px 12px;font-weight:700;color:#0f172a;background:#f8fafc;list-style:none;display:flex;justify-content:space-between;gap:8px;align-items:center;}
+.backlog-state summary::-webkit-details-marker{display:none;}
+.backlog-state summary:after{content:'?';font-size:11px;color:#64748b;}
+.backlog-state[open] summary:after{content:'?';}
+.backlog-state .backlog-body{padding:4px 6px 10px;}
+.backlog-count{font-weight:600;color:#334155;font-size:12px;}
 @media(max-width:520px){.row-hoy{grid-template-columns:1fr;gap:6px}.tec{color:#334155;font-size:12px}}
 </style></head><body>
 <style>
@@ -168,4 +175,4 @@ document.addEventListener('DOMContentLoaded', ()=>{
   applyFilter();
 });
 </script>
-<footer><p>Generado: 2026-06-19 16:04:39</p></footer></body></html>
+<footer><p>Generado: 2026-06-19 16:16:37</p></footer></body></html>
