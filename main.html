@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang='es'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>A.R.M.A. | Asset Reliability & Maintenance Analytics</title>
+  <style>
+:root{
+  --blue:#004b9b;
+  --blue2:#0076d7;
+  --navy:#002b66;
+  --green:#55b52e;
+  --green2:#00d65f;
+  --cyan:#00bfd6;
+  --gray:#f3f6fb;
+  --line:#dbe5f0;
+  --text:#0f172a;
+  --muted:#64748b;
+  --dark:#111827;
+  --shadow:0 14px 28px rgba(0,43,102,.12);
+  --soft:0 5px 14px rgba(15,23,42,.12);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:#eef3f9;color:var(--text)}
+.app{display:flex;min-height:100vh}
+.sidebar{width:245px;background:linear-gradient(180deg,#002b66,#004b9b 55%,#00336f);color:#fff;padding:22px 16px;position:fixed;left:0;top:0;bottom:0;box-shadow:12px 0 28px rgba(0,43,102,.20);z-index:10}
+.brand-mini{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.brand-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--blue2),var(--green));display:grid;place-items:center;font-size:28px;font-weight:900;box-shadow:var(--soft)}
+.brand-mini strong{display:block;font-size:18px;letter-spacing:.5px}
+.brand-mini span{display:block;font-size:11px;color:#cce5ff;margin-top:2px}
+.menu{display:flex;flex-direction:column;gap:8px}
+.menu a{display:flex;align-items:center;gap:12px;text-decoration:none;color:#dbeafe;padding:13px 12px;border-radius:12px;font-weight:650;font-size:14px;border:1px solid transparent}
+.menu a span{width:24px;text-align:center;font-size:17px}
+.menu a:hover,.menu a.active{background:linear-gradient(90deg,#006bd6,#0052b8);border-left:4px solid var(--green2);color:#fff;box-shadow:var(--soft)}
+.side-status{position:absolute;left:16px;right:16px;bottom:18px;border-top:1px solid rgba(255,255,255,.20);padding-top:14px;display:flex;justify-content:space-between;align-items:center;color:#dbeafe}
+.side-status span{font-size:11px}.side-status strong{background:rgba(255,255,255,.12);padding:6px 10px;border-radius:999px}
+.main{margin-left:245px;width:calc(100% - 245px);padding:18px 24px 20px}
+.topbar{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow);margin-bottom:18px}
+.brand-row{display:flex;align-items:center;gap:22px}
+.brand-separator{width:1px;height:58px;background:#d8e5f2}
+.logo-pelex{height:72px;object-fit:contain}
+.logo-arma{height:82px;object-fit:contain}
+.top-actions{display:flex;align-items:center;gap:12px}
+.date-card,.user-card{background:#f8fbff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;min-width:118px;box-shadow:0 2px 8px rgba(15,23,42,.05)}
+.date-card span,.user-card span{display:block;font-size:12px;color:var(--muted)}
+.date-card strong,.user-card strong{display:block;font-size:16px;color:var(--navy);margin-top:3px}
+.user-card{display:flex;align-items:center;gap:10px;min-width:180px}
+.avatar{width:38px;height:38px;border-radius:50%;background:#e8f2ff;color:var(--blue);display:grid;place-items:center;font-weight:900}
+.hero{position:relative;overflow:hidden;background:radial-gradient(circle at 72% 20%,#006bd6 0,#003b86 35%,#00265b 100%);border-radius:22px;min-height:245px;padding:38px 46px;display:flex;justify-content:space-between;align-items:center;color:#fff;box-shadow:var(--shadow);margin-bottom:18px}
+.hero:before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.08),transparent 40%),repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 1px,transparent 1px 90px);opacity:.65}
+.hero-content{position:relative;z-index:2;max-width:720px}
+.label{display:inline-block;background:rgba(0,214,95,.15);border:1px solid rgba(0,214,95,.45);color:#b8ffd5;padding:7px 12px;border-radius:999px;font-weight:800;font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+.hero h1{font-size:42px;margin:16px 0 10px;letter-spacing:.5px}
+.hero p{font-size:20px;line-height:1.45;margin:0 0 24px;color:#eaf4ff}
+.hero-buttons{display:flex;gap:12px;flex-wrap:wrap}
+.hero-btn{display:inline-block;text-decoration:none;padding:12px 18px;border-radius:13px;font-weight:800}
+.hero-btn.primary{background:linear-gradient(180deg,var(--green2),var(--green));color:#fff}
+.hero-btn.secondary{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);color:#fff}
+.hero-graphic{position:relative;z-index:2;width:380px;height:180px}
+.shield{position:absolute;right:120px;top:10px;width:112px;height:112px;border-radius:30px;background:linear-gradient(135deg,#00c3ff,#006bd6);display:grid;place-items:center;font-size:64px;font-weight:900;box-shadow:0 0 45px rgba(0,195,255,.55)}
+.graph-bars{position:absolute;right:6px;bottom:8px;height:85px;display:flex;align-items:end;gap:10px}
+.graph-bars i{display:block;width:22px;background:linear-gradient(180deg,#00d65f,#0076d7);border-radius:8px 8px 0 0}
+.graph-bars i:nth-child(1){height:30px}.graph-bars i:nth-child(2){height:45px}.graph-bars i:nth-child(3){height:62px}.graph-bars i:nth-child(4){height:78px}.graph-bars i:nth-child(5){height:95px}
+.curve{position:absolute;right:5px;bottom:20px;width:310px;height:90px;border-bottom:8px solid var(--green);border-radius:50%;transform:rotate(-8deg);opacity:.9}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:18px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);text-decoration:none;color:inherit}
+a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)}
+.kpi-icon{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:22px}
+.kpi-icon.blue{background:linear-gradient(135deg,#0076d7,#004b9b)}
+.kpi-icon.green{background:linear-gradient(135deg,#00d65f,#55b52e)}
+.kpi-icon.cyan{background:linear-gradient(135deg,#00bfd6,#0076d7)}
+.kpi-icon.dark{background:linear-gradient(135deg,#111827,#000)}
+.kpi span{display:block;color:var(--muted);font-size:13px}
+.kpi strong{display:block;font-size:30px;color:var(--navy);margin:2px 0}
+.kpi small{display:block;color:#16a34a;font-size:12px}
+.modules{display:grid;grid-template-columns:repeat(6,minmax(180px,1fr));gap:14px;margin-bottom:18px}
+.module-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--shadow)}
+.module-title h2{font-size:17px;text-align:center;margin:4px 0 8px;color:var(--text)}
+.accent{height:8px;background:linear-gradient(90deg,var(--blue) 0 74%,var(--green) 74% 86%,var(--blue) 86%);border-radius:999px;margin-bottom:12px}
+.module-buttons{display:flex;flex-direction:column;gap:10px}
+.arma-btn{position:relative;display:flex;align-items:center;min-height:42px;border-radius:999px;text-decoration:none;color:#fff;font-weight:850;letter-spacing:.2px;box-shadow:0 5px 12px rgba(15,23,42,.22);overflow:hidden}
+.arma-btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.arma-btn .btn-icon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#00bfd6;margin-right:8px;font-size:13px;border:2px solid rgba(255,255,255,.70);flex:0 0 42px}
+.arma-btn .btn-text{padding-right:12px;font-size:13px;line-height:1.1}
+.arma-btn.blue{background:linear-gradient(180deg,#5aa9e8,#0076d7)}
+.arma-btn.green{background:linear-gradient(180deg,#78c64a,#55a928)}
+.arma-btn.gray{background:linear-gradient(180deg,#b8b8b8,#8d8d8d)}
+.arma-btn.dark{background:linear-gradient(180deg,#2b2b2b,#000)}
+.quick{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);margin-bottom:16px}
+.quick h2{text-align:center;margin:0 0 14px;color:var(--navy);text-transform:uppercase;font-size:15px}
+.quick-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.quick-grid a{background:#f8fbff;border:1px solid var(--line);border-radius:14px;text-decoration:none;color:var(--navy);font-weight:800;text-align:center;padding:14px 10px}
+.footer{background:linear-gradient(90deg,#2764c8,#004b9b);color:#fff;border-radius:999px;padding:9px 16px;text-align:center;font-size:12px;font-weight:800;box-shadow:var(--soft)}
+@media(max-width:1500px){.modules{grid-template-columns:repeat(3,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:980px){.sidebar{position:relative;width:100%;height:auto;bottom:auto}.app{display:block}.main{margin-left:0;width:100%;padding:14px}.topbar{flex-direction:column;gap:12px}.brand-row{justify-content:center;flex-wrap:wrap}.top-actions{flex-wrap:wrap;justify-content:center}.hero{flex-direction:column;align-items:flex-start}.hero-graphic{display:none}.modules{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr}.logo-pelex{height:58px}.logo-arma{height:68px}}
+
+  </style>
+</head>
+<body>
+<div class='app'>
+<aside class='sidebar'>
+  <div class='brand-mini'>
+    <div class='brand-icon'>A</div>
+    <div>
+      <strong>A.R.M.A.</strong>
+      <span>Maintenance Suite</span>
+    </div>
+  </div>
+  <nav class='menu'>
+    <a class='active' href='main.html'><span>¦</span> Inicio</a>
+    <a href='index.html'><span>?</span> Órdenes de Trabajo</a>
+    <a href='cumplimiento.html'><span>?</span> Cumplimiento</a>
+    <a href='solicitudes.html'><span>?</span> Solicitudes</a>
+    <a href='#modulos'><span>?</span> Módulos</a>
+    <a href='#herramientas'><span>?</span> Herramientas</a>
+  </nav>
+  <div class='side-status'>
+    <span>SGMC-P2</span>
+    <strong>Semana 26</strong>
+  </div>
+</aside>
+<main class='main'>
+  <header class='topbar'>
+    <div class='brand-row'>
+      <img src='logo_pelex.bmp' alt='PELEX' class='logo-pelex'>
+      <div class='brand-separator'></div>
+      <img src='ARMA%20logo%202.png' alt='A.R.M.A.' class='logo-arma'>
+    </div>
+    <div class='top-actions'>
+      <div class='date-card'><span>Semana</span><strong>26</strong></div>
+      <div class='date-card'><span>Fecha</span><strong>24/06/2026</strong></div>
+      <div class='user-card'><div class='avatar'>?</div><div><strong>Administrador</strong><span>Planta Principal</span></div></div>
+    </div>
+  </header>
+  <section class='hero'>
+    <div class='hero-content'>
+      <span class='label'>Asset Reliability & Maintenance Analytics</span>
+      <h1>Bienvenido a A.R.M.A.</h1>
+      <p>Plataforma integral para la gestión de activos, mantenimiento, confiabilidad operacional y control técnico.</p>
+      <div class='hero-buttons'>
+        <a href='index.html' class='hero-btn primary'>Abrir Órdenes de Trabajo</a>
+        <a href='solicitudes.html' class='hero-btn secondary'>Gestionar Solicitudes</a>
+      </div>
+    </div>
+    <div class='hero-graphic'>
+      <div class='shield'>?</div>
+      <div class='graph-bars'><i></i><i></i><i></i><i></i><i></i></div>
+      <div class='curve'></div>
+    </div>
+  </section>
+  <section class='kpis'>
+    <a class='kpi' href='index.html'>
+      <div class='kpi-icon blue'>?</div>
+      <div><span>Órdenes de Trabajo</span><strong>4872</strong><small>Ir al index operativo actual</small></div>
+    </a>
+    <a class='kpi' href='cumplimiento.html'>
+      <div class='kpi-icon green'>?</div>
+      <div><span>Cumplimiento OTCT</span><strong>92,6%</strong><small>Programadas vs cerradas</small></div>
+    </a>
+    <a class='kpi' href='solicitudes.html'>
+      <div class='kpi-icon cyan'>?</div>
+      <div><span>Solicitudes</span><strong>45</strong><small>Producción a mantenimiento</small></div>
+    </a>
+    <div class='kpi'>
+      <div class='kpi-icon dark'>?</div>
+      <div><span>Sistema</span><strong>Online</strong><small>Generado: 24/06 17:14</small></div>
+    </div>
+  </section>
+  <section class='modules' id='modulos'>
+    <div class='module-card'>
+      <div class='module-title'>
+        <h2>Gestión de Activos</h2>
+        <div class='accent'></div>
+      </div>
+      <div class='module-buttons'>
+        <a class='arma-btn green' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Reportes Técnicos</span>
+        </a>
+        <a class='arma-btn blue' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>MEL Equipos</span>
+        </a>
+        <a class='arma-btn gray' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Matriz de Criticidad</span>
+        </a>
+        <a class='arma-btn gray' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Hojas de Vida Equipos</span>
+        </a>
+        <a class='arma-btn gray' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Componentes</span>
+        </a>
+        <a class='arma-btn green' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Plan Padrino</span>
+        </a>
+        <a class='arma-btn dark' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Lecturas</span>
+        </a>
+      </div>
+    </div>
+    <div class='module-card'>
+      <div class='module-title'>
+        <h2>Plan Mantenimiento</h2>
+        <div class='accent'></div>
+      </div>
+      <div class='module-buttons'>
+        <a class='arma-btn blue' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Cronogramas MP</span>
+        </a>
+        <a class='arma-btn green' href='solicitudes.html'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Solicitudes</span>
+        </a>
+        <a class='arma-btn blue' href='index.html'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Órdenes de MTTO</span>
+        </a>
+        <a class='arma-btn green' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Plan MTTO</span>
+        </a>
+        <a class='arma-btn blue' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Actividades A.M.</span>
+        </a>
+        <a class='arma-btn green' href='#'>
+          <span class='btn-icon'>PDF</span>
+          <span class='btn-text'>View OT's PDF</span>
+        </a>
+        <a class='arma-btn blue' href='#'>
+          <span class='btn-icon'>PDF</span>
+          <span class='btn-text'>View RT's PDF</span>
+        </a>
+        <a class='arma-btn green' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Inspección I&amp;MA</span>
+        </a>
+        <a class='arma-btn blue' href='#'>
+          <span class='btn-icon'>PDF</span>
+          <span class='btn-text'>View IMA PDF</span>
+        </a>
+      </div>
+    </div>
+    <div class='module-card'>
+      <div class='module-title'>
+        <h2>Soporte y Control Externo</h2>
+        <div class='accent'></div>
+      </div>
+      <div class='module-buttons'>
+        <a class='arma-btn green' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Solicitudes Directas SR</span>
+        </a>
+        <a class='arma-btn dark' href='#'>
+          <span class='btn-icon'>$</span>
+          <span class='btn-text'>Costos MTTO</span>
+        </a>
+        <a class='arma-btn gray' href='#'>
+          <span class='btn-icon'>OC</span>
+          <span class='btn-text'>Órdenes de Compra</span>
+        </a>
+        <a class='arma-btn gray' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Remisiones</span>
+        </a>
+        <a class='arma-btn green' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Servicios</span>
+        </a>
+        <a class='arma-btn gray' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Inventario Repuestos</span>
+        </a>
+        <a class='arma-btn green' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Repuestos Almacén</span>
+        </a>
+        <a class='arma-btn blue' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Proveedores</span>
+        </a>
+        <a class='arma-btn dark' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Evalúa Proveedor</span>
+        </a>
+      </div>
+    </div>
+    <div class='module-card'>
+      <div class='module-title'>
+        <h2>Talento Humano</h2>
+        <div class='accent'></div>
+      </div>
+      <div class='module-buttons'>
+        <a class='arma-btn blue' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Turnos MTTO</span>
+        </a>
+        <a class='arma-btn green' href='#'>
+          <span class='btn-icon'>??</span>
+          <span class='btn-text'>Personal</span>
+        </a>
+        <a class='arma-btn blue' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Form Registro</span>
+        </a>
+        <a class='arma-btn green' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Perfiles</span>
+        </a>
+        <a class='arma-btn dark' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Evalúa Personal</span>
+        </a>
+        <a class='arma-btn dark' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Capacitaciones</span>
+        </a>
+        <a class='arma-btn dark' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Registro Capacitación</span>
+        </a>
+      </div>
+    </div>
+    <div class='module-card'>
+      <div class='module-title'>
+        <h2>Riesgo y Desempeño</h2>
+        <div class='accent'></div>
+      </div>
+      <div class='module-buttons'>
+        <a class='arma-btn green' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Liberación Inocuidad</span>
+        </a>
+        <a class='arma-btn blue' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>IDP</span>
+        </a>
+        <a class='arma-btn green' href='#'>
+          <span class='btn-icon'>Kg</span>
+          <span class='btn-text'>Producción Kg.</span>
+        </a>
+        <a class='arma-btn blue' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Dashboard</span>
+        </a>
+        <a class='arma-btn green' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Gestionar SR'S</span>
+        </a>
+        <a class='arma-btn dark' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Manejo Residuos</span>
+        </a>
+      </div>
+    </div>
+    <div class='module-card'>
+      <div class='module-title'>
+        <h2>Herramientas</h2>
+        <div class='accent'></div>
+      </div>
+      <div class='module-buttons'>
+        <a class='arma-btn blue' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Actualizar HTML</span>
+        </a>
+        <a class='arma-btn green' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Fichas Rodamientos</span>
+        </a>
+        <a class='arma-btn blue' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Biblioteca Digital</span>
+        </a>
+        <a class='arma-btn green' href='#'>
+          <span class='btn-icon'>?</span>
+          <span class='btn-text'>Codificación Productos</span>
+        </a>
+        <a class='arma-btn dark' href='#'>
+          <span class='btn-icon'>i</span>
+          <span class='btn-text'>Instructivos</span>
+        </a>
+      </div>
+    </div>
+  </section>
+  <section class='quick' id='herramientas'>
+    <h2>Acceso rápido</h2>
+    <div class='quick-grid'>
+      <a href='index.html'>? Dashboard OT</a>
+      <a href='solicitudes.html'>? Solicitudes</a>
+      <a href='cumplimiento.html'>? Cumplimiento semanal</a>
+      <a href='#'>? Herramientas</a>
+      <a href='#'>? Biblioteca</a>
+    </div>
+  </section>
+  <footer class='footer'>
+    CONTROL // A.R.M.A. HOME // Generado: 2026-06-24 17:14:37 // PELEX S.A.S.
+  </footer>
+</main>
+</div>
+</body>
+</html>
