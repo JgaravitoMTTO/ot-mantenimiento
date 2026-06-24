@@ -3,7 +3,7 @@
 <head>
   <meta charset='utf-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <title>A.R.M.A. | Asset Reliability & Maintenance Analytics</title>
+  <title>ARMA | ASSET RELIABILITY AND MAINTENANCE ANALYTICS</title>
   <style>
 :root{
   --blue:#004b9b;
@@ -12,6 +12,7 @@
   --green:#55b52e;
   --green2:#00d65f;
   --cyan:#00bfd6;
+  --red:#d71920;
   --gray:#f3f6fb;
   --line:#dbe5f0;
   --text:#0f172a;
@@ -21,43 +22,45 @@
   --soft:0 5px 14px rgba(15,23,42,.12);
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:#eef3f9;color:var(--text)}
-.app{display:flex;min-height:100vh}
-.sidebar{width:245px;background:linear-gradient(180deg,#002b66,#004b9b 55%,#00336f);color:#fff;padding:22px 16px;position:fixed;left:0;top:0;bottom:0;box-shadow:12px 0 28px rgba(0,43,102,.20);z-index:10}
+body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:#eef3f9;color:var(--text);text-transform:uppercase}
+.top-global{position:fixed;left:0;top:0;width:100%;z-index:100;background:#fff;box-shadow:0 10px 24px rgba(0,43,102,.14)}
+.top-white{background:#fff;min-height:122px;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.red-line{height:6px;background:linear-gradient(90deg,var(--red),#ff3333,var(--red))}
+.brand-row{display:flex;align-items:center;gap:26px}
+.brand-separator{width:1px;height:72px;background:#d8e5f2}
+.logo-pelex{height:82px;max-width:300px;object-fit:contain}
+.logo-arma{height:92px;max-width:420px;object-fit:contain}
+.top-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+.date-card,.user-card{background:#f8fbff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;min-width:118px;box-shadow:0 2px 8px rgba(15,23,42,.05)}
+.date-card span,.user-card span{display:block;font-size:11px;color:var(--muted);font-weight:800;letter-spacing:.4px}
+.date-card strong,.user-card strong{display:block;font-size:16px;color:var(--navy);margin-top:3px}
+.user-card{display:flex;align-items:center;gap:10px;min-width:190px}
+.avatar{width:42px;height:42px;border-radius:50%;background:#e8f2ff;color:var(--blue);display:grid;place-items:center;font-weight:900;font-size:13px}
+.app{display:flex;min-height:100vh;padding-top:128px}
+.sidebar{width:245px;background:linear-gradient(180deg,#002b66,#004b9b 55%,#00336f);color:#fff;padding:22px 16px;position:fixed;left:0;top:128px;bottom:0;box-shadow:12px 0 28px rgba(0,43,102,.20);z-index:20}
 .brand-mini{display:flex;align-items:center;gap:12px;margin-bottom:28px}
 .brand-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--blue2),var(--green));display:grid;place-items:center;font-size:28px;font-weight:900;box-shadow:var(--soft)}
 .brand-mini strong{display:block;font-size:18px;letter-spacing:.5px}
 .brand-mini span{display:block;font-size:11px;color:#cce5ff;margin-top:2px}
 .menu{display:flex;flex-direction:column;gap:8px}
-.menu a{display:flex;align-items:center;gap:12px;text-decoration:none;color:#dbeafe;padding:13px 12px;border-radius:12px;font-weight:650;font-size:14px;border:1px solid transparent}
-.menu a span{width:24px;text-align:center;font-size:17px}
+.menu a{display:flex;align-items:center;gap:12px;text-decoration:none;color:#dbeafe;padding:13px 12px;border-radius:12px;font-weight:800;font-size:13px;border:1px solid transparent;letter-spacing:.2px}
+.menu a span{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center;text-align:center;font-size:10px;font-weight:900;color:#fff}
 .menu a:hover,.menu a.active{background:linear-gradient(90deg,#006bd6,#0052b8);border-left:4px solid var(--green2);color:#fff;box-shadow:var(--soft)}
 .side-status{position:absolute;left:16px;right:16px;bottom:18px;border-top:1px solid rgba(255,255,255,.20);padding-top:14px;display:flex;justify-content:space-between;align-items:center;color:#dbeafe}
-.side-status span{font-size:11px}.side-status strong{background:rgba(255,255,255,.12);padding:6px 10px;border-radius:999px}
-.main{margin-left:245px;width:calc(100% - 245px);padding:18px 24px 20px}
-.topbar{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow);margin-bottom:18px}
-.brand-row{display:flex;align-items:center;gap:22px}
-.brand-separator{width:1px;height:58px;background:#d8e5f2}
-.logo-pelex{height:72px;object-fit:contain}
-.logo-arma{height:82px;object-fit:contain}
-.top-actions{display:flex;align-items:center;gap:12px}
-.date-card,.user-card{background:#f8fbff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;min-width:118px;box-shadow:0 2px 8px rgba(15,23,42,.05)}
-.date-card span,.user-card span{display:block;font-size:12px;color:var(--muted)}
-.date-card strong,.user-card strong{display:block;font-size:16px;color:var(--navy);margin-top:3px}
-.user-card{display:flex;align-items:center;gap:10px;min-width:180px}
-.avatar{width:38px;height:38px;border-radius:50%;background:#e8f2ff;color:var(--blue);display:grid;place-items:center;font-weight:900}
+.side-status span{font-size:11px}.side-status strong{background:rgba(255,255,255,.12);padding:6px 10px;border-radius:999px;font-size:12px}
+.main{margin-left:245px;width:calc(100% - 245px);padding:22px 24px 20px}
 .hero{position:relative;overflow:hidden;background:radial-gradient(circle at 72% 20%,#006bd6 0,#003b86 35%,#00265b 100%);border-radius:22px;min-height:245px;padding:38px 46px;display:flex;justify-content:space-between;align-items:center;color:#fff;box-shadow:var(--shadow);margin-bottom:18px}
 .hero:before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.08),transparent 40%),repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 1px,transparent 1px 90px);opacity:.65}
-.hero-content{position:relative;z-index:2;max-width:720px}
-.label{display:inline-block;background:rgba(0,214,95,.15);border:1px solid rgba(0,214,95,.45);color:#b8ffd5;padding:7px 12px;border-radius:999px;font-weight:800;font-size:12px;letter-spacing:.5px;text-transform:uppercase}
-.hero h1{font-size:42px;margin:16px 0 10px;letter-spacing:.5px}
-.hero p{font-size:20px;line-height:1.45;margin:0 0 24px;color:#eaf4ff}
+.hero-content{position:relative;z-index:2;max-width:760px}
+.label{display:inline-block;background:rgba(0,214,95,.15);border:1px solid rgba(0,214,95,.45);color:#b8ffd5;padding:7px 12px;border-radius:999px;font-weight:900;font-size:12px;letter-spacing:.5px}
+.hero h1{font-size:42px;margin:16px 0 10px;letter-spacing:.6px}
+.hero p{font-size:20px;line-height:1.45;margin:0 0 24px;color:#eaf4ff;font-weight:500}
 .hero-buttons{display:flex;gap:12px;flex-wrap:wrap}
-.hero-btn{display:inline-block;text-decoration:none;padding:12px 18px;border-radius:13px;font-weight:800}
+.hero-btn{display:inline-block;text-decoration:none;padding:12px 18px;border-radius:13px;font-weight:900;letter-spacing:.3px}
 .hero-btn.primary{background:linear-gradient(180deg,var(--green2),var(--green));color:#fff}
 .hero-btn.secondary{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);color:#fff}
 .hero-graphic{position:relative;z-index:2;width:380px;height:180px}
-.shield{position:absolute;right:120px;top:10px;width:112px;height:112px;border-radius:30px;background:linear-gradient(135deg,#00c3ff,#006bd6);display:grid;place-items:center;font-size:64px;font-weight:900;box-shadow:0 0 45px rgba(0,195,255,.55)}
+.shield{position:absolute;right:120px;top:10px;width:112px;height:112px;border-radius:30px;background:linear-gradient(135deg,#00c3ff,#006bd6);display:grid;place-items:center;font-size:38px;font-weight:900;box-shadow:0 0 45px rgba(0,195,255,.55)}
 .graph-bars{position:absolute;right:6px;bottom:8px;height:85px;display:flex;align-items:end;gap:10px}
 .graph-bars i{display:block;width:22px;background:linear-gradient(180deg,#00d65f,#0076d7);border-radius:8px 8px 0 0}
 .graph-bars i:nth-child(1){height:30px}.graph-bars i:nth-child(2){height:45px}.graph-bars i:nth-child(3){height:62px}.graph-bars i:nth-child(4){height:78px}.graph-bars i:nth-child(5){height:95px}
@@ -65,341 +68,344 @@ body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:#eef3f9;co
 .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:18px}
 .kpi{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);text-decoration:none;color:inherit}
 a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)}
-.kpi-icon{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:22px}
+.kpi-icon{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:15px}
 .kpi-icon.blue{background:linear-gradient(135deg,#0076d7,#004b9b)}
 .kpi-icon.green{background:linear-gradient(135deg,#00d65f,#55b52e)}
 .kpi-icon.cyan{background:linear-gradient(135deg,#00bfd6,#0076d7)}
 .kpi-icon.dark{background:linear-gradient(135deg,#111827,#000)}
-.kpi span{display:block;color:var(--muted);font-size:13px}
+.kpi span{display:block;color:var(--muted);font-size:12px;font-weight:900;letter-spacing:.3px}
 .kpi strong{display:block;font-size:30px;color:var(--navy);margin:2px 0}
-.kpi small{display:block;color:#16a34a;font-size:12px}
+.kpi small{display:block;color:#16a34a;font-size:11px;font-weight:800}
 .modules{display:grid;grid-template-columns:repeat(6,minmax(180px,1fr));gap:14px;margin-bottom:18px}
 .module-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--shadow)}
-.module-title h2{font-size:17px;text-align:center;margin:4px 0 8px;color:var(--text)}
+.module-title h2{font-size:16px;text-align:center;margin:4px 0 8px;color:var(--text);letter-spacing:.2px}
 .accent{height:8px;background:linear-gradient(90deg,var(--blue) 0 74%,var(--green) 74% 86%,var(--blue) 86%);border-radius:999px;margin-bottom:12px}
 .module-buttons{display:flex;flex-direction:column;gap:10px}
-.arma-btn{position:relative;display:flex;align-items:center;min-height:42px;border-radius:999px;text-decoration:none;color:#fff;font-weight:850;letter-spacing:.2px;box-shadow:0 5px 12px rgba(15,23,42,.22);overflow:hidden}
+.arma-btn{position:relative;display:flex;align-items:center;min-height:42px;border-radius:999px;text-decoration:none;color:#fff;font-weight:900;letter-spacing:.2px;box-shadow:0 5px 12px rgba(15,23,42,.22);overflow:hidden}
 .arma-btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
-.arma-btn .btn-icon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#00bfd6;margin-right:8px;font-size:13px;border:2px solid rgba(255,255,255,.70);flex:0 0 42px}
-.arma-btn .btn-text{padding-right:12px;font-size:13px;line-height:1.1}
+.arma-btn .btn-icon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#00bfd6;margin-right:8px;font-size:11px;border:2px solid rgba(255,255,255,.70);flex:0 0 42px}
+.arma-btn .btn-text{padding-right:12px;font-size:12px;line-height:1.1}
 .arma-btn.blue{background:linear-gradient(180deg,#5aa9e8,#0076d7)}
 .arma-btn.green{background:linear-gradient(180deg,#78c64a,#55a928)}
 .arma-btn.gray{background:linear-gradient(180deg,#b8b8b8,#8d8d8d)}
 .arma-btn.dark{background:linear-gradient(180deg,#2b2b2b,#000)}
 .quick{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);margin-bottom:16px}
-.quick h2{text-align:center;margin:0 0 14px;color:var(--navy);text-transform:uppercase;font-size:15px}
+.quick h2{text-align:center;margin:0 0 14px;color:var(--navy);font-size:15px;letter-spacing:.4px}
 .quick-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
-.quick-grid a{background:#f8fbff;border:1px solid var(--line);border-radius:14px;text-decoration:none;color:var(--navy);font-weight:800;text-align:center;padding:14px 10px}
-.footer{background:linear-gradient(90deg,#2764c8,#004b9b);color:#fff;border-radius:999px;padding:9px 16px;text-align:center;font-size:12px;font-weight:800;box-shadow:var(--soft)}
+.quick-grid a{background:#f8fbff;border:1px solid var(--line);border-radius:14px;text-decoration:none;color:var(--navy);font-weight:900;text-align:center;padding:14px 10px;font-size:13px}
+.footer{background:linear-gradient(90deg,#2764c8,#004b9b);color:#fff;border-radius:999px;padding:9px 16px;text-align:center;font-size:12px;font-weight:900;box-shadow:var(--soft);letter-spacing:.3px}
 @media(max-width:1500px){.modules{grid-template-columns:repeat(3,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:980px){.sidebar{position:relative;width:100%;height:auto;bottom:auto}.app{display:block}.main{margin-left:0;width:100%;padding:14px}.topbar{flex-direction:column;gap:12px}.brand-row{justify-content:center;flex-wrap:wrap}.top-actions{flex-wrap:wrap;justify-content:center}.hero{flex-direction:column;align-items:flex-start}.hero-graphic{display:none}.modules{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr}.logo-pelex{height:58px}.logo-arma{height:68px}}
+@media(max-width:980px){.top-global{position:relative}.top-white{flex-direction:column;gap:12px}.brand-row{justify-content:center;flex-wrap:wrap}.top-actions{justify-content:center}.app{display:block;padding-top:0}.sidebar{position:relative;width:100%;height:auto;top:0;bottom:auto}.main{margin-left:0;width:100%;padding:14px}.hero{flex-direction:column;align-items:flex-start}.hero-graphic{display:none}.modules{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr}.logo-pelex{height:58px}.logo-arma{height:68px}}
 
   </style>
 </head>
 <body>
+<header class='top-global'>
+  <div class='top-white'>
+    <div class='brand-row'>
+      <img src='logo_pelex.bmp' alt='PELEX' class='logo-pelex'>
+      <div class='brand-separator'></div>
+      <img src='ARMA%20logo%202.png' alt='ARMA' class='logo-arma'>
+    </div>
+    <div class='top-actions'>
+      <div class='date-card'><span>SEMANA</span><strong>26</strong></div>
+      <div class='date-card'><span>FECHA</span><strong>24/06/2026</strong></div>
+      <div class='user-card'><div class='avatar'>AD</div><div><strong>ADMINISTRADOR</strong><span>PLANTA PRINCIPAL</span></div></div>
+    </div>
+  </div>
+  <div class='red-line'></div>
+</header>
 <div class='app'>
 <aside class='sidebar'>
   <div class='brand-mini'>
     <div class='brand-icon'>A</div>
     <div>
-      <strong>A.R.M.A.</strong>
-      <span>Maintenance Suite</span>
+      <strong>ARMA</strong>
+      <span>MAINTENANCE SUITE</span>
     </div>
   </div>
   <nav class='menu'>
-    <a class='active' href='main.html'><span>¦</span> Inicio</a>
-    <a href='index.html'><span>?</span> Órdenes de Trabajo</a>
-    <a href='cumplimiento.html'><span>?</span> Cumplimiento</a>
-    <a href='solicitudes.html'><span>?</span> Solicitudes</a>
-    <a href='#modulos'><span>?</span> Módulos</a>
-    <a href='#herramientas'><span>?</span> Herramientas</a>
+    <a class='active' href='main.html'><span>IN</span> INICIO</a>
+    <a href='index.html'><span>OT</span> ORDENES DE TRABAJO</a>
+    <a href='cumplimiento.html'><span>CU</span> CUMPLIMIENTO</a>
+    <a href='solicitudes.html'><span>SO</span> SOLICITUDES</a>
+    <a href='#modulos'><span>MO</span> MODULOS</a>
+    <a href='#herramientas'><span>HE</span> HERRAMIENTAS</a>
   </nav>
   <div class='side-status'>
     <span>SGMC-P2</span>
-    <strong>Semana 26</strong>
+    <strong>SEMANA 26</strong>
   </div>
 </aside>
 <main class='main'>
-  <header class='topbar'>
-    <div class='brand-row'>
-      <img src='logo_pelex.bmp' alt='PELEX' class='logo-pelex'>
-      <div class='brand-separator'></div>
-      <img src='ARMA%20logo%202.png' alt='A.R.M.A.' class='logo-arma'>
-    </div>
-    <div class='top-actions'>
-      <div class='date-card'><span>Semana</span><strong>26</strong></div>
-      <div class='date-card'><span>Fecha</span><strong>24/06/2026</strong></div>
-      <div class='user-card'><div class='avatar'>?</div><div><strong>Administrador</strong><span>Planta Principal</span></div></div>
-    </div>
-  </header>
   <section class='hero'>
     <div class='hero-content'>
-      <span class='label'>Asset Reliability & Maintenance Analytics</span>
-      <h1>Bienvenido a A.R.M.A.</h1>
-      <p>Plataforma integral para la gestión de activos, mantenimiento, confiabilidad operacional y control técnico.</p>
+      <span class='label'>ASSET RELIABILITY AND MAINTENANCE ANALYTICS</span>
+      <h1>BIENVENIDO A ARMA</h1>
+      <p>PLATAFORMA INTEGRAL PARA LA GESTION DE ACTIVOS, MANTENIMIENTO, CONFIABILIDAD OPERACIONAL Y CONTROL TECNICO.</p>
       <div class='hero-buttons'>
-        <a href='index.html' class='hero-btn primary'>Abrir Órdenes de Trabajo</a>
-        <a href='solicitudes.html' class='hero-btn secondary'>Gestionar Solicitudes</a>
+        <a href='index.html' class='hero-btn primary'>ABRIR ORDENES DE TRABAJO</a>
+        <a href='solicitudes.html' class='hero-btn secondary'>GESTIONAR SOLICITUDES</a>
       </div>
     </div>
     <div class='hero-graphic'>
-      <div class='shield'>?</div>
+      <div class='shield'>OK</div>
       <div class='graph-bars'><i></i><i></i><i></i><i></i><i></i></div>
       <div class='curve'></div>
     </div>
   </section>
   <section class='kpis'>
     <a class='kpi' href='index.html'>
-      <div class='kpi-icon blue'>?</div>
-      <div><span>Órdenes de Trabajo</span><strong>4872</strong><small>Ir al index operativo actual</small></div>
+      <div class='kpi-icon blue'>OT</div>
+      <div><span>ORDENES DE TRABAJO</span><strong>4872</strong><small>IR AL INDEX OPERATIVO ACTUAL</small></div>
     </a>
     <a class='kpi' href='cumplimiento.html'>
-      <div class='kpi-icon green'>?</div>
-      <div><span>Cumplimiento OTCT</span><strong>92,6%</strong><small>Programadas vs cerradas</small></div>
+      <div class='kpi-icon green'>CU</div>
+      <div><span>CUMPLIMIENTO OTCT</span><strong>92,6%</strong><small>PROGRAMADAS VS CERRADAS</small></div>
     </a>
     <a class='kpi' href='solicitudes.html'>
-      <div class='kpi-icon cyan'>?</div>
-      <div><span>Solicitudes</span><strong>45</strong><small>Producción a mantenimiento</small></div>
+      <div class='kpi-icon cyan'>SO</div>
+      <div><span>SOLICITUDES</span><strong>45</strong><small>PRODUCCION A MANTENIMIENTO</small></div>
     </a>
     <div class='kpi'>
-      <div class='kpi-icon dark'>?</div>
-      <div><span>Sistema</span><strong>Online</strong><small>Generado: 24/06 17:14</small></div>
+      <div class='kpi-icon dark'>ON</div>
+      <div><span>SISTEMA</span><strong>ONLINE</strong><small>GENERADO: 24/06 17:29</small></div>
     </div>
   </section>
   <section class='modules' id='modulos'>
     <div class='module-card'>
       <div class='module-title'>
-        <h2>Gestión de Activos</h2>
+        <h2>GESTION DE ACTIVOS</h2>
         <div class='accent'></div>
       </div>
       <div class='module-buttons'>
         <a class='arma-btn green' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Reportes Técnicos</span>
+          <span class='btn-icon'>RT</span>
+          <span class='btn-text'>REPORTES TECNICOS</span>
         </a>
         <a class='arma-btn blue' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>MEL Equipos</span>
+          <span class='btn-icon'>ME</span>
+          <span class='btn-text'>MEL EQUIPOS</span>
         </a>
         <a class='arma-btn gray' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Matriz de Criticidad</span>
+          <span class='btn-icon'>MC</span>
+          <span class='btn-text'>MATRIZ DE CRITICIDAD</span>
         </a>
         <a class='arma-btn gray' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Hojas de Vida Equipos</span>
+          <span class='btn-icon'>HV</span>
+          <span class='btn-text'>HOJAS DE VIDA EQUIPOS</span>
         </a>
         <a class='arma-btn gray' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Componentes</span>
+          <span class='btn-icon'>CO</span>
+          <span class='btn-text'>COMPONENTES</span>
         </a>
         <a class='arma-btn green' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Plan Padrino</span>
+          <span class='btn-icon'>PP</span>
+          <span class='btn-text'>PLAN PADRINO</span>
         </a>
         <a class='arma-btn dark' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Lecturas</span>
+          <span class='btn-icon'>LE</span>
+          <span class='btn-text'>LECTURAS</span>
         </a>
       </div>
     </div>
     <div class='module-card'>
       <div class='module-title'>
-        <h2>Plan Mantenimiento</h2>
+        <h2>PLAN MANTENIMIENTO</h2>
         <div class='accent'></div>
       </div>
       <div class='module-buttons'>
         <a class='arma-btn blue' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Cronogramas MP</span>
+          <span class='btn-icon'>MP</span>
+          <span class='btn-text'>CRONOGRAMAS MP</span>
         </a>
         <a class='arma-btn green' href='solicitudes.html'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Solicitudes</span>
+          <span class='btn-icon'>SO</span>
+          <span class='btn-text'>SOLICITUDES</span>
         </a>
         <a class='arma-btn blue' href='index.html'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Órdenes de MTTO</span>
+          <span class='btn-icon'>OT</span>
+          <span class='btn-text'>ORDENES DE MTTO</span>
         </a>
         <a class='arma-btn green' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Plan MTTO</span>
+          <span class='btn-icon'>PM</span>
+          <span class='btn-text'>PLAN MTTO</span>
         </a>
         <a class='arma-btn blue' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Actividades A.M.</span>
+          <span class='btn-icon'>AM</span>
+          <span class='btn-text'>ACTIVIDADES A.M.</span>
         </a>
         <a class='arma-btn green' href='#'>
           <span class='btn-icon'>PDF</span>
-          <span class='btn-text'>View OT's PDF</span>
+          <span class='btn-text'>VIEW OT PDF</span>
         </a>
         <a class='arma-btn blue' href='#'>
           <span class='btn-icon'>PDF</span>
-          <span class='btn-text'>View RT's PDF</span>
+          <span class='btn-text'>VIEW RT PDF</span>
         </a>
         <a class='arma-btn green' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Inspección I&amp;MA</span>
+          <span class='btn-icon'>IMA</span>
+          <span class='btn-text'>INSPECCION IMA</span>
         </a>
         <a class='arma-btn blue' href='#'>
           <span class='btn-icon'>PDF</span>
-          <span class='btn-text'>View IMA PDF</span>
+          <span class='btn-text'>VIEW IMA PDF</span>
         </a>
       </div>
     </div>
     <div class='module-card'>
       <div class='module-title'>
-        <h2>Soporte y Control Externo</h2>
+        <h2>SOPORTE Y CONTROL EXTERNO</h2>
         <div class='accent'></div>
       </div>
       <div class='module-buttons'>
         <a class='arma-btn green' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Solicitudes Directas SR</span>
+          <span class='btn-icon'>SR</span>
+          <span class='btn-text'>SOLICITUDES DIRECTAS SR</span>
         </a>
         <a class='arma-btn dark' href='#'>
           <span class='btn-icon'>$</span>
-          <span class='btn-text'>Costos MTTO</span>
+          <span class='btn-text'>COSTOS MTTO</span>
         </a>
         <a class='arma-btn gray' href='#'>
           <span class='btn-icon'>OC</span>
-          <span class='btn-text'>Órdenes de Compra</span>
+          <span class='btn-text'>ORDENES DE COMPRA</span>
         </a>
         <a class='arma-btn gray' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Remisiones</span>
+          <span class='btn-icon'>RE</span>
+          <span class='btn-text'>REMISIONES</span>
         </a>
         <a class='arma-btn green' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Servicios</span>
+          <span class='btn-icon'>SE</span>
+          <span class='btn-text'>SERVICIOS</span>
         </a>
         <a class='arma-btn gray' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Inventario Repuestos</span>
+          <span class='btn-icon'>IR</span>
+          <span class='btn-text'>INVENTARIO REPUESTOS</span>
         </a>
         <a class='arma-btn green' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Repuestos Almacén</span>
+          <span class='btn-icon'>RA</span>
+          <span class='btn-text'>REPUESTOS ALMACEN</span>
         </a>
         <a class='arma-btn blue' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Proveedores</span>
+          <span class='btn-icon'>PR</span>
+          <span class='btn-text'>PROVEEDORES</span>
         </a>
         <a class='arma-btn dark' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Evalúa Proveedor</span>
+          <span class='btn-icon'>EP</span>
+          <span class='btn-text'>EVALUA PROVEEDOR</span>
         </a>
       </div>
     </div>
     <div class='module-card'>
       <div class='module-title'>
-        <h2>Talento Humano</h2>
+        <h2>TALENTO HUMANO</h2>
         <div class='accent'></div>
       </div>
       <div class='module-buttons'>
         <a class='arma-btn blue' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Turnos MTTO</span>
+          <span class='btn-icon'>TU</span>
+          <span class='btn-text'>TURNOS MTTO</span>
         </a>
         <a class='arma-btn green' href='#'>
-          <span class='btn-icon'>??</span>
-          <span class='btn-text'>Personal</span>
+          <span class='btn-icon'>PE</span>
+          <span class='btn-text'>PERSONAL</span>
         </a>
         <a class='arma-btn blue' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Form Registro</span>
+          <span class='btn-icon'>FR</span>
+          <span class='btn-text'>FORM REGISTRO</span>
         </a>
         <a class='arma-btn green' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Perfiles</span>
+          <span class='btn-icon'>PF</span>
+          <span class='btn-text'>PERFILES</span>
         </a>
         <a class='arma-btn dark' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Evalúa Personal</span>
+          <span class='btn-icon'>EV</span>
+          <span class='btn-text'>EVALUA PERSONAL</span>
         </a>
         <a class='arma-btn dark' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Capacitaciones</span>
+          <span class='btn-icon'>CA</span>
+          <span class='btn-text'>CAPACITACIONES</span>
         </a>
         <a class='arma-btn dark' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Registro Capacitación</span>
+          <span class='btn-icon'>RC</span>
+          <span class='btn-text'>REGISTRO CAPACITACION</span>
         </a>
       </div>
     </div>
     <div class='module-card'>
       <div class='module-title'>
-        <h2>Riesgo y Desempeño</h2>
+        <h2>RIESGO Y DESEMPENO</h2>
         <div class='accent'></div>
       </div>
       <div class='module-buttons'>
         <a class='arma-btn green' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Liberación Inocuidad</span>
+          <span class='btn-icon'>LI</span>
+          <span class='btn-text'>LIBERACION INOCUIDAD</span>
         </a>
         <a class='arma-btn blue' href='#'>
-          <span class='btn-icon'>?</span>
+          <span class='btn-icon'>IDP</span>
           <span class='btn-text'>IDP</span>
         </a>
         <a class='arma-btn green' href='#'>
-          <span class='btn-icon'>Kg</span>
-          <span class='btn-text'>Producción Kg.</span>
+          <span class='btn-icon'>KG</span>
+          <span class='btn-text'>PRODUCCION KG</span>
         </a>
         <a class='arma-btn blue' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Dashboard</span>
+          <span class='btn-icon'>DB</span>
+          <span class='btn-text'>DASHBOARD</span>
         </a>
         <a class='arma-btn green' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Gestionar SR'S</span>
+          <span class='btn-icon'>SR</span>
+          <span class='btn-text'>GESTIONAR SR</span>
         </a>
         <a class='arma-btn dark' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Manejo Residuos</span>
+          <span class='btn-icon'>MR</span>
+          <span class='btn-text'>MANEJO RESIDUOS</span>
         </a>
       </div>
     </div>
     <div class='module-card'>
       <div class='module-title'>
-        <h2>Herramientas</h2>
+        <h2>HERRAMIENTAS</h2>
         <div class='accent'></div>
       </div>
       <div class='module-buttons'>
         <a class='arma-btn blue' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Actualizar HTML</span>
+          <span class='btn-icon'>HT</span>
+          <span class='btn-text'>ACTUALIZAR HTML</span>
         </a>
         <a class='arma-btn green' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Fichas Rodamientos</span>
+          <span class='btn-icon'>FR</span>
+          <span class='btn-text'>FICHAS RODAMIENTOS</span>
         </a>
         <a class='arma-btn blue' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Biblioteca Digital</span>
+          <span class='btn-icon'>BD</span>
+          <span class='btn-text'>BIBLIOTECA DIGITAL</span>
         </a>
         <a class='arma-btn green' href='#'>
-          <span class='btn-icon'>?</span>
-          <span class='btn-text'>Codificación Productos</span>
+          <span class='btn-icon'>CP</span>
+          <span class='btn-text'>CODIFICACION PRODUCTOS</span>
         </a>
         <a class='arma-btn dark' href='#'>
-          <span class='btn-icon'>i</span>
-          <span class='btn-text'>Instructivos</span>
+          <span class='btn-icon'>IN</span>
+          <span class='btn-text'>INSTRUCTIVOS</span>
         </a>
       </div>
     </div>
   </section>
   <section class='quick' id='herramientas'>
-    <h2>Acceso rápido</h2>
+    <h2>ACCESO RAPIDO</h2>
     <div class='quick-grid'>
-      <a href='index.html'>? Dashboard OT</a>
-      <a href='solicitudes.html'>? Solicitudes</a>
-      <a href='cumplimiento.html'>? Cumplimiento semanal</a>
-      <a href='#'>? Herramientas</a>
-      <a href='#'>? Biblioteca</a>
+      <a href='index.html'>OT DASHBOARD OT</a>
+      <a href='solicitudes.html'>SO SOLICITUDES</a>
+      <a href='cumplimiento.html'>CU CUMPLIMIENTO SEMANAL</a>
+      <a href='#'>HE HERRAMIENTAS</a>
+      <a href='#'>BD BIBLIOTECA</a>
     </div>
   </section>
   <footer class='footer'>
-    CONTROL // A.R.M.A. HOME // Generado: 2026-06-24 17:14:37 // PELEX S.A.S.
+    CONTROL // ARMA HOME // GENERADO: 2026-06-24 17:29:51 // PELEX S.A.S.
   </footer>
 </main>
 </div>
