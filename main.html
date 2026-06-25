@@ -34,6 +34,13 @@ body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:#eef3f9;co
 .date-card,.user-card{background:#f8fbff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;min-width:118px;box-shadow:0 2px 8px rgba(15,23,42,.05)}
 .date-card span,.user-card span{display:block;font-size:11px;color:var(--muted);font-weight:800;letter-spacing:.4px}
 .date-card strong,.user-card strong{display:block;font-size:16px;color:var(--navy);margin-top:3px}
+.date-live-card{background:#f8fbff;border:1px solid var(--line);border-radius:14px;padding:12px 18px;min-width:250px;box-shadow:0 2px 8px rgba(15,23,42,.05);display:flex;align-items:center;gap:16px}
+.calendar-icon{width:54px;height:54px;border:3px solid var(--blue);border-radius:10px;position:relative;display:grid;place-items:center;color:var(--blue);font-weight:900;background:#fff}
+.calendar-icon:before{content:'';position:absolute;left:9px;right:9px;top:13px;height:3px;background:var(--blue);border-radius:999px}
+.calendar-icon:after{content:'';position:absolute;width:6px;height:10px;left:12px;top:-7px;background:var(--blue);border-radius:3px;box-shadow:22px 0 0 var(--blue)}
+.calendar-icon span{width:22px;height:16px;margin-top:14px;border-left:5px solid var(--blue);border-bottom:5px solid var(--blue);transform:skew(-8deg)}
+.date-live-text strong{display:block;font-size:22px;color:var(--navy);font-weight:900;line-height:1.1;letter-spacing:.2px}
+.date-live-text span{display:block;font-size:21px;color:var(--navy);font-weight:700;margin-top:8px;letter-spacing:.3px}
 .user-card{display:flex;align-items:center;gap:10px;min-width:190px}
 .avatar{width:42px;height:42px;border-radius:50%;background:#e8f2ff;color:var(--blue);display:grid;place-items:center;font-weight:900;font-size:13px}
 .app{display:flex;min-height:100vh;padding-top:128px}
@@ -110,8 +117,13 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
       <img src='ARMA%20logo%202.png' alt='ARMA' class='logo-arma'>
     </div>
     <div class='top-actions'>
-      <div class='date-card'><span>SEMANA</span><strong>26</strong></div>
-      <div class='date-card'><span>FECHA</span><strong>24/06/2026</strong></div>
+      <div class='date-live-card'>
+        <div class='calendar-icon'><span></span></div>
+        <div class='date-live-text'>
+          <strong id='isoWeekText'>SEMANA --</strong>
+          <span id='todayDateText'>--/--/----</span>
+        </div>
+      </div>
       <div class='user-card'><div class='avatar'>AD</div><div><strong>ADMINISTRADOR</strong><span>PLANTA PRINCIPAL</span></div></div>
     </div>
   </div>
@@ -142,7 +154,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
     <a class='kpi' href='cumplimiento.html'>
       <div class='kpi-icon green'>CU</div>
-      <div><span>CUMPLIMIENTO OTCT</span><strong>92,6%</strong><small>PROGRAMADAS VS CERRADAS</small></div>
+      <div><span>CUMPLIMIENTO OTCT</span><strong>92,7%</strong><small>PROGRAMADAS VS CERRADAS</small></div>
     </a>
     <a class='kpi' href='solicitudes.html'>
       <div class='kpi-icon cyan'>SO</div>
@@ -150,7 +162,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
     <div class='kpi'>
       <div class='kpi-icon dark'>ON</div>
-      <div><span>SISTEMA</span><strong>ONLINE</strong><small>GENERADO: 24/06 18:18</small></div>
+      <div><span>SISTEMA</span><strong>ONLINE</strong><small>GENERADO: 25/06 08:02</small></div>
     </div>
   </section>
   <section class='modules' id='modulos'>
@@ -386,9 +398,30 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </div>
   </section>
   <footer class='footer'>
-    CONTROL // ARMA HOME // GENERADO: 2026-06-24 18:18:08 // PELEX S.A.S.
+    CONTROL // ARMA HOME // GENERADO: 2026-06-25 08:02:39 // PELEX S.A.S.
   </footer>
 </main>
 </div>
+<script>
+function getISOWeekNumber(date){
+  var d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  var dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+}
+function pad2(n){return String(n).padStart(2,'0');}
+function updateDateCard(){
+  var now = new Date();
+  var week = getISOWeekNumber(now);
+  var dateTxt = pad2(now.getDate()) + '/' + pad2(now.getMonth()+1) + '/' + now.getFullYear();
+  var weekEl = document.getElementById('isoWeekText');
+  var dateEl = document.getElementById('todayDateText');
+  if(weekEl){weekEl.textContent = 'SEMANA ' + week;}
+  if(dateEl){dateEl.textContent = dateTxt;}
+}
+updateDateCard();
+setInterval(updateDateCard, 60000);
+</script>
 </body>
 </html>
