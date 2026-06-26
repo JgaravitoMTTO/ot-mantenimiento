@@ -31,29 +31,50 @@ body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:#eef3f9;co
 .logo-pelex{height:82px;max-width:300px;object-fit:contain}
 .logo-arma{height:92px;max-width:420px;object-fit:contain}
 .top-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
-.top-card{height:78px;background:#f8fbff;border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 8px rgba(15,23,42,.05)}
-.date-live-card{padding:11px 18px;min-width:238px;display:flex;align-items:center;gap:15px}
-.calendar-icon-small{width:45px;height:45px;border:3px solid var(--blue);border-radius:9px;position:relative;display:grid;place-items:center;background:#fff;flex:0 0 45px}
-.calendar-icon-small:before{content:'';position:absolute;left:7px;right:7px;top:12px;height:3px;background:var(--blue);border-radius:999px}
-.calendar-icon-small:after{content:'';position:absolute;width:5px;height:9px;left:10px;top:-7px;background:var(--blue);border-radius:3px;box-shadow:20px 0 0 var(--blue)}
-.calendar-icon-small span{width:19px;height:13px;margin-top:13px;border-left:5px solid var(--blue);border-bottom:5px solid var(--blue);transform:skew(-8deg)}
-.date-live-text strong{display:block;font-size:20px;color:var(--navy);font-weight:900;line-height:1.05;letter-spacing:.2px}
-.date-live-text span{display:block;font-size:18px;color:var(--navy);font-weight:700;margin-top:7px;letter-spacing:.3px}
-.notify-card{width:78px;padding:0;display:grid;place-items:center;position:relative;cursor:pointer;font-family:inherit}
-.bell-icon{width:38px;height:38px;position:relative;display:block}
-.bell-icon:before{content:'';position:absolute;left:8px;top:8px;width:22px;height:24px;border:3px solid var(--blue);border-bottom:none;border-radius:16px 16px 10px 10px}
-.bell-icon:after{content:'';position:absolute;left:13px;top:32px;width:12px;height:3px;background:var(--blue);border-radius:999px;box-shadow:4px 5px 0 -1px var(--blue)}
-.notif-badge{position:absolute;right:-7px;top:-5px;width:22px;height:22px;border-radius:50%;background:#1d6fe8;color:#fff;display:grid;place-items:center;font-size:12px;font-weight:900;box-shadow:0 3px 8px rgba(0,43,102,.25)}
-.user-card{border:1px solid var(--line);padding:11px 16px;display:flex;align-items:center;gap:12px;min-width:260px;text-align:left;cursor:pointer;color:var(--navy);font-family:inherit}
-.user-card:hover,.notify-card:hover{filter:brightness(.985);transform:translateY(-1px)}
-.user-avatar-icon{width:44px;height:44px;border:3px solid var(--blue);border-radius:50%;position:relative;background:#fff;flex:0 0 44px}
-.user-avatar-icon:before{content:'';position:absolute;left:13px;top:8px;width:12px;height:12px;border:3px solid var(--blue);border-radius:50%;background:#fff}
-.user-avatar-icon:after{content:'';position:absolute;left:8px;bottom:7px;width:22px;height:12px;border:3px solid var(--blue);border-radius:14px 14px 6px 6px;background:#fff}
-.user-info{display:block;line-height:1.12;min-width:0}
-.user-info strong{display:block;font-size:18px;color:var(--navy);font-weight:900;white-space:nowrap}
-.user-info span{display:block;font-size:14px;color:var(--blue);font-weight:700;margin-top:5px;white-space:nowrap}
-.user-arrow{width:9px;height:9px;border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);transform:rotate(45deg);margin-left:auto;margin-right:3px}
+.date-card,.user-card{background:#f8fbff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;min-width:118px;box-shadow:0 2px 8px rgba(15,23,42,.05)}
+.date-card span,.user-card span{display:block;font-size:11px;color:var(--muted);font-weight:800;letter-spacing:.4px}
+.date-card strong,.user-card strong{display:block;font-size:16px;color:var(--navy);margin-top:3px}
+.date-live-card{background:#f8fbff;border:1px solid var(--line);border-radius:14px;padding:12px 18px;min-width:250px;box-shadow:0 2px 8px rgba(15,23,42,.05);display:flex;align-items:center;gap:16px}
+.calendar-icon{width:54px;height:54px;border:3px solid var(--blue);border-radius:10px;position:relative;display:grid;place-items:center;color:var(--blue);font-weight:900;background:#fff}
+.calendar-icon:before{content:'';position:absolute;left:9px;right:9px;top:13px;height:3px;background:var(--blue);border-radius:999px}
+.calendar-icon:after{content:'';position:absolute;width:6px;height:10px;left:12px;top:-7px;background:var(--blue);border-radius:3px;box-shadow:22px 0 0 var(--blue)}
+.calendar-icon span{width:22px;height:16px;margin-top:14px;border-left:5px solid var(--blue);border-bottom:5px solid var(--blue);transform:skew(-8deg)}
+.date-live-text strong{display:block;font-size:22px;color:var(--navy);font-weight:900;line-height:1.1;letter-spacing:.2px}
+.date-live-text span{display:block;font-size:21px;color:var(--navy);font-weight:700;margin-top:8px;letter-spacing:.3px}
+.user-card{display:flex;align-items:center;gap:10px;min-width:190px}
 .avatar{width:42px;height:42px;border-radius:50%;background:#e8f2ff;color:var(--blue);display:grid;place-items:center;font-weight:900;font-size:13px}
+.top-card{height:78px;background:#f8fbff;border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 8px rgba(15,23,42,.05);display:flex;align-items:center}
+.top-card-img{width:42px;height:42px;object-fit:contain;flex:0 0 auto}
+.date-live-card{padding:10px 16px;min-width:238px;gap:14px}
+.date-live-text strong{display:block;font-size:21px;color:var(--navy);font-weight:900;line-height:1.05;letter-spacing:.2px}
+.date-live-text span{display:block;font-size:19px;color:var(--navy);font-weight:750;margin-top:8px;letter-spacing:.3px}
+.notify-card{width:78px;justify-content:center;position:relative;cursor:pointer}
+.notify-badge{position:absolute;right:12px;top:11px;width:22px;height:22px;border-radius:50%;background:#2563eb;color:#fff;display:grid;place-items:center;font-size:12px;font-weight:900;border:2px solid #fff}
+.user-card{position:relative;gap:12px;min-width:255px;padding:10px 14px;cursor:pointer}
+.user-img{width:44px;height:44px}
+.user-text strong{display:block;font-size:16px;color:var(--navy);font-weight:900;line-height:1.05}
+.user-text span{display:block;font-size:12px;color:var(--navy);font-weight:750;margin-top:5px}
+.user-arrow{margin-left:auto;color:var(--blue);font-size:18px;font-weight:900}
+.user-menu{display:none;position:absolute;right:0;top:86px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 35px rgba(0,43,102,.18);padding:8px;min-width:210px;z-index:200}
+.user-card.open .user-menu{display:block}
+.user-menu button{display:block;width:100%;border:0;background:#f8fbff;color:var(--navy);font-weight:900;text-align:left;padding:10px 12px;border-radius:10px;cursor:pointer}
+.user-menu button:hover{background:#e8f2ff}
+.arma-locked{filter:grayscale(1)!important;opacity:.52!important;cursor:not-allowed!important;box-shadow:none!important}
+.arma-locked .btn-icon,.arma-locked.kpi .kpi-icon{background:#9ca3af!important}
+.arma-locked:hover{transform:none!important;filter:grayscale(1)!important}
+.login-modal{display:none;position:fixed;inset:0;background:rgba(2,6,23,.62);z-index:999;align-items:center;justify-content:center;padding:18px}
+.login-modal.show{display:flex}
+.login-box{width:min(430px,96vw);background:#fff;border-radius:18px;border:1px solid var(--line);box-shadow:0 24px 60px rgba(0,0,0,.30);padding:22px}
+.login-box h2{margin:0 0 8px;color:var(--navy);font-size:20px}
+.login-box p{margin:0 0 16px;color:var(--muted);font-size:12px;font-weight:800}
+.login-box label{display:block;margin:10px 0 5px;color:var(--navy);font-size:12px;font-weight:900}
+.login-box input{width:100%;height:42px;border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-size:15px;font-weight:700;color:var(--navy);outline:none}
+.login-box input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,75,155,.10)}
+.login-msg{min-height:20px;margin-top:10px;color:#b91c1c;font-size:12px;font-weight:900}
+.login-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}
+.login-actions button{border:0;border-radius:12px;padding:10px 14px;font-weight:900;cursor:pointer}
+.btn-cancel{background:#e5e7eb;color:#111827}
+.btn-login{background:linear-gradient(180deg,var(--green2),var(--green));color:#fff}
 .app{display:flex;min-height:100vh;padding-top:128px}
 .sidebar{width:245px;background:linear-gradient(180deg,#002b66,#004b9b 55%,#00336f);color:#fff;padding:22px 16px;position:fixed;left:0;top:128px;bottom:0;box-shadow:12px 0 28px rgba(0,43,102,.20);z-index:20}
 .brand-mini{display:flex;align-items:center;gap:12px;margin-bottom:28px}
@@ -129,20 +150,25 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </div>
     <div class='top-actions'>
       <div class='date-live-card top-card'>
-        <div class='calendar-icon-small'><span></span></div>
+        <img src='calendario.png' alt='CALENDARIO' class='top-card-img'>
         <div class='date-live-text'>
           <strong id='isoWeekText'>SEMANA --</strong>
           <span id='todayDateText'>--/--/----</span>
         </div>
       </div>
-      <button class='notify-card top-card' id='notifyCardBtn' type='button' title='NOTIFICACIONES'>
-        <span class='bell-icon'><span class='notif-badge'>3</span></span>
-      </button>
-      <button class='user-card top-card user-card-click' id='userCardBtn' type='button' title='USUARIO'>
-        <span class='user-avatar-icon'></span>
-        <span class='user-info'><strong id='userNameText'>ADMINISTRADOR</strong><span id='userRoleText'>PLANTA PRINCIPAL</span></span>
-        <span class='user-arrow'></span>
-      </button>
+      <div class='notify-card top-card' id='notifyCard' title='NOTIFICACIONES'>
+        <img src='notificacion.png' alt='NOTIFICACION' class='top-card-img'>
+        <span class='notify-badge' id='notifyBadge'>0</span>
+      </div>
+      <div class='user-card top-card' id='userCard' title='INICIAR SESION / CAMBIAR USUARIO'>
+        <img src='usuario.png' alt='USUARIO' class='top-card-img user-img'>
+        <div class='user-text'><strong id='userNameText'>VISITANTE</strong><span id='userLevelText'>SIN SESION</span></div>
+        <span class='user-arrow'>v</span>
+        <div class='user-menu' id='userMenu'>
+          <button type='button' id='btnOpenLogin'>INICIAR SESION</button>
+          <button type='button' id='btnLogout'>CERRAR SESION</button>
+        </div>
+      </div>
     </div>
   </div>
   <div class='red-line'></div>
@@ -150,11 +176,11 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
 <div class='app'>
 <aside class='sidebar'>
   <nav class='menu'>
-    <a href='index.html'><span>OT</span> ORDENES DE TRABAJO</a>
-    <a href='cumplimiento.html'><span>CU</span> CUMPLIMIENTO</a>
-    <a href='solicitudes.html'><span>SO</span> SOLICITUDES</a>
-    <a href='#modulos'><span>MO</span> MODULOS</a>
-    <a href='#herramientas'><span>HE</span> HERRAMIENTAS</a>
+    <a class='arma-secured arma-locked' data-perm='BTN_OT' href='index.html'><span>OT</span> ORDENES DE TRABAJO</a>
+    <a class='arma-secured arma-locked' data-perm='BTN_CUMPLIMIENTO' href='cumplimiento.html'><span>CU</span> CUMPLIMIENTO</a>
+    <a class='arma-secured arma-locked' data-perm='BTN_SOLICITUDES' href='solicitudes.html'><span>SO</span> SOLICITUDES</a>
+    <a class='arma-secured arma-locked' data-perm='BTN_MODULOS' href='#modulos'><span>MO</span> MODULOS</a>
+    <a class='arma-secured arma-locked' data-perm='BTN_HERRAMIENTAS' href='#herramientas'><span>HE</span> HERRAMIENTAS</a>
   </nav>
   <div class='side-status'>
     <span>SGMC-P2</span>
@@ -166,21 +192,21 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     <img src='ARMA%20banner%20home.png' alt='BANNER ARMA' class='hero-banner-img'>
   </section>
   <section class='kpis'>
-    <a class='kpi' href='index.html'>
+    <a class='kpi arma-secured arma-locked' data-perm='BTN_OT' href='index.html'>
       <div class='kpi-icon blue'>OT</div>
       <div><span>ORDENES DE TRABAJO</span><strong>4872</strong><small>IR AL INDEX OPERATIVO ACTUAL</small></div>
     </a>
-    <a class='kpi' href='cumplimiento.html'>
+    <a class='kpi arma-secured arma-locked' data-perm='BTN_CUMPLIMIENTO' href='cumplimiento.html'>
       <div class='kpi-icon green'>CU</div>
       <div><span>CUMPLIMIENTO OTCT</span><strong>92,7%</strong><small>PROGRAMADAS VS CERRADAS</small></div>
     </a>
-    <a class='kpi' href='solicitudes.html'>
+    <a class='kpi arma-secured arma-locked' data-perm='BTN_SOLICITUDES' href='solicitudes.html'>
       <div class='kpi-icon cyan'>SO</div>
       <div><span>SOLICITUDES</span><strong>45</strong><small>PRODUCCION A MANTENIMIENTO</small></div>
     </a>
     <div class='kpi'>
       <div class='kpi-icon dark'>ON</div>
-      <div><span>SISTEMA</span><strong>OFFLINE</strong><small>GENERADO: 25/06 19:10</small></div>
+      <div><span>SISTEMA</span><strong id='systemStatusText'>OFFLINE</strong><small>GENERADO: 25/06 19:35</small></div>
     </div>
   </section>
   <section class='modules' id='modulos'>
@@ -190,31 +216,31 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
         <div class='accent'></div>
       </div>
       <div class='module-buttons'>
-        <a class='arma-btn green' href='#'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_REPORTES_TECNICOS' href='#'>
           <span class='btn-icon'>RT</span>
           <span class='btn-text'>REPORTES TECNICOS</span>
         </a>
-        <a class='arma-btn blue' href='#'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_MEL_EQUIPOS' href='#'>
           <span class='btn-icon'>ME</span>
           <span class='btn-text'>MEL EQUIPOS</span>
         </a>
-        <a class='arma-btn gray' href='#'>
+        <a class='arma-btn gray arma-secured arma-locked' data-perm='BTN_MATRIZ_CRITICIDAD' href='#'>
           <span class='btn-icon'>MC</span>
           <span class='btn-text'>MATRIZ DE CRITICIDAD</span>
         </a>
-        <a class='arma-btn gray' href='#'>
+        <a class='arma-btn gray arma-secured arma-locked' data-perm='BTN_HOJAS_VIDA' href='#'>
           <span class='btn-icon'>HV</span>
           <span class='btn-text'>HOJAS DE VIDA EQUIPOS</span>
         </a>
-        <a class='arma-btn gray' href='#'>
+        <a class='arma-btn gray arma-secured arma-locked' data-perm='BTN_COMPONENTES' href='#'>
           <span class='btn-icon'>CO</span>
           <span class='btn-text'>COMPONENTES</span>
         </a>
-        <a class='arma-btn green' href='#'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_PLAN_PADRINO' href='#'>
           <span class='btn-icon'>PP</span>
           <span class='btn-text'>PLAN PADRINO</span>
         </a>
-        <a class='arma-btn dark' href='#'>
+        <a class='arma-btn dark arma-secured arma-locked' data-perm='BTN_LECTURAS' href='#'>
           <span class='btn-icon'>LE</span>
           <span class='btn-text'>LECTURAS</span>
         </a>
@@ -226,39 +252,39 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
         <div class='accent'></div>
       </div>
       <div class='module-buttons'>
-        <a class='arma-btn blue' href='#'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_CRONOGRAMAS_MP' href='#'>
           <span class='btn-icon'>MP</span>
           <span class='btn-text'>CRONOGRAMAS MP</span>
         </a>
-        <a class='arma-btn green' href='solicitudes.html'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_SOLICITUDES' href='solicitudes.html'>
           <span class='btn-icon'>SO</span>
           <span class='btn-text'>SOLICITUDES</span>
         </a>
-        <a class='arma-btn blue' href='index.html'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_ORDENES_MTTO' href='index.html'>
           <span class='btn-icon'>OT</span>
           <span class='btn-text'>ORDENES DE MTTO</span>
         </a>
-        <a class='arma-btn green' href='#'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_PLAN_MTTO' href='#'>
           <span class='btn-icon'>PM</span>
           <span class='btn-text'>PLAN MTTO</span>
         </a>
-        <a class='arma-btn blue' href='#'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_ACTIVIDADES_AM' href='#'>
           <span class='btn-icon'>AM</span>
           <span class='btn-text'>ACTIVIDADES A.M.</span>
         </a>
-        <a class='arma-btn green' href='#'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_VIEW_OT_PDF' href='#'>
           <span class='btn-icon'>PDF</span>
           <span class='btn-text'>VIEW OT PDF</span>
         </a>
-        <a class='arma-btn blue' href='#'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_VIEW_RT_PDF' href='#'>
           <span class='btn-icon'>PDF</span>
           <span class='btn-text'>VIEW RT PDF</span>
         </a>
-        <a class='arma-btn green' href='#'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_INSPECCION_IMA' href='#'>
           <span class='btn-icon'>IMA</span>
           <span class='btn-text'>INSPECCION IMA</span>
         </a>
-        <a class='arma-btn blue' href='#'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_VIEW_IMA_PDF' href='#'>
           <span class='btn-icon'>PDF</span>
           <span class='btn-text'>VIEW IMA PDF</span>
         </a>
@@ -270,39 +296,39 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
         <div class='accent'></div>
       </div>
       <div class='module-buttons'>
-        <a class='arma-btn green' href='#'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_SOLICITUDES_DIRECTAS_SR' href='#'>
           <span class='btn-icon'>SR</span>
           <span class='btn-text'>SOLICITUDES DIRECTAS SR</span>
         </a>
-        <a class='arma-btn dark' href='#'>
+        <a class='arma-btn dark arma-secured arma-locked' data-perm='BTN_COSTOS_MTTO' href='#'>
           <span class='btn-icon'>$</span>
           <span class='btn-text'>COSTOS MTTO</span>
         </a>
-        <a class='arma-btn gray' href='#'>
+        <a class='arma-btn gray arma-secured arma-locked' data-perm='BTN_ORDENES_COMPRA' href='#'>
           <span class='btn-icon'>OC</span>
           <span class='btn-text'>ORDENES DE COMPRA</span>
         </a>
-        <a class='arma-btn gray' href='#'>
+        <a class='arma-btn gray arma-secured arma-locked' data-perm='BTN_REMISIONES' href='#'>
           <span class='btn-icon'>RE</span>
           <span class='btn-text'>REMISIONES</span>
         </a>
-        <a class='arma-btn green' href='#'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_SERVICIOS' href='#'>
           <span class='btn-icon'>SE</span>
           <span class='btn-text'>SERVICIOS</span>
         </a>
-        <a class='arma-btn gray' href='#'>
+        <a class='arma-btn gray arma-secured arma-locked' data-perm='BTN_INVENTARIO_REPUESTOS' href='#'>
           <span class='btn-icon'>IR</span>
           <span class='btn-text'>INVENTARIO REPUESTOS</span>
         </a>
-        <a class='arma-btn green' href='#'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_REPUESTOS_ALMACEN' href='#'>
           <span class='btn-icon'>RA</span>
           <span class='btn-text'>REPUESTOS ALMACEN</span>
         </a>
-        <a class='arma-btn blue' href='#'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_PROVEEDORES' href='#'>
           <span class='btn-icon'>PR</span>
           <span class='btn-text'>PROVEEDORES</span>
         </a>
-        <a class='arma-btn dark' href='#'>
+        <a class='arma-btn dark arma-secured arma-locked' data-perm='BTN_EVALUA_PROVEEDOR' href='#'>
           <span class='btn-icon'>EP</span>
           <span class='btn-text'>EVALUA PROVEEDOR</span>
         </a>
@@ -314,31 +340,31 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
         <div class='accent'></div>
       </div>
       <div class='module-buttons'>
-        <a class='arma-btn blue' href='#'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_TURNOS_MTTO' href='#'>
           <span class='btn-icon'>TU</span>
           <span class='btn-text'>TURNOS MTTO</span>
         </a>
-        <a class='arma-btn green' href='#'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_PERSONAL' href='#'>
           <span class='btn-icon'>PE</span>
           <span class='btn-text'>PERSONAL</span>
         </a>
-        <a class='arma-btn blue' href='#'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_FORM_REGISTRO' href='#'>
           <span class='btn-icon'>FR</span>
           <span class='btn-text'>FORM REGISTRO</span>
         </a>
-        <a class='arma-btn green' href='#'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_PERFILES' href='#'>
           <span class='btn-icon'>PF</span>
           <span class='btn-text'>PERFILES</span>
         </a>
-        <a class='arma-btn dark' href='#'>
+        <a class='arma-btn dark arma-secured arma-locked' data-perm='BTN_EVALUA_PERSONAL' href='#'>
           <span class='btn-icon'>EV</span>
           <span class='btn-text'>EVALUA PERSONAL</span>
         </a>
-        <a class='arma-btn dark' href='#'>
+        <a class='arma-btn dark arma-secured arma-locked' data-perm='BTN_CAPACITACIONES' href='#'>
           <span class='btn-icon'>CA</span>
           <span class='btn-text'>CAPACITACIONES</span>
         </a>
-        <a class='arma-btn dark' href='#'>
+        <a class='arma-btn dark arma-secured arma-locked' data-perm='BTN_REGISTRO_CAPACITACION' href='#'>
           <span class='btn-icon'>RC</span>
           <span class='btn-text'>REGISTRO CAPACITACION</span>
         </a>
@@ -350,27 +376,27 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
         <div class='accent'></div>
       </div>
       <div class='module-buttons'>
-        <a class='arma-btn green' href='#'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_LIBERACION_INOCUIDAD' href='#'>
           <span class='btn-icon'>LI</span>
           <span class='btn-text'>LIBERACION INOCUIDAD</span>
         </a>
-        <a class='arma-btn blue' href='#'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_IDP' href='#'>
           <span class='btn-icon'>IDP</span>
           <span class='btn-text'>IDP</span>
         </a>
-        <a class='arma-btn green' href='#'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_PRODUCCION_KG' href='#'>
           <span class='btn-icon'>KG</span>
           <span class='btn-text'>PRODUCCION KG</span>
         </a>
-        <a class='arma-btn blue' href='#'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_DASHBOARD' href='#'>
           <span class='btn-icon'>DB</span>
           <span class='btn-text'>DASHBOARD</span>
         </a>
-        <a class='arma-btn green' href='#'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_GESTIONAR_SR' href='#'>
           <span class='btn-icon'>SR</span>
           <span class='btn-text'>GESTIONAR SR</span>
         </a>
-        <a class='arma-btn dark' href='#'>
+        <a class='arma-btn dark arma-secured arma-locked' data-perm='BTN_MANEJO_RESIDUOS' href='#'>
           <span class='btn-icon'>MR</span>
           <span class='btn-text'>MANEJO RESIDUOS</span>
         </a>
@@ -382,23 +408,23 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
         <div class='accent'></div>
       </div>
       <div class='module-buttons'>
-        <a class='arma-btn blue' href='#'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_ACTUALIZAR_HTML' href='#'>
           <span class='btn-icon'>HT</span>
           <span class='btn-text'>ACTUALIZAR HTML</span>
         </a>
-        <a class='arma-btn green' href='#'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_FICHAS_RODAMIENTOS' href='#'>
           <span class='btn-icon'>FR</span>
           <span class='btn-text'>FICHAS RODAMIENTOS</span>
         </a>
-        <a class='arma-btn blue' href='#'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_BIBLIOTECA_DIGITAL' href='#'>
           <span class='btn-icon'>BD</span>
           <span class='btn-text'>BIBLIOTECA DIGITAL</span>
         </a>
-        <a class='arma-btn green' href='#'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_CODIFICACION_PRODUCTOS' href='#'>
           <span class='btn-icon'>CP</span>
           <span class='btn-text'>CODIFICACION PRODUCTOS</span>
         </a>
-        <a class='arma-btn dark' href='#'>
+        <a class='arma-btn dark arma-secured arma-locked' data-perm='BTN_INSTRUCTIVOS' href='#'>
           <span class='btn-icon'>IN</span>
           <span class='btn-text'>INSTRUCTIVOS</span>
         </a>
@@ -408,19 +434,38 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
   <section class='quick' id='herramientas'>
     <h2>ACCESO RAPIDO</h2>
     <div class='quick-grid'>
-      <a href='index.html'>OT DASHBOARD OT</a>
-      <a href='solicitudes.html'>SO SOLICITUDES</a>
-      <a href='cumplimiento.html'>CU CUMPLIMIENTO SEMANAL</a>
-      <a href='#'>HE HERRAMIENTAS</a>
-      <a href='#'>BD BIBLIOTECA</a>
+      <a class='arma-secured arma-locked' data-perm='BTN_OT' href='index.html'>OT DASHBOARD OT</a>
+      <a class='arma-secured arma-locked' data-perm='BTN_SOLICITUDES' href='solicitudes.html'>SO SOLICITUDES</a>
+      <a class='arma-secured arma-locked' data-perm='BTN_CUMPLIMIENTO' href='cumplimiento.html'>CU CUMPLIMIENTO SEMANAL</a>
+      <a class='arma-secured arma-locked' data-perm='BTN_HERRAMIENTAS' href='#'>HE HERRAMIENTAS</a>
+      <a class='arma-secured arma-locked' data-perm='BTN_BIBLIOTECA_DIGITAL' href='#'>BD BIBLIOTECA</a>
     </div>
   </section>
   <footer class='footer'>
-    CONTROL // ARMA HOME // GENERADO: 2026-06-25 19:10:50 // PELEX S.A.S.
+    CONTROL // ARMA HOME // GENERADO: 2026-06-25 19:35:08 // PELEX S.A.S.
   </footer>
 </main>
 </div>
+<div class='login-modal' id='loginModal'>
+  <div class='login-box'>
+    <h2>INICIO DE SESION ARMA</h2>
+    <p>INGRESE USUARIO Y CLAVE PARA ACTIVAR LOS MODULOS AUTORIZADOS.</p>
+    <label>USUARIO</label>
+    <input type='text' id='loginUser' autocomplete='username'>
+    <label>CLAVE</label>
+    <input type='password' id='loginPass' autocomplete='current-password'>
+    <div class='login-msg' id='loginMsg'></div>
+    <div class='login-actions'>
+      <button type='button' id='loginCancel' class='btn-cancel'>CANCELAR</button>
+      <button type='button' id='loginDo' class='btn-login'>INGRESAR</button>
+    </div>
+  </div>
+</div>
+
 <script>
+const ARMA_API_URL = 'https://script.google.com/macros/s/AKfycby0aYXm5CSZQdTlZnLTTImQyAOfyn0hjtsVZrabOxoJuz6nIUPrAv5MesHkNlJ-CF4VNw/exec';
+const ARMA_VISITOR_PERMISSIONS = {};
+let armaSession = {user:'VISITANTE', nombre:'VISITANTE', nivel:'SIN SESION', token:'', permissions:ARMA_VISITOR_PERMISSIONS};
 function getISOWeekNumber(date){
   var d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
   var dayNum = d.getUTCDay() || 7;
@@ -438,8 +483,64 @@ function updateDateCard(){
   if(weekEl){weekEl.textContent = 'SEMANA ' + week;}
   if(dateEl){dateEl.textContent = dateTxt;}
 }
-updateDateCard();
-setInterval(updateDateCard, 60000);
+function armaNormalizePerms(perms){var out={};perms=perms||{};Object.keys(perms).forEach(function(k){out[String(k).toUpperCase()]=perms[k]===true||String(perms[k]).toUpperCase()==='SI'||String(perms[k]).toUpperCase()==='TRUE';});return out;}
+function armaApplyPermissions(){
+  var perms=armaNormalizePerms(armaSession.permissions);
+  document.querySelectorAll('.arma-secured').forEach(function(el){
+    var key=(el.getAttribute('data-perm')||'').toUpperCase();
+    var allowed=!!perms[key];
+    if(allowed){el.classList.remove('arma-locked');el.setAttribute('aria-disabled','false');}
+    else{el.classList.add('arma-locked');el.setAttribute('aria-disabled','true');}
+  });
+}
+function armaUpdateUserCard(){
+  var nameEl=document.getElementById('userNameText'); var lvlEl=document.getElementById('userLevelText');
+  if(nameEl){nameEl.textContent=(armaSession.nombre||armaSession.user||'VISITANTE');}
+  if(lvlEl){lvlEl.textContent=(armaSession.nivel||'SIN SESION');}
+  document.body.classList.toggle('arma-logged', !!armaSession.token);
+}
+function armaSetSession(data){
+  armaSession={user:data.user||'VISITANTE',nombre:data.nombre||data.user||'VISITANTE',nivel:data.nivel||'SIN SESION',token:data.token||'',permissions:data.permissions||{}};
+  if(armaSession.token){localStorage.setItem('ARMA_TOKEN', armaSession.token);}
+  armaUpdateUserCard(); armaApplyPermissions();
+}
+function armaSetVisitor(){
+  armaSession={user:'VISITANTE',nombre:'VISITANTE',nivel:'SIN SESION',token:'',permissions:{}};
+  localStorage.removeItem('ARMA_TOKEN'); armaUpdateUserCard(); armaApplyPermissions();
+}
+async function armaApi(action,payload){
+  payload=payload||{}; payload.action=action;
+  const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+  return await res.json();
+}
+async function armaPing(){
+  try{const res=await fetch(ARMA_API_URL); const data=await res.json(); document.getElementById('systemStatusText').textContent=data.ok?'ONLINE':'OFFLINE';}
+  catch(e){var s=document.getElementById('systemStatusText'); if(s){s.textContent='OFFLINE';}}
+}
+function armaOpenLogin(){document.getElementById('loginModal').classList.add('show');document.getElementById('loginUser').focus();document.getElementById('loginMsg').textContent='';}
+function armaCloseLogin(){document.getElementById('loginModal').classList.remove('show');}
+async function armaLogin(){
+  var u=document.getElementById('loginUser').value.trim(); var p=document.getElementById('loginPass').value; var msg=document.getElementById('loginMsg');
+  if(!u||!p){msg.textContent='DIGITE USUARIO Y CLAVE.';return;}
+  msg.textContent='VALIDANDO...';
+  try{var data=await armaApi('login',{user:u,password:p}); if(data.ok){armaSetSession(data); armaCloseLogin(); document.getElementById('loginPass').value='';} else {msg.textContent=data.error||'LOGIN NO VALIDO';}}
+  catch(e){msg.textContent='NO FUE POSIBLE CONECTAR CON ARMA_BACKEND. REVISE CORS/PUBLICACION.';}
+}
+async function armaValidateStoredSession(){
+  var token=localStorage.getItem('ARMA_TOKEN')||''; if(!token){armaSetVisitor();return;}
+  try{var data=await armaApi('validateSession',{token:token}); if(data.ok){data.token=token; armaSetSession(data);} else {armaSetVisitor();}}catch(e){armaSetVisitor();}
+}
+async function armaLogout(){try{if(armaSession.token){await armaApi('logout',{token:armaSession.token});}}catch(e){} armaSetVisitor();}
+document.addEventListener('DOMContentLoaded',function(){
+  updateDateCard(); setInterval(updateDateCard,60000); armaSetVisitor(); armaPing(); armaValidateStoredSession();
+  document.body.addEventListener('click',function(e){var locked=e.target.closest('.arma-locked'); if(locked){e.preventDefault(); alert('DEBE INICIAR SESION PARA ACCEDER A ESTE MODULO.');}});
+  document.getElementById('userCard').addEventListener('click',function(e){e.stopPropagation(); this.classList.toggle('open');});
+  document.getElementById('btnOpenLogin').addEventListener('click',function(e){e.stopPropagation(); armaOpenLogin(); document.getElementById('userCard').classList.remove('open');});
+  document.getElementById('btnLogout').addEventListener('click',function(e){e.stopPropagation(); armaLogout(); document.getElementById('userCard').classList.remove('open');});
+  document.getElementById('loginCancel').addEventListener('click',armaCloseLogin); document.getElementById('loginDo').addEventListener('click',armaLogin);
+  document.getElementById('loginPass').addEventListener('keydown',function(e){if(e.key==='Enter'){armaLogin();}});
+  document.addEventListener('click',function(){var u=document.getElementById('userCard'); if(u){u.classList.remove('open');}});
+});
 </script>
 </body>
 </html>
