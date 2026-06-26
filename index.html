@@ -92,6 +92,12 @@ nav.chips{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px;background:#eaf1
 </style></head><body>
 <style>
 .top-meta{font-size:13px;color:#334155;margin:6px 0 14px 8px}
+.index-date-wrap{display:flex;justify-content:flex-start;margin:16px 18px 10px}
+.index-date-card{background:#f8fbff;border:1px solid #dbe5f0;border-radius:14px;padding:12px 18px;min-width:250px;box-shadow:0 2px 8px rgba(15,23,42,.08);display:flex;align-items:center;gap:16px}
+.index-date-icon{width:54px;height:54px;border-radius:10px;display:grid;place-items:center;background:#fff;border:1px solid #dbe5f0;overflow:hidden;flex:0 0 54px}
+.index-date-icon img{width:42px;height:42px;object-fit:contain;display:block}
+.index-date-text strong{display:block;font-size:22px;color:#002b66;font-weight:900;line-height:1.1;letter-spacing:.2px}
+.index-date-text span{display:block;font-size:21px;color:#002b66;font-weight:700;margin-top:8px;letter-spacing:.3px}
 .charts-row{display:flex;gap:16px;align-items:flex-start;flex-wrap:nowrap}
 .chart-box{flex:1 1 0;min-width:300px;background:#fff;border:1px solid #dbe5f0;border-radius:18px;padding:12px 14px;box-shadow:0 14px 28px rgba(0,43,102,.12)}
 @media(max-width:900px){.charts-row{flex-wrap:wrap}.chart-box{flex:1 1 100%}}
@@ -102,7 +108,15 @@ nav.chips{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px;background:#eaf1
 .btnlink:hover{filter:brightness(1.06);transform:translateY(-1px)}
 </style>
 <header class='arma-top'><div class='arma-brand'><img src='logo_pelex.bmp' alt='PELEX' class='logo logo-left'><span class='arma-sep'></span><img src='ARMA%20logo%202.png' alt='ARMA' class='logo-right'></div><div class='arma-titlebox'><span>ARMA</span><h1>Dashboard OT's de Mantenimiento</h1></div></header>
-<div class='top-meta'>Semana ISO actual: <strong>2026-W26</strong> &nbsp;//&nbsp; Fecha: <strong>25/06/2026</strong> &nbsp;//&nbsp; Year: <strong>2026</strong></div>
+<div class='index-date-wrap'>
+  <div class='index-date-card'>
+    <div class='index-date-icon'><img src='calendario.png' alt='CALENDARIO'></div>
+    <div class='index-date-text'>
+      <strong id='indexIsoWeekText'>SEMANA --</strong>
+      <span id='indexTodayDateText'>--/--/----</span>
+    </div>
+  </div>
+</div>
 <div class='row-log'>
   <a class='btnlink' href='solicitudes.html'>Solicitudes</a>
   <a class='btnlink' href='cumplimiento.html'>Cumplimiento</a>
@@ -174,6 +188,25 @@ try{
   new Chart(document.getElementById('chartPrevProgVsCT').getContext('2d'),{
     type:'bar',data:{labels:['Programadas','Cerradas (OTCT)'],datasets:[{label:'OTs',data:[123,82]}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
   });
+  function getISOWeekNumberIndex(date){
+    var d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    var dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  }
+  function pad2Index(n){return String(n).padStart(2,'0');}
+  function updateIndexDateCard(){
+    var now = new Date();
+    var week = getISOWeekNumberIndex(now);
+    var dateTxt = pad2Index(now.getDate()) + '/' + pad2Index(now.getMonth()+1) + '/' + now.getFullYear();
+    var weekEl = document.getElementById('indexIsoWeekText');
+    var dateEl = document.getElementById('indexTodayDateText');
+    if(weekEl){weekEl.textContent = 'SEMANA ' + week;}
+    if(dateEl){dateEl.textContent = dateTxt;}
+  }
+  updateIndexDateCard();
+  setInterval(updateIndexDateCard, 60000);
 }catch(e){console && console.error && console.error(e);}
 </script>
-<footer class='arma-footer'><p>CONTROL // ARMA // GENERADO: 2026-06-25 19:51:59 // PELEX S.A.S.</p></footer></body></html>
+<footer class='arma-footer'><p>CONTROL // ARMA // GENERADO: 2026-06-25 20:17:06 // PELEX S.A.S.</p></footer></body></html>
