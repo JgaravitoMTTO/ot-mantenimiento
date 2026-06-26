@@ -88,7 +88,9 @@ body.arma-logged #userCard .user-arrow{color:var(--green)!important}
 .menu a{display:flex;align-items:center;gap:12px;text-decoration:none;color:#dbeafe;padding:13px 12px;border-radius:12px;font-weight:800;font-size:13px;border:1px solid transparent;letter-spacing:.2px}
 .menu a span{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center;text-align:center;font-size:10px;font-weight:900;color:#fff;flex:0 0 28px}
 .menu a .menu-icon-img img{width:18px;height:18px;object-fit:contain;display:block}
-.menu a.sidebar-form-link{line-height:1.15}
+.menu a.sidebar-form-link{min-height:64px;padding:12px 14px;background:linear-gradient(90deg,#006bd6,#0052b8);border-left:4px solid var(--green2);color:#fff;box-shadow:var(--soft);line-height:1.15}
+.menu a.sidebar-form-link .menu-icon-img{width:48px;height:48px;flex:0 0 48px;background:transparent;border-radius:12px}
+.menu a.sidebar-form-link .menu-icon-img img{width:38px;height:38px;object-fit:contain;display:block;filter:brightness(0) invert(1)}
 .menu a:hover,.menu a.active{background:linear-gradient(90deg,#006bd6,#0052b8);border-left:4px solid var(--green2);color:#fff;box-shadow:var(--soft)}
 .side-status{position:absolute;left:16px;right:16px;bottom:18px;border-top:1px solid rgba(255,255,255,.20);padding-top:14px;display:flex;justify-content:space-between;align-items:center;color:#dbeafe}
 .side-status span{font-size:11px}.side-status strong{background:rgba(255,255,255,.12);padding:6px 10px;border-radius:999px;font-size:12px}
@@ -200,7 +202,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
 <div class='app'>
 <aside class='sidebar'>
   <nav class='menu'>
-    <a class='sidebar-form-link' href='https://forms.gle/RebpqAi14r7zpwZX9' target='_blank' rel='noopener noreferrer'><span class='menu-icon-img'><img src='documento.png' alt='RT'></span> DILIGENCIAR RT (REGISTRO TECNICO) BITACORA</a>
+    <a class='sidebar-form-link' href='https://forms.gle/RebpqAi14r7zpwZX9' target='_blank' rel='noopener noreferrer'><span class='menu-icon-img'><img src='documento.png' alt='RT'></span> DILIGENCIAR RT (REGISTRO TECNICO)</a>
     <a class='arma-secured arma-locked' data-perm='BTN_CUMPLIMIENTO' href='cumplimiento.html' data-arma-window='ARMA_CUMPLIMIENTO' target='ARMA_CUMPLIMIENTO'><span>CU</span> CUMPLIMIENTO</a>
     <a class='arma-secured arma-locked' data-perm='BTN_SOLICITUDES' href='solicitudes.html' data-arma-window='ARMA_SOLICITUDES' target='ARMA_SOLICITUDES'><span>SO</span> SOLICITUDES</a>
     <a class='arma-secured arma-locked' data-perm='BTN_MODULOS' href='#modulos'><span>MO</span> MODULOS</a>
@@ -230,7 +232,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
     <div class='kpi'>
       <div class='kpi-icon dark'>ON</div>
-      <div><span>SISTEMA</span><strong id='systemStatusText'>OFFLINE</strong><small>GENERADO: 26/06 09:40</small></div>
+      <div><span>SISTEMA</span><strong id='systemStatusText'>OFFLINE</strong><small>GENERADO: 26/06 09:48</small></div>
     </div>
   </section>
   <section class='modules' id='modulos'>
@@ -474,7 +476,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </div>
   </section>
   <footer class='footer'>
-    CONTROL // ARMA HOME // GENERADO: 2026-06-26 09:40:39 // PELEX S.A.S.
+    CONTROL // ARMA HOME // GENERADO: 2026-06-26 09:48:37 // PELEX S.A.S.
   </footer>
 </main>
 </div>
