@@ -179,9 +179,9 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
 <div class='app'>
 <aside class='sidebar'>
   <nav class='menu'>
-    <a class='arma-secured arma-locked' data-perm='BTN_OT' href='index.html' target='_blank' rel='noopener noreferrer'><span>OT</span> ORDENES DE TRABAJO</a>
-    <a class='arma-secured arma-locked' data-perm='BTN_CUMPLIMIENTO' href='cumplimiento.html' target='_blank' rel='noopener noreferrer'><span>CU</span> CUMPLIMIENTO</a>
-    <a class='arma-secured arma-locked' data-perm='BTN_SOLICITUDES' href='solicitudes.html' target='_blank' rel='noopener noreferrer'><span>SO</span> SOLICITUDES</a>
+    <a class='arma-secured arma-locked' data-perm='BTN_OT' href='index.html' data-arma-window='ARMA_INDEX' target='ARMA_INDEX'><span>OT</span> ORDENES DE TRABAJO</a>
+    <a class='arma-secured arma-locked' data-perm='BTN_CUMPLIMIENTO' href='cumplimiento.html' data-arma-window='ARMA_CUMPLIMIENTO' target='ARMA_CUMPLIMIENTO'><span>CU</span> CUMPLIMIENTO</a>
+    <a class='arma-secured arma-locked' data-perm='BTN_SOLICITUDES' href='solicitudes.html' data-arma-window='ARMA_SOLICITUDES' target='ARMA_SOLICITUDES'><span>SO</span> SOLICITUDES</a>
     <a class='arma-secured arma-locked' data-perm='BTN_MODULOS' href='#modulos'><span>MO</span> MODULOS</a>
     <a class='arma-secured arma-locked' data-perm='BTN_HERRAMIENTAS' href='#herramientas'><span>HE</span> HERRAMIENTAS</a>
   </nav>
@@ -195,21 +195,21 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     <img src='ARMA%20banner%20home.png' alt='BANNER ARMA' class='hero-banner-img'>
   </section>
   <section class='kpis'>
-    <a class='kpi arma-secured arma-locked' data-perm='BTN_OT' href='index.html' target='_blank' rel='noopener noreferrer'>
+    <a class='kpi arma-secured arma-locked' data-perm='BTN_OT' href='index.html' data-arma-window='ARMA_INDEX' target='ARMA_INDEX'>
       <div class='kpi-icon blue'>OT</div>
       <div><span>ORDENES DE TRABAJO</span><strong>4872</strong><small>IR AL INDEX OPERATIVO ACTUAL</small></div>
     </a>
-    <a class='kpi arma-secured arma-locked' data-perm='BTN_CUMPLIMIENTO' href='cumplimiento.html' target='_blank' rel='noopener noreferrer'>
+    <a class='kpi arma-secured arma-locked' data-perm='BTN_CUMPLIMIENTO' href='cumplimiento.html' data-arma-window='ARMA_CUMPLIMIENTO' target='ARMA_CUMPLIMIENTO'>
       <div class='kpi-icon green'>CU</div>
       <div><span>CUMPLIMIENTO OTCT</span><strong>92,7%</strong><small>PROGRAMADAS VS CERRADAS</small></div>
     </a>
-    <a class='kpi arma-secured arma-locked' data-perm='BTN_SOLICITUDES' href='solicitudes.html' target='_blank' rel='noopener noreferrer'>
+    <a class='kpi arma-secured arma-locked' data-perm='BTN_SOLICITUDES' href='solicitudes.html' data-arma-window='ARMA_SOLICITUDES' target='ARMA_SOLICITUDES'>
       <div class='kpi-icon cyan'>SO</div>
       <div><span>SOLICITUDES</span><strong>45</strong><small>PRODUCCION A MANTENIMIENTO</small></div>
     </a>
     <div class='kpi'>
       <div class='kpi-icon dark'>ON</div>
-      <div><span>SISTEMA</span><strong id='systemStatusText'>OFFLINE</strong><small>GENERADO: 25/06 22:15</small></div>
+      <div><span>SISTEMA</span><strong id='systemStatusText'>OFFLINE</strong><small>GENERADO: 25/06 22:29</small></div>
     </div>
   </section>
   <section class='modules' id='modulos'>
@@ -259,11 +259,11 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
           <span class='btn-icon'>MP</span>
           <span class='btn-text'>CRONOGRAMAS MP</span>
         </a>
-        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_SOLICITUDES' href='solicitudes.html' target='_blank' rel='noopener noreferrer'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_SOLICITUDES' href='solicitudes.html' data-arma-window='ARMA_SOLICITUDES' target='ARMA_SOLICITUDES'>
           <span class='btn-icon'>SO</span>
           <span class='btn-text'>SOLICITUDES</span>
         </a>
-        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_ORDENES_MTTO' href='index.html' target='_blank' rel='noopener noreferrer'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_ORDENES_MTTO' href='index.html' data-arma-window='ARMA_INDEX' target='ARMA_INDEX'>
           <span class='btn-icon'>OT</span>
           <span class='btn-text'>ORDENES DE MTTO</span>
         </a>
@@ -437,15 +437,15 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
   <section class='quick' id='herramientas'>
     <h2>ACCESO RAPIDO</h2>
     <div class='quick-grid'>
-      <a class='arma-secured arma-locked' data-perm='BTN_OT' href='index.html' target='_blank' rel='noopener noreferrer'>OT DASHBOARD OT</a>
-      <a class='arma-secured arma-locked' data-perm='BTN_SOLICITUDES' href='solicitudes.html' target='_blank' rel='noopener noreferrer'>SO SOLICITUDES</a>
-      <a class='arma-secured arma-locked' data-perm='BTN_CUMPLIMIENTO' href='cumplimiento.html' target='_blank' rel='noopener noreferrer'>CU CUMPLIMIENTO SEMANAL</a>
+      <a class='arma-secured arma-locked' data-perm='BTN_OT' href='index.html' data-arma-window='ARMA_INDEX' target='ARMA_INDEX'>OT DASHBOARD OT</a>
+      <a class='arma-secured arma-locked' data-perm='BTN_SOLICITUDES' href='solicitudes.html' data-arma-window='ARMA_SOLICITUDES' target='ARMA_SOLICITUDES'>SO SOLICITUDES</a>
+      <a class='arma-secured arma-locked' data-perm='BTN_CUMPLIMIENTO' href='cumplimiento.html' data-arma-window='ARMA_CUMPLIMIENTO' target='ARMA_CUMPLIMIENTO'>CU CUMPLIMIENTO SEMANAL</a>
       <a class='arma-secured arma-locked' data-perm='BTN_HERRAMIENTAS' href='#'>HE HERRAMIENTAS</a>
       <a class='arma-secured arma-locked' data-perm='BTN_BIBLIOTECA_DIGITAL' href='#'>BD BIBLIOTECA</a>
     </div>
   </section>
   <footer class='footer'>
-    CONTROL // ARMA HOME // GENERADO: 2026-06-25 22:15:34 // PELEX S.A.S.
+    CONTROL // ARMA HOME // GENERADO: 2026-06-25 22:29:40 // PELEX S.A.S.
   </footer>
 </main>
 </div>
@@ -469,6 +469,26 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
 const ARMA_API_URL = 'https://script.google.com/macros/s/AKfycby0aYXm5CSZQdTlZnLTTImQyAOfyn0hjtsVZrabOxoJuz6nIUPrAv5MesHkNlJ-CF4VNw/exec';
 const ARMA_VISITOR_PERMISSIONS = {};
 let armaSession = {user:'VISITANTE', nombre:'VISITANTE', nivel:'INICIAR SESION', token:'', permissions:ARMA_VISITOR_PERMISSIONS};
+const ARMA_CHANNEL_NAME='ARMA_CONTROL_CHANNEL';
+let armaMainChannel=null;
+function armaMainHeartbeat(){
+  try{localStorage.setItem('ARMA_MAIN_ACTIVE',JSON.stringify({active:true,ts:Date.now(),url:location.href,name:'ARMA_MAIN'}));}catch(e){}
+}
+function armaStartMainPresence(){
+  try{window.name='ARMA_MAIN';}catch(e){}
+  armaMainHeartbeat(); setInterval(armaMainHeartbeat,2000);
+  try{
+    if('BroadcastChannel' in window){
+      armaMainChannel=new BroadcastChannel(ARMA_CHANNEL_NAME);
+      armaMainChannel.onmessage=function(ev){var msg=ev.data||{}; if(msg.type==='PING_MAIN'||msg.type==='FOCUS_MAIN'){armaMainHeartbeat(); try{window.focus();}catch(e){} armaMainChannel.postMessage({type:'MAIN_ACTIVE',ts:Date.now(),url:location.href,name:'ARMA_MAIN'});}};
+      armaMainChannel.postMessage({type:'MAIN_ACTIVE',ts:Date.now(),url:location.href,name:'ARMA_MAIN'});
+    }
+  }catch(e){}
+  window.addEventListener('storage',function(e){if(e.key==='ARMA_REQUEST_MAIN_FOCUS'){armaMainHeartbeat(); try{window.focus();}catch(x){}}});
+}
+function armaOpenChildWindow(url,targetName){
+  try{var w=window.open(url,targetName||'_blank'); if(w){w.focus();} return false;}catch(e){location.href=url; return false;}
+}
 function getISOWeekNumber(date){
   var d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
   var dayNum = d.getUTCDay() || 7;
@@ -535,8 +555,9 @@ async function armaValidateStoredSession(){
 }
 async function armaLogout(){try{if(armaSession.token){await armaApi('logout',{token:armaSession.token});}}catch(e){} armaSetVisitor();}
 document.addEventListener('DOMContentLoaded',function(){
-  updateDateCard(); setInterval(updateDateCard,60000); armaSetVisitor(); armaPing(); armaValidateStoredSession();
+  armaStartMainPresence(); updateDateCard(); setInterval(updateDateCard,60000); armaSetVisitor(); armaPing(); armaValidateStoredSession();
   document.body.addEventListener('click',function(e){var locked=e.target.closest('.arma-locked'); if(locked){e.preventDefault(); alert('DEBE INICIAR SESION PARA ACCEDER A ESTE MODULO.');}});
+  document.body.addEventListener('click',function(e){var a=e.target.closest('a[data-arma-window]'); if(a && !a.classList.contains('arma-locked')){e.preventDefault(); armaOpenChildWindow(a.getAttribute('href'),a.getAttribute('data-arma-window'));}});
   document.getElementById('userCard').addEventListener('click',function(e){e.stopPropagation(); this.classList.toggle('open');});
   document.getElementById('btnOpenLogin').addEventListener('click',function(e){e.stopPropagation(); armaOpenLogin(); document.getElementById('userCard').classList.remove('open');});
   document.getElementById('btnLogout').addEventListener('click',function(e){e.stopPropagation(); armaLogout(); document.getElementById('userCard').classList.remove('open');});
