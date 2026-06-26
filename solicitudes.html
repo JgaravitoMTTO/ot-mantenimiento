@@ -253,21 +253,66 @@ function updateIndexDateCard(){
   if(weekEl){weekEl.textContent = 'SEMANA ' + week;}
   if(dateEl){dateEl.textContent = dateTxt;}
 }
-function armaVolverAMainDesdeIndex(e){
-  if(e){e.preventDefault();}
-  var mainUrl='main.html';
-  try{localStorage.setItem('ARMA_RETURN_MAIN_REQUEST', String(Date.now()));}catch(err){}
+function armaMainStorageIsFresh(maxAgeMs){
   try{
-    if(window.opener && !window.opener.closed){window.opener.focus();setTimeout(function(){try{window.close();}catch(err){}},80);return false;}
-    var w=window.open(mainUrl,'ARMA_MAIN');
-    if(w){w.focus();setTimeout(function(){try{window.close();}catch(err){}},120);return false;}
-    alert('EL NAVEGADOR BLOQUEO EL ENFOQUE AUTOMATICO. BUSQUE LA PESTANA DE ARMA MAIN O HABILITE POP-UPS PARA ESTE SITIO.');
-  }catch(err){alert('NO FUE POSIBLE ENFOCAR MAIN AUTOMATICAMENTE. EL NAVEGADOR LIMITA ESTA ACCION ENTRE PESTANAS.');}
+    var raw = localStorage.getItem('ARMA_MAIN_ACTIVE') || '';
+    if(!raw){return false;}
+    var data = JSON.parse(raw);
+    if(!data || !data.ts){return false;}
+    return (Date.now() - Number(data.ts)) <= (maxAgeMs || 3500);
+  }catch(err){return false;}
+}
+function armaAskMainIsActive(){
+  return new Promise(function(resolve){
+    var resolved = false;
+    var bc = null;
+    function finish(active){
+      if(resolved){return;}
+      resolved = true;
+      try{if(bc){bc.close();}}catch(err){}
+      resolve(!!active);
+    }
+    try{
+      if('BroadcastChannel' in window){
+        bc = new BroadcastChannel('ARMA_CONTROL_CHANNEL');
+        bc.onmessage = function(ev){
+          var msg = ev.data || {};
+          if(msg.type === 'MAIN_ACTIVE'){finish(true);}
+        };
+        bc.postMessage({type:'FOCUS_MAIN',from:location.href,ts:Date.now()});
+      }
+    }catch(err){}
+    try{localStorage.setItem('ARMA_REQUEST_MAIN_FOCUS', String(Date.now()));}catch(err){}
+    if(armaMainStorageIsFresh(3500)){setTimeout(function(){finish(true);},120);}
+    setTimeout(function(){finish(false);},650);
+  });
+}
+function armaTryCloseCurrentPage(){
+  try{window.close();}catch(err){}
+  setTimeout(function(){
+    if(!window.closed){
+      var msg='MAIN YA ESTA ABIERTO. EL NAVEGADOR NO PERMITIO CERRAR ESTA PESTANA AUTOMATICAMENTE. PUEDE CERRARLA MANUALMENTE.';
+      try{console.warn(msg);}catch(err){}
+    }
+  },220);
+}
+function armaGoHomeSmart(e){
+  if(e){e.preventDefault();}
+  armaAskMainIsActive().then(function(active){
+    if(active){
+      try{
+        if(window.opener && !window.opener.closed){window.opener.focus();}
+      }catch(err){}
+      armaTryCloseCurrentPage();
+    }else{
+      window.location.href='main.html';
+    }
+  });
   return false;
 }
 document.addEventListener('DOMContentLoaded',function(){
   updateIndexDateCard(); setInterval(updateIndexDateCard,60000);
-  document.querySelectorAll("[data-smart-home='1']").forEach(function(a){a.addEventListener('click',armaVolverAMainDesdeIndex);});
+  document.querySelectorAll("[data-smart-home='1']").forEach(function(a){a.addEventListener('click',armaGoHomeSmart);});
 });
 
 function norm(s){return (s||'').toString().trim().toLowerCase();}
@@ -296,4 +341,4 @@ document.addEventListener('DOMContentLoaded', ()=>{
   applyFilter();
 });
 </script>
-<footer class='arma-footer'><p>CONTROL // ARMA // GENERADO: 2026-06-25 22:16:03 // PELEX S.A.S.</p></footer></body></html>
+<footer class='arma-footer'><p>CONTROL // ARMA // GENERADO: 2026-06-25 22:35:27 // PELEX S.A.S.</p></footer></body></html>
