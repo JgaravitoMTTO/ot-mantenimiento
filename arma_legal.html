@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang='es'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>ARMA | Declaracion Legal</title>
+<!--
+ARMA LEGAL ABOUT PAGE
+Fecha de creacion de esta pagina: 2026-06-26 16:21:26
+Fecha declarada de nacimiento de ARMA como Herramienta y Software de Uso de Gestion de Mantenimiento: 26 de agosto de 2026
+Titular de derechos intelectuales: Jhonathan Hernando Garavito Caballero
+Usuario autorizado inicial: PELEX S.A.S.
+Resumen esencial incorporado al codigo fuente:
+- ARMA es software, metodologia, arquitectura funcional, estructura documental, interfaces, macros y automatizaciones protegidas.
+- El uso por PELEX S.A.S. es interno, limitado, no exclusivo, no transferible, revocable y condicionado.
+- El uso de ARMA no implica cesion de derechos patrimoniales, propiedad intelectual, codigo fuente ni transferencia tecnologica.
+- Los datos, reportes, historicos, PDFs e informacion operativa de PELEX S.A.S. pertenecen a PELEX S.A.S.
+- Se separa expresamente la propiedad de la herramienta ARMA de la propiedad de los datos operativos del usuario autorizado.
+- Se prohibe la copia, divulgacion, sublicencia, comercializacion, ingenieria inversa o reconstruccion funcional sin autorizacion escrita del titular.
+- La aceptacion se produce por uso, acceso, consulta, operacion o interaccion directa o indirecta con ARMA.
+-->
+  <style>
+:root{
+  --blue:#004b9b;
+  --blue2:#0076d7;
+  --navy:#002b66;
+  --green:#55b52e;
+  --green2:#00d65f;
+  --cyan:#00bfd6;
+  --gray:#eef3f9;
+  --line:#dbe5f0;
+  --text:#0f172a;
+  --muted:#64748b;
+  --dark:#111827;
+  --shadow:0 18px 44px rgba(0,43,102,.18);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',Roboto,Arial,sans-serif;background:radial-gradient(circle at 70% 0%,#e8f7ff 0,#eef3f9 42%,#dce8f5 100%);color:var(--text)}
+.legal-shell{min-height:100vh;padding:22px 28px 18px}
+.legal-header{background:#fff;border-radius:20px;border:1px solid var(--line);box-shadow:var(--shadow);min-height:108px;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:18px;border-bottom:6px solid var(--blue)}
+.brand-row{display:flex;align-items:center;gap:24px}
+.brand-separator{width:1px;height:70px;background:#d8e5f2}
+.logo-pelex{height:74px;max-width:265px;object-fit:contain}
+.logo-arma{height:82px;max-width:385px;object-fit:contain}
+.legal-badge{border:1px solid rgba(0,214,95,.35);background:linear-gradient(135deg,#eafff1,#e7f6ff);color:var(--navy);border-radius:999px;padding:11px 16px;font-weight:950;font-size:12px;letter-spacing:.8px;box-shadow:0 8px 20px rgba(0,75,155,.10)}
+.legal-card{position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+.legal-card:before{content:'';position:absolute;left:0;top:0;bottom:0;width:8px;background:linear-gradient(180deg,var(--green2),var(--green),var(--blue2))}
+.legal-top{position:relative;background:linear-gradient(135deg,#001f4d 0%,#003b86 56%,#004b9b 100%);color:#fff;padding:24px 34px 22px 42px;display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
+.legal-top:after{content:'ARMA';position:absolute;right:24px;bottom:-18px;font-size:82px;font-weight:950;letter-spacing:6px;color:rgba(255,255,255,.055);pointer-events:none}
+.eyebrow{display:inline-block;color:#9dffbf;border:1px solid rgba(157,255,191,.38);background:rgba(0,214,95,.08);border-radius:999px;padding:6px 12px;font-size:11px;font-weight:950;letter-spacing:1px;margin-bottom:10px}
+.legal-top h1{margin:0;font-size:30px;line-height:1.05;letter-spacing:.5px;font-weight:950}
+.legal-top p{max-width:850px;margin:10px 0 0;color:#dbeafe;font-size:13px;font-weight:650;line-height:1.45}
+.meta-box{position:relative;z-index:1;min-width:295px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:14px 16px;backdrop-filter:blur(3px)}
+.meta-box strong{display:block;color:#9dffbf;font-size:10px;letter-spacing:.9px;margin-top:6px}
+.meta-box strong:first-child{margin-top:0}
+.meta-box span{display:block;color:#fff;font-size:13px;font-weight:850;margin-top:4px}
+.contract-text{padding:26px 42px 24px;max-height:62vh;overflow:auto;background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%)}
+.contract-text h1{font-size:18px;line-height:1.25;text-align:center;color:var(--navy);margin:4px 0 10px;font-weight:950;letter-spacing:.3px}
+.contract-text h2{font-size:14px;text-align:center;color:var(--blue);margin:0 0 18px;font-weight:950;letter-spacing:.4px}
+.contract-text h3{font-size:12px;color:#fff;background:linear-gradient(90deg,var(--navy),var(--blue));border-left:5px solid var(--green2);border-radius:10px;padding:8px 12px;margin:18px 0 8px;font-weight:950;letter-spacing:.35px}
+.contract-text p{font-family:'Segoe UI',Arial,sans-serif;font-size:11px;line-height:1.55;margin:5px 0;color:#1f2937;text-align:justify;font-weight:550;letter-spacing:.12px}
+.contract-text .legal-label{font-size:10px;color:var(--blue);font-weight:950;margin:8px 0 2px;text-align:left;letter-spacing:.45px}
+.contract-text .legal-end{text-align:center;color:var(--navy);font-size:12px;font-weight:950;margin:20px 0 4px}
+.accept-area{border-top:1px solid var(--line);background:linear-gradient(90deg,#f8fbff,#eef6ff);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.accept-area p{margin:0;color:var(--muted);font-size:11px;font-weight:800;line-height:1.35}
+.accept-area button{border:0;border-radius:999px;background:linear-gradient(180deg,var(--green2),var(--green));color:#fff;font-size:13px;font-weight:950;letter-spacing:.5px;padding:12px 30px;box-shadow:0 10px 22px rgba(85,181,46,.25);cursor:pointer;min-width:145px}
+.accept-area button:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.legal-footer{margin-top:14px;background:linear-gradient(90deg,#2764c8,#004b9b);color:#fff;border-radius:999px;padding:9px 16px;text-align:center;font-size:11px;font-weight:950;box-shadow:0 5px 14px rgba(15,23,42,.12);letter-spacing:.35px}
+@media(max-width:900px){.legal-shell{padding:12px}.legal-header,.legal-top,.accept-area{flex-direction:column;align-items:stretch}.brand-row{justify-content:center;flex-wrap:wrap}.brand-separator{display:none}.logo-pelex{height:56px}.logo-arma{height:64px}.legal-top{padding:22px}.meta-box{min-width:0}.contract-text{padding:18px;max-height:none}.accept-area button{width:100%}}
+
+  </style>
+</head>
+<body>
+<div class='legal-shell'>
+  <header class='legal-header'>
+    <div class='brand-row'>
+      <img src='logo_pelex.bmp' alt='PELEX' class='logo-pelex'>
+      <div class='brand-separator'></div>
+      <img src='ARMA%20logo%202.png' alt='ARMA' class='logo-arma'>
+    </div>
+    <div class='legal-badge'>PROPIEDAD INTELECTUAL PROTEGIDA</div>
+  </header>
+  <main class='legal-card'>
+    <section class='legal-top'>
+      <div>
+        <span class='eyebrow'>ABOUT LEGAL // TERMINOS DE USO</span>
+        <h1>DECLARACION LEGAL ARMA&trade;</h1>
+        <p>Documento interno de titularidad, condiciones de uso, confidencialidad, reserva de derechos y separacion entre herramienta y datos operativos.</p>
+      </div>
+      <div class='meta-box'>
+        <strong>FECHA DE CREACION DE PAGINA</strong><span>2026-06-26 16:21:26</span>
+        <strong>NACIMIENTO DECLARADO ARMA&trade;</strong><span>26 de agosto de 2026</span>
+      </div>
+    </section>
+    <section class='contract-text'>
+    <h1>DECLARACION DE TITULARIDAD, CONDICIONES DE USO, CONFIDENCIALIDAD Y RESERVA DE DERECHOS DE ARMA&trade;</h1>
+    <h2>ARMA&trade; &ndash; SISTEMA DE GESTION DE MANTENIMIENTO INDUSTRIAL</h2>
+    <p class='legal-label'>Titular de derechos intelectuales:</p>
+    <p>Jhonathan Hernando Garavito Caballero</p>
+    <p class='legal-label'>Fecha declarada de nacimiento de ARMA&trade;:</p>
+    <p>26 de agosto de 2026</p>
+    <p class='legal-label'>Usuario autorizado inicial:</p>
+    <p>PELEX S.A.S.</p>
+    <p class='legal-label'>Naturaleza del documento:</p>
+    <p>Declaracion de titularidad, condiciones de uso, confidencialidad, reserva de derechos, separacion de propiedad entre software y datos operativos, y autorizacion de uso interno limitado.</p>
+    <p class='legal-label'>Version del documento:</p>
+    <p>1.0</p>
+    <h3>1. DECLARACION GENERAL</h3>
+    <p>ARMA&trade; es un sistema de gestion de mantenimiento industrial creado, desarrollado, estructurado, disenado, documentado, administrado y evolucionado por Jhonathan Hernando Garavito Caballero, quien conserva la titularidad plena sobre los derechos intelectuales, patrimoniales, tecnicos, funcionales, documentales, metodologicos y de explotacion economica asociados al sistema.</p>
+    <p>Para todos los efectos internos, tecnicos, documentales, historicos y juridicos, se declara como fecha de nacimiento de ARMA&trade; el dia 26 de agosto de 2026.</p>
+    <p>ARMA&trade; comprende, entre otros elementos, software, codigo fuente, macros, modulos VBA, formularios, interfaces HTML, archivos de configuracion, estructuras de datos, disenos visuales, arquitectura funcional, flujos de trabajo, logica de operacion, metodologia de mantenimiento, reportes, formatos, tableros, documentacion tecnica, documentacion funcional, manuales de uso, nomenclaturas, procedimientos, plantillas, publicaciones web, integraciones, automatizaciones y cualquier desarrollo presente o futuro relacionado con el sistema.</p>
+    <p>El uso de ARMA&trade; por parte de PELEX S.A.S., o por parte de cualquier otro usuario autorizado por el titular, se entiende como una autorizacion de uso interno, limitada, no exclusiva, no transferible, revocable y condicionada, sin que dicha autorizacion constituya cesion, venta, transferencia, sublicencia, entrega, renuncia o transmision de derechos patrimoniales o de propiedad intelectual sobre ARMA&trade;.</p>
+    <h3>2. ACEPTACION POR USO</h3>
+    <p>El solo acceso, apertura, consulta, visualizacion, operacion, uso, ejecucion, administracion, modificacion operativa permitida, generacion de reportes, consulta de informacion, generacion de archivos PDF, uso de formularios, navegacion por paginas HTML, uso de macros, carga de informacion o cualquier interaccion directa o indirecta con ARMA&trade; implica la aceptacion expresa, plena e inequivoca de las presentes condiciones.</p>
+    <p>Toda persona natural o juridica que acceda, use, consulte, administre u opere ARMA&trade; declara conocer y aceptar que el sistema es propiedad intelectual de Jhonathan Hernando Garavito Caballero y que su uso no implica transferencia de propiedad, cesion de derechos, sublicencia, autorizacion comercial, entrega de codigo fuente ni titularidad alguna sobre el software, metodologia, arquitectura, diseno o componentes internos del sistema.</p>
+    <p>Quien no acepte estas condiciones debera abstenerse de acceder, usar, copiar, manipular, modificar, distribuir, intervenir, administrar, consultar o explotar ARMA&trade;.</p>
+    <h3>3. FINALIDAD DEL USO AUTORIZADO</h3>
+    <p>ARMA&trade; puede ser utilizado por PELEX S.A.S. unicamente para fines internos relacionados con la gestion, control, documentacion, seguimiento, consulta, generacion de reportes y administracion de actividades de mantenimiento industrial, solicitudes, ordenes de trabajo, inspecciones, indicadores, registros tecnicos y demas procesos internos previamente habilitados dentro del sistema.</p>
+    <p>El uso de ARMA&trade; dentro de PELEX S.A.S. tiene caracter operativo, funcional y de apoyo a la gestion de mantenimiento. Dicho uso no convierte a PELEX S.A.S. en titular, propietario, cesionario, licenciatario exclusivo, desarrollador, distribuidor, sublicenciante ni explotador comercial del sistema.</p>
+    <p>La autorizacion concedida no faculta a PELEX S.A.S., ni a sus trabajadores, contratistas, proveedores, aliados, representantes o terceros relacionados, para copiar, modificar, replicar, comercializar, arrendar, sublicenciar, vender, publicar, transferir, divulgar, intervenir, descompilar, desmontar, reutilizar o explotar ARMA&trade; fuera del alcance expresamente permitido por el titular.</p>
+    <h3>4. PROPIEDAD DE ARMA&trade;</h3>
+    <p>Se reconoce expresamente que ARMA&trade; es propiedad intelectual de Jhonathan Hernando Garavito Caballero, quien conserva todos los derechos sobre el sistema y sus componentes.</p>
+    <p class='legal-label'>La titularidad sobre ARMA&trade; incluye, sin limitarse a:</p>
+    <p>a. Codigo fuente, codigo VBA, macros, scripts, funciones, procedimientos y modulos de automatizacion.</p>
+    <p>b. Diseno de formularios, interfaces, paginas HTML, tableros, botones, estilos, navegacion y experiencia de usuario.</p>
+    <p>c. Arquitectura funcional, estructura documental, organizacion de hojas, tablas, campos, nomenclaturas, procesos y flujos de informacion.</p>
+    <p>d. Metodologia de gestion de mantenimiento, logica de ordenes de trabajo, solicitudes, reportes, estados, alertas, indicadores y publicaciones.</p>
+    <p>e. Manuales tecnicos, manuales funcionales, instructivos, documentacion interna, diagramas, formatos, modelos, plantillas y lineamientos.</p>
+    <p>f. Estructura de publicacion web, generacion de archivos, automatizaciones, integracion con repositorios, generacion de PDF y demas componentes del sistema.</p>
+    <p>g. Marca, nombre, denominacion, signos distintivos, logotipo, identidad visual y elementos graficos asociados a ARMA&trade;.</p>
+    <p>h. Versiones futuras, mejoras, actualizaciones, modulos complementarios, adaptaciones, ampliaciones, correcciones, integraciones, migraciones o derivados del sistema.</p>
+    <p>Ningun acceso, uso, prueba, implementacion, operacion, mejora, recomendacion, retroalimentacion o participacion de PELEX S.A.S. en el uso del sistema podra interpretarse como adquisicion de derechos patrimoniales, titularidad compartida, copropiedad, cesion implicita, licencia perpetua, transferencia tecnologica o autorizacion de explotacion comercial sobre ARMA&trade;.</p>
+    <h3>5. PROPIEDAD DE LOS DATOS E INFORMACION DE PELEX S.A.S. O DEL USUARIO AUTORIZADO</h3>
+    <p>ARMA&trade; actua como herramienta tecnologica, metodologica y documental para procesar, organizar, visualizar, registrar o generar informacion operativa. Sin embargo, la informacion propia de PELEX S.A.S. o de cualquier usuario autorizado no se transfiere al titular de ARMA&trade; por el hecho de ser cargada, procesada, consultada, organizada o generada dentro del sistema.</p>
+    <p class='legal-label'>En consecuencia, PELEX S.A.S. o el usuario autorizado correspondiente conserva la propiedad, control y titularidad sobre:</p>
+    <p>a. Datos de maquinas, equipos, lineas, activos, ubicaciones y componentes industriales.</p>
+    <p>b. Historicos de mantenimiento, ordenes de trabajo, solicitudes, inspecciones, reportes, diagnosticos, actividades y registros tecnicos.</p>
+    <p>c. Informacion de personal, turnos, areas, responsables, proveedores, repuestos, recursos, tiempos, fallas, evidencias y observaciones.</p>
+    <p>d. Indicadores, resultados, mediciones, analisis internos, hallazgos, fotografias, archivos adjuntos y documentos derivados de su operacion.</p>
+    <p>e. PDFs, informes, reportes, formatos, documentos de ordenes de trabajo, solicitudes, inspecciones o cualquier documento generado como resultado de la operacion interna del usuario autorizado dentro de ARMA&trade;.</p>
+    <p>f. Informacion industrial, tecnica, administrativa, financiera, documental, comercial, operativa o estrategica perteneciente a PELEX S.A.S. o al usuario autorizado.</p>
+    <p>La generacion de documentos, reportes, archivos PDF, publicaciones internas o salidas de informacion desde ARMA&trade; no implica que el titular de ARMA&trade; adquiera propiedad sobre los datos, documentos o informacion empresarial del usuario autorizado.</p>
+    <p>Los documentos generados por ARMA&trade; como resultado de la operacion interna de PELEX S.A.S. pertenecen a PELEX S.A.S. en cuanto a su contenido operativo, tecnico, industrial y documental. No obstante, la plantilla, estructura, logica de generacion, diseno funcional, automatizacion y metodologia utilizada para producir dichos documentos hacen parte de ARMA&trade; y permanecen bajo titularidad de Jhonathan Hernando Garavito Caballero.</p>
+    <h3>6. SEPARACION ENTRE HERRAMIENTA Y DATOS</h3>
+    <p class='legal-label'>Para todos los efectos, se establece una separacion expresa entre:</p>
+    <p class='legal-label'>a. ARMA&trade; como herramienta:</p>
+    <p>Software, codigo, metodologia, arquitectura, diseno, logica, estructura, automatizaciones, manuales, formatos base, flujos y sistema funcional, cuya titularidad corresponde a Jhonathan Hernando Garavito Caballero.</p>
+    <p class='legal-label'>b. Los datos del usuario autorizado:</p>
+    <p>Informacion de maquinas, mantenimientos, informes, ordenes de trabajo, solicitudes, reportes, registros, PDFs y demas contenidos operativos generados por PELEX S.A.S. o por cualquier usuario autorizado, cuya titularidad corresponde al respectivo usuario autorizado.</p>
+    <p>El uso de ARMA&trade; no autoriza al titular del sistema a apropiarse de la informacion confidencial, industrial, tecnica, operativa o comercial de PELEX S.A.S.; del mismo modo, el uso de datos de PELEX S.A.S. dentro de ARMA&trade; no autoriza a PELEX S.A.S. a apropiarse del software, codigo, metodologia, arquitectura, diseno o propiedad intelectual de ARMA&trade;.</p>
+    <h3>7. CONFIDENCIALIDAD DEL CODIGO FUENTE Y COMPONENTES INTERNOS</h3>
+    <p>El codigo fuente, macros, modulos VBA, estructuras internas, formulas, logica de procesamiento, automatizaciones, credenciales, rutas, archivos maestros, metodologia, diseno tecnico, arquitectura y documentacion interna de ARMA&trade; son informacion confidencial y reservada del titular.</p>
+    <p>PELEX S.A.S., sus trabajadores, contratistas, proveedores, aliados, representantes o terceros con acceso al sistema no podran revisar, extraer, copiar, alterar, manipular, divulgar, publicar, entregar, reutilizar, replicar, intervenir o explotar el codigo fuente o los componentes internos de ARMA&trade; sin autorizacion expresa, previa y escrita de Jhonathan Hernando Garavito Caballero.</p>
+    <p>La autorizacion de uso de ARMA&trade; no incluye acceso libre al codigo fuente ni facultad para modificar, auditar, intervenir, clonar, reconstruir, traducir, adaptar o reutilizar la logica interna del sistema, salvo autorizacion escrita del titular.</p>
+    <p>Cualquier acceso accidental, tecnico, operativo o circunstancial al codigo fuente o a los componentes internos de ARMA&trade; no se entendera como autorizacion de uso, modificacion, copia, divulgacion, explotacion o transferencia de dichos componentes.</p>
+    <h3>8. RESTRICCIONES DE USO</h3>
+    <p class='legal-label'>Salvo autorizacion previa, expresa y escrita del titular, PELEX S.A.S. y cualquier usuario autorizado se abstendran de:</p>
+    <p>a. Copiar total o parcialmente ARMA&trade;.</p>
+    <p>b. Entregar ARMA&trade; a terceros.</p>
+    <p>c. Publicar, divulgar o compartir el sistema, sus archivos maestros, codigo fuente, modulos, documentacion tecnica o componentes internos.</p>
+    <p>d. Modificar, alterar, intervenir, descompilar, replicar, reconstruir o crear sistemas derivados a partir de ARMA&trade;.</p>
+    <p>e. Comercializar, arrendar, vender, sublicenciar, transferir o explotar economicamente ARMA&trade;.</p>
+    <p>f. Retirar avisos legales, leyendas de titularidad, marcas, logos, notas de derechos de autor o restricciones de uso.</p>
+    <p>g. Usar ARMA&trade; en empresas, plantas, sedes, filiales, terceros, clientes o proyectos no autorizados expresamente.</p>
+    <p>h. Usar ARMA&trade; para desarrollar, entrenar, replicar o alimentar soluciones competidoras o similares basadas en su estructura, metodologia, codigo o logica funcional.</p>
+    <p>i. Permitir acceso a personal externo sin autorizacion del titular.</p>
+    <p>j. Eliminar, alterar o impedir el funcionamiento de las advertencias legales y mecanismos de identificacion de titularidad incorporados en ARMA&trade;.</p>
+    <h3>9. DERECHOS DEL TITULAR SOBRE CONTINUIDAD, SOPORTE Y RETIRO DEL USO</h3>
+    <p>Jhonathan Hernando Garavito Caballero conserva la facultad de definir, modificar, limitar, suspender o retirar la autorizacion de uso de ARMA&trade;, especialmente en caso de terminacion de la relacion laboral, comercial, contractual, tecnica o de confianza que haya permitido su implementacion, o en caso de incumplimiento de las condiciones aqui establecidas.</p>
+    <p>El uso de ARMA&trade; en PELEX S.A.S. no obliga al titular a prestar soporte indefinido, actualizaciones permanentes, mantenimiento gratuito, continuidad operativa, disponibilidad futura, correcciones, mejoras, migraciones, capacitaciones, acompanamiento tecnico o cesion del codigo fuente.</p>
+    <p>En caso de que el titular decida suspender, retirar o no continuar prestando ARMA&trade;, PELEX S.A.S. conservara sus datos operativos, documentos, PDFs, reportes e informacion propia generada durante el uso autorizado, pero no adquirira por ello derechos sobre el software, codigo fuente, metodologia, arquitectura, diseno ni componentes internos de ARMA&trade;.</p>
+    <p>La eventual imposibilidad de uso futuro de ARMA&trade;, por retiro de autorizacion, falta de soporte, cambio de condiciones, terminacion de relacion con el titular, falta de actualizacion, ausencia del titular, decision comercial o cualquier otra circunstancia, no se entendera como abandono, cesion, renuncia o transferencia de derechos sobre ARMA&trade; a favor de PELEX S.A.S. o de terceros.</p>
+    <h3>10. COMERCIALIZACION FUTURA DE ARMA&trade;</h3>
+    <p>Jhonathan Hernando Garavito Caballero conserva plena libertad para desarrollar, mejorar, modificar, adaptar, licenciar, comercializar, implementar, vender, ofrecer, distribuir o autorizar el uso de ARMA&trade; a otras personas naturales o juridicas, incluyendo empresas del sector industrial, manufacturero, plastico, extrusion, mantenimiento, produccion o sectores similares o competidores de PELEX S.A.S.</p>
+    <p>La implementacion o uso de ARMA&trade; en PELEX S.A.S. no genera exclusividad territorial, sectorial, industrial, comercial, tecnica ni funcional a favor de PELEX S.A.S.</p>
+    <p>La futura comercializacion de ARMA&trade; no autoriza al titular a divulgar, vender, transferir, revelar, publicar, utilizar o explotar datos confidenciales, historicos, documentos, reportes, informacion tecnica, informacion de maquinas, informacion de mantenimiento, indicadores, informes, PDFs o cualquier informacion propia de PELEX S.A.S.</p>
+    <p>El titular podra utilizar su conocimiento general, experiencia, metodologia, arquitectura de software, estructura funcional, codigo, aprendizajes tecnicos, mejoras generales y know-how propio para desarrollar o comercializar ARMA&trade; o soluciones similares, siempre que ello no implique revelar informacion confidencial especifica de PELEX S.A.S.</p>
+    <h3>11. MEJORAS, ADAPTACIONES Y DESARROLLOS DERIVADOS</h3>
+    <p>Toda mejora, actualizacion, correccion, ajuste, modulo adicional, plantilla, funcion, automatizacion, formulario, reporte, diseno, integracion, publicacion, estructura, macro, codigo, manual, documento, desarrollo derivado o nueva version de ARMA&trade; desarrollada por Jhonathan Hernando Garavito Caballero conservara la misma titularidad del sistema original.</p>
+    <p>Las sugerencias, comentarios, necesidades operativas, retroalimentaciones o requerimientos funcionales expresados por PELEX S.A.S. durante el uso de ARMA&trade; podran ser considerados por el titular para mejorar el sistema, sin que ello implique transferencia de derechos, copropiedad, participacion economica, exclusividad o limitacion para usar dichas mejoras en otras implementaciones.</p>
+    <p>Cuando una mejora incorpore datos especificos, informacion confidencial o documentos propios de PELEX S.A.S., dicha informacion seguira perteneciendo a PELEX S.A.S.; sin embargo, la logica funcional, codigo, diseno, estructura y metodologia de la mejora seguiran perteneciendo al titular de ARMA&trade;.</p>
+    <h3>12. USO DE INFORMACION CONFIDENCIAL DE PELEX S.A.S.</h3>
+    <p>El titular de ARMA&trade; reconoce que, durante la implementacion, soporte o uso del sistema, puede llegar a conocer informacion propia de PELEX S.A.S., incluyendo datos tecnicos, industriales, operativos, administrativos, documentales o estrategicos.</p>
+    <p>Dicha informacion sera tratada con confidencialidad y no sera divulgada, publicada, comercializada, transferida ni utilizada para perjudicar a PELEX S.A.S. o para revelar secretos industriales, tecnicos, productivos, comerciales o estrategicos de dicha empresa.</p>
+    <p>El titular podra reutilizar elementos generales de diseno, metodologia, arquitectura, codigo, estructura y conocimiento tecnico propio de ARMA&trade;, siempre que no incluya, revele o transfiera informacion especifica, identificable o confidencial de PELEX S.A.S.</p>
+    <h3>13. LEYENDAS LEGALES DENTRO DEL SISTEMA</h3>
+    <p>ARMA&trade; podra incluir avisos legales, textos de titularidad, marcas, identificaciones de version, restricciones de uso, notas de confidencialidad y mensajes de propiedad intelectual en sus pantallas, archivos, modulos, reportes, PDFs, paginas HTML, formularios, hojas internas, comentarios de codigo, manuales y documentacion.</p>
+    <p>La eliminacion, alteracion, ocultamiento o modificacion no autorizada de dichas leyendas no afectara la titularidad de ARMA&trade; ni los derechos de Jhonathan Hernando Garavito Caballero sobre el sistema.</p>
+    <h3>14. PROPIEDAD SOBRE PDFS Y DOCUMENTOS GENERADOS</h3>
+    <p>Los documentos, reportes, informes, registros y archivos PDF generados por ARMA&trade; con base en informacion operativa de PELEX S.A.S. seran propiedad de PELEX S.A.S. en cuanto a su contenido, datos, registros, evidencias y finalidad documental.</p>
+    <p>No obstante, el formato base, plantilla, diseno funcional, logica de generacion, estructura de campos, automatizacion, codigo, metodologia y mecanismos que permiten la generacion de dichos documentos hacen parte de ARMA&trade; y se mantienen como propiedad intelectual de Jhonathan Hernando Garavito Caballero.</p>
+    <p>La entrega o disponibilidad de PDFs generados por ARMA&trade; no implica entrega del software, codigo fuente, macros, plantillas maestras, logica de automatizacion ni derechos de explotacion del sistema.</p>
+    <h3>15. NO EXCLUSIVIDAD</h3>
+    <p>La autorizacion de uso de ARMA&trade; concedida a PELEX S.A.S. no tiene caracter exclusivo. El titular conserva el derecho de usar, adaptar, modificar, mejorar, licenciar, comercializar o implementar ARMA&trade; en otras empresas, industrias, territorios o sectores, sin necesidad de autorizacion de PELEX S.A.S., siempre que no se divulgue informacion confidencial propia de PELEX S.A.S.</p>
+    <p>PELEX S.A.S. reconoce que el uso de ARMA&trade; en sus instalaciones, procesos o equipos no limita la libertad del titular para continuar desarrollando el sistema, comercializarlo o permitir su uso por terceros.</p>
+    <h3>16. AUSENCIA DE TRANSFERENCIA POR USO, PRUEBA O IMPLEMENTACION</h3>
+    <p>La prueba, uso, instalacion, operacion, validacion, implementacion, retroalimentacion, capacitacion, acompanamiento, personalizacion o mejora de ARMA&trade; dentro de PELEX S.A.S. no constituye transferencia de propiedad intelectual.</p>
+    <p>El acceso al sistema, su utilizacion diaria o la dependencia operativa que pueda generarse por su uso no convierte a PELEX S.A.S. en titular de ARMA&trade; ni le otorga derecho a exigir la entrega del codigo fuente, archivos maestros, claves, estructura interna, repositorios, logica funcional, documentacion tecnica reservada o capacidad de explotacion comercial.</p>
+    <h3>17. PROTECCION EN COLOMBIA, ESTADOS UNIDOS Y OTROS TERRITORIOS</h3>
+    <p>ARMA&trade; se considera una creacion intelectual protegible conforme a las normas aplicables sobre derechos de autor, software, propiedad intelectual, secretos empresariales, confidencialidad, marcas y proteccion de informacion no divulgada.</p>
+    <p>La proteccion de ARMA&trade; se extiende a Colombia, Estados Unidos y a cualquier otro territorio donde resulte aplicable la proteccion de software, obras literarias, obras tecnicas, bases de datos, documentacion, signos distintivos, secretos empresariales, informacion confidencial, know-how, contratos de licencia, terminos de uso o normas equivalentes.</p>
+    <p>El titular podra adelantar registros, depositos, solicitudes, tramites, contratos, licencias, marcas, derechos de autor o medidas de proteccion en Colombia, Estados Unidos u otros paises, sin que ello requiera autorizacion de PELEX S.A.S. o de usuarios autorizados.</p>
+    <h3>18. RECONOCIMIENTO DE DERECHOS MORALES Y PATRIMONIALES</h3>
+    <p>Jhonathan Hernando Garavito Caballero conserva el reconocimiento como creador, desarrollador, estructurador y titular de ARMA&trade;.</p>
+    <p>Asi mismo, conserva los derechos patrimoniales sobre el sistema, incluyendo, entre otros, los derechos de reproduccion, distribucion, comunicacion publica, transformacion, adaptacion, modificacion, licenciamiento, comercializacion, autorizacion de uso, explotacion economica y retiro o suspension de autorizaciones, conforme a la legislacion aplicable.</p>
+    <p>Ningun uso interno, requerimiento operativo, dependencia funcional, personalizacion, adaptacion o implementacion dentro de PELEX S.A.S. podra interpretarse como renuncia a dichos derechos.</p>
+    <h3>19. RESPONSABILIDAD OPERATIVA Y USO DEL SISTEMA</h3>
+    <p>ARMA&trade; es una herramienta de apoyo para la gestion de mantenimiento. Las decisiones operativas, tecnicas, administrativas, de seguridad, produccion, mantenimiento, compras, intervencion de equipos, validacion de informacion y ejecucion de actividades seguiran siendo responsabilidad del usuario autorizado y de las personas designadas por este.</p>
+    <p>El titular de ARMA&trade; no sera responsable por decisiones tecnicas, operativas, administrativas o industriales tomadas exclusivamente por PELEX S.A.S. o por otros usuarios autorizados con base en informacion ingresada, interpretada o utilizada dentro del sistema, salvo pacto escrito en contrario.</p>
+    <p>PELEX S.A.S. sera responsable por la veracidad, suficiencia, actualizacion, integridad y legalidad de los datos que ingrese o cargue en ARMA&trade;.</p>
+    <h3>20. CONSERVACION Y RETIRO DE DATOS</h3>
+    <p>En caso de retiro, suspension, terminacion o no continuidad del uso de ARMA&trade;, PELEX S.A.S. podra conservar los documentos, PDFs, reportes, exportaciones, historicos o datos que le pertenezcan y que hayan sido generados durante el uso autorizado del sistema.</p>
+    <p>La conservacion de dichos datos no implica derecho a conservar, copiar, modificar, distribuir, intervenir o explotar el software ARMA&trade;, sus archivos maestros, codigo fuente, logica funcional, metodologia, diseno, documentacion tecnica reservada, macros, formularios, plantillas internas o componentes protegidos.</p>
+    <p>Cuando sea tecnicamente posible y razonable, el titular podra facilitar mecanismos de exportacion o entrega de informacion operativa perteneciente al usuario autorizado, sin que ello implique entregar el codigo fuente ni transferir propiedad intelectual sobre ARMA&trade;.</p>
+    <h3>21. PROHIBICION DE INGENIERIA INVERSA Y RECONSTRUCCION FUNCIONAL</h3>
+    <p>PELEX S.A.S. y cualquier usuario autorizado se abstendran de realizar ingenieria inversa, reconstruccion, copia funcional, clonacion, replica estructural, extraccion de logica, reutilizacion de codigo, duplicacion de flujos, apropiacion de metodologia o desarrollo de soluciones equivalentes basadas en ARMA&trade; sin autorizacion expresa y escrita del titular.</p>
+    <p>Esta restriccion aplica tanto al codigo fuente como a la estructura documental, arquitectura funcional, diseno de pantallas, flujos de trabajo, generacion de reportes, logica de estados, nomenclaturas, integracion de modulos y cualquier otro componente que refleje el esfuerzo creativo, tecnico, metodologico o funcional del titular.</p>
+    <h3>22. IDENTIFICACION DEL USUARIO AUTORIZADO</h3>
+    <p>El usuario autorizado inicial de ARMA&trade; es PELEX S.A.S., para uso interno en sus procesos de mantenimiento industrial, bajo las condiciones aqui establecidas.</p>
+    <p>Cualquier extension del uso a otras sedes, empresas vinculadas, clientes, proveedores, aliados, contratistas, terceros, filiales, proyectos externos o unidades de negocio diferentes debera contar con autorizacion expresa y escrita del titular.</p>
+    <h3>23. VIGENCIA DE LA AUTORIZACION</h3>
+    <p>La autorizacion de uso de ARMA&trade; tendra vigencia mientras el titular permita su uso y mientras se respeten las condiciones de confidencialidad, titularidad, restricciones de uso y separacion entre datos del usuario y propiedad intelectual del sistema.</p>
+    <p>El titular podra modificar las condiciones de uso, establecer nuevas condiciones comerciales, documentales, tecnicas o legales, o exigir la formalizacion de acuerdos adicionales para continuar el uso de ARMA&trade;.</p>
+    <h3>24. AUSENCIA DE CESION LABORAL, COMERCIAL O TACITA</h3>
+    <p>El uso de ARMA&trade; por parte de PELEX S.A.S. no se entendera como obra cedida, obra por encargo, desarrollo contratado, entrega laboral, transferencia tacita, cesion comercial, cesion por dependencia, cesion por implementacion ni cesion por uso continuado.</p>
+    <p>Cualquier cesion de derechos patrimoniales sobre ARMA&trade; debera constar en documento escrito, expreso, especifico y firmado por Jhonathan Hernando Garavito Caballero. En ausencia de dicho documento, se entendera que todos los derechos sobre ARMA&trade; permanecen reservados a favor del titular.</p>
+    <h3>25. RESERVA EXPRESA DE DERECHOS</h3>
+    <p>Todos los derechos no concedidos expresamente mediante documento escrito se entienden reservados por Jhonathan Hernando Garavito Caballero.</p>
+    <p>Ninguna omision, tolerancia, acceso, soporte, ajuste, capacitacion, uso continuado, publicacion interna, generacion de documentos o implementacion operativa podra interpretarse como renuncia, cesion, autorizacion ampliada o perdida de derechos sobre ARMA&trade;.</p>
+    <h3>26. TEXTO CORTO DE AVISO LEGAL PARA PANTALLAS Y REPORTES</h3>
+    <p>ARMA&trade; &ndash; Sistema de Gestion de Mantenimiento Industrial.</p>
+    <p>Software, codigo, metodologia, diseno, estructura documental y arquitectura funcional propiedad intelectual de Jhonathan Hernando Garavito Caballero.</p>
+    <p>Fecha declarada de nacimiento de ARMA&trade;: 26 de agosto de 2026.</p>
+    <p>PELEX S.A.S. cuenta con autorizacion de uso interno, limitada, no exclusiva y no transferible.</p>
+    <p>Los datos, informes, registros y PDFs generados con informacion de PELEX S.A.S. pertenecen a PELEX S.A.S.</p>
+    <p>El uso de ARMA&trade; no implica cesion de derechos patrimoniales ni transferencia de propiedad intelectual.</p>
+    <h3>27. ACEPTACION FINAL POR USO, ACCESO O CONSULTA</h3>
+    <p>El acceso, uso, consulta, operacion, administracion, ejecucion o interaccion con ARMA&trade; implica aceptacion expresa de las presentes condiciones de titularidad, uso autorizado, confidencialidad, reserva de derechos y separacion entre la propiedad intelectual del sistema y la propiedad de los datos del usuario autorizado.</p>
+    <p>La aceptacion no requiere firma manuscrita, firma digital, confirmacion adicional, comunicacion escrita ni acto formal independiente. El uso, acceso o consulta de ARMA&trade; constituye manifestacion suficiente de aceptacion de estas condiciones por parte del usuario, administrador, operador, empresa o tercero autorizado que acceda al sistema.</p>
+    <p>Quien no acepte estas condiciones debera abstenerse de acceder, usar, consultar, copiar, manipular, modificar, distribuir, intervenir, administrar o explotar ARMA&trade;.</p>
+    <h3>28. NOTA DE INCORPORACION AL SISTEMA</h3>
+    <p>Este documento forma parte integral de las condiciones de uso de ARMA&trade; y podra ser incorporado en la pagina legal del sistema, manuales, documentacion tecnica, acuerdos de confidencialidad, contratos de licencia, anexos de autorizacion de uso, repositorios privados, publicaciones internas, encabezados de codigo, pantallas de acceso, paginas HTML y reportes generados por el sistema.</p>
+    <p>La presencia de este documento dentro de ARMA&trade;, o su disponibilidad para consulta dentro del sistema, refuerza la aceptacion de las condiciones aqui descritas por el solo uso, acceso, consulta u operacion del sistema.</p>
+    <p class='legal-end'>FIN DEL DOCUMENTO</p>
+    </section>
+    <section class='accept-area'>
+      <p>Al hacer clic en ACEPTAR se cierra esta pagina de consulta legal. El acceso, uso o consulta de ARMA&trade; implica aceptacion de las condiciones de uso descritas.</p>
+      <button type='button' id='btnAcceptLegal'>ACEPTAR</button>
+    </section>
+  </main>
+  <footer class='legal-footer'>ARMA&trade; // SISTEMA DE GESTION DE MANTENIMIENTO INDUSTRIAL // USO INTERNO AUTORIZADO</footer>
+</div>
+<script>
+document.getElementById('btnAcceptLegal').addEventListener('click',function(){try{window.close();}catch(e){} setTimeout(function(){if(!window.closed){window.location.href='main.html';}},120);});
+</script>
+</body>
+</html>
