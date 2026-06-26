@@ -141,9 +141,9 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
 .arma-btn.gray{background:linear-gradient(180deg,#b8b8b8,#8d8d8d)}
 .arma-btn.dark{background:linear-gradient(180deg,#2b2b2b,#000)}
 .quick{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);margin-bottom:16px}
-.quick h2{text-align:center;margin:0 0 14px;color:var(--navy);font-size:15px;letter-spacing:.4px}
-.quick-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
-.quick-grid a{background:#f8fbff;border:1px solid var(--line);border-radius:14px;text-decoration:none;color:var(--navy);font-weight:900;text-align:center;padding:14px 10px;font-size:13px}
+.quick-legal{text-align:center;color:var(--navy);font-weight:800;line-height:1.35;padding:18px 28px}
+.quick-legal p{margin:4px auto;font-size:13px;letter-spacing:.15px;max-width:1180px}
+.quick-legal strong{font-size:14px;font-weight:950;color:var(--blue)}
 .footer{background:linear-gradient(90deg,#2764c8,#004b9b);color:#fff;border-radius:999px;padding:9px 16px;text-align:center;font-size:12px;font-weight:900;box-shadow:var(--soft);letter-spacing:.3px}
 @media(max-width:1500px){.modules{grid-template-columns:repeat(3,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:980px){.top-global{position:relative}.top-white{flex-direction:column;gap:12px}.brand-row{justify-content:center;flex-wrap:wrap}.top-actions{justify-content:center}.app{display:block;padding-top:0}.sidebar{position:relative;width:100%;height:auto;top:0;bottom:auto}.main{margin-left:0;width:100%;padding:14px}.hero{flex-direction:column;align-items:flex-start}.hero-graphic{display:none}.modules{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr}.logo-pelex{height:58px}.logo-arma{height:68px}}
@@ -233,7 +233,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
     <div class='kpi'>
       <div class='kpi-icon dark'>ON</div>
-      <div><span>SISTEMA</span><strong id='systemStatusText'>OFFLINE</strong><small>GENERADO: 26/06 14:33</small></div>
+      <div><span>SISTEMA</span><strong id='systemStatusText'>OFFLINE</strong><small>GENERADO: 26/06 15:33</small></div>
     </div>
   </section>
   <section class='modules' id='modulos'>
@@ -466,18 +466,14 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
       </div>
     </div>
   </section>
-  <section class='quick' id='herramientas'>
-    <h2>ACCESO RAPIDO</h2>
-    <div class='quick-grid'>
-      <a class='arma-secured arma-locked' data-perm='BTN_OT' href='index.html' data-arma-window='ARMA_INDEX' target='ARMA_INDEX'>OT DASHBOARD OT</a>
-      <a class='arma-secured arma-locked' data-perm='BTN_SOLICITUDES' href='solicitudes.html' data-arma-window='ARMA_SOLICITUDES' target='ARMA_SOLICITUDES'>SO SOLICITUDES</a>
-      <a class='arma-secured arma-locked' data-perm='BTN_CUMPLIMIENTO' href='cumplimiento.html' data-arma-window='ARMA_CUMPLIMIENTO' target='ARMA_CUMPLIMIENTO'>CU CUMPLIMIENTO SEMANAL</a>
-      <a class='arma-secured arma-locked' data-perm='BTN_HERRAMIENTAS' href='#'>HE HERRAMIENTAS</a>
-      <a class='arma-secured arma-locked' data-perm='BTN_BIBLIOTECA_DIGITAL' href='#'>BD BIBLIOTECA</a>
-    </div>
+  <section class='quick quick-legal' id='herramientas'>
+    <p><strong>ARMA&trade;</strong> &ndash; SISTEMA DE GESTION DE MANTENIMIENTO INDUSTRIAL.</p>
+    <p>SOFTWARE, DISENO, METODOLOGIA, CODIGO FUENTE, ESTRUCTURA DOCUMENTAL Y ARQUITECTURA FUNCIONAL PROTEGIDOS POR DERECHOS DE AUTOR.</p>
+    <p>PELEX S.A.S. CUENTA CON AUTORIZACION DE USO INTERNO, LIMITADA, NO EXCLUSIVA Y NO TRANSFERIBLE.</p>
+    <p>EL USO DE ARMA NO IMPLICA CESION DE DERECHOS PATRIMONIALES NI TRANSFERENCIA DE PROPIEDAD INTELECTUAL.</p>
   </section>
   <footer class='footer'>
-    CONTROL // ARMA HOME // GENERADO: 2026-06-26 14:33:58 // PELEX S.A.S.
+    CONTROL // ARMA HOME // GENERADO: 2026-06-26 15:33:40 // PELEX S.A.S.
   </footer>
 </main>
 </div>
