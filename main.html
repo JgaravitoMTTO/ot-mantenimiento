@@ -140,6 +140,24 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
 .footer{background:linear-gradient(90deg,#2764c8,#004b9b);color:#fff;border-radius:999px;padding:9px 16px;text-align:center;font-size:12px;font-weight:900;box-shadow:var(--soft);letter-spacing:.3px}
 @media(max-width:1500px){.modules{grid-template-columns:repeat(3,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:980px){.top-global{position:relative}.top-white{flex-direction:column;gap:12px}.brand-row{justify-content:center;flex-wrap:wrap}.top-actions{justify-content:center}.app{display:block;padding-top:0}.sidebar{position:relative;width:100%;height:auto;top:0;bottom:auto}.main{margin-left:0;width:100%;padding:14px}.hero{flex-direction:column;align-items:flex-start}.hero-graphic{display:none}.modules{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr}.logo-pelex{height:58px}.logo-arma{height:68px}}
+.login-box.wide{width:min(920px,96vw);max-height:88vh;overflow:auto}
+.admin-actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.admin-actions button,.admin-mini-btn{border:0;border-radius:12px;padding:10px 12px;font-weight:900;cursor:pointer;background:linear-gradient(180deg,var(--blue2),var(--blue));color:#fff}
+.admin-actions button.green,.admin-mini-btn.green{background:linear-gradient(180deg,var(--green2),var(--green))}
+.admin-actions button.dark,.admin-mini-btn.dark{background:linear-gradient(180deg,#374151,#111827)}
+.admin-actions button.red,.admin-mini-btn.red{background:linear-gradient(180deg,#ef4444,#b91c1c)}
+.admin-body{margin-top:10px}
+.admin-msg{min-height:22px;margin:8px 0;color:var(--navy);font-size:12px;font-weight:900}
+.admin-row{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);background:#f8fbff;border-radius:14px;padding:10px 12px;margin:8px 0}
+.admin-row strong{color:var(--navy);font-size:14px}.admin-row span{display:block;color:var(--muted);font-size:11px;font-weight:800;margin-top:3px}
+.admin-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+.admin-form label{display:block;color:var(--navy);font-size:12px;font-weight:900}
+.admin-form input,.admin-form select{width:100%;height:42px;border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:14px;font-weight:700;color:var(--navy);outline:none;background:#fff}
+.admin-form .full{grid-column:1/-1}
+.perm-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px;max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:14px;padding:10px;background:#f8fbff}
+.perm-item{display:flex;gap:6px;align-items:center;font-size:11px;font-weight:800;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px}
+.perm-item input{width:auto;height:auto}
+@media(max-width:720px){.admin-form{grid-template-columns:1fr}.perm-grid{grid-template-columns:1fr}}
 
   </style>
 </head>
@@ -169,6 +187,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
         <span class='user-arrow'>v</span>
         <div class='user-menu' id='userMenu'>
           <button type='button' id='btnOpenLogin'>INICIAR SESION</button>
+          <button type='button' id='btnChangePassword'>CAMBIAR CLAVE</button>
           <button type='button' id='btnLogout'>CERRAR SESION</button>
         </div>
       </div>
@@ -209,7 +228,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
     <div class='kpi'>
       <div class='kpi-icon dark'>ON</div>
-      <div><span>SISTEMA</span><strong id='systemStatusText'>OFFLINE</strong><small>GENERADO: 25/06 22:29</small></div>
+      <div><span>SISTEMA</span><strong id='systemStatusText'>OFFLINE</strong><small>GENERADO: 25/06 23:27</small></div>
     </div>
   </section>
   <section class='modules' id='modulos'>
@@ -371,6 +390,14 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
           <span class='btn-icon'>RC</span>
           <span class='btn-text'>REGISTRO CAPACITACION</span>
         </a>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_ADMIN_USUARIOS' href='#'>
+          <span class='btn-icon'>AU</span>
+          <span class='btn-text'>ADMINISTRAR USUARIOS</span>
+        </a>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_ADMIN_NIVELES' href='#'>
+          <span class='btn-icon'>AN</span>
+          <span class='btn-text'>ADMINISTRAR NIVELES</span>
+        </a>
       </div>
     </div>
     <div class='module-card'>
@@ -445,7 +472,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </div>
   </section>
   <footer class='footer'>
-    CONTROL // ARMA HOME // GENERADO: 2026-06-25 22:29:40 // PELEX S.A.S.
+    CONTROL // ARMA HOME // GENERADO: 2026-06-25 23:27:02 // PELEX S.A.S.
   </footer>
 </main>
 </div>
@@ -465,8 +492,55 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
   </div>
 </div>
 
+<div class='login-modal' id='changePasswordModal'>
+  <div class='login-box'>
+    <h2>CAMBIAR CLAVE ARMA</h2>
+    <p>ACTUALICE SU CLAVE DE ACCESO. LA NUEVA CLAVE QUEDARA PROTEGIDA COMO HASH EN LA BASE DE DATOS.</p>
+    <label>CLAVE ACTUAL</label>
+    <input type='password' id='changeOldPass' autocomplete='current-password'>
+    <label>NUEVA CLAVE</label>
+    <input type='password' id='changeNewPass1' autocomplete='new-password'>
+    <label>CONFIRMAR NUEVA CLAVE</label>
+    <input type='password' id='changeNewPass2' autocomplete='new-password'>
+    <div class='login-msg' id='changePassMsg'></div>
+    <div class='login-actions'>
+      <button type='button' id='changePassCancel' class='btn-cancel'>CANCELAR</button>
+      <button type='button' id='changePassDo' class='btn-login'>GUARDAR CLAVE</button>
+    </div>
+  </div>
+</div>
+
+<div class='login-modal' id='userAdminModal'>
+  <div class='login-box wide'>
+    <h2>ADMINISTRAR USUARIOS</h2>
+    <p>CREAR, ACTIVAR / SUSPENDER O ELIMINAR USUARIOS DEL SISTEMA. EL USUARIO ADMIN ESTA PROTEGIDO.</p>
+    <div class='admin-actions'>
+      <button type='button' id='userAdminCreate' class='green'>CREAR USUARIO</button>
+      <button type='button' id='userAdminToggle'>SUSPENDER / ACTIVAR</button>
+      <button type='button' id='userAdminDelete' class='red'>ELIMINAR USUARIO</button>
+    </div>
+    <div class='admin-msg' id='userAdminMsg'></div>
+    <div class='admin-body' id='userAdminBody'></div>
+    <div class='login-actions'>
+      <button type='button' id='userAdminCancel' class='btn-cancel'>CERRAR</button>
+    </div>
+  </div>
+</div>
+
+<div class='login-modal' id='levelAdminModal'>
+  <div class='login-box wide'>
+    <h2>ADMINISTRAR NIVELES</h2>
+    <p>CREAR O ACTUALIZAR NIVELES Y ASIGNAR PERMISOS POR BOTON.</p>
+    <div class='admin-msg' id='levelAdminMsg'></div>
+    <div class='admin-body' id='levelAdminBody'></div>
+    <div class='login-actions'>
+      <button type='button' id='levelAdminCancel' class='btn-cancel'>CERRAR</button>
+    </div>
+  </div>
+</div>
+
 <script>
-const ARMA_API_URL = 'https://script.google.com/macros/s/AKfycby0aYXm5CSZQdTlZnLTTImQyAOfyn0hjtsVZrabOxoJuz6nIUPrAv5MesHkNlJ-CF4VNw/exec';
+const ARMA_API_URL = 'https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
 const ARMA_VISITOR_PERMISSIONS = {};
 let armaSession = {user:'VISITANTE', nombre:'VISITANTE', nivel:'INICIAR SESION', token:'', permissions:ARMA_VISITOR_PERMISSIONS};
 const ARMA_CHANNEL_NAME='ARMA_CONTROL_CHANNEL';
@@ -554,6 +628,254 @@ async function armaValidateStoredSession(){
   try{var data=await armaApi('validateSession',{token:token}); if(data.ok){data.token=token; armaSetSession(data);} else {armaSetVisitor();}}catch(e){armaSetVisitor();}
 }
 async function armaLogout(){try{if(armaSession.token){await armaApi('logout',{token:armaSession.token});}}catch(e){} armaSetVisitor();}
+function armaHtmlEsc(v){
+  return String(v==null?'':v).replace(/[&<>"']/g,function(ch){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
+  });
+}
+function armaShowModal(id){
+  var el=document.getElementById(id);
+  if(el){el.classList.add('show');}
+}
+function armaHideModal(id){
+  var el=document.getElementById(id);
+  if(el){el.classList.remove('show');}
+}
+function armaRequireSession(){
+  if(!armaSession || !armaSession.token){
+    alert('DEBE INICIAR SESION.');
+    return false;
+  }
+  return true;
+}
+function armaRequireAdminPerm(perm){
+  if(!armaRequireSession()){return false;}
+  var p=armaNormalizePerms(armaSession.permissions);
+  if(armaSession.nivel==='ADMIN' || p[perm]===true){return true;}
+  alert('NO TIENE PERMISO PARA ESTA ADMINISTRACION.');
+  return false;
+}
+function armaOpenChangePassword(){
+  if(!armaRequireSession()){return;}
+  document.getElementById('changeOldPass').value='';
+  document.getElementById('changeNewPass1').value='';
+  document.getElementById('changeNewPass2').value='';
+  document.getElementById('changePassMsg').textContent='';
+  armaShowModal('changePasswordModal');
+  setTimeout(function(){document.getElementById('changeOldPass').focus();},80);
+}
+async function armaDoChangePassword(){
+  var msg=document.getElementById('changePassMsg');
+  var oldP=document.getElementById('changeOldPass').value;
+  var p1=document.getElementById('changeNewPass1').value;
+  var p2=document.getElementById('changeNewPass2').value;
+  if(!oldP||!p1||!p2){msg.textContent='COMPLETE TODOS LOS CAMPOS.';return;}
+  if(p1!==p2){msg.textContent='LA NUEVA CLAVE NO COINCIDE.';return;}
+  if(p1.length<6){msg.textContent='LA NUEVA CLAVE DEBE TENER MINIMO 6 CARACTERES.';return;}
+  msg.textContent='GUARDANDO...';
+  try{
+    var data=await armaApi('changePassword',{token:armaSession.token,currentPassword:oldP,newPassword:p1});
+    if(data.ok){
+      msg.textContent='CLAVE ACTUALIZADA CORRECTAMENTE.';
+      setTimeout(function(){armaHideModal('changePasswordModal');},650);
+    }else{
+      msg.textContent=data.error||'NO FUE POSIBLE CAMBIAR LA CLAVE.';
+    }
+  }catch(e){
+    msg.textContent='ERROR DE CONEXION CON ARMA_BACKEND.';
+  }
+}
+function armaOpenUsersAdmin(){
+  if(!armaRequireAdminPerm('BTN_ADMIN_USUARIOS')){return;}
+  document.getElementById('userAdminMsg').textContent='';
+  document.getElementById('userAdminBody').innerHTML='';
+  armaShowModal('userAdminModal');
+  armaRenderUserCreate();
+}
+async function armaLoadLevelsForSelect(){
+  var data=await armaApi('listLevels',{token:armaSession.token});
+  if(!data.ok){throw new Error(data.error||'NO SE PUDIERON CARGAR NIVELES');}
+  return data.levels||[];
+}
+async function armaRenderUserCreate(){
+  var body=document.getElementById('userAdminBody');
+  var msg=document.getElementById('userAdminMsg');
+  msg.textContent='CARGANDO NIVELES...';
+  try{
+    var levels=await armaLoadLevelsForSelect();
+    var opts=levels.filter(function(l){return l.activo==='SI';}).map(function(l){
+      return '<option value="'+armaHtmlEsc(l.nivel)+'">'+armaHtmlEsc(l.nivel)+' - '+armaHtmlEsc(l.descripcion||'')+'</option>';
+    }).join('');
+    body.innerHTML=
+      '<div class="admin-form">'+
+      '<div><label>USUARIO</label><input id="newUserId" type="text" placeholder="EJ: JUAN.PEREZ"></div>'+
+      '<div><label>NOMBRE COMPLETO</label><input id="newUserName" type="text" placeholder="NOMBRE DEL TECNICO"></div>'+
+      '<div><label>CORREO</label><input id="newUserMail" type="email" placeholder="OPCIONAL"></div>'+
+      '<div><label>NIVEL</label><select id="newUserLevel">'+opts+'</select></div>'+
+      '<div><label>CLAVE INICIAL</label><input id="newUserPass" type="password" placeholder="CLAVE TEMPORAL"></div>'+
+      '<div><label>ACTIVO</label><select id="newUserActive"><option value="SI">SI</option><option value="NO">NO</option></select></div>'+
+      '<div class="full"><button type="button" class="admin-mini-btn green" id="btnCreateUserNow">GUARDAR USUARIO</button></div>'+
+      '</div>';
+    document.getElementById('btnCreateUserNow').addEventListener('click',armaCreateUserNow);
+    msg.textContent='COMPLETE LOS DATOS DEL NUEVO USUARIO.';
+  }catch(e){
+    msg.textContent=e.message||'NO SE PUDIERON CARGAR NIVELES.';
+  }
+}
+async function armaCreateUserNow(){
+  var msg=document.getElementById('userAdminMsg');
+  var payload={
+    token:armaSession.token,
+    userData:{
+      user:document.getElementById('newUserId').value,
+      nombre:document.getElementById('newUserName').value,
+      correo:document.getElementById('newUserMail').value,
+      nivel:document.getElementById('newUserLevel').value,
+      password:document.getElementById('newUserPass').value,
+      activo:document.getElementById('newUserActive').value,
+      debeCambiarClave:'SI'
+    }
+  };
+  if(!payload.userData.user||!payload.userData.nivel||!payload.userData.password){msg.textContent='USUARIO, NIVEL Y CLAVE SON OBLIGATORIOS.';return;}
+  msg.textContent='CREANDO USUARIO...';
+  try{
+    var data=await armaApi('createUser',payload);
+    if(data.ok){msg.textContent='USUARIO CREADO: '+data.user; armaRenderUserCreate();}
+    else{msg.textContent=data.error||'NO FUE POSIBLE CREAR EL USUARIO.';}
+  }catch(e){msg.textContent='ERROR DE CONEXION CON ARMA_BACKEND.';}
+}
+async function armaRenderUserList(mode){
+  var body=document.getElementById('userAdminBody');
+  var msg=document.getElementById('userAdminMsg');
+  msg.textContent='CARGANDO USUARIOS...';
+  body.innerHTML='';
+  try{
+    var data=await armaApi('listUsers',{token:armaSession.token});
+    if(!data.ok){msg.textContent=data.error||'NO SE PUDIERON CARGAR USUARIOS.';return;}
+    var users=(data.users||[]).filter(function(u){return !u.protegido;});
+    if(users.length===0){body.innerHTML='<p>NO HAY USUARIOS DISPONIBLES.</p>';msg.textContent='';return;}
+    body.innerHTML=users.map(function(u){
+      var action='';
+      if(mode==='toggle'){
+        action='<button type="button" class="admin-mini-btn" data-user-toggle="'+armaHtmlEsc(u.user)+'">CAMBIAR ACTIVO</button>';
+      }else{
+        action='<button type="button" class="admin-mini-btn red" data-user-delete="'+armaHtmlEsc(u.user)+'">ELIMINAR</button>';
+      }
+      return '<div class="admin-row"><div><strong>'+armaHtmlEsc(u.user)+' // '+armaHtmlEsc(u.nombre)+'</strong><span>NIVEL: '+armaHtmlEsc(u.nivel)+' // ACTIVO: '+armaHtmlEsc(u.activo)+' // CAMBIAR CLAVE: '+armaHtmlEsc(u.debeCambiarClave)+'</span></div><div>'+action+'</div></div>';
+    }).join('');
+    body.querySelectorAll('[data-user-toggle]').forEach(function(b){b.addEventListener('click',function(){armaToggleUserNow(this.getAttribute('data-user-toggle'));});});
+    body.querySelectorAll('[data-user-delete]').forEach(function(b){b.addEventListener('click',function(){armaDeleteUserNow(this.getAttribute('data-user-delete'));});});
+    msg.textContent=(mode==='toggle')?'SELECCIONE UN USUARIO PARA CAMBIAR ACTIVO SI/NO.':'SELECCIONE UN USUARIO PARA ELIMINAR.';
+  }catch(e){msg.textContent='ERROR DE CONEXION CON ARMA_BACKEND.';}
+}
+async function armaToggleUserNow(user){
+  var msg=document.getElementById('userAdminMsg');
+  if(!confirm('CAMBIAR ESTADO ACTIVO DEL USUARIO '+user+'?')){return;}
+  msg.textContent='ACTUALIZANDO...';
+  try{
+    var data=await armaApi('toggleUserActive',{token:armaSession.token,user:user});
+    if(data.ok){msg.textContent='USUARIO '+data.user+' ACTIVO: '+data.activo; armaRenderUserList('toggle');}
+    else{msg.textContent=data.error||'NO FUE POSIBLE ACTUALIZAR.';}
+  }catch(e){msg.textContent='ERROR DE CONEXION CON ARMA_BACKEND.';}
+}
+async function armaDeleteUserNow(user){
+  var msg=document.getElementById('userAdminMsg');
+  if(!confirm('ELIMINAR DEFINITIVAMENTE EL USUARIO '+user+'?')){return;}
+  msg.textContent='ELIMINANDO...';
+  try{
+    var data=await armaApi('deleteUser',{token:armaSession.token,user:user});
+    if(data.ok){msg.textContent='USUARIO ELIMINADO: '+data.user; armaRenderUserList('delete');}
+    else{msg.textContent=data.error||'NO FUE POSIBLE ELIMINAR.';}
+  }catch(e){msg.textContent='ERROR DE CONEXION CON ARMA_BACKEND.';}
+}
+function armaOpenLevelsAdmin(){
+  if(!armaRequireAdminPerm('BTN_ADMIN_NIVELES')){return;}
+  document.getElementById('levelAdminMsg').textContent='CARGANDO NIVELES...';
+  document.getElementById('levelAdminBody').innerHTML='';
+  armaShowModal('levelAdminModal');
+  armaRenderLevelsAdmin();
+}
+async function armaRenderLevelsAdmin(){
+  var body=document.getElementById('levelAdminBody');
+  var msg=document.getElementById('levelAdminMsg');
+  try{
+    var data=await armaApi('listLevels',{token:armaSession.token});
+    if(!data.ok){msg.textContent=data.error||'NO SE PUDIERON CARGAR NIVELES.';return;}
+    var levels=data.levels||[];
+    var keys=data.permissionKeys||[];
+    var select='<option value="">-- NUEVO NIVEL --</option>'+levels.map(function(l){return '<option value="'+armaHtmlEsc(l.nivel)+'">'+armaHtmlEsc(l.nivel)+'</option>';}).join('');
+    var permsHtml=keys.map(function(k){return '<label class="perm-item"><input type="checkbox" data-perm-key="'+armaHtmlEsc(k)+'"> '+armaHtmlEsc(k)+'</label>';}).join('');
+    body.innerHTML=
+      '<div class="admin-form">'+
+      '<div><label>NIVEL</label><input id="levelName" type="text" placeholder="EJ: TECNICO_MTTO"></div>'+
+      '<div><label>CARGAR EXISTENTE</label><select id="levelSelect">'+select+'</select></div>'+
+      '<div><label>DESCRIPCION</label><input id="levelDesc" type="text"></div>'+
+      '<div><label>ACTIVO</label><select id="levelActive"><option value="SI">SI</option><option value="NO">NO</option></select></div>'+
+      '<div class="full"><label>PERMISOS</label><div class="perm-grid">'+permsHtml+'</div></div>'+
+      '<div class="full"><button type="button" class="admin-mini-btn green" id="btnSaveLevelNow">GUARDAR NIVEL</button></div>'+
+      '</div>'+
+      '<div id="levelList">'+levels.map(function(l){return '<div class="admin-row"><div><strong>'+armaHtmlEsc(l.nivel)+'</strong><span>'+armaHtmlEsc(l.descripcion||'')+' // ACTIVO: '+armaHtmlEsc(l.activo)+'</span></div></div>';}).join('')+'</div>';
+    document.getElementById('levelSelect').addEventListener('change',function(){
+      var val=this.value;
+      var level=levels.find(function(x){return x.nivel===val;});
+      document.getElementById('levelName').value=level?level.nivel:'';
+      document.getElementById('levelDesc').value=level?(level.descripcion||''):'';
+      document.getElementById('levelActive').value=level?(level.activo||'SI'):'SI';
+      body.querySelectorAll('[data-perm-key]').forEach(function(ch){
+        ch.checked=!!(level && level.permissions && level.permissions[ch.getAttribute('data-perm-key')]);
+      });
+    });
+    document.getElementById('btnSaveLevelNow').addEventListener('click',armaSaveLevelNow);
+    msg.textContent='CREE O ACTUALICE UN NIVEL.';
+  }catch(e){msg.textContent='ERROR DE CONEXION CON ARMA_BACKEND.';}
+}
+async function armaSaveLevelNow(){
+  var body=document.getElementById('levelAdminBody');
+  var msg=document.getElementById('levelAdminMsg');
+  var perms={};
+  body.querySelectorAll('[data-perm-key]').forEach(function(ch){perms[ch.getAttribute('data-perm-key')]=ch.checked?'SI':'NO';});
+  var payload={
+    token:armaSession.token,
+    levelData:{
+      nivel:document.getElementById('levelName').value,
+      descripcion:document.getElementById('levelDesc').value,
+      activo:document.getElementById('levelActive').value,
+      permissions:perms
+    }
+  };
+  if(!payload.levelData.nivel){msg.textContent='DIGITE EL NOMBRE DEL NIVEL.';return;}
+  msg.textContent='GUARDANDO NIVEL...';
+  try{
+    var data=await armaApi('saveLevel',payload);
+    if(data.ok){msg.textContent='NIVEL GUARDADO: '+data.nivel; armaRenderLevelsAdmin();}
+    else{msg.textContent=data.error||'NO FUE POSIBLE GUARDAR NIVEL.';}
+  }catch(e){msg.textContent='ERROR DE CONEXION CON ARMA_BACKEND.';}
+}
+function armaInitAdminUI(){
+  var cp=document.getElementById('btnChangePassword');
+  if(cp){cp.addEventListener('click',function(e){e.stopPropagation();armaOpenChangePassword();document.getElementById('userCard').classList.remove('open');});}
+  var cpc=document.getElementById('changePassCancel');
+  if(cpc){cpc.addEventListener('click',function(){armaHideModal('changePasswordModal');});}
+  var cpd=document.getElementById('changePassDo');
+  if(cpd){cpd.addEventListener('click',armaDoChangePassword);}
+  var old=document.getElementById('changeOldPass');
+  if(old){old.addEventListener('keydown',function(e){if(e.key==='Enter'){armaDoChangePassword();}});}
+  var p2=document.getElementById('changeNewPass2');
+  if(p2){p2.addEventListener('keydown',function(e){if(e.key==='Enter'){armaDoChangePassword();}});}
+  document.querySelectorAll('[data-perm="BTN_ADMIN_USUARIOS"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault(); if(!a.classList.contains('arma-locked')){armaOpenUsersAdmin();}});});
+  document.querySelectorAll('[data-perm="BTN_ADMIN_NIVELES"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault(); if(!a.classList.contains('arma-locked')){armaOpenLevelsAdmin();}});});
+  var uc=document.getElementById('userAdminCancel');
+  if(uc){uc.addEventListener('click',function(){armaHideModal('userAdminModal');});}
+  var lc=document.getElementById('levelAdminCancel');
+  if(lc){lc.addEventListener('click',function(){armaHideModal('levelAdminModal');});}
+  var ucreate=document.getElementById('userAdminCreate');
+  if(ucreate){ucreate.addEventListener('click',armaRenderUserCreate);}
+  var utoggle=document.getElementById('userAdminToggle');
+  if(utoggle){utoggle.addEventListener('click',function(){armaRenderUserList('toggle');});}
+  var udelete=document.getElementById('userAdminDelete');
+  if(udelete){udelete.addEventListener('click',function(){armaRenderUserList('delete');});}
+}
+
 document.addEventListener('DOMContentLoaded',function(){
   armaStartMainPresence(); updateDateCard(); setInterval(updateDateCard,60000); armaSetVisitor(); armaPing(); armaValidateStoredSession();
   document.body.addEventListener('click',function(e){var locked=e.target.closest('.arma-locked'); if(locked){e.preventDefault(); alert('DEBE INICIAR SESION PARA ACCEDER A ESTE MODULO.');}});
@@ -561,6 +883,7 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('userCard').addEventListener('click',function(e){e.stopPropagation(); this.classList.toggle('open');});
   document.getElementById('btnOpenLogin').addEventListener('click',function(e){e.stopPropagation(); armaOpenLogin(); document.getElementById('userCard').classList.remove('open');});
   document.getElementById('btnLogout').addEventListener('click',function(e){e.stopPropagation(); armaLogout(); document.getElementById('userCard').classList.remove('open');});
+  armaInitAdminUI();
   document.getElementById('loginCancel').addEventListener('click',armaCloseLogin); document.getElementById('loginDo').addEventListener('click',armaLogin);
   document.getElementById('loginPass').addEventListener('keydown',function(e){if(e.key==='Enter'){armaLogin();}});
   document.addEventListener('click',function(){var u=document.getElementById('userCard'); if(u){u.classList.remove('open');}});
