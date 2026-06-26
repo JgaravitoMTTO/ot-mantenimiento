@@ -144,7 +144,7 @@ nav.chips{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px;background:#eaf1
     </div>
   </div>
   <div class='index-nav-cards'>
-    <a class='index-nav-card main-home' href='main.html'>
+    <a class='index-nav-card main-home' href='main.html' id='btnIndexInicio'>
       <div class='nav-icon'><img src='boton-de-inicio.png' alt='INICIO'></div>
       <div class='nav-text'><strong>Inicio</strong><span>Volver a ARMA</span></div>
     </a>
@@ -231,6 +231,27 @@ try{
   new Chart(barCtx,{
     type:'bar',data:{labels:['PROGRAMADAS','CERRADAS OTCT'],datasets:[{label:'OTs',data:[123,82],backgroundColor:[gradProg,gradCerr],borderColor:['#004b9b','#55b52e'],borderWidth:1,borderRadius:12,barThickness:82}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#002b66',titleColor:'#ffffff',bodyColor:'#ffffff',padding:10,cornerRadius:10}},scales:{x:{grid:{display:false},ticks:{color:'#002b66',font:{weight:'900'}}},y:{beginAtZero:true,grid:{color:'rgba(0,75,155,.12)'},ticks:{color:'#64748b',font:{weight:'700'}}}}}
   });
+  function armaVolverAMainDesdeIndex(e){
+    if(e){e.preventDefault();}
+    var mainUrl='main.html';
+    try{
+      if(window.opener && !window.opener.closed){
+        window.opener.focus();
+        window.close();
+        setTimeout(function(){try{window.location.href=mainUrl;}catch(err){}},350);
+        return false;
+      }
+      var w=window.open(mainUrl,'ARMA_MAIN');
+      if(w){w.focus();}
+      window.close();
+      setTimeout(function(){try{window.location.href=mainUrl;}catch(err){}},350);
+    }catch(err){
+      window.location.href=mainUrl;
+    }
+    return false;
+  }
+  var btnIndexInicio=document.getElementById('btnIndexInicio');
+  if(btnIndexInicio){btnIndexInicio.addEventListener('click',armaVolverAMainDesdeIndex);}
   function getISOWeekNumberIndex(date){
     var d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
     var dayNum = d.getUTCDay() || 7;
@@ -252,4 +273,4 @@ try{
   setInterval(updateIndexDateCard, 60000);
 }catch(e){console && console.error && console.error(e);}
 </script>
-<footer class='arma-footer'><p>CONTROL // ARMA // GENERADO: 2026-06-25 21:10:51 // PELEX S.A.S.</p></footer></body></html>
+<footer class='arma-footer'><p>CONTROL // ARMA // GENERADO: 2026-06-25 22:07:02 // PELEX S.A.S.</p></footer></body></html>
