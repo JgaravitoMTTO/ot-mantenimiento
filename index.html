@@ -182,11 +182,11 @@ nav.chips{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px;background:#eaf1
   <div class='chart-box'><canvas id='chartEstados' width='420' height='240'></canvas></div>
   <div class='chart-box'>
     <table class='grid'><thead><tr><th>Estado</th><th>Cantidad</th><th>% del total</th></tr></thead><tbody>
-      <tr><td><span class='estado-label'>OTAPR</span></td><td>1</td><td>0,3%</td></tr>
-      <tr><td><span class='estado-label'>OTPL</span></td><td>75</td><td>21,2%</td></tr>
-      <tr><td><span class='estado-label'>OTPR</span></td><td>136</td><td>38,4%</td></tr>
-      <tr><td><span class='estado-label'>OTRPR</span></td><td>5</td><td>1,4%</td></tr>
-      <tr class='estado-OTE-row'><td><span class='estado-label estado-OTE'>OTE</span></td><td>137</td><td>38,7%</td></tr>
+      <tr><td><span class='estado-label'>OTAPR</span></td><td>1</td><td>0,2%</td></tr>
+      <tr><td><span class='estado-label'>OTPL</span></td><td>154</td><td>35,6%</td></tr>
+      <tr><td><span class='estado-label'>OTPR</span></td><td>136</td><td>31,4%</td></tr>
+      <tr><td><span class='estado-label'>OTRPR</span></td><td>5</td><td>1,2%</td></tr>
+      <tr class='estado-OTE-row'><td><span class='estado-label estado-OTE'>OTE</span></td><td>137</td><td>31,6%</td></tr>
       <tr><td><span class='estado-label'>OTD</span></td><td>0</td><td>0,0%</td></tr>
     </tbody></table>
   </div>
@@ -197,9 +197,9 @@ nav.chips{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px;background:#eaf1
 </div></section>
 <h2 class='h2small'>Resumen global de cierre</h2>
 <div class='row-log'>
-<span class='chip'>OTs totales: <strong>4872</strong></span>
+<span class='chip'>OTs totales: <strong>4951</strong></span>
 <span class='chip'>OTCT (cerradas): <strong>4518</strong></span>
-<span class='chip'>% cerradas: <strong>92,7%</strong></span>
+<span class='chip'>% cerradas: <strong>91,3%</strong></span>
 </div>
 <h2 class='h2small'>BackLog &nbsp;<small>(OTs con fecha anterior a la semana actual)</small></h2>
 <div class='row-log'>
@@ -242,7 +242,7 @@ try{
   const armaPalette=['#00bfd6','#55b52e','#0076d7','#94a3b8','#004b9b','#00d65f'];
   const pieCtx=document.getElementById('chartEstados').getContext('2d');
   new Chart(pieCtx,{
-    type:'doughnut',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[1,75,136,5,137,0],backgroundColor:armaPalette,borderColor:'#ffffff',borderWidth:4,hoverOffset:10,spacing:2}]},options:{responsive:false,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:9,padding:14,font:{weight:'800',size:11},color:'#002b66'}},tooltip:{backgroundColor:'#002b66',titleColor:'#ffffff',bodyColor:'#ffffff',padding:10,cornerRadius:10}}}
+    type:'doughnut',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[1,154,136,5,137,0],backgroundColor:armaPalette,borderColor:'#ffffff',borderWidth:4,hoverOffset:10,spacing:2}]},options:{responsive:false,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:9,padding:14,font:{weight:'800',size:11},color:'#002b66'}},tooltip:{backgroundColor:'#002b66',titleColor:'#ffffff',bodyColor:'#ffffff',padding:10,cornerRadius:10}}}
   });
   const barCtx=document.getElementById('chartPrevProgVsCT').getContext('2d');
   const gradProg=barCtx.createLinearGradient(0,0,0,240);gradProg.addColorStop(0,'#0076d7');gradProg.addColorStop(1,'#00bfd6');
@@ -331,4 +331,4 @@ document.addEventListener('DOMContentLoaded',function(){
 
 }catch(e){console && console.error && console.error(e);}
 </script>
-<footer class='arma-footer'><p>CONTROL // ARMA // GENERADO: 2026-06-26 12:47:59 // PELEX S.A.S.</p></footer></body></html>
+<footer class='arma-footer'><p>CONTROL // ARMA // GENERADO: 2026-06-26 22:28:29 // PELEX S.A.S.</p></footer></body></html>
