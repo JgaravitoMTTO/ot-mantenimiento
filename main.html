@@ -120,14 +120,16 @@ body.arma-logged #userCard .user-arrow{color:var(--green)!important}
 .curve{position:absolute;right:5px;bottom:20px;width:310px;height:90px;border-bottom:8px solid var(--green);border-radius:50%;transform:rotate(-8deg);opacity:.9}
 .hero.hero-image{background:#fff;padding:0;min-height:auto;border-radius:22px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:18px}
 .hero-banner-img{display:block;width:100%;height:auto;border-radius:22px}
-.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:18px}
-.kpi{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);text-decoration:none;color:inherit}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:18px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;align-items:center;gap:13px;box-shadow:var(--shadow);text-decoration:none;color:inherit;min-width:0}
 a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)}
-.kpi-icon{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:15px}
-.kpi-icon.blue{background:linear-gradient(135deg,#0076d7,#004b9b)}
-.kpi-icon.green{background:linear-gradient(135deg,#00d65f,#55b52e)}
-.kpi-icon.cyan{background:linear-gradient(135deg,#00bfd6,#0076d7)}
-.kpi-icon.dark{background:linear-gradient(135deg,#111827,#000)}
+.kpi-icon{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:15px;flex:0 0 54px}
+.kpi-icon-img{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;flex:0 0 54px;overflow:hidden}
+.kpi-icon-img img{width:42px;height:42px;object-fit:contain;display:block}
+.kpi-icon.blue,.kpi-icon-img.blue{background:linear-gradient(135deg,#0076d7,#004b9b)}
+.kpi-icon.green,.kpi-icon-img.green{background:linear-gradient(135deg,#00d65f,#55b52e)}
+.kpi-icon.cyan,.kpi-icon-img.cyan{background:linear-gradient(135deg,#00bfd6,#0076d7)}
+.kpi-icon.dark,.kpi-icon-img.dark{background:linear-gradient(135deg,#111827,#000)}
 .kpi span{display:block;color:var(--muted);font-size:12px;font-weight:900;letter-spacing:.3px}
 .kpi strong{display:block;font-size:30px;color:var(--navy);margin:2px 0}
 .kpi small{display:block;color:#16a34a;font-size:11px;font-weight:800}
@@ -164,7 +166,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
 .footer-card span{position:relative;z-index:1;white-space:nowrap}
 .footer-brand{color:#fff;font-weight:950;letter-spacing:.9px}
 .footer-sep{color:#9dffbf;font-weight:950;opacity:.95}
-@media(max-width:1500px){.modules{grid-template-columns:repeat(3,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1500px){.modules{grid-template-columns:repeat(3,1fr)}.kpis{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}}
 @media(max-width:980px){.top-global{position:relative}.top-white{flex-direction:column;gap:12px}.brand-row{justify-content:center;flex-wrap:wrap}.top-actions{justify-content:center}.app{display:block;padding-top:0}.sidebar{position:relative;width:100%;height:auto;top:0;bottom:auto}.main{margin-left:0;width:100%;padding:14px}.hero{flex-direction:column;align-items:flex-start}.hero-graphic{display:none}.modules{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr}.logo-pelex{height:58px}.logo-arma{height:68px}}
 .login-box.wide{width:min(920px,96vw);max-height:88vh;overflow:auto}
 .admin-actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
@@ -241,10 +243,10 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     <img src='ARMA%20banner%20home.png' alt='BANNER ARMA' class='hero-banner-img'>
   </section>
   <section class='kpis'>
-    <a class='kpi arma-secured arma-locked' data-perm='BTN_OT' href='index.html' data-arma-window='ARMA_INDEX' target='ARMA_INDEX'>
-      <div class='kpi-icon blue'>OT</div>
-      <div><span>ORDENES DE TRABAJO</span><strong>4872</strong><small>IR AL INDEX OPERATIVO ACTUAL</small></div>
-    </a>
+    <div class='kpi kpi-static'>
+      <div class='kpi-icon-img blue'><img src='transportador.png' alt='ACTIVOS'></div>
+      <div><span>TOTAL DE ACTIVOS</span><strong>0000</strong><small>ACTIVOS REGISTRADOS</small></div>
+    </div>
     <a class='kpi arma-secured arma-locked' data-perm='BTN_CUMPLIMIENTO' href='cumplimiento.html' data-arma-window='ARMA_CUMPLIMIENTO' target='ARMA_CUMPLIMIENTO'>
       <div class='kpi-icon green'>CU</div>
       <div><span>CUMPLIMIENTO OTCT</span><strong>92,7%</strong><small>PROGRAMADAS VS CERRADAS</small></div>
@@ -255,7 +257,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
     <div class='kpi'>
       <div class='kpi-icon dark'>ON</div>
-      <div><span>SISTEMA</span><strong id='systemStatusText'>OFFLINE</strong><small>GENERADO: 26/06 21:16</small></div>
+      <div><span>SISTEMA</span><strong id='systemStatusText'>OFFLINE</strong><small>GENERADO: 26/06 21:32</small></div>
     </div>
   </section>
   <section class='modules' id='modulos'>
@@ -495,7 +497,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-06-26 21:16:52</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-06-26 21:32:47</span></div>
   </footer>
 </main>
 </div>
