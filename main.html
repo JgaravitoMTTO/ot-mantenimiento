@@ -184,6 +184,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
 .admin-form label{display:block;color:var(--navy);font-size:12px;font-weight:900}
 .admin-form input,.admin-form select{width:100%;height:42px;border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:14px;font-weight:700;color:var(--navy);outline:none;background:#fff}
 .admin-form .full{grid-column:1/-1}
+.admin-help{margin-top:5px;color:var(--muted);font-size:10px;font-weight:850;line-height:1.35}
 .perm-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px;max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:14px;padding:10px;background:#f8fbff}
 .perm-item{display:flex;gap:6px;align-items:center;font-size:11px;font-weight:800;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px}
 .perm-item input{width:auto;height:auto}
@@ -495,7 +496,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-06-28 21:35:11</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-06-29 08:35:04</span></div>
   </footer>
 </main>
 </div>
@@ -726,50 +727,101 @@ async function armaLoadLevelsForSelect(){
   if(!data.ok){throw new Error(data.error||'NO SE PUDIERON CARGAR NIVELES');}
   return data.levels||[];
 }
+async function armaLoadPersonalForUserCreate(){
+  var data=await armaApi('listPersonalForUserCreate',{token:armaSession.token});
+  if(!data.ok){throw new Error(data.error||'NO SE PUDO CARGAR PERSONAL DESDE ARMA_DATA');}
+  return data.rows||[];
+}
+function armaSuggestUserFromName(name){
+  name=String(name||'').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  var parts=name.split(/\s+/).filter(Boolean);
+  if(parts.length>=2){return (parts[0]+'.'+parts[parts.length-1]).replace(/[^A-Z0-9.]/g,'');}
+  return name.replace(/[^A-Z0-9.]/g,'');
+}
+function armaFindSelectedPerson(){
+  var sel=document.getElementById('newUserPerson');
+  var id=sel?sel.value:'';
+  var rows=window.armaUserCreatePeople||[];
+  for(var i=0;i<rows.length;i++){if(String(rows[i].ID_PERSONA)===String(id)){return rows[i];}}
+  return null;
+}
+function armaUserCreateFillFromPerson(){
+  var p=armaFindSelectedPerson();
+  var msg=document.getElementById('userAdminMsg');
+  if(!p){document.getElementById('newUserName').value='';document.getElementById('newUserMail').value='';return;}
+  document.getElementById('newUserName').value=p.NOMBRE_COMPLETO||'';
+  document.getElementById('newUserMail').value=p.CORREO||'';
+  var u=document.getElementById('newUserId');
+  if(u && !u.value){u.value=armaSuggestUserFromName(p.NOMBRE_COMPLETO||'');}
+  if(msg){
+    if(p.USER_ARMA){msg.textContent='ATENCION: ESTA PERSONA YA TIENE USUARIO ARMA ASOCIADO: '+p.USER_ARMA;}
+    else if(!p.CORREO){msg.textContent='PERSONA SELECCIONADA. EL CORREO ESTA VACIO EN PERSONAL; SI LO DILIGENCIA AQUI, SE SINCRONIZARA CON PERSONAL.';}
+    else{msg.textContent='PERSONA SELECCIONADA DESDE ARMA_DATA / PERSONAL.';}
+  }
+}
+function armaValidEmail(v){
+  v=String(v||'').trim();
+  if(!v){return true;}
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+}
 async function armaRenderUserCreate(){
   var body=document.getElementById('userAdminBody');
   var msg=document.getElementById('userAdminMsg');
-  msg.textContent='CARGANDO NIVELES...';
+  msg.textContent='CARGANDO NIVELES Y PERSONAL...';
   try{
     var levels=await armaLoadLevelsForSelect();
+    var personas=await armaLoadPersonalForUserCreate();
+    window.armaUserCreatePeople=personas;
     var opts=levels.filter(function(l){return l.activo==='SI';}).map(function(l){
       return '<option value="'+armaHtmlEsc(l.nivel)+'">'+armaHtmlEsc(l.nivel)+' - '+armaHtmlEsc(l.descripcion||'')+'</option>';
     }).join('');
+    var personOpts='<option value="">SELECCIONE UNA PERSONA CREADA EN PERSONAL...</option>'+personas.map(function(p){
+      var extra=(p.USER_ARMA?' // USUARIO: '+p.USER_ARMA:'')+(p.ESTADO_PERSONA?' // '+p.ESTADO_PERSONA:'');
+      return '<option value="'+armaHtmlEsc(p.ID_PERSONA)+'">'+armaHtmlEsc(p.NOMBRE_COMPLETO||p.ID_PERSONA)+' // ID: '+armaHtmlEsc(p.ID_PERSONA)+armaHtmlEsc(extra)+'</option>';
+    }).join('');
     body.innerHTML=
       '<div class="admin-form">'+
-      '<div><label>USUARIO</label><input id="newUserId" type="text" placeholder="EJ: JUAN.PEREZ"></div>'+
-      '<div><label>NOMBRE COMPLETO</label><input id="newUserName" type="text" placeholder="NOMBRE DEL TECNICO"></div>'+
-      '<div><label>CORREO</label><input id="newUserMail" type="email" placeholder="OPCIONAL"></div>'+
+      '<div class="full"><label>PERSONA CREADA EN PERSONAL</label><select id="newUserPerson">'+personOpts+'</select><div class="admin-help">OBLIGATORIO: PRIMERO DEBE EXISTIR LA PERSONA EN ARMA_DATA / PERSONAL. EL USUARIO QUEDA VINCULADO POR ID_PERSONA.</div></div>'+
+      '<div><label>USUARIO</label><input id="newUserId" type="text" placeholder="EJ: MARIO.AREVALO"></div>'+
+      '<div><label>NOMBRE COMPLETO</label><input id="newUserName" type="text" readonly placeholder="SE CARGA DESDE PERSONAL"></div>'+
+      '<div><label>CORREO</label><input id="newUserMail" type="email" placeholder="SE CARGA DESDE PERSONAL O SE DILIGENCIA SI ESTA VACIO"></div>'+
       '<div><label>NIVEL</label><select id="newUserLevel">'+opts+'</select></div>'+
       '<div><label>CLAVE INICIAL</label><input id="newUserPass" type="password" placeholder="CLAVE TEMPORAL"></div>'+
       '<div><label>ACTIVO</label><select id="newUserActive"><option value="SI">SI</option><option value="NO">NO</option></select></div>'+
       '<div class="full"><button type="button" class="admin-mini-btn green" id="btnCreateUserNow">GUARDAR USUARIO</button></div>'+
       '</div>';
+    document.getElementById('newUserPerson').addEventListener('change',armaUserCreateFillFromPerson);
     document.getElementById('btnCreateUserNow').addEventListener('click',armaCreateUserNow);
-    msg.textContent='COMPLETE LOS DATOS DEL NUEVO USUARIO.';
+    msg.textContent='SELECCIONE PRIMERO UNA PERSONA PARA CREAR SU USUARIO ARMA.';
   }catch(e){
-    msg.textContent=e.message||'NO SE PUDIERON CARGAR NIVELES.';
+    msg.textContent=e.message||'NO SE PUDIERON CARGAR NIVELES O PERSONAL.';
   }
 }
 async function armaCreateUserNow(){
   var msg=document.getElementById('userAdminMsg');
+  var person=armaFindSelectedPerson();
+  var correo=document.getElementById('newUserMail').value;
   var payload={
     token:armaSession.token,
     userData:{
+      idPersona:document.getElementById('newUserPerson').value,
       user:document.getElementById('newUserId').value,
       nombre:document.getElementById('newUserName').value,
-      correo:document.getElementById('newUserMail').value,
+      correo:correo,
       nivel:document.getElementById('newUserLevel').value,
       password:document.getElementById('newUserPass').value,
       activo:document.getElementById('newUserActive').value,
       debeCambiarClave:'SI'
     }
   };
+  if(!payload.userData.idPersona){msg.textContent='DEBE SELECCIONAR UNA PERSONA CREADA EN PERSONAL.';return;}
   if(!payload.userData.user||!payload.userData.nivel||!payload.userData.password){msg.textContent='USUARIO, NIVEL Y CLAVE SON OBLIGATORIOS.';return;}
-  msg.textContent='CREANDO USUARIO...';
+  if(!armaValidEmail(correo)){msg.textContent='CORREO INVALIDO. REVISE EL FORMATO.';return;}
+  if(person && person.USER_ARMA && String(person.USER_ARMA).toUpperCase()!==String(payload.userData.user).toUpperCase()){msg.textContent='ESTA PERSONA YA TIENE USUARIO ARMA: '+person.USER_ARMA;return;}
+  msg.textContent='CREANDO USUARIO Y VINCULANDO CON PERSONAL...';
   try{
     var data=await armaApi('createUser',payload);
-    if(data.ok){msg.textContent='USUARIO CREADO: '+data.user; armaRenderUserCreate();}
+    if(data.ok){msg.textContent='USUARIO CREADO Y VINCULADO: '+data.user+' // ID_PERSONA: '+data.idPersona; armaRenderUserCreate();}
     else{msg.textContent=data.error||'NO FUE POSIBLE CREAR EL USUARIO.';}
   }catch(e){msg.textContent='ERROR DE CONEXION CON ARMA_BACKEND.';}
 }
