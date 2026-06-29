@@ -495,7 +495,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-06-28 20:30:50</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-06-28 21:35:11</span></div>
   </footer>
 </main>
 </div>
@@ -604,12 +604,17 @@ function updateDateCard(){
   if(dateEl){dateEl.textContent = dateTxt;}
 }
 function armaNormalizePerms(perms){var out={};perms=perms||{};Object.keys(perms).forEach(function(k){out[String(k).toUpperCase()]=perms[k]===true||String(perms[k]).toUpperCase()==='SI'||String(perms[k]).toUpperCase()==='TRUE';});return out;}
+function armaIsSuperAdmin(){
+  var p=armaNormalizePerms(armaSession.permissions);
+  return !!armaSession.token && (String(armaSession.user||'').toUpperCase()==='ARMA' || String(armaSession.nivel||'').toUpperCase()==='SUPER_ADMIN' || p.__SUPER_ADMIN__===true || p.ALL===true);
+}
 function armaApplyPermissions(){
   var perms=armaNormalizePerms(armaSession.permissions);
+  var superAdmin=armaIsSuperAdmin();
   document.querySelectorAll('.arma-secured').forEach(function(el){
     var key=(el.getAttribute('data-perm')||'').toUpperCase();
     var loginRequired=(el.getAttribute('data-login-required')==='1');
-    var allowed=loginRequired ? !!armaSession.token : !!perms[key];
+    var allowed=superAdmin ? !!armaSession.token : (loginRequired ? !!armaSession.token : !!perms[key]);
     if(allowed){el.classList.remove('arma-locked');el.setAttribute('aria-disabled','false');}
     else{el.classList.add('arma-locked');el.setAttribute('aria-disabled','true');}
   });
@@ -675,7 +680,7 @@ function armaRequireSession(){
 function armaRequireAdminPerm(perm){
   if(!armaRequireSession()){return false;}
   var p=armaNormalizePerms(armaSession.permissions);
-  if(armaSession.nivel==='ADMIN' || p[perm]===true){return true;}
+  if(String(armaSession.user||'').toUpperCase()==='ARMA' || String(armaSession.nivel||'').toUpperCase()==='SUPER_ADMIN' || armaSession.nivel==='ADMIN' || p.__SUPER_ADMIN__===true || p.ALL===true || p[perm]===true){return true;}
   alert('NO TIENE PERMISO PARA ESTA ADMINISTRACION.');
   return false;
 }
