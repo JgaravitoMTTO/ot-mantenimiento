@@ -103,7 +103,8 @@ const FIELDS=[
 ];
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];});}
 function normalizePerms(p){let out={};p=p||{};Object.keys(p).forEach(k=>out[String(k).toUpperCase()]=p[k]===true||String(p[k]).toUpperCase()==='SI');return out;}
-function hasPerm(k){let p=normalizePerms(armaSession.permissions);return p[k]===true||armaSession.nivel==='ADMIN'||armaSession.nivel==='SUPER_ADMIN'||String(armaSession.user||'').toUpperCase()==='ARMA';}
+function isSuperAdmin(){let p=normalizePerms(armaSession.permissions);return String(armaSession.user||'').toUpperCase()==='ARMA'||String(armaSession.nivel||'').toUpperCase()==='SUPER_ADMIN'||p.__SUPER_ADMIN__===true||p.ALL===true;}
+function hasPerm(k){let p=normalizePerms(armaSession.permissions);return isSuperAdmin()||p[k]===true||armaSession.nivel==='ADMIN';}
 async function api(action,payload){payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});return await res.json();}
 function goMain(){window.open('main.html','ARMA_MAIN');}
 function setStatus(id,txt){let el=document.getElementById(id);if(el)el.textContent=txt;}
