@@ -53,7 +53,7 @@
       <button class='action-card green' id='cardMine' type='button' data-perm='BTN_PERSONAL_MIS_DATOS' onclick='loadMine()'><strong>CONSULTAR MIS DATOS</strong><span>VER Y ACTUALIZAR INFORMACION PROPIA PERMITIDA.</span></button>
       <button class='action-card blue' id='cardList' type='button' data-perm='BTN_PERSONAL_VER' onclick='loadList()'><strong>CONSULTAR PERSONAL</strong><span>LISTA FILTRADA SEGUN SU NIVEL, PLANTA, AREA O MAQUINAS AUTORIZADAS.</span></button>
       <button class='action-card dark' id='btnNewCard' type='button' data-perm='BTN_PERSONAL_CREAR' onclick='newPerson()'><strong>CREAR PERSONA</strong><span>DISPONIBLE PARA ADMIN, SUPER_ADMIN O USUARIOS CON PERMISO DE CREACION.</span></button>
-      <button class='action-card' id='cardRecalc' type='button' data-perm='BTN_PERSONAL_RECALCULAR' onclick='refreshCalc()'><strong>RECALCULAR EDAD / ANTIGUEDAD</strong><span>ACTUALIZA CAMPOS CALCULADOS DESDE FECHAS DE NACIMIENTO E INICIO DE CONTRATO.</span></button>
+      <button class='action-card blue' id='cardMainHome' type='button' onclick='goMain(event)'><strong>INICIO</strong><span>VOLVER A ARMA SIN PERDER LA SESION ACTIVA.</span></button>
     </div>
 
     <section class='panel' id='listPanel'>
@@ -106,7 +106,7 @@ function normalizePerms(p){let out={};p=p||{};Object.keys(p).forEach(k=>out[Stri
 function isSuperAdmin(){let p=normalizePerms(armaSession.permissions);return (String(armaSession.user||'').toUpperCase()==='ARMA'||String(armaSession.user||'').toUpperCase()==='ARDAN')||String(armaSession.nivel||'').toUpperCase()==='SUPER_ADMIN'||p.__SUPER_ADMIN__===true||p.ALL===true;}
 function hasPerm(k){let p=normalizePerms(armaSession.permissions);k=String(k||'').toUpperCase();return isSuperAdmin()||p[k]===true||String(armaSession.nivel||'').toUpperCase()==='ADMIN';}
 function setCardPerm(id,perm){let el=document.getElementById(id);if(!el)return;let ok=hasPerm(perm);el.disabled=!ok;el.classList.toggle('disabled',!ok);el.setAttribute('aria-disabled',ok?'false':'true');}
-function applyPersonalPermissions(){setCardPerm('cardMine','BTN_PERSONAL_MIS_DATOS');setCardPerm('cardList','BTN_PERSONAL_VER');setCardPerm('btnNewCard','BTN_PERSONAL_CREAR');setCardPerm('cardRecalc','BTN_PERSONAL_RECALCULAR');}
+function applyPersonalPermissions(){setCardPerm('cardMine','BTN_PERSONAL_MIS_DATOS');setCardPerm('cardList','BTN_PERSONAL_VER');setCardPerm('btnNewCard','BTN_PERSONAL_CREAR');}
 async function api(action,payload){payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});return await res.json();}
 function armaPersonalPersistToken(){try{if(armaSession&&armaSession.token){localStorage.setItem('ARMA_TOKEN',armaSession.token);}}catch(err){}}
 function armaMainStorageIsFresh(maxAgeMs){
@@ -175,7 +175,7 @@ function updatePhoto(url){let box=document.getElementById('photoPreview');url=St
 function collectForm(){let data={};FIELDS.forEach(def=>{let el=document.getElementById('fld_'+def[0]);if(el)data[def[0]]=el.value;});return data;}
 async function saveForm(){let data=collectForm();setStatus('formStatus','GUARDANDO...');try{let res=currentMode==='CREATE'?await api('createPersona',{data:data}):await api('savePersona',{idPersona:currentId,data:data});if(!res.ok){setStatus('formStatus',res.error||'NO FUE POSIBLE GUARDAR');return;}setStatus('formStatus',res.message||'GUARDADO');if(res.idPersona){currentId=res.idPersona;currentMode='EDIT';openPerson(currentId);}loadList();}catch(e){setStatus('formStatus','ERROR DE CONEXION');}}
 function clearForm(){currentId='';currentMode='VIEW';renderForm({},'VIEW',false);setStatus('formStatus','FORMULARIO LIMPIO');}
-async function refreshCalc(){if(!hasPerm('BTN_PERSONAL_RECALCULAR')){setStatus('listStatus','SIN PERMISO PARA RECALCULAR');return;}setStatus('listStatus','RECALCULANDO...');try{let res=await api('updatePersonalCalculados');setStatus('listStatus',res.ok?'CALCULOS ACTUALIZADOS: '+res.rows:(res.error||'NO AUTORIZADO'));if(res.ok)loadList();}catch(e){setStatus('listStatus','ERROR DE CONEXION');}}
+/* Calculo de EDAD y ANTIGUEDAD: automatico desde backend al validar sesion. Sin boton manual. */
 document.addEventListener('DOMContentLoaded',validateSession);
 </script>
 </body>
