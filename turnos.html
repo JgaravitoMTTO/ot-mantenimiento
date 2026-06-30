@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARMA | TURNOS</title>
+  <style>
+:root{--blue:#004b9b;--blue2:#0076d7;--navy:#002b66;--green:#55b52e;--green2:#00d65f;--cyan:#00bfd6;--line:#dbe5f0;--text:#0f172a;--muted:#64748b;--shadow:0 14px 28px rgba(0,43,102,.12);--soft:0 5px 14px rgba(15,23,42,.12);--danger:#b91c1c;--warn:#fb923c}
+*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:#eef3f9;color:var(--text);text-transform:uppercase}a{color:inherit}
+.top-global{position:sticky;top:0;z-index:50;background:#fff;box-shadow:0 10px 24px rgba(0,43,102,.14)}.top-white{min-height:108px;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}.blue-line{height:6px;background:linear-gradient(90deg,var(--blue),var(--blue2),var(--blue))}.brand-row{display:flex;align-items:center;gap:22px}.brand-separator{width:1px;height:68px;background:#d8e5f2}.logo-pelex{height:74px;max-width:260px;object-fit:contain}.logo-arma{height:82px;max-width:380px;object-fit:contain}.top-title{text-align:right}.top-title strong{display:block;color:var(--navy);font-size:24px;font-weight:950}.top-title span{display:block;color:var(--muted);font-size:12px;font-weight:900;margin-top:5px}.top-title-actions{margin-top:9px;display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}.user-pill{display:inline-flex;align-items:center;gap:8px;background:#f8fbff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--navy);font-size:12px;font-weight:900}.btn-main{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:999px;padding:8px 13px;background:linear-gradient(180deg,var(--blue2),var(--blue));color:#fff;font-size:11px;font-weight:950;box-shadow:var(--soft);cursor:pointer;text-decoration:none}
+.main{padding:18px 24px 22px}.hero{position:relative;overflow:hidden;border-radius:22px;background:radial-gradient(circle at 74% 10%,#0076d7 0,#004b9b 42%,#002b66 100%);box-shadow:var(--shadow);color:#fff;padding:20px 28px;margin-bottom:16px}.hero:after{content:'TURNOS';position:absolute;right:20px;bottom:-14px;font-size:68px;font-weight:950;letter-spacing:4px;color:rgba(255,255,255,.055)}.hero span{display:inline-block;background:rgba(0,214,95,.15);border:1px solid rgba(0,214,95,.45);color:#b8ffd5;padding:6px 10px;border-radius:999px;font-weight:950;font-size:11px}.hero h1{margin:12px 0 5px;font-size:30px}.hero p{margin:0;max-width:1220px;color:#eaf4ff;font-size:11px;line-height:1.2;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;z-index:2}
+.action-grid{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:14px;margin-bottom:16px}.action-card{position:relative;overflow:hidden;border:0;border-radius:18px;background:#fff;box-shadow:var(--shadow);padding:17px;text-align:left;cursor:pointer;border-left:6px solid var(--green2);min-height:112px}.action-card:hover{filter:brightness(1.03);transform:translateY(-1px)}.action-card strong{display:block;color:var(--navy);font-size:16px;font-weight:950;margin-bottom:8px}.action-card span{display:block;color:var(--muted);font-size:11px;font-weight:850;line-height:1.35}.action-card.blue{border-left-color:var(--blue2)}.action-card.green{border-left-color:var(--green2)}.action-card.dark{border-left-color:#111827}.action-card.gray{border-left-color:#9ca3af}.action-card.disabled{filter:grayscale(1);opacity:.48;cursor:not-allowed}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:15px;margin-bottom:16px}.panel-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.panel-title h2{margin:0;color:var(--navy);font-size:18px}.status{color:var(--muted);font-size:12px;font-weight:900}.filters{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;margin-bottom:12px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 11px;font-size:13px;font-weight:750;color:var(--navy);outline:none;background:#fff;text-transform:uppercase}input:focus,select:focus,textarea:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(0,118,215,.10)}textarea{min-height:76px;resize:vertical}.btn{border:0;border-radius:12px;padding:10px 14px;font-size:12px;font-weight:950;cursor:pointer;color:#fff;background:linear-gradient(180deg,var(--blue2),var(--blue));box-shadow:var(--soft)}.btn.green{background:linear-gradient(180deg,var(--green2),var(--green))}.btn.gray{background:linear-gradient(180deg,#9ca3af,#6b7280)}.btn.red{background:linear-gradient(180deg,#ef4444,#b91c1c)}.btn:disabled{filter:grayscale(1);opacity:.55;cursor:not-allowed}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;max-height:68vh}table{border-collapse:collapse;width:100%;min-width:980px;background:#fff}th{background:#0f6385;color:#fff;font-size:12px;text-align:center;padding:10px;position:sticky;top:0;z-index:2}th.sticky-col,td.sticky-col{position:sticky;left:0;z-index:3}td.sticky-col{background:#fff}th.sticky-col{z-index:4}td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8px 9px;font-size:12px;font-weight:800;color:#0f172a;text-align:center;white-space:nowrap}tr:nth-child(even){background:#eef7fd}tr:hover{background:#d9ecff}.turno-cell{border-radius:9px;min-width:76px}.editable{cursor:pointer;box-shadow:inset 0 0 0 1px rgba(0,118,215,.18)}.editable:hover{background:#e8f2ff!important}.t-1{background:#e8f2ff}.t-2{background:#ecfdf5}.t-3{background:#fff7ed}.t-4,.t-5{background:#f5f3ff}.t-descanso,.t-vacaciones{background:#f1f5f9;color:#64748b}.t-incapacidad,.t-curso{background:#fef2f2;color:#991b1b}.badge{display:inline-flex;border-radius:999px;padding:4px 8px;background:#e8f2ff;color:var(--navy);font-size:10px;font-weight:950}.hidden{display:none!important}.notice{border-left:5px solid var(--green2);background:#f8fbff;border-radius:14px;padding:12px;color:var(--navy);font-size:12px;font-weight:800;line-height:1.4}.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}.field label{display:block;color:var(--navy);font-size:11px;font-weight:950;margin-bottom:5px}.field.full{grid-column:1/-1}
+.modal-back{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;z-index:200}.modal-back.show{display:flex}.modal{background:#fff;border-radius:22px;box-shadow:0 30px 60px rgba(0,0,0,.28);width:min(780px,94vw);max-height:86vh;overflow:auto;padding:20px;border:1px solid var(--line)}.modal h2{margin:0 0 12px;color:var(--navy)}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px;flex-wrap:wrap}
+.login-wall{min-height:260px;display:grid;place-items:center;text-align:center}.login-wall h2{color:var(--navy);margin:0 0 8px}.login-wall p{color:var(--muted);font-weight:850;max-width:680px}.footer{text-align:center;margin-top:14px}.footer-card{display:flex;align-items:center;justify-content:center;gap:10px;min-height:38px;padding:9px 18px;border-radius:16px;background:linear-gradient(135deg,#001f4d 0%,#003b86 54%,#004b9b 100%);color:#eaf4ff;font-size:12px;font-weight:850;box-shadow:var(--shadow)}.footer-sep{color:#9dffbf;font-weight:950}
+@media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}}@media(max-width:700px){.action-grid,.filters,.form-grid{grid-template-columns:1fr}.main{padding:12px}.logo-pelex{height:58px}.logo-arma{height:64px}}
+  </style>
+</head>
+<body>
+<header class="top-global">
+  <div class="top-white">
+    <div class="brand-row">
+      <img src="logo_pelex.bmp" alt="PELEX" class="logo-pelex">
+      <div class="brand-separator"></div>
+      <img src="ARMA%20logo%202.png" alt="ARMA" class="logo-arma">
+    </div>
+    <div class="top-title">
+      <strong>TALENTO HUMANO | TURNOS</strong>
+      <span>PROGRAMACION CONTROLADA DE TURNOS DEL EQUIPO DE TRABAJO</span>
+      <div class="top-title-actions"><button class="btn-main" type="button" onclick="goMainSmart(event)">VOLVER A MAIN</button><div class="user-pill" id="userPill">VALIDANDO SESION...</div></div>
+    </div>
+  </div>
+  <div class="blue-line"></div>
+</header>
+<main class="main">
+  <section class="hero">
+    <span>ARMA DATA // TURNOS</span>
+    <h1>GESTION DE TURNOS</h1>
+    <p>CONSULTE, MODIFIQUE Y ADMINISTRE LA PROGRAMACION DE TURNOS DESDE UNA INTERFAZ SEGURA // DATOS EN LINEA DESDE ARMA_DATA MEDIANTE BACKEND VALIDADO.</p>
+  </section>
+
+  <section id="loginWall" class="panel login-wall hidden">
+    <div>
+      <h2>SESION NO VALIDADA</h2>
+      <p>INGRESE PRIMERO DESDE MAIN.HTML. ESTA PAGINA USA EL TOKEN DE ARMA PARA DEFINIR SI USTED VE SUS TURNOS, SU EQUIPO O TODA LA MATRIZ.</p>
+      <button class="btn" type="button" onclick="goMainSmart(event)">VOLVER A MAIN</button>
+    </div>
+  </section>
+
+  <section id="appArea" class="hidden">
+    <div class="action-grid">
+      <button class="action-card green" type="button" onclick="goMainSmart(event)"><strong>INICIO</strong><span>VOLVER A ARMA SIN PERDER LA SESION ACTIVA.</span></button>
+      <button class="action-card blue" type="button" onclick="loadTurnos()"><strong>CONSULTAR TURNOS</strong><span>LISTA FILTRADA SEGUN SU NIVEL, PLANTA, AREA O PERSONA AUTORIZADA.</span></button>
+      <button class="action-card dark" id="btnNewTurno" type="button" onclick="openNewTurno()"><strong>CREAR NUEVO TURNO</strong><span>AGREGA CODIGOS AL CATALOGO SIN CREAR NUEVAS HOJAS.</span></button>
+      <button class="action-card gray disabled" id="btnRotacion" type="button" onclick="rotationInfo()"><strong>GENERAR ROTACION</strong><span>PREPARADO PARA V2. PRIMERO VALIDAMOS CONSULTA Y EDICION INDIVIDUAL.</span></button>
+    </div>
+
+    <section class="panel" id="turnosPanel">
+      <div class="panel-title"><h2>MATRIZ DE TURNOS</h2><div class="status" id="turnosStatus">SIN CONSULTA</div></div>
+      <div class="filters">
+        <input id="fechaDesde" type="date">
+        <input id="fechaHasta" type="date">
+        <select id="quickMonth"></select>
+        <button class="btn" type="button" onclick="loadTurnos()">BUSCAR</button>
+      </div>
+      <div class="notice" style="margin-bottom:12px">PARA MODIFICAR UN TURNO, HAGA CLIC SOBRE UNA CELDA HABILITADA. TODO CAMBIO QUEDA REGISTRADO EN LOG_CAMBIOS.</div>
+      <div class="table-wrap"><table id="turnosTable"><thead id="turnosHead"><tr><th>FECHA</th><th>DIA</th></tr></thead><tbody id="turnosRows"><tr><td colspan="2">SIN DATOS CARGADOS</td></tr></tbody></table></div>
+    </section>
+  </section>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>TURNOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span></div></footer>
+</main>
+
+<div id="editModal" class="modal-back">
+  <div class="modal">
+    <h2>MODIFICAR TURNO INDIVIDUAL</h2>
+    <div class="form-grid">
+      <div class="field"><label>FECHA</label><input id="editFecha" readonly></div>
+      <div class="field"><label>PERSONA / COLUMNA</label><input id="editPersona" readonly></div>
+      <div class="field"><label>TURNO ACTUAL</label><input id="editActual" readonly></div>
+      <div class="field"><label>NUEVO TURNO</label><select id="editTurno"></select></div>
+      <div class="field full"><label>OBSERVACION DEL CAMBIO</label><textarea id="editObs" placeholder="MOTIVO DEL CAMBIO"></textarea></div>
+    </div>
+    <div class="modal-actions"><button class="btn gray" onclick="closeEdit()">CANCELAR</button><button class="btn green" onclick="saveEdit()">GUARDAR TURNO</button></div>
+  </div>
+</div>
+
+<div id="newTurnoModal" class="modal-back">
+  <div class="modal">
+    <h2>CREAR NUEVO TURNO EN CATALOGO</h2>
+    <div class="notice" style="margin-bottom:12px">EL NUEVO TURNO SE GUARDA EN ARMA_DATA / CATALOGOS COMO TIPO TURNO_CODIGO Y QUEDA DISPONIBLE PARA LA EDICION DE LA MATRIZ.</div>
+    <div class="form-grid">
+      <div class="field"><label>CODIGO</label><input id="newCodigo" placeholder="EJ. T6 / CAP / DOM"></div>
+      <div class="field"><label>VALOR MOSTRADO</label><input id="newValor" placeholder="EJ. T6"></div>
+      <div class="field"><label>TIPO / DESCRIPCION</label><input id="newDesc" placeholder="ROTATIVO / NOVEDAD"></div>
+      <div class="field"><label>HORA INICIO</label><input id="newInicio" placeholder="06:00"></div>
+      <div class="field"><label>HORA FIN</label><input id="newFin" placeholder="14:00"></div>
+      <div class="field"><label>OBSERVACION</label><input id="newObs" placeholder="DETALLE"></div>
+    </div>
+    <div class="modal-actions"><button class="btn gray" onclick="closeNewTurno()">CANCELAR</button><button class="btn green" onclick="saveNewTurno()">GUARDAR NUEVO TURNO</button></div>
+  </div>
+</div>
+
+<script>
+const ARMA_API_URL='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
+let armaSession={user:'',nombre:'',nivel:'',permissions:{},token:''};
+let turnosData={columns:[],rows:[],turnos:[]};
+let editCtx=null;
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];});}
+function normalizePerms(p){let out={};p=p||{};Object.keys(p).forEach(k=>out[String(k).toUpperCase()]=p[k]===true||String(p[k]).toUpperCase()==='SI');return out;}
+function isSuperAdmin(){let p=normalizePerms(armaSession.permissions);return String(armaSession.user||'').toUpperCase()==='ARDAN'||String(armaSession.user||'').toUpperCase()==='ARMA'||String(armaSession.nivel||'').toUpperCase()==='SUPER_ADMIN'||p.__SUPER_ADMIN__===true||p.ALL===true;}
+function hasPerm(k){let p=normalizePerms(armaSession.permissions);return isSuperAdmin()||p[String(k).toUpperCase()]===true||String(armaSession.nivel||'').toUpperCase()==='ADMIN';}
+async function api(action,payload){payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});return await res.json();}
+function setStatus(id,txt){let el=document.getElementById(id);if(el)el.textContent=txt;}
+function showLoginWall(){document.getElementById('loginWall').classList.remove('hidden');document.getElementById('appArea').classList.add('hidden');document.getElementById('userPill').textContent='SESION NO VALIDADA';}
+async function validateSession(){let token=localStorage.getItem('ARMA_TOKEN')||'';if(!token){showLoginWall();return;}try{armaSession.token=token;let data=await api('validateSession',{token:token});if(!data.ok){showLoginWall();return;}armaSession={user:data.user,nombre:data.nombre||data.user,nivel:data.nivel,permissions:data.permissions||{},token:token};document.getElementById('userPill').textContent=(armaSession.nombre||armaSession.user)+' // '+armaSession.nivel;document.getElementById('loginWall').classList.add('hidden');document.getElementById('appArea').classList.remove('hidden');document.getElementById('btnNewTurno').classList.toggle('disabled',!hasPerm('BTN_TURNOS_CREAR_TURNO'));initDates();loadTurnos();}catch(e){showLoginWall();}}
+function initDates(){let now=new Date();let first=new Date(now.getFullYear(),now.getMonth(),1);let last=new Date(now.getFullYear(),now.getMonth()+1,0);document.getElementById('fechaDesde').value=toISO(first);document.getElementById('fechaHasta').value=toISO(last);let sel=document.getElementById('quickMonth');let opts='';for(let i=-2;i<=6;i++){let d=new Date(now.getFullYear(),now.getMonth()+i,1);opts+='<option value="'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'">'+d.toLocaleString('es-CO',{month:'long',year:'numeric'}).toUpperCase()+'</option>';}sel.innerHTML=opts;sel.value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');sel.addEventListener('change',function(){let p=this.value.split('-');let y=Number(p[0]),m=Number(p[1])-1;document.getElementById('fechaDesde').value=toISO(new Date(y,m,1));document.getElementById('fechaHasta').value=toISO(new Date(y,m+1,0));});}
+function toISO(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+async function loadTurnos(){setStatus('turnosStatus','CARGANDO TURNOS...');let filters={FECHA_DESDE:document.getElementById('fechaDesde').value,FECHA_HASTA:document.getElementById('fechaHasta').value};try{let data=await api('listTurnosMatrix',{filters:filters});if(!data.ok){setStatus('turnosStatus',data.error||'ERROR');return;}turnosData=data;renderTurnos(data);setStatus('turnosStatus',(data.rows||[]).length+' DIAS // '+(data.columns||[]).length+' COLUMNAS');}catch(e){setStatus('turnosStatus','ERROR DE CONEXION');}}
+function renderTurnos(data){let cols=data.columns||[];let rows=data.rows||[];let head='<tr><th class="sticky-col">FECHA</th><th>DIA</th>'+cols.map(c=>'<th title="'+esc(c.idPersona||c.tipo)+'">'+esc(c.nombre)+'<br><span class="badge">'+esc(c.tipo)+'</span></th>').join('')+'</tr>';document.getElementById('turnosHead').innerHTML=head;if(rows.length===0){document.getElementById('turnosRows').innerHTML='<tr><td colspan="'+(cols.length+2)+'">SIN TURNOS PARA EL RANGO O PERMISOS ACTUALES</td></tr>';return;}let body=rows.map(r=>'<tr><td class="sticky-col"><strong>'+esc(r.fecha)+'</strong></td><td>'+esc(r.dia)+'</td>'+cols.map(c=>cellHtml(r,c,r.values[c.key])).join('')+'</tr>').join('');document.getElementById('turnosRows').innerHTML=body;document.querySelectorAll('td[data-edit="1"]').forEach(td=>td.addEventListener('click',function(){openEdit(this.dataset.fecha,this.dataset.col,this.dataset.id,this.dataset.nombre,this.dataset.valor);}));}
+function cellHtml(r,c,val){let cls=turnoClass(val);let ed=c.editable?' editable':'';let data=c.editable?' data-edit="1" data-fecha="'+esc(r.fecha)+'" data-col="'+esc(c.key)+'" data-id="'+esc(c.idPersona)+'" data-nombre="'+esc(c.nombre)+'" data-valor="'+esc(val)+'"':'';return '<td class="turno-cell '+cls+ed+'"'+data+'>'+esc(val||'')+'</td>';}
+function turnoClass(v){let x=String(v||'').toUpperCase().trim();if(x==='1')return 't-1';if(x==='2')return 't-2';if(x==='3')return 't-3';if(x==='4'||x==='5')return 't-4';if(x.indexOf('DESCANSO')>=0||x.indexOf('VACACIONES')>=0)return 't-descanso';if(x.indexOf('INCAP')>=0||x.indexOf('CURSO')>=0||x.indexOf('EXAMEN')>=0)return 't-incapacidad';return '';}
+function renderTurnoOptions(selected){let opts='<option value=""></option>';(turnosData.turnos||[]).forEach(t=>{let v=t.valor||t.codigo;opts+='<option value="'+esc(v)+'" '+(String(v).toUpperCase()===String(selected||'').toUpperCase()?'selected':'')+'>'+esc(v)+' - '+esc(t.observacion||t.descripcion||'')+'</option>';});return opts;}
+function openEdit(fecha,colKey,id,nombre,valor){editCtx={fecha:fecha,columnKey:colKey,idPersona:id,nombre:nombre,valor:valor};document.getElementById('editFecha').value=fecha;document.getElementById('editPersona').value=nombre+' // '+(id||colKey);document.getElementById('editActual').value=valor||'';document.getElementById('editTurno').innerHTML=renderTurnoOptions(valor);document.getElementById('editObs').value='';document.getElementById('editModal').classList.add('show');}
+function closeEdit(){document.getElementById('editModal').classList.remove('show');editCtx=null;}
+async function saveEdit(){if(!editCtx)return;let nuevo=document.getElementById('editTurno').value;let obs=document.getElementById('editObs').value;setStatus('turnosStatus','GUARDANDO CAMBIO...');try{let res=await api('saveTurnoIndividual',{data:{FECHA:editCtx.fecha,COLUMN_KEY:editCtx.columnKey,ID_PERSONA:editCtx.idPersona,TURNO:nuevo,OBSERVACION:obs}});if(!res.ok){setStatus('turnosStatus',res.error||'NO FUE POSIBLE GUARDAR');return;}closeEdit();await loadTurnos();setStatus('turnosStatus','TURNO ACTUALIZADO');}catch(e){setStatus('turnosStatus','ERROR DE CONEXION');}}
+function openNewTurno(){if(!hasPerm('BTN_TURNOS_CREAR_TURNO')){alert('NO TIENE PERMISO PARA CREAR TURNOS.');return;}document.getElementById('newTurnoModal').classList.add('show');}
+function closeNewTurno(){document.getElementById('newTurnoModal').classList.remove('show');}
+async function saveNewTurno(){let data={CODIGO:document.getElementById('newCodigo').value,VALOR:document.getElementById('newValor').value,DESCRIPCION:document.getElementById('newDesc').value,HORA_INICIO:document.getElementById('newInicio').value,HORA_FIN:document.getElementById('newFin').value,OBSERVACION:document.getElementById('newObs').value};if(!data.CODIGO){alert('EL CODIGO ES OBLIGATORIO');return;}setStatus('turnosStatus','CREANDO TURNO...');try{let res=await api('createTurnoCatalogo',{data:data});if(!res.ok){setStatus('turnosStatus',res.error||'NO FUE POSIBLE CREAR');return;}closeNewTurno();await loadTurnos();setStatus('turnosStatus',res.message||'TURNO CREADO');}catch(e){setStatus('turnosStatus','ERROR DE CONEXION');}}
+function rotationInfo(){alert('GENERACION POR ROTACION QUEDA PARA LA V2. PRIMERO VALIDAMOS LECTURA, PERMISOS, CATALOGO Y EDICION INDIVIDUAL.');}
+function armaMainStorageIsFresh(maxAgeMs){try{let raw=localStorage.getItem('ARMA_MAIN_ACTIVE')||'';if(!raw)return false;let data=JSON.parse(raw);return data&&data.ts&&(Date.now()-Number(data.ts)<=maxAgeMs);}catch(e){return false;}}
+function armaAskMainIsActive(){return new Promise(resolve=>{let done=false,bc=null;function finish(v){if(done)return;done=true;try{if(bc)bc.close();}catch(e){}resolve(!!v);}try{if('BroadcastChannel' in window){bc=new BroadcastChannel('ARMA_CONTROL_CHANNEL');bc.onmessage=ev=>{let msg=ev.data||{};if(msg.type==='MAIN_ACTIVE')finish(true);};bc.postMessage({type:'FOCUS_MAIN',from:location.href,ts:Date.now()});}}catch(e){}try{localStorage.setItem('ARMA_REQUEST_MAIN_FOCUS',String(Date.now()));}catch(e){}if(armaMainStorageIsFresh(3500))setTimeout(()=>finish(true),120);setTimeout(()=>finish(false),650);});}
+function goMainSmart(e){if(e)e.preventDefault();armaAskMainIsActive().then(active=>{if(active){try{if(window.opener&&!window.opener.closed)window.opener.focus();}catch(e){}try{window.close();}catch(e){}}else{window.location.href='main.html';}});return false;}
+document.addEventListener('DOMContentLoaded',validateSession);
+</script>
+</body>
+</html>
