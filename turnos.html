@@ -138,7 +138,13 @@ function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(ch){retu
 function normalizePerms(p){let out={};p=p||{};Object.keys(p).forEach(k=>out[String(k).toUpperCase()]=p[k]===true||String(p[k]).toUpperCase()==='SI');return out;}
 function isSuperAdmin(){let p=normalizePerms(armaSession.permissions);return String(armaSession.user||'').toUpperCase()==='ARDAN'||String(armaSession.user||'').toUpperCase()==='ARMA'||String(armaSession.nivel||'').toUpperCase()==='SUPER_ADMIN'||p.__SUPER_ADMIN__===true||p.ALL===true;}
 function hasPerm(k){let p=normalizePerms(armaSession.permissions);return isSuperAdmin()||p[String(k).toUpperCase()]===true||String(armaSession.nivel||'').toUpperCase()==='ADMIN';}
-async function api(action,payload){payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});return await res.json();}
+async function api(action,payload){
+  payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';
+  const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+  const txt=await res.text();
+  try{return JSON.parse(txt);}
+  catch(e){throw new Error('RESPUESTA_NO_JSON '+res.status+' '+txt.slice(0,240));}
+}
 function setStatus(id,txt){let el=document.getElementById(id);if(el)el.textContent=txt;}
 function showLoginWall(){document.getElementById('loginWall').classList.remove('hidden');document.getElementById('appArea').classList.add('hidden');document.getElementById('userPill').textContent='SESION NO VALIDADA';}
 async function validateSession(){let token=localStorage.getItem('ARMA_TOKEN')||'';if(!token){showLoginWall();return;}try{armaSession.token=token;let data=await api('validateSession',{token:token});if(!data.ok){showLoginWall();return;}armaSession={user:data.user,nombre:data.nombre||data.user,nivel:data.nivel,permissions:data.permissions||{},token:token};document.getElementById('userPill').textContent=(armaSession.nombre||armaSession.user)+' // '+armaSession.nivel;document.getElementById('loginWall').classList.add('hidden');document.getElementById('appArea').classList.remove('hidden');document.getElementById('btnNewTurno').classList.toggle('disabled',!hasPerm('BTN_TURNOS_CREAR_TURNO'));document.getElementById('btnNovedad').classList.toggle('disabled',!hasPerm('BTN_TURNOS_REPORTAR_NOVEDAD'));initDates();await loadTurnos();loadNovedades();}catch(e){showLoginWall();}}
@@ -198,7 +204,18 @@ function renderTurnoOptions(selected){let opts='<option value=""></option>';(tur
 function openEdit(fecha,colKey,id,nombre,valor,original){editCtx={fecha:fecha,columnKey:colKey,idPersona:id,nombre:nombre,valor:valor,original:original};document.getElementById('editFecha').value=fecha;document.getElementById('editPersona').value=nombre+' // '+(id||colKey);document.getElementById('editActual').value=valor||'';document.getElementById('editTurno').innerHTML=renderTurnoOptions(valor);document.getElementById('editObs').value='';document.getElementById('editModal').classList.add('show');}
 function closeEdit(){document.getElementById('editModal').classList.remove('show');editCtx=null;}
 function saveEdit(){if(!editCtx)return;let nuevo=document.getElementById('editTurno').value;let obs=document.getElementById('editObs').value;let k=pendingKey(editCtx.fecha,editCtx.columnKey);let original=String(editCtx.original==null?'':editCtx.original);if(String(nuevo||'').toUpperCase()===original.toUpperCase()){delete pendingTurnoChanges[k];}else{pendingTurnoChanges[k]={FECHA:editCtx.fecha,COLUMN_KEY:editCtx.columnKey,ID_PERSONA:editCtx.idPersona,TURNO:nuevo,OBSERVACION:obs,NOMBRE:editCtx.nombre,OLD_VALUE:original};}closeEdit();renderTurnos(turnosData);setStatus('turnosStatus',countPending()+' CAMBIO(S) PENDIENTES. REVISE LA PROGRAMACION Y PRESIONE GRABAR PROGRAMACION.');}
-async function guardarProgramacion(){let changes=Object.values(pendingTurnoChanges||{});if(changes.length===0){alert('NO HAY CAMBIOS PENDIENTES.');return;}if(!confirm('SE GUARDARAN '+changes.length+' CAMBIO(S) EN ARMA_DATA / TURNOS. ¿CONFIRMA?'))return;setStatus('turnosStatus','GRABANDO PROGRAMACION...');try{let res=await api('saveTurnosBatch',{changes:changes,observacionGeneral:'PROGRAMACION_LOTE_HTML'});if(!res.ok){setStatus('turnosStatus',(res.error||res.message||'GUARDADO CON ERRORES')+' // OK: '+(res.saved||0)+' // ERRORES: '+(res.errors||0));return;}pendingTurnoChanges={};updatePendingBar();await loadTurnos();setStatus('turnosStatus','PROGRAMACION GUARDADA // CAMBIOS: '+(res.saved||changes.length));}catch(e){setStatus('turnosStatus','ERROR DE CONEXION AL GRABAR PROGRAMACION');}}
+async function guardarProgramacion(){
+  let changes=Object.values(pendingTurnoChanges||{});
+  if(changes.length===0){alert('NO HAY CAMBIOS PENDIENTES.');return;}
+  if(!confirm('SE GUARDARAN '+changes.length+' CAMBIO(S) EN ARMA_DATA / TURNOS. ¿CONFIRMA?'))return;
+  setStatus('turnosStatus','GRABANDO PROGRAMACION...');
+  try{
+    let res=await api('saveTurnosBatch',{changes:changes,observacionGeneral:'PROGRAMACION_LOTE_HTML'});
+    if(!res.ok){let det=res.detail||'';if(res.errorSamples&&res.errorSamples.length){det+=' // '+res.errorSamples.map(x=>x.index+':'+x.error).join(' | ');}setStatus('turnosStatus',(res.error||res.message||'GUARDADO CON ERRORES')+' // OK: '+(res.saved||0)+' // ERRORES: '+(res.errors||0)+' '+det);return;}
+    pendingTurnoChanges={};updatePendingBar();await loadTurnos();
+    setStatus('turnosStatus','PROGRAMACION GUARDADA // CAMBIOS: '+(res.saved||changes.length));
+  }catch(e){try{console.error(e);}catch(_){ }setStatus('turnosStatus','ERROR DE CONEXION AL GRABAR PROGRAMACION: '+(e&&e.message?e.message:e));}
+}
 function descartarCambios(){if(countPending()===0)return;if(!confirm('¿DESCARTAR LOS CAMBIOS PENDIENTES?'))return;pendingTurnoChanges={};renderTurnos(turnosData);setStatus('turnosStatus','CAMBIOS PENDIENTES DESCARTADOS');}
 function openNewTurno(){if(!hasPerm('BTN_TURNOS_CREAR_TURNO')){alert('NO TIENE PERMISO PARA CREAR TURNOS.');return;}document.getElementById('newTurnoModal').classList.add('show');}
 function closeNewTurno(){document.getElementById('newTurnoModal').classList.remove('show');}
