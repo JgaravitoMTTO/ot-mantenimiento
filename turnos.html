@@ -16,12 +16,20 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
 .t-1{background:#e8f2ff}.t-2{background:#ecfdf5}.t-3{background:#fff7ed}.t-4,.t-5{background:#f5f3ff}.t-descanso,.t-vacaciones{background:#f1f5f9;color:#64748b}.t-incapacidad,.t-curso{background:#fef2f2;color:#991b1b}.today-row td{background:#fff7c2!important;box-shadow:inset 0 0 0 1px rgba(251,146,60,.35)}.today-row td.sticky-col{background:#ffe98a!important}
 .novedad-list{display:grid;gap:8px}.novedad-card{border:1px solid var(--line);border-radius:14px;background:#f8fbff;padding:10px 12px;font-size:12px;font-weight:800;color:var(--navy)}.novedad-card .meta{color:var(--muted);font-size:11px;margin-top:4px}.badge{display:inline-flex;border-radius:999px;padding:4px 8px;background:#e8f2ff;color:var(--navy);font-size:10px;font-weight:950}
 .hidden{display:none!important}.notice{border-left:5px solid var(--green2);background:#f8fbff;border-radius:14px;padding:12px;color:var(--navy);font-size:12px;font-weight:800;line-height:1.4}.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}.field label{display:block;color:var(--navy);font-size:11px;font-weight:950;margin-bottom:5px}.field.full{grid-column:1/-1}
+.arma-loader{position:fixed;inset:0;background:rgba(2,6,23,.50);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)}.arma-loader.hidden{display:none!important}.arma-loader-box{width:min(390px,92vw);background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 28px 70px rgba(0,0,0,.32);padding:24px;text-align:center;color:var(--navy)}.arma-spinner{width:54px;height:54px;border:6px solid #dbeafe;border-top-color:var(--blue2);border-radius:50%;margin:0 auto 14px;animation:armaSpin .8s linear infinite}.arma-loader-box h2{font-size:17px;margin:0 0 7px;font-weight:950}.arma-loader-box p{font-size:11px;margin:0;color:var(--muted);font-weight:850;line-height:1.35}@keyframes armaSpin{to{transform:rotate(360deg)}}
 .modal-back{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;z-index:200}.modal-back.show{display:flex}.modal{background:#fff;border-radius:22px;box-shadow:0 30px 60px rgba(0,0,0,.28);width:min(780px,94vw);max-height:86vh;overflow:auto;padding:20px;border:1px solid var(--line)}.modal h2{margin:0 0 12px;color:var(--navy)}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px;flex-wrap:wrap}
 .login-wall{min-height:260px;display:grid;place-items:center;text-align:center}.login-wall h2{color:var(--navy);margin:0 0 8px}.login-wall p{color:var(--muted);font-weight:850;max-width:680px}.footer{text-align:center;margin-top:14px}.footer-card{display:flex;align-items:center;justify-content:center;gap:10px;min-height:38px;padding:9px 18px;border-radius:16px;background:linear-gradient(135deg,#001f4d 0%,#003b86 54%,#004b9b 100%);color:#eaf4ff;font-size:12px;font-weight:850;box-shadow:var(--shadow)}.footer-sep{color:#9dffbf;font-weight:950}
 @media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}}@media(max-width:700px){.action-grid,.filters,.form-grid{grid-template-columns:1fr}.main{padding:12px}.logo-pelex{height:58px}.logo-arma{height:64px}}
   </style>
 </head>
 <body>
+<div id='armaLoader' class='arma-loader hidden'>
+  <div class='arma-loader-box'>
+    <div class='arma-spinner'></div>
+    <h2 id='armaLoaderText'>CARGANDO...</h2>
+    <p>ARMA ESTA CONSULTANDO DATOS EN LINEA. ESPERE UN MOMENTO.</p>
+  </div>
+</div>
 <header class="top-global">
   <div class="top-white">
     <div class="brand-row">
@@ -138,16 +146,27 @@ function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(ch){retu
 function normalizePerms(p){let out={};p=p||{};Object.keys(p).forEach(k=>out[String(k).toUpperCase()]=p[k]===true||String(p[k]).toUpperCase()==='SI');return out;}
 function isSuperAdmin(){let p=normalizePerms(armaSession.permissions);return String(armaSession.user||'').toUpperCase()==='ARDAN'||String(armaSession.user||'').toUpperCase()==='ARMA'||String(armaSession.nivel||'').toUpperCase()==='SUPER_ADMIN'||p.__SUPER_ADMIN__===true||p.ALL===true;}
 function hasPerm(k){let p=normalizePerms(armaSession.permissions);return isSuperAdmin()||p[String(k).toUpperCase()]===true||String(armaSession.nivel||'').toUpperCase()==='ADMIN';}
-async function api(action,payload){
+let armaLoaderCount=0;
+function loaderMsg(action){let a=String(action||'').toUpperCase();if(a.indexOf('TURNO')>=0)return 'CARGANDO TURNOS...';if(a.indexOf('NOVEDAD')>=0)return 'PROCESANDO NOVEDAD...';if(a.indexOf('BATCH')>=0||a.indexOf('SAVE')>=0)return 'GUARDANDO PROGRAMACION...';if(a.indexOf('SESSION')>=0)return 'VALIDANDO SESION...';return 'CONSULTANDO ARMA...';}
+function showArmaLoader(msg){armaLoaderCount++;let o=document.getElementById('armaLoader');let t=document.getElementById('armaLoaderText');if(t)t.textContent=msg||'CARGANDO...';if(o)o.classList.remove('hidden');}
+function hideArmaLoader(){armaLoaderCount=Math.max(0,armaLoaderCount-1);if(armaLoaderCount===0){let o=document.getElementById('armaLoader');if(o)o.classList.add('hidden');}}
+function readSessionCache(){try{let raw=localStorage.getItem('ARMA_SESSION_CACHE')||'';if(!raw)return null;let s=JSON.parse(raw);if(!s||!s.token)return null;if(Date.now()-Number(s.ts||0)>10*60*1000)return null;return s;}catch(e){return null;}}
+function writeSessionCache(){try{if(!armaSession||!armaSession.token)return;localStorage.setItem('ARMA_SESSION_CACHE',JSON.stringify({user:armaSession.user||'',nombre:armaSession.nombre||'',nivel:armaSession.nivel||'',token:armaSession.token||'',permissions:armaSession.permissions||{},ts:Date.now(),source:'TURNOS'}));}catch(e){}}
+function setSessionData(data,token){armaSession={user:data.user||'',nombre:data.nombre||data.user||'',nivel:data.nivel||'',permissions:data.permissions||{},token:token||data.token||armaSession.token||''};if(armaSession.token)localStorage.setItem('ARMA_TOKEN',armaSession.token);writeSessionCache();document.getElementById('userPill').textContent=(armaSession.nombre||armaSession.user)+' // '+armaSession.nivel;}
+async function startTurnosApp(){document.getElementById('loginWall').classList.add('hidden');document.getElementById('appArea').classList.remove('hidden');document.getElementById('btnNewTurno').classList.toggle('disabled',!hasPerm('BTN_TURNOS_CREAR_TURNO'));document.getElementById('btnNovedad').classList.toggle('disabled',!hasPerm('BTN_TURNOS_REPORTAR_NOVEDAD'));initDates();await loadTurnos();loadNovedades();}
+async function api(action,payload,msg){
   payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';
-  const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
-  const txt=await res.text();
-  try{return JSON.parse(txt);}
-  catch(e){throw new Error('RESPUESTA_NO_JSON '+res.status+' '+txt.slice(0,240));}
+  showArmaLoader(msg||loaderMsg(action));
+  try{
+    const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+    const txt=await res.text();
+    try{return JSON.parse(txt);}
+    catch(e){throw new Error('RESPUESTA_NO_JSON '+res.status+' '+txt.slice(0,240));}
+  }finally{hideArmaLoader();}
 }
 function setStatus(id,txt){let el=document.getElementById(id);if(el)el.textContent=txt;}
-function showLoginWall(){document.getElementById('loginWall').classList.remove('hidden');document.getElementById('appArea').classList.add('hidden');document.getElementById('userPill').textContent='SESION NO VALIDADA';}
-async function validateSession(){let token=localStorage.getItem('ARMA_TOKEN')||'';if(!token){showLoginWall();return;}try{armaSession.token=token;let data=await api('validateSession',{token:token});if(!data.ok){showLoginWall();return;}armaSession={user:data.user,nombre:data.nombre||data.user,nivel:data.nivel,permissions:data.permissions||{},token:token};document.getElementById('userPill').textContent=(armaSession.nombre||armaSession.user)+' // '+armaSession.nivel;document.getElementById('loginWall').classList.add('hidden');document.getElementById('appArea').classList.remove('hidden');document.getElementById('btnNewTurno').classList.toggle('disabled',!hasPerm('BTN_TURNOS_CREAR_TURNO'));document.getElementById('btnNovedad').classList.toggle('disabled',!hasPerm('BTN_TURNOS_REPORTAR_NOVEDAD'));initDates();await loadTurnos();loadNovedades();}catch(e){showLoginWall();}}
+function showLoginWall(){armaLoaderCount=0;hideArmaLoader();document.getElementById('loginWall').classList.remove('hidden');document.getElementById('appArea').classList.add('hidden');document.getElementById('userPill').textContent='SESION NO VALIDADA';}
+async function validateSession(){let token=localStorage.getItem('ARMA_TOKEN')||'';if(!token){showLoginWall();return;}try{let cached=readSessionCache();if(cached&&cached.token===token){setSessionData(cached,token);await startTurnosApp();return;}let data=await api('validateSession',{token:token},'VALIDANDO SESION...');if(!data.ok){showLoginWall();return;}setSessionData(data,token);await startTurnosApp();}catch(e){showLoginWall();}}
 function initDates(){
   let now=new Date();
   let first=new Date(now.getFullYear(),now.getMonth(),1);
