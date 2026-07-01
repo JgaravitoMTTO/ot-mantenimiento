@@ -155,7 +155,7 @@ tr:hover{background:#d9ecff;cursor:pointer}
         <input id="fBuscar" placeholder="BUSCAR POR NOMBRE, ID, CARGO, PLANTA O AREA">
         <input id="fPlanta" placeholder="PLANTA">
         <input id="fArea" placeholder="AREA">
-        <select id="fEstado"><option value="">ESTADO</option><option>ACTIVO</option><option>INACTIVO</option><option>RETIRADO</option></select>
+        <select id="fEstado"><option value="">ESTADO</option><option selected>ACTIVO</option><option>INACTIVO</option><option>RETIRADO</option></select>
         <button class="btn" type="button" onclick="loadList()">BUSCAR</button>
       </div>
       <div class="table-wrap"><table><thead><tr><th>ID</th><th>NOMBRE</th><th>CARGO</th><th>PLANTA</th><th>AREA</th><th>TURNO</th><th>ESTADO</th><th>CELULAR</th><th>CORREO</th></tr></thead><tbody id="personalRows"><tr><td colspan="9">SIN DATOS CARGADOS</td></tr></tbody></table></div>
@@ -179,7 +179,7 @@ tr:hover{background:#d9ecff;cursor:pointer}
       </div>
     </section>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-01 14:54:38</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-01 15:13:17</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -244,7 +244,7 @@ function readSessionCache(){try{let raw=localStorage.getItem("ARMA_SESSION_CACHE
 function writeSessionCache(){try{if(!armaSession||!armaSession.token)return;localStorage.setItem("ARMA_SESSION_CACHE",JSON.stringify({user:armaSession.user||"",nombre:armaSession.nombre||"",nivel:armaSession.nivel||"",token:armaSession.token||"",permissions:armaSession.permissions||{},ts:Date.now(),source:"PERSONAL"}));}catch(e){}}
 function setSessionData(data,token){armaSession={user:data.user||"",nombre:data.nombre||data.user||"",nivel:data.nivel||"",permissions:data.permissions||{},token:token||data.token||armaSession.token||""};if(armaSession.token)localStorage.setItem("ARMA_TOKEN",armaSession.token);writeSessionCache();document.getElementById("userPill").textContent=(armaSession.nombre||armaSession.user)+" // "+armaSession.nivel;}
 async function api(action,payload,msg){payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem("ARMA_TOKEN")||"";showArmaLoader(msg||loaderMsg(action));try{const res=await fetch(ARMA_API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});return await res.json();}finally{hideArmaLoader();}}
-function startPersonalApp(){document.getElementById("loginWall").classList.add("hidden");document.getElementById("appArea").classList.remove("hidden");applyPersonalPermissions();renderForm({},"VIEW",false,"VIEW");if(hasPerm("BTN_PERSONAL_VER")){loadList();}else{setStatus("listStatus","SIN PERMISO PARA LISTA GENERAL");}if(hasPerm("BTN_PERSONAL_MIS_DATOS")||hasPerm("BTN_PERSONAL")){loadMine();}}
+function startPersonalApp(){document.getElementById("loginWall").classList.add("hidden");document.getElementById("appArea").classList.remove("hidden");let estado=document.getElementById("fEstado");if(estado&&!estado.value){estado.value="ACTIVO";}applyPersonalPermissions();renderForm({},"VIEW",false,"VIEW");if(hasPerm("BTN_PERSONAL_VER")){loadList();}else{setStatus("listStatus","SIN PERMISO PARA LISTA GENERAL");}if(hasPerm("BTN_PERSONAL_MIS_DATOS")||hasPerm("BTN_PERSONAL")){loadMine();}}
 function armaPersonalPersistToken(){try{if(armaSession&&armaSession.token)localStorage.setItem("ARMA_TOKEN",armaSession.token);}catch(err){}}
 function armaMainStorageIsFresh(maxAgeMs){try{var raw=localStorage.getItem("ARMA_MAIN_ACTIVE")||"";if(!raw)return false;var data=JSON.parse(raw);if(!data||!data.ts)return false;return (Date.now()-Number(data.ts)) <= (maxAgeMs||3500);}catch(err){return false;}}
 function armaAskMainIsActive(){return new Promise(function(resolve){var resolved=false;var bc=null;function finish(active){if(resolved)return;resolved=true;try{if(bc)bc.close();}catch(err){}resolve(!!active);}try{if("BroadcastChannel" in window){bc=new BroadcastChannel("ARMA_CONTROL_CHANNEL");bc.onmessage=function(ev){var msg=ev.data||{};if(msg.type==="MAIN_ACTIVE")finish(true);};bc.postMessage({type:"FOCUS_MAIN",from:location.href,ts:Date.now()});}}catch(err){}try{localStorage.setItem("ARMA_REQUEST_MAIN_FOCUS",String(Date.now()));}catch(err){}if(armaMainStorageIsFresh(3500))setTimeout(function(){finish(true);},120);setTimeout(function(){finish(false);},650);});}
