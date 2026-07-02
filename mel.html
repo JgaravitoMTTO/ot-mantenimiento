@@ -26,14 +26,14 @@ body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);
 .title-box h1{margin:0;font-size:28px;letter-spacing:.4px;color:#002f67}
 .title-box p{margin:5px 0 10px;font-size:11px;color:#50627a;font-weight:800}
 .user-pill{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 14px;font-size:12px;font-weight:900;box-shadow:0 8px 20px rgba(0,0,0,.07)}
-.main{padding:18px 22px 22px}
-.hero{background:linear-gradient(135deg,#003b7a,#0076d7);border-radius:18px;color:#fff;padding:22px 26px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.main{padding:10px 22px 18px}
+.hero{background:linear-gradient(135deg,#003b7a,#0076d7);border-radius:18px;color:#fff;padding:18px 26px;box-shadow:var(--shadow);position:relative;overflow:hidden}
 .hero:after{content:"MEL";position:absolute;right:24px;bottom:-18px;font-size:64px;font-weight:1000;opacity:.08;letter-spacing:8px}
 .hero .tag{display:inline-block;background:#045; border:1px solid rgba(255,255,255,.35);padding:7px 14px;border-radius:999px;font-size:11px;color:#7fffb0;font-weight:900;margin-bottom:13px}
-.hero h2{font-size:30px;margin:0 0 7px}
+.hero h2{font-size:30px;margin:0 0 5px}
 .hero p{margin:0;font-size:12px;font-weight:900;line-height:1.5}
-.action-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}
-.action-card{background:#fff;border-radius:16px;min-height:92px;padding:17px 18px;box-shadow:var(--shadow);border-left:5px solid var(--blue2);cursor:pointer;display:flex;align-items:center;gap:14px;transition:.18s}
+.action-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:10px 0}
+.action-card{background:#fff;border-radius:16px;min-height:70px;padding:12px 16px;box-shadow:var(--shadow);border-left:5px solid var(--blue2);cursor:pointer;display:flex;align-items:center;gap:14px;transition:.18s}
 .action-card:hover{transform:translateY(-2px)}
 .action-card.green{border-left-color:var(--green)}
 .action-card.disabled{opacity:.44;filter:grayscale(1);cursor:not-allowed}
@@ -41,8 +41,8 @@ body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);
 .home-icon img{width:31px;height:31px;object-fit:contain}
 .action-card strong{display:block;font-size:15px;margin-bottom:5px}
 .action-card span{display:block;font-size:10px;line-height:1.35;color:#60708a;font-weight:900}
-.workspace{display:grid;grid-template-columns:430px minmax(0,1fr);gap:16px;align-items:start}
-.panel{background:#fff;border-radius:16px;box-shadow:var(--shadow);border:1px solid #d8e6f5;padding:16px}
+.workspace{display:grid;grid-template-columns:430px minmax(0,1fr);gap:14px;align-items:start}
+.panel{background:#fff;border-radius:16px;box-shadow:var(--shadow);border:1px solid #d8e6f5;padding:14px}
 .panel-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .panel-title h3{margin:0;font-size:18px}
 .status-small{font-size:11px;color:#5a6a80;font-weight:900}
@@ -89,11 +89,12 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
 /* === MEL v3: tarjeta superior independiente, foto ajustada y arbol desplegable === */
 /* === MEL v4: banner compacto, filtros ocultos y tarjeta superior full-width === */
 /* === MEL v5: arbol autoalto, iconos +/- y foto completa sin recorte === */
+/* === MEL v6: espacios compactos, tarjeta superior sin rotulos y arbol ordenado por CODIGO_TAG === */
 .hero .tag{display:none !important}
 .workspace>aside.panel .filters{display:none !important}
 .workspace{grid-template-columns:minmax(390px,460px) minmax(0,1fr);align-items:start}
-.asset-summary-panel{background:#fff;border-radius:18px;box-shadow:var(--shadow);border:1px solid #d8e6f5;padding:14px;margin:0 0 16px}
-.action-row{position:sticky;top:112px;z-index:38;background:rgba(238,243,249,.96);padding:10px 0;margin:0 0 18px;backdrop-filter:blur(7px);border-bottom:1px solid rgba(207,224,242,.75)}
+.asset-summary-panel{background:#fff;border-radius:18px;box-shadow:var(--shadow);border:1px solid #d8e6f5;padding:10px;margin:0 0 12px}
+.action-row{position:sticky;top:112px;z-index:38;background:rgba(238,243,249,.96);padding:6px 0;margin:0 0 10px;backdrop-filter:blur(7px);border-bottom:1px solid rgba(207,224,242,.75)}
 .workspace{grid-template-columns:minmax(390px,460px) minmax(0,1fr);align-items:start}
 .workspace>aside.panel{position:static;top:auto;max-height:none;display:flex;flex-direction:column;overflow:visible}
 .workspace>section.panel{max-height:none;overflow:visible;scroll-behavior:smooth}
@@ -109,7 +110,7 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
 .tree-row .name{font-weight:1000;font-size:12px;color:#002f67;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tree-row .meta{font-size:10px;color:#60708a;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .asset-node{display:none}
-.detail-head{position:relative;top:auto;z-index:1;display:grid;grid-template-columns:minmax(360px,460px) minmax(0,1fr) auto;align-items:stretch;background:#f8fbff;border:1px solid #dce9f7;border-radius:16px;padding:14px;margin:0;box-shadow:none;overflow:hidden}
+.detail-head{position:relative;top:auto;z-index:1;display:grid;grid-template-columns:minmax(360px,460px) minmax(0,1fr) auto;align-items:stretch;background:#f8fbff;border:1px solid #dce9f7;border-radius:16px;padding:10px;margin:0;box-shadow:none;overflow:hidden}
 .photo-box{width:100%;aspect-ratio:16/9;height:auto;min-width:320px;border-radius:17px;background:#fff;border:1px solid #dce9f7;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.75)}
 .photo-box img{width:100%;height:100%;object-fit:contain;object-position:center;display:block;background:#fff}
 .selected-name{font-size:34px;font-weight:1000;color:#003b7a;line-height:1.05;letter-spacing:.2px}
@@ -120,6 +121,16 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
 .detail-text .photo-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
 @media(max-width:1100px){.workspace{grid-template-columns:1fr}.workspace>aside.panel,.workspace>section.panel{position:static;max-height:none;overflow:visible}.tree{min-height:0;max-height:none;overflow:visible}.detail-head{position:relative;top:auto;grid-template-columns:260px 1fr auto}.photo-box{min-width:260px}.selected-name{font-size:27px}.action-row{top:96px}}
 @media(max-width:700px){.action-row{position:static}.detail-head{position:relative;grid-template-columns:1fr}.photo-box{min-width:0}.selected-name{font-size:24px}.tree{min-height:0;max-height:none;overflow:visible}.workspace{display:block}.workspace>aside.panel{margin-bottom:14px}.detail-head .btn{width:100%}}
+.asset-summary-panel>.panel-title{display:none !important}
+.asset-summary-panel .status-small{display:none !important}
+.action-card{min-height:66px !important;padding:10px 16px !important}
+.home-icon{width:40px;height:40px;border-radius:12px}
+.home-icon img{width:28px;height:28px}
+.action-card strong{font-size:14px;margin-bottom:3px}
+.action-card span{font-size:9.5px;line-height:1.25}
+.main{padding-top:9px !important}
+.hero{margin:0 0 8px !important}
+.form-section{margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -158,9 +169,9 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
   </section>
 
   <section class="asset-summary-panel">
-    <div class="panel-title">
-      <h3>ACTIVO SELECCIONADO</h3>
-      <span id="editStatus" class="status-small">SIN ACTIVO SELECCIONADO</span>
+    <div class="panel-title" style="display:none">
+      <h3></h3>
+      <span id="editStatus" class="status-small"></span>
     </div>
     <div class="detail-head">
       <div class="photo-box"><img id="assetPhoto" alt="FOTO DEL ACTIVO" src="https://drive.google.com/thumbnail?id=1jMGf3MQmWRTkoEuTcYka31pYpTX9RGxG&sz=w1000"></div>
@@ -293,7 +304,7 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-02 15:26:24</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-02 15:44:08</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -450,7 +461,7 @@ function selectAsset(row) {
   creatingNew = false;
   setForm(row);
   renderTree();
-  document.getElementById("editStatus").textContent = hasPerm("BTN_MEL_EDITAR") ? "EDICION HABILITADA" : "SOLO CONSULTA";
+  document.getElementById("editStatus").textContent = "";
 }
 function setForm(row) {
   document.querySelectorAll("[data-field]").forEach(function(el) {
@@ -474,7 +485,7 @@ function newAsset() {
   creatingNew = true;
   selectedAsset = null;
   setForm({ESTADO_ACTIVO:"ACTIVO", FECHA_DE_ALTA:new Date().toISOString().slice(0,10), ACTIVO_MANTENIBLE:"NO", ADMITE_OT:"NO", ADMITE_LECTURAS:"NO", ADMITE_HOJA_VIDA:"NO"});
-  document.getElementById("editStatus").textContent = "CREACION DE ACTIVO";
+  document.getElementById("editStatus").textContent = "";
   renderTree();
 }
 async function saveAsset() {
@@ -542,6 +553,7 @@ const MEL_DEFAULT_PHOTO = 'https://drive.google.com/thumbnail?id=1jMGf3MQmWRTkoE
 let melTreeOpen = new Set();
 function melAssetKey(r){ return String((r && (r.ID_ACTIVO || r.CODIGO_TAG)) || '').trim(); }
 function melParentKey(r){ return String((r && (r.PADRE || r.ID_PADRE || r.PADRE_ID || r.ACTIVO_PADRE)) || '').trim(); }
+function melSortKey(r){ return String((r && (r.CODIGO_TAG || r.ID_ACTIVO || r.NOMBRE)) || '').trim().toUpperCase(); }
 function melImageUrl(v){
   const s = String(v || '').trim();
   if (!s) return MEL_DEFAULT_PHOTO;
@@ -564,8 +576,8 @@ function renderTree() {
     if(pk && byKey[pk] && melAssetKey(byKey[pk]) !== k){ const realPk = melAssetKey(byKey[pk]); if(!children[realPk]) children[realPk] = []; children[realPk].push(r); }
     else { roots.push(r); }
   });
-  Object.keys(children).forEach(function(k){ children[k].sort(function(a,b){ return String(a.NOMBRE||a.CODIGO_TAG||'').localeCompare(String(b.NOMBRE||b.CODIGO_TAG||'')); }); });
-  roots.sort(function(a,b){ return String(a.NOMBRE||a.CODIGO_TAG||'').localeCompare(String(b.NOMBRE||b.CODIGO_TAG||'')); });
+  Object.keys(children).forEach(function(k){ children[k].sort(function(a,b){ return melSortKey(a).localeCompare(melSortKey(b), undefined, {numeric:true, sensitivity:'base'}); }); });
+  roots.sort(function(a,b){ return melSortKey(a).localeCompare(melSortKey(b), undefined, {numeric:true, sensitivity:'base'}); });
   if (melTreeOpen.size === 0) roots.forEach(function(r){ const k = melAssetKey(r); if(k) melTreeOpen.add(k); });
   function nodeHtml(r, depth){
     const k = melAssetKey(r); const ch = children[k] || []; const open = melTreeOpen.has(k);
