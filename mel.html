@@ -86,6 +86,31 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
 .toast.show{display:block}
 @media(max-width:1100px){.workspace{grid-template-columns:1fr}.action-row{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.top-global{height:auto;align-items:flex-start}.brand img.pelex{height:42px}.brand img.arma{height:44px}.title-box h1{font-size:20px}.action-row{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.grid .span2,.grid .span4{grid-column:1/-1}}
+/* === MEL v2: foto protagonista, cabecera fija y arbol desplegable === */
+.action-row{position:sticky;top:112px;z-index:38;background:rgba(238,243,249,.96);padding:10px 0;margin:0 0 18px;backdrop-filter:blur(7px);border-bottom:1px solid rgba(207,224,242,.75)}
+.workspace{grid-template-columns:minmax(390px,460px) minmax(0,1fr);align-items:start}
+.workspace>aside.panel{position:sticky;top:220px;max-height:calc(100vh - 238px);display:flex;flex-direction:column;overflow:hidden}
+.workspace>section.panel{max-height:calc(100vh - 238px);overflow:auto;scroll-behavior:smooth}
+.workspace>aside.panel .filters{flex:0 0 auto}
+.tree{flex:1;max-height:none;min-height:620px;overflow:auto;border:1px solid #dce9f7;border-radius:12px;background:#f8fbff;padding:6px}
+.tree-node{margin:0 0 2px 0}
+.tree-row{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:6px;align-items:center;padding:7px 8px;border-radius:10px;border:1px solid transparent;cursor:pointer;transition:.15s}
+.tree-row:hover{background:#eaf6ff;border-color:#c7e4ff}
+.tree-row.selected{background:#dcfce7;border-color:#22c55e;box-shadow:0 0 0 2px rgba(34,197,94,.18)}
+.tree-toggle{width:22px;height:22px;border:1px solid #b7cce5;background:#fff;border-radius:7px;font-weight:1000;color:#003b7a;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.tree-spacer{width:22px;height:22px;display:block}
+.tree-children{margin-left:18px;border-left:1px dotted #9db7d5;padding-left:7px}
+.tree-row .name{font-weight:1000;font-size:12px;color:#002f67;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tree-row .meta{font-size:10px;color:#60708a;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.asset-node{display:none}
+.detail-head{position:sticky;top:0;z-index:26;grid-template-columns:minmax(260px,340px) minmax(0,1fr) auto;align-items:stretch;background:rgba(248,251,255,.98);backdrop-filter:blur(8px);box-shadow:0 12px 28px rgba(0,43,92,.10)}
+.photo-box{width:100%;height:250px;min-width:260px;border-radius:17px;background:#eaf1f8;border:1px solid #dce9f7;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.75)}
+.photo-box img{width:100%;height:100%;object-fit:cover}
+.selected-name{font-size:34px;font-weight:1000;color:#003b7a;line-height:1.05;letter-spacing:.2px}
+.selected-sub{font-size:12px;color:#60708a;font-weight:900;margin-top:8px;line-height:1.35}
+#photoFile{max-width:520px;background:#fff}
+@media(max-width:1100px){.workspace{grid-template-columns:1fr}.workspace>aside.panel,.workspace>section.panel{position:static;max-height:none;overflow:visible}.tree{min-height:360px;max-height:460px}.detail-head{position:sticky;top:0;grid-template-columns:220px 1fr auto}.photo-box{height:190px;min-width:220px}.selected-name{font-size:27px}.action-row{top:96px}}
+@media(max-width:700px){.action-row{position:static}.detail-head{position:static;grid-template-columns:1fr}.photo-box{height:240px;min-width:0}.selected-name{font-size:24px}.tree{min-height:280px;max-height:380px}.workspace{display:block}.workspace>aside.panel{margin-bottom:14px}}
 </style>
 </head>
 <body>
@@ -254,7 +279,7 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-02 14:59:36</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-02 14:16:44</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -497,6 +522,68 @@ document.getElementById("btnUploadPhoto").addEventListener("click", uploadPhoto)
 ["filterQ","filterEstado","filterNivel","filterPlanta","filterArea"].forEach(function(id) {
   document.getElementById(id).addEventListener("keydown", function(e) { if (e.key === "Enter") loadMEL(); });
 });
+// === MEL v2: imagen por defecto, TreeView real y ficha fija ===
+const MEL_DEFAULT_PHOTO = 'https://drive.google.com/thumbnail?id=1jMGf3MQmWRTkoEuTcYka31pYpTX9RGxG&sz=w1000';
+let melTreeOpen = new Set();
+function melAssetKey(r){ return String((r && (r.ID_ACTIVO || r.CODIGO_TAG)) || '').trim(); }
+function melParentKey(r){ return String((r && (r.PADRE || r.ID_PADRE || r.PADRE_ID || r.ACTIVO_PADRE)) || '').trim(); }
+function melImageUrl(v){
+  const s = String(v || '').trim();
+  if (!s) return MEL_DEFAULT_PHOTO;
+  let m = s.match(/\/file\/d\/([^\/]+)/) || s.match(/[?&]id=([^&]+)/);
+  if (m && m[1]) return 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(m[1]) + '&sz=w1000';
+  return s;
+}
+function renderTree() {
+  const box = document.getElementById('treeBox');
+  if (!melRows.length) {
+    box.innerHTML = '<div class="tree-row"><span class="tree-spacer"></span><div><div class="name">SIN ACTIVOS CARGADOS</div><div class="meta">EJECUTE SETUP MEL Y CARGUE DATOS.</div></div></div>';
+    return;
+  }
+  const byKey = {};
+  melRows.forEach(function(r){ const k = melAssetKey(r); if(k){ byKey[k] = r; if(r.CODIGO_TAG) byKey[String(r.CODIGO_TAG).trim()] = r; }});
+  const children = {}; const roots = [];
+  melRows.forEach(function(r){
+    const k = melAssetKey(r); if(!k) return;
+    const pk = melParentKey(r);
+    if(pk && byKey[pk] && melAssetKey(byKey[pk]) !== k){ const realPk = melAssetKey(byKey[pk]); if(!children[realPk]) children[realPk] = []; children[realPk].push(r); }
+    else { roots.push(r); }
+  });
+  Object.keys(children).forEach(function(k){ children[k].sort(function(a,b){ return String(a.NOMBRE||a.CODIGO_TAG||'').localeCompare(String(b.NOMBRE||b.CODIGO_TAG||'')); }); });
+  roots.sort(function(a,b){ return String(a.NOMBRE||a.CODIGO_TAG||'').localeCompare(String(b.NOMBRE||b.CODIGO_TAG||'')); });
+  if (melTreeOpen.size === 0) roots.forEach(function(r){ const k = melAssetKey(r); if(k) melTreeOpen.add(k); });
+  function nodeHtml(r, depth){
+    const k = melAssetKey(r); const ch = children[k] || []; const open = melTreeOpen.has(k);
+    const selected = selectedAsset && melAssetKey(selectedAsset) === k ? ' selected' : '';
+    const badge = r.ADMITE_OT === 'SI' ? '<span class="badge green">OT</span>' : '<span class="badge gray">NODO</span>';
+    const toggle = ch.length ? '<button type="button" class="tree-toggle" data-toggle="'+esc(k)+'">'+(open?'?':'?')+'</button>' : '<span class="tree-spacer"></span>';
+    let html = '<div class="tree-node">' +
+      '<div class="tree-row'+selected+'" data-id="'+esc(k)+'" style="padding-left:'+(6 + Math.min(depth,9)*8)+'px">' + toggle +
+      '<div><div class="name">'+esc(r.CODIGO_TAG || r.ID_ACTIVO)+' // '+esc(r.NOMBRE)+'</div>' +
+      '<div class="meta">'+esc(r.NIVEL_DE_JERARQUIA || '')+' // '+esc(r.RUTA_NOMBRE || r.PADRE || '')+'</div></div>' + badge + '</div>';
+    if(ch.length && open){ html += '<div class="tree-children">' + ch.map(function(x){ return nodeHtml(x, depth+1); }).join('') + '</div>'; }
+    return html + '</div>';
+  }
+  box.innerHTML = roots.map(function(r){ return nodeHtml(r, 0); }).join('');
+  box.querySelectorAll('[data-toggle]').forEach(function(btn){
+    btn.addEventListener('click', function(e){ e.stopPropagation(); const k=this.getAttribute('data-toggle'); if(melTreeOpen.has(k)) melTreeOpen.delete(k); else melTreeOpen.add(k); renderTree(); });
+  });
+  box.querySelectorAll('[data-id]').forEach(function(el){
+    el.addEventListener('click', function(){ const id=this.getAttribute('data-id'); const row=melRows.find(x => melAssetKey(x) === id || String(x.CODIGO_TAG||'').trim() === id); if(row) selectAsset(row); });
+  });
+}
+function setForm(row) {
+  document.querySelectorAll('[data-field]').forEach(function(el) {
+    const k = el.getAttribute('data-field');
+    el.value = row && row[k] != null ? row[k] : '';
+  });
+  const nm = row && row.NOMBRE ? row.NOMBRE : 'NO_ASSET';
+  document.getElementById('selectedName').textContent = nm;
+  document.getElementById('selectedSub').textContent = row ? ((row.CODIGO_TAG || row.ID_ACTIVO || '') + ' // ' + (row.NIVEL_DE_JERARQUIA || '') + ' // PADRE: ' + (row.PADRE || 'SIN PADRE')) : 'SELECCIONE UN ACTIVO DEL ARBOL O CREE UNO NUEVO.';
+  const img = document.getElementById('assetPhoto');
+  img.onerror = function(){ this.onerror = null; this.src = MEL_DEFAULT_PHOTO; };
+  img.src = melImageUrl(row && (row.DIR_FOTOGRAFIA || row.FOTO_URL || row.UBICACION_FOTOGRAFIA || row.UBICACION_FOTOGRAFICA));
+}
 init();
 </script>
 </body>
