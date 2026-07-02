@@ -480,14 +480,11 @@ async function uploadPhoto() {
   };
   reader.readAsDataURL(file);
 }
+function armaMainStorageIsFresh(maxAgeMs){try{let raw=localStorage.getItem('ARMA_MAIN_ACTIVE')||'';if(!raw)return false;let data=JSON.parse(raw);return data&&data.ts&&(Date.now()-Number(data.ts)<=maxAgeMs);}catch(e){return false;}}
+function armaAskMainIsActive(){return new Promise(resolve=>{let done=false,bc=null;function finish(v){if(done)return;done=true;try{if(bc)bc.close();}catch(e){}resolve(!!v);}try{if('BroadcastChannel' in window){bc=new BroadcastChannel('ARMA_CONTROL_CHANNEL');bc.onmessage=ev=>{let msg=ev.data||{};if(msg.type==='MAIN_ACTIVE')finish(true);};bc.postMessage({type:'FOCUS_MAIN',from:location.href,ts:Date.now()});}}catch(e){}try{localStorage.setItem('ARMA_REQUEST_MAIN_FOCUS',String(Date.now()));}catch(e){}if(armaMainStorageIsFresh(3500))setTimeout(()=>finish(true),120);setTimeout(()=>finish(false),650);});}
 function smartHome() {
-  try {
-    if (window.opener && !window.opener.closed) {
-      window.opener.postMessage({type:"ARMA_MAIN_ACTIVE"}, "*");
-      window.focus();
-    }
-  } catch(e) {}
-  window.location.href = "main.html";
+  try{ if(armaSession&&armaSession.token)localStorage.setItem('ARMA_TOKEN',armaSession.token); }catch(e){}
+  armaAskMainIsActive().then(active=>{ if(active){ try{if(window.opener&&!window.opener.closed)window.opener.focus();}catch(e){} try{window.close();}catch(e){} setTimeout(()=>{if(!window.closed)toast('MAIN YA ESTA ABIERTO. CIERRE ESTA PESTANA MANUALMENTE.');},250); } else { window.location.href='main.html'; } });
 }
 document.getElementById("btnHome").addEventListener("click", smartHome);
 document.getElementById("btnReload").addEventListener("click", loadMEL);
