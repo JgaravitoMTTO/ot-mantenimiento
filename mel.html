@@ -27,10 +27,10 @@ body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);
 .title-box p{margin:5px 0 10px;font-size:11px;color:#50627a;font-weight:800}
 .user-pill{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 14px;font-size:12px;font-weight:900;box-shadow:0 8px 20px rgba(0,0,0,.07)}
 .main{padding:18px 22px 22px}
-.hero{background:linear-gradient(135deg,#003b7a,#0076d7);border-radius:18px;color:#fff;padding:28px 28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-.hero:after{content:"MEL";position:absolute;right:24px;bottom:-16px;font-size:72px;font-weight:1000;opacity:.08;letter-spacing:8px}
+.hero{background:linear-gradient(135deg,#003b7a,#0076d7);border-radius:18px;color:#fff;padding:22px 26px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:after{content:"MEL";position:absolute;right:24px;bottom:-18px;font-size:64px;font-weight:1000;opacity:.08;letter-spacing:8px}
 .hero .tag{display:inline-block;background:#045; border:1px solid rgba(255,255,255,.35);padding:7px 14px;border-radius:999px;font-size:11px;color:#7fffb0;font-weight:900;margin-bottom:13px}
-.hero h2{font-size:32px;margin:0 0 8px}
+.hero h2{font-size:30px;margin:0 0 7px}
 .hero p{margin:0;font-size:12px;font-weight:900;line-height:1.5}
 .action-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}
 .action-card{background:#fff;border-radius:16px;min-height:92px;padding:17px 18px;box-shadow:var(--shadow);border-left:5px solid var(--blue2);cursor:pointer;display:flex;align-items:center;gap:14px;transition:.18s}
@@ -87,6 +87,11 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
 @media(max-width:1100px){.workspace{grid-template-columns:1fr}.action-row{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.top-global{height:auto;align-items:flex-start}.brand img.pelex{height:42px}.brand img.arma{height:44px}.title-box h1{font-size:20px}.action-row{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.grid .span2,.grid .span4{grid-column:1/-1}}
 /* === MEL v3: tarjeta superior independiente, foto ajustada y arbol desplegable === */
+/* === MEL v4: banner compacto, filtros ocultos y tarjeta superior full-width === */
+.hero .tag{display:none !important}
+.workspace>aside.panel .filters{display:none !important}
+.workspace{grid-template-columns:minmax(390px,460px) minmax(0,1fr);align-items:start}
+.asset-summary-panel{background:#fff;border-radius:18px;box-shadow:var(--shadow);border:1px solid #d8e6f5;padding:14px;margin:0 0 16px}
 .action-row{position:sticky;top:112px;z-index:38;background:rgba(238,243,249,.96);padding:10px 0;margin:0 0 18px;backdrop-filter:blur(7px);border-bottom:1px solid rgba(207,224,242,.75)}
 .workspace{grid-template-columns:minmax(390px,460px) minmax(0,1fr);align-items:start}
 .workspace>aside.panel{position:sticky;top:220px;max-height:calc(100vh - 238px);display:flex;flex-direction:column;overflow:hidden}
@@ -103,7 +108,7 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
 .tree-row .name{font-weight:1000;font-size:12px;color:#002f67;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tree-row .meta{font-size:10px;color:#60708a;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .asset-node{display:none}
-.detail-head{position:relative;top:auto;z-index:1;display:grid;grid-template-columns:minmax(320px,430px) minmax(0,1fr) auto;align-items:stretch;background:#fff;border:1px solid #dce9f7;border-radius:18px;padding:14px;margin:0 0 16px;box-shadow:var(--shadow);overflow:hidden}
+.detail-head{position:relative;top:auto;z-index:1;display:grid;grid-template-columns:minmax(360px,460px) minmax(0,1fr) auto;align-items:stretch;background:#f8fbff;border:1px solid #dce9f7;border-radius:16px;padding:14px;margin:0;box-shadow:none;overflow:hidden}
 .photo-box{width:100%;aspect-ratio:16/9;height:auto;min-width:320px;border-radius:17px;background:#eaf1f8;border:1px solid #dce9f7;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.75)}
 .photo-box img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
 .selected-name{font-size:34px;font-weight:1000;color:#003b7a;line-height:1.05;letter-spacing:.2px}
@@ -131,7 +136,6 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
 
 <main class="main">
   <section class="hero">
-    <span class="tag">ARMA DATA // MEL_ACTIVOS</span>
     <h2>MAESTRO DE EQUIPOS Y ACTIVOS</h2>
     <p>CONSULTE, CREE Y ADMINISTRE ACTIVOS DESDE UNA INTERFAZ SEGURA // DATOS EN LINEA DESDE ARMA_DATA MEDIANTE BACKEND VALIDADO.</p>
   </section>
@@ -149,6 +153,22 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
     </div>
     <div class="action-card" id="btnSaveTop">
       <div><strong>GUARDAR CAMBIOS</strong><span>REGISTRAR CREACION O ACTUALIZACION DEL ACTIVO.</span></div>
+    </div>
+  </section>
+
+  <section class="asset-summary-panel">
+    <div class="panel-title">
+      <h3>ACTIVO SELECCIONADO</h3>
+      <span id="editStatus" class="status-small">SIN ACTIVO SELECCIONADO</span>
+    </div>
+    <div class="detail-head">
+      <div class="photo-box"><img id="assetPhoto" alt="FOTO DEL ACTIVO" src="https://drive.google.com/thumbnail?id=1jMGf3MQmWRTkoEuTcYka31pYpTX9RGxG&sz=w1000"></div>
+      <div class="detail-text">
+        <div id="selectedName" class="selected-name">NO_ASSET</div>
+        <div id="selectedSub" class="selected-sub">SELECCIONE UN ACTIVO DEL ARBOL O CREE UNO NUEVO.</div>
+        <div class="photo-row"><input id="photoFile" type="file" accept="image/png,image/jpeg,image/webp"></div>
+      </div>
+      <button id="btnUploadPhoto" type="button" class="btn green">SUBIR FOTO</button>
     </div>
   </section>
 
@@ -173,18 +193,8 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
 
     <section class="panel">
       <div class="panel-title">
-        <h3>DETALLE DEL ACTIVO</h3>
-        <span id="editStatus" class="status-small">SIN ACTIVO SELECCIONADO</span>
-      </div>
-
-      <div class="detail-head">
-        <div class="photo-box"><img id="assetPhoto" alt="FOTO DEL ACTIVO" src="https://drive.google.com/thumbnail?id=1jMGf3MQmWRTkoEuTcYka31pYpTX9RGxG&sz=w1000"></div>
-        <div class="detail-text">
-          <div id="selectedName" class="selected-name">NO_ASSET</div>
-          <div id="selectedSub" class="selected-sub">SELECCIONE UN ACTIVO DEL ARBOL O CREE UNO NUEVO.</div>
-          <div class="photo-row"><input id="photoFile" type="file" accept="image/png,image/jpeg,image/webp"></div>
-        </div>
-        <button id="btnUploadPhoto" type="button" class="btn green">SUBIR FOTO</button>
+        <h3>DATOS DEL ACTIVO</h3>
+        <span class="status-small">FICHA TECNICA MEL</span>
       </div>
 
       <form id="assetForm">
@@ -282,7 +292,7 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-02 14:49:32</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-02 15:05:25</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
