@@ -131,6 +131,17 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
 .main{padding-top:9px !important}
 .hero{margin:0 0 8px !important}
 .form-section{margin-bottom:10px}
+/* === MEL v7: resumen del activo fijo bajo acciones y foto 80% === */
+.action-row{margin:0 0 4px !important;padding:5px 0 !important}
+.asset-summary-panel{position:sticky;top:190px;z-index:37;margin:0 0 9px !important;padding:8px !important;background:rgba(255,255,255,.98);backdrop-filter:blur(7px)}
+.detail-head{grid-template-columns:minmax(288px,368px) minmax(0,1fr) auto !important;gap:12px !important;padding:8px !important;border-radius:15px !important}
+.photo-box{min-width:256px !important;max-width:368px !important;aspect-ratio:16/9 !important;border-radius:15px !important}
+.selected-name{font-size:30px !important;line-height:1.02 !important}
+.selected-sub{font-size:11px !important;margin-top:6px !important}
+.detail-text .photo-row{margin-top:8px !important}
+#photoFile{max-width:450px !important;padding:8px 9px !important}
+.detail-head .btn{min-height:42px !important;padding:10px 16px !important}
+@media(max-width:1100px){.asset-summary-panel{position:static !important;top:auto !important}.detail-head{grid-template-columns:1fr !important}.photo-box{min-width:0 !important;max-width:none !important}.selected-name{font-size:26px !important}}
 </style>
 </head>
 <body>
@@ -304,7 +315,7 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-02 15:46:42</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-02 16:04:14</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
