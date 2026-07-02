@@ -142,6 +142,17 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
 #photoFile{max-width:450px !important;padding:8px 9px !important}
 .detail-head .btn{min-height:42px !important;padding:10px 16px !important}
 @media(max-width:1100px){.asset-summary-panel{position:static !important;top:auto !important}.detail-head{grid-template-columns:1fr !important}.photo-box{min-width:0 !important;max-width:none !important}.selected-name{font-size:26px !important}}
+/* === MEL v8: resumen profesional con QR, datos clave y carga de foto integrada === */
+.detail-head{grid-template-columns:minmax(288px,368px) minmax(0,1fr) 158px !important;align-items:stretch !important}
+.detail-text{justify-content:center !important;padding:4px 0 !important}
+.asset-lines{display:grid;gap:6px;margin-top:9px;font-size:12px;color:#52657d;font-weight:950;line-height:1.35}
+.asset-lines b{color:#003b7a;font-weight:1000}
+.summary-right{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:7px;min-width:150px;align-self:stretch}
+.asset-qr{width:118px;height:118px;border:1px solid #cfe0f2;border-radius:12px;background:#fff;padding:6px;object-fit:contain;box-shadow:0 8px 18px rgba(0,43,92,.08)}
+.photo-file-hidden{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+.photo-filename{width:150px;text-align:center;font-size:9.5px;color:#60708a;font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.15}
+.summary-right .btn{width:150px;min-height:38px !important;padding:9px 12px !important}
+@media(max-width:1100px){.detail-head{grid-template-columns:1fr !important}.summary-right{align-items:stretch;min-width:0}.asset-qr{align-self:center}.photo-filename,.summary-right .btn{width:100%}}
 </style>
 </head>
 <body>
@@ -188,10 +199,14 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
       <div class="photo-box"><img id="assetPhoto" alt="FOTO DEL ACTIVO" src="https://drive.google.com/thumbnail?id=1jMGf3MQmWRTkoEuTcYka31pYpTX9RGxG&sz=w1000"></div>
       <div class="detail-text">
         <div id="selectedName" class="selected-name">NO_ASSET</div>
-        <div id="selectedSub" class="selected-sub">SELECCIONE UN ACTIVO DEL ARBOL O CREE UNO NUEVO.</div>
-        <div class="photo-row"><input id="photoFile" type="file" accept="image/png,image/jpeg,image/webp"></div>
+        <div id="selectedSub" class="selected-sub asset-lines">SELECCIONE UN ACTIVO DEL ARBOL O CREE UNO NUEVO.</div>
+        <input id="photoFile" class="photo-file-hidden" type="file" accept="image/png,image/jpeg,image/webp">
       </div>
-      <button id="btnUploadPhoto" type="button" class="btn green">SUBIR FOTO</button>
+      <div class="summary-right">
+        <img id="assetQr" class="asset-qr" alt="QR DEL ACTIVO" src="">
+        <button id="btnUploadPhoto" type="button" class="btn green">SUBIR FOTO</button>
+        <div id="photoFileName" class="photo-filename">SIN ARCHIVO SELECCIONADO</div>
+      </div>
     </div>
   </section>
 
@@ -315,7 +330,7 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-02 16:04:14</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-02 16:53:44</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -539,6 +554,7 @@ async function uploadPhoto() {
     await loadMEL();
     const row = melRows.find(x => x.ID_ACTIVO === data.ID_ACTIVO);
     if (row) selectAsset(row);
+    document.getElementById("photoFileName").textContent = file.name;
   };
   reader.readAsDataURL(file);
 }
@@ -555,7 +571,9 @@ document.getElementById("btnNew").addEventListener("click", newAsset);
 document.getElementById("btnSave").addEventListener("click", saveAsset);
 document.getElementById("btnSaveTop").addEventListener("click", saveAsset);
 document.getElementById("btnCancel").addEventListener("click", function() { if (selectedAsset) setForm(selectedAsset); else setForm(null); });
-document.getElementById("btnUploadPhoto").addEventListener("click", uploadPhoto);
+function chooseMELPhoto() { document.getElementById("photoFile").click(); }
+document.getElementById("btnUploadPhoto").addEventListener("click", chooseMELPhoto);
+document.getElementById("photoFile").addEventListener("change", function(){ const f=this.files&&this.files[0]; document.getElementById("photoFileName").textContent = f ? f.name : "SIN ARCHIVO SELECCIONADO"; if(f) uploadPhoto(); });
 ["filterQ","filterEstado","filterNivel","filterPlanta","filterArea"].forEach(function(id) {
   document.getElementById(id).addEventListener("keydown", function(e) { if (e.key === "Enter") loadMEL(); });
 });
@@ -610,17 +628,41 @@ function renderTree() {
     el.addEventListener('click', function(){ const id=this.getAttribute('data-id'); const row=melRows.find(x => melAssetKey(x) === id || String(x.CODIGO_TAG||'').trim() === id); if(row) selectAsset(row); });
   });
 }
+function melClean(v){ return String(v == null ? '' : v).trim(); }
+function melSummaryText(row){
+  if(!row) return 'NO_ASSET';
+  const name = melClean(row.NOMBRE) || 'NO_ASSET';
+  const tag = melClean(row.CODIGO_TAG) || 'SIN TAG';
+  const id = melClean(row.ID_ACTIVO) || 'SIN ID';
+  const jer = melClean(row.NIVEL_DE_JERARQUIA) || 'SIN JERARQUIA';
+  const padre = melClean(row.PADRE) || 'SIN PADRE';
+  const planta = melClean(row.PLANTA) || 'SIN PLANTA';
+  return name + '\nTAG: ' + tag + ' // ID ACTIVO: ' + id + '\nJERARQUIA: ' + jer + ' // PADRE: ' + padre + '\nPLANTA: ' + planta;
+}
+function renderAssetSummary(row){
+  const name = row && row.NOMBRE ? row.NOMBRE : 'NO_ASSET';
+  const tag = row ? (melClean(row.CODIGO_TAG) || 'SIN TAG') : 'SIN TAG';
+  const id = row ? (melClean(row.ID_ACTIVO) || 'SIN ID') : 'SIN ID';
+  const jer = row ? (melClean(row.NIVEL_DE_JERARQUIA) || 'SIN JERARQUIA') : 'SIN JERARQUIA';
+  const padre = row ? (melClean(row.PADRE) || 'SIN PADRE') : 'SIN PADRE';
+  const planta = row ? (melClean(row.PLANTA) || 'SIN PLANTA') : 'SIN PLANTA';
+  document.getElementById('selectedName').textContent = name;
+  document.getElementById('selectedSub').innerHTML = row ? ('<div><b>TAG:</b> '+esc(tag)+' <b>// ID ACTIVO:</b> '+esc(id)+'</div><div><b>JERARQUIA:</b> '+esc(jer)+' <b>// PADRE:</b> '+esc(padre)+'</div><div><b>PLANTA:</b> '+esc(planta)+'</div>') : 'SELECCIONE UN ACTIVO DEL ARBOL O CREE UNO NUEVO.';
+  const qr = document.getElementById('assetQr');
+  const qtxt = row ? melSummaryText(row) : 'NO_ASSET';
+  qr.src = 'https://api.qrserver.com/v1/create-qr-code/?size=140x140&margin=8&data=' + encodeURIComponent(qtxt);
+}
 function setForm(row) {
   document.querySelectorAll('[data-field]').forEach(function(el) {
     const k = el.getAttribute('data-field');
     el.value = row && row[k] != null ? row[k] : '';
   });
-  const nm = row && row.NOMBRE ? row.NOMBRE : 'NO_ASSET';
-  document.getElementById('selectedName').textContent = nm;
-  document.getElementById('selectedSub').textContent = row ? ((row.CODIGO_TAG || row.ID_ACTIVO || '') + ' // ' + (row.NIVEL_DE_JERARQUIA || '') + ' // PADRE: ' + (row.PADRE || 'SIN PADRE')) : 'SELECCIONE UN ACTIVO DEL ARBOL O CREE UNO NUEVO.';
+  renderAssetSummary(row);
   const img = document.getElementById('assetPhoto');
   img.onerror = function(){ this.onerror = null; this.src = MEL_DEFAULT_PHOTO; };
   img.src = melImageUrl(row && (row.DIR_FOTOGRAFIA || row.FOTO_URL || row.UBICACION_FOTOGRAFIA || row.UBICACION_FOTOGRAFICA));
+  document.getElementById('photoFile').value = '';
+  document.getElementById('photoFileName').textContent = 'SIN ARCHIVO SELECCIONADO';
 }
 init();
 </script>
