@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARMA | MEL EQUIPOS</title>
+<style>
+:root {
+  --blue:#003b7a;
+  --blue2:#0076d7;
+  --green:#19c45a;
+  --ink:#002b5c;
+  --muted:#64748b;
+  --bg:#eef3f9;
+  --line:#cfe0f2;
+  --card:#ffffff;
+  --shadow:0 14px 36px rgba(0,43,92,.14);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);text-transform:uppercase}
+.top-global{height:112px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:14px 24px 12px;border-bottom:6px solid #0066c9;box-shadow:0 8px 26px rgba(0,43,92,.10);position:sticky;top:0;z-index:50}
+.brand{display:flex;align-items:center;gap:24px}
+.brand img.pelex{height:58px;object-fit:contain}
+.brand img.arma{height:60px;object-fit:contain}
+.title-box{text-align:right}
+.title-box h1{margin:0;font-size:28px;letter-spacing:.4px;color:#002f67}
+.title-box p{margin:5px 0 10px;font-size:11px;color:#50627a;font-weight:800}
+.user-pill{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 14px;font-size:12px;font-weight:900;box-shadow:0 8px 20px rgba(0,0,0,.07)}
+.main{padding:18px 22px 22px}
+.hero{background:linear-gradient(135deg,#003b7a,#0076d7);border-radius:18px;color:#fff;padding:28px 28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:after{content:"MEL";position:absolute;right:24px;bottom:-16px;font-size:72px;font-weight:1000;opacity:.08;letter-spacing:8px}
+.hero .tag{display:inline-block;background:#045; border:1px solid rgba(255,255,255,.35);padding:7px 14px;border-radius:999px;font-size:11px;color:#7fffb0;font-weight:900;margin-bottom:13px}
+.hero h2{font-size:32px;margin:0 0 8px}
+.hero p{margin:0;font-size:12px;font-weight:900;line-height:1.5}
+.action-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}
+.action-card{background:#fff;border-radius:16px;min-height:92px;padding:17px 18px;box-shadow:var(--shadow);border-left:5px solid var(--blue2);cursor:pointer;display:flex;align-items:center;gap:14px;transition:.18s}
+.action-card:hover{transform:translateY(-2px)}
+.action-card.green{border-left-color:var(--green)}
+.action-card.disabled{opacity:.44;filter:grayscale(1);cursor:not-allowed}
+.home-icon{width:45px;height:45px;border-radius:13px;background:#f2f8ff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.home-icon img{width:31px;height:31px;object-fit:contain}
+.action-card strong{display:block;font-size:15px;margin-bottom:5px}
+.action-card span{display:block;font-size:10px;line-height:1.35;color:#60708a;font-weight:900}
+.workspace{display:grid;grid-template-columns:430px minmax(0,1fr);gap:16px;align-items:start}
+.panel{background:#fff;border-radius:16px;box-shadow:var(--shadow);border:1px solid #d8e6f5;padding:16px}
+.panel-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.panel-title h3{margin:0;font-size:18px}
+.status-small{font-size:11px;color:#5a6a80;font-weight:900}
+.filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.filters .full{grid-column:1/-1}
+input,select,textarea{width:100%;border:1px solid #cfe0f2;border-radius:9px;padding:10px 11px;font-size:12px;font-weight:800;color:#002f67;background:#fff;text-transform:uppercase}
+textarea{min-height:72px;resize:vertical}
+label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:5px}
+.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:1000;color:#fff;background:linear-gradient(135deg,#0063c7,#0a8ae8);cursor:pointer;box-shadow:0 8px 18px rgba(0,80,160,.25)}
+.btn.green{background:linear-gradient(135deg,#16b84e,#27d35f)}
+.btn.gray{background:linear-gradient(135deg,#687386,#9aa3b2)}
+.btn.red{background:linear-gradient(135deg,#b42318,#ef4444)}
+.btn:disabled{opacity:.5;filter:grayscale(1);cursor:not-allowed}
+.tree{max-height:620px;overflow:auto;border:1px solid #dce9f7;border-radius:12px;background:#f8fbff}
+.asset-node{padding:9px 10px;border-bottom:1px solid #e6effa;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;cursor:pointer}
+.asset-node:hover{background:#eaf6ff}
+.asset-node.selected{background:#dcfce7;outline:2px solid #22c55e}
+.asset-node .name{font-weight:1000;font-size:12px;color:#002f67;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.asset-node .meta{font-size:10px;color:#60708a;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badge{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:#e0f2fe;color:#005b9e;font-size:9px;font-weight:1000;padding:4px 8px}
+.badge.green{background:#dcfce7;color:#087735}
+.badge.gray{background:#e5e7eb;color:#475569}
+.detail-head{display:grid;grid-template-columns:110px 1fr auto;gap:14px;align-items:center;background:#f8fbff;border:1px solid #dce9f7;border-radius:14px;padding:12px;margin-bottom:14px}
+.photo-box{width:95px;height:95px;border-radius:15px;background:#eaf1f8;border:1px solid #dce9f7;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.photo-box img{width:100%;height:100%;object-fit:cover}
+.selected-name{font-size:26px;font-weight:1000;color:#003b7a;line-height:1.1}
+.selected-sub{font-size:11px;color:#60708a;font-weight:900;margin-top:6px}
+.form-section{border:1px solid #dce9f7;border-radius:14px;padding:12px;margin-bottom:12px;background:#fbfdff}
+.form-section h4{margin:0 0 11px;font-size:15px;color:#003b7a}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.grid .span2{grid-column:span 2}
+.grid .span4{grid-column:1/-1}
+.form-actions{position:sticky;bottom:12px;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border:1px solid #dce9f7;border-radius:14px;padding:12px;display:flex;justify-content:flex-end;gap:10px;box-shadow:var(--shadow)}
+.footer{margin:18px 0 0;background:linear-gradient(135deg,#003b7a,#006bd1);color:#fff;border-radius:14px;text-align:center;font-size:11px;font-weight:1000;padding:13px}
+.loader{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;z-index:1000}
+.loader.hidden{display:none}
+.loader-card{background:#fff;border-radius:18px;padding:24px 28px;box-shadow:0 24px 60px rgba(0,0,0,.25);text-align:center;min-width:320px}
+.spinner{width:48px;height:48px;border-radius:50%;border:6px solid #dbeafe;border-top-color:#0076d7;margin:0 auto 14px;animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;right:18px;bottom:18px;background:#003b7a;color:#fff;border-radius:12px;padding:13px 16px;font-weight:900;font-size:12px;box-shadow:var(--shadow);z-index:1500;display:none;max-width:520px}
+.toast.show{display:block}
+@media(max-width:1100px){.workspace{grid-template-columns:1fr}.action-row{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.top-global{height:auto;align-items:flex-start}.brand img.pelex{height:42px}.brand img.arma{height:44px}.title-box h1{font-size:20px}.action-row{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.grid .span2,.grid .span4{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<header class="top-global">
+  <div class="brand">
+    <img class="pelex" src="logo_pelex.bmp" alt="PELEX">
+    <img class="arma" src="ARMA%20logo%202.png" alt="ARMA">
+  </div>
+  <div class="title-box">
+    <h1>GESTION DE ACTIVOS | MEL EQUIPOS</h1>
+    <p>MAESTRO DE EQUIPOS Y ACTIVOS BAJO CRITERIO ISO 14224</p>
+    <span id="userPill" class="user-pill">VALIDANDO SESION...</span>
+  </div>
+</header>
+
+<main class="main">
+  <section class="hero">
+    <span class="tag">ARMA DATA // MEL_ACTIVOS</span>
+    <h2>MAESTRO DE EQUIPOS Y ACTIVOS</h2>
+    <p>CONSULTE, CREE Y ADMINISTRE ACTIVOS DESDE UNA INTERFAZ SEGURA // DATOS EN LINEA DESDE ARMA_DATA MEDIANTE BACKEND VALIDADO.</p>
+  </section>
+
+  <section class="action-row">
+    <div class="action-card green" id="btnHome">
+      <div class="home-icon"><img src="boton-de-inicio.png" alt=""></div>
+      <div><strong>INICIO</strong><span>VOLVER A ARMA SIN PERDER LA SESION ACTIVA.</span></div>
+    </div>
+    <div class="action-card" id="btnReload">
+      <div><strong>CONSULTAR ACTIVOS</strong><span>LISTA FILTRADA SEGUN NIVEL, PLANTA, AREA O ALCANCE AUTORIZADO.</span></div>
+    </div>
+    <div class="action-card green" id="btnNew">
+      <div><strong>CREAR ACTIVO</strong><span>CREAR ACTIVOS BAJO ISO 14224 Y JERARQUIA MEL.</span></div>
+    </div>
+    <div class="action-card" id="btnSaveTop">
+      <div><strong>GUARDAR CAMBIOS</strong><span>REGISTRAR CREACION O ACTUALIZACION DEL ACTIVO.</span></div>
+    </div>
+  </section>
+
+  <section class="workspace">
+    <aside class="panel">
+      <div class="panel-title">
+        <h3>ARBOL / LISTA MEL</h3>
+        <span id="countLabel" class="status-small">0 ACTIVOS</span>
+      </div>
+      <div class="filters">
+        <div class="full"><label>Buscar</label><input id="filterQ" placeholder="BUSCAR POR ID, TAG, NOMBRE, SISTEMA O AREA"></div>
+        <div><label>Estado</label><select id="filterEstado"><option value="ACTIVO">ACTIVO</option><option value="">TODOS</option><option>INACTIVO</option><option>RETIRADO</option></select></div>
+        <div><label>Nivel</label><select id="filterNivel"><option value="">TODOS</option></select></div>
+        <div><label>Planta</label><input id="filterPlanta" placeholder="PLANTA"></div>
+        <div><label>Area</label><input id="filterArea" placeholder="AREA"></div>
+        <div class="full"><button class="btn" id="btnSearch" type="button">BUSCAR</button></div>
+      </div>
+      <div class="tree" id="treeBox">
+        <div class="asset-node"><div><div class="name">SIN DATOS CARGADOS</div><div class="meta">EJECUTE SETUP Y CARGUE MEL_ACTIVOS.</div></div></div>
+      </div>
+    </aside>
+
+    <section class="panel">
+      <div class="panel-title">
+        <h3>DETALLE DEL ACTIVO</h3>
+        <span id="editStatus" class="status-small">SIN ACTIVO SELECCIONADO</span>
+      </div>
+
+      <div class="detail-head">
+        <div class="photo-box"><img id="assetPhoto" alt="" src=""></div>
+        <div>
+          <div id="selectedName" class="selected-name">NO_ASSET</div>
+          <div id="selectedSub" class="selected-sub">SELECCIONE UN ACTIVO DEL ARBOL O CREE UNO NUEVO.</div>
+          <input id="photoFile" type="file" accept="image/png,image/jpeg,image/webp" style="margin-top:10px">
+        </div>
+        <button id="btnUploadPhoto" type="button" class="btn green">SUBIR FOTO</button>
+      </div>
+
+      <form id="assetForm">
+        <div class="form-section">
+          <h4>IDENTIFICACION DEL ACTIVO</h4>
+          <div class="grid">
+            <div><label>ID ACTIVO</label><input data-field="ID_ACTIVO" readonly></div>
+            <div><label>CODIGO / TAG</label><input data-field="CODIGO_TAG"></div>
+            <div class="span2"><label>NOMBRE</label><input data-field="NOMBRE"></div>
+            <div><label>ESTADO</label><select data-field="ESTADO_ACTIVO"><option>ACTIVO</option><option>INACTIVO</option><option>RETIRADO</option></select></div>
+            <div><label>FECHA DE ALTA</label><input type="date" data-field="FECHA_DE_ALTA"></div>
+            <div><label>CODIGO CONTABLE</label><input data-field="CODIGO_CONTABLE"></div>
+            <div><label>APROBADO POR</label><input data-field="APROBADO_POR"></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>JERARQUIA DEL ACTIVO</h4>
+          <div class="grid">
+            <div><label>NIVEL DE JERARQUIA</label><select data-field="NIVEL_DE_JERARQUIA" id="nivelSelect"></select></div>
+            <div class="span2"><label>PADRE</label><select data-field="PADRE" id="padreSelect"><option value="">SIN PADRE</option></select></div>
+            <div><label>PLANTA</label><input data-field="PLANTA"></div>
+            <div><label>AREA</label><input data-field="AREA"></div>
+            <div><label>LINEA / EQUIPO</label><input data-field="LINEA_EQUIPO"></div>
+            <div><label>SISTEMA</label><input data-field="SISTEMA"></div>
+            <div><label>SUBSISTEMA</label><input data-field="SUBSISTEMA"></div>
+            <div><label>SUBEQUIPO</label><input data-field="SUBEQUIPO"></div>
+            <div><label>COMPONENTE</label><input data-field="COMPONENTE"></div>
+            <div class="span4"><label>DETALLE UBICACION</label><input data-field="DETALLE_UBICACION"></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>CLASIFICACION ISO 14224</h4>
+          <div class="grid">
+            <div><label>CLASE ISO 14224</label><input data-field="CLASE_DE_EQUIPO_ISO_14224"></div>
+            <div><label>TIPO ISO 14224</label><input data-field="TIPO_DE_EQUIPO_ISO_14224"></div>
+            <div><label>TECNOLOGIA / PROCESO</label><input data-field="TECNOLOGIA_PROCESO"></div>
+            <div><label>FUNCION PRIMARIA</label><input data-field="FUNCION_PRIMARIA"></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>DATOS TECNICOS</h4>
+          <div class="grid">
+            <div><label>FABRICANTE</label><input data-field="FABRICANTE"></div>
+            <div><label>MODELO</label><input data-field="MODELO"></div>
+            <div><label>SERIE</label><input data-field="SERIE"></div>
+            <div><label>PROVEEDOR</label><input data-field="PROVEEDOR"></div>
+            <div><label>FECHA FABRICACION</label><input type="date" data-field="FECHA_DE_FABRICACION"></div>
+            <div><label>ANIO INSTALACION</label><input data-field="ANIO_DE_INSTALACION"></div>
+            <div><label>CAPACIDAD NOMINAL</label><input data-field="CAPACIDAD_NOMINAL"></div>
+            <div><label>UNIDAD CAPACIDAD</label><input data-field="UNIDAD_DE_CAPACIDAD"></div>
+            <div><label>POTENCIA NOMINAL</label><input data-field="POTENCIA_NOMINAL"></div>
+            <div><label>VOLTAJE PLACA</label><input data-field="VOLTAJE_PLACA"></div>
+            <div><label>REQ. AIRE</label><input data-field="REQUERIMIENTO_AIRE_COMPRIMIDO"></div>
+            <div><label>REQ. AGUA</label><input data-field="REQUERIMIENTO_AGUA"></div>
+            <div class="span4"><label>OTROS REQUERIMIENTOS</label><input data-field="OTROS_REQUERIMIENTOS"></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>CRITICIDAD / ESTRATEGIA / USO OPERATIVO</h4>
+          <div class="grid">
+            <div><label>CRITICIDAD</label><input data-field="CRITICIDAD"></div>
+            <div><label>ESTRATEGIA MTTO</label><input data-field="ESTRATEGIA_DE_MANTENIMIENTO"></div>
+            <div><label>ACTIVO MANTENIBLE</label><select data-field="ACTIVO_MANTENIBLE"><option>SI</option><option>NO</option></select></div>
+            <div><label>ADMITE OT</label><select data-field="ADMITE_OT"><option>SI</option><option>NO</option></select></div>
+            <div><label>ADMITE LECTURAS</label><select data-field="ADMITE_LECTURAS"><option>SI</option><option>NO</option></select></div>
+            <div><label>ADMITE HOJA VIDA</label><select data-field="ADMITE_HOJA_VIDA"><option>SI</option><option>NO</option></select></div>
+            <div><label>PADRINO</label><input data-field="PADRINO"></div>
+            <div><label>CODIGO DOCUMENTOS</label><input data-field="CODIGO_DOCUMENTOS"></div>
+            <div class="span4"><label>DOC TECNICOS</label><input data-field="DOC_TECNICOS"></div>
+            <div class="span4"><label>DIR FOTOGRAFIA</label><input data-field="DIR_FOTOGRAFIA" readonly></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>RUTA / NOTAS / AUDITORIA</h4>
+          <div class="grid">
+            <div class="span2"><label>RUTA CODIGO</label><input data-field="RUTA_CODIGO" readonly></div>
+            <div class="span2"><label>RUTA NOMBRE</label><input data-field="RUTA_NOMBRE" readonly></div>
+            <div class="span4"><label>NOTAS</label><textarea data-field="NOTAS"></textarea></div>
+            <div><label>FECHA CREACION</label><input data-field="FECHA_CREACION" readonly></div>
+            <div><label>FECHA ACTUALIZACION</label><input data-field="FECHA_ACTUALIZACION" readonly></div>
+            <div><label>USUARIO ACTUALIZACION</label><input data-field="USUARIO_ACTUALIZACION" readonly></div>
+          </div>
+        </div>
+      </form>
+
+      <div class="form-actions">
+        <button id="btnCancel" type="button" class="btn gray">DESCARTAR</button>
+        <button id="btnSave" type="button" class="btn green">GUARDAR ACTIVO</button>
+      </div>
+    </section>
+  </section>
+
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-02 14:59:36</div>
+</main>
+
+<div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
+<div id="toast" class="toast"></div>
+
+<script>
+const ARMA_API_URL = "https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
+const ARMA_SESSION_CACHE_KEY = "ARMA_SESSION_CACHE";
+const DEFAULT_PHOTO = "https://drive.google.com/thumbnail?id=1TWJGvCajOVMozZV9PfK2YXSQanGiSWxU&sz=w512";
+let armaSession = null;
+let melRows = [];
+let melCatalogos = {};
+let selectedAsset = null;
+let creatingNew = false;
+
+function esc(v) {
+  return String(v == null ? "" : v).replace(/[&<>"']/g, function(m) { return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[m]; });
+}
+function showLoader(msg) { document.getElementById("loaderText").textContent = msg || "CARGANDO..."; document.getElementById("loader").classList.remove("hidden"); }
+function hideLoader() { document.getElementById("loader").classList.add("hidden"); }
+function toast(msg) { const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show"); setTimeout(function(){t.classList.remove("show");}, 4200); }
+function getCachedSession() {
+  try {
+    const raw = localStorage.getItem(ARMA_SESSION_CACHE_KEY);
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    if (!obj || !obj.token) return null;
+    return obj;
+  } catch(e) { return null; }
+}
+async function api(action, payload) {
+  payload = payload || {};
+  payload.action = action;
+  if (armaSession && armaSession.token && !payload.token) payload.token = armaSession.token;
+  const res = await fetch(ARMA_API_URL, {method:"POST", body:JSON.stringify(payload)});
+  return await res.json();
+}
+function hasPerm(k) {
+  const p = (armaSession && armaSession.permissions) || {};
+  return p.ALL === true || p.__SUPER_ADMIN__ === true || p[k] === true || armaSession.nivel === "ADMIN" || armaSession.nivel === "SUPER_ADMIN";
+}
+async function init() {
+  showLoader("VALIDANDO SESION...");
+  armaSession = getCachedSession();
+  if (!armaSession || !armaSession.token) {
+    hideLoader();
+    document.getElementById("userPill").textContent = "SIN SESION // VUELVA A MAIN";
+    toast("NO HAY SESION ACTIVA. ABRA MAIN E INICIE SESION.");
+    return;
+  }
+  const val = await api("validateSession", {token:armaSession.token});
+  if (!val.ok) {
+    hideLoader();
+    localStorage.removeItem(ARMA_SESSION_CACHE_KEY);
+    document.getElementById("userPill").textContent = "SESION NO VALIDA";
+    toast("SESION NO VALIDA. REGRESE A MAIN.");
+    return;
+  }
+  armaSession = Object.assign(armaSession, val);
+  localStorage.setItem(ARMA_SESSION_CACHE_KEY, JSON.stringify(armaSession));
+  document.getElementById("userPill").textContent = (val.nombre || val.user || "") + " // " + (val.nivel || "");
+  applyPermissions();
+  await loadMEL();
+}
+function applyPermissions() {
+  const canCreate = hasPerm("BTN_MEL_CREAR");
+  const canEdit = hasPerm("BTN_MEL_EDITAR");
+  const canUpload = hasPerm("BTN_MEL_SUBIR_FOTO");
+  document.getElementById("btnNew").classList.toggle("disabled", !canCreate);
+  document.getElementById("btnSaveTop").classList.toggle("disabled", !canEdit && !canCreate);
+  document.getElementById("btnSave").disabled = !canEdit && !canCreate;
+  document.getElementById("btnUploadPhoto").disabled = !canUpload;
+}
+function currentFilters() {
+  return {
+    q: document.getElementById("filterQ").value,
+    estado: document.getElementById("filterEstado").value,
+    nivel: document.getElementById("filterNivel").value,
+    planta: document.getElementById("filterPlanta").value,
+    area: document.getElementById("filterArea").value
+  };
+}
+async function loadMEL() {
+  showLoader("CARGANDO MEL_ACTIVOS...");
+  try {
+    const data = await api("listMELActivos", {filters: currentFilters()});
+    if (!data.ok) throw new Error(data.error || "ERROR_LIST_MEL");
+    melRows = data.rows || [];
+    melCatalogos = data.catalogos || {};
+    renderCatalogos();
+    renderParentOptions();
+    renderTree();
+    document.getElementById("countLabel").textContent = melRows.length + " ACTIVOS";
+    hideLoader();
+  } catch(err) {
+    hideLoader();
+    toast("ERROR CARGANDO MEL: " + err.message);
+  }
+}
+function renderCatalogos() {
+  const levels = (melCatalogos.MEL_NIVEL_JERARQUIA || []).map(x => x.valor || x.codigo).filter(Boolean);
+  const fallback = ["EMPRESA","PLANTA","AREA","SISTEMA","SUBSISTEMA","EQUIPO","SUBEQUIPO","COMPONENTE MANTENIBLE"];
+  fillSelect(document.getElementById("filterNivel"), ["TODOS"].concat(levels.length ? levels : fallback), true);
+  fillSelect(document.getElementById("nivelSelect"), levels.length ? levels : fallback, false);
+}
+function fillSelect(sel, values, firstEmpty) {
+  const cur = sel.value;
+  sel.innerHTML = "";
+  values.forEach(function(v, i) {
+    const opt = document.createElement("option");
+    if (firstEmpty && i === 0) { opt.value = ""; opt.textContent = "TODOS"; }
+    else { opt.value = v; opt.textContent = v; }
+    sel.appendChild(opt);
+  });
+  if ([...sel.options].some(o => o.value === cur)) sel.value = cur;
+}
+function renderParentOptions() {
+  const sel = document.getElementById("padreSelect");
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">SIN PADRE</option>';
+  melRows.forEach(function(r) {
+    const opt = document.createElement("option");
+    opt.value = r.ID_ACTIVO || "";
+    opt.textContent = (r.CODIGO_TAG || r.ID_ACTIVO || "") + " | " + (r.NOMBRE || "");
+    sel.appendChild(opt);
+  });
+  if ([...sel.options].some(o => o.value === cur)) sel.value = cur;
+}
+function renderTree() {
+  const box = document.getElementById("treeBox");
+  if (!melRows.length) {
+    box.innerHTML = '<div class="asset-node"><div><div class="name">SIN ACTIVOS CARGADOS</div><div class="meta">EJECUTE SETUP MEL Y CARGUE DATOS.</div></div></div>';
+    return;
+  }
+  box.innerHTML = melRows.map(function(r) {
+    const depth = Math.min(Number(r.DEPTH || 0), 8);
+    const selected = selectedAsset && selectedAsset.ID_ACTIVO === r.ID_ACTIVO ? " selected" : "";
+    const badge = r.ADMITE_OT === "SI" ? '<span class="badge green">OT</span>' : '<span class="badge gray">NODO</span>';
+    return '<div class="asset-node'+selected+'" data-id="'+esc(r.ID_ACTIVO)+'" style="padding-left:'+(10 + depth*18)+'px">'+
+      '<div><div class="name">'+esc(r.CODIGO_TAG || r.ID_ACTIVO)+' // '+esc(r.NOMBRE)+'</div>'+
+      '<div class="meta">'+esc(r.NIVEL_DE_JERARQUIA || "")+' // '+esc(r.RUTA_NOMBRE || "")+'</div></div>'+badge+'</div>';
+  }).join("");
+  box.querySelectorAll("[data-id]").forEach(function(el) {
+    el.addEventListener("click", function() {
+      const id = this.getAttribute("data-id");
+      const row = melRows.find(x => x.ID_ACTIVO === id);
+      if (row) selectAsset(row);
+    });
+  });
+}
+function selectAsset(row) {
+  selectedAsset = row;
+  creatingNew = false;
+  setForm(row);
+  renderTree();
+  document.getElementById("editStatus").textContent = hasPerm("BTN_MEL_EDITAR") ? "EDICION HABILITADA" : "SOLO CONSULTA";
+}
+function setForm(row) {
+  document.querySelectorAll("[data-field]").forEach(function(el) {
+    const k = el.getAttribute("data-field");
+    el.value = row && row[k] != null ? row[k] : "";
+  });
+  document.getElementById("selectedName").textContent = row && row.NOMBRE ? row.NOMBRE : "NO_ASSET";
+  document.getElementById("selectedSub").textContent = row ? ((row.CODIGO_TAG || row.ID_ACTIVO || "") + " // " + (row.NIVEL_DE_JERARQUIA || "")) : "SELECCIONE UN ACTIVO DEL ARBOL O CREE UNO NUEVO.";
+  document.getElementById("assetPhoto").src = (row && row.DIR_FOTOGRAFIA) ? row.DIR_FOTOGRAFIA : DEFAULT_PHOTO;
+}
+function formData() {
+  const obj = {};
+  document.querySelectorAll("[data-field]").forEach(function(el) {
+    const k = el.getAttribute("data-field");
+    obj[k] = el.value;
+  });
+  return obj;
+}
+function newAsset() {
+  if (!hasPerm("BTN_MEL_CREAR")) { toast("SIN PERMISO PARA CREAR ACTIVOS."); return; }
+  creatingNew = true;
+  selectedAsset = null;
+  setForm({ESTADO_ACTIVO:"ACTIVO", FECHA_DE_ALTA:new Date().toISOString().slice(0,10), ACTIVO_MANTENIBLE:"NO", ADMITE_OT:"NO", ADMITE_LECTURAS:"NO", ADMITE_HOJA_VIDA:"NO"});
+  document.getElementById("editStatus").textContent = "CREACION DE ACTIVO";
+  renderTree();
+}
+async function saveAsset() {
+  const data = formData();
+  if (creatingNew || !data.ID_ACTIVO) {
+    if (!hasPerm("BTN_MEL_CREAR")) { toast("SIN PERMISO PARA CREAR."); return; }
+    showLoader("CREANDO ACTIVO...");
+    const res = await api("createMELActivo", {data:data});
+    hideLoader();
+    if (!res.ok) { toast("ERROR: " + (res.error || "NO GUARDADO")); return; }
+    toast("ACTIVO CREADO: " + res.idActivo);
+    await loadMEL();
+    const row = melRows.find(x => x.ID_ACTIVO === res.idActivo);
+    if (row) selectAsset(row);
+  } else {
+    if (!hasPerm("BTN_MEL_EDITAR")) { toast("SIN PERMISO PARA EDITAR."); return; }
+    showLoader("GUARDANDO ACTIVO...");
+    const res = await api("saveMELActivo", {idActivo:data.ID_ACTIVO, data:data});
+    hideLoader();
+    if (!res.ok) { toast("ERROR: " + (res.error || "NO GUARDADO")); return; }
+    toast("ACTIVO ACTUALIZADO.");
+    await loadMEL();
+    const row = melRows.find(x => x.ID_ACTIVO === data.ID_ACTIVO);
+    if (row) selectAsset(row);
+  }
+}
+async function uploadPhoto() {
+  const data = formData();
+  const file = document.getElementById("photoFile").files[0];
+  if (!data.ID_ACTIVO) { toast("SELECCIONE O GUARDE PRIMERO EL ACTIVO."); return; }
+  if (!file) { toast("SELECCIONE UNA IMAGEN."); return; }
+  if (!hasPerm("BTN_MEL_SUBIR_FOTO")) { toast("SIN PERMISO PARA SUBIR FOTO."); return; }
+  const reader = new FileReader();
+  reader.onload = async function() {
+    showLoader("SUBIENDO FOTO...");
+    const res = await api("uploadMELFoto", {idActivo:data.ID_ACTIVO, fileName:file.name, mimeType:file.type, base64:reader.result});
+    hideLoader();
+    if (!res.ok) { toast("ERROR FOTO: " + (res.error || "NO SUBIDA")); return; }
+    toast("FOTO ACTUALIZADA.");
+    await loadMEL();
+    const row = melRows.find(x => x.ID_ACTIVO === data.ID_ACTIVO);
+    if (row) selectAsset(row);
+  };
+  reader.readAsDataURL(file);
+}
+function smartHome() {
+  try {
+    if (window.opener && !window.opener.closed) {
+      window.opener.postMessage({type:"ARMA_MAIN_ACTIVE"}, "*");
+      window.focus();
+    }
+  } catch(e) {}
+  window.location.href = "main.html";
+}
+document.getElementById("btnHome").addEventListener("click", smartHome);
+document.getElementById("btnReload").addEventListener("click", loadMEL);
+document.getElementById("btnSearch").addEventListener("click", loadMEL);
+document.getElementById("btnNew").addEventListener("click", newAsset);
+document.getElementById("btnSave").addEventListener("click", saveAsset);
+document.getElementById("btnSaveTop").addEventListener("click", saveAsset);
+document.getElementById("btnCancel").addEventListener("click", function() { if (selectedAsset) setForm(selectedAsset); else setForm(null); });
+document.getElementById("btnUploadPhoto").addEventListener("click", uploadPhoto);
+["filterQ","filterEstado","filterNivel","filterPlanta","filterArea"].forEach(function(id) {
+  document.getElementById(id).addEventListener("keydown", function(e) { if (e.key === "Enter") loadMEL(); });
+});
+init();
+</script>
+</body>
+</html>
