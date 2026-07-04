@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ARMA | MEL EQUIPOS</title>
 <style>
+/* ARMA_VISUAL_ZOOM_75 */ html{zoom:75%;}
 :root {
   --blue:#003b7a;
   --blue2:#0076d7;
@@ -179,17 +180,17 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
   </section>
 
   <section class="action-row">
-    <div class="action-card green" id="btnHome">
+    <div class="action-card green" id="btnHome" data-arma-access="ACC_MEL_INICIO">
       <div class="home-icon"><img src="boton-de-inicio.png" alt=""></div>
       <div><strong>INICIO</strong><span>VOLVER A ARMA SIN PERDER LA SESION ACTIVA.</span></div>
     </div>
-    <div class="action-card" id="btnReload">
+    <div class="action-card" id="btnReload" data-perm="BTN_MEL_VER" data-arma-access="BTN_MEL_VER">
       <div><strong>CONSULTAR ACTIVOS</strong><span>LISTA FILTRADA SEGUN NIVEL, PLANTA, AREA O ALCANCE AUTORIZADO.</span></div>
     </div>
-    <div class="action-card green" id="btnNew">
+    <div class="action-card green" id="btnNew" data-perm="BTN_MEL_CREAR" data-arma-access="BTN_MEL_CREAR">
       <div><strong>CREAR ACTIVO</strong><span>CREAR ACTIVOS BAJO ISO 14224 Y JERARQUIA MEL.</span></div>
     </div>
-    <div class="action-card" id="btnSaveTop">
+    <div class="action-card" id="btnSaveTop" data-perm="BTN_MEL_EDITAR" data-arma-access="BTN_MEL_EDITAR">
       <div><strong>GUARDAR CAMBIOS</strong><span>REGISTRAR CREACION O ACTUALIZACION DEL ACTIVO.</span></div>
     </div>
   </section>
@@ -208,7 +209,7 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
       </div>
       <div class="summary-right">
         <img id="assetQr" class="asset-qr" alt="QR DEL ACTIVO" src="">
-        <button id="btnUploadPhoto" type="button" class="btn green">SUBIR FOTO</button>
+        <button id="btnUploadPhoto" type="button" class="btn green" data-perm="BTN_MEL_SUBIR_FOTO" data-arma-access="BTN_MEL_SUBIR_FOTO">SUBIR FOTO</button>
         <div id="photoFileName" class="photo-filename">SIN ARCHIVO SELECCIONADO</div>
       </div>
     </div>
@@ -329,12 +330,12 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
 
       <div class="form-actions">
         <button id="btnCancel" type="button" class="btn gray">DESCARTAR</button>
-        <button id="btnSave" type="button" class="btn green">GUARDAR ACTIVO</button>
+        <button id="btnSave" type="button" class="btn green" data-perm="BTN_MEL_EDITAR" data-arma-access="BTN_MEL_EDITAR">GUARDAR ACTIVO</button>
       </div>
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-02 17:10:04</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-04 06:48:58</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
