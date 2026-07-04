@@ -524,7 +524,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-07-04 07:57:54</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-07-04 08:15:17</span></div>
   </footer>
 </main>
 </div>
@@ -672,10 +672,37 @@ function armaSetVisitor(){
   armaSession={user:'VISITANTE',nombre:'VISITANTE',nivel:'INICIAR SESION',token:'',permissions:{}};
   localStorage.removeItem('ARMA_TOKEN'); localStorage.removeItem('ARMA_SESSION_CACHE'); armaUpdateUserCard(); armaApplyPermissions(); armaLoadMainKpis();
 }
+function armaApiJsonp(action,payload){
+  payload=payload||{}; payload.action=action;
+  return new Promise(function(resolve,reject){
+    var cb='armaJsonp_'+Date.now()+'_'+Math.floor(Math.random()*100000);
+    var s=document.createElement('script');
+    var done=false;
+    window[cb]=function(data){done=true; try{delete window[cb];}catch(e){window[cb]=undefined;} if(s&&s.parentNode){s.parentNode.removeChild(s);} resolve(data||{});};
+    var q=[]; Object.keys(payload).forEach(function(k){if(payload[k]!==undefined&&payload[k]!==null){q.push(encodeURIComponent(k)+'='+encodeURIComponent(String(payload[k])));}});
+    q.push('callback='+encodeURIComponent(cb)); q.push('_ts='+Date.now());
+    s.src=ARMA_API_URL+'?'+q.join('&');
+    s.onerror=function(){if(done)return; done=true; try{delete window[cb];}catch(e){} reject(new Error('JSONP_ERROR'));};
+    setTimeout(function(){if(done)return; done=true; try{delete window[cb];}catch(e){} if(s&&s.parentNode){s.parentNode.removeChild(s);} reject(new Error('JSONP_TIMEOUT'));},12000);
+    document.head.appendChild(s);
+  });
+}
 async function armaApi(action,payload){
   payload=payload||{}; payload.action=action;
-  const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
-  return await res.json();
+  var controller=null; var timer=null;
+  try{
+    if(window.AbortController){controller=new AbortController(); timer=setTimeout(function(){try{controller.abort();}catch(e){}},8000);}
+    const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),signal:controller?controller.signal:undefined});
+    if(timer)clearTimeout(timer);
+    const txt=await res.text();
+    try{return JSON.parse(txt);}catch(e){throw new Error('RESPUESTA_NO_JSON '+res.status+' '+txt.slice(0,180));}
+  }catch(e){
+    if(timer)clearTimeout(timer);
+    if(action==='login'||action==='validateSession'||action==='mainKpis'||action==='getMainKpis'||action==='ping'){
+      return await armaApiJsonp(action,payload);
+    }
+    throw e;
+  }
 }
 async function armaPing(){
   try{const res=await fetch(ARMA_API_URL); const data=await res.json(); document.getElementById('systemStatusText').textContent=data.ok?'ONLINE':'OFFLINE';}
