@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ARMA | TURNOS</title>
   <style>
+/* ARMA_VISUAL_ZOOM_75 */ html{zoom:75%;}
 :root{--blue:#004b9b;--blue2:#0076d7;--navy:#002b66;--green:#55b52e;--green2:#00d65f;--cyan:#00bfd6;--line:#dbe5f0;--text:#0f172a;--muted:#64748b;--shadow:0 14px 28px rgba(0,43,102,.12);--soft:0 5px 14px rgba(15,23,42,.12);--danger:#b91c1c;--warn:#fb923c}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:#eef3f9;color:var(--text);text-transform:uppercase}a{color:inherit}
 .top-global{position:sticky;top:0;z-index:50;background:#fff;box-shadow:0 10px 24px rgba(0,43,102,.14)}.top-white{min-height:108px;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}.blue-line{height:6px;background:linear-gradient(90deg,var(--blue),var(--blue2),var(--blue))}.brand-row{display:flex;align-items:center;gap:22px}.brand-separator{width:1px;height:68px;background:#d8e5f2}.logo-pelex{height:74px;max-width:260px;object-fit:contain}.logo-arma{height:82px;max-width:380px;object-fit:contain}.top-title{text-align:right}.top-title strong{display:block;color:var(--navy);font-size:24px;font-weight:950}.top-title span{display:block;color:var(--muted);font-size:12px;font-weight:900;margin-top:5px}.top-title-actions{margin-top:9px;display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}.user-pill{display:inline-flex;align-items:center;gap:8px;background:#f8fbff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--navy);font-size:12px;font-weight:900}.btn-main{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:999px;padding:8px 13px;background:linear-gradient(180deg,var(--blue2),var(--blue));color:#fff;font-size:11px;font-weight:950;box-shadow:var(--soft);cursor:pointer;text-decoration:none}
@@ -68,13 +69,13 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
 
   <section id="appArea" class="hidden">
     <div class="action-grid">
-      <a class="index-nav-card main-home" href="main.html" data-smart-home="1" onclick="return goMainSmart(event)">
+      <a class="index-nav-card main-home" href="main.html" data-smart-home="1" data-arma-access="ACC_TURNOS_INICIO" onclick="return goMainSmart(event)">
         <div class="nav-icon"><img src="boton-de-inicio.png" alt="INICIO"></div>
         <div class="nav-text"><strong>Inicio</strong><span>Volver a ARMA</span></div>
       </a>
-      <button class="action-card blue" type="button" onclick="loadTurnos()"><strong>CONSULTAR TURNOS</strong><span>LISTA FILTRADA SEGUN SU NIVEL, PLANTA, AREA O PERSONA AUTORIZADA.</span></button>
-      <button class="action-card dark" id="btnNovedad" type="button" onclick="openNovedad()"><strong>REPORTAR NOVEDAD</strong><span>REGISTRA EXTRAS, INCAPACIDAD, PERMISO O DESCANSO TRABAJADO CON JUSTIFICACION.</span></button>
-      <button class="action-card gray" id="btnNewTurno" type="button" onclick="openNewTurno()"><strong>CREAR NUEVO TURNO</strong><span>AGREGA CODIGOS AL CATALOGO SIN CREAR NUEVAS HOJAS.</span></button>
+      <button class="action-card blue" type="button" data-perm="BTN_TURNOS_VER_PROPIO" data-arma-access="BTN_TURNOS_VER_PROPIO" data-arma-access-alt="BTN_TURNOS_VER_EQUIPO,BTN_TURNOS_VER_TODO" onclick="loadTurnos()"><strong>CONSULTAR TURNOS</strong><span>LISTA FILTRADA SEGUN SU NIVEL, PLANTA, AREA O PERSONA AUTORIZADA.</span></button>
+      <button class="action-card dark" id="btnNovedad" type="button" data-perm="BTN_TURNOS_REPORTAR_NOVEDAD" data-arma-access="BTN_TURNOS_REPORTAR_NOVEDAD" onclick="openNovedad()"><strong>REPORTAR NOVEDAD</strong><span>REGISTRA EXTRAS, INCAPACIDAD, PERMISO O DESCANSO TRABAJADO CON JUSTIFICACION.</span></button>
+      <button class="action-card gray" id="btnNewTurno" type="button" data-perm="BTN_TURNOS_CREAR_TURNO" data-arma-access="BTN_TURNOS_CREAR_TURNO" onclick="openNewTurno()"><strong>CREAR NUEVO TURNO</strong><span>AGREGA CODIGOS AL CATALOGO SIN CREAR NUEVAS HOJAS.</span></button>
     </div>
 
     <section class="panel" id="turnosPanel">
@@ -83,7 +84,7 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
         <input id="fechaDesde" type="date">
         <input id="fechaHasta" type="date">
         <select id="quickMonth"></select>
-        <button class="btn" type="button" onclick="loadTurnos()">BUSCAR</button>
+        <button class="btn" type="button" data-perm="BTN_TURNOS_VER_PROPIO" data-arma-access="BTN_TURNOS_VER_PROPIO" data-arma-access-alt="BTN_TURNOS_VER_EQUIPO,BTN_TURNOS_VER_TODO" onclick="loadTurnos()">BUSCAR</button>
       </div>
       <div class="notice" style="margin-bottom:12px">USE EL MODO DE EDICION PARA PROGRAMAR EL MES. LOS CAMBIOS QUEDAN PENDIENTES Y SOLO SE GUARDAN AL PRESIONAR GRABAR PROGRAMACION.</div>
       <div class="planner-panel">
@@ -94,11 +95,11 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
           <div class="planner-field"><label>COLUMNA / PERSONA</label><select id="toolColumn"><option value="ALL">TODAS LAS COLUMNAS EDITABLES</option></select></div>
           <div class="planner-field"><label>TURNO INICIAL ROTATIVO</label><select id="toolStartTurno"><option value="3">3</option><option value="2">2</option><option value="1">1</option></select></div>
           <div class="planner-field"><label>SEGURIDAD</label><input id="toolSecurityNames" placeholder="ALVARADO, DUARTE, PELAEZ"></div>
-          <button class="btn orange" type="button" onclick="applyPlannerTool()">APLICAR HERRAMIENTA</button>
+          <button class="btn orange" type="button" data-perm="BTN_TURNOS_EDITAR" data-arma-access="BTN_TURNOS_EDITAR" onclick="applyPlannerTool()">APLICAR HERRAMIENTA</button>
         </div>
         <div class="planner-help"><label class="planner-check"><input id="toolOverwrite" type="checkbox"> SOBRESCRIBIR TURNOS EXISTENTES</label><span id="plannerHelpText">PUNTUAL: CLIC EN UNA CELDA PARA ABRIR VENTANA. DIRECTA: ESCRIBA EN LA CELDA Y PRESIONE ENTER. PINTAR: SELECCIONE UN TURNO Y HAGA CLIC EN VARIAS CELDAS.</span></div>
       </div>
-      <div class="pending-toolbar"><strong id="pendingCount">0 CAMBIOS PENDIENTES</strong><div class="pending-actions"><button class="btn green" id="btnCommitTurnos" type="button" onclick="guardarProgramacion()" disabled>GRABAR PROGRAMACION</button><button class="btn gray" id="btnDiscardTurnos" type="button" onclick="descartarCambios()" disabled>DESCARTAR CAMBIOS</button></div></div>
+      <div class="pending-toolbar"><strong id="pendingCount">0 CAMBIOS PENDIENTES</strong><div class="pending-actions"><button class="btn green" id="btnCommitTurnos" type="button" data-perm="BTN_TURNOS_GRABAR_PROGRAMACION" data-arma-access="BTN_TURNOS_GRABAR_PROGRAMACION" onclick="guardarProgramacion()" disabled>GRABAR PROGRAMACION</button><button class="btn gray" id="btnDiscardTurnos" type="button" data-perm="BTN_TURNOS_DESCARTAR_CAMBIOS" data-arma-access="BTN_TURNOS_DESCARTAR_CAMBIOS" onclick="descartarCambios()" disabled>DESCARTAR CAMBIOS</button></div></div>
       <div class="table-wrap"><table id="turnosTable"><thead id="turnosHead"><tr><th>FECHA</th><th>DIA</th></tr></thead><tbody id="turnosRows"><tr><td colspan="2">SIN DATOS CARGADOS</td></tr></tbody></table></div>
     </section>
 
@@ -108,7 +109,7 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
       <div id="novedadesList" class="novedad-list"><div class="novedad-card">SIN NOVEDADES CARGADAS.</div></div>
     </section>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>TURNOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-01 16:36:06</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>TURNOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-04 06:47:59</span></div></footer>
 </main>
 
 <div id="editModal" class="modal-back">
@@ -137,7 +138,7 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
       <div class="field full"><label>JUSTIFICACION / RAZON</label><textarea id="novJustificacion" placeholder="EXPLIQUE LA RAZON DE LA NOVEDAD, EXTRA, PERMISO O INCAPACIDAD"></textarea></div>
       <div class="field full"><label>SOPORTE PDF O IMAGEN</label><input id="novSoporte" type="file" accept="application/pdf,image/*"></div>
     </div>
-    <div class="modal-actions"><button class="btn gray" onclick="closeNovedad()">CANCELAR</button><button class="btn green" onclick="saveNovedad()">GUARDAR NOVEDAD</button></div>
+    <div class="modal-actions"><button class="btn gray" onclick="closeNovedad()">CANCELAR</button><button class="btn green" data-perm="BTN_TURNOS_REPORTAR_NOVEDAD" data-arma-access="BTN_TURNOS_REPORTAR_NOVEDAD" onclick="saveNovedad()">GUARDAR NOVEDAD</button></div>
   </div>
 </div>
 <div id="newTurnoModal" class="modal-back">
@@ -152,7 +153,7 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
       <div class="field"><label>HORA FIN</label><input id="newFin" placeholder="14:00"></div>
       <div class="field"><label>OBSERVACION</label><input id="newObs" placeholder="DETALLE"></div>
     </div>
-    <div class="modal-actions"><button class="btn gray" onclick="closeNewTurno()">CANCELAR</button><button class="btn green" onclick="saveNewTurno()">GUARDAR NUEVO TURNO</button></div>
+    <div class="modal-actions"><button class="btn gray" onclick="closeNewTurno()">CANCELAR</button><button class="btn green" data-perm="BTN_TURNOS_CREAR_TURNO" data-arma-access="BTN_TURNOS_CREAR_TURNO" onclick="saveNewTurno()">GUARDAR NUEVO TURNO</button></div>
   </div>
 </div>
 
