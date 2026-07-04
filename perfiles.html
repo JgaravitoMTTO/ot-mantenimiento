@@ -29,11 +29,23 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eaf0f7;color:#0
 .pdf-ico{width:24px;height:24px;border-radius:5px;background:#e53935;color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;}.file-title{font-size:12px;color:#001f4f;line-height:1.25;word-break:break-word;}.file-meta{display:block;font-size:10px;color:#6b7d96;margin-top:4px;}
 .pdf-frame{width:100%;height:585px;border:1px solid #d7e4f2;border-radius:14px;background:#f8fbff;display:none;}.empty-preview{height:585px;border:2px dashed #cbdced;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#5b6d87;background:#f8fbff;text-align:center;gap:10px;}
 .empty-preview strong{font-size:24px;color:#002c6d;}.empty-preview span{font-size:13px;text-transform:uppercase;}.footer{display:flex;justify-content:space-between;margin-top:18px;color:#5d6f89;font-size:11px;letter-spacing:.5px;}
+.arma-loader{position:fixed;inset:0;background:rgba(2,6,23,.50);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
+.arma-loader.hidden{display:none!important;}.arma-loader-box{width:min(420px,92vw);background:#fff;border:1px solid #dbe5f0;border-radius:22px;box-shadow:0 28px 70px rgba(0,0,0,.32);padding:24px;text-align:center;color:#002b66;}
+.arma-spinner{width:54px;height:54px;border:6px solid #dbeafe;border-top-color:#0076d7;border-radius:50%;margin:0 auto 14px;animation:armaSpin .8s linear infinite;}
+.arma-loader-box h2{font-size:17px;margin:0 0 7px;font-weight:950;}.arma-loader-box p{font-size:11px;margin:0;color:#64748b;font-weight:850;line-height:1.35;text-transform:uppercase;}
+@keyframes armaSpin{to{transform:rotate(360deg)}}
 @media(max-width:1100px){html{zoom:100%;}.action-grid,.content-grid{grid-template-columns:1fr;}.topbar{height:auto;gap:18px;align-items:flex-start;}.page-head{text-align:left;}.brand{flex-wrap:wrap;}}
 
 </style>
 </head>
 <body>
+<div id='armaLoader' class='arma-loader hidden'>
+  <div class='arma-loader-box'>
+    <div class='arma-spinner'></div>
+    <h2 id='armaLoaderText'>CARGANDO...</h2>
+    <p>ARMA ESTA CONSULTANDO DOCUMENTOS EN LINEA. ESPERE UN MOMENTO.</p>
+  </div>
+</div>
 <header class='topbar'>
   <div class='brand'>
     <img src='logo_pelex.bmp' alt='PELEX' class='pelex-logo'>
@@ -95,13 +107,25 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eaf0f7;color:#0
   </section>
   <footer class='footer'>
     <span>A.R.M.A. - ASSET RELIABILITY & MAINTENANCE ANALYTICS</span>
-    <span>GENERADO: 2026-07-04 12:47:21</span>
+    <span>GENERADO: 2026-07-04 13:12:28</span>
   </footer>
 </main>
 <script>
 const ARMA_API_URL='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
 const ARMA_PERFILES_FOLDER='https://drive.google.com/drive/folders/1dX_5BOoiMQjFtEog_dJpHgobnuv_wbGd?usp=sharing';
 let ARMA_PERFILES_FILES=[];
+let armaLoaderCount=0;
+function showArmaLoader(msg){
+  armaLoaderCount++;
+  var o=document.getElementById('armaLoader');
+  var t=document.getElementById('armaLoaderText');
+  if(t)t.textContent=msg||'CARGANDO...';
+  if(o)o.classList.remove('hidden');
+}
+function hideArmaLoader(){
+  armaLoaderCount=Math.max(0,armaLoaderCount-1);
+  if(armaLoaderCount===0){var o=document.getElementById('armaLoader');if(o)o.classList.add('hidden');}
+}
 function armaInicio(){
   try{if(window.opener && !window.opener.closed){window.opener.focus();window.close();return false;}}catch(e){}
   try{window.location.href='main.html';}catch(e){}
@@ -136,6 +160,7 @@ async function armaApi(action,payload){
   return await res.json();
 }
 async function armaLoadFiles(){
+  showArmaLoader('ACTUALIZANDO LISTA DE PERFILES...');
   var st=document.getElementById('statusBox');
   var box=document.getElementById('fileList');
   st.textContent='CONSULTANDO CARPETA DRIVE...';
@@ -149,6 +174,8 @@ async function armaLoadFiles(){
     armaRenderFiles();
   }catch(e){
     st.textContent='ERROR DE CONEXION CON ARMA_BACKEND: '+e.message;
+  }finally{
+    hideArmaLoader();
   }
 }
 function armaRenderFiles(){
@@ -178,6 +205,9 @@ function armaPreviewFile(i,row){
   document.getElementById('viewerSub').textContent='VISTA PREVIA DINAMICA DESDE GOOGLE DRIVE';
   document.getElementById('emptyPreview').style.display='none';
   var frame=document.getElementById('pdfFrame');
+  showArmaLoader('CARGANDO PDF EN VISOR...');
+  frame.onload=function(){hideArmaLoader();frame.onload=null;};
+  setTimeout(function(){hideArmaLoader();},4500);
   frame.style.display='block';
   frame.src='https://drive.google.com/file/d/'+encodeURIComponent(f.id)+'/preview';
 }
