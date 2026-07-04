@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ARMA | PERSONAL</title>
   <style>
+/* ARMA_VISUAL_ZOOM_75 */ html{zoom:75%;}
 :root{--blue:#004b9b;--blue2:#0076d7;--navy:#002b66;--green:#55b52e;--green2:#00d65f;--cyan:#00bfd6;--line:#dbe5f0;--text:#0f172a;--muted:#64748b;--shadow:0 14px 28px rgba(0,43,102,.12);--soft:0 5px 14px rgba(15,23,42,.12);--bg:#eef3f9;--surface:#fff}
 *{box-sizing:border-box}
 body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);text-transform:uppercase}
@@ -141,13 +142,13 @@ tr:hover{background:#d9ecff;cursor:pointer}
   </section>
   <section id="appArea" class="hidden">
     <div class="action-grid">
-      <a class="index-nav-card main-home" href="main.html" data-smart-home="1" onclick="return goMain(event)">
+      <a class="index-nav-card main-home" href="main.html" data-smart-home="1" data-arma-access="ACC_PERSONAL_INICIO" onclick="return goMain(event)">
         <div class="nav-icon"><img src="boton-de-inicio.png" alt="INICIO"></div>
         <div class="nav-text"><strong>Inicio</strong><span>Volver a ARMA</span></div>
       </a>
-      <button class="action-card green" id="cardMine" type="button" data-perm="BTN_PERSONAL_MIS_DATOS" onclick="loadMine()"><strong>CONSULTAR MIS DATOS</strong><span>VER Y ACTUALIZAR INFORMACION PROPIA PERMITIDA.</span></button>
-      <button class="action-card blue" id="cardList" type="button" data-perm="BTN_PERSONAL_VER" onclick="loadList()"><strong>CONSULTAR PERSONAL</strong><span>LISTA FILTRADA SEGUN SU NIVEL, PLANTA, AREA O MAQUINAS AUTORIZADAS.</span></button>
-      <button class="action-card dark" id="btnNewCard" type="button" data-perm="BTN_PERSONAL_CREAR" onclick="newPerson()"><strong>CREAR PERSONA</strong><span>REGISTRA PERSONAL NUEVO ANTES DE CREAR USUARIO ARMA.</span></button>
+      <button class="action-card green" id="cardMine" type="button" data-perm="BTN_PERSONAL_MIS_DATOS" data-arma-access="BTN_PERSONAL_MIS_DATOS" onclick="loadMine()"><strong>CONSULTAR MIS DATOS</strong><span>VER Y ACTUALIZAR INFORMACION PROPIA PERMITIDA.</span></button>
+      <button class="action-card blue" id="cardList" type="button" data-perm="BTN_PERSONAL_VER" data-arma-access="BTN_PERSONAL_VER" onclick="loadList()"><strong>CONSULTAR PERSONAL</strong><span>LISTA FILTRADA SEGUN SU NIVEL, PLANTA, AREA O MAQUINAS AUTORIZADAS.</span></button>
+      <button class="action-card dark" id="btnNewCard" type="button" data-perm="BTN_PERSONAL_CREAR" data-arma-access="BTN_PERSONAL_CREAR" onclick="newPerson()"><strong>CREAR PERSONA</strong><span>REGISTRA PERSONAL NUEVO ANTES DE CREAR USUARIO ARMA.</span></button>
     </div>
     <section class="panel" id="listPanel">
       <div class="panel-title"><h2>LISTA DE PERSONAL</h2><div class="status" id="listStatus">SIN CONSULTA</div></div>
@@ -168,18 +169,18 @@ tr:hover{background:#d9ecff;cursor:pointer}
           <div class="person-focus-name empty" id="personFocusName">NO_USER</div>
           <div class="photo-actions">
             <input id="photoFile" type="file" accept="image/png,image/jpeg,image/webp">
-            <button class="btn green" id="btnUploadPhoto" type="button" onclick="uploadPhoto()">SUBIR FOTO</button>
+            <button class="btn green" id="btnUploadPhoto" type="button" data-perm="BTN_PERSONAL_EDITAR" data-arma-access="BTN_PERSONAL_EDITAR" onclick="uploadPhoto()">SUBIR FOTO</button>
           </div>
         </div>
       </div>
       <div id="personalForm" class="form-sections"></div>
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap">
         <button class="btn gray" type="button" onclick="clearForm()">LIMPIAR</button>
-        <button class="btn green" id="btnSave" type="button" onclick="saveForm()">GUARDAR CAMBIOS</button>
+        <button class="btn green" id="btnSave" type="button" data-perm="BTN_PERSONAL_EDITAR" data-arma-access="BTN_PERSONAL_EDITAR" onclick="saveForm()">GUARDAR CAMBIOS</button>
       </div>
     </section>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-01 15:13:17</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-04 06:47:08</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
