@@ -169,7 +169,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-04 20:47:44</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-04 21:15:52</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -178,7 +178,7 @@ const REQUIRED_PERM="BTN_LEER_BITACORA";
 const ALT_PERM="BTN_RT_CONSULTAR";
 let armaSession={user:"",nombre:"",nivel:"",permissions:{},token:""};
 let selectedRT=null;
-let catalogos={};
+let catalogos={};let rtEquiposAll=[];let rtPersonasAll=[];let rtPlantasAll=[];
 let armaLoaderCount=0;
 function esc(v){let d=document.createElement("div");d.textContent=String(v==null?"":v);return d.innerHTML;}
 function normalizePerms(p){let out={};p=p||{};Object.keys(p).forEach(k=>out[String(k).toUpperCase()]=p[k]===true||String(p[k]).toUpperCase()==="SI"||String(p[k]).toUpperCase()==="TRUE");return out;}
@@ -207,10 +207,34 @@ function fillSelect(id,rows,textKeys,valueKeys,emptyText){let el=document.getEle
 function normTxt(v){return String(v==null?'':v).toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();}
 function personaId(r){return val(r,['ID_PERSONA','idPersona','IDENTIFICACION','ID']);}
 function personaNombre(r){return val(r,['NOMBRE_COMPLETO','nombre','NOMBRE','PERSONA']);}
-function setSelectSmart(id,wanted){let el=document.getElementById(id);if(!el||!wanted)return false;let w=normTxt(wanted);let dig=(w.match(/[123]/)||[''])[0];for(let i=0;i<el.options.length;i++){let o=el.options[i];let ov=normTxt(o.value),ot=normTxt(o.text);if(ov===w||ot===w||(dig&&(ov==='PL'+dig||ot.indexOf('PLANTA '+dig)>=0||ot.indexOf('PL '+dig)>=0))){el.value=o.value;return true;}}return false;}
-function setPlantaFromPersona(rows,id){if(PAGE_MODE!=='REPORTAR')return;rows=asArr(rows);let r=rows.find(x=>String(personaId(x))===String(id));if(!r)return;let planta=val(r,['PLANTA_ASIGNADA','planta','PLANTA','ALCANCE_PLANTAS']);setSelectSmart('rtPlanta',planta);}
+function plantaDigit(v){let s=normTxt(v);let m=s.match(/([123])/);return m?m[1]:'';}
+function equipoNivel(e){return normTxt(val(e,['nivel','NIVEL','NIVEL_DE_JERARQUIA'])).replace(/-/g,'_');}
+function equipoPlanta(e){return val(e,['plantaMEL','planta','PLANTA_MEL','PLANTA','plantaRaiz','PLANTA_RAIZ']);}
+function equipoValue(e){return val(e,['idActivo','ID_ACTIVO','codigo','CODIGO','CODIGO_TAG','CODIGO/TAG','nombre','NOMBRE']);}
+function equipoText(e){let c=val(e,['codigo','CODIGO','CODIGO_TAG','CODIGO/TAG']);let n=val(e,['nombre','NOMBRE']);let niv=val(e,['nivel','NIVEL']);return (c&&n)?(c+' // '+n):(n||c||equipoValue(e));}
+function setSelectSmart(id,wanted){let el=document.getElementById(id);if(!el||!wanted)return false;let w=normTxt(wanted);let dig=plantaDigit(wanted);for(let i=0;i<el.options.length;i++){let o=el.options[i];let ov=normTxt(o.value),ot=normTxt(o.text);if(ov===w||ot===w||(dig&&(ov===dig||ov==='PL'+dig||ot.indexOf('PLANTA '+dig)>=0||ot.indexOf('PL '+dig)>=0))){el.value=o.value;return true;}}return false;}
+function rebuildEquipoSelectByPlanta(){let pl=document.getElementById('rtPlanta');let eq=document.getElementById('rtEquipo');if(!eq)return;let p=pl?plantaDigit(pl.value||((pl.options[pl.selectedIndex]||{}).text)):'';let rows=asArr(rtEquiposAll).filter(e=>{let niv=equipoNivel(e);if(niv&&niv!=='EQUIPO')return false;let ep=plantaDigit(equipoPlanta(e));return !p||!ep||ep===p;});let html=`<option value="">SELECCIONE EQUIPO</option>`;html+=rows.map(e=>`<option value="${esc(equipoValue(e))}">${esc(equipoText(e))}</option>`).join('');eq.innerHTML=html;rebuildSubsistemaSelect();}
+function rebuildSubsistemaSelect(){let eq=document.getElementById('rtEquipo');let sub=document.getElementById('rtSubsistema');if(!sub)return;let selected=eq?eq.value:'';let selectedTxt=eq&&eq.options[eq.selectedIndex]?eq.options[eq.selectedIndex].text:'';let sNorm=normTxt(selected+'|'+selectedTxt);let rows=asArr(rtEquiposAll).filter(e=>{let niv=equipoNivel(e);if(['SUBEQUIPO','SUB_EQUIPO','COMPONENTE_MANTENIBLE'].indexOf(niv)<0)return false;let padre=normTxt(val(e,['padre','PADRE']));return selected&&((padre&&sNorm.indexOf(padre)>=0)||padre===normTxt(selected));});let html=`<option value="">NO APLICA / SELECCIONE</option>`;html+=rows.map(e=>`<option value="${esc(equipoValue(e))}">${esc(equipoText(e))}</option>`).join('');sub.innerHTML=html;}
+function setPlantaFromPersona(rows,id){if(PAGE_MODE!=='REPORTAR')return;rows=asArr(rows);let r=rows.find(x=>String(personaId(x))===String(id));if(!r)return;let planta=val(r,['PLANTA_ASIGNADA','planta','PLANTA','ALCANCE_PLANTAS','alcancePlantas']);if(setSelectSmart('rtPlanta',planta)){rebuildEquipoSelectByPlanta();}}
 function applyReportePersonaDefault(personas){let el=document.getElementById('rtPersona');if(!el||PAGE_MODE!=='REPORTAR')return;let rows=asArr(personas);let chosen='';let u=normTxt(armaSession.user||'');if(rows.length===1){chosen=personaId(rows[0]);}else{rows.forEach(r=>{if(!chosen&&u&&normTxt(val(r,['USER_ARMA','userArma','USUARIO_ARMA']))===u)chosen=personaId(r);});}if(chosen){el.value=chosen;el.disabled=true;el.title='PERSONA ASOCIADA AL USUARIO VALIDADO EN ARMA';setPlantaFromPersona(rows,chosen);}el.onchange=function(){setPlantaFromPersona(rows,el.value);};}
-async function loadCatalogos(){try{let data=await api("rtCatalogos",{},"CARGANDO CATALOGOS RT...");if(data.ok){catalogos=data.catalogos||data;}}catch(e){catalogos={};}let personas=getCat(["personasReporte","PERSONAS_REPORTE","PERSONASREPORTA","PERSONAL","personal","personas","tecnicos"]);let equipos=getCat(["EQUIPOS","equipos","MEL_EQUIPOS","activos"]);let subs=getCat(["SUBSISTEMAS","subsistemas","COMPONENTES","componentes"]);let tipos=getCat(["TIPO_TRABAJO","TIPOS_TRABAJO","tiposTrabajo"]);let plantas=getCat(["PLANTA","PLANTAS","plantas"]);if(!plantas.length)plantas=[{CODIGO:"PL1",VALOR:"PLANTA 1"},{CODIGO:"PL2",VALOR:"PLANTA 2"},{CODIGO:"PL3",VALOR:"PLANTA 3"}];if(!tipos.length)tipos=[{CODIGO:"CORRECTIVO",VALOR:"CORRECTIVO"},{CODIGO:"AJUSTE",VALOR:"AJUSTE"},{CODIGO:"REVISION",VALOR:"REVISION"}];fillSelect("rtPersona",personas,["NOMBRE_COMPLETO","nombre","NOMBRE"],["ID_PERSONA","idPersona","IDENTIFICACION"],"SELECCIONE");fillSelect("ctPersona",personas,["NOMBRE_COMPLETO","nombre","NOMBRE"],["ID_PERSONA","idPersona","IDENTIFICACION"],"SELECCIONE");fillSelect("rtEquipo",equipos,["NOMBRE","CODIGO_TAG","CODIGO/TAG","EQUIPO"],["ID_ACTIVO","CODIGO_TAG","CODIGO/TAG","EQUIPO"],"SELECCIONE EQUIPO");fillSelect("rtSubsistema",subs,["NOMBRE","SUBSISTEMA","COMPONENTE"],["ID_ACTIVO","SUBSISTEMA","COMPONENTE"],"NO APLICA / SELECCIONE");fillSelect("rtTipoTrabajo",tipos,["VALOR","DESCRIPCION","CODIGO"],["CODIGO","VALOR"],"SELECCIONE");fillSelect("rtPlanta",plantas,["VALOR","DESCRIPCION","CODIGO"],["CODIGO","VALOR"],"SELECCIONE");applyReportePersonaDefault(personas);}
+async function loadCatalogos(){
+  try{let data=await api('rtCatalogos',{},'CARGANDO CATALOGOS RT...');if(data.ok){catalogos=data.catalogos||data;}}catch(e){catalogos={};}
+  let personas=getCat(['personasReporte','PERSONAS_REPORTE','PERSONASREPORTA','PERSONAL','personal','personas','tecnicos']);
+  let equipos=getCat(['equipos','EQUIPOS','MEL_EQUIPOS','activos']);
+  let tipos=getCat(['tiposTrabajo','TIPO_TRABAJO','TIPOS_TRABAJO','tiposTrabajo']);
+  let plantas=getCat(['plantasMel','PLANTAS_MEL','plantas','PLANTAS','PLANTA']);
+  rtPersonasAll=asArr(personas);rtEquiposAll=asArr(equipos);rtPlantasAll=asArr(plantas);
+  if(!plantas.length)plantas=[{valor:'1',descripcion:'PLANTA 1'},{valor:'2',descripcion:'PLANTA 2'},{valor:'3',descripcion:'PLANTA 3'}];
+  if(!tipos.length)tipos=[{valor:'CORRECTIVO',descripcion:'CORRECTIVO'},{valor:'AJUSTE',descripcion:'AJUSTE'},{valor:'REVISION',descripcion:'REVISION'}];
+  fillSelect('rtPersona',personas,['NOMBRE_COMPLETO','nombre','NOMBRE'],['ID_PERSONA','idPersona','IDENTIFICACION'],'SELECCIONE');
+  fillSelect('ctPersona',personas,['NOMBRE_COMPLETO','nombre','NOMBRE'],['ID_PERSONA','idPersona','IDENTIFICACION'],'SELECCIONE');
+  fillSelect('rtTipoTrabajo',tipos,['descripcion','DESCRIPCION','valor','VALOR','CODIGO'],['valor','VALOR','CODIGO'],'SELECCIONE');
+  fillSelect('rtPlanta',plantas,['descripcion','DESCRIPCION','nombre','NOMBRE','valor','VALOR','CODIGO'],['valor','VALOR','CODIGO','idActivo','ID_ACTIVO'],'SELECCIONE');
+  let pl=document.getElementById('rtPlanta');if(pl){pl.onchange=rebuildEquipoSelectByPlanta;}
+  let eq=document.getElementById('rtEquipo');if(eq){eq.onchange=rebuildSubsistemaSelect;}
+  rebuildEquipoSelectByPlanta();
+  applyReportePersonaDefault(personas);
+}
 function refreshAll(){if(PAGE_MODE==="REPORTAR"){clearReportForm(false);}else{loadRTList();}}
 function buildFilters(){return {BUSCAR:document.getElementById("fBuscar").value,FECHA_DESDE:document.getElementById("fDesde").value,FECHA_HASTA:document.getElementById("fHasta").value,ESTADO:document.getElementById("fEstado").value,EQUIPO:document.getElementById("fEquipo").value};}
 async function loadRTList(){document.getElementById("listStatus").textContent="CARGANDO...";try{let data=await api("listRT",{filters:buildFilters()},"CARGANDO RT...");if(!data.ok){document.getElementById("listStatus").textContent=data.error||"ERROR";return;}renderRows(data.rows||data.rt||[]);document.getElementById("listStatus").textContent=(data.count||asArr(data.rows||data.rt).length)+" REGISTROS";}catch(e){document.getElementById("listStatus").textContent="ERROR DE CONEXION";}}
