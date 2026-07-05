@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARMA | BITACORA RT</title>
+<style>
+html{zoom:75%;}
+:root{--blue:#004b9b;--blue2:#0076d7;--navy:#002b66;--green:#55b52e;--green2:#00d65f;--cyan:#00bfd6;--line:#dbe5f0;--text:#0f172a;--muted:#64748b;--bg:#eef3f9;--surface:#fff;--shadow:0 14px 28px rgba(0,43,102,.12);--soft:0 5px 14px rgba(15,23,42,.12);}
+*{box-sizing:border-box}
+body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);text-transform:uppercase}
+.hidden{display:none!important}
+.top-global{position:sticky;top:0;z-index:50;background:#fff;box-shadow:0 10px 24px rgba(0,43,102,.14)}
+.top-white{min-height:110px;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.red-line{height:6px;background:linear-gradient(90deg,var(--blue),var(--blue2),var(--blue))}
+.brand-row{display:flex;align-items:center;gap:22px}
+.brand-separator{width:1px;height:68px;background:#d8e5f2}
+.logo-pelex{height:74px;max-width:260px;object-fit:contain}
+.logo-arma{height:82px;max-width:380px;object-fit:contain}
+.top-title{text-align:right}
+.top-title strong{display:block;color:var(--navy);font-size:24px;font-weight:950}
+.top-title span{display:block;color:var(--muted);font-size:12px;font-weight:900;margin-top:5px}
+.top-title-actions{margin-top:9px;display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.user-pill{display:inline-flex;align-items:center;gap:8px;background:#f8fbff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--navy);font-size:12px;font-weight:900}
+.main{padding:18px 24px 22px}
+.hero{position:relative;overflow:hidden;border-radius:22px;background:radial-gradient(circle at 74% 10%,#0076d7 0,#004b9b 42%,#002b66 100%);box-shadow:var(--shadow);color:#fff;padding:20px 28px;margin-bottom:16px}
+.hero:after{content:'BITACORA';position:absolute;right:20px;bottom:-14px;font-size:68px;font-weight:950;letter-spacing:4px;color:rgba(255,255,255,.055)}
+.hero span{display:inline-block;background:rgba(0,214,95,.15);border:1px solid rgba(0,214,95,.45);color:#b8ffd5;padding:6px 10px;border-radius:999px;font-weight:950;font-size:11px}
+.hero h1{margin:12px 0 5px;font-size:30px}
+.hero p{margin:0;max-width:1220px;color:#eaf4ff;font-size:11px;line-height:1.25;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;z-index:2}
+.action-grid{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:14px;margin-bottom:16px}
+.index-nav-card{position:relative;display:flex;align-items:center;gap:14px;min-width:230px;min-height:82px;height:100%;padding:14px 18px;border-radius:18px;background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid #dbe5f0;box-shadow:0 10px 22px rgba(0,43,102,.10);text-decoration:none;color:#002b66;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.index-nav-card:before{content:'';position:absolute;left:0;top:0;width:100%;height:5px;background:linear-gradient(90deg,#004b9b,#0076d7,#00bfd6,#55b52e)}
+.index-nav-card:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(0,43,102,.16);border-color:#bcd7f5}
+.index-nav-card .nav-icon{width:54px;height:54px;border-radius:16px;background:#ffffff;border:1px solid #dbe5f0;display:grid;place-items:center;flex:0 0 54px;box-shadow:0 4px 10px rgba(15,23,42,.08)}
+.index-nav-card .nav-icon img{width:38px;height:38px;object-fit:contain;display:block}
+.index-nav-card .nav-text{display:flex;flex-direction:column;line-height:1.1}
+.index-nav-card .nav-text strong{font-size:18px;font-weight:900;color:#002b66;letter-spacing:.2px}
+.index-nav-card .nav-text span{font-size:11px;font-weight:900;color:#008c2e;letter-spacing:.45px;text-transform:uppercase;margin-top:6px}
+.index-nav-card.main-home{background:linear-gradient(180deg,#ffffff,#eef7ff)}
+.index-nav-card.main-home .nav-icon{background:#e8f2ff}
+.action-card{position:relative;overflow:hidden;border:0;border-radius:18px;background:#fff;box-shadow:var(--shadow);padding:17px;text-align:left;cursor:pointer;border-left:6px solid var(--green2);min-height:82px}
+.action-card:hover{filter:brightness(1.03);transform:translateY(-1px)}
+.action-card strong{display:block;color:var(--navy);font-size:16px;font-weight:950;margin-bottom:8px}
+.action-card span{display:block;color:var(--muted);font-size:11px;font-weight:850;line-height:1.35}
+.action-card.blue{border-left-color:var(--blue2)}
+.action-card.green{border-left-color:var(--green2)}
+.action-card.dark{border-left-color:#111827}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:15px;margin-bottom:16px}
+.panel-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.panel-title h2{margin:0;color:var(--navy);font-size:18px}
+.status{color:var(--muted);font-size:12px;font-weight:900;text-align:right}
+.filters{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr .8fr auto;gap:10px;margin-bottom:12px}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 11px;font-size:13px;font-weight:750;color:var(--navy);outline:none;background:#fff;text-transform:uppercase}
+input[type=file]{padding:8px;background:#f8fbff;text-transform:none}
+input:focus,select:focus,textarea:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(0,118,215,.10)}
+textarea{min-height:78px;resize:vertical}
+.btn{border:0;border-radius:12px;padding:10px 14px;font-size:12px;font-weight:950;cursor:pointer;color:#fff;background:linear-gradient(180deg,var(--blue2),var(--blue));box-shadow:var(--soft)}
+.btn.green{background:linear-gradient(180deg,var(--green2),var(--green))}
+.btn.gray{background:linear-gradient(180deg,#9ca3af,#6b7280)}
+.btn.red{background:linear-gradient(180deg,#ef4444,#b91c1c)}
+.btn:disabled{filter:grayscale(1);opacity:.55;cursor:not-allowed}
+.grid2{display:grid;grid-template-columns:38% 62%;gap:14px}
+.grid-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+.field label{display:block;color:var(--navy);font-size:11px;font-weight:950;margin-bottom:5px}
+.field.full{grid-column:1/-1}
+.field.half{grid-column:span 2}
+.notice{border-left:5px solid var(--green2);background:#f8fbff;border-radius:14px;padding:12px;color:var(--navy);font-size:12px;font-weight:800;line-height:1.4;margin-bottom:10px}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;max-height:520px}
+table{border-collapse:collapse;width:100%;min-width:980px;background:#fff}
+th{background:#0f6385;color:#fff;font-size:12px;text-align:left;padding:10px;position:sticky;top:0;z-index:1}
+td{border-bottom:1px solid var(--line);padding:9px 10px;font-size:12px;font-weight:700;color:#0f172a}
+tr:nth-child(even){background:#eef7fd}
+tr:hover{background:#d9ecff;cursor:pointer}
+tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
+.badge{display:inline-flex;border-radius:999px;padding:4px 8px;background:#e8f2ff;color:var(--navy);font-size:10px;font-weight:950}
+.badge.green{background:#e9fff2;color:#166534}
+.badge.red{background:#fee2e2;color:#991b1b}
+.badge.gray{background:#f1f5f9;color:#475569}
+.viewer{height:620px;border:1px dashed #bcd7f5;border-radius:14px;background:#f8fbff;overflow:hidden;display:grid;place-items:center;text-align:center;color:var(--navy)}
+.viewer iframe{width:100%;height:100%;border:0;background:#fff}
+.viewer h2{margin:0 0 6px;font-size:22px;color:var(--navy)}
+.viewer p{font-size:12px;color:var(--muted);font-weight:850}
+.arma-loader{position:fixed;inset:0;background:rgba(2,6,23,.50);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.arma-loader.hidden{display:none!important}
+.arma-loader-box{width:min(390px,92vw);background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 28px 70px rgba(0,0,0,.32);padding:24px;text-align:center;color:var(--navy)}
+.arma-spinner{width:54px;height:54px;border:6px solid #dbeafe;border-top-color:var(--blue2);border-radius:50%;margin:0 auto 14px;animation:armaSpin .8s linear infinite}
+.arma-loader-box h2{font-size:17px;margin:0 0 7px;font-weight:950}
+.arma-loader-box p{font-size:11px;margin:0;color:var(--muted);font-weight:850;line-height:1.35}
+@keyframes armaSpin{to{transform:rotate(360deg)}}
+.login-wall{min-height:260px;display:grid;place-items:center;text-align:center}
+.login-wall h2{color:var(--navy);margin:0 0 8px}
+.login-wall p{color:var(--muted);font-weight:850;max-width:680px}
+.footer{text-align:center;margin-top:14px}
+.footer-card{display:flex;align-items:center;justify-content:center;gap:10px;min-height:38px;padding:9px 18px;border-radius:16px;background:linear-gradient(135deg,#001f4d 0%,#003b86 54%,#004b9b 100%);color:#eaf4ff;font-size:12px;font-weight:850;box-shadow:var(--shadow);flex-wrap:wrap}
+.footer-sep{color:#9dffbf;font-weight:950}
+@media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}.grid-form{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}}
+@media(max-width:700px){.action-grid,.filters,.grid-form{grid-template-columns:1fr}.main{padding:12px}.logo-pelex{height:58px}.logo-arma{height:64px}}
+</style>
+</head>
+<body>
+<div id="armaLoader" class="arma-loader hidden"><div class="arma-loader-box"><div class="arma-spinner"></div><h2 id="armaLoaderText">CARGANDO...</h2><p>ARMA ESTA CONSULTANDO DATOS EN LINEA. ESPERE UN MOMENTO.</p></div></div>
+<header class="top-global">
+  <div class="top-white">
+    <div class="brand-row"><img src="logo_pelex.bmp" alt="PELEX" class="logo-pelex"><div class="brand-separator"></div><img src="ARMA%20logo%202.png" alt="ARMA" class="logo-arma"></div>
+    <div class="top-title"><strong>MANTENIMIENTO | LEER BITACORA</strong><span>CONSULTA CONTROLADA DE REPORTES TECNICOS DOCUMENTADOS Y CERRADOS</span><div class="top-title-actions"><div class="user-pill" id="userPill">VALIDANDO SESION...</div></div></div>
+  </div>
+  <div class="red-line"></div>
+</header>
+<main class="main">
+  <section class="hero"><span>ARMA DATA // BITACORA</span><h1>BITACORA DE REPORTES TECNICOS</h1><p>CONSULTE REPORTES TECNICOS POR FECHA, EQUIPO, PRIORIDAD Y ESTADO. SELECCIONE UNA RT PARA VER SU PDF EN EL VISOR INTERNO.</p></section>
+  <section id="loginWall" class="panel login-wall hidden"><div><h2>SESION NO VALIDADA</h2><p>INGRESE PRIMERO DESDE MAIN.HTML. ESTA PAGINA USA EL TOKEN DE ARMA PARA DEFINIR LOS PERMISOS DE RT.</p><button class="btn" type="button" onclick="goMain()">VOLVER A MAIN</button></div></section>
+  <section id="appArea" class="hidden">
+    <div class="action-grid">
+      <a class="index-nav-card main-home" href="main.html" data-smart-home="1" onclick="return goMain(event)"><div class="nav-icon"><img src="boton-de-inicio.png" alt="INICIO"></div><div class="nav-text"><strong>Inicio</strong><span>Volver a ARMA</span></div></a>
+      <button class="action-card green" type="button" id="btnRefresh" onclick="refreshAll()"><strong>ACTUALIZAR</strong><span>RECARGAR INFORMACION DESDE ARMA_DATA.</span></button>
+      <button class="action-card blue" type="button" id="btnPdf" onclick="generateSelectedPdf()"><strong>GENERAR PDF</strong><span>REGENERAR SOPORTE PDF DE LA RT SELECCIONADA.</span></button>
+      <button class="action-card dark" type="button" onclick="clearViewer()"><strong>LIMPIAR VISOR</strong><span>RETIRAR PDF ACTUAL DEL PANEL.</span></button>
+    </div>
+    <section id="reportPanel" class="panel hidden">
+      <div class="panel-title"><h2>NUEVO REPORTE TECNICO</h2><div class="status" id="reportStatus">LISTO PARA DILIGENCIAR</div></div>
+      <div class="notice">LA RT NACE EN ESTADO RTD. PRIORIDAD 1 ES ATENCION INMEDIATA. PRIORIDAD 2 DEBE ATENDERSE DENTRO DE LAS SIGUIENTES 8 HORAS. ARMA VALIDARA COHERENCIA DE TIEMPOS ANTES DE GUARDAR.</div>
+      <div class="grid-form">
+        <div class="field"><label>QUIEN REPORTA</label><select id="rtPersona"></select></div>
+        <div class="field"><label>PLANTA</label><select id="rtPlanta"></select></div>
+        <div class="field"><label>PRIORIDAD</label><select id="rtPrioridad"><option value="P1_INMEDIATA">P1 INMEDIATA</option><option value="P2_8_HORAS">P2 8 HORAS</option></select></div>
+        <div class="field"><label>TIPO DE TRABAJO</label><select id="rtTipoTrabajo"></select></div>
+        <div class="field half"><label>EQUIPO INTERVENIDO</label><select id="rtEquipo"></select></div>
+        <div class="field half"><label>SUBSISTEMA / COMPONENTE</label><select id="rtSubsistema"></select></div>
+        <div class="field"><label>INICIO INTERVENCION</label><input id="rtInicio" type="datetime-local"></div>
+        <div class="field"><label>FIN INTERVENCION</label><input id="rtFin" type="datetime-local"></div>
+        <div class="field half"><label>FALLA / NECESIDAD</label><textarea id="rtFalla"></textarea></div>
+        <div class="field half"><label>INTERVENCION REALIZADA</label><textarea id="rtIntervencion"></textarea></div>
+        <div class="field half"><label>REPUESTOS USADOS</label><textarea id="rtRepuestos"></textarea></div>
+        <div class="field half"><label>PENDIENTES</label><textarea id="rtPendientes"></textarea></div>
+        <div class="field half"><label>FOTOS DE REFERENCIA</label><input id="rtFotos" type="file" accept="image/png,image/jpeg,image/webp" multiple></div>
+        <div class="field half"><label>OBSERVACIONES</label><textarea id="rtObservaciones"></textarea></div>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap"><button class="btn gray" type="button" onclick="clearReportForm()">LIMPIAR</button><button class="btn green" type="button" onclick="createRT()">GUARDAR RT</button></div>
+    </section>
+    <div id="consultGrid" class="grid2">
+      <section class="panel" id="listPanel">
+        <div class="panel-title"><h2 id="listTitle">LISTA DE RT</h2><div class="status" id="listStatus">SIN CONSULTA</div></div>
+        <div class="filters">
+          <input id="fBuscar" placeholder="BUSCAR BT, RT, EQUIPO O FALLA">
+          <input id="fDesde" type="date">
+          <input id="fHasta" type="date">
+          <select id="fEstado"><option value="">ESTADO</option><option value="RTD">RTD</option><option value="RTCT">RTCT</option></select>
+          <input id="fEquipo" placeholder="EQUIPO">
+          <button class="btn" type="button" onclick="loadRTList()">BUSCAR</button>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>BT</th><th>NUMERO RT</th><th>FECHA</th><th>EQUIPO</th><th>PRIORIDAD</th><th>ESTADO</th></tr></thead><tbody id="rtRows"><tr><td colspan="6">SIN DATOS CARGADOS</td></tr></tbody></table></div>
+      </section>
+      <section class="panel" id="detailPanel">
+        <div class="panel-title"><h2 id="detailTitle">VISOR PDF INTERNO</h2><div class="status" id="detailStatus">SELECCIONE UNA RT</div></div>
+        <div id="viewer" class="viewer"><div><h2>VISOR LISTO</h2><p>SELECCIONE UNA RT PARA CARGAR EL PDF.</p></div></div>
+        <section id="closePanel" class="panel hidden" style="margin-top:14px;box-shadow:none">
+          <div class="panel-title"><h2>CIERRE TECNICO</h2><div class="status" id="closeStatus">SELECCIONE UNA RT DOCUMENTADA</div></div>
+          <div class="grid-form">
+            <div class="field"><label>PRIORIDAD AJUSTADA</label><select id="ctPrioridad"><option value="">MANTENER</option><option value="P1_INMEDIATA">P1 INMEDIATA</option><option value="P2_8_HORAS">P2 8 HORAS</option></select></div>
+            <div class="field"><label>QUIEN REALIZA CIERRE</label><select id="ctPersona"></select></div>
+            <div class="field half"><label>OBSERVACIONES FINALES</label><textarea id="ctObservaciones"></textarea></div>
+            <div class="field half"><label>MOTIVO / JUSTIFICACION DE AJUSTE</label><textarea id="ctMotivo"></textarea></div>
+            <div class="field half"><label>NUEVA OT FUTURA</label><textarea id="ctNuevaOT" placeholder="SOLO DOCUMENTAR POR AHORA. NO CREA OT TODAVIA."></textarea></div>
+            <div class="field half"><label>SOLICITUD / COMPRA FUTURA</label><textarea id="ctSR" placeholder="SOLO DOCUMENTAR POR AHORA. NO CREA SR TODAVIA."></textarea></div>
+          </div>
+          <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap"><button class="btn green" type="button" onclick="closeSelectedRT()">REALIZAR CIERRE TECNICO</button></div>
+        </section>
+      </section>
+    </div>
+  </section>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-04 20:20:13</span></div></footer>
+</main>
+<script>
+const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
+const PAGE_MODE="BITACORA";
+const REQUIRED_PERM="BTN_LEER_BITACORA";
+const ALT_PERM="BTN_RT_CONSULTAR";
+let armaSession={user:"",nombre:"",nivel:"",permissions:{},token:""};
+let selectedRT=null;
+let catalogos={};
+let armaLoaderCount=0;
+function esc(v){let d=document.createElement("div");d.textContent=String(v==null?"":v);return d.innerHTML;}
+function normalizePerms(p){let out={};p=p||{};Object.keys(p).forEach(k=>out[String(k).toUpperCase()]=p[k]===true||String(p[k]).toUpperCase()==="SI"||String(p[k]).toUpperCase()==="TRUE");return out;}
+function isSuperAdmin(){let p=normalizePerms(armaSession.permissions);let u=String(armaSession.user||"").toUpperCase();let n=String(armaSession.nivel||"").toUpperCase();return u==="ARMA"||u==="ARDAN"||n==="SUPER_ADMIN"||p.__SUPER_ADMIN__===true||p.ALL===true;}
+function hasPerm(k){let p=normalizePerms(armaSession.permissions);k=String(k||"").toUpperCase();let n=String(armaSession.nivel||"").toUpperCase();return isSuperAdmin()||n==="ADMIN"||p[k]===true;}
+function canOpenPage(){return hasPerm(REQUIRED_PERM)||hasPerm(ALT_PERM);}
+function showArmaLoader(msg){armaLoaderCount++;let o=document.getElementById("armaLoader");let t=document.getElementById("armaLoaderText");if(t)t.textContent=msg||"CARGANDO...";if(o)o.classList.remove("hidden");}
+function hideArmaLoader(){armaLoaderCount=Math.max(0,armaLoaderCount-1);if(armaLoaderCount===0)document.getElementById("armaLoader").classList.add("hidden");}
+async function api(action,payload,msg){payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem("ARMA_TOKEN")||"";showArmaLoader(msg||"CONSULTANDO ARMA...");try{const res=await fetch(ARMA_API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});return await res.json();}finally{hideArmaLoader();}}
+function readSessionCache(){try{let raw=localStorage.getItem("ARMA_SESSION_CACHE")||"";if(!raw)return null;let s=JSON.parse(raw);if(!s||!s.token)return null;if(Date.now()-Number(s.ts||0)>10*60*1000)return null;return s;}catch(e){return null;}}
+function writeSessionCache(){try{if(!armaSession||!armaSession.token)return;localStorage.setItem("ARMA_SESSION_CACHE",JSON.stringify({user:armaSession.user||"",nombre:armaSession.nombre||"",nivel:armaSession.nivel||"",token:armaSession.token||"",permissions:armaSession.permissions||{},ts:Date.now(),source:"RT_"+PAGE_MODE}));}catch(e){}}
+function setSessionData(data,token){armaSession={user:data.user||"",nombre:data.nombre||data.user||"",nivel:data.nivel||"",permissions:data.permissions||{},token:token||data.token||armaSession.token||""};if(armaSession.token)localStorage.setItem("ARMA_TOKEN",armaSession.token);writeSessionCache();document.getElementById("userPill").textContent=(armaSession.nombre||armaSession.user)+" // "+armaSession.nivel;}
+function showLoginWall(msg){armaLoaderCount=0;hideArmaLoader();document.getElementById("loginWall").classList.remove("hidden");document.getElementById("appArea").classList.add("hidden");document.getElementById("userPill").textContent="SESION NO VALIDADA";if(msg)document.querySelector("#loginWall p").textContent=msg;}
+function startApp(){if(!canOpenPage()){showLoginWall("SU USUARIO NO TIENE PERMISO PARA ABRIR ESTE MODULO RT.");return;}document.getElementById("loginWall").classList.add("hidden");document.getElementById("appArea").classList.remove("hidden");configureMode();loadCatalogos().then(refreshAll);}
+async function validateSession(){let token=localStorage.getItem("ARMA_TOKEN")||"";if(!token){showLoginWall();return;}try{let cached=readSessionCache();if(cached&&cached.token===token){setSessionData(cached,token);startApp();return;}let data=await api("validateSession",{token:token},"VALIDANDO SESION...");if(!data.ok){showLoginWall();return;}setSessionData(data,token);startApp();}catch(e){showLoginWall();}}
+function armaPersistToken(){try{if(armaSession&&armaSession.token)localStorage.setItem("ARMA_TOKEN",armaSession.token);}catch(e){}}
+function armaMainStorageIsFresh(maxAgeMs){try{var raw=localStorage.getItem("ARMA_MAIN_ACTIVE")||"";if(!raw)return false;var data=JSON.parse(raw);if(!data||!data.ts)return false;return (Date.now()-Number(data.ts)) <= (maxAgeMs||3500);}catch(err){return false;}}
+function armaAskMainIsActive(){return new Promise(function(resolve){var resolved=false;var bc=null;function finish(active){if(resolved)return;resolved=true;try{if(bc)bc.close();}catch(err){}resolve(!!active);}try{if("BroadcastChannel" in window){bc=new BroadcastChannel("ARMA_CONTROL_CHANNEL");bc.onmessage=function(ev){var msg=ev.data||{};if(msg.type==="MAIN_ACTIVE")finish(true);};bc.postMessage({type:"FOCUS_MAIN",from:location.href,ts:Date.now()});}}catch(err){}try{localStorage.setItem("ARMA_REQUEST_MAIN_FOCUS",String(Date.now()));}catch(err){}if(armaMainStorageIsFresh(3500))setTimeout(function(){finish(true);},120);setTimeout(function(){finish(false);},650);});}
+function armaTryCloseCurrentPage(){try{window.close();}catch(err){}setTimeout(function(){if(!window.closed){try{console.warn("MAIN YA ESTA ABIERTO. CIERRE ESTA PESTANA MANUALMENTE.");}catch(err){}}},220);}
+function goMain(e){if(e&&e.preventDefault)e.preventDefault();armaPersistToken();armaAskMainIsActive().then(function(active){if(active){try{if(window.opener&&!window.opener.closed)window.opener.focus();}catch(err){}armaTryCloseCurrentPage();}else{window.location.href="main.html";}});return false;}
+function configureMode(){let report=document.getElementById("reportPanel"), grid=document.getElementById("consultGrid"), close=document.getElementById("closePanel"), btnPdf=document.getElementById("btnPdf");if(PAGE_MODE==="REPORTAR"){report.classList.remove("hidden");grid.classList.add("hidden");btnPdf.style.display="none";}else{report.classList.add("hidden");grid.classList.remove("hidden");if(PAGE_MODE==="GESTION")close.classList.remove("hidden");else close.classList.add("hidden");}let est=document.getElementById("fEstado");if(PAGE_MODE==="GESTION"&&est)est.value="RTD";}
+function asArr(v){if(!v)return[];if(Array.isArray(v))return v;if(v.rows&&Array.isArray(v.rows))return v.rows;if(v.files&&Array.isArray(v.files))return v.files;return[];}
+function getCat(keys){for(let i=0;i<keys.length;i++){let k=keys[i];if(catalogos[k])return asArr(catalogos[k]);let u=String(k).toUpperCase();if(catalogos[u])return asArr(catalogos[u]);}return[];}
+function val(o,keys){o=o||{};for(let i=0;i<keys.length;i++){let k=keys[i];if(o[k]!=null&&o[k]!=="")return o[k];let u=String(k).toUpperCase();if(o[u]!=null&&o[u]!=="")return o[u];}return"";}
+function fillSelect(id,rows,textKeys,valueKeys,emptyText){let el=document.getElementById(id);if(!el)return;rows=asArr(rows);let html=emptyText?'<option value="">'+esc(emptyText)+'</option>':"";html+=rows.map(r=>{let text=val(r,textKeys)||val(r,valueKeys)||String(r);let value=val(r,valueKeys)||text;return '<option value="'+esc(value)+'">'+esc(text)+'</option>';}).join("");el.innerHTML=html;}
+async function loadCatalogos(){try{let data=await api("rtCatalogos",{},"CARGANDO CATALOGOS RT...");if(data.ok){catalogos=data.catalogos||data;}}catch(e){catalogos={};}let personas=getCat(["PERSONAL","personal","personas","tecnicos"]);let equipos=getCat(["EQUIPOS","equipos","MEL_EQUIPOS","activos"]);let subs=getCat(["SUBSISTEMAS","subsistemas","COMPONENTES","componentes"]);let tipos=getCat(["TIPO_TRABAJO","TIPOS_TRABAJO","tiposTrabajo"]);let plantas=getCat(["PLANTA","PLANTAS","plantas"]);if(!plantas.length)plantas=[{CODIGO:"PL1",VALOR:"PLANTA 1"},{CODIGO:"PL2",VALOR:"PLANTA 2"},{CODIGO:"PL3",VALOR:"PLANTA 3"}];if(!tipos.length)tipos=[{CODIGO:"CORRECTIVO",VALOR:"CORRECTIVO"},{CODIGO:"AJUSTE",VALOR:"AJUSTE"},{CODIGO:"REVISION",VALOR:"REVISION"}];fillSelect("rtPersona",personas,["NOMBRE_COMPLETO","nombre","NOMBRE"],["ID_PERSONA","idPersona","IDENTIFICACION"],"SELECCIONE");fillSelect("ctPersona",personas,["NOMBRE_COMPLETO","nombre","NOMBRE"],["ID_PERSONA","idPersona","IDENTIFICACION"],"SELECCIONE");fillSelect("rtEquipo",equipos,["NOMBRE","CODIGO_TAG","CODIGO/TAG","EQUIPO"],["ID_ACTIVO","CODIGO_TAG","CODIGO/TAG","EQUIPO"],"SELECCIONE EQUIPO");fillSelect("rtSubsistema",subs,["NOMBRE","SUBSISTEMA","COMPONENTE"],["ID_ACTIVO","SUBSISTEMA","COMPONENTE"],"NO APLICA / SELECCIONE");fillSelect("rtTipoTrabajo",tipos,["VALOR","DESCRIPCION","CODIGO"],["CODIGO","VALOR"],"SELECCIONE");fillSelect("rtPlanta",plantas,["VALOR","DESCRIPCION","CODIGO"],["CODIGO","VALOR"],"SELECCIONE");}
+function refreshAll(){if(PAGE_MODE==="REPORTAR"){clearReportForm(false);}else{loadRTList();}}
+function buildFilters(){return {BUSCAR:document.getElementById("fBuscar").value,FECHA_DESDE:document.getElementById("fDesde").value,FECHA_HASTA:document.getElementById("fHasta").value,ESTADO:document.getElementById("fEstado").value,EQUIPO:document.getElementById("fEquipo").value};}
+async function loadRTList(){document.getElementById("listStatus").textContent="CARGANDO...";try{let data=await api("listRT",{filters:buildFilters()},"CARGANDO RT...");if(!data.ok){document.getElementById("listStatus").textContent=data.error||"ERROR";return;}renderRows(data.rows||data.rt||[]);document.getElementById("listStatus").textContent=(data.count||asArr(data.rows||data.rt).length)+" REGISTROS";}catch(e){document.getElementById("listStatus").textContent="ERROR DE CONEXION";}}
+function renderRows(rows){rows=asArr(rows);let tb=document.getElementById("rtRows");if(!rows.length){tb.innerHTML='<tr><td colspan="6">SIN REGISTROS DISPONIBLES</td></tr>';return;}tb.innerHTML=rows.map(r=>{let id=val(r,["ID_INT","ID_RT","BT","ID"]);let estado=val(r,["ESTADO_RT","ESTADO"]);let cls=estado==="RTCT"?"green":(estado==="RTD"?"red":"gray");return '<tr data-id="'+esc(id)+'"><td><strong>'+esc(id)+'</strong></td><td>'+esc(val(r,["NUMERO_RT","NUM_REGISTRO","RT"]))+'</td><td>'+esc(val(r,["FECHA_HORA_REPORTE","FECHA_INTERVENCION","FECHA"]))+'</td><td>'+esc(val(r,["EQUIPO","EQUIPO_INTERVENIDO","NOMBRE_EQUIPO"]))+'</td><td>'+esc(val(r,["PRIORIDAD"]))+'</td><td><span class="badge '+cls+'">'+esc(estado)+'</span></td></tr>';}).join("");tb.querySelectorAll("tr[data-id]").forEach(tr=>tr.addEventListener("click",function(){tb.querySelectorAll("tr").forEach(x=>x.classList.remove("selected"));this.classList.add("selected");openRT(this.getAttribute("data-id"));}));}
+async function openRT(id){document.getElementById("detailStatus").textContent="CARGANDO DETALLE...";try{let data=await api("getRT",{idRT:id,idInt:id,ID_INT:id},"CARGANDO DETALLE RT...");if(!data.ok){document.getElementById("detailStatus").textContent=data.error||"ERROR";return;}selectedRT=data.rt||data.row||data.data||data;document.getElementById("detailTitle").textContent=(val(selectedRT,["ID_INT","ID_RT","BT"])||id)+" // "+(val(selectedRT,["NUMERO_RT","NUM_REGISTRO","RT"])||"RT");document.getElementById("detailStatus").textContent=val(selectedRT,["ESTADO_RT","ESTADO"])||"DETALLE CARGADO";setViewerFromRT(selectedRT);}catch(e){document.getElementById("detailStatus").textContent="ERROR DE CONEXION";}}
+function drivePreviewFromUrl(url){url=String(url||"").trim();if(!url)return"";let m=url.match(/\/d\/([^\/]+)/)||url.match(/[?&]id=([^&]+)/);if(m&&m[1])return "https://drive.google.com/file/d/"+encodeURIComponent(m[1])+"/preview";return url;}
+function getPdfUrl(rt){return drivePreviewFromUrl(val(rt,["PDF_PREVIEW_URL","DRIVE_PREVIEW_URL","PREVIEW_URL","URL_PREVIEW","PDF_URL","URL_PDF","LINK_PDF"]));}
+function setViewerFromRT(rt){let url=getPdfUrl(rt);let v=document.getElementById("viewer");if(!url){v.innerHTML='<div><h2>PDF NO DISPONIBLE</h2><p>LA RT SELECCIONADA AUN NO TIENE PDF ASOCIADO O EL BACKEND NO RETORNO URL.</p></div>';return;}v.innerHTML='<iframe src="'+esc(url)+'" title="VISOR PDF RT"></iframe>';}
+function clearViewer(){selectedRT=null;document.getElementById("detailTitle").textContent="VISOR PDF INTERNO";document.getElementById("detailStatus").textContent="SELECCIONE UNA RT";document.getElementById("viewer").innerHTML='<div><h2>VISOR LISTO</h2><p>SELECCIONE UNA RT PARA CARGAR EL PDF.</p></div>';}
+function parseDt(id){let v=document.getElementById(id).value;if(!v)return null;return new Date(v);}
+function validateTimes(){let ini=parseDt("rtInicio"), fin=parseDt("rtFin");if(!ini||!fin){alert("DILIGENCIE INICIO Y FIN DE INTERVENCION.");return false;}let rawIni=document.getElementById("rtInicio").value, rawFin=document.getElementById("rtFin").value;if(rawIni.indexOf("T24:")>0||rawFin.indexOf("T24:")>0){alert("HORA 24:00 NO ES VALIDA. USE 00:00 DEL DIA SIGUIENTE.");return false;}let hrs=(fin-ini)/3600000;if(hrs<=0){alert("LA FECHA/HORA FIN DEBE SER MAYOR QUE EL INICIO.");return false;}if(hrs>24){alert("NO ES POSIBLE REPORTAR UNA RT MAYOR A 24 HORAS.");return false;}if(hrs>12){return confirm("LA RT SUPERA 12 HORAS. ESTO REQUIERE REVISION/APROBACION DEL JEFE. DESEA CONTINUAR?");}return true;}
+function collectRT(){return {ID_PERSONA_REPORTA:document.getElementById("rtPersona").value,PLANTA:document.getElementById("rtPlanta").value,PRIORIDAD:document.getElementById("rtPrioridad").value,TIPO_TRABAJO:document.getElementById("rtTipoTrabajo").value,EQUIPO:document.getElementById("rtEquipo").value,SUBSISTEMA:document.getElementById("rtSubsistema").value,FECHA_HORA_INICIO:document.getElementById("rtInicio").value,FECHA_HORA_FIN:document.getElementById("rtFin").value,FALLA_NECESIDAD:document.getElementById("rtFalla").value,INTERVENCION_REALIZADA:document.getElementById("rtIntervencion").value,REPUESTOS_USADOS:document.getElementById("rtRepuestos").value,PENDIENTES:document.getElementById("rtPendientes").value,OBSERVACIONES:document.getElementById("rtObservaciones").value};}
+async function createRT(){if(!hasPerm("BTN_DILIGENCIAR_RT")&&!hasPerm("BTN_RT_CREAR")){alert("NO TIENE PERMISO PARA CREAR RT.");return;}let data=collectRT();if(!data.ID_PERSONA_REPORTA||!data.PLANTA||!data.EQUIPO||!data.FALLA_NECESIDAD||!data.INTERVENCION_REALIZADA){alert("COMPLETE PERSONA, PLANTA, EQUIPO, FALLA E INTERVENCION.");return;}if(!validateTimes())return;document.getElementById("reportStatus").textContent="GUARDANDO RT...";try{let res=await api("createRT",{data:data},"GUARDANDO RT...");if(!res.ok){document.getElementById("reportStatus").textContent=res.error||"NO FUE POSIBLE GUARDAR";return;}let id=res.idRT||res.ID_INT||res.idInt||val(res.rt||{},["ID_INT","ID_RT"]);await uploadFotosForRT(id);try{await api("generateRTPDF",{idRT:id,idInt:id},"GENERANDO PDF...");}catch(e){}document.getElementById("reportStatus").textContent="RT GUARDADA: "+id;alert("RT GUARDADA CORRECTAMENTE: "+id);clearReportForm(false);}catch(e){document.getElementById("reportStatus").textContent="ERROR DE CONEXION";}}
+function fileToBase64(file){return new Promise(function(resolve,reject){let r=new FileReader();r.onload=function(){let s=String(r.result||"");resolve(s.indexOf(",")>=0?s.split(",")[1]:s);};r.onerror=reject;r.readAsDataURL(file);});}
+async function uploadFotosForRT(id){let inp=document.getElementById("rtFotos");let files=inp&&inp.files?Array.from(inp.files):[];if(!id||!files.length)return;for(let i=0;i<files.length;i++){let file=files[i];if(!/^image\/(jpeg|jpg|png|webp)$/i.test(file.type||"")){alert("SE OMITE ARCHIVO NO VALIDO: "+file.name);continue;}if(file.size>2.5*1024*1024){alert("SE OMITE FOTO MAYOR A 2.5 MB: "+file.name);continue;}let base64=await fileToBase64(file);await api("uploadRTFoto",{idRT:id,idInt:id,fileName:file.name,mimeType:file.type,base64:base64},"SUBIENDO FOTO RT...");}inp.value="";}
+function clearReportForm(resetStatus=true){["rtFalla","rtIntervencion","rtRepuestos","rtPendientes","rtObservaciones"].forEach(id=>document.getElementById(id).value="");["rtInicio","rtFin"].forEach(id=>document.getElementById(id).value="");let f=document.getElementById("rtFotos");if(f)f.value="";if(resetStatus)document.getElementById("reportStatus").textContent="FORMULARIO LIMPIO";}
+async function closeSelectedRT(){if(!selectedRT){alert("SELECCIONE UNA RT.");return;}if(!hasPerm("BTN_REPORTES_TECNICOS")&&!hasPerm("BTN_RT_CERRAR")){alert("NO TIENE PERMISO PARA CIERRE TECNICO.");return;}let id=val(selectedRT,["ID_INT","ID_RT","BT"]);let payload={idRT:id,idInt:id,data:{PRIORIDAD:document.getElementById("ctPrioridad").value,ID_PERSONA_CIERRE:document.getElementById("ctPersona").value,OBSERVACIONES_CIERRE:document.getElementById("ctObservaciones").value,MOTIVO_EDICION_ADMIN:document.getElementById("ctMotivo").value,REQUIERE_NUEVA_OT_DESC:document.getElementById("ctNuevaOT").value,REQUIERE_SR_DESC:document.getElementById("ctSR").value}};if(!payload.data.ID_PERSONA_CIERRE){alert("SELECCIONE QUIEN REALIZA EL CIERRE.");return;}if(!payload.data.OBSERVACIONES_CIERRE){alert("DILIGENCIE OBSERVACIONES FINALES.");return;}if(!confirm("CONFIRMA REALIZAR EL CIERRE TECNICO DE "+id+"?"))return;document.getElementById("closeStatus").textContent="CERRANDO RT...";try{let res=await api("closeRT",payload,"REALIZANDO CIERRE TECNICO...");if(!res.ok){document.getElementById("closeStatus").textContent=res.error||"NO FUE POSIBLE CERRAR";return;}try{await api("generateRTPDF",{idRT:id,idInt:id},"ACTUALIZANDO PDF...");}catch(e){}document.getElementById("closeStatus").textContent="RT CERRADA";await openRT(id);await loadRTList();alert("CIERRE TECNICO REALIZADO.");}catch(e){document.getElementById("closeStatus").textContent="ERROR DE CONEXION";}}
+async function generateSelectedPdf(){if(!selectedRT){alert("SELECCIONE UNA RT.");return;}if(!hasPerm("BTN_RT_GENERAR_PDF")&&!hasPerm("BTN_REPORTES_TECNICOS")&&!hasPerm("BTN_DILIGENCIAR_RT")){alert("NO TIENE PERMISO PARA GENERAR PDF.");return;}let id=val(selectedRT,["ID_INT","ID_RT","BT"]);try{let res=await api("generateRTPDF",{idRT:id,idInt:id},"GENERANDO PDF RT...");if(!res.ok){alert(res.error||"NO FUE POSIBLE GENERAR PDF");return;}await openRT(id);alert("PDF ACTUALIZADO.");}catch(e){alert("ERROR DE CONEXION");}}
+document.addEventListener("DOMContentLoaded",validateSession);
+</script>
+</body>
+</html>
+
