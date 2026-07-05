@@ -169,7 +169,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-04 22:07:01</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-04 22:33:24</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -243,7 +243,31 @@ function refreshAll(){if(PAGE_MODE==="REPORTAR"){clearReportForm(false);}else{lo
 function buildFilters(){return {BUSCAR:document.getElementById("fBuscar").value,FECHA_DESDE:document.getElementById("fDesde").value,FECHA_HASTA:document.getElementById("fHasta").value,ESTADO:document.getElementById("fEstado").value,EQUIPO:document.getElementById("fEquipo").value};}
 async function loadRTList(){document.getElementById("listStatus").textContent="CARGANDO...";try{let data=await api("listRT",{filters:buildFilters()},"CARGANDO RT...");if(!data.ok){document.getElementById("listStatus").textContent=data.error||"ERROR";return;}renderRows(data.rows||data.rt||[]);document.getElementById("listStatus").textContent=(data.count||asArr(data.rows||data.rt).length)+" REGISTROS";}catch(e){document.getElementById("listStatus").textContent="ERROR DE CONEXION";}}
 function renderRows(rows){rows=asArr(rows);let tb=document.getElementById("rtRows");if(!rows.length){tb.innerHTML='<tr><td colspan="6">SIN REGISTROS DISPONIBLES</td></tr>';return;}tb.innerHTML=rows.map(r=>{let id=val(r,["ID_INT","ID_RT","BT","ID"]);let estado=val(r,["ESTADO_RT","ESTADO"]);let cls=estado==="RTCT"?"green":(estado==="RTD"?"red":"gray");return '<tr data-id="'+esc(id)+'"><td><strong>'+esc(id)+'</strong></td><td>'+esc(val(r,["NUMERO_RT","NUM_REGISTRO","RT"]))+'</td><td>'+esc(val(r,["FECHA_HORA_REPORTE","FECHA_INTERVENCION","FECHA"]))+'</td><td>'+esc(val(r,["EQUIPO","EQUIPO_INTERVENIDO","NOMBRE_EQUIPO"]))+'</td><td>'+esc(val(r,["PRIORIDAD"]))+'</td><td><span class="badge '+cls+'">'+esc(estado)+'</span></td></tr>';}).join("");tb.querySelectorAll("tr[data-id]").forEach(tr=>tr.addEventListener("click",function(){tb.querySelectorAll("tr").forEach(x=>x.classList.remove("selected"));this.classList.add("selected");openRT(this.getAttribute("data-id"));}));}
-async function openRT(id){document.getElementById("detailStatus").textContent="CARGANDO DETALLE...";try{let data=await api("getRT",{idRT:id,idInt:id,ID_INT:id},"CARGANDO DETALLE RT...");if(!data.ok){document.getElementById("detailStatus").textContent=data.error||"ERROR";return;}selectedRT=data.rt||data.row||data.data||data;document.getElementById("detailTitle").textContent=(val(selectedRT,["ID_INT","ID_RT","BT"])||id)+" // "+(val(selectedRT,["NUMERO_RT","NUM_REGISTRO","RT"])||"RT");document.getElementById("detailStatus").textContent=val(selectedRT,["ESTADO_RT","ESTADO"])||"DETALLE CARGADO";setViewerFromRT(selectedRT);}catch(e){document.getElementById("detailStatus").textContent="ERROR DE CONEXION";}}
+async function resolvePdfForRT(id,rt){
+  try{
+    if(getPdfUrl(rt)){return rt;}
+    let res=await api("resolveRTPDF",{idRT:id,idInt:id,ID_RT:id,CONSECUTIVO_BT:id},"BUSCANDO PDF RT...");
+    if(res&&res.ok){
+      rt.PDF_FILE_ID=res.fileId||rt.PDF_FILE_ID||"";
+      rt.PDF_URL=res.url||rt.PDF_URL||"";
+      rt.PDF_PREVIEW_URL=res.previewUrl||rt.PDF_PREVIEW_URL||"";
+      rt.ESTADO_PDF=res.estadoPdf||rt.ESTADO_PDF||"ENCONTRADO_DRIVE";
+    }
+    return rt;
+  }catch(e){return rt;}
+}
+async function openRT(id){
+  document.getElementById("detailStatus").textContent="CARGANDO DETALLE...";
+  try{
+    let data=await api("getRT",{idRT:id,idInt:id,ID_INT:id},"CARGANDO DETALLE RT...");
+    if(!data.ok){document.getElementById("detailStatus").textContent=data.error||"ERROR";return;}
+    selectedRT=data.rt||data.row||data.data||data;
+    selectedRT=await resolvePdfForRT(id,selectedRT);
+    document.getElementById("detailTitle").textContent=(val(selectedRT,["ID_INT","ID_RT","BT","CONSECUTIVO_BT"])||id)+" // "+(val(selectedRT,["NUMERO_RT","NUM_REGISTRO","NUM_REGISTRO_RT","RT"])||"RT");
+    document.getElementById("detailStatus").textContent=val(selectedRT,["ESTADO_RT","ESTADO"])||"DETALLE CARGADO";
+    setViewerFromRT(selectedRT);
+  }catch(e){document.getElementById("detailStatus").textContent="ERROR DE CONEXION";}
+}
 function drivePreviewFromUrl(url){url=String(url||"").trim();if(!url)return"";let m=url.match(/\/d\/([^\/]+)/)||url.match(/[?&]id=([^&]+)/);if(m&&m[1])return "https://drive.google.com/file/d/"+encodeURIComponent(m[1])+"/preview";return url;}
 function getPdfUrl(rt){return drivePreviewFromUrl(val(rt,["PDF_PREVIEW_URL","DRIVE_PREVIEW_URL","PREVIEW_URL","URL_PREVIEW","PDF_URL","URL_PDF","LINK_PDF"]));}
 function setViewerFromRT(rt){let url=getPdfUrl(rt);let v=document.getElementById("viewer");if(!url){v.innerHTML='<div><h2>PDF NO DISPONIBLE</h2><p>LA RT SELECCIONADA AUN NO TIENE PDF ASOCIADO O EL BACKEND NO RETORNO URL.</p></div>';return;}v.innerHTML='<iframe src="'+esc(url)+'" title="VISOR PDF RT"></iframe>';}
