@@ -103,12 +103,25 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
 .footer{text-align:center;margin-top:14px}
 .footer-card{display:flex;align-items:center;justify-content:center;gap:10px;min-height:38px;padding:9px 18px;border-radius:16px;background:linear-gradient(135deg,#001f4d 0%,#003b86 54%,#004b9b 100%);color:#eaf4ff;font-size:12px;font-weight:850;box-shadow:var(--shadow);flex-wrap:wrap}
 .footer-sep{color:#9dffbf;font-weight:950}
+.resumen48-modal{position:fixed;inset:0;background:rgba(2,6,23,.58);z-index:9998;display:flex;align-items:center;justify-content:center;padding:22px;backdrop-filter:blur(2px)}
+.resumen48-modal.hidden{display:none!important}
+.resumen48-box{width:min(1180px,96vw);max-height:86vh;background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 28px 70px rgba(0,0,0,.34);overflow:hidden;color:var(--navy)}
+.resumen48-head{background:linear-gradient(135deg,#002b66,#004b9b,#0076d7);color:#fff;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.resumen48-head h2{margin:0;font-size:21px;font-weight:950}
+.resumen48-head span{font-size:11px;font-weight:900;color:#dbeafe}
+.resumen48-body{padding:16px 18px;max-height:60vh;overflow:auto;background:#f8fbff}
+.resumen48-table{width:100%;min-width:980px;border-collapse:collapse;background:#fff;border:1px solid var(--line)}
+.resumen48-table th{position:sticky;top:0;background:#0f6385;color:#fff;font-size:11px;padding:9px;text-align:left}
+.resumen48-table td{vertical-align:top;border-bottom:1px solid var(--line);padding:8px 9px;font-size:11px;line-height:1.25;font-weight:750;color:#0f172a}
+.resumen48-foot{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:12px 18px;background:#fff;border-top:1px solid var(--line)}
+.resumen48-ok{border:0;border-radius:12px;background:linear-gradient(180deg,#00d65f,#55b52e);color:#fff;font-size:12px;font-weight:950;padding:10px 22px;cursor:pointer;box-shadow:var(--soft)}
 @media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.grid2,.detail-grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}.grid-form{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}}
 @media(max-width:700px){.action-grid,.filters,.grid-form{grid-template-columns:1fr}.main{padding:12px}.logo-pelex{height:58px}.logo-arma{height:64px}}
 </style>
 </head>
 <body>
 <div id="armaLoader" class="arma-loader hidden"><div class="arma-loader-box"><div class="arma-spinner"></div><h2 id="armaLoaderText">CARGANDO...</h2><p>ARMA ESTA CONSULTANDO DATOS EN LINEA. ESPERE UN MOMENTO.</p></div></div>
+<div id="resumen48Modal" class="resumen48-modal hidden"><div class="resumen48-box"><div class="resumen48-head"><div><h2>RESUMEN ULTIMAS 48 HORAS</h2><span>MAQUINA, FECHA DE REPORTE, REPORTA, FALLA, INTERVENCION Y PENDIENTES</span></div></div><div class="resumen48-body" id="resumen48Body"></div><div class="resumen48-foot"><button class="resumen48-ok" type="button" onclick="closeResumen48()">ACEPTAR</button></div></div></div>
 <header class="top-global">
   <div class="top-white">
     <div class="brand-row"><img src="logo_pelex.bmp" alt="PELEX" class="logo-pelex"><div class="brand-separator"></div><img src="ARMA%20logo%202.png" alt="ARMA" class="logo-arma"></div>
@@ -178,7 +191,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-06 16:55:11</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-06 17:32:05</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -188,7 +201,7 @@ const ALT_PERM="BTN_RT_CERRAR";
 let armaSession={user:"",nombre:"",nivel:"",permissions:{},token:""};
 let selectedRT=null;
 let catalogos={};let rtEquiposAll=[];let rtPersonasAll=[];let rtPlantasAll=[];
-let armaLoaderCount=0;
+let armaLoaderCount=0;let resumen48Shown=false;
 function esc(v){let d=document.createElement("div");d.textContent=String(v==null?"":v);return d.innerHTML;}
 function normalizePerms(p){let out={};p=p||{};Object.keys(p).forEach(k=>out[String(k).toUpperCase()]=p[k]===true||String(p[k]).toUpperCase()==="SI"||String(p[k]).toUpperCase()==="TRUE");return out;}
 function isSuperAdmin(){let p=normalizePerms(armaSession.permissions);let u=String(armaSession.user||"").toUpperCase();let n=String(armaSession.nivel||"").toUpperCase();return u==="ARMA"||u==="ARDAN"||n==="SUPER_ADMIN"||p.__SUPER_ADMIN__===true||p.ALL===true;}
@@ -197,11 +210,11 @@ function canOpenPage(){return hasPerm(REQUIRED_PERM)||hasPerm(ALT_PERM);}
 function showArmaLoader(msg){armaLoaderCount++;let o=document.getElementById("armaLoader");let t=document.getElementById("armaLoaderText");if(t)t.textContent=msg||"CARGANDO...";if(o)o.classList.remove("hidden");}
 function hideArmaLoader(){armaLoaderCount=Math.max(0,armaLoaderCount-1);if(armaLoaderCount===0)document.getElementById("armaLoader").classList.add("hidden");}
 async function api(action,payload,msg){payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem("ARMA_TOKEN")||"";showArmaLoader(msg||"CONSULTANDO ARMA...");try{const res=await fetch(ARMA_API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});return await res.json();}finally{hideArmaLoader();}}
-function readSessionCache(){try{let raw=localStorage.getItem("ARMA_SESSION_CACHE")||"";if(!raw)return null;let s=JSON.parse(raw);if(!s||!s.token)return null;if(Date.now()-Number(s.ts||0)>10*60*1000)return null;return s;}catch(e){return null;}}
+function readSessionCache(){try{let raw=localStorage.getItem("ARMA_SESSION_CACHE")||"";if(!raw)return null;let s=JSON.parse(raw);if(!s||!s.token)return null;if(Date.now()-Number(s.ts||0)>8*60*60*1000)return null;return s;}catch(e){return null;}}
 function writeSessionCache(){try{if(!armaSession||!armaSession.token)return;localStorage.setItem("ARMA_SESSION_CACHE",JSON.stringify({user:armaSession.user||"",nombre:armaSession.nombre||"",nivel:armaSession.nivel||"",token:armaSession.token||"",permissions:armaSession.permissions||{},ts:Date.now(),source:"RT_"+PAGE_MODE}));}catch(e){}}
 function setSessionData(data,token){armaSession={user:data.user||"",nombre:data.nombre||data.user||"",nivel:data.nivel||"",permissions:data.permissions||{},token:token||data.token||armaSession.token||""};if(armaSession.token)localStorage.setItem("ARMA_TOKEN",armaSession.token);writeSessionCache();document.getElementById("userPill").textContent=(armaSession.nombre||armaSession.user)+" // "+armaSession.nivel;}
 function showLoginWall(msg){armaLoaderCount=0;hideArmaLoader();document.getElementById("loginWall").classList.remove("hidden");document.getElementById("appArea").classList.add("hidden");document.getElementById("userPill").textContent="SESION NO VALIDADA";if(msg)document.querySelector("#loginWall p").textContent=msg;}
-function startApp(){if(!canOpenPage()){showLoginWall("SU USUARIO NO TIENE PERMISO PARA ABRIR ESTE MODULO RT.");return;}document.getElementById("loginWall").classList.add("hidden");document.getElementById("appArea").classList.remove("hidden");configureMode();loadCatalogos().then(refreshAll);}
+function startApp(){if(!canOpenPage()){showLoginWall("SU USUARIO NO TIENE PERMISO PARA ABRIR ESTE MODULO RT.");return;}document.getElementById("loginWall").classList.add("hidden");document.getElementById("appArea").classList.remove("hidden");configureMode();if(PAGE_MODE==="BITACORA"){refreshAll();}else{loadCatalogos().then(refreshAll);}}
 async function validateSession(){let token=localStorage.getItem("ARMA_TOKEN")||"";if(!token){showLoginWall();return;}try{let cached=readSessionCache();if(cached&&cached.token===token){setSessionData(cached,token);startApp();return;}let data=await api("validateSession",{token:token},"VALIDANDO SESION...");if(!data.ok){showLoginWall();return;}setSessionData(data,token);startApp();}catch(e){showLoginWall();}}
 function armaPersistToken(){try{if(armaSession&&armaSession.token)localStorage.setItem("ARMA_TOKEN",armaSession.token);}catch(e){}}
 function armaMainStorageIsFresh(maxAgeMs){try{var raw=localStorage.getItem("ARMA_MAIN_ACTIVE")||"";if(!raw)return false;var data=JSON.parse(raw);if(!data||!data.ts)return false;return (Date.now()-Number(data.ts)) <= (maxAgeMs||3500);}catch(err){return false;}}
@@ -250,8 +263,16 @@ async function loadCatalogos(){
 }
 function refreshAll(){if(PAGE_MODE==="REPORTAR"){clearReportForm(false);}else{loadRTList();}}
 function buildFilters(){return {BUSCAR:document.getElementById("fBuscar").value,FECHA_DESDE:document.getElementById("fDesde").value,FECHA_HASTA:document.getElementById("fHasta").value,ESTADO:document.getElementById("fEstado").value,EQUIPO:document.getElementById("fEquipo").value};}
-async function loadRTList(){document.getElementById("listStatus").textContent="CARGANDO...";try{let data=await api("listRT",{filters:buildFilters()},"CARGANDO RT...");if(!data.ok){document.getElementById("listStatus").textContent=data.error||"ERROR";return;}renderRows(data.rows||data.rt||[]);document.getElementById("listStatus").textContent=(data.count||asArr(data.rows||data.rt).length)+" REGISTROS";}catch(e){document.getElementById("listStatus").textContent="ERROR DE CONEXION";}}
+function hasActiveFilters(){let f=buildFilters();return !!(String(f.BUSCAR||'').trim()||String(f.FECHA_DESDE||'').trim()||String(f.FECHA_HASTA||'').trim()||String(f.ESTADO||'').trim()||String(f.EQUIPO||'').trim());}
+function rtListCacheKey(){return 'ARMA_RT_LIST_CACHE_'+PAGE_MODE;}
+function readRTListCache(){try{let raw=sessionStorage.getItem(rtListCacheKey())||'';if(!raw)return null;let c=JSON.parse(raw);if(!c||!c.rows||Date.now()-Number(c.ts||0)>60000)return null;return c;}catch(e){return null;}}
+function writeRTListCache(rows,count){try{sessionStorage.setItem(rtListCacheKey(),JSON.stringify({rows:rows||[],count:count||0,ts:Date.now()}));}catch(e){}}
+async function loadRTList(){document.getElementById('listStatus').textContent='CARGANDO...';try{let cached=(PAGE_MODE==='BITACORA'&&!hasActiveFilters())?readRTListCache():null;if(cached){renderRows(cached.rows);document.getElementById('listStatus').textContent=(cached.count||cached.rows.length)+' REGISTROS';showResumen48FromRows(cached.rows);return;}let data=await api('listRT',{filters:buildFilters()},'CARGANDO RT...');if(!data.ok){document.getElementById('listStatus').textContent=data.error||'ERROR';return;}let rows=data.rows||data.rt||[];renderRows(rows);document.getElementById('listStatus').textContent=(data.count||asArr(rows).length)+' REGISTROS';if(PAGE_MODE==='BITACORA'&&!hasActiveFilters())writeRTListCache(rows,data.count||asArr(rows).length);if(PAGE_MODE==='BITACORA')showResumen48FromRows(rows);}catch(e){document.getElementById('listStatus').textContent='ERROR DE CONEXION';}}
 function renderRows(rows){rows=asArr(rows);let tb=document.getElementById("rtRows");if(!rows.length){tb.innerHTML='<tr><td colspan="6">SIN REGISTROS DISPONIBLES</td></tr>';return;}tb.innerHTML=rows.map(r=>{let id=val(r,["ID_INT","ID_RT","BT","ID"]);let estado=val(r,["ESTADO_RT","ESTADO"]);let cls=estado==="RTCT"?"green":(estado==="RTD"?"red":"gray");return '<tr data-id="'+esc(id)+'"><td><strong>'+esc(id)+'</strong></td><td>'+esc(val(r,["NUMERO_RT","NUM_REGISTRO","RT"]))+'</td><td>'+esc(val(r,["FECHA_HORA_REPORTE","FECHA_INTERVENCION","FECHA"]))+'</td><td>'+esc(val(r,["EQUIPO","EQUIPO_INTERVENIDO","NOMBRE_EQUIPO"]))+'</td><td>'+esc(val(r,["PRIORIDAD"]))+'</td><td><span class="badge '+cls+'">'+esc(estado)+'</span></td></tr>';}).join("");tb.querySelectorAll("tr[data-id]").forEach(tr=>tr.addEventListener("click",function(){tb.querySelectorAll("tr").forEach(x=>x.classList.remove("selected"));this.classList.add("selected");openRT(this.getAttribute("data-id"));}));}
+function parseDateAny(v){v=String(v==null?'':v).trim();if(!v)return null;let m=v.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);if(m)return new Date(+m[1],+m[2]-1,+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0));m=v.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);if(m)return new Date(+m[3],+m[2]-1,+m[1],+(m[4]||0),+(m[5]||0),+(m[6]||0));let d=new Date(v);return isNaN(d.getTime())?null:d;}
+function closeResumen48(){let m=document.getElementById('resumen48Modal');if(m)m.classList.add('hidden');}
+function resumen48Row(r){return '<tr><td>'+esc(val(r,['EQUIPO','EQUIPO_INTERVENIDO','NOMBRE_EQUIPO']))+'</td><td>'+esc(val(r,['FECHA_HORA_REPORTE','FECHA_INTERVENCION','FECHA']))+'</td><td>'+esc(val(r,['PERSONAS_REPORTAN','QUIEN_REPORTA','REPORTA']))+'</td><td>'+esc(val(r,['DESCRIPCION_FALLA_NECESIDAD','FALLA_NECESIDAD','FALLA']))+'</td><td>'+esc(val(r,['INTERVENCION_REALIZADA','INTERVENCION']))+'</td><td>'+esc(val(r,['PENDIENTES']))+'</td></tr>'; }
+function showResumen48FromRows(rows){if(PAGE_MODE!=='BITACORA'||resumen48Shown)return;resumen48Shown=true;rows=asArr(rows);let lim=Date.now()-48*60*60*1000;let recent=rows.filter(r=>{let d=parseDateAny(val(r,['FECHA_HORA_REPORTE','FECHA_INTERVENCION','FECHA','FECHA_HORA_INICIO']));return d&&d.getTime()>=lim;});let body=document.getElementById('resumen48Body'),modal=document.getElementById('resumen48Modal');if(!body||!modal)return;if(!recent.length){body.innerHTML=`<div style='padding:18px;font-weight:900;color:#002b66'>NO HAY RT REGISTRADAS EN LAS ULTIMAS 48 HORAS SEGUN LA CONSULTA ACTUAL.</div>`;modal.classList.remove('hidden');return;}body.innerHTML=`<table class='resumen48-table'><thead><tr><th>MAQUINA</th><th>FECHA REPORTE</th><th>REPORTA</th><th>FALLA</th><th>INTERVENCION</th><th>PENDIENTES</th></tr></thead><tbody>`+recent.map(resumen48Row).join('')+`</tbody></table>`;modal.classList.remove('hidden');}
 async function resolvePdfForRT(id,rt){
   try{
     if(getPdfUrl(rt)){return rt;}
