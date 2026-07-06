@@ -22,36 +22,36 @@ body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);
 .top-title span{display:block;color:var(--muted);font-size:12px;font-weight:900;margin-top:5px}
 .top-title-actions{margin-top:9px;display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
 .user-pill{display:inline-flex;align-items:center;gap:8px;background:#f8fbff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--navy);font-size:12px;font-weight:900}
-.main{padding:10px 18px 16px}
-.hero{position:relative;overflow:hidden;border-radius:18px;background:radial-gradient(circle at 74% 10%,#0076d7 0,#004b9b 42%,#002b66 100%);box-shadow:var(--shadow);color:#fff;padding:12px 24px;margin-bottom:8px;min-height:86px}
-.hero:after{content:'BITACORA';position:absolute;right:18px;bottom:-18px;font-size:58px;font-weight:950;letter-spacing:4px;color:rgba(255,255,255,.052)}
-.hero span{display:none}
-.hero h1{margin:0 0 5px;font-size:25px}
-.hero p{margin:0;max-width:1220px;color:#eaf4ff;font-size:10px;line-height:1.2;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;z-index:2}
-.action-grid{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:8px;margin-bottom:8px}
-.index-nav-card{position:relative;display:flex;align-items:center;gap:10px;min-width:210px;min-height:60px;height:100%;padding:9px 14px;border-radius:16px;background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid #dbe5f0;box-shadow:0 8px 18px rgba(0,43,102,.10);text-decoration:none;color:#002b66;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.main{padding:10px 18px 14px}
+.hero{position:relative;overflow:hidden;border-radius:18px;background:radial-gradient(circle at 74% 10%,#0076d7 0,#004b9b 42%,#002b66 100%);box-shadow:var(--shadow);color:#fff;padding:12px 22px;margin-bottom:10px}
+.hero:after{content:'BITACORA';position:absolute;right:20px;bottom:-14px;font-size:68px;font-weight:950;letter-spacing:4px;color:rgba(255,255,255,.055)}
+.hero span{display:inline-block;background:rgba(0,214,95,.15);border:1px solid rgba(0,214,95,.45);color:#b8ffd5;padding:6px 10px;border-radius:999px;font-weight:950;font-size:11px}
+.hero h1{margin:0 0 4px;font-size:23px}
+.hero p{margin:0;max-width:1220px;color:#eaf4ff;font-size:10px;line-height:1.18;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;z-index:2}
+.action-grid{display:grid;grid-template-columns:repeat(4,minmax(170px,1fr));gap:10px;margin-bottom:10px}
+.index-nav-card{position:relative;display:flex;align-items:center;gap:10px;min-width:210px;min-height:64px;height:100%;padding:9px 14px;border-radius:16px;background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid #dbe5f0;box-shadow:0 10px 22px rgba(0,43,102,.10);text-decoration:none;color:#002b66;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
 .index-nav-card:before{content:'';position:absolute;left:0;top:0;width:100%;height:5px;background:linear-gradient(90deg,#004b9b,#0076d7,#00bfd6,#55b52e)}
 .index-nav-card:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(0,43,102,.16);border-color:#bcd7f5}
-.index-nav-card .nav-icon{width:42px;height:42px;border-radius:14px;background:#ffffff;border:1px solid #dbe5f0;display:grid;place-items:center;flex:0 0 42px;box-shadow:0 4px 10px rgba(15,23,42,.08)}
-.index-nav-card .nav-icon img{width:30px;height:30px;object-fit:contain;display:block}
+.index-nav-card .nav-icon{width:44px;height:44px;border-radius:14px;background:#ffffff;border:1px solid #dbe5f0;display:grid;place-items:center;flex:0 0 44px;box-shadow:0 4px 10px rgba(15,23,42,.08)}
+.index-nav-card .nav-icon img{width:31px;height:31px;object-fit:contain;display:block}
 .index-nav-card .nav-text{display:flex;flex-direction:column;line-height:1.1}
-.index-nav-card .nav-text strong{font-size:15px;font-weight:900;color:#002b66;letter-spacing:.2px}
-.index-nav-card .nav-text span{font-size:9px;font-weight:900;color:#008c2e;letter-spacing:.35px;text-transform:uppercase;margin-top:4px}
+.index-nav-card .nav-text strong{font-size:16px;font-weight:900;color:#002b66;letter-spacing:.2px}
+.index-nav-card .nav-text span{font-size:10px;font-weight:900;color:#008c2e;letter-spacing:.45px;text-transform:uppercase;margin-top:4px}
 .index-nav-card.main-home{background:linear-gradient(180deg,#ffffff,#eef7ff)}
 .index-nav-card.main-home .nav-icon{background:#e8f2ff}
-.action-card{position:relative;overflow:hidden;border:0;border-radius:16px;background:#fff;box-shadow:0 9px 20px rgba(0,43,102,.10);padding:11px 14px;text-align:left;cursor:pointer;border-left:5px solid var(--green2);min-height:60px}
+.action-card{position:relative;overflow:hidden;border:0;border-radius:16px;background:#fff;box-shadow:var(--shadow);padding:11px 14px;text-align:left;cursor:pointer;border-left:6px solid var(--green2);min-height:64px}
 .action-card:hover{filter:brightness(1.03);transform:translateY(-1px)}
 .action-card strong{display:block;color:var(--navy);font-size:14px;font-weight:950;margin-bottom:4px}
-.action-card span{display:block;color:var(--muted);font-size:9px;font-weight:850;line-height:1.25}
+.action-card span{display:block;color:var(--muted);font-size:10px;font-weight:850;line-height:1.25}
 .action-card.blue{border-left-color:var(--blue2)}
 .action-card.green{border-left-color:var(--green2)}
 .action-card.dark{border-left-color:#111827}
-.panel{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 22px rgba(0,43,102,.10);padding:12px;margin-bottom:10px}
-.panel-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:10px;margin-bottom:10px}
+.panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
 .panel-title h2{margin:0;color:var(--navy);font-size:18px}
 .status{color:var(--muted);font-size:12px;font-weight:900;text-align:right}
-.filters{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr .8fr auto;gap:10px;margin-bottom:12px}
-input,select,textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 11px;font-size:13px;font-weight:750;color:var(--navy);outline:none;background:#fff;text-transform:uppercase}
+.filters{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr .8fr auto;gap:8px;margin-bottom:8px}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:8px 10px;font-size:12px;font-weight:750;color:var(--navy);outline:none;background:#fff;text-transform:uppercase}
 input[type=file]{padding:8px;background:#f8fbff;text-transform:none}
 input:focus,select:focus,textarea:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(0,118,215,.10)}
 textarea{min-height:78px;resize:vertical}
@@ -184,7 +184,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
         </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-06 12:47:24</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-06 13:01:33</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -203,12 +203,12 @@ function canOpenPage(){return hasPerm(REQUIRED_PERM)||hasPerm(ALT_PERM);}
 function showArmaLoader(msg){armaLoaderCount++;let o=document.getElementById("armaLoader");let t=document.getElementById("armaLoaderText");if(t)t.textContent=msg||"CARGANDO...";if(o)o.classList.remove("hidden");}
 function hideArmaLoader(){armaLoaderCount=Math.max(0,armaLoaderCount-1);if(armaLoaderCount===0)document.getElementById("armaLoader").classList.add("hidden");}
 async function api(action,payload,msg){payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem("ARMA_TOKEN")||"";showArmaLoader(msg||"CONSULTANDO ARMA...");try{const res=await fetch(ARMA_API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});return await res.json();}finally{hideArmaLoader();}}
-function readSessionCache(){try{let raw=localStorage.getItem("ARMA_SESSION_CACHE")||"";if(!raw)return null;let s=JSON.parse(raw);if(!s||!s.token)return null;return s;}catch(e){return null;}}
+function readSessionCache(){try{let raw=localStorage.getItem("ARMA_SESSION_CACHE")||"";if(!raw)return null;let s=JSON.parse(raw);if(!s||!s.token)return null;if(Date.now()-Number(s.ts||0)>10*60*1000)return null;return s;}catch(e){return null;}}
 function writeSessionCache(){try{if(!armaSession||!armaSession.token)return;localStorage.setItem("ARMA_SESSION_CACHE",JSON.stringify({user:armaSession.user||"",nombre:armaSession.nombre||"",nivel:armaSession.nivel||"",token:armaSession.token||"",permissions:armaSession.permissions||{},ts:Date.now(),source:"RT_"+PAGE_MODE}));}catch(e){}}
 function setSessionData(data,token){armaSession={user:data.user||"",nombre:data.nombre||data.user||"",nivel:data.nivel||"",permissions:data.permissions||{},token:token||data.token||armaSession.token||""};if(armaSession.token)localStorage.setItem("ARMA_TOKEN",armaSession.token);writeSessionCache();document.getElementById("userPill").textContent=(armaSession.nombre||armaSession.user)+" // "+armaSession.nivel;}
 function showLoginWall(msg){armaLoaderCount=0;hideArmaLoader();document.getElementById("loginWall").classList.remove("hidden");document.getElementById("appArea").classList.add("hidden");document.getElementById("userPill").textContent="SESION NO VALIDADA";if(msg)document.querySelector("#loginWall p").textContent=msg;}
 function startApp(){if(!canOpenPage()){showLoginWall("SU USUARIO NO TIENE PERMISO PARA ABRIR ESTE MODULO RT.");return;}document.getElementById("loginWall").classList.add("hidden");document.getElementById("appArea").classList.remove("hidden");configureMode();loadCatalogos().then(refreshAll);}
-async function validateSession(){let token=localStorage.getItem("ARMA_TOKEN")||"";if(!token){showLoginWall();return;}let cached=readSessionCache();if(cached&&cached.token===token){setSessionData(cached,token);startApp();return;}try{let data=await api("validateSession",{token:token},"VALIDANDO SESION...");if(!data.ok){showLoginWall(data.error||"SESION NO VALIDADA. INGRESE NUEVAMENTE DESDE MAIN.HTML.");return;}setSessionData(data,token);startApp();}catch(e){showLoginWall("NO FUE POSIBLE VALIDAR SESION CON ARMA_BACKEND. VUELVA A MAIN, VERIFIQUE SESION Y REINTENTE.");}}
+async function validateSession(){let token=localStorage.getItem("ARMA_TOKEN")||"";if(!token){showLoginWall();return;}try{let cached=readSessionCache();if(cached&&cached.token===token){setSessionData(cached,token);startApp();return;}let data=await api("validateSession",{token:token},"VALIDANDO SESION...");if(!data.ok){showLoginWall();return;}setSessionData(data,token);startApp();}catch(e){showLoginWall();}}
 function armaPersistToken(){try{if(armaSession&&armaSession.token)localStorage.setItem("ARMA_TOKEN",armaSession.token);}catch(e){}}
 function armaMainStorageIsFresh(maxAgeMs){try{var raw=localStorage.getItem("ARMA_MAIN_ACTIVE")||"";if(!raw)return false;var data=JSON.parse(raw);if(!data||!data.ts)return false;return (Date.now()-Number(data.ts)) <= (maxAgeMs||3500);}catch(err){return false;}}
 function armaAskMainIsActive(){return new Promise(function(resolve){var resolved=false;var bc=null;function finish(active){if(resolved)return;resolved=true;try{if(bc)bc.close();}catch(err){}resolve(!!active);}try{if("BroadcastChannel" in window){bc=new BroadcastChannel("ARMA_CONTROL_CHANNEL");bc.onmessage=function(ev){var msg=ev.data||{};if(msg.type==="MAIN_ACTIVE")finish(true);};bc.postMessage({type:"FOCUS_MAIN",from:location.href,ts:Date.now()});}}catch(err){}try{localStorage.setItem("ARMA_REQUEST_MAIN_FOCUS",String(Date.now()));}catch(err){}if(armaMainStorageIsFresh(3500))setTimeout(function(){finish(true);},120);setTimeout(function(){finish(false);},650);});}
@@ -333,7 +333,7 @@ function fileToBase64(file){return new Promise(function(resolve,reject){let r=ne
 async function uploadFotosForRT(id){let inp=document.getElementById("rtFotos");let files=inp&&inp.files?Array.from(inp.files):[];if(!id||!files.length)return;for(let i=0;i<files.length;i++){let file=files[i];if(!/^image\/(jpeg|jpg|png|webp)$/i.test(file.type||"")){alert("SE OMITE ARCHIVO NO VALIDO: "+file.name);continue;}if(file.size>2.5*1024*1024){alert("SE OMITE FOTO MAYOR A 2.5 MB: "+file.name);continue;}let base64=await fileToBase64(file);await api("uploadRTFoto",{idRT:id,idInt:id,fileName:file.name,mimeType:file.type,base64:base64},"SUBIENDO FOTO RT...");}inp.value="";}
 function clearReportForm(resetStatus=true){["rtFalla","rtIntervencion","rtRepuestos","rtPendientes","rtObservaciones"].forEach(id=>document.getElementById(id).value="");["rtInicio","rtFin"].forEach(id=>document.getElementById(id).value="");let f=document.getElementById("rtFotos");if(f)f.value="";if(resetStatus)document.getElementById("reportStatus").textContent="FORMULARIO LIMPIO";}
 async function closeSelectedRT(){if(!selectedRT){alert("SELECCIONE UNA RT.");return;}if(!hasPerm("BTN_REPORTES_TECNICOS")&&!hasPerm("BTN_RT_CERRAR")){alert("NO TIENE PERMISO PARA CIERRE TECNICO.");return;}let id=val(selectedRT,["ID_INT","ID_RT","BT"]);let payload={idRT:id,idInt:id,data:{PRIORIDAD:document.getElementById("ctPrioridad").value,ID_PERSONA_CIERRE:document.getElementById("ctPersona").value,OBSERVACIONES_CIERRE:document.getElementById("ctObservaciones").value,MOTIVO_EDICION_ADMIN:document.getElementById("ctMotivo").value,REQUIERE_NUEVA_OT_DESC:document.getElementById("ctNuevaOT").value,REQUIERE_SR_DESC:document.getElementById("ctSR").value}};if(!payload.data.ID_PERSONA_CIERRE){alert("SELECCIONE QUIEN REALIZA EL CIERRE.");return;}if(!payload.data.OBSERVACIONES_CIERRE){alert("DILIGENCIE OBSERVACIONES FINALES.");return;}if(!confirm("CONFIRMA REALIZAR EL CIERRE TECNICO DE "+id+"?"))return;document.getElementById("closeStatus").textContent="CERRANDO RT...";try{let res=await api("closeRT",payload,"REALIZANDO CIERRE TECNICO...");if(!res.ok){document.getElementById("closeStatus").textContent=res.error||"NO FUE POSIBLE CERRAR";return;}try{await api("generateRTPDF",{idRT:id,idInt:id},"ACTUALIZANDO PDF...");}catch(e){}document.getElementById("closeStatus").textContent="RT CERRADA";await openRT(id);await loadRTList();alert("CIERRE TECNICO REALIZADO.");}catch(e){document.getElementById("closeStatus").textContent="ERROR DE CONEXION";}}
-async function generateSelectedPdf(){if(!selectedRT){alert("SELECCIONE UNA RT.");return;}if(!hasPerm("BTN_RT_GENERAR_PDF")&&!hasPerm("BTN_REPORTES_TECNICOS")&&!hasPerm("BTN_DILIGENCIAR_RT")){alert("NO TIENE PERMISO PARA GENERAR PDF.");return;}let id=val(selectedRT,["ID_INT","ID_RT","BT"]);try{let res=await api("generateRTPDF",{idRT:id,idInt:id},"GENERANDO PDF RT...");if(!res.ok){alert((res.error||"NO FUE POSIBLE GENERAR PDF")+(res.detail?String.fromCharCode(10)+res.detail:")+(res.action?String.fromCharCode(10)+"ACCION: "+res.action:"));return;}await openRT(id);alert("PDF ACTUALIZADO.");}catch(e){alert("ERROR DE CONEXION");}}
+async function generateSelectedPdf(){if(!selectedRT){alert("SELECCIONE UNA RT.");return;}if(!hasPerm("BTN_RT_GENERAR_PDF")&&!hasPerm("BTN_REPORTES_TECNICOS")&&!hasPerm("BTN_DILIGENCIAR_RT")){alert("NO TIENE PERMISO PARA GENERAR PDF.");return;}let id=val(selectedRT,["ID_INT","ID_RT","BT"]);try{let res=await api("generateRTPDF",{idRT:id,idInt:id},"GENERANDO PDF RT...");if(!res.ok){alert(res.error||"NO FUE POSIBLE GENERAR PDF");return;}await openRT(id);alert("PDF ACTUALIZADO.");}catch(e){alert("ERROR DE CONEXION");}}
 document.addEventListener("DOMContentLoaded",validateSession);
 </script>
 </body>
