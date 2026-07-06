@@ -22,12 +22,21 @@ body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);
 .top-title span{display:block;color:var(--muted);font-size:12px;font-weight:900;margin-top:5px}
 .top-title-actions{margin-top:9px;display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
 .user-pill{display:inline-flex;align-items:center;gap:8px;background:#f8fbff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--navy);font-size:12px;font-weight:900}
-.main{padding:18px 24px 22px}
-.hero{position:relative;overflow:hidden;border-radius:22px;background:radial-gradient(circle at 74% 10%,#0076d7 0,#004b9b 42%,#002b66 100%);box-shadow:var(--shadow);color:#fff;padding:20px 28px;margin-bottom:16px}
+.main{padding:10px 18px 18px}
+.hero{position:relative;overflow:hidden;border-radius:22px;background:radial-gradient(circle at 74% 10%,#0076d7 0,#004b9b 42%,#002b66 100%);box-shadow:var(--shadow);color:#fff;padding:14px 20px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:88px}
 .hero:after{content:'BITACORA';position:absolute;right:20px;bottom:-14px;font-size:68px;font-weight:950;letter-spacing:4px;color:rgba(255,255,255,.055)}
 .hero span{display:inline-block;background:rgba(0,214,95,.15);border:1px solid rgba(0,214,95,.45);color:#b8ffd5;padding:6px 10px;border-radius:999px;font-weight:950;font-size:11px}
-.hero h1{margin:12px 0 5px;font-size:30px}
+.hero h1{margin:0 0 5px;font-size:28px}
 .hero p{margin:0;max-width:1220px;color:#eaf4ff;font-size:11px;line-height:1.25;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;z-index:2}
+.hero-copy{position:relative;z-index:2;min-width:0;flex:1}
+.hero-home-card{width:auto;min-width:210px;max-width:250px;min-height:58px;padding:9px 13px;border-radius:16px;flex:0 0 auto;z-index:3}
+.hero-home-card .nav-icon{width:42px;height:42px;border-radius:13px;flex:0 0 42px}
+.hero-home-card .nav-icon img{width:30px;height:30px}
+.hero-home-card .nav-text strong{font-size:15px}
+.hero-home-card .nav-text span{font-size:9px;margin-top:4px}
+.list-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.gen-pdf-small{background:linear-gradient(180deg,#00d65f,#21b957);color:#fff;border:0;border-radius:12px;padding:9px 15px;font-size:12px;font-weight:950;cursor:pointer;box-shadow:0 5px 14px rgba(0,166,80,.22);white-space:nowrap}
+.gen-pdf-small:hover{filter:brightness(1.04);transform:translateY(-1px)}
 .action-grid{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:14px;margin-bottom:16px}
 .index-nav-card{position:relative;display:flex;align-items:center;gap:14px;min-width:230px;min-height:82px;height:100%;padding:14px 18px;border-radius:18px;background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid #dbe5f0;box-shadow:0 10px 22px rgba(0,43,102,.10);text-decoration:none;color:#002b66;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
 .index-nav-card:before{content:'';position:absolute;left:0;top:0;width:100%;height:5px;background:linear-gradient(90deg,#004b9b,#0076d7,#00bfd6,#55b52e)}
@@ -68,7 +77,7 @@ textarea{min-height:78px;resize:vertical}
 .field.full{grid-column:1/-1}
 .field.half{grid-column:span 2}
 .notice{border-left:5px solid var(--green2);background:#f8fbff;border-radius:14px;padding:12px;color:var(--navy);font-size:12px;font-weight:800;line-height:1.4;margin-bottom:10px}
-.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;max-height:520px}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;max-height:260px}
 table{border-collapse:collapse;width:100%;min-width:980px;background:#fff}
 th{background:#0f6385;color:#fff;font-size:12px;text-align:left;padding:10px;position:sticky;top:0;z-index:1}
 td{border-bottom:1px solid var(--line);padding:9px 10px;font-size:12px;font-weight:700;color:#0f172a}
@@ -79,7 +88,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
 .badge.green{background:#e9fff2;color:#166534}
 .badge.red{background:#fee2e2;color:#991b1b}
 .badge.gray{background:#f1f5f9;color:#475569}
-.viewer{height:620px;border:1px dashed #bcd7f5;border-radius:14px;background:#f8fbff;overflow:hidden;display:grid;place-items:center;text-align:center;color:var(--navy)}
+.viewer{height:806px;border:1px dashed #bcd7f5;border-radius:14px;background:#f8fbff;overflow:hidden;display:grid;place-items:center;text-align:center;color:var(--navy)}
 .viewer iframe{width:100%;height:100%;border:0;background:#fff}
 .viewer h2{margin:0 0 6px;font-size:22px;color:var(--navy)}
 .viewer p{font-size:12px;color:var(--muted);font-weight:850}
@@ -117,15 +126,12 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
   <div class="red-line"></div>
 </header>
 <main class="main">
-  <section class="hero"><span>ARMA DATA // BITACORA</span><h1>BITACORA DE REPORTES TECNICOS</h1><p>CONSULTE REPORTES TECNICOS POR FECHA, EQUIPO, PRIORIDAD Y ESTADO. SELECCIONE UNA RT PARA VER SU PDF EN EL VISOR INTERNO.</p></section>
+  <section class="hero">
+    <div class="hero-copy"><h1>BITACORA DE REPORTES TECNICOS</h1><p>CONSULTE REPORTES TECNICOS POR FECHA, EQUIPO, PRIORIDAD Y ESTADO. SELECCIONE UNA RT PARA VER SU PDF EN EL VISOR INTERNO.</p></div>
+    <a class="index-nav-card main-home hero-home-card" href="main.html" data-smart-home="1" onclick="return goMain(event)"><div class="nav-icon"><img src="boton-de-inicio.png" alt="INICIO"></div><div class="nav-text"><strong>Inicio</strong><span>Volver a ARMA</span></div></a>
+  </section>
   <section id="loginWall" class="panel login-wall hidden"><div><h2>SESION NO VALIDADA</h2><p>INGRESE PRIMERO DESDE MAIN.HTML. ESTA PAGINA USA EL TOKEN DE ARMA PARA DEFINIR LOS PERMISOS DE RT.</p><button class="btn" type="button" onclick="goMain()">VOLVER A MAIN</button></div></section>
   <section id="appArea" class="hidden">
-    <div class="action-grid">
-      <a class="index-nav-card main-home" href="main.html" data-smart-home="1" onclick="return goMain(event)"><div class="nav-icon"><img src="boton-de-inicio.png" alt="INICIO"></div><div class="nav-text"><strong>Inicio</strong><span>Volver a ARMA</span></div></a>
-      <button class="action-card green" type="button" id="btnRefresh" onclick="refreshAll()"><strong>ACTUALIZAR</strong><span>RECARGAR INFORMACION DESDE ARMA_DATA.</span></button>
-      <button class="action-card blue" type="button" id="btnPdf" onclick="generateSelectedPdf()"><strong>GENERAR PDF</strong><span>REGENERAR SOPORTE PDF DE LA RT SELECCIONADA.</span></button>
-      <button class="action-card dark" type="button" onclick="clearViewer()"><strong>LIMPIAR VISOR</strong><span>RETIRAR PDF ACTUAL DEL PANEL.</span></button>
-    </div>
     <section id="reportPanel" class="panel hidden">
       <div class="panel-title"><h2>NUEVO REPORTE TECNICO</h2><div class="status" id="reportStatus">LISTO PARA DILIGENCIAR</div></div>
       <div class="notice">LA RT NACE EN ESTADO RTD. PRIORIDAD 1 ES ATENCION INMEDIATA. PRIORIDAD 2 DEBE ATENDERSE DENTRO DE LAS SIGUIENTES 8 HORAS. ARMA VALIDARA COHERENCIA DE TIEMPOS ANTES DE GUARDAR.</div>
@@ -149,7 +155,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
     </section>
     <div id="consultGrid" class="consult-layout">
       <section class="panel" id="listPanel">
-        <div class="panel-title"><h2 id="listTitle">LISTA DE RT</h2><div class="status" id="listStatus">SIN CONSULTA</div></div>
+        <div class="panel-title"><h2 id="listTitle">LISTA DE RT</h2><div class="list-actions"><div class="status" id="listStatus">SIN CONSULTA</div><button class="gen-pdf-small" type="button" id="btnPdf" onclick="generateSelectedPdf()">GENERAR PDF</button></div></div>
         <div class="filters">
           <input id="fBuscar" placeholder="BUSCAR BT, RT, EQUIPO O FALLA">
           <input id="fDesde" type="date">
@@ -184,7 +190,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
         </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-06 15:14:06</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-06 16:01:21</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -319,7 +325,8 @@ function renderRTData(rt){
 }
 function drivePreviewFromUrl(url){url=String(url||"").trim();if(!url)return"";let m=url.match(/\/d\/([^\/]+)/)||url.match(/[?&]id=([^&]+)/);if(m&&m[1])return "https://drive.google.com/file/d/"+encodeURIComponent(m[1])+"/preview";return url;}
 function getPdfUrl(rt){let url=val(rt,["PDF_PREVIEW_URL","DRIVE_PREVIEW_URL","PREVIEW_URL","URL_PREVIEW"]);if(!url)url=val(rt,["PDF_URL","URL_PDF","LINK_PDF"]);if(!url)url=val(rt,["directUrl","DIRECT_URL","PDF_DIRECT_URL","DOWNLOAD_URL"]);return drivePreviewFromUrl(url);}
-function setViewerFromRT(rt){let url=getPdfUrl(rt);let v=document.getElementById("viewer");if(!url){v.innerHTML='<div><h2>PDF NO DISPONIBLE</h2><p>LA RT SELECCIONADA AUN NO TIENE PDF ASOCIADO O EL BACKEND NO RETORNO URL.</p></div>';return;}v.innerHTML='<iframe src="'+esc(url)+'" title="VISOR PDF RT"></iframe>';}
+function fitPdfUrl(url){url=String(url||"").trim();if(!url)return"";return url.indexOf("#")>=0?url:url+"#zoom=page-width&view=FitH";}
+function setViewerFromRT(rt){let url=getPdfUrl(rt);let v=document.getElementById("viewer");if(!url){v.innerHTML='<div><h2>PDF NO DISPONIBLE</h2><p>LA RT SELECCIONADA AUN NO TIENE PDF ASOCIADO O EL BACKEND NO RETORNO URL.</p></div>';return;}let src=fitPdfUrl(url);v.innerHTML='<iframe src="'+esc(src)+'" title="VISOR PDF RT" loading="eager"></iframe>'; }
 function clearViewer(){selectedRT=null;document.getElementById("detailTitle").textContent="VISOR PDF INTERNO";document.getElementById("detailStatus").textContent="SELECCIONE UNA RT";document.getElementById("viewer").innerHTML='<div><h2>VISOR LISTO</h2><p>SELECCIONE UNA RT PARA CARGAR EL PDF.</p></div>';renderRTData(null);}
 function parseDt(id){let v=document.getElementById(id).value;if(!v)return null;return new Date(v);}
 function validateTimes(){let ini=parseDt("rtInicio"), fin=parseDt("rtFin");if(!ini||!fin){alert("DILIGENCIE INICIO Y FIN DE INTERVENCION.");return false;}let rawIni=document.getElementById("rtInicio").value, rawFin=document.getElementById("rtFin").value;if(rawIni.indexOf("T24:")>0||rawFin.indexOf("T24:")>0){alert("HORA 24:00 NO ES VALIDA. USE 00:00 DEL DIA SIGUIENTE.");return false;}let hrs=(fin-ini)/3600000;if(hrs<=0){alert("LA FECHA/HORA FIN DEBE SER MAYOR QUE EL INICIO.");return false;}if(hrs>24){alert("NO ES POSIBLE REPORTAR UNA RT MAYOR A 24 HORAS.");return false;}if(hrs>12){return confirm("LA RT SUPERA 12 HORAS. ESTO REQUIERE REVISION/APROBACION DEL JEFE. DESEA CONTINUAR?");}return true;}
