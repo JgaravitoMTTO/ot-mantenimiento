@@ -71,7 +71,7 @@ textarea{min-height:78px;resize:vertical}
 .btn:disabled{filter:grayscale(1);opacity:.55;cursor:not-allowed}
 .grid2{display:grid;grid-template-columns:38% 62%;gap:14px}
 .consult-layout{display:block}
-.detail-grid{display:grid;grid-template-columns:62% 38%;gap:14px;align-items:start}
+.detail-grid{display:grid;grid-template-columns:62% 38%;gap:14px;align-items:stretch}
 .grid-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
 .field label{display:block;color:var(--navy);font-size:11px;font-weight:950;margin-bottom:5px}
 .field.full{grid-column:1/-1}
@@ -88,8 +88,9 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
 .badge.green{background:#e9fff2;color:#166534}
 .badge.red{background:#fee2e2;color:#991b1b}
 .badge.gray{background:#f1f5f9;color:#475569}
-.viewer{height:806px;border:1px dashed #bcd7f5;border-radius:14px;background:#f8fbff;overflow:hidden;display:grid;place-items:center;text-align:center;color:var(--navy)}
-.viewer iframe{width:100%;height:100%;border:0;background:#fff}
+.detail-grid>.panel{height:100%;display:flex;flex-direction:column}
+.viewer{height:auto;min-height:1048px;flex:1;border:1px dashed #bcd7f5;border-radius:14px;background:#f8fbff;overflow:hidden;display:grid;place-items:center;text-align:center;color:var(--navy)}
+.viewer iframe{width:82%;height:82%;border:0;background:#fff;transform:scale(1.22);transform-origin:top center}
 .viewer h2{margin:0 0 6px;font-size:22px;color:var(--navy)}
 .viewer p{font-size:12px;color:var(--muted);font-weight:850}
 .rt-info{display:grid;gap:10px}
@@ -190,7 +191,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
         </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-06 16:01:21</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-06 16:33:08</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -321,13 +322,14 @@ function renderRTData(rt){
   html+=rtInfoBlock('REPUESTOS USADOS',val(rt,['REPUESTOS_USADOS','REPUESTOS']),true);
   html+=rtInfoBlock('PENDIENTES',val(rt,['PENDIENTES']),true);
   html+=rtInfoBlock('CIERRE / OBSERVACIONES',val(rt,['OBSERVACIONES_CIERRE','OBSERVACIONES']),true);
-  box.innerHTML=html;
+  box.innerHTML=html;syncRtDetailHeights();
 }
+function syncRtDetailHeights(){try{let dp=document.getElementById("rtDataPanel"),vp=document.getElementById("detailPanel"),vw=document.getElementById("viewer");if(!dp||!vp||!vw)return;vw.style.minHeight="1048px";requestAnimationFrame(function(){let h=Math.max(1048,dp.offsetHeight-64);vw.style.minHeight=h+"px";});}catch(e){}}
 function drivePreviewFromUrl(url){url=String(url||"").trim();if(!url)return"";let m=url.match(/\/d\/([^\/]+)/)||url.match(/[?&]id=([^&]+)/);if(m&&m[1])return "https://drive.google.com/file/d/"+encodeURIComponent(m[1])+"/preview";return url;}
 function getPdfUrl(rt){let url=val(rt,["PDF_PREVIEW_URL","DRIVE_PREVIEW_URL","PREVIEW_URL","URL_PREVIEW"]);if(!url)url=val(rt,["PDF_URL","URL_PDF","LINK_PDF"]);if(!url)url=val(rt,["directUrl","DIRECT_URL","PDF_DIRECT_URL","DOWNLOAD_URL"]);return drivePreviewFromUrl(url);}
-function fitPdfUrl(url){url=String(url||"").trim();if(!url)return"";return url.indexOf("#")>=0?url:url+"#zoom=page-width&view=FitH";}
-function setViewerFromRT(rt){let url=getPdfUrl(rt);let v=document.getElementById("viewer");if(!url){v.innerHTML='<div><h2>PDF NO DISPONIBLE</h2><p>LA RT SELECCIONADA AUN NO TIENE PDF ASOCIADO O EL BACKEND NO RETORNO URL.</p></div>';return;}let src=fitPdfUrl(url);v.innerHTML='<iframe src="'+esc(src)+'" title="VISOR PDF RT" loading="eager"></iframe>'; }
-function clearViewer(){selectedRT=null;document.getElementById("detailTitle").textContent="VISOR PDF INTERNO";document.getElementById("detailStatus").textContent="SELECCIONE UNA RT";document.getElementById("viewer").innerHTML='<div><h2>VISOR LISTO</h2><p>SELECCIONE UNA RT PARA CARGAR EL PDF.</p></div>';renderRTData(null);}
+function fitPdfUrl(url){url=String(url||"").trim();if(!url)return"";return url.indexOf("#")>=0?url:url+"#zoom=125&view=FitH";}
+function setViewerFromRT(rt){let url=getPdfUrl(rt);let v=document.getElementById("viewer");if(!url){v.innerHTML='<div><h2>PDF NO DISPONIBLE</h2><p>LA RT SELECCIONADA AUN NO TIENE PDF ASOCIADO O EL BACKEND NO RETORNO URL.</p></div>';syncRtDetailHeights();return;}let src=fitPdfUrl(url);v.innerHTML='<iframe src="'+esc(src)+'" title="VISOR PDF RT" loading="eager"></iframe>';syncRtDetailHeights();}
+function clearViewer(){selectedRT=null;document.getElementById("detailTitle").textContent="VISOR PDF INTERNO";document.getElementById("detailStatus").textContent="SELECCIONE UNA RT";document.getElementById("viewer").innerHTML='<div><h2>VISOR LISTO</h2><p>SELECCIONE UNA RT PARA CARGAR EL PDF.</p></div>';renderRTData(null);syncRtDetailHeights();}
 function parseDt(id){let v=document.getElementById(id).value;if(!v)return null;return new Date(v);}
 function validateTimes(){let ini=parseDt("rtInicio"), fin=parseDt("rtFin");if(!ini||!fin){alert("DILIGENCIE INICIO Y FIN DE INTERVENCION.");return false;}let rawIni=document.getElementById("rtInicio").value, rawFin=document.getElementById("rtFin").value;if(rawIni.indexOf("T24:")>0||rawFin.indexOf("T24:")>0){alert("HORA 24:00 NO ES VALIDA. USE 00:00 DEL DIA SIGUIENTE.");return false;}let hrs=(fin-ini)/3600000;if(hrs<=0){alert("LA FECHA/HORA FIN DEBE SER MAYOR QUE EL INICIO.");return false;}if(hrs>24){alert("NO ES POSIBLE REPORTAR UNA RT MAYOR A 24 HORAS.");return false;}if(hrs>12){return confirm("LA RT SUPERA 12 HORAS. ESTO REQUIERE REVISION/APROBACION DEL JEFE. DESEA CONTINUAR?");}return true;}
 function collectRT(){let eqObj=selectedEquipoObj();let subObj=selectedSubsistemaObj();let equipoNombre=equipoText(eqObj)||selectedOptionText('rtEquipo')||document.getElementById('rtEquipo').value;let subNombre=equipoText(subObj)||selectedOptionText('rtSubsistema')||document.getElementById('rtSubsistema').value;return {
