@@ -61,6 +61,8 @@ textarea{min-height:78px;resize:vertical}
 .btn.red{background:linear-gradient(180deg,#ef4444,#b91c1c)}
 .btn:disabled{filter:grayscale(1);opacity:.55;cursor:not-allowed}
 .grid2{display:grid;grid-template-columns:38% 62%;gap:14px}
+.consult-layout{display:block}
+.detail-grid{display:grid;grid-template-columns:62% 38%;gap:14px;align-items:start}
 .grid-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
 .field label{display:block;color:var(--navy);font-size:11px;font-weight:950;margin-bottom:5px}
 .field.full{grid-column:1/-1}
@@ -81,6 +83,13 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
 .viewer iframe{width:100%;height:100%;border:0;background:#fff}
 .viewer h2{margin:0 0 6px;font-size:22px;color:var(--navy)}
 .viewer p{font-size:12px;color:var(--muted);font-weight:850}
+.rt-info{display:grid;gap:10px}
+.rt-info-block{border:1px solid var(--line);border-radius:14px;background:#f8fbff;padding:10px 12px}
+.rt-info-block label{display:block;color:var(--muted);font-size:10px;font-weight:950;margin-bottom:5px}
+.rt-info-block strong{display:block;color:var(--navy);font-size:13px;font-weight:950;line-height:1.25;white-space:pre-wrap}
+.rt-info-block.full strong{font-size:12px;line-height:1.35}
+.rt-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rt-empty{min-height:380px;display:grid;place-items:center;text-align:center;color:var(--muted);font-size:12px;font-weight:900;border:1px dashed #bcd7f5;border-radius:14px;background:#f8fbff}
 .arma-loader{position:fixed;inset:0;background:rgba(2,6,23,.50);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
 .arma-loader.hidden{display:none!important}
 .arma-loader-box{width:min(390px,92vw);background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 28px 70px rgba(0,0,0,.32);padding:24px;text-align:center;color:var(--navy)}
@@ -94,7 +103,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
 .footer{text-align:center;margin-top:14px}
 .footer-card{display:flex;align-items:center;justify-content:center;gap:10px;min-height:38px;padding:9px 18px;border-radius:16px;background:linear-gradient(135deg,#001f4d 0%,#003b86 54%,#004b9b 100%);color:#eaf4ff;font-size:12px;font-weight:850;box-shadow:var(--shadow);flex-wrap:wrap}
 .footer-sep{color:#9dffbf;font-weight:950}
-@media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}.grid-form{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}}
+@media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.grid2,.detail-grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}.grid-form{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}}
 @media(max-width:700px){.action-grid,.filters,.grid-form{grid-template-columns:1fr}.main{padding:12px}.logo-pelex{height:58px}.logo-arma{height:64px}}
 </style>
 </head>
@@ -138,7 +147,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       </div>
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap"><button class="btn gray" type="button" onclick="clearReportForm()">LIMPIAR</button><button class="btn green" type="button" onclick="createRT()">GUARDAR RT</button></div>
     </section>
-    <div id="consultGrid" class="grid2">
+    <div id="consultGrid" class="consult-layout">
       <section class="panel" id="listPanel">
         <div class="panel-title"><h2 id="listTitle">LISTA DE RT</h2><div class="status" id="listStatus">SIN CONSULTA</div></div>
         <div class="filters">
@@ -151,10 +160,17 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
         </div>
         <div class="table-wrap"><table><thead><tr><th>BT</th><th>NUMERO RT</th><th>FECHA</th><th>EQUIPO</th><th>PRIORIDAD</th><th>ESTADO</th></tr></thead><tbody id="rtRows"><tr><td colspan="6">SIN DATOS CARGADOS</td></tr></tbody></table></div>
       </section>
-      <section class="panel" id="detailPanel">
-        <div class="panel-title"><h2 id="detailTitle">VISOR PDF INTERNO</h2><div class="status" id="detailStatus">SELECCIONE UNA RT</div></div>
-        <div id="viewer" class="viewer"><div><h2>VISOR LISTO</h2><p>SELECCIONE UNA RT PARA CARGAR EL PDF.</p></div></div>
-        <section id="closePanel" class="panel hidden" style="margin-top:14px;box-shadow:none">
+      <div class="detail-grid">
+        <section class="panel" id="detailPanel">
+          <div class="panel-title"><h2 id="detailTitle">VISOR PDF INTERNO</h2><div class="status" id="detailStatus">SELECCIONE UNA RT</div></div>
+          <div id="viewer" class="viewer"><div><h2>VISOR LISTO</h2><p>SELECCIONE UNA RT PARA CARGAR EL PDF.</p></div></div>
+        </section>
+        <section class="panel" id="rtDataPanel">
+          <div class="panel-title"><h2>DATOS DE LA RT</h2><div class="status" id="rtDataStatus">SELECCIONE UNA RT</div></div>
+          <div id="rtDataBox" class="rt-empty">SELECCIONE UNA RT PARA VER AQUI LA INFORMACION DE LA FILA ARMA_DATA.</div>
+        </section>
+      </div>
+      <section id="closePanel" class="panel hidden" style="margin-top:14px;box-shadow:none">
           <div class="panel-title"><h2>CIERRE TECNICO</h2><div class="status" id="closeStatus">SELECCIONE UNA RT DOCUMENTADA</div></div>
           <div class="grid-form">
             <div class="field"><label>PRIORIDAD AJUSTADA</label><select id="ctPrioridad"><option value="">MANTENER</option><option value="P1_INMEDIATA">P1 INMEDIATA</option><option value="P2_8_HORAS">P2 8 HORAS</option></select></div>
@@ -166,10 +182,9 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
           </div>
           <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap"><button class="btn green" type="button" onclick="closeSelectedRT()">REALIZAR CIERRE TECNICO</button></div>
         </section>
-      </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-04 22:33:24</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-06 11:51:25</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -266,12 +281,46 @@ async function openRT(id){
     document.getElementById("detailTitle").textContent=(val(selectedRT,["ID_INT","ID_RT","BT","CONSECUTIVO_BT"])||id)+" // "+(val(selectedRT,["NUMERO_RT","NUM_REGISTRO","NUM_REGISTRO_RT","RT"])||"RT");
     document.getElementById("detailStatus").textContent=val(selectedRT,["ESTADO_RT","ESTADO"])||"DETALLE CARGADO";
     setViewerFromRT(selectedRT);
+    renderRTData(selectedRT);
   }catch(e){document.getElementById("detailStatus").textContent="ERROR DE CONEXION";}
+}
+function rtInfoBlock(label,value,full){
+  return '<div class="rt-info-block '+(full?'full':'')+'"><label>'+esc(label)+'</label><strong>'+esc(value||'')+'</strong></div>';
+}
+function renderRTData(rt){
+  let box=document.getElementById('rtDataBox');let st=document.getElementById('rtDataStatus');
+  if(!box)return;
+  if(!rt){box.className='rt-empty';box.textContent='SELECCIONE UNA RT PARA VER AQUI LA INFORMACION DE LA FILA ARMA_DATA.';if(st)st.textContent='SELECCIONE UNA RT';return;}
+  let id=val(rt,['ID_INT','ID_RT','CONSECUTIVO_BT','BT']);
+  if(st)st.textContent=(val(rt,['ESTADO_RT','ESTADO'])||'DETALLE')+' // '+id;
+  box.className='rt-info';let html='';
+  html+='<div class="rt-info-grid">';
+  html+=rtInfoBlock('BT',id,false);
+  html+=rtInfoBlock('NUMERO RT',val(rt,['NUMERO_RT','NUM_REGISTRO_RT','NUM_REGISTRO','RT']),false);
+  html+=rtInfoBlock('ESTADO',val(rt,['ESTADO_RT','ESTADO']),false);
+  html+=rtInfoBlock('PRIORIDAD',val(rt,['PRIORIDAD']),false);
+  html+=rtInfoBlock('FECHA REPORTE',val(rt,['FECHA_HORA_REPORTE','MARCA_TEMPORAL','FECHA']),false);
+  html+=rtInfoBlock('PLANTA',val(rt,['PLANTA']),false);
+  html+=rtInfoBlock('REPORTA',val(rt,['PERSONAS_REPORTAN','QUIEN_REPORTA','REPORTA']),false);
+  html+=rtInfoBlock('TIPO TRABAJO',val(rt,['TIPO_TRABAJO']),false);
+  html+=rtInfoBlock('EQUIPO',val(rt,['EQUIPO_INTERVENIDO','EQUIPO']),false);
+  html+=rtInfoBlock('SUBSISTEMA',val(rt,['SUBSISTEMA_INTERVENIDO','SUBSISTEMA']),false);
+  html+=rtInfoBlock('INICIO',val(rt,['FECHA_HORA_INICIO','INICIO_INTERVENCION']),false);
+  html+=rtInfoBlock('FIN',val(rt,['FECHA_HORA_FIN','FIN_INTERVENCION']),false);
+  html+=rtInfoBlock('DURACION',String(val(rt,['DURACION_HORAS','HORAS'])||'')+' H / '+String(val(rt,['DURACION_MIN','MINUTOS'])||'')+' MIN',false);
+  html+=rtInfoBlock('ESTADO PDF',val(rt,['ESTADO_PDF']),false);
+  html+='</div>';
+  html+=rtInfoBlock('FALLA / NECESIDAD',val(rt,['DESCRIPCION_FALLA_NECESIDAD','FALLA_NECESIDAD','DESCRIPCION']),true);
+  html+=rtInfoBlock('INTERVENCION REALIZADA',val(rt,['INTERVENCION_REALIZADA','INTERVENCION']),true);
+  html+=rtInfoBlock('REPUESTOS USADOS',val(rt,['REPUESTOS_USADOS','REPUESTOS']),true);
+  html+=rtInfoBlock('PENDIENTES',val(rt,['PENDIENTES']),true);
+  html+=rtInfoBlock('CIERRE / OBSERVACIONES',val(rt,['OBSERVACIONES_CIERRE','OBSERVACIONES']),true);
+  box.innerHTML=html;
 }
 function drivePreviewFromUrl(url){url=String(url||"").trim();if(!url)return"";let m=url.match(/\/d\/([^\/]+)/)||url.match(/[?&]id=([^&]+)/);if(m&&m[1])return "https://drive.google.com/file/d/"+encodeURIComponent(m[1])+"/preview";return url;}
 function getPdfUrl(rt){return drivePreviewFromUrl(val(rt,["PDF_PREVIEW_URL","DRIVE_PREVIEW_URL","PREVIEW_URL","URL_PREVIEW","PDF_URL","URL_PDF","LINK_PDF"]));}
 function setViewerFromRT(rt){let url=getPdfUrl(rt);let v=document.getElementById("viewer");if(!url){v.innerHTML='<div><h2>PDF NO DISPONIBLE</h2><p>LA RT SELECCIONADA AUN NO TIENE PDF ASOCIADO O EL BACKEND NO RETORNO URL.</p></div>';return;}v.innerHTML='<iframe src="'+esc(url)+'" title="VISOR PDF RT"></iframe>';}
-function clearViewer(){selectedRT=null;document.getElementById("detailTitle").textContent="VISOR PDF INTERNO";document.getElementById("detailStatus").textContent="SELECCIONE UNA RT";document.getElementById("viewer").innerHTML='<div><h2>VISOR LISTO</h2><p>SELECCIONE UNA RT PARA CARGAR EL PDF.</p></div>';}
+function clearViewer(){selectedRT=null;document.getElementById("detailTitle").textContent="VISOR PDF INTERNO";document.getElementById("detailStatus").textContent="SELECCIONE UNA RT";document.getElementById("viewer").innerHTML='<div><h2>VISOR LISTO</h2><p>SELECCIONE UNA RT PARA CARGAR EL PDF.</p></div>';renderRTData(null);}
 function parseDt(id){let v=document.getElementById(id).value;if(!v)return null;return new Date(v);}
 function validateTimes(){let ini=parseDt("rtInicio"), fin=parseDt("rtFin");if(!ini||!fin){alert("DILIGENCIE INICIO Y FIN DE INTERVENCION.");return false;}let rawIni=document.getElementById("rtInicio").value, rawFin=document.getElementById("rtFin").value;if(rawIni.indexOf("T24:")>0||rawFin.indexOf("T24:")>0){alert("HORA 24:00 NO ES VALIDA. USE 00:00 DEL DIA SIGUIENTE.");return false;}let hrs=(fin-ini)/3600000;if(hrs<=0){alert("LA FECHA/HORA FIN DEBE SER MAYOR QUE EL INICIO.");return false;}if(hrs>24){alert("NO ES POSIBLE REPORTAR UNA RT MAYOR A 24 HORAS.");return false;}if(hrs>12){return confirm("LA RT SUPERA 12 HORAS. ESTO REQUIERE REVISION/APROBACION DEL JEFE. DESEA CONTINUAR?");}return true;}
 function collectRT(){let eqObj=selectedEquipoObj();let subObj=selectedSubsistemaObj();let equipoNombre=equipoText(eqObj)||selectedOptionText('rtEquipo')||document.getElementById('rtEquipo').value;let subNombre=equipoText(subObj)||selectedOptionText('rtSubsistema')||document.getElementById('rtSubsistema').value;return {
