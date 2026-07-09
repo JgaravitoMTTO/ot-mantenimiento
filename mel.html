@@ -160,6 +160,15 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
 .summary-right .btn{width:170px;min-height:40px !important;padding:10px 13px !important}
 @media(max-width:1100px){.detail-head{grid-template-columns:1fr !important}.summary-right{align-items:stretch;min-width:0}.asset-qr{align-self:center}.photo-filename,.summary-right .btn{width:100%}}
 @media(max-width:700px){.btn,button{font-size:19px!important;}.action-card strong{font-size:18px!important;}.action-card span{font-size:12px!important;}.tree-toggle{font-size:19px!important;}}
+/* === MEL GEO PLANTAS 150 M === */
+.geo-hidden{display:none!important}
+.geo-plant-section{border:2px solid #86c7ff;background:linear-gradient(180deg,#f8fcff,#edf8ff)}
+.geo-help{border-left:5px solid #19c45a;background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:12px;color:#003b7a;font-size:11px;font-weight:900;line-height:1.45}
+.geo-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.geo-status{flex:1;min-width:240px;border:1px solid #cfe0f2;border-radius:11px;background:#fff;padding:11px 13px;color:#42546b;font-size:11px;font-weight:900;line-height:1.35}
+.geo-status.ok{border-color:#22c55e;background:#ecfdf5;color:#166534}
+.geo-status.warn{border-color:#f59e0b;background:#fff7ed;color:#9a3412}
+@media(max-width:700px){.geo-actions{display:grid;grid-template-columns:1fr}.geo-actions .btn{width:100%}.geo-status{min-width:0;font-size:15px}.geo-plant-section label{font-size:15px}.geo-plant-section input{font-size:18px!important}}
 </style>
 </head>
 <body>
@@ -272,6 +281,20 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
           </div>
         </div>
 
+        <div id="geoPlantSection" class="form-section geo-plant-section geo-hidden">
+          <h4>UBICACION GPS DE LA PLANTA</h4>
+          <div class="geo-help">ESTE BLOQUE SOLO SE ACTIVA PARA NIVEL PLANTA. ABRA MEL DESDE EL CELULAR ESTANDO EN EL PUNTO DE REFERENCIA, CAPTURE LA UBICACION Y LUEGO PRESIONE GUARDAR ACTIVO. RADIO INICIAL: 150 METROS.</div>
+          <div class="grid">
+            <div><label>LATITUD GPS</label><input id="geoLat" data-field="LATITUD_GPS" readonly></div>
+            <div><label>LONGITUD GPS</label><input id="geoLon" data-field="LONGITUD_GPS" readonly></div>
+            <div><label>RADIO UBICACION (M)</label><input id="geoRadius" data-field="RADIO_UBICACION_M" type="number" min="10" max="5000" step="1"></div>
+            <div><label>PRECISION GPS (M)</label><input id="geoAccuracy" data-field="PRECISION_GPS_M" readonly></div>
+            <div class="span2"><label>FECHA UBICACION GPS</label><input id="geoDate" data-field="FECHA_UBICACION_GPS" readonly></div>
+            <div class="span2"><label>USUARIO UBICACION GPS</label><input id="geoUser" data-field="USUARIO_UBICACION_GPS" readonly></div>
+            <div class="span4 geo-actions"><button id="btnCaptureGeo" type="button" class="btn green">OBTENER UBICACION ACTUAL</button><div id="geoStatus" class="geo-status">SIN UBICACION CAPTURADA.</div></div>
+          </div>
+        </div>
+
         <div class="form-section">
           <h4>CLASIFICACION ISO 14224</h4>
           <div class="grid">
@@ -337,7 +360,7 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-09 10:19:00</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-09 17:47:35</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -410,6 +433,7 @@ function applyPermissions() {
   document.getElementById("btnSaveTop").classList.toggle("disabled", !canEdit && !canCreate);
   document.getElementById("btnSave").disabled = !canEdit && !canCreate;
   document.getElementById("btnUploadPhoto").disabled = !canUpload;
+  document.getElementById("btnCaptureGeo").disabled = !canEdit && !canCreate;
 }
 function currentFilters() {
   return {
@@ -672,6 +696,52 @@ function renderAssetSummary(row){
   const qtxt = row ? melSummaryText(row) : 'NO_ASSET';
   qr.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=8&data=' + encodeURIComponent(qtxt);
 }
+function melGeoNorm(v){ return String(v || '').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+function melIsPlantLevel(){ return melGeoNorm(document.getElementById('nivelSelect').value) === 'PLANTA'; }
+function updateGeoPlantSection() {
+  const section = document.getElementById('geoPlantSection');
+  const isPlant = melIsPlantLevel();
+  section.classList.toggle('geo-hidden', !isPlant);
+  if (isPlant && !document.getElementById('geoRadius').value) document.getElementById('geoRadius').value = '150';
+}
+function melGeoStatus(text, mode) {
+  const el = document.getElementById('geoStatus');
+  el.textContent = text;
+  el.classList.remove('ok','warn');
+  if (mode) el.classList.add(mode);
+}
+function melGeoErrorMessage(err) {
+  if (!err) return 'NO FUE POSIBLE OBTENER LA UBICACION.';
+  if (err.code === 1) return 'PERMISO DE UBICACION RECHAZADO. HABILITE UBICACION PARA ESTE SITIO.';
+  if (err.code === 2) return 'UBICACION NO DISPONIBLE. ACTIVE GPS Y DATOS/WIFI.';
+  if (err.code === 3) return 'TIEMPO AGOTADO. INTENTE NUEVAMENTE CERCA DE UNA VENTANA O EN EXTERIOR.';
+  return 'ERROR DE UBICACION: ' + (err.message || 'DESCONOCIDO');
+}
+function capturePlantLocation() {
+  if (!melIsPlantLevel()) { toast('SELECCIONE NIVEL DE JERARQUIA PLANTA.'); return; }
+  if (!window.isSecureContext) { melGeoStatus('LA UBICACION SOLO FUNCIONA DESDE HTTPS. PUBLIQUE Y ABRA MEL DESDE GITHUB PAGES.','warn'); return; }
+  if (!navigator.geolocation) { melGeoStatus('ESTE NAVEGADOR NO SOPORTA UBICACION GPS.','warn'); return; }
+  const btn = document.getElementById('btnCaptureGeo');
+  btn.disabled = true;
+  melGeoStatus('SOLICITANDO UBICACION AL DISPOSITIVO...','');
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    const lat = Number(pos.coords.latitude).toFixed(7);
+    const lon = Number(pos.coords.longitude).toFixed(7);
+    const accuracy = Math.max(0, Math.round(Number(pos.coords.accuracy || 0)));
+    document.getElementById('geoLat').value = lat;
+    document.getElementById('geoLon').value = lon;
+    document.getElementById('geoAccuracy').value = accuracy;
+    if (!document.getElementById('geoRadius').value) document.getElementById('geoRadius').value = '150';
+    document.getElementById('geoDate').value = new Date().toISOString();
+    document.getElementById('geoUser').value = (armaSession && (armaSession.user || armaSession.nombre)) || '';
+    if (accuracy > 150) melGeoStatus('UBICACION CAPTURADA, PERO LA PRECISION ES BAJA: ' + accuracy + ' M. INTENTE NUEVAMENTE EN EXTERIOR. PRESIONE GUARDAR ACTIVO PARA ALMACENAR.','warn');
+    else melGeoStatus('UBICACION CAPTURADA CON PRECISION APROXIMADA DE ' + accuracy + ' M. PRESIONE GUARDAR ACTIVO PARA ALMACENAR.','ok');
+    btn.disabled = false;
+  }, function(err) {
+    melGeoStatus(melGeoErrorMessage(err),'warn');
+    btn.disabled = false;
+  }, {enableHighAccuracy:true, timeout:20000, maximumAge:0});
+}
 function setForm(row) {
   document.querySelectorAll('[data-field]').forEach(function(el) {
     const k = el.getAttribute('data-field');
@@ -683,7 +753,12 @@ function setForm(row) {
   img.src = melImageUrl(row && (row.DIR_FOTOGRAFIA || row.FOTO_URL || row.UBICACION_FOTOGRAFIA || row.UBICACION_FOTOGRAFICA));
   document.getElementById('photoFile').value = '';
   document.getElementById('photoFileName').textContent = 'SIN ARCHIVO SELECCIONADO';
+  updateGeoPlantSection();
+  if (row && row.LATITUD_GPS && row.LONGITUD_GPS) melGeoStatus('UBICACION GPS GUARDADA. RADIO: ' + (row.RADIO_UBICACION_M || 150) + ' M.','ok');
+  else melGeoStatus('SIN UBICACION CAPTURADA.','');
 }
+document.getElementById('nivelSelect').addEventListener('change', updateGeoPlantSection);
+document.getElementById('btnCaptureGeo').addEventListener('click', capturePlantLocation);
 init();
 </script>
 </body>
