@@ -1,15 +1,15 @@
-/* ARMA PWA SERVICE WORKER V01 */
-const ARMA_SW_VERSION = 'arma-pwa-v01-20260710';
+/* ARMA PWA SERVICE WORKER V02 */
+const ARMA_SW_VERSION = 'arma-pwa-v02-avatar-20260710';
 const ARMA_STATIC_CACHE = `${ARMA_SW_VERSION}-static`;
 const ARMA_PAGE_CACHE = `${ARMA_SW_VERSION}-pages`;
 
 const ARMA_OFFLINE_URL = './offline.html';
 const ARMA_STATIC_ASSETS = [
   './offline.html',
-  './pwa-icon-192.png',
-  './pwa-icon-512.png',
-  './pwa-icon-maskable-512.png',
-  './apple-touch-icon.png',
+  './arma-avatar-192.png',
+  './arma-avatar-512.png',
+  './arma-avatar-maskable-512.png',
+  './arma-avatar-apple-180.png',
   './manifest.webmanifest'
 ];
 
@@ -26,9 +26,11 @@ self.addEventListener('activate', event => {
     caches.keys()
       .then(keys => Promise.all(
         keys
-          .filter(key => key.startsWith('arma-pwa-') &&
+          .filter(key =>
+            key.startsWith('arma-pwa-') &&
             key !== ARMA_STATIC_CACHE &&
-            key !== ARMA_PAGE_CACHE)
+            key !== ARMA_PAGE_CACHE
+          )
           .map(key => caches.delete(key))
       ))
       .then(() => self.clients.claim())
@@ -56,7 +58,7 @@ async function armaNetworkFirst(request) {
 
 async function armaStaleWhileRevalidate(request) {
   const cached = await caches.match(request);
-  const networkPromise = fetch(request)
+  const networkPromise = fetch(request, { cache: 'no-store' })
     .then(async response => {
       if (response && response.ok) {
         const cache = await caches.open(ARMA_STATIC_CACHE);
@@ -75,18 +77,22 @@ self.addEventListener('fetch', event => {
 
   const url = new URL(request.url);
 
-  // El backend de Apps Script siempre debe consultarse en línea.
+  // Apps Script y recursos externos siempre deben ir a red.
   if (url.origin !== self.location.origin) return;
 
-  if (request.mode === 'navigate' ||
-      request.destination === 'document' ||
-      url.pathname.endsWith('.html')) {
+  if (
+    request.mode === 'navigate' ||
+    request.destination === 'document' ||
+    url.pathname.endsWith('.html')
+  ) {
     event.respondWith(armaNetworkFirst(request));
     return;
   }
 
-  if (['image', 'style', 'script', 'font'].includes(request.destination) ||
-      /\.(png|jpg|jpeg|webp|gif|svg|ico|css|js|webmanifest)$/i.test(url.pathname)) {
+  if (
+    ['image', 'style', 'script', 'font'].includes(request.destination) ||
+    /\.(png|jpg|jpeg|webp|gif|svg|ico|css|js|webmanifest)$/i.test(url.pathname)
+  ) {
     event.respondWith(armaStaleWhileRevalidate(request));
   }
 });
