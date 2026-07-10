@@ -186,8 +186,8 @@ nav.chips{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px;background:#eaf1
       <tr><td><span class='estado-label'>OTPL</span></td><td>216</td><td>50,2%</td></tr>
       <tr><td><span class='estado-label'>OTPR</span></td><td>0</td><td>0,0%</td></tr>
       <tr><td><span class='estado-label'>OTRPR</span></td><td>0</td><td>0,0%</td></tr>
-      <tr class='estado-OTE-row'><td><span class='estado-label estado-OTE'>OTE</span></td><td>189</td><td>44,0%</td></tr>
-      <tr><td><span class='estado-label'>OTD</span></td><td>25</td><td>5,8%</td></tr>
+      <tr class='estado-OTE-row'><td><span class='estado-label estado-OTE'>OTE</span></td><td>186</td><td>43,3%</td></tr>
+      <tr><td><span class='estado-label'>OTD</span></td><td>28</td><td>6,5%</td></tr>
     </tbody></table>
   </div>
   <div class='chart-box'>
@@ -218,7 +218,7 @@ COMPRESOR 2</span></span><span class='tec'> /  /  / </span></div><div class='row
 COMPRESOR 2</span></span><span class='tec'> /  /  / </span></div><div class='row-hoy'><div class='otcell'><span class='pill'>OT_4963</span><span class='tag'><strong>OTPL</strong></span><span class='tag'>-2 Dias</span><a class='pdfbtn' href='https://drive.google.com/drive/u/0/search?q=%22OT_4963%22' target='_blank' rel='noopener'>Ver PDF</a></div><span class='txt'>TOMA DE LECTURA DE CONTADOR DE AGUA <span class='sep-equipo'>|</span> <span class='equipo-ot'>AGUA POTABLE</span></span><span class='tec'> /  /  / </span></div><div class='row-hoy'><div class='otcell'><span class='pill'>OT_4964</span><span class='tag'><strong>OTPL</strong></span><span class='tag'>-2 Dias</span><a class='pdfbtn' href='https://drive.google.com/drive/u/0/search?q=%22OT_4964%22' target='_blank' rel='noopener'>Ver PDF</a></div><span class='txt'>REALIZAR ASEO AL TALLER DE MANTENIMIENTO <span class='sep-equipo'>|</span> <span class='equipo-ot'>TALLER DE MANTENIMIENTO</span></span><span class='tec'> /  /  / </span></div></div></details></section>
 <section><h2>Consulta por Especialista</h2><ul class='list'>
 <li><a class='link link-tec' href='OT_EDDY_SANTIAGO_RAMIREZ_SALGADO.html'><span class='tec-name'>EDDY SANTIAGO RAMIREZ SALGADO</span><span class='tec-resumen'><span class='tec-count'>OTPR: <strong>0</strong></span><span class='tec-count estado-OTE'>OTE: <strong>8</strong></span><span class='tec-count'>OTRPR: <strong>0</strong></span><span class='tec-count'>OTD: <strong>0</strong></span></span></a></li>
-<li><a class='link link-tec' href='OT_EDWARD_MART_NEZ_FRANCO.html'><span class='tec-name'>EDWARD MARTÍNEZ FRANCO</span><span class='tec-resumen'><span class='tec-count'>OTPR: <strong>0</strong></span><span class='tec-count estado-OTE'>OTE: <strong>13</strong></span><span class='tec-count'>OTRPR: <strong>0</strong></span><span class='tec-count'>OTD: <strong>12</strong></span></span></a></li>
+<li><a class='link link-tec' href='OT_EDWARD_MART_NEZ_FRANCO.html'><span class='tec-name'>EDWARD MARTÍNEZ FRANCO</span><span class='tec-resumen'><span class='tec-count'>OTPR: <strong>0</strong></span><span class='tec-count estado-OTE'>OTE: <strong>10</strong></span><span class='tec-count'>OTRPR: <strong>0</strong></span><span class='tec-count'>OTD: <strong>15</strong></span></span></a></li>
 <li><a class='link link-tec' href='OT_GILDARDO_CASTIBLANCO_PE_A.html'><span class='tec-name'>GILDARDO CASTIBLANCO PEÑA</span><span class='tec-resumen'><span class='tec-count'>OTPR: <strong>0</strong></span><span class='tec-count estado-OTE'>OTE: <strong>7</strong></span><span class='tec-count'>OTRPR: <strong>0</strong></span><span class='tec-count'>OTD: <strong>0</strong></span></span></a></li>
 <li><a class='link link-tec' href='OT_JES_S_DAVID_MOLINA_PRIETO.html'><span class='tec-name'>JESÚS DAVID MOLINA PRIETO</span><span class='tec-resumen'><span class='tec-count'>OTPR: <strong>0</strong></span><span class='tec-count estado-OTE'>OTE: <strong>2</strong></span><span class='tec-count'>OTRPR: <strong>0</strong></span><span class='tec-count'>OTD: <strong>0</strong></span></span></a></li>
 <li><a class='link link-tec' href='OT_JOHANN_CAMILO_BUITRAGO_JIMENEZ.html'><span class='tec-name'>JOHANN CAMILO BUITRAGO JIMENEZ</span><span class='tec-resumen'><span class='tec-count'>OTPR: <strong>0</strong></span><span class='tec-count estado-OTE'>OTE: <strong>24</strong></span><span class='tec-count'>OTRPR: <strong>0</strong></span><span class='tec-count'>OTD: <strong>0</strong></span></span></a></li>
@@ -246,7 +246,7 @@ try{
   const armaPalette=['#00bfd6','#55b52e','#0076d7','#94a3b8','#004b9b','#00d65f'];
   const pieCtx=document.getElementById('chartEstados').getContext('2d');
   new Chart(pieCtx,{
-    type:'doughnut',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,216,0,0,189,25],backgroundColor:armaPalette,borderColor:'#ffffff',borderWidth:4,hoverOffset:10,spacing:2}]},options:{responsive:false,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:9,padding:14,font:{weight:'800',size:11},color:'#002b66'}},tooltip:{backgroundColor:'#002b66',titleColor:'#ffffff',bodyColor:'#ffffff',padding:10,cornerRadius:10}}}
+    type:'doughnut',data:{labels:["OTAPR","OTPL","OTPR","OTRPR","OTE","OTD"],datasets:[{data:[0,216,0,0,186,28],backgroundColor:armaPalette,borderColor:'#ffffff',borderWidth:4,hoverOffset:10,spacing:2}]},options:{responsive:false,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:9,padding:14,font:{weight:'800',size:11},color:'#002b66'}},tooltip:{backgroundColor:'#002b66',titleColor:'#ffffff',bodyColor:'#ffffff',padding:10,cornerRadius:10}}}
   });
   const barCtx=document.getElementById('chartPrevProgVsCT').getContext('2d');
   const gradProg=barCtx.createLinearGradient(0,0,0,240);gradProg.addColorStop(0,'#0076d7');gradProg.addColorStop(1,'#00bfd6');
@@ -335,4 +335,4 @@ document.addEventListener('DOMContentLoaded',function(){
 
 }catch(e){console && console.error && console.error(e);}
 </script>
-<footer class='arma-footer'><p>CONTROL // ARMA // GENERADO: 2026-07-10 09:20:37 // PELEX S.A.S.</p></footer></body></html>
+<footer class='arma-footer'><p>CONTROL // ARMA // GENERADO: 2026-07-10 15:42:55 // PELEX S.A.S.</p></footer></body></html>
