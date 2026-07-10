@@ -225,6 +225,12 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
 @media(max-width:520px){.login-modal{padding:10px!important;align-items:center!important}.login-box,.login-box.wide{width:calc(100dvw - 20px)!important;max-width:calc(100dvw - 20px)!important;max-height:calc(100dvh - 20px)!important;padding:15px!important;border-radius:16px!important}}
 @media(max-width:520px){.login-box h2{font-size:21px!important;line-height:1.2!important}.login-box p{font-size:14px!important;line-height:1.35!important}.login-box label{font-size:14px!important}.login-box input,.admin-form input,.admin-form select{font-size:17px!important;min-height:50px!important}}
 @media(max-width:520px){.login-actions{grid-template-columns:1fr!important}.login-actions button{min-height:50px!important}.user-menu{position:fixed!important;left:10px!important;right:10px!important;top:auto!important;width:auto!important;min-width:0!important;max-width:none!important}}
+.arma-location-back{position:fixed;inset:0;z-index:1300;background:rgba(2,6,23,.66);display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
+.arma-location-back.show{display:flex}.arma-location-card{width:min(500px,94vw);background:#fff;border:1px solid #cfe0f2;border-radius:22px;box-shadow:0 30px 80px rgba(0,0,0,.38);overflow:hidden;color:#002b66}
+.arma-location-head{padding:18px 20px;background:linear-gradient(135deg,#002b66,#005eb8,#0076d7);color:#fff;font-size:20px;font-weight:950}.arma-location-body{padding:22px 20px;font-size:15px;line-height:1.5;font-weight:850;text-transform:uppercase;white-space:pre-wrap}
+.arma-location-actions{padding:0 20px 18px;display:flex;justify-content:flex-end}.arma-location-ok{border:0;border-radius:13px;background:linear-gradient(180deg,#00d65f,#55b52e);color:#fff;font-weight:950;font-size:14px;padding:12px 24px;cursor:pointer}
+.arma-location-card.outside .arma-location-head{background:linear-gradient(135deg,#475569,#64748b,#94a3b8)}.arma-location-card.warn .arma-location-head{background:linear-gradient(135deg,#92400e,#d97706,#f59e0b)}
+@media(max-width:980px){.arma-location-back{padding:10px}.arma-location-card{width:calc(100dvw - 20px);max-width:500px}.arma-location-head{font-size:24px}.arma-location-body{font-size:20px}.arma-location-ok{width:100%;font-size:21px;min-height:58px}.arma-location-actions{padding:0 16px 16px}}
 
   </style>
 </head>
@@ -540,7 +546,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-07-09 18:09:15</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-07-10 13:12:07</span></div>
   </footer>
 </main>
 </div>
@@ -679,14 +685,49 @@ function armaUpdateUserCard(){
   if(lvlEl){lvlEl.textContent=(armaSession.token ? (armaSession.nivel||'USUARIO VALIDADO') : 'INICIAR SESION');}
   document.body.classList.toggle('arma-logged', !!armaSession.token);
 }
+function armaIsMobileViewport(){return window.matchMedia&&window.matchMedia('(max-width:980px)').matches;}
+function armaGeoDistanceMeters(lat1,lon1,lat2,lon2){const R=6371000,toRad=v=>Number(v)*Math.PI/180;const p1=toRad(lat1),p2=toRad(lat2),dp=toRad(Number(lat2)-Number(lat1)),dl=toRad(Number(lon2)-Number(lon1));const a=Math.sin(dp/2)**2+Math.cos(p1)*Math.cos(p2)*Math.sin(dl/2)**2;return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
+function armaCloseLocationMessage(){var b=document.getElementById('armaLocationBack');if(b)b.remove();}
+function armaShowLocationMessage(title,message,mode){
+  armaCloseLocationMessage();
+  var back=document.createElement('div');back.id='armaLocationBack';back.className='arma-location-back show';
+  var card=document.createElement('div');card.className='arma-location-card '+(mode||'');
+  var head=document.createElement('div');head.className='arma-location-head';head.textContent=title||'A.R.M.A.';
+  var body=document.createElement('div');body.className='arma-location-body';body.textContent=message||'';
+  var actions=document.createElement('div');actions.className='arma-location-actions';
+  var ok=document.createElement('button');ok.type='button';ok.className='arma-location-ok';ok.textContent='CONTINUAR';ok.onclick=armaCloseLocationMessage;
+  actions.appendChild(ok);card.appendChild(head);card.appendChild(body);card.appendChild(actions);back.appendChild(card);
+  back.addEventListener('click',function(e){if(e.target===back)armaCloseLocationMessage();});
+  document.body.appendChild(back);setTimeout(function(){ok.focus();},30);
+}
+function armaGeoErrorText(err){if(!err)return 'NO FUE POSIBLE VALIDAR LA UBICACION.';if(err.code===1)return 'NO SE AUTORIZO EL ACCESO A LA UBICACION.';if(err.code===2)return 'LA UBICACION NO ESTA DISPONIBLE. ACTIVE EL GPS.';if(err.code===3)return 'SE AGOTO EL TIEMPO PARA OBTENER LA UBICACION.';return 'NO FUE POSIBLE VALIDAR LA UBICACION.';}
+async function armaCheckMobileLocationWelcome(){
+  if(!armaSession||!armaSession.token||!armaIsMobileViewport()||!navigator.geolocation||!window.isSecureContext)return;
+  var key='ARMA_GEO_WELCOME_'+String(armaSession.user||'USER').toUpperCase();
+  if(sessionStorage.getItem(key)==='SI')return;
+  sessionStorage.setItem(key,'SI');
+  var plant;
+  try{plant=await armaApi('getPlantLocation',{token:armaSession.token,planta:'PLANTA 2'});}catch(e){return;}
+  if(!plant||!plant.ok)return;
+  navigator.geolocation.getCurrentPosition(function(pos){
+    var distance=Math.round(armaGeoDistanceMeters(pos.coords.latitude,pos.coords.longitude,plant.latitud,plant.longitud));
+    var radius=Math.round(Number(plant.radioMetros||150));
+    var accuracy=Math.round(Number(pos.coords.accuracy||0));
+    var who=String(armaSession.nombre||armaSession.user||'USUARIO');
+    if(accuracy>250){armaShowLocationMessage('UBICACION CON BAJA PRECISION','HOLA '+who+'.\\n\\nARMA OBTUVO UNA PRECISION APROXIMADA DE '+accuracy+' M. INTENTE NUEVAMENTE CON EL GPS ACTIVO O CERCA DE UNA VENTANA.','warn');return;}
+    if(distance<=radius){armaShowLocationMessage('BIENVENIDO A PLANTA 2','HOLA '+who+'.\\n\\nARMA CONFIRMA QUE SE ENCUENTRA DENTRO DEL RADIO DE PLANTA 2.\\n\\nDISTANCIA APROXIMADA: '+distance+' M.','');}
+    else{armaShowLocationMessage('UBICACION VALIDADA','HOLA '+who+'.\\n\\nARMA CONFIRMA QUE SE ENCUENTRA FUERA DEL RADIO DE PLANTA 2.\\n\\nDISTANCIA APROXIMADA: '+distance+' M.','outside');}
+  },function(err){armaShowLocationMessage('UBICACION NO VALIDADA',armaGeoErrorText(err),'warn');},{enableHighAccuracy:true,timeout:20000,maximumAge:0});
+}
 function armaSetSession(data){
   armaSession={user:data.user||'VISITANTE',nombre:data.nombre||data.user||'VISITANTE',nivel:data.nivel||'USUARIO VALIDADO',token:data.token||'',permissions:data.permissions||{}};
   if(armaSession.token){localStorage.setItem('ARMA_TOKEN', armaSession.token); armaWriteSessionCache();}
   armaUpdateUserCard(); armaApplyPermissions(); armaLoadMainKpis();
+  setTimeout(armaCheckMobileLocationWelcome,450);
 }
 function armaSetVisitor(){
   armaSession={user:'VISITANTE',nombre:'VISITANTE',nivel:'INICIAR SESION',token:'',permissions:{}};
-  localStorage.removeItem('ARMA_TOKEN'); localStorage.removeItem('ARMA_SESSION_CACHE'); armaUpdateUserCard(); armaApplyPermissions(); armaLoadMainKpis();
+  localStorage.removeItem('ARMA_TOKEN'); localStorage.removeItem('ARMA_SESSION_CACHE'); try{Object.keys(sessionStorage).filter(k=>k.indexOf('ARMA_GEO_WELCOME_')===0).forEach(k=>sessionStorage.removeItem(k));}catch(e){} armaCloseLocationMessage(); armaUpdateUserCard(); armaApplyPermissions(); armaLoadMainKpis();
 }
 async function armaApi(action,payload){
   payload=payload||{}; payload.action=action;
