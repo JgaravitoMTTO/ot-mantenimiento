@@ -29,6 +29,18 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
 .login-wall{min-height:260px;display:grid;place-items:center;text-align:center}.login-wall h2{color:var(--navy);margin:0 0 8px}.login-wall p{color:var(--muted);font-weight:850;max-width:680px}.footer{text-align:center;margin-top:14px}.footer-card{display:flex;align-items:center;justify-content:center;gap:10px;min-height:38px;padding:9px 18px;border-radius:16px;background:linear-gradient(135deg,#001f4d 0%,#003b86 54%,#004b9b 100%);color:#eaf4ff;font-size:12px;font-weight:850;box-shadow:var(--shadow)}.footer-sep{color:#9dffbf;font-weight:950}
 @media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}}@media(max-width:700px){body{font-size:16px;overflow-x:hidden}.action-grid,.filters,.form-grid{grid-template-columns:1fr}.main{padding:10px}.top-white{padding:10px 12px}.brand-row{gap:10px;flex-wrap:wrap;justify-content:center}.logo-pelex{height:46px}.logo-arma{height:52px}.hero{padding:16px}.hero h1{font-size:24px}.panel{padding:12px}.action-card,.index-nav-card{min-width:0;width:100%}.btn,button,input,select,textarea{font-size:16px!important;min-height:46px}.table-wrap{max-width:100%;-webkit-overflow-scrolling:touch}.modal{width:96vw;padding:14px}}
 @media(max-width:700px){.btn,.btn-main,button{font-size:19px!important;}.action-card strong,.index-nav-card .nav-text strong{font-size:19px!important;}.action-card span,.index-nav-card .nav-text span{font-size:13px!important;}.pending-actions button,.modal-actions button{font-size:17px!important;}}
+/* ARMA_TURNOS_HEADER_PRO_V01 */
+#turnosHead th{vertical-align:middle;border-right:1px solid rgba(255,255,255,.16)}
+#turnosHead th.person-head{min-width:118px;padding:0;overflow:hidden;box-shadow:inset 0 4px 0 rgba(255,255,255,.08),inset 0 -3px 0 rgba(0,31,77,.28)}
+#turnosHead .person-head-inner{min-height:72px;padding:10px 8px 9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+#turnosHead .person-name{display:block;max-width:138px;color:#fff;font-size:14px;font-weight:950;line-height:1.08;letter-spacing:.2px;white-space:normal;overflow-wrap:anywhere;text-align:center;text-shadow:0 1px 2px rgba(0,20,48,.48)}
+#turnosHead .person-role{display:inline-flex;align-items:center;justify-content:center;min-width:62px;min-height:22px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.44);font-size:9px;font-weight:950;line-height:1;letter-spacing:.7px;box-shadow:0 3px 8px rgba(0,0,0,.14)}
+#turnosHead th.maintenance-head{background:linear-gradient(180deg,#0b7898 0%,#0b607f 58%,#06445f 100%)}
+#turnosHead th.security-head{background:linear-gradient(180deg,#0b5b96 0%,#06457b 58%,#002b66 100%)}
+#turnosHead th.security-head .person-role{background:#e8f2ff;color:#003b73;border-color:#b9d8f5}
+#turnosHead th.day-head,#turnosHead th.sticky-col{background:linear-gradient(180deg,#0b7898 0%,#0b607f 58%,#06445f 100%);font-weight:950;letter-spacing:.25px}
+#turnosHead th.person-head:hover{filter:brightness(1.06)}
+@media(max-width:700px){#turnosHead .person-head-inner{min-height:66px;padding:8px 6px}#turnosHead .person-name{font-size:12px}#turnosHead .person-role{font-size:8px;min-width:56px;padding:4px 8px}}
   </style>
 </head>
 <body>
@@ -111,7 +123,7 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
       <div id="novedadesList" class="novedad-list"><div class="novedad-card">SIN NOVEDADES CARGADAS.</div></div>
     </section>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>TURNOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-11 11:17:56</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>TURNOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-11 13:16:03</span></div></footer>
 </main>
 
 <div id="editModal" class="modal-back">
@@ -167,6 +179,7 @@ let editCtx=null;
 let pendingTurnoChanges={};
 let currentEditMode='PUNTUAL';
 const EDIT_MODE_PERMS={PUNTUAL:'BTN_TURNOS_MODO_PUNTUAL',DIRECTA:'BTN_TURNOS_MODO_DIRECTO',PINTAR:'BTN_TURNOS_MODO_PINTAR',AUTOROTATIVO:'BTN_TURNOS_AUTOLLENAR_ROTATIVO',AUTOADMON:'BTN_TURNOS_AUTOLLENAR_ADMON',AUTOSEGURIDAD:'BTN_TURNOS_AUTOLLENAR_SEGURIDAD'};
+const SECURITY_TURN_OPTIONS=Object.freeze(['ALVARADO','DUARTE','PELAEZ','PROVISIONAL','NINGUNO']);
 let novedadesData={rows:[],tipos:[]};
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];});}
 function normalizePerms(p){let out={};p=p||{};Object.keys(p).forEach(k=>out[String(k).toUpperCase()]=p[k]===true||String(p[k]).toUpperCase()==='SI');return out;}
@@ -249,10 +262,16 @@ function updatePendingBar(){let n=countPending();let c=document.getElementById('
 function pendingKey(fecha,colKey){return String(fecha||'')+'|'+String(colKey||'').toUpperCase();}
 function getDisplayTurnoValue(r,c){let k=pendingKey(r.fecha,c.key);return pendingTurnoChanges[k]?pendingTurnoChanges[k].TURNO:(r.values?r.values[c.key]:'');}
 function getOriginalTurnoValue(r,c){return r.values?r.values[c.key]:'';}
+function turnoColumnByKey(colKey){let wanted=String(colKey||'').trim().toUpperCase();return (turnosData.columns||[]).find(c=>String(c.key||'').trim().toUpperCase()===wanted)||null;}
+function turnoColumnType(columnOrKey){let c=(columnOrKey&&typeof columnOrKey==='object')?columnOrKey:turnoColumnByKey(columnOrKey);return String((c&&c.tipo)||'').trim().toUpperCase();}
+function turnoRoleLabel(tipo){let t=String(tipo||'').trim().toUpperCase();return t==='TECNICO'?'MTTO':t;}
+function isSecurityColumn(columnOrKey){return turnoColumnType(columnOrKey)==='SEGURIDAD';}
+function isValidSecurityTurn(value){return SECURITY_TURN_OPTIONS.indexOf(String(value||'').trim().toUpperCase())>=0;}
+function renderSecurityTurnOptions(selected){let current=String(selected||'').trim().toUpperCase();let valid=isValidSecurityTurn(current);let opts='<option value="" disabled '+(valid?'':'selected')+'>SELECCIONE...</option>';SECURITY_TURN_OPTIONS.forEach(v=>{opts+='<option value="'+esc(v)+'" '+(v===current?'selected':'')+'>'+esc(v)+'</option>';});return opts;}
 function renderTurnos(data){
   let cols=data.columns||[];
   let rows=data.rows||[];
-  let head='<tr><th class="sticky-col">FECHA</th><th>DIA</th>'+cols.map(function(c){return '<th title="'+esc(c.idPersona||c.tipo)+'">'+esc(c.nombre)+'<br><span class="badge">'+esc(c.tipo)+'</span></th>';}).join('')+'</tr>';
+  let head='<tr><th class="sticky-col">FECHA</th><th class="day-head">DIA</th>'+cols.map(function(c){let tipo=turnoColumnType(c);let headClass=tipo==='SEGURIDAD'?'security-head':'maintenance-head';return '<th class="person-head '+headClass+'" title="'+esc(c.idPersona||tipo)+'"><div class="person-head-inner"><span class="person-name">'+esc(c.nombre)+'</span><span class="person-role">'+esc(turnoRoleLabel(tipo))+'</span></div></th>';}).join('')+'</tr>';
   document.getElementById('turnosHead').innerHTML=head;
   if(rows.length===0){document.getElementById('turnosRows').innerHTML='<tr><td colspan="'+(cols.length+2)+'">SIN TURNOS PARA EL RANGO O PERMISOS ACTUALES</td></tr>';renderPersonOptions();updatePendingBar();updatePlannerOptions();return;}
   let body=rows.map(function(r){let hol=isColombiaHolidayISO(r.fecha);let rowCls=(r.today?'today-row ':'')+(hol?'holiday-row':'');let dia=esc(r.dia)+(hol?' <span class="holiday-badge">FESTIVO CO</span>':'');return '<tr class="'+rowCls+'"><td class="sticky-col"><strong>'+esc(r.fecha)+'</strong></td><td>'+dia+'</td>'+cols.map(function(c){return cellHtml(r,c,getOriginalTurnoValue(r,c),getDisplayTurnoValue(r,c));}).join('')+'</tr>';}).join('');
@@ -262,34 +281,35 @@ function renderTurnos(data){
   updatePendingBar();
   updatePlannerOptions();
 }
-function cellHtml(r,c,originalVal,displayVal){let cls=turnoClass(displayVal);let ed=c.editable?' editable':'';let k=pendingKey(r.fecha,c.key);let pend=pendingTurnoChanges[k]?' pending':'';let paint=currentEditMode==='PINTAR'?' paint-mode':'';let direct=(c.editable&&currentEditMode==='DIRECTA'&&canUseMode('DIRECTA'))?' contenteditable="true" spellcheck="false"':'';let data=c.editable?' data-edit="1" data-fecha="'+esc(r.fecha)+'" data-col="'+esc(c.key)+'" data-id="'+esc(c.idPersona)+'" data-nombre="'+esc(c.nombre)+'" data-valor="'+esc(displayVal)+'" data-original="'+esc(originalVal)+'"':'';return '<td class="turno-cell '+cls+ed+pend+paint+'"'+data+direct+'>'+esc(displayVal||'')+'</td>';}
+function cellHtml(r,c,originalVal,displayVal){
+  let cls=turnoClass(displayVal),ed=c.editable?' editable':'',k=pendingKey(r.fecha,c.key),pend=pendingTurnoChanges[k]?' pending':'',paint=currentEditMode==='PINTAR'?' paint-mode':'';
+  let tipo=turnoColumnType(c),security=tipo==='SEGURIDAD';
+  let direct=(c.editable&&currentEditMode==='DIRECTA'&&canUseMode('DIRECTA')&&!security)?' contenteditable="true" spellcheck="false"':'';
+  let data=c.editable?' data-edit="1" data-fecha="'+esc(r.fecha)+'" data-col="'+esc(c.key)+'" data-id="'+esc(c.idPersona)+'" data-nombre="'+esc(c.nombre)+'" data-tipo="'+esc(tipo)+'" data-valor="'+esc(displayVal)+'" data-original="'+esc(originalVal)+'"':'';
+  return '<td class="turno-cell '+cls+ed+pend+paint+'"'+data+direct+'>'+esc(displayVal||'')+'</td>';
+}
 function wireTurnoCells(){
   document.querySelectorAll('td[data-edit="1"]').forEach(function(td){
-    if(currentEditMode==='DIRECTA'&&canUseMode('DIRECTA')){
+    let security=String(td.dataset.tipo||'').toUpperCase()==='SEGURIDAD';
+    if(currentEditMode==='DIRECTA'&&canUseMode('DIRECTA')&&!security){
       td.addEventListener('focus',function(){this.dataset.before=this.textContent.trim();});
       td.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();this.blur();}});
-      td.addEventListener('blur',function(){
-        let nuevo=this.textContent.trim().toUpperCase();
-        applyPendingChange(this.dataset.fecha,this.dataset.col,this.dataset.id,this.dataset.nombre,this.dataset.original,nuevo,'EDICION_DIRECTA');
-      });
-    }else{
-      td.addEventListener('click',function(){
-        if(currentEditMode==='PINTAR'){
-          let v=document.getElementById('toolTurno').value;
-          applyPendingChange(this.dataset.fecha,this.dataset.col,this.dataset.id,this.dataset.nombre,this.dataset.original,v,'PINTAR_TURNO');
-        }else{
-          openEdit(this.dataset.fecha,this.dataset.col,this.dataset.id,this.dataset.nombre,this.dataset.valor,this.dataset.original);
-        }
-      });
+      td.addEventListener('blur',function(){let nuevo=this.textContent.trim().toUpperCase();applyPendingChange(this.dataset.fecha,this.dataset.col,this.dataset.id,this.dataset.nombre,this.dataset.original,nuevo,'EDICION_DIRECTA');});
+      return;
     }
+    td.addEventListener('click',function(){
+      if(currentEditMode==='PINTAR'&&!security){let v=document.getElementById('toolTurno').value;applyPendingChange(this.dataset.fecha,this.dataset.col,this.dataset.id,this.dataset.nombre,this.dataset.original,v,'PINTAR_TURNO');return;}
+      if(currentEditMode==='PINTAR'&&security){let v=String(document.getElementById('toolTurno').value||'').toUpperCase();if(isValidSecurityTurn(v)){applyPendingChange(this.dataset.fecha,this.dataset.col,this.dataset.id,this.dataset.nombre,this.dataset.original,v,'PINTAR_SEGURIDAD');return;}}
+      openEdit(this.dataset.fecha,this.dataset.col,this.dataset.id,this.dataset.nombre,this.dataset.valor,this.dataset.original);
+    });
   });
 }
 function turnoClass(v){let x=String(v||'').toUpperCase().trim();if(x==='1')return 't-1';if(x==='2')return 't-2';if(x==='3')return 't-3';if(x==='4'||x==='5')return 't-4';if(x.indexOf('ADMON')>=0)return 't-admon';if(x.indexOf('DESCANSO')>=0||x.indexOf('VACACIONES')>=0)return 't-descanso';if(x.indexOf('INCAP')>=0||x.indexOf('CURSO')>=0||x.indexOf('EXAMEN')>=0)return 't-incapacidad';return '';}
-function renderTurnoOptions(selected){let opts='<option value=""></option>';(turnosData.turnos||[]).forEach(t=>{let v=t.valor||t.codigo;opts+='<option value="'+esc(v)+'" '+(String(v).toUpperCase()===String(selected||'').toUpperCase()?'selected':'')+'>'+esc(v)+' - '+esc(t.observacion||t.descripcion||'')+'</option>';});return opts;}
-function openEdit(fecha,colKey,id,nombre,valor,original){if(!canUseMode('PUNTUAL')){alert('NO TIENE PERMISO PARA EDICION PUNTUAL.');return;}editCtx={fecha:fecha,columnKey:colKey,idPersona:id,nombre:nombre,valor:valor,original:original};document.getElementById('editFecha').value=fecha;document.getElementById('editPersona').value=nombre+' // '+(id||colKey);document.getElementById('editActual').value=valor||'';document.getElementById('editTurno').innerHTML=renderTurnoOptions(valor);document.getElementById('editObs').value='';document.getElementById('editModal').classList.add('show');}
+function renderTurnoOptions(selected,tipo){if(String(tipo||'').trim().toUpperCase()==='SEGURIDAD')return renderSecurityTurnOptions(selected);let opts='<option value=""></option>';(turnosData.turnos||[]).forEach(t=>{let v=t.valor||t.codigo;opts+='<option value="'+esc(v)+'" '+(String(v).toUpperCase()===String(selected||'').toUpperCase()?'selected':'')+'>'+esc(v)+' - '+esc(t.observacion||t.descripcion||'')+'</option>';});return opts;}
+function openEdit(fecha,colKey,id,nombre,valor,original){let column=turnoColumnByKey(colKey),tipo=turnoColumnType(column),security=tipo==='SEGURIDAD';if(column&&column.editable===false){alert('ESTA COLUMNA NO ESTA HABILITADA PARA EDICION.');return;}if(security){if(!canEditTurnos()||(!hasPerm('BTN_TURNOS_EDITAR_SEGURIDAD')&&!isSuperAdmin())){alert('NO TIENE PERMISO PARA EDITAR TURNOS DE SEGURIDAD.');return;}}else if(!canUseMode('PUNTUAL')){alert('NO TIENE PERMISO PARA EDICION PUNTUAL.');return;}editCtx={fecha:fecha,columnKey:colKey,idPersona:id,nombre:nombre,valor:valor,original:original,tipo:tipo};document.getElementById('editFecha').value=fecha;document.getElementById('editPersona').value=nombre+' // '+(id||colKey);document.getElementById('editActual').value=valor||'';document.getElementById('editTurno').innerHTML=renderTurnoOptions(valor,tipo);document.getElementById('editObs').value='';document.getElementById('editModal').classList.add('show');}
 function closeEdit(){document.getElementById('editModal').classList.remove('show');editCtx=null;}
-function applyPendingChange(fecha,colKey,idPersona,nombre,original,nuevo,obs){let k=pendingKey(fecha,colKey);original=String(original==null?'':original);nuevo=String(nuevo==null?'':nuevo).trim().toUpperCase();if(String(nuevo||'').toUpperCase()===original.toUpperCase()){delete pendingTurnoChanges[k];}else{pendingTurnoChanges[k]={FECHA:fecha,COLUMN_KEY:colKey,ID_PERSONA:idPersona,TURNO:nuevo,OBSERVACION:obs||'CAMBIO_HTML',NOMBRE:nombre,OLD_VALUE:original};}renderTurnos(turnosData);setStatus('turnosStatus',countPending()+' CAMBIO(S) PENDIENTES. REVISE LA PROGRAMACION Y PRESIONE GRABAR PROGRAMACION.');}
-function saveEdit(){if(!editCtx)return;let nuevo=document.getElementById('editTurno').value;let obs=document.getElementById('editObs').value;applyPendingChange(editCtx.fecha,editCtx.columnKey,editCtx.idPersona,editCtx.nombre,editCtx.original,nuevo,obs||'CAMBIO_PUNTUAL');closeEdit();}
+function applyPendingChange(fecha,colKey,idPersona,nombre,original,nuevo,obs){let k=pendingKey(fecha,colKey),security=isSecurityColumn(colKey);original=String(original==null?'':original);nuevo=String(nuevo==null?'':nuevo).trim().toUpperCase();if(security&&!isValidSecurityTurn(nuevo)){alert('VALOR DE SEGURIDAD NO VALIDO. USE: ALVARADO, DUARTE, PELAEZ, PROVISIONAL O NINGUNO.');return false;}if(nuevo===original.toUpperCase()){delete pendingTurnoChanges[k];}else{pendingTurnoChanges[k]={FECHA:fecha,COLUMN_KEY:colKey,ID_PERSONA:idPersona,TURNO:nuevo,OBSERVACION:obs||'CAMBIO_HTML',NOMBRE:nombre,OLD_VALUE:original};}renderTurnos(turnosData);setStatus('turnosStatus',countPending()+' CAMBIO(S) PENDIENTES. REVISE LA PROGRAMACION Y PRESIONE GRABAR PROGRAMACION.');return true;}
+function saveEdit(){if(!editCtx)return;let nuevo=document.getElementById('editTurno').value;let obs=document.getElementById('editObs').value;let saved=applyPendingChange(editCtx.fecha,editCtx.columnKey,editCtx.idPersona,editCtx.nombre,editCtx.original,nuevo,obs||'CAMBIO_PUNTUAL');if(saved!==false)closeEdit();}
 async function guardarProgramacion(){
   let changes=Object.values(pendingTurnoChanges||{});
   if(changes.length===0){alert('NO HAY CAMBIOS PENDIENTES.');return;}
@@ -307,8 +327,9 @@ function closeNewTurno(){document.getElementById('newTurnoModal').classList.remo
 async function saveNewTurno(){let data={CODIGO:document.getElementById('newCodigo').value,VALOR:document.getElementById('newValor').value,DESCRIPCION:document.getElementById('newDesc').value,HORA_INICIO:document.getElementById('newInicio').value,HORA_FIN:document.getElementById('newFin').value,OBSERVACION:document.getElementById('newObs').value};if(!data.CODIGO){alert('EL CODIGO ES OBLIGATORIO');return;}setStatus('turnosStatus','CREANDO TURNO...');try{let res=await api('createTurnoCatalogo',{data:data});if(!res.ok){setStatus('turnosStatus',res.error||'NO FUE POSIBLE CREAR');return;}closeNewTurno();await loadTurnos();setStatus('turnosStatus',res.message||'TURNO CREADO');}catch(e){setStatus('turnosStatus','ERROR DE CONEXION');}}
 function changeEditMode(){let sel=document.getElementById('editMode');let next=sel.value;if(!canUseMode(next)){alert('NO TIENE PERMISO PARA USAR ESTE MODO DE EDICION.');sel.value=currentEditMode;return;}currentEditMode=next;updatePlannerUi();renderTurnos(turnosData);applyTurnosPermissionUi();}
 function updatePlannerUi(){let mode=currentEditMode;let st=document.getElementById('plannerStatus');let help=document.getElementById('plannerHelpText');if(st)st.textContent='MODO '+mode+' ACTIVO';let msg='PUNTUAL: CLIC EN UNA CELDA PARA ABRIR VENTANA.';if(mode==='DIRECTA')msg='DIRECTA: ESCRIBA EN LA CELDA, PRESIONE ENTER O SALGA DE LA CELDA. LUEGO GRABE PROGRAMACION.';if(mode==='PINTAR')msg='PINTAR: SELECCIONE TURNO / VALOR Y HAGA CLIC EN VARIAS CELDAS.';if(mode==='AUTOROTATIVO')msg='ROTATIVO: 6 DIAS TRABAJADOS, 2 DESCANSO. SECUENCIA 3, LUEGO 2, LUEGO 1.';if(mode==='AUTOADMON')msg='ADMON: LUNES A VIERNES ADMON; SABADOS, DOMINGOS Y FESTIVOS COLOMBIA DESCANSO.';if(mode==='AUTOSEGURIDAD')msg='SEGURIDAD: DOS DIAS PRIMER TURNO, DOS DIAS SEGUNDO TURNO Y DOS DIAS DESCANSO.';if(help)help.textContent=msg;}
-function updatePlannerOptions(){let turnoSel=document.getElementById('toolTurno');if(turnoSel){turnoSel.innerHTML=renderTurnoOptions(turnoSel.value||'1');if(!turnoSel.value)turnoSel.value='1';}let colSel=document.getElementById('toolColumn');if(colSel){let old=colSel.value||'ALL';let cols=(turnosData.columns||[]).filter(c=>c.editable);colSel.innerHTML='<option value="ALL">TODAS LAS COLUMNAS EDITABLES</option>'+cols.map(c=>'<option value="'+esc(c.key)+'">'+esc(c.nombre)+' // '+esc(c.tipo)+'</option>').join('');colSel.value=[...colSel.options].some(o=>o.value===old)?old:'ALL';}suggestSecurityNames();updatePlannerUi();applyTurnosPermissionUi();}
-function selectedColumns(kind){let val=(document.getElementById('toolColumn')||{}).value||'ALL';let cols=(turnosData.columns||[]).filter(c=>c.editable);if(kind==='SEGURIDAD')cols=cols.filter(c=>c.tipo==='SEGURIDAD');else cols=cols.filter(c=>c.tipo!=='SEGURIDAD');if(val!=='ALL')cols=cols.filter(c=>c.key===val);return cols;}
+function syncPlannerTurnOptions(){let turnoSel=document.getElementById('toolTurno'),colSel=document.getElementById('toolColumn');if(!turnoSel)return;let old=String(turnoSel.value||'').toUpperCase();let column=(colSel&&colSel.value!=='ALL')?turnoColumnByKey(colSel.value):null;let tipo=turnoColumnType(column);turnoSel.innerHTML=renderTurnoOptions(old,tipo);if(tipo==='SEGURIDAD'){turnoSel.value=isValidSecurityTurn(old)?old:'ALVARADO';}else if(!turnoSel.value){turnoSel.value='1';}}
+function updatePlannerOptions(){let colSel=document.getElementById('toolColumn');if(colSel){let old=colSel.value||'ALL';let cols=(turnosData.columns||[]).filter(c=>c.editable);colSel.innerHTML='<option value="ALL">TODAS LAS COLUMNAS EDITABLES</option>'+cols.map(c=>'<option value="'+esc(c.key)+'">'+esc(c.nombre)+' // '+esc(turnoRoleLabel(c.tipo))+'</option>').join('');colSel.value=[...colSel.options].some(o=>o.value===old)?old:'ALL';colSel.onchange=syncPlannerTurnOptions;}syncPlannerTurnOptions();suggestSecurityNames();updatePlannerUi();applyTurnosPermissionUi();}
+function selectedColumns(kind){let val=(document.getElementById('toolColumn')||{}).value||'ALL';let cols=(turnosData.columns||[]).filter(c=>c.editable);if(kind==='SEGURIDAD')cols=cols.filter(c=>isSecurityColumn(c));else cols=cols.filter(c=>!isSecurityColumn(c));if(val!=='ALL')cols=cols.filter(c=>c.key===val);return cols;}
 function applyAutoValue(row,c,val,obs,overwrite){let original=getOriginalTurnoValue(row,c);let current=getDisplayTurnoValue(row,c);if(!overwrite&&String(current||'').trim())return 0;applyPendingNoRender(row.fecha,c.key,c.idPersona,c.nombre,original,val,obs);return 1;}
 function applyPendingNoRender(fecha,colKey,idPersona,nombre,original,nuevo,obs){let k=pendingKey(fecha,colKey);original=String(original==null?'':original);nuevo=String(nuevo==null?'':nuevo).trim().toUpperCase();if(String(nuevo||'').toUpperCase()===original.toUpperCase())delete pendingTurnoChanges[k];else pendingTurnoChanges[k]={FECHA:fecha,COLUMN_KEY:colKey,ID_PERSONA:idPersona,TURNO:nuevo,OBSERVACION:obs||'AUTOLLENADO_HTML',NOMBRE:nombre,OLD_VALUE:original};}
 function rotativoValue(index,start){let base=['3','2','1'];let pos=base.indexOf(String(start||'3'));if(pos<0)pos=0;let order=base.slice(pos).concat(base.slice(0,pos));let cycle=[];order.forEach(t=>{for(let i=0;i<6;i++)cycle.push(t);for(let j=0;j<2;j++)cycle.push('DESCANSO');});return cycle[index%cycle.length];}
@@ -340,8 +361,8 @@ function applyPlannerTool(){
   renderTurnos(turnosData);
   setStatus('turnosStatus',changed+' CAMBIO(S) GENERADO(S) POR HERRAMIENTA. REVISE Y PRESIONE GRABAR PROGRAMACION.');
 }
-function suggestSecurityNames(){let inp=document.getElementById('toolSecurityNames');if(!inp||inp.value.trim())return;let vals=[];(turnosData.columns||[]).filter(c=>c.tipo==='SEGURIDAD').forEach(c=>{(turnosData.rows||[]).forEach(r=>{let v=String((r.values||{})[c.key]||'').trim();if(v&&vals.indexOf(v)<0)vals.push(v);});});if(vals.length)inp.value=vals.slice(0,3).join(', ');}
-function applyAutoSeguridad(overwrite){let cols=selectedColumns('SEGURIDAD');if(cols.length<2){alert('SE REQUIEREN DOS COLUMNAS DE SEGURIDAD VISIBLES Y EDITABLES.');return 0;}let names=document.getElementById('toolSecurityNames').value.split(',').map(x=>x.trim().toUpperCase()).filter(Boolean);if(names.length<3){alert('INGRESE TRES NOMBRES DE SEGURIDAD SEPARADOS POR COMA.');return 0;}let changed=0;(turnosData.rows||[]).forEach((r,idx)=>{let block=Math.floor(idx/2)%3;let first=names[(block*2)%3];let second=names[(block*2+1)%3];changed+=applyAutoValue(r,cols[0],first,'AUTOLLENADO_SEGURIDAD',overwrite);changed+=applyAutoValue(r,cols[1],second,'AUTOLLENADO_SEGURIDAD',overwrite);});return changed;}
+function suggestSecurityNames(){let inp=document.getElementById('toolSecurityNames');if(!inp||inp.value.trim())return;inp.value='ALVARADO, DUARTE, PELAEZ';}
+function applyAutoSeguridad(overwrite){let cols=selectedColumns('SEGURIDAD');if(cols.length<2){alert('SE REQUIEREN DOS COLUMNAS DE SEGURIDAD VISIBLES Y EDITABLES.');return 0;}let names=document.getElementById('toolSecurityNames').value.split(',').map(x=>x.trim().toUpperCase()).filter(Boolean);if(names.length<3){alert('INGRESE TRES NOMBRES DE SEGURIDAD SEPARADOS POR COMA.');return 0;}let invalid=names.filter(v=>!isValidSecurityTurn(v));if(invalid.length){alert('VALOR DE SEGURIDAD NO VALIDO: '+invalid.join(', ')+'. USE: ALVARADO, DUARTE, PELAEZ, PROVISIONAL O NINGUNO.');return 0;}let changed=0;(turnosData.rows||[]).forEach((r,idx)=>{let block=Math.floor(idx/2)%3;let first=names[(block*2)%3];let second=names[(block*2+1)%3];changed+=applyAutoValue(r,cols[0],first,'AUTOLLENADO_SEGURIDAD',overwrite);changed+=applyAutoValue(r,cols[1],second,'AUTOLLENADO_SEGURIDAD',overwrite);});return changed;}
 function renderPersonOptions(){let sel=document.getElementById('novPersona');if(!sel)return;let personas=(turnosData.novedadPersonas||[]);if(!personas.length){let cols=(turnosData.columns||[]).filter(c=>c.idPersona&&c.tipo!=='SEGURIDAD');personas=cols.map(c=>({idPersona:c.idPersona,nombre:c.nombre,planta:c.planta||'',area:c.area||''}));}if(personas.length===0){sel.innerHTML='<option value="">SIN PERSONA DISPONIBLE</option>';sel.disabled=true;return;}sel.innerHTML=personas.map(p=>'<option value="'+esc(p.idPersona)+'">'+esc(p.nombre)+' // '+esc(p.idPersona)+'</option>').join('');sel.disabled=(personas.length===1&&!isSuperAdmin()&&!hasPerm('BTN_TURNOS_VER_EQUIPO')&&!hasPerm('BTN_TURNOS_VER_TODO'));if(personas.length===1)sel.value=personas[0].idPersona;}
 function renderNovedadTipos(){let sel=document.getElementById('novTipo');let tipos=(turnosData.novedadesTipos||novedadesData.tipos||['DESCANSO TRABAJADO','EXTRAS NOCTURNAS','EXTRAS ORDINARIAS','EXTRAS FESTIVAS','EXTRAS DESCANSO TRABAJADO','PERMISO','ENFERMEDAD','INCAPACIDAD']);sel.innerHTML=tipos.map(t=>'<option>'+esc(t)+'</option>').join('');}
 function openNovedad(){if(!hasPerm('BTN_TURNOS_REPORTAR_NOVEDAD')){alert('NO TIENE PERMISO PARA REPORTAR NOVEDADES.');return;}document.getElementById('novFecha').value=toISO(new Date());renderPersonOptions();renderNovedadTipos();document.getElementById('novHoras').value='';document.getElementById('novJustificacion').value='';document.getElementById('novSoporte').value='';document.getElementById('novedadModal').classList.add('show');}
