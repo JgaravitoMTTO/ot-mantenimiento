@@ -1,11 +1,17 @@
-/* ARMA PWA SERVICE WORKER V02 */
-const ARMA_SW_VERSION = 'arma-pwa-v02-avatar-20260710';
+/* A.R.M.A. PWA SERVICE WORKER V03 - NAVEGACION INTERNA */
+const ARMA_SW_VERSION = 'arma-pwa-v03-internal-navigation-20260711';
 const ARMA_STATIC_CACHE = `${ARMA_SW_VERSION}-static`;
 const ARMA_PAGE_CACHE = `${ARMA_SW_VERSION}-pages`;
 
+const ARMA_SCOPE_PATH = '/ot-mantenimiento/';
 const ARMA_OFFLINE_URL = './offline.html';
+const ARMA_NAV_INJECTION =
+  '<script src="/ot-mantenimiento/arma-pwa-navigation.js" ' +
+  'defer data-arma-pwa-navigation="1"></script>';
+
 const ARMA_STATIC_ASSETS = [
   './offline.html',
+  './arma-pwa-navigation.js',
   './arma-avatar-192.png',
   './arma-avatar-512.png',
   './arma-avatar-maskable-512.png',
@@ -37,19 +43,65 @@ self.addEventListener('activate', event => {
   );
 });
 
-async function armaNetworkFirst(request) {
-  try {
-    const response = await fetch(request, { cache: 'no-store' });
-    if (response && response.ok) {
-      const cache = await caches.open(ARMA_PAGE_CACHE);
-      cache.put(request, response.clone());
-    }
+function armaIsHtmlResponse(response) {
+  if (!response) return false;
+
+  const contentType = response.headers.get('content-type') || '';
+  return contentType.toLowerCase().includes('text/html');
+}
+
+async function armaInjectNavigation(response) {
+  if (!response || !response.ok || !armaIsHtmlResponse(response)) {
     return response;
+  }
+
+  const html = await response.text();
+
+  if (
+    html.includes('data-arma-pwa-navigation="1"') ||
+    html.includes("data-arma-pwa-navigation='1'")
+  ) {
+    return new Response(html, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: response.headers
+    });
+  }
+
+  const injected = /<\/head>/i.test(html)
+    ? html.replace(/<\/head>/i, `${ARMA_NAV_INJECTION}</head>`)
+    : `${ARMA_NAV_INJECTION}${html}`;
+
+  const headers = new Headers(response.headers);
+  headers.delete('content-length');
+  headers.delete('content-encoding');
+
+  return new Response(injected, {
+    status: response.status,
+    statusText: response.statusText,
+    headers
+  });
+}
+
+async function armaNetworkFirstPage(request) {
+  try {
+    const networkResponse = await fetch(request, { cache: 'no-store' });
+    const preparedResponse = await armaInjectNavigation(networkResponse);
+
+    if (preparedResponse && preparedResponse.ok) {
+      const cache = await caches.open(ARMA_PAGE_CACHE);
+      await cache.put(request, preparedResponse.clone());
+    }
+
+    return preparedResponse;
   } catch (error) {
     const cached = await caches.match(request);
     if (cached) return cached;
 
-    const mainCached = await caches.match('./main.html');
+    const mainRequest = new Request(
+      `${self.location.origin}${ARMA_SCOPE_PATH}main.html`
+    );
+    const mainCached = await caches.match(mainRequest);
     if (mainCached) return mainCached;
 
     return caches.match(ARMA_OFFLINE_URL);
@@ -58,12 +110,14 @@ async function armaNetworkFirst(request) {
 
 async function armaStaleWhileRevalidate(request) {
   const cached = await caches.match(request);
+
   const networkPromise = fetch(request, { cache: 'no-store' })
     .then(async response => {
       if (response && response.ok) {
         const cache = await caches.open(ARMA_STATIC_CACHE);
         await cache.put(request, response.clone());
       }
+
       return response;
     })
     .catch(() => null);
@@ -73,19 +127,22 @@ async function armaStaleWhileRevalidate(request) {
 
 self.addEventListener('fetch', event => {
   const request = event.request;
+
   if (request.method !== 'GET') return;
 
   const url = new URL(request.url);
 
-  // Apps Script y recursos externos siempre deben ir a red.
+  // Apps Script y otros orígenes siempre se consultan directamente.
   if (url.origin !== self.location.origin) return;
+
+  if (!url.pathname.startsWith(ARMA_SCOPE_PATH)) return;
 
   if (
     request.mode === 'navigate' ||
     request.destination === 'document' ||
     url.pathname.endsWith('.html')
   ) {
-    event.respondWith(armaNetworkFirst(request));
+    event.respondWith(armaNetworkFirstPage(request));
     return;
   }
 
