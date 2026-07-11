@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#031d3b">
+  <meta name="description" content="A.R.M.A. es una plataforma profesional para gestión de activos, mantenimiento y confiabilidad operacional.">
+  <meta name="application-name" content="A.R.M.A.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="A.R.M.A.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="arma-avatar-apple-180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="arma-avatar-192.png">
+  <meta property="og:title" content="A.R.M.A. — Asset Reliability & Maintenance Analytics">
+  <meta property="og:description" content="Gestión inteligente de activos, mantenimiento y confiabilidad operacional.">
+  <meta property="og:image" content="https://jgaravitomtto.github.io/ot-mantenimiento/arma-public-assets/arma-public-overview-ai.webp">
+  <title>A.R.M.A. | Mantenimiento y confiabilidad</title>
+  <style>
+    :root{
+      --navy:#031d3b;--navy2:#052c58;--blue:#006bd6;--blue2:#00a7ff;
+      --cyan:#15d4ff;--green:#4fc72e;--white:#fff;--muted:#a9c3dc;
+      --line:rgba(111,183,255,.22);--shadow:0 24px 70px rgba(0,0,0,.35)
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:Segoe UI,Inter,Arial,sans-serif;color:#eef8ff;
+      background:radial-gradient(circle at 15% 5%,rgba(0,119,215,.22),transparent 30%),
+      radial-gradient(circle at 90% 20%,rgba(21,212,255,.14),transparent 24%),
+      linear-gradient(180deg,#020d1d,#031a35 52%,#02101f);overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+    .shell{width:min(1220px,calc(100% - 34px));margin:auto}
+    .nav{position:sticky;top:0;z-index:50;background:rgba(2,13,29,.86);
+      backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+    .nav-inner{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{display:flex;align-items:center;gap:13px}
+    .brand img{width:54px;height:54px;border-radius:16px;object-fit:cover;
+      border:2px solid rgba(255,255,255,.78);box-shadow:0 8px 24px rgba(0,116,255,.28)}
+    .brand strong{display:block;font-size:21px;letter-spacing:2px}
+    .brand span{display:block;color:#8fcaff;font-size:11px;font-weight:700;margin-top:3px}
+    .links{display:flex;gap:22px;font-size:12px;font-weight:800;letter-spacing:.5px;color:#cfe8ff}
+    .links a:hover{color:#fff}
+    .nav-install{border:1px solid rgba(80,210,255,.55);border-radius:13px;padding:12px 17px;
+      background:linear-gradient(135deg,#006bd6,#008cff);color:#fff;font-weight:900;
+      cursor:pointer;box-shadow:0 10px 28px rgba(0,105,220,.28)}
+    .hero{padding:70px 0 52px}
+    .hero-grid{display:grid;grid-template-columns:1.03fr .97fr;gap:38px;align-items:center}
+    .eyebrow{display:inline-flex;gap:9px;align-items:center;border:1px solid var(--line);
+      background:rgba(4,43,87,.55);border-radius:999px;padding:8px 13px;color:#87dcff;
+      font-size:12px;font-weight:900;letter-spacing:.8px}
+    .hero h1{font-size:clamp(48px,7vw,92px);line-height:.95;margin:22px 0 12px;
+      letter-spacing:5px;text-shadow:0 8px 30px rgba(0,107,214,.35)}
+    .hero h2{font-size:clamp(24px,3vw,41px);line-height:1.08;margin:0;color:#31baff}
+    .hero p{font-size:18px;line-height:1.65;color:#c3d8ea;max-width:660px;margin:23px 0}
+    .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px}
+    .primary,.secondary{border-radius:15px;padding:15px 21px;font-weight:950;cursor:pointer;
+      min-height:54px;display:inline-flex;align-items:center;justify-content:center;gap:10px}
+    .primary{border:0;color:#fff;background:linear-gradient(135deg,#006bd6,#007cff 62%,#19b8ff);
+      box-shadow:0 15px 35px rgba(0,107,214,.33)}
+    .secondary{border:1px solid rgba(91,199,255,.42);color:#dff4ff;background:rgba(5,44,88,.62)}
+    .hidden{display:none!important}
+    .hero-image{position:relative;border:1px solid rgba(112,190,255,.30);padding:10px;
+      border-radius:28px;background:rgba(5,39,78,.62);box-shadow:var(--shadow)}
+    .hero-image img{display:block;width:100%;border-radius:20px;aspect-ratio:16/10;object-fit:cover}
+    .hero-image::after{content:"VISUALIZACIÓN CONCEPTUAL";position:absolute;right:20px;bottom:18px;
+      background:rgba(0,12,28,.72);border:1px solid rgba(255,255,255,.16);
+      border-radius:999px;padding:7px 11px;font-size:9px;font-weight:900;
+      letter-spacing:.8px;color:#a9dcff}
+    .trust{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:36px}
+    .trust div{border:1px solid var(--line);border-radius:14px;padding:13px 14px;
+      background:rgba(5,37,74,.48);font-size:12px;color:#cce7fb;font-weight:800}
+    .section{padding:70px 0}
+    .section-head{text-align:center;max-width:760px;margin:0 auto 35px}
+    .section-head span{color:#36c0ff;font-size:12px;font-weight:950;letter-spacing:1.2px}
+    .section-head h3{font-size:clamp(31px,4vw,48px);margin:10px 0 13px}
+    .section-head p{margin:0;color:#aac3d9;line-height:1.6}
+    .features{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+    .feature{border:1px solid var(--line);
+      background:linear-gradient(180deg,rgba(7,48,95,.70),rgba(2,25,50,.82));
+      border-radius:20px;padding:24px;min-height:190px;box-shadow:0 14px 38px rgba(0,0,0,.18)}
+    .feature .icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;
+      background:linear-gradient(135deg,#007cf0,#11c6eb);font-size:23px;
+      box-shadow:0 8px 20px rgba(0,128,255,.25)}
+    .feature h4{font-size:17px;margin:18px 0 8px}
+    .feature p{font-size:13px;line-height:1.55;color:#a9c3d9;margin:0}
+    .showcase{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+    .show-card{border:1px solid var(--line);border-radius:24px;background:rgba(4,35,70,.66);
+      padding:13px;box-shadow:var(--shadow)}
+    .show-card img{width:100%;display:block;border-radius:17px;aspect-ratio:16/10;object-fit:cover}
+    .show-card h4{font-size:20px;margin:17px 8px 6px}
+    .show-card p{font-size:13px;color:#aac3d9;line-height:1.55;margin:0 8px 8px}
+    .install{border:1px solid rgba(65,196,255,.32);border-radius:30px;
+      background:linear-gradient(135deg,rgba(4,44,88,.92),rgba(3,22,45,.95));
+      padding:35px;display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center;
+      box-shadow:var(--shadow)}
+    .install h3{font-size:40px;margin:0 0 12px}
+    .install p{color:#bdd2e5;line-height:1.6}
+    .install-list{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0}
+    .install-list div{border:1px solid var(--line);border-radius:14px;padding:14px;
+      background:rgba(2,24,49,.55);font-size:12px;font-weight:800;line-height:1.5}
+    .qr-card{display:grid;grid-template-columns:210px 1fr;gap:22px;align-items:center;
+      background:#fff;color:#062649;border-radius:22px;padding:20px}
+    .qr-card img{width:210px;max-width:100%;border-radius:14px}
+    .qr-card h4{font-size:24px;margin:0 0 9px}
+    .qr-card p{color:#3d5872;margin:0;line-height:1.5;font-size:13px}
+    .security{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+    .security div{border:1px solid var(--line);border-radius:18px;padding:21px;
+      background:rgba(3,34,69,.58)}
+    .security strong{display:block;font-size:17px;margin-bottom:7px}
+    .security span{color:#a8c1d7;font-size:13px;line-height:1.55}
+    footer{border-top:1px solid var(--line);padding:30px 0 40px;color:#7fa4c5;font-size:12px}
+    .footer-inner{display:flex;justify-content:space-between;gap:20px;align-items:center}
+    .modal{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:16px;
+      background:rgba(0,8,20,.76);backdrop-filter:blur(5px)}
+    .modal.show{display:grid}
+    .modal-card{width:min(560px,96vw);border:1px solid var(--line);border-radius:22px;
+      background:#fff;color:#08294d;box-shadow:var(--shadow);overflow:hidden}
+    .modal-head{background:linear-gradient(135deg,#003b7a,#0076d7);color:#fff;
+      padding:20px;font-weight:950;font-size:21px}
+    .modal-body{padding:22px;font-size:15px;line-height:1.6}
+    .modal-body ol{padding-left:22px}
+    .modal-actions{display:flex;justify-content:flex-end;padding:0 22px 20px}
+    .modal-actions button{border:0;border-radius:12px;padding:12px 20px;color:#fff;
+      background:#0076d7;font-weight:900;cursor:pointer}
+    @media(max-width:980px){
+      .links{display:none}.hero-grid,.install{grid-template-columns:1fr}
+      .features{grid-template-columns:repeat(2,1fr)}.trust{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:680px){
+      .shell{width:min(100% - 22px,1220px)}.nav-inner{min-height:68px}
+      .brand img{width:46px;height:46px}.brand strong{font-size:18px}
+      .brand span{font-size:9px}.nav-install{padding:11px 12px;font-size:12px}
+      .hero{padding-top:42px}.hero-grid{gap:25px}.hero h1{font-size:53px}
+      .hero h2{font-size:27px}.hero p{font-size:16px}
+      .hero-actions{display:grid;grid-template-columns:1fr}.primary,.secondary{width:100%}
+      .features,.showcase,.security{grid-template-columns:1fr}
+      .trust{grid-template-columns:1fr 1fr}.section{padding:52px 0}
+      .install{padding:22px}.install h3{font-size:31px}
+      .install-list{grid-template-columns:1fr}.qr-card{grid-template-columns:1fr;text-align:center}
+      .qr-card img{margin:auto}.footer-inner{flex-direction:column;text-align:center}
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="shell nav-inner">
+      <a class="brand" href="#inicio" aria-label="A.R.M.A.">
+        <img src="arma-public-assets/arma-avatar-192.png" alt="Avatar A.R.M.A.">
+        <div>
+          <strong>A.R.M.A.</strong>
+          <span>ASSET RELIABILITY &amp; MAINTENANCE ANALYTICS</span>
+        </div>
+      </a>
+      <nav class="links">
+        <a href="#funciones">FUNCIONES</a>
+        <a href="#experiencia">EXPERIENCIA</a>
+        <a href="#instalar">INSTALAR</a>
+        <a href="#seguridad">SEGURIDAD</a>
+      </nav>
+      <button class="nav-install" type="button" data-install>INSTALAR A.R.M.A.</button>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <span class="eyebrow">? PLATAFORMA PROFESIONAL DE MANTENIMIENTO</span>
+          <h1>A.R.M.A.</h1>
+          <h2>Asset Reliability &amp;<br>Maintenance Analytics</h2>
+          <p>Una plataforma modular para gestionar activos, reportes técnicos, órdenes de trabajo,
+          documentación, turnos, permisos e indicadores operativos desde PC, tablet o móvil.</p>
+          <div class="hero-actions">
+            <button class="primary" type="button" data-install>? INSTALAR A.R.M.A.</button>
+            <a id="openAppBtn" class="secondary hidden" href="main.html?source=public">ABRIR A.R.M.A.</a>
+          </div>
+          <div class="trust">
+            <div>? ACTUALIZACIONES AUTOMÁTICAS</div>
+            <div>? ACCESO SEGÚN PERMISOS</div>
+            <div>? EXPERIENCIA PC Y MÓVIL</div>
+            <div>? OPERACIÓN MODULAR</div>
+          </div>
+        </div>
+        <figure class="hero-image">
+          <img src="arma-public-assets/arma-public-hero-ai.webp"
+            alt="Visualización conceptual de A.R.M.A.">
+        </figure>
+      </div>
+    </section>
+
+    <section id="funciones" class="section">
+      <div class="shell">
+        <div class="section-head">
+          <span>CAPACIDADES PRINCIPALES</span>
+          <h3>Una sola plataforma para toda la operación</h3>
+          <p>A.R.M.A. concentra información, trazabilidad y herramientas de mantenimiento
+          en una interfaz clara y adaptable.</p>
+        </div>
+        <div class="features">
+          <article class="feature"><div class="icon">?</div><h4>Gestión de activos</h4><p>Jerarquías, equipos, componentes, fichas técnicas y trazabilidad del ciclo de vida.</p></article>
+          <article class="feature"><div class="icon">?</div><h4>Reportes técnicos</h4><p>Registro de fallas, intervenciones, evidencias, pendientes y generación documental.</p></article>
+          <article class="feature"><div class="icon">?</div><h4>Bitácora operativa</h4><p>Consulta centralizada de eventos, reportes recientes, PDF y seguimiento entre turnos.</p></article>
+          <article class="feature"><div class="icon">?</div><h4>Órdenes de trabajo</h4><p>Control de asignaciones, estados, ejecución, cierres y cumplimiento operativo.</p></article>
+          <article class="feature"><div class="icon">?</div><h4>Usuarios y permisos</h4><p>Acceso por rol, nivel de responsabilidad y funciones autorizadas.</p></article>
+          <article class="feature"><div class="icon">?</div><h4>Ubicación inteligente</h4><p>Validación de presencia autorizada sin almacenar recorridos del usuario.</p></article>
+          <article class="feature"><div class="icon">?</div><h4>Documentación técnica</h4><p>Acceso estructurado a perfiles, manuales, archivos, reportes y documentación.</p></article>
+          <article class="feature"><div class="icon">?</div><h4>Indicadores operativos</h4><p>Visibilidad del estado de activos, mantenimiento y desempeño para tomar decisiones.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="experiencia" class="section">
+      <div class="shell">
+        <div class="section-head">
+          <span>DISEÑADA PARA TRABAJAR</span>
+          <h3>La misma experiencia en cualquier dispositivo</h3>
+          <p>Las imágenes son visualizaciones conceptuales creadas para presentar A.R.M.A.
+          sin exponer información de ningún proyecto o empresa.</p>
+        </div>
+        <div class="showcase">
+          <article class="show-card">
+            <img src="arma-public-assets/arma-public-mobile-ai.webp"
+              alt="A.R.M.A. en dispositivos móviles">
+            <h4>Operación móvil</h4>
+            <p>Reporta, consulta y da seguimiento desde el lugar de trabajo.</p>
+          </article>
+          <article class="show-card">
+            <img src="arma-public-assets/arma-public-install-ai.webp"
+              alt="Instalación de A.R.M.A.">
+            <h4>Instalación sencilla</h4>
+            <p>Instala A.R.M.A. como aplicación sin depender de tiendas tradicionales.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="instalar" class="section">
+      <div class="shell install">
+        <div>
+          <span class="eyebrow">INSTALACIÓN MULTIPLATAFORMA</span>
+          <h3>Instala A.R.M.A. en segundos</h3>
+          <p>La plataforma funciona sobre tecnología web segura, pero se instala y abre
+          como una aplicación independiente.</p>
+          <div class="install-list">
+            <div><strong>WINDOWS / PC</strong><br>Chrome o Edge ? Instalar aplicación.</div>
+            <div><strong>ANDROID</strong><br>Chrome ? Instalar A.R.M.A.</div>
+            <div><strong>IPHONE / IPAD</strong><br>Safari ? Compartir ? Agregar a inicio.</div>
+          </div>
+          <div class="hero-actions">
+            <button class="primary" type="button" data-install>? INSTALAR EN ESTE EQUIPO</button>
+            <a id="openAppInstallBtn" class="secondary hidden"
+              href="main.html?source=public">ABRIR A.R.M.A.</a>
+          </div>
+        </div>
+        <div class="qr-card">
+          <img src="arma-public-assets/qr-instalar-arma-actual.png"
+            alt="Código QR para instalar A.R.M.A.">
+          <div>
+            <h4>Instala desde tu móvil</h4>
+            <p>Escanea este código QR con la cámara del teléfono para abrir esta página
+            y comenzar la instalación.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="seguridad" class="section">
+      <div class="shell">
+        <div class="section-head">
+          <span>SEGURIDAD Y CONFIABILIDAD</span>
+          <h3>Control operativo sin perder simplicidad</h3>
+        </div>
+        <div class="security">
+          <div><strong>Sesiones controladas</strong><span>Validación de usuario, permisos y renovación de sesión según las reglas operativas.</span></div>
+          <div><strong>Datos en línea</strong><span>La información se consulta desde servicios autorizados y evita copias operativas desactualizadas.</span></div>
+          <div><strong>Privacidad por diseño</strong><span>La ubicación se solicita únicamente cuando es necesaria y no se utiliza para guardar recorridos.</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <div><strong>A.R.M.A.</strong> — Asset Reliability &amp; Maintenance Analytics</div>
+      <div>Gestión de activos, mantenimiento y confiabilidad operacional.</div>
+    </div>
+  </footer>
+
+  <div id="installModal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div id="modalTitle" class="modal-head">INSTALAR A.R.M.A.</div>
+      <div id="modalBody" class="modal-body"></div>
+      <div class="modal-actions">
+        <button id="closeModal" type="button">ACEPTAR</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let deferredInstallPrompt = null;
+    const installButtons = Array.from(document.querySelectorAll('[data-install]'));
+    const openButtons = [
+      document.getElementById('openAppBtn'),
+      document.getElementById('openAppInstallBtn')
+    ];
+    const modal = document.getElementById('installModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+
+    function isStandalone(){
+      return window.matchMedia('(display-mode: standalone)').matches ||
+        window.navigator.standalone === true;
+    }
+    function isIOS(){
+      return /iphone|ipad|ipod/i.test(navigator.userAgent);
+    }
+    function hasInstallMarker(){
+      return localStorage.getItem('ARMA_PWA_INSTALLED') === 'SI';
+    }
+    function isInstalled(){
+      return isStandalone() || hasInstallMarker();
+    }
+    function updateActions(){
+      const installed = isInstalled();
+      installButtons.forEach(btn => btn.classList.toggle('hidden', installed));
+      openButtons.forEach(btn => btn.classList.toggle('hidden', !installed));
+    }
+    function showModal(title,html){
+      modalTitle.textContent = title;
+      modalBody.innerHTML = html;
+      modal.classList.add('show');
+    }
+    function closeModal(){
+      modal.classList.remove('show');
+    }
+    async function installARMA(){
+      if(isInstalled()){
+        location.href = 'main.html?source=public';
+        return;
+      }
+      if(deferredInstallPrompt){
+        deferredInstallPrompt.prompt();
+        try{
+          const choice = await deferredInstallPrompt.userChoice;
+          if(choice && choice.outcome === 'accepted'){
+            localStorage.setItem('ARMA_PWA_INSTALLED','SI');
+            updateActions();
+          }
+        }catch(e){}
+        deferredInstallPrompt = null;
+        return;
+      }
+      if(isIOS()){
+        showModal('INSTALAR EN IPHONE / IPAD',
+          '<ol><li>Abra esta página en Safari.</li><li>Pulse Compartir.</li>' +
+          '<li>Seleccione Agregar a pantalla de inicio.</li><li>Confirme Agregar.</li></ol>');
+        return;
+      }
+      showModal('INSTALAR A.R.M.A.',
+        '<p>Abra el menú del navegador y seleccione <strong>Instalar aplicación</strong> ' +
+        'o <strong>Agregar a pantalla de inicio</strong>.</p>');
+    }
+
+    installButtons.forEach(btn => btn.addEventListener('click',installARMA));
+    document.getElementById('closeModal').addEventListener('click',closeModal);
+    modal.addEventListener('click',e => {
+      if(e.target === modal) closeModal();
+    });
+    window.addEventListener('beforeinstallprompt',e => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      updateActions();
+    });
+    window.addEventListener('appinstalled',() => {
+      localStorage.setItem('ARMA_PWA_INSTALLED','SI');
+      deferredInstallPrompt = null;
+      updateActions();
+    });
+
+    if('serviceWorker' in navigator && window.isSecureContext){
+      navigator.serviceWorker.register('./service-worker.js', {
+        scope:'./',
+        updateViaCache:'none'
+      }).catch(err => console.warn('A.R.M.A. Service Worker',err));
+    }
+    updateActions();
+  </script>
+</body>
+</html>
