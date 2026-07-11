@@ -1,4 +1,4 @@
-/* A.R.M.A. PWA - NAVEGACION INTERNA V04 */
+/* A.R.M.A. PWA - NAVEGACION INTERNA V04.2 PUBLIC EXTERNAL BROWSER */
 (function () {
   'use strict';
 
@@ -82,6 +82,34 @@
       if (anchor.hasAttribute('download')) return;
 
       const rawHref = String(anchor.getAttribute('href') || '').trim();
+
+      // CONOCER A.R.M.A.: abre el destino en un contexto nativo nuevo,
+      // sin pasarlo por la navegacion interna de la PWA.
+      if (anchor.hasAttribute('data-arma-browser')) {
+        if (!rawHref) return;
+
+        const browserUrl = resolveUrl(rawHref);
+        if (!browserUrl) return;
+
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        const browserWindow = nativeWindowOpen(
+          browserUrl.href,
+          '_blank',
+          'noopener,noreferrer'
+        );
+
+        if (browserWindow) {
+          try {
+            browserWindow.opener = null;
+            browserWindow.focus();
+          } catch (error) {}
+        }
+
+        return;
+      }
+
       if (
         !rawHref ||
         rawHref.startsWith('#') ||

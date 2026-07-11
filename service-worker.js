@@ -1,5 +1,5 @@
-/* A.R.M.A. PWA SERVICE WORKER V04 - SESION CONTINUA */
-const ARMA_SW_VERSION = 'arma-pwa-v04-session-continuity-20260711';
+/* A.R.M.A. PWA SERVICE WORKER V04.2 - PUBLIC EXTERNAL BROWSER */
+const ARMA_SW_VERSION = 'arma-pwa-v04-2-public-external-browser-20260711';
 const ARMA_STATIC_CACHE = `${ARMA_SW_VERSION}-static`;
 const ARMA_PAGE_CACHE = `${ARMA_SW_VERSION}-pages`;
 
