@@ -1,8 +1,10 @@
-/* A.R.M.A. PWA - NAVEGACION INTERNA V03 */
+/* A.R.M.A. PWA - NAVEGACION INTERNA V04 */
 (function () {
   'use strict';
 
   const APP_SCOPE_PATH = '/ot-mantenimiento/';
+  const RETURN_MAIN_KEY = 'ARMA_PWA_RETURN_MAIN';
+  const LAST_INTERNAL_KEY = 'ARMA_PWA_LAST_INTERNAL_URL';
 
   function isStandalone() {
     return (
@@ -28,10 +30,31 @@
     );
   }
 
+  function isMainUrl(url) {
+    if (!url) return false;
+
+    return (
+      url.pathname === APP_SCOPE_PATH ||
+      url.pathname === `${APP_SCOPE_PATH}main.html` ||
+      url.pathname.endsWith('/main.html')
+    );
+  }
+
+  function markInternalNavigation(url) {
+    try {
+      sessionStorage.setItem(LAST_INTERNAL_KEY, window.location.href);
+
+      if (isMainUrl(url)) {
+        sessionStorage.setItem(RETURN_MAIN_KEY, '1');
+      }
+    } catch (error) {}
+  }
+
   function navigateInternal(value) {
     const url = resolveUrl(value);
     if (!isStandalone() || !isInternalAppUrl(url)) return false;
 
+    markInternalNavigation(url);
     window.location.assign(url.href);
     return true;
   }
@@ -82,6 +105,7 @@
 
       event.preventDefault();
       event.stopImmediatePropagation();
+      markInternalNavigation(url);
       window.location.assign(url.href);
     },
     true
@@ -98,6 +122,7 @@
       const url = resolveUrl(form.getAttribute('action') || window.location.href);
       if (!isInternalAppUrl(url)) return;
 
+      markInternalNavigation(url);
       form.removeAttribute('target');
     },
     true
@@ -106,6 +131,10 @@
   window.ARMA_PWA_NAV = Object.freeze({
     isStandalone,
     isInternalAppUrl: value => isInternalAppUrl(resolveUrl(value)),
-    navigateInternal
+    navigateInternal,
+    markInternalNavigation: value => {
+      const url = resolveUrl(value);
+      if (isInternalAppUrl(url)) markInternalNavigation(url);
+    }
   });
 })();
