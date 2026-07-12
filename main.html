@@ -479,11 +479,11 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
           <span class='btn-icon btn-icon-img'><img src='tarjeta-de-identificacion.png' alt='PERSONAL'></span>
           <span class='btn-text'>PERSONAL</span>
         </a>
-        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_ADMIN_USUARIOS' href='#' title='CREAR, SUSPENDER O ELIMINAR USUARIOS'>
+        <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_ADMIN_USUARIOS' href='usuarios_arma.html' data-arma-window='ARMA_MODULO_USUARIOS_ARMA_HTML' target='ARMA_MODULO_USUARIOS_ARMA_HTML' title='CREAR, SUSPENDER O ELIMINAR USUARIOS'>
           <span class='btn-icon btn-icon-img'><img src='subcontratacion.png' alt='USUARIOS'></span>
           <span class='btn-text'>USUARIOS</span>
         </a>
-        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_ADMIN_NIVELES' href='#' title='GESTIONAR PERMISOS POR NIVELES DE USUARIO'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_ADMIN_NIVELES' href='niveles_arma.html' data-arma-window='ARMA_MODULO_NIVELES_ARMA_HTML' target='ARMA_MODULO_NIVELES_ARMA_HTML' title='GESTIONAR PERMISOS POR NIVELES DE USUARIO'>
           <span class='btn-icon btn-icon-img'><img src='meta.png' alt='NIVELES DE USUARIO'></span>
           <span class='btn-text'>NIVELES DE USUARIO</span>
         </a>
@@ -573,7 +573,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-07-11 11:17:33</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-07-11 22:28:31</span></div>
   </footer>
 </main>
 </div>
@@ -1144,8 +1144,6 @@ function armaInitAdminUI(){
   if(old){old.addEventListener('keydown',function(e){if(e.key==='Enter'){armaDoChangePassword();}});}
   var p2=document.getElementById('changeNewPass2');
   if(p2){p2.addEventListener('keydown',function(e){if(e.key==='Enter'){armaDoChangePassword();}});}
-  document.querySelectorAll('[data-perm="BTN_ADMIN_USUARIOS"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault(); if(!a.classList.contains('arma-locked')){armaOpenUsersAdmin();}});});
-  document.querySelectorAll('[data-perm="BTN_ADMIN_NIVELES"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault(); if(!a.classList.contains('arma-locked')){armaOpenLevelsAdmin();}});});
   var uc=document.getElementById('userAdminCancel');
   if(uc){uc.addEventListener('click',function(){armaHideModal('userAdminModal');});}
   var lc=document.getElementById('levelAdminCancel');
