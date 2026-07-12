@@ -22,12 +22,17 @@ a{color:inherit}
 .top-title span{display:block;color:var(--muted);font-size:12px;font-weight:900;margin-top:5px}
 .top-title-actions{margin-top:9px;display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
 .user-pill{display:inline-flex;align-items:center;gap:8px;background:#f8fbff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--navy);font-size:12px;font-weight:900}
-.main{padding:18px 24px 22px}
-.hero{position:relative;overflow:hidden;border-radius:22px;background:radial-gradient(circle at 74% 10%,#0076d7 0,#004b9b 42%,#002b66 100%);box-shadow:var(--shadow);color:#fff;padding:20px 28px;margin-bottom:16px}
+.main{padding:10px 18px 18px}
+.hero{position:relative;overflow:hidden;border-radius:22px;background:radial-gradient(circle at 74% 10%,#0076d7 0,#004b9b 42%,#002b66 100%);box-shadow:var(--shadow);color:#fff;padding:14px 20px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:88px}
 .hero:after{content:'PERSONAL';position:absolute;right:20px;bottom:-14px;font-size:68px;font-weight:950;letter-spacing:4px;color:rgba(255,255,255,.055)}
-.hero span{display:inline-block;background:rgba(0,214,95,.15);border:1px solid rgba(0,214,95,.45);color:#b8ffd5;padding:6px 10px;border-radius:999px;font-weight:950;font-size:11px}
-.hero h1{margin:12px 0 5px;font-size:30px}
+.hero h1{margin:0 0 5px;font-size:28px}
 .hero p{margin:0;max-width:1220px;color:#eaf4ff;font-size:11px;line-height:1.25;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;z-index:2}
+.hero-copy{position:relative;z-index:2;min-width:0;flex:1}
+.hero-home-card{width:auto;min-width:210px;max-width:250px;min-height:58px;padding:9px 13px;border-radius:16px;flex:0 0 auto;z-index:3}
+.hero-home-card .nav-icon{width:42px;height:42px;border-radius:13px;flex:0 0 42px}
+.hero-home-card .nav-icon img{width:30px;height:30px}
+.hero-home-card .nav-text strong{font-size:15px}
+.hero-home-card .nav-text span{font-size:9px;margin-top:4px}
 .action-grid{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:14px;margin-bottom:16px}
 .action-card{position:relative;overflow:hidden;border:0;border-radius:18px;background:#fff;box-shadow:var(--shadow);padding:17px;text-align:left;cursor:pointer;border-left:6px solid var(--green2);min-height:115px}
 .action-card:hover{filter:brightness(1.03);transform:translateY(-1px)}
@@ -61,10 +66,10 @@ textarea{min-height:76px;resize:vertical}
 .btn.gray{background:linear-gradient(180deg,#9ca3af,#6b7280)}
 .btn.red{background:linear-gradient(180deg,#ef4444,#b91c1c)}
 .btn:disabled{filter:grayscale(1);opacity:.55;cursor:not-allowed}
-.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}
+.table-wrap{height:250px;max-height:250px;overflow:auto;border:1px solid var(--line);border-radius:14px}
 table{border-collapse:collapse;width:100%;min-width:1040px;background:#fff}
-th{background:#0f6385;color:#fff;font-size:12px;text-align:left;padding:10px;position:sticky;top:0;z-index:1}
-td{border-bottom:1px solid var(--line);padding:9px 10px;font-size:12px;font-weight:700;color:#0f172a}
+th{background:#0f6385;color:#fff;font-size:12px;text-align:left;padding:10px;position:sticky;top:0;z-index:2;height:40px;white-space:nowrap}
+td{border-bottom:1px solid var(--line);padding:9px 10px;font-size:12px;font-weight:700;color:#0f172a;height:42px;white-space:nowrap}
 tr:nth-child(even){background:#eef7fd}
 tr:hover{background:#d9ecff;cursor:pointer}
 .badge{display:inline-flex;border-radius:999px;padding:4px 8px;background:#e8f2ff;color:var(--navy);font-size:10px;font-weight:950}
@@ -74,6 +79,10 @@ tr:hover{background:#d9ecff;cursor:pointer}
 .photo-preview{width:104px;height:104px;border-radius:22px;background:linear-gradient(135deg,#dbeafe,#f8fbff);display:grid;place-items:center;overflow:hidden;border:1px solid var(--line);box-shadow:var(--soft)}
 .photo-preview img{width:100%;height:100%;object-fit:cover}
 .photo-preview span{font-size:30px;color:var(--blue);font-weight:950}
+.detail-create-row{display:flex;align-items:center;justify-content:flex-end;margin:0 0 9px}
+.create-person-small{background:linear-gradient(180deg,#00d65f,#21b957);color:#fff;border:0;border-radius:12px;padding:9px 15px;font-size:12px;font-weight:950;cursor:pointer;box-shadow:0 5px 14px rgba(0,166,80,.22);white-space:nowrap}
+.create-person-small:hover{filter:brightness(1.04);transform:translateY(-1px)}
+.create-person-small:disabled{filter:grayscale(1);opacity:.55;cursor:not-allowed;transform:none}
 .photo-actions{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end}
 .notice{border-left:5px solid var(--green2);background:#fff;border-radius:14px;padding:12px;color:var(--navy);font-size:12px;font-weight:800;line-height:1.4;margin-bottom:10px}
 .person-focus-name{border-left:6px solid var(--green2);background:linear-gradient(180deg,#ffffff,#f8fbff);border-radius:16px;padding:16px 18px;color:var(--navy);font-size:26px;font-weight:950;line-height:1.1;letter-spacing:.5px;margin-bottom:12px;box-shadow:var(--soft);min-height:58px;display:flex;align-items:center;text-transform:uppercase}
@@ -101,7 +110,7 @@ tr:hover{background:#d9ecff;cursor:pointer}
 .footer-card{display:flex;align-items:center;justify-content:center;gap:10px;min-height:38px;padding:9px 18px;border-radius:16px;background:linear-gradient(135deg,#001f4d 0%,#003b86 54%,#004b9b 100%);color:#eaf4ff;font-size:12px;font-weight:850;box-shadow:var(--shadow);flex-wrap:wrap}
 .footer-sep{color:#9dffbf;font-weight:950}
 @media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}.photo-box{grid-template-columns:1fr}.photo-actions{grid-template-columns:1fr}}
-@media(max-width:700px){.action-grid,.filters,.form-grid{grid-template-columns:1fr}.main{padding:12px}.logo-pelex{height:58px}.logo-arma{height:64px}}
+@media(max-width:700px){.action-grid,.filters,.form-grid{grid-template-columns:1fr}.main{padding:10px}.logo-pelex{height:58px}.logo-arma{height:64px}.hero{align-items:stretch;flex-direction:column}.hero-home-card{width:100%;max-width:none}.detail-create-row{justify-content:stretch}.create-person-small{width:100%}}
   </style>
 </head>
 <body>
@@ -129,9 +138,8 @@ tr:hover{background:#d9ecff;cursor:pointer}
 </header>
 <main class="main">
   <section class="hero">
-    <span>ARMA DATA // PERSONAL</span>
-    <h1>GESTION DE PERSONAL</h1>
-    <p>CONSULTE, ACTUALICE Y ADMINISTRE INFORMACION DE PERSONAL DESDE UNA INTERFAZ SEGURA // DATOS EN LINEA DESDE ARMA_DATA MEDIANTE BACKEND VALIDADO.</p>
+    <div class="hero-copy"><h1>GESTION DE PERSONAL</h1><p>CONSULTE, ACTUALICE Y ADMINISTRE INFORMACION DE PERSONAL DESDE UNA INTERFAZ SEGURA // DATOS EN LINEA DESDE ARMA_DATA MEDIANTE BACKEND VALIDADO.</p></div>
+    <a class="index-nav-card main-home hero-home-card" href="main.html" data-smart-home="1" data-arma-access="ACC_PERSONAL_INICIO" onclick="return goMain(event)"><div class="nav-icon"><img src="boton-de-inicio.png" alt="INICIO"></div><div class="nav-text"><strong>Inicio</strong><span>Volver a ARMA</span></div></a>
   </section>
   <section id="loginWall" class="panel login-wall hidden">
     <div>
@@ -141,15 +149,6 @@ tr:hover{background:#d9ecff;cursor:pointer}
     </div>
   </section>
   <section id="appArea" class="hidden">
-    <div class="action-grid">
-      <a class="index-nav-card main-home" href="main.html" data-smart-home="1" data-arma-access="ACC_PERSONAL_INICIO" onclick="return goMain(event)">
-        <div class="nav-icon"><img src="boton-de-inicio.png" alt="INICIO"></div>
-        <div class="nav-text"><strong>Inicio</strong><span>Volver a ARMA</span></div>
-      </a>
-      <button class="action-card green" id="cardMine" type="button" data-perm="BTN_PERSONAL_MIS_DATOS" data-arma-access="BTN_PERSONAL_MIS_DATOS" onclick="loadMine()"><strong>CONSULTAR MIS DATOS</strong><span>VER Y ACTUALIZAR INFORMACION PROPIA PERMITIDA.</span></button>
-      <button class="action-card blue" id="cardList" type="button" data-perm="BTN_PERSONAL_VER" data-arma-access="BTN_PERSONAL_VER" onclick="loadList()"><strong>CONSULTAR PERSONAL</strong><span>LISTA FILTRADA SEGUN SU NIVEL, PLANTA, AREA O MAQUINAS AUTORIZADAS.</span></button>
-      <button class="action-card dark" id="btnNewCard" type="button" data-perm="BTN_PERSONAL_CREAR" data-arma-access="BTN_PERSONAL_CREAR" onclick="newPerson()"><strong>CREAR PERSONA</strong><span>REGISTRA PERSONAL NUEVO ANTES DE CREAR USUARIO ARMA.</span></button>
-    </div>
     <section class="panel" id="listPanel">
       <div class="panel-title"><h2>LISTA DE PERSONAL</h2><div class="status" id="listStatus">SIN CONSULTA</div></div>
       <div class="filters">
@@ -167,6 +166,7 @@ tr:hover{background:#d9ecff;cursor:pointer}
         <div class="photo-preview" id="photoPreview"><span>AR</span></div>
         <div>
           <div class="person-focus-name empty" id="personFocusName">NO_USER</div>
+          <div class="detail-create-row"><button class="create-person-small" id="btnNewCard" type="button" data-perm="BTN_PERSONAL_CREAR" data-arma-access="BTN_PERSONAL_CREAR" onclick="newPerson()">CREAR PERSONA</button></div>
           <div class="photo-actions">
             <input id="photoFile" type="file" accept="image/png,image/jpeg,image/webp">
             <button class="btn green" id="btnUploadPhoto" type="button" data-perm="BTN_PERSONAL_EDITAR" data-arma-access="BTN_PERSONAL_EDITAR" onclick="uploadPhoto()">SUBIR FOTO</button>
@@ -180,7 +180,7 @@ tr:hover{background:#d9ecff;cursor:pointer}
       </div>
     </section>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-11 20:06:01</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-11 20:28:55</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -239,7 +239,7 @@ function isSuperAdmin(){let p=normalizePerms(armaSession.permissions);let u=Stri
 function isAdminLike(){let n=String(armaSession.nivel||"").toUpperCase();return isSuperAdmin()||n==="ADMIN";}
 function hasPerm(k){let p=normalizePerms(armaSession.permissions);k=String(k||"").toUpperCase();return isSuperAdmin()||p[k]===true||String(armaSession.nivel||"").toUpperCase()==="ADMIN";}
 function setCardPerm(id,perm){let el=document.getElementById(id);if(!el)return;let ok=hasPerm(perm);el.disabled=!ok;el.classList.toggle("disabled",!ok);el.setAttribute("aria-disabled",ok?"false":"true");}
-function applyPersonalPermissions(){setCardPerm("cardMine","BTN_PERSONAL_MIS_DATOS");setCardPerm("cardList","BTN_PERSONAL_VER");setCardPerm("btnNewCard","BTN_PERSONAL_CREAR");}
+function applyPersonalPermissions(){setCardPerm("btnNewCard","BTN_PERSONAL_CREAR");}
 let armaLoaderCount=0;
 function loaderMsg(action){let a=String(action||"").toUpperCase();if(a.indexOf("UPLOAD")>=0)return "SUBIENDO FOTOGRAFIA...";if(a.indexOf("PERSONAL")>=0||a.indexOf("PERSONA")>=0)return "CARGANDO PERSONAL...";if(a.indexOf("SESSION")>=0)return "VALIDANDO SESION...";return "CONSULTANDO ARMA...";}
 function showArmaLoader(msg){armaLoaderCount++;let o=document.getElementById("armaLoader");let t=document.getElementById("armaLoaderText");if(t)t.textContent=msg||"CARGANDO...";if(o)o.classList.remove("hidden");}
