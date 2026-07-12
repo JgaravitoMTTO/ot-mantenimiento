@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#004b9b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="arma-avatar-192.png">
+<script src="arma-pwa-navigation.js" defer data-arma-pwa-navigation="1"></script>
+<title>ARMA | ADMINISTRACION DE USUARIOS</title>
+<style>:root{
+  --navy:#002b66;--blue:#004b9b;--blue2:#0076d7;--cyan:#00bfd6;
+  --green:#18c65b;--green2:#55b52e;--red:#dc2626;--orange:#f59e0b;
+  --line:#d7e4f2;--bg:#eef3f9;--surface:#ffffff;--text:#0f172a;
+  --muted:#64748b;--shadow:0 14px 34px rgba(0,43,102,.13);
+}
+*{box-sizing:border-box}
+html{zoom:75%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Segoe UI,Roboto,Arial,sans-serif;text-transform:uppercase}
+button,input,select,textarea{font:inherit;text-transform:uppercase}
+button{cursor:pointer}
+.hidden{display:none!important}
+.top-global{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 10px 24px rgba(0,43,102,.14)}
+.top-white{min-height:108px;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.blue-line{height:6px;background:linear-gradient(90deg,var(--blue),var(--blue2),var(--blue))}
+.brand-row{display:flex;align-items:center;gap:22px}
+.brand-separator{width:1px;height:68px;background:#d8e5f2}
+.logo-pelex{height:72px;max-width:250px;object-fit:contain}
+.logo-arma{height:80px;max-width:360px;object-fit:contain}
+.top-title{text-align:right}
+.top-title strong{display:block;color:var(--navy);font-size:24px;font-weight:950}
+.top-title span{display:block;color:var(--muted);font-size:11px;font-weight:900;margin-top:5px}
+.user-pill{display:inline-flex;align-items:center;gap:8px;margin-top:8px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#f8fbff;color:var(--navy);font-size:11px;font-weight:950}
+.main{padding:12px 20px 22px}
+.hero{position:relative;overflow:hidden;min-height:92px;border-radius:22px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:18px;background:radial-gradient(circle at 72% 0,#0b83e8 0,#0057aa 43%,#002b66 100%);color:#fff;box-shadow:var(--shadow);margin-bottom:12px}
+.hero:after{content:attr(data-mark);position:absolute;right:22px;bottom:-18px;font-size:66px;font-weight:1000;letter-spacing:4px;color:rgba(255,255,255,.06)}
+.hero-copy{position:relative;z-index:2;min-width:0}
+.hero h1{margin:0 0 5px;font-size:29px;font-weight:950}
+.hero p{margin:0;color:#eaf4ff;font-size:11px;font-weight:850;line-height:1.35}
+.home-card{position:relative;z-index:3;display:flex;align-items:center;gap:12px;min-width:205px;padding:10px 14px;border-radius:17px;background:linear-gradient(180deg,#fff,#eef7ff);border:1px solid #cfe0f2;text-decoration:none;color:var(--navy);box-shadow:0 12px 26px rgba(0,0,0,.14)}
+.home-card:before{content:"";position:absolute;left:0;top:0;width:100%;height:5px;border-radius:17px 17px 0 0;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--green))}
+.home-icon{width:46px;height:46px;border-radius:14px;background:#e8f2ff;border:1px solid var(--line);display:grid;place-items:center;flex:0 0 46px}
+.home-icon img{width:32px;height:32px;object-fit:contain}
+.home-text strong{display:block;font-size:16px;font-weight:950}
+.home-text span{display:block;margin-top:4px;color:#008c2e;font-size:9px;font-weight:950;letter-spacing:.4px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:15px}
+.panel-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.panel-title h2{margin:0;color:var(--navy);font-size:18px}
+.status{font-size:11px;font-weight:900;color:var(--muted);text-align:right}
+.btn{border:0;border-radius:11px;padding:10px 14px;color:#fff;background:linear-gradient(180deg,var(--blue2),var(--blue));font-size:11px;font-weight:950;box-shadow:0 6px 14px rgba(0,75,155,.18)}
+.btn.green{background:linear-gradient(180deg,#22d566,#16a34a)}
+.btn.gray{background:linear-gradient(180deg,#9ca3af,#64748b)}
+.btn.red{background:linear-gradient(180deg,#ef4444,#b91c1c)}
+.btn.orange{background:linear-gradient(180deg,#fbbf24,#d97706)}
+.btn:disabled{opacity:.45;filter:grayscale(1);cursor:not-allowed}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:10px 11px;background:#fff;color:var(--navy);font-size:12px;font-weight:800;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(0,118,215,.10)}
+input[readonly],textarea[readonly]{background:#edf3fa;color:#53677f}
+label{display:block;margin-bottom:5px;color:var(--navy);font-size:10px;font-weight:950}
+.badge{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:4px 8px;font-size:9px;font-weight:950;background:#e8f2ff;color:var(--navy)}
+.badge.green{background:#dcfce7;color:#166534}
+.badge.red{background:#fee2e2;color:#991b1b}
+.badge.gray{background:#e5e7eb;color:#475569}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:13px;background:#fff}
+table{border-collapse:collapse;width:100%;min-width:920px}
+th{position:sticky;top:0;z-index:2;background:#0f6385;color:#fff;padding:10px;text-align:left;font-size:10px;font-weight:950}
+td{padding:9px 10px;border-bottom:1px solid var(--line);font-size:10px;font-weight:760}
+tr:nth-child(even){background:#eef7fd}
+tbody tr:hover{background:#d9ecff;cursor:pointer}
+tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,.25)}
+.loader{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(2,6,23,.56);backdrop-filter:blur(3px)}
+.loader-card{width:min(390px,92vw);padding:25px;border-radius:22px;background:#fff;text-align:center;color:var(--navy);box-shadow:0 28px 70px rgba(0,0,0,.34)}
+.spinner{width:54px;height:54px;border-radius:50%;border:6px solid #dbeafe;border-top-color:var(--blue2);margin:0 auto 14px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-card h2{margin:0 0 7px;font-size:17px}
+.loader-card p{margin:0;color:var(--muted);font-size:11px;font-weight:850}
+.toast{position:fixed;right:18px;bottom:18px;z-index:10000;max-width:520px;padding:13px 16px;border-radius:12px;background:#002b66;color:#fff;font-size:11px;font-weight:900;box-shadow:var(--shadow);display:none}
+.toast.show{display:block}
+.dialog{position:fixed;inset:0;z-index:10001;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(2,6,23,.58);backdrop-filter:blur(3px)}
+.dialog-card{width:min(520px,94vw);border-radius:22px;background:#fff;border:1px solid var(--line);box-shadow:0 28px 70px rgba(0,0,0,.35);overflow:hidden}
+.dialog-head{padding:17px 20px;background:linear-gradient(135deg,#002b66,#0076d7);color:#fff}
+.dialog-head h2{margin:0;font-size:18px}
+.dialog-body{padding:20px;color:var(--navy);font-size:12px;font-weight:850;line-height:1.45;white-space:pre-wrap}
+.dialog-actions{display:flex;justify-content:flex-end;gap:9px;padding:12px 18px;border-top:1px solid var(--line)}
+.login-wall{min-height:300px;display:grid;place-items:center;text-align:center}
+.footer{margin-top:14px;padding:11px 16px;border-radius:14px;background:linear-gradient(135deg,#001f4d,#004b9b);color:#eaf4ff;text-align:center;font-size:10px;font-weight:900}
+@media(max-width:900px){
+  html{zoom:100%}
+  .top-white{flex-direction:column;padding:10px 12px}
+  .top-title{text-align:center}
+  .main{padding:10px}
+  .hero{align-items:stretch;flex-direction:column}
+  .home-card{width:100%}
+  .logo-pelex{height:45px}.logo-arma{height:50px}
+}.workspace{display:grid;grid-template-columns:minmax(430px,42%) minmax(0,1fr);gap:14px;align-items:start}
+.filters{display:grid;grid-template-columns:1.5fr 1fr 1fr auto;gap:8px;margin-bottom:10px}
+.users-table{max-height:620px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.field.full{grid-column:1/-1}
+.form-section{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fbfdff;margin-bottom:11px}
+.form-section h3{margin:0 0 11px;color:var(--navy);font-size:14px}
+.form-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;padding-top:12px;border-top:1px solid var(--line)}
+.identity-card{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(135deg,#f8fbff,#eef7ff);margin-bottom:11px}
+.identity-card strong{display:block;color:var(--navy);font-size:20px}
+.identity-card span{display:block;margin-top:4px;color:var(--muted);font-size:10px;font-weight:900}
+.access-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.summary-box{padding:10px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.summary-box span{display:block;color:var(--muted);font-size:9px;font-weight:900}
+.summary-box strong{display:block;margin-top:4px;color:var(--navy);font-size:14px}
+@media(max-width:1150px){.workspace{grid-template-columns:1fr}.users-table{max-height:420px}}
+@media(max-width:700px){.filters,.form-grid,.access-summary{grid-template-columns:1fr}.field.full{grid-column:1}.btn{min-height:48px;font-size:14px}}</style>
+</head>
+<body>
+<div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><h2 id="loaderText">CARGANDO...</h2><p>ARMA ESTA VALIDANDO Y ACTUALIZANDO INFORMACION EN LINEA.</p></div></div>
+<div id="toast" class="toast"></div>
+<div id="dialog" class="dialog hidden"><div class="dialog-card"><div class="dialog-head"><h2 id="dialogTitle">A.R.M.A.</h2></div><div id="dialogMessage" class="dialog-body"></div><div class="dialog-actions"><button id="dialogCancel" class="btn gray">CANCELAR</button><button id="dialogAccept" class="btn green">ACEPTAR</button></div></div></div>
+<header class="top-global"><div class="top-white"><div class="brand-row"><img src="logo_pelex.bmp" class="logo-pelex" alt="PELEX"><div class="brand-separator"></div><img src="ARMA%20logo%202.png" class="logo-arma" alt="ARMA"></div><div class="top-title"><strong>ADMINISTRACION | USUARIOS</strong><span>CUENTAS ARMA VINCULADAS A PERSONAL Y NIVELES DE ACCESO</span><div id="userPill" class="user-pill">VALIDANDO SESION...</div></div></div><div class="blue-line"></div></header>
+<main id="appArea" class="main">
+<section class="hero" data-mark="USUARIOS"><div class="hero-copy"><h1>GESTION DE USUARIOS ARMA</h1><p>CREE, ACTUALICE, ACTIVE, SUSPENDA Y PROTEJA CUENTAS. LOS PERMISOS SE HEREDAN DEL NIVEL ASIGNADO.</p></div><a class="home-card" href="main.html" data-smart-home="1"><span class="home-icon"><img src="boton-de-inicio.png" alt="INICIO"></span><span class="home-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></span></a></section>
+<section class="workspace">
+  <article class="panel">
+    <div class="panel-title"><h2>LISTA DE USUARIOS</h2><span id="listStatus" class="status">0 USUARIOS</span></div>
+    <div class="filters"><input id="filterQ" placeholder="BUSCAR USUARIO, PERSONA, CORREO O ID"><select id="filterLevel"><option value="">TODOS LOS NIVELES</option></select><select id="filterActive"><option value="">TODOS LOS ESTADOS</option><option value="SI">ACTIVOS</option><option value="NO">SUSPENDIDOS</option></select><button id="btnSearch" class="btn">BUSCAR</button></div>
+    <div class="table-wrap users-table"><table><thead><tr><th>USUARIO</th><th>NOMBRE</th><th>NIVEL</th><th>ACTIVO</th><th>ID PERSONA</th><th>CORREO</th><th>PERMISOS</th></tr></thead><tbody id="usersRows"></tbody></table></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px"><button id="btnReload" class="btn gray">ACTUALIZAR</button><button id="btnNew" class="btn green">NUEVO USUARIO</button></div>
+  </article>
+  <article class="panel">
+    <div class="panel-title"><h2 id="formTitle">CREAR USUARIO</h2><span class="status">ARMA_DATABASE / USUARIOS</span></div>
+    <div class="identity-card"><div><strong id="identityName">NUEVO USUARIO</strong><span id="identitySub">SELECCIONE UNA PERSONA CREADA EN PERSONAL</span></div><span class="badge">ACCESO CONTROLADO</span></div>
+    <div id="personField" class="form-section"><h3>PERSONA VINCULADA</h3><label>PERSONA CREADA EN PERSONAL</label><select id="personSelect"><option value="">SELECCIONE PERSONA</option></select></div>
+    <div class="form-section"><h3>IDENTIDAD Y CUENTA</h3><div class="form-grid">
+      <div><label>USUARIO</label><input id="userName" placeholder="EJ: MARIO.AREVALO"></div>
+      <div><label>ID PERSONA</label><input id="userIdPersona" readonly></div>
+      <div class="field full"><label>NOMBRE COMPLETO</label><input id="userFullName" readonly></div>
+      <div><label>CORREO</label><input id="userMail" type="email"></div>
+      <div><label>NIVEL</label><select id="userLevel"><option value="">SELECCIONE NIVEL</option></select></div>
+      <div><label>ACTIVO</label><select id="userActive"><option value="SI">SI</option><option value="NO">NO</option></select></div>
+      <div><label>DEBE CAMBIAR CLAVE</label><select id="userMustChange"><option value="SI">SI</option><option value="NO">NO</option></select></div>
+      <div class="field full"><label>CLAVE TEMPORAL / NUEVA CLAVE</label><input id="userPassword" type="password" placeholder="MINIMO 8 CARACTERES"></div>
+    </div></div>
+    <div class="form-section"><h3>RESUMEN DEL NIVEL</h3><div class="access-summary"><div class="summary-box"><span>PERMISOS ACTIVOS</span><strong id="sumPermissions">0</strong></div><div class="summary-box"><span>FILTROS RESTRINGIDOS</span><strong id="sumFilters">0</strong></div><div class="summary-box"><span>ESTADO CUENTA</span><strong id="sumStatus">-</strong></div></div></div>
+    <div class="form-section"><h3>AUDITORIA</h3><div class="form-grid"><div><label>ULTIMO LOGIN</label><input id="userLastLogin" readonly></div><div class="field full"><label>OBSERVACION</label><textarea id="userObservation" readonly></textarea></div></div></div>
+    <div class="form-actions"><button id="btnToggle" class="btn orange">ACTIVAR / SUSPENDER</button><button id="btnReset" class="btn">RESTABLECER CLAVE</button><button id="btnDelete" class="btn red">ELIMINAR</button><button id="btnSave" class="btn green">CREAR USUARIO</button></div>
+  </article>
+</section>
+<footer class="footer">A.R.M.A. // USUARIOS // ARMA_DATABASE EN LINEA // 2026-07-11 22:26:21</footer>
+</main>
+<script>const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
+const ARMA_UI_MANIFEST={
+  page:{htmlId:'usuarios_arma.html',htmlTitle:'ADMINISTRACION | USUARIOS',url:'usuarios_arma.html',module:'ADMIN_USUARIOS',order:800},
+  buttons:[
+    {key:'BTN_ADMIN_USUARIOS',label:'ABRIR ADMINISTRACION DE USUARIOS',group:'ACCESO'},
+    {key:'BTN_USUARIOS_CREAR',label:'CREAR USUARIO',group:'OPERACIONES'},
+    {key:'BTN_USUARIOS_EDITAR',label:'EDITAR USUARIO',group:'OPERACIONES'},
+    {key:'BTN_USUARIOS_ACTIVAR',label:'ACTIVAR O SUSPENDER',group:'OPERACIONES'},
+    {key:'BTN_USUARIOS_RESETEAR_CLAVE',label:'RESTABLECER CLAVE',group:'SEGURIDAD'},
+    {key:'BTN_USUARIOS_ELIMINAR',label:'ELIMINAR USUARIO',group:'SEGURIDAD'}
+  ],
+  filters:[
+    {id:'USUARIOS_NIVEL',label:'NIVEL DE USUARIO',provider:'NIVELES_USUARIO',type:'SELECT_MULTIPLE',order:10},
+    {id:'USUARIOS_ESTADO',label:'ESTADO DE USUARIO',values:['SI','NO'],type:'SELECT_MULTIPLE',order:20}
+  ]
+};
+let armaSession={user:'',nombre:'',nivel:'',permissions:{},token:''};
+let appData={users:[],levels:[],persons:[]};
+let selectedUser=null;
+let createMode=false;
+let dialogResolver=null;
+
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function normalize(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toUpperCase();}
+function readCache(){try{let raw=localStorage.getItem('ARMA_SESSION_CACHE')||'';if(!raw)return null;let x=JSON.parse(raw);return x&&x.token?x:null;}catch(e){return null;}}
+function setSession(data,token){armaSession={user:data.user||'',nombre:data.nombre||data.user||'',nivel:data.nivel||'',permissions:data.permissions||{},token:token||data.token||''};if(armaSession.token)localStorage.setItem('ARMA_TOKEN',armaSession.token);document.getElementById('userPill').textContent=(armaSession.nombre||armaSession.user)+' // '+armaSession.nivel;}
+function hasPerm(key,parent){if(armaSession.nivel==='SUPER_ADMIN'||armaSession.permissions.__SUPER_ADMIN__===true)return true;if(Object.prototype.hasOwnProperty.call(armaSession.permissions,key))return armaSession.permissions[key]===true;return parent?armaSession.permissions[parent]===true:false;}
+function showLoader(msg){document.getElementById('loaderText').textContent=msg||'CARGANDO...';document.getElementById('loader').classList.remove('hidden');}
+function hideLoader(){document.getElementById('loader').classList.add('hidden');}
+function toast(msg){let el=document.getElementById('toast');el.textContent=msg||'';el.classList.add('show');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>el.classList.remove('show'),4200);}
+async function api(action,payload,msg){payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';if(msg)showLoader(msg);try{let r=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});return await r.json();}finally{if(msg)hideLoader();}}
+function dialog(title,message,confirmText='ACEPTAR',cancelText=''){return new Promise(resolve=>{dialogResolver=resolve;document.getElementById('dialogTitle').textContent=title;document.getElementById('dialogMessage').textContent=message;let cancel=document.getElementById('dialogCancel');document.getElementById('dialogAccept').textContent=confirmText;cancel.textContent=cancelText||'CANCELAR';cancel.classList.toggle('hidden',!cancelText);document.getElementById('dialog').classList.remove('hidden');});}
+function closeDialog(value){document.getElementById('dialog').classList.add('hidden');if(dialogResolver)dialogResolver(value);dialogResolver=null;}
+function formatDate(v){if(!v)return '';let d=new Date(v);return isNaN(d)?String(v):d.toLocaleString('es-CO');}
+function actionAllowed(key){return hasPerm(key,'BTN_ADMIN_USUARIOS');}
+function personById(id){return appData.persons.find(p=>normalize(p.ID_PERSONA)===normalize(id));}
+function levelByName(name){return appData.levels.find(l=>normalize(l.nivel)===normalize(name));}
+
+async function validateSession(){
+  let cache=readCache();let token=localStorage.getItem('ARMA_TOKEN')||(cache&&cache.token)||'';
+  if(!token){location.href='main.html';return false;}
+  if(cache)setSession(cache,token);
+  let data=await api('validateSession',{token});
+  if(!data.ok){localStorage.removeItem('ARMA_TOKEN');localStorage.removeItem('ARMA_SESSION_CACHE');location.href='main.html';return false;}
+  setSession(data,token);
+  if(!hasPerm('BTN_ADMIN_USUARIOS','BTN_ADMIN_USUARIOS')){document.getElementById('appArea').innerHTML='<section class="panel login-wall"><div><h2>ACCESO NO AUTORIZADO</h2><p>SU NIVEL NO TIENE BTN_ADMIN_USUARIOS.</p><a class="btn" href="main.html">VOLVER A MAIN</a></div></section>';return false;}
+  try{await api('registerUiManifest',{manifest:ARMA_UI_MANIFEST});}catch(e){}
+  return true;
+}
+
+async function loadBootstrap(selectName){
+  let data=await api('adminUsersBootstrap',{},'CARGANDO USUARIOS Y NIVELES...');
+  if(!data.ok)throw new Error(data.error||'NO SE PUDO CARGAR');
+  appData={users:data.users||[],levels:data.levels||[],persons:data.persons||[]};
+  fillFilters();
+  if(selectName&&appData.users.some(u=>normalize(u.user)===normalize(selectName)))selectUser(selectName);else beginNew(false);
+  renderUsers();
+  document.getElementById('listStatus').textContent=appData.users.length+' USUARIOS';
+}
+
+function fillFilters(){
+  let level=document.getElementById('filterLevel');let old=level.value;
+  level.innerHTML='<option value="">TODOS LOS NIVELES</option>'+appData.levels.map(l=>`<option value="${esc(l.nivel)}">${esc(l.nivel)}</option>`).join('');
+  level.value=old;
+  let formLevel=document.getElementById('userLevel');let current=formLevel.value;
+  formLevel.innerHTML='<option value="">SELECCIONE NIVEL</option>'+appData.levels.map(l=>`<option value="${esc(l.nivel)}">${esc(l.nivel)} // ${esc(l.descripcion||'')}</option>`).join('');
+  if(current)formLevel.value=current;
+  let person=document.getElementById('personSelect');
+  person.innerHTML='<option value="">SELECCIONE PERSONA CREADA EN PERSONAL</option>'+appData.persons.map(p=>{let linked=normalize(p.USER_ARMA);let disabled=linked?' disabled':'';let suffix=linked?' // YA VINCULADA: '+linked:'';return `<option value="${esc(p.ID_PERSONA)}"${disabled}>${esc(p.NOMBRE_COMPLETO)} // ${esc(p.ID_PERSONA)}${esc(suffix)}</option>`;}).join('');
+}
+
+function filteredUsers(){
+  let q=normalize(document.getElementById('filterQ').value);
+  let level=normalize(document.getElementById('filterLevel').value);
+  let active=normalize(document.getElementById('filterActive').value);
+  return appData.users.filter(u=>{
+    let hay=normalize([u.user,u.nombre,u.correo,u.idPersona,u.nivel].join(' '));
+    return (!q||hay.includes(q))&&(!level||normalize(u.nivel)===level)&&(!active||normalize(u.activo)===active);
+  });
+}
+
+function renderUsers(){
+  let rows=filteredUsers();
+  document.getElementById('usersRows').innerHTML=rows.map(u=>`<tr data-user="${esc(u.user)}" class="${selectedUser&&normalize(selectedUser.user)===normalize(u.user)?'selected':''}"><td><strong>${esc(u.user)}</strong>${u.protegido?'<br><span class="badge gray">PROTEGIDO</span>':''}</td><td>${esc(u.nombre)}</td><td>${esc(u.nivel)}</td><td><span class="badge ${u.activo==='SI'?'green':'red'}">${esc(u.activo)}</span></td><td>${esc(u.idPersona)}</td><td>${esc(u.correo)}</td><td>${u.permissionCount||0}</td></tr>`).join('')||'<tr><td colspan="7">SIN RESULTADOS</td></tr>';
+  document.querySelectorAll('#usersRows tr[data-user]').forEach(tr=>tr.addEventListener('click',()=>selectUser(tr.dataset.user)));
+  document.getElementById('listStatus').textContent=rows.length+' DE '+appData.users.length+' USUARIOS';
+}
+
+function beginNew(focus=true){
+  createMode=true;selectedUser=null;
+  document.getElementById('formTitle').textContent='CREAR USUARIO';
+  document.getElementById('identityName').textContent='NUEVO USUARIO';
+  document.getElementById('identitySub').textContent='SELECCIONE UNA PERSONA CREADA EN PERSONAL';
+  document.getElementById('personField').classList.remove('hidden');
+  ['userName','userMail','userPassword'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('userName').readOnly=false;
+  document.getElementById('userIdPersona').value='';
+  document.getElementById('userFullName').value='';
+  document.getElementById('userLevel').value='';
+  document.getElementById('userActive').value='SI';
+  document.getElementById('userMustChange').value='SI';
+  document.getElementById('userLastLogin').value='';
+  document.getElementById('userObservation').value='';
+  document.getElementById('btnSave').textContent='CREAR USUARIO';
+  setActionButtons();
+  renderUsers();updateSummary();
+  if(focus)document.getElementById('personSelect').focus();
+}
+
+function selectUser(user){
+  let u=appData.users.find(x=>normalize(x.user)===normalize(user));if(!u)return;
+  createMode=false;selectedUser=u;
+  document.getElementById('formTitle').textContent='DETALLE DE USUARIO';
+  document.getElementById('identityName').textContent=u.nombre||u.user;
+  document.getElementById('identitySub').textContent=u.user+' // '+u.nivel+(u.protegido?' // PROTEGIDO':'');
+  document.getElementById('personField').classList.add('hidden');
+  document.getElementById('userName').value=u.user||'';
+  document.getElementById('userName').readOnly=true;
+  document.getElementById('userIdPersona').value=u.idPersona||'';
+  document.getElementById('userFullName').value=u.nombre||'';
+  document.getElementById('userMail').value=u.correo||'';
+  document.getElementById('userLevel').value=u.nivel||'';
+  document.getElementById('userActive').value=u.activo||'SI';
+  document.getElementById('userMustChange').value=u.debeCambiarClave||'NO';
+  document.getElementById('userPassword').value='';
+  document.getElementById('userLastLogin').value=formatDate(u.ultimoLogin);
+  document.getElementById('userObservation').value=u.observacion||'';
+  document.getElementById('btnSave').textContent='GUARDAR CAMBIOS';
+  setActionButtons();renderUsers();updateSummary();
+}
+
+function setActionButtons(){
+  let protectedUser=!!(selectedUser&&selectedUser.protegido);
+  document.getElementById('btnNew').disabled=!actionAllowed('BTN_USUARIOS_CREAR');
+  document.getElementById('btnSave').disabled=createMode?!actionAllowed('BTN_USUARIOS_CREAR'):(!actionAllowed('BTN_USUARIOS_EDITAR')||protectedUser);
+  document.getElementById('btnToggle').disabled=createMode||!actionAllowed('BTN_USUARIOS_ACTIVAR')||protectedUser;
+  document.getElementById('btnReset').disabled=createMode||!actionAllowed('BTN_USUARIOS_RESETEAR_CLAVE')||protectedUser;
+  document.getElementById('btnDelete').disabled=createMode||!actionAllowed('BTN_USUARIOS_ELIMINAR')||protectedUser;
+  document.getElementById('userMail').readOnly=!createMode&&(!actionAllowed('BTN_USUARIOS_EDITAR')||protectedUser);
+  document.getElementById('userLevel').disabled=!createMode&&(!actionAllowed('BTN_USUARIOS_EDITAR')||protectedUser);
+  document.getElementById('userActive').disabled=!createMode&&(!actionAllowed('BTN_USUARIOS_EDITAR')||protectedUser);
+  document.getElementById('userMustChange').disabled=!createMode&&(!actionAllowed('BTN_USUARIOS_EDITAR')||protectedUser);
+}
+
+function updateSummary(){
+  let level=levelByName(document.getElementById('userLevel').value)||{};
+  document.getElementById('sumPermissions').textContent=level.permissionCount||0;
+  document.getElementById('sumFilters').textContent=level.filterRuleCount||0;
+  document.getElementById('sumStatus').textContent=document.getElementById('userActive').value||'-';
+}
+
+function onPersonChange(){
+  let p=personById(document.getElementById('personSelect').value);
+  if(!p)return;
+  document.getElementById('userIdPersona').value=p.ID_PERSONA||'';
+  document.getElementById('userFullName').value=p.NOMBRE_COMPLETO||'';
+  document.getElementById('userMail').value=p.CORREO||'';
+  document.getElementById('identityName').textContent=p.NOMBRE_COMPLETO||'NUEVO USUARIO';
+  document.getElementById('identitySub').textContent=(p.ID_PERSONA||'')+' // '+(p.CARGO||'')+' // '+(p.PLANTA_ASIGNADA||'');
+  if(!document.getElementById('userName').value)document.getElementById('userName').value=suggestUser(p.NOMBRE_COMPLETO||'');
+}
+
+function suggestUser(name){
+  let parts=normalize(name).replace(/[^A-Z0-9 ]/g,' ').split(/\s+/).filter(Boolean);
+  if(!parts.length)return '';
+  return parts.length===1?parts[0]:(parts[0]+'.'+parts[parts.length-1]).slice(0,40);
+}
+
+async function saveUser(){
+  let data={
+    user:document.getElementById('userName').value,
+    idPersona:document.getElementById('userIdPersona').value,
+    correo:document.getElementById('userMail').value,
+    nivel:document.getElementById('userLevel').value,
+    activo:document.getElementById('userActive').value,
+    debeCambiarClave:document.getElementById('userMustChange').value
+  };
+  if(createMode)data.password=document.getElementById('userPassword').value;
+  if(!data.user||!data.nivel||(!data.idPersona&&createMode)){toast('COMPLETE USUARIO, PERSONA Y NIVEL.');return;}
+  if(createMode&&!data.password){toast('DIGITE UNA CLAVE TEMPORAL.');return;}
+  let ok=await dialog(createMode?'CREAR USUARIO':'GUARDAR CAMBIOS',createMode?'SE CREARA EL USUARIO Y SE VINCULARA A PERSONAL.':'SE ACTUALIZARA EL USUARIO SELECCIONADO.','CONTINUAR','CANCELAR');if(!ok)return;
+  let wasCreate=createMode;let targetUser=data.user;
+  let result=await api(wasCreate?'createUser':'updateUserAdmin',{userData:data},wasCreate?'CREANDO USUARIO...':'GUARDANDO CAMBIOS...');
+  if(!result.ok){toast(result.error||'NO FUE POSIBLE GUARDAR.');return;}
+  toast(result.message||'OPERACION COMPLETADA');await loadBootstrap(targetUser);
+}
+
+async function toggleUser(){
+  if(!selectedUser)return;
+  let targetUser=selectedUser.user;let targetActive=selectedUser.activo;
+  let ok=await dialog(targetActive==='SI'?'SUSPENDER USUARIO':'ACTIVAR USUARIO','USUARIO: '+targetUser+'\nESTADO ACTUAL: '+targetActive,'CONFIRMAR','CANCELAR');if(!ok)return;
+  let r=await api('toggleUserActive',{user:targetUser},'ACTUALIZANDO ESTADO...');
+  if(!r.ok){toast(r.error||'NO FUE POSIBLE CAMBIAR EL ESTADO.');return;}
+  toast('ESTADO ACTUALIZADO: '+r.activo);await loadBootstrap(targetUser);
+}
+
+async function resetPassword(){
+  if(!selectedUser)return;
+  let pass=document.getElementById('userPassword').value;
+  if(pass.length<8){toast('LA CLAVE TEMPORAL DEBE TENER MINIMO 8 CARACTERES.');return;}
+  let ok=await dialog('RESTABLECER CLAVE','SE CERRARAN LAS SESIONES DEL USUARIO '+selectedUser.user+'.','RESTABLECER','CANCELAR');if(!ok)return;
+  let r=await api('resetUserPasswordAdmin',{user:selectedUser.user,password:pass,mustChange:true},'ACTUALIZANDO CLAVE...');
+  if(!r.ok){toast(r.error||'NO FUE POSIBLE ACTUALIZAR LA CLAVE.');return;}
+  document.getElementById('userPassword').value='';toast(r.message||'CLAVE ACTUALIZADA');
+}
+
+async function deleteSelected(){
+  if(!selectedUser)return;
+  let ok=await dialog('ELIMINAR USUARIO','ESTA ACCION ELIMINA LA CUENTA, CIERRA SUS SESIONES Y DESVINCULA USER_ARMA EN PERSONAL.\n\nUSUARIO: '+selectedUser.user,'ELIMINAR','CANCELAR');if(!ok)return;
+  let r=await api('deleteUser',{user:selectedUser.user},'ELIMINANDO USUARIO...');
+  if(!r.ok){toast(r.error||'NO FUE POSIBLE ELIMINAR.');return;}
+  toast(r.message||'USUARIO ELIMINADO');await loadBootstrap();
+}
+
+function bind(){
+  ['filterQ','filterLevel','filterActive'].forEach(id=>document.getElementById(id).addEventListener(id==='filterQ'?'input':'change',renderUsers));
+  document.getElementById('btnSearch').addEventListener('click',renderUsers);
+  document.getElementById('btnReload').addEventListener('click',loadBootstrap);
+  document.getElementById('btnNew').addEventListener('click',()=>beginNew(true));
+  document.getElementById('btnSave').addEventListener('click',saveUser);
+  document.getElementById('btnToggle').addEventListener('click',toggleUser);
+  document.getElementById('btnReset').addEventListener('click',resetPassword);
+  document.getElementById('btnDelete').addEventListener('click',deleteSelected);
+  document.getElementById('personSelect').addEventListener('change',onPersonChange);
+  document.getElementById('userLevel').addEventListener('change',updateSummary);
+  document.getElementById('userActive').addEventListener('change',updateSummary);
+  document.getElementById('dialogAccept').addEventListener('click',()=>closeDialog(true));
+  document.getElementById('dialogCancel').addEventListener('click',()=>closeDialog(false));
+}
+document.addEventListener('DOMContentLoaded',async()=>{bind();try{if(await validateSession())await loadBootstrap();}catch(e){hideLoader();toast(e.message||'ERROR DE CONEXION');}});</script>
+</body>
+</html>
