@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#004b9b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="arma-avatar-192.png">
+<script src="arma-pwa-navigation.js" defer data-arma-pwa-navigation="1"></script>
+<title>ARMA | NIVELES DE USUARIO</title>
+<style>:root{
+  --navy:#002b66;--blue:#004b9b;--blue2:#0076d7;--cyan:#00bfd6;
+  --green:#18c65b;--green2:#55b52e;--red:#dc2626;--orange:#f59e0b;
+  --line:#d7e4f2;--bg:#eef3f9;--surface:#ffffff;--text:#0f172a;
+  --muted:#64748b;--shadow:0 14px 34px rgba(0,43,102,.13);
+}
+*{box-sizing:border-box}
+html{zoom:75%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Segoe UI,Roboto,Arial,sans-serif;text-transform:uppercase}
+button,input,select,textarea{font:inherit;text-transform:uppercase}
+button{cursor:pointer}
+.hidden{display:none!important}
+.top-global{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 10px 24px rgba(0,43,102,.14)}
+.top-white{min-height:108px;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.blue-line{height:6px;background:linear-gradient(90deg,var(--blue),var(--blue2),var(--blue))}
+.brand-row{display:flex;align-items:center;gap:22px}
+.brand-separator{width:1px;height:68px;background:#d8e5f2}
+.logo-pelex{height:72px;max-width:250px;object-fit:contain}
+.logo-arma{height:80px;max-width:360px;object-fit:contain}
+.top-title{text-align:right}
+.top-title strong{display:block;color:var(--navy);font-size:24px;font-weight:950}
+.top-title span{display:block;color:var(--muted);font-size:11px;font-weight:900;margin-top:5px}
+.user-pill{display:inline-flex;align-items:center;gap:8px;margin-top:8px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#f8fbff;color:var(--navy);font-size:11px;font-weight:950}
+.main{padding:12px 20px 22px}
+.hero{position:relative;overflow:hidden;min-height:92px;border-radius:22px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:18px;background:radial-gradient(circle at 72% 0,#0b83e8 0,#0057aa 43%,#002b66 100%);color:#fff;box-shadow:var(--shadow);margin-bottom:12px}
+.hero:after{content:attr(data-mark);position:absolute;right:22px;bottom:-18px;font-size:66px;font-weight:1000;letter-spacing:4px;color:rgba(255,255,255,.06)}
+.hero-copy{position:relative;z-index:2;min-width:0}
+.hero h1{margin:0 0 5px;font-size:29px;font-weight:950}
+.hero p{margin:0;color:#eaf4ff;font-size:11px;font-weight:850;line-height:1.35}
+.home-card{position:relative;z-index:3;display:flex;align-items:center;gap:12px;min-width:205px;padding:10px 14px;border-radius:17px;background:linear-gradient(180deg,#fff,#eef7ff);border:1px solid #cfe0f2;text-decoration:none;color:var(--navy);box-shadow:0 12px 26px rgba(0,0,0,.14)}
+.home-card:before{content:"";position:absolute;left:0;top:0;width:100%;height:5px;border-radius:17px 17px 0 0;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--green))}
+.home-icon{width:46px;height:46px;border-radius:14px;background:#e8f2ff;border:1px solid var(--line);display:grid;place-items:center;flex:0 0 46px}
+.home-icon img{width:32px;height:32px;object-fit:contain}
+.home-text strong{display:block;font-size:16px;font-weight:950}
+.home-text span{display:block;margin-top:4px;color:#008c2e;font-size:9px;font-weight:950;letter-spacing:.4px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:15px}
+.panel-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.panel-title h2{margin:0;color:var(--navy);font-size:18px}
+.status{font-size:11px;font-weight:900;color:var(--muted);text-align:right}
+.btn{border:0;border-radius:11px;padding:10px 14px;color:#fff;background:linear-gradient(180deg,var(--blue2),var(--blue));font-size:11px;font-weight:950;box-shadow:0 6px 14px rgba(0,75,155,.18)}
+.btn.green{background:linear-gradient(180deg,#22d566,#16a34a)}
+.btn.gray{background:linear-gradient(180deg,#9ca3af,#64748b)}
+.btn.red{background:linear-gradient(180deg,#ef4444,#b91c1c)}
+.btn.orange{background:linear-gradient(180deg,#fbbf24,#d97706)}
+.btn:disabled{opacity:.45;filter:grayscale(1);cursor:not-allowed}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:10px 11px;background:#fff;color:var(--navy);font-size:12px;font-weight:800;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(0,118,215,.10)}
+input[readonly],textarea[readonly]{background:#edf3fa;color:#53677f}
+label{display:block;margin-bottom:5px;color:var(--navy);font-size:10px;font-weight:950}
+.badge{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:4px 8px;font-size:9px;font-weight:950;background:#e8f2ff;color:var(--navy)}
+.badge.green{background:#dcfce7;color:#166534}
+.badge.red{background:#fee2e2;color:#991b1b}
+.badge.gray{background:#e5e7eb;color:#475569}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:13px;background:#fff}
+table{border-collapse:collapse;width:100%;min-width:920px}
+th{position:sticky;top:0;z-index:2;background:#0f6385;color:#fff;padding:10px;text-align:left;font-size:10px;font-weight:950}
+td{padding:9px 10px;border-bottom:1px solid var(--line);font-size:10px;font-weight:760}
+tr:nth-child(even){background:#eef7fd}
+tbody tr:hover{background:#d9ecff;cursor:pointer}
+tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,.25)}
+.loader{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(2,6,23,.56);backdrop-filter:blur(3px)}
+.loader-card{width:min(390px,92vw);padding:25px;border-radius:22px;background:#fff;text-align:center;color:var(--navy);box-shadow:0 28px 70px rgba(0,0,0,.34)}
+.spinner{width:54px;height:54px;border-radius:50%;border:6px solid #dbeafe;border-top-color:var(--blue2);margin:0 auto 14px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-card h2{margin:0 0 7px;font-size:17px}
+.loader-card p{margin:0;color:var(--muted);font-size:11px;font-weight:850}
+.toast{position:fixed;right:18px;bottom:18px;z-index:10000;max-width:520px;padding:13px 16px;border-radius:12px;background:#002b66;color:#fff;font-size:11px;font-weight:900;box-shadow:var(--shadow);display:none}
+.toast.show{display:block}
+.dialog{position:fixed;inset:0;z-index:10001;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(2,6,23,.58);backdrop-filter:blur(3px)}
+.dialog-card{width:min(520px,94vw);border-radius:22px;background:#fff;border:1px solid var(--line);box-shadow:0 28px 70px rgba(0,0,0,.35);overflow:hidden}
+.dialog-head{padding:17px 20px;background:linear-gradient(135deg,#002b66,#0076d7);color:#fff}
+.dialog-head h2{margin:0;font-size:18px}
+.dialog-body{padding:20px;color:var(--navy);font-size:12px;font-weight:850;line-height:1.45;white-space:pre-wrap}
+.dialog-actions{display:flex;justify-content:flex-end;gap:9px;padding:12px 18px;border-top:1px solid var(--line)}
+.login-wall{min-height:300px;display:grid;place-items:center;text-align:center}
+.footer{margin-top:14px;padding:11px 16px;border-radius:14px;background:linear-gradient(135deg,#001f4d,#004b9b);color:#eaf4ff;text-align:center;font-size:10px;font-weight:900}
+@media(max-width:900px){
+  html{zoom:100%}
+  .top-white{flex-direction:column;padding:10px 12px}
+  .top-title{text-align:center}
+  .main{padding:10px}
+  .hero{align-items:stretch;flex-direction:column}
+  .home-card{width:100%}
+  .logo-pelex{height:45px}.logo-arma{height:50px}
+}.workspace{display:grid;grid-template-columns:350px minmax(0,1fr);gap:14px;align-items:start}
+.level-list{max-height:760px;overflow:auto;border:1px solid var(--line);border-radius:13px}
+.level-item{padding:11px 12px;border-bottom:1px solid var(--line);background:#fff;cursor:pointer}
+.level-item:hover{background:#eef7ff}
+.level-item.selected{background:#dbeafe;box-shadow:inset 4px 0 0 var(--blue2)}
+.level-item strong{display:block;color:var(--navy);font-size:12px}
+.level-item span{display:block;margin-top:4px;color:var(--muted);font-size:9px;font-weight:850}
+.level-meta{display:grid;grid-template-columns:1fr 1fr 150px;gap:9px;margin-bottom:12px}
+.level-meta .full{grid-column:1/-1}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.catalog-tools{display:grid;grid-template-columns:1fr auto auto;gap:8px;margin-bottom:12px}
+.page-card{border:1px solid var(--line);border-radius:16px;background:#fff;margin-bottom:12px;overflow:hidden}
+.page-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:linear-gradient(135deg,#003b7a,#0076d7);color:#fff}
+.page-head h3{margin:0;font-size:15px}
+.page-head span{font-size:9px;font-weight:850;color:#dbeafe}
+.page-actions{display:flex;gap:7px}
+.mini{border:1px solid rgba(255,255,255,.5);border-radius:9px;padding:6px 8px;background:rgba(255,255,255,.14);color:#fff;font-size:9px;font-weight:950}
+.page-body{padding:12px;background:#f8fbff}
+.group-title{margin:4px 0 8px;color:var(--navy);font-size:11px;font-weight:950}
+.permission-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.permission-item{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:start;padding:9px;border:1px solid var(--line);border-radius:11px;background:#fff}
+.permission-item input{width:auto;margin-top:2px}
+.permission-item strong{display:block;color:var(--navy);font-size:10px}
+.permission-item span{display:block;margin-top:3px;color:var(--muted);font-size:8px;font-weight:800;word-break:break-all}
+.filter-section{border-top:1px solid var(--line);padding-top:10px}
+.filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.filter-card{border:1px solid #cfe0f2;border-radius:12px;background:#fff;padding:10px}
+.filter-card h4{margin:0;color:var(--navy);font-size:11px}
+.filter-card p{margin:4px 0 8px;color:var(--muted);font-size:8px;font-weight:800}
+.filter-head-row{display:grid;grid-template-columns:1fr 150px;gap:8px;align-items:center}
+.option-search{margin:8px 0 6px}
+.option-list{max-height:190px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:6px;background:#f8fbff}
+.option-item{display:flex;align-items:center;gap:7px;padding:5px 6px;border-radius:7px;font-size:9px;font-weight:850;color:var(--navy)}
+.option-item:hover{background:#e8f2ff}
+.option-item input{width:auto}
+.sticky-save{position:sticky;bottom:8px;display:flex;justify-content:flex-end;gap:8px;padding:10px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.94);backdrop-filter:blur(6px);box-shadow:var(--shadow)}
+@media(max-width:1200px){.permission-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:950px){.workspace{grid-template-columns:1fr}.level-list{max-height:300px}}
+@media(max-width:700px){.level-meta,.catalog-tools,.permission-grid,.filter-grid,.filter-head-row{grid-template-columns:1fr}.level-meta .full{grid-column:1}.btn{min-height:48px;font-size:14px}}</style>
+</head>
+<body>
+<div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><h2 id="loaderText">CARGANDO...</h2><p>ARMA ESTA LEYENDO PERMISOS Y FILTROS DESDE ARMA_DATABASE.</p></div></div>
+<div id="toast" class="toast"></div>
+<div id="dialog" class="dialog hidden"><div class="dialog-card"><div class="dialog-head"><h2 id="dialogTitle">A.R.M.A.</h2></div><div id="dialogMessage" class="dialog-body"></div><div class="dialog-actions"><button id="dialogCancel" class="btn gray">CANCELAR</button><button id="dialogAccept" class="btn green">ACEPTAR</button></div></div></div>
+<header class="top-global"><div class="top-white"><div class="brand-row"><img src="logo_pelex.bmp" class="logo-pelex" alt="PELEX"><div class="brand-separator"></div><img src="ARMA%20logo%202.png" class="logo-arma" alt="ARMA"></div><div class="top-title"><strong>ADMINISTRACION | NIVELES DE USUARIO</strong><span>PERMISOS DINAMICOS POR HTML, BOTON Y VALOR DE FILTRO</span><div id="userPill" class="user-pill">VALIDANDO SESION...</div></div></div><div class="blue-line"></div></header>
+<main id="appArea" class="main">
+<section class="hero" data-mark="NIVELES"><div class="hero-copy"><h1>DISENADOR DE NIVELES Y PERMISOS</h1><p>CADA TARJETA REPRESENTA UNA HTML. LOS BOTONES Y FILTROS SE LEEN DINAMICAMENTE DESDE ARMA_DATABASE.</p></div><a class="home-card" href="main.html" data-smart-home="1"><span class="home-icon"><img src="boton-de-inicio.png" alt="INICIO"></span><span class="home-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></span></a></section>
+<section class="workspace">
+  <aside class="panel">
+    <div class="panel-title"><h2>NIVELES</h2><span class="status" id="levelCount"></span></div>
+    <input id="levelSearch" placeholder="BUSCAR NIVEL">
+    <div id="levelList" class="level-list" style="margin-top:9px"></div>
+    <div class="toolbar" style="margin-top:10px"><button id="btnNew" class="btn green">NUEVO</button><button id="btnClone" class="btn">CLONAR</button><button id="btnSync" class="btn gray">SINCRONIZAR CATALOGO</button></div>
+  </aside>
+  <section>
+    <article class="panel">
+      <div class="panel-title"><h2 id="editorTitle">CREAR NIVEL</h2><span id="catalogStatus" class="status">CARGANDO CATALOGO...</span></div>
+      <div class="level-meta"><div><label>NIVEL</label><input id="levelName" placeholder="EJ: SUPERVISOR_MTTO"></div><div><label>DESCRIPCION</label><input id="levelDescription"></div><div><label>ACTIVO</label><select id="levelActive"><option value="SI">SI</option><option value="NO">NO</option></select></div><div class="full"><label>OBSERVACION</label><input id="levelObservation"></div></div>
+      <div class="catalog-tools"><input id="catalogSearch" placeholder="BUSCAR HTML O MODULO"><button class="btn gray" type="button" onclick="document.querySelectorAll('[data-permission]').forEach(c=>c.checked=true)">MARCAR TODOS</button><button class="btn gray" type="button" onclick="document.querySelectorAll('[data-permission]').forEach(c=>c.checked=false)">LIMPIAR TODOS</button></div>
+    </article>
+    <div id="catalogCards"></div>
+    <div class="sticky-save"><button id="btnSave" class="btn green">GUARDAR NIVEL Y REGLAS</button></div>
+  </section>
+</section>
+<footer class="footer">A.R.M.A. // NIVELES DE USUARIO // ARMA_DATABASE EN LINEA // 2026-07-11 22:27:27</footer>
+</main>
+<script>const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
+const ARMA_UI_MANIFEST={
+  page:{htmlId:'niveles_arma.html',htmlTitle:'ADMINISTRACION | NIVELES DE USUARIO',url:'niveles_arma.html',module:'ADMIN_NIVELES',order:810},
+  buttons:[
+    {key:'BTN_ADMIN_NIVELES',label:'ABRIR ADMINISTRACION DE NIVELES',group:'ACCESO'},
+    {key:'BTN_NIVELES_CREAR',label:'CREAR NIVEL',group:'OPERACIONES'},
+    {key:'BTN_NIVELES_EDITAR',label:'EDITAR NIVEL',group:'OPERACIONES'},
+    {key:'BTN_NIVELES_CLONAR',label:'CLONAR NIVEL',group:'OPERACIONES'},
+    {key:'BTN_NIVELES_GESTIONAR_FILTROS',label:'GESTIONAR FILTROS',group:'FILTROS'},
+    {key:'BTN_NIVELES_SINCRONIZAR_CATALOGO',label:'SINCRONIZAR CATALOGO',group:'CATALOGO'}
+  ],
+  filters:[]
+};
+let armaSession={user:'',nombre:'',nivel:'',permissions:{},token:''};
+let appData={levels:[],permissionCatalog:[],filterCatalog:[],pages:[]};
+let currentLevel=null;
+let editMode='NEW';
+let dialogResolver=null;
+
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function normalize(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toUpperCase();}
+function readCache(){try{let raw=localStorage.getItem('ARMA_SESSION_CACHE')||'';if(!raw)return null;let x=JSON.parse(raw);return x&&x.token?x:null;}catch(e){return null;}}
+function setSession(data,token){armaSession={user:data.user||'',nombre:data.nombre||data.user||'',nivel:data.nivel||'',permissions:data.permissions||{},token:token||data.token||''};if(armaSession.token)localStorage.setItem('ARMA_TOKEN',armaSession.token);document.getElementById('userPill').textContent=(armaSession.nombre||armaSession.user)+' // '+armaSession.nivel;}
+function hasPerm(key,parent){if(armaSession.nivel==='SUPER_ADMIN'||armaSession.permissions.__SUPER_ADMIN__===true)return true;if(Object.prototype.hasOwnProperty.call(armaSession.permissions,key))return armaSession.permissions[key]===true;return parent?armaSession.permissions[parent]===true:false;}
+function showLoader(msg){document.getElementById('loaderText').textContent=msg||'CARGANDO...';document.getElementById('loader').classList.remove('hidden');}
+function hideLoader(){document.getElementById('loader').classList.add('hidden');}
+function toast(msg){let el=document.getElementById('toast');el.textContent=msg||'';el.classList.add('show');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>el.classList.remove('show'),4500);}
+async function api(action,payload,msg){payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';if(msg)showLoader(msg);try{let r=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});return await r.json();}finally{if(msg)hideLoader();}}
+function dialog(title,message,confirmText='ACEPTAR',cancelText=''){return new Promise(resolve=>{dialogResolver=resolve;document.getElementById('dialogTitle').textContent=title;document.getElementById('dialogMessage').textContent=message;document.getElementById('dialogAccept').textContent=confirmText;let cancel=document.getElementById('dialogCancel');cancel.textContent=cancelText||'CANCELAR';cancel.classList.toggle('hidden',!cancelText);document.getElementById('dialog').classList.remove('hidden');});}
+function closeDialog(value){document.getElementById('dialog').classList.add('hidden');if(dialogResolver)dialogResolver(value);dialogResolver=null;}
+function actionAllowed(key){return hasPerm(key,'BTN_ADMIN_NIVELES');}
+
+async function validateSession(){
+  let cache=readCache();let token=localStorage.getItem('ARMA_TOKEN')||(cache&&cache.token)||'';
+  if(!token){location.href='main.html';return false;}
+  if(cache)setSession(cache,token);
+  let data=await api('validateSession',{token});
+  if(!data.ok){localStorage.removeItem('ARMA_TOKEN');localStorage.removeItem('ARMA_SESSION_CACHE');location.href='main.html';return false;}
+  setSession(data,token);
+  if(!hasPerm('BTN_ADMIN_NIVELES','BTN_ADMIN_NIVELES')){document.getElementById('appArea').innerHTML='<section class="panel login-wall"><div><h2>ACCESO NO AUTORIZADO</h2><p>SU NIVEL NO TIENE BTN_ADMIN_NIVELES.</p><a class="btn" href="main.html">VOLVER A MAIN</a></div></section>';return false;}
+  try{await api('registerUiManifest',{manifest:ARMA_UI_MANIFEST});}catch(e){}
+  return true;
+}
+
+async function loadBootstrap(selectName){
+  let data=await api('adminLevelsBootstrap',{},'CARGANDO CATALOGO DE PERMISOS Y FILTROS...');
+  if(!data.ok)throw new Error(data.error||'NO SE PUDO CARGAR');
+  appData={levels:data.levels||[],permissionCatalog:data.permissionCatalog||[],filterCatalog:data.filterCatalog||[],pages:data.pages||[]};
+  renderLevelList();
+  if(selectName)selectLevel(selectName);else if(appData.levels.length)selectLevel(appData.levels[0].nivel);else beginNew();
+  document.getElementById('catalogStatus').textContent=appData.permissionCatalog.length+' PERMISOS // '+appData.filterCatalog.length+' FILTROS';
+}
+
+function renderLevelList(){
+  let q=normalize(document.getElementById('levelSearch').value);
+  let rows=appData.levels.filter(l=>!q||normalize([l.nivel,l.descripcion].join(' ')).includes(q));
+  document.getElementById('levelCount').textContent=rows.length+' DE '+appData.levels.length;
+  document.getElementById('levelList').innerHTML=rows.map(l=>`<div class="level-item ${currentLevel&&normalize(currentLevel.nivel)===normalize(l.nivel)?'selected':''}" data-level="${esc(l.nivel)}"><strong>${esc(l.nivel)}</strong><span>${esc(l.descripcion||'')} // ${l.permissionCount||0} PERMISOS // ${Object.keys(l.filterRules||{}).length} FILTROS</span></div>`).join('')||'<div class="level-item">SIN NIVELES</div>';
+  document.querySelectorAll('.level-item[data-level]').forEach(el=>el.addEventListener('click',()=>selectLevel(el.dataset.level)));
+}
+
+function beginNew(){
+  editMode='NEW';currentLevel={nivel:'',descripcion:'',activo:'SI',observacion:'',permissions:{},filterRules:{}};
+  document.getElementById('levelName').readOnly=false;
+  document.getElementById('levelName').value='';
+  document.getElementById('levelDescription').value='';
+  document.getElementById('levelActive').value='SI';
+  document.getElementById('levelObservation').value='';
+  document.getElementById('editorTitle').textContent='CREAR NIVEL';
+  renderCatalog();setButtons();renderLevelList();document.getElementById('levelName').focus();
+}
+
+function selectLevel(name){
+  let level=appData.levels.find(l=>normalize(l.nivel)===normalize(name));if(!level)return;
+  editMode='EDIT';currentLevel=JSON.parse(JSON.stringify(level));
+  document.getElementById('levelName').readOnly=true;
+  document.getElementById('levelName').value=level.nivel||'';
+  document.getElementById('levelDescription').value=level.descripcion||'';
+  document.getElementById('levelActive').value=level.activo||'SI';
+  document.getElementById('levelObservation').value=level.observacion||'';
+  document.getElementById('editorTitle').textContent='EDITAR NIVEL: '+level.nivel;
+  renderCatalog();setButtons();renderLevelList();
+}
+
+function cloneLevel(){
+  if(!currentLevel||!currentLevel.nivel)return;
+  editMode='CLONE';currentLevel=JSON.parse(JSON.stringify(currentLevel));
+  document.getElementById('levelName').readOnly=false;
+  document.getElementById('levelName').value=currentLevel.nivel+'_COPIA';
+  document.getElementById('editorTitle').textContent='CLONAR NIVEL';
+  setButtons();document.getElementById('levelName').focus();
+}
+
+function setButtons(){
+  document.getElementById('btnNew').disabled=!actionAllowed('BTN_NIVELES_CREAR');
+  document.getElementById('btnClone').disabled=!currentLevel||!currentLevel.nivel||!actionAllowed('BTN_NIVELES_CLONAR');
+  document.getElementById('btnSave').disabled=!actionAllowed(editMode==='NEW'?'BTN_NIVELES_CREAR':'BTN_NIVELES_EDITAR');
+  document.getElementById('btnSync').disabled=!actionAllowed('BTN_NIVELES_SINCRONIZAR_CATALOGO');
+}
+
+function groupByPage(){
+  let pages={};
+  appData.permissionCatalog.forEach(p=>{let id=p.htmlId||'main.html';if(!pages[id])pages[id]={htmlId:id,htmlTitle:p.htmlTitle||id,permissions:[],filters:[],order:p.orden||0};pages[id].permissions.push(p);});
+  appData.filterCatalog.forEach(f=>{let id=f.htmlId||'main.html';if(!pages[id])pages[id]={htmlId:id,htmlTitle:f.htmlTitle||id,permissions:[],filters:[],order:f.orden||0};pages[id].filters.push(f);});
+  return Object.values(pages).sort((a,b)=>a.order-b.order||a.htmlTitle.localeCompare(b.htmlTitle));
+}
+
+function renderCatalog(){
+  let pageQuery=normalize(document.getElementById('catalogSearch').value);
+  let pages=groupByPage().filter(p=>!pageQuery||normalize([p.htmlId,p.htmlTitle].join(' ')).includes(pageQuery));
+  document.getElementById('catalogCards').innerHTML=pages.map(renderPageCard).join('')||'<div class="panel">SIN CONTROLES PARA EL FILTRO ACTUAL.</div>';
+  bindCatalogControls();
+}
+
+function renderPageCard(page){
+  let groups={};
+  page.permissions.forEach(p=>{let g=p.grupo||'PERMISOS';(groups[g]=groups[g]||[]).push(p);});
+  let permissionHtml=Object.keys(groups).sort().map(g=>`<div class="group-title">${esc(g)}</div><div class="permission-grid">${groups[g].map(renderPermission).join('')}</div>`).join('');
+  let filters=page.filters.map(renderFilter).join('');
+  return `<section class="page-card" data-page="${esc(page.htmlId)}"><div class="page-head"><div><h3>${esc(page.htmlTitle)}</h3><span>${esc(page.htmlId)} // ${page.permissions.length} PERMISOS // ${page.filters.length} FILTROS</span></div><div class="page-actions"><button class="mini" data-page-all="${esc(page.htmlId)}">MARCAR TODO</button><button class="mini" data-page-none="${esc(page.htmlId)}">LIMPIAR</button></div></div><div class="page-body">${permissionHtml}${filters?`<div class="filter-section"><div class="group-title">VALORES DISPONIBLES EN FILTROS</div><div class="filter-grid">${filters}</div></div>`:''}</div></section>`;
+}
+
+function renderPermission(p){
+  let checked=!!(currentLevel&&currentLevel.permissions&&currentLevel.permissions[p.key]);
+  return `<label class="permission-item"><input type="checkbox" data-permission="${esc(p.key)}" data-page-id="${esc(p.htmlId)}" ${checked?'checked':''}><span><strong>${esc(p.texto)}</strong><span>${esc(p.key)} // ${esc(p.modulo)}</span></span></label>`;
+}
+
+function renderFilter(f){
+  let key=f.htmlId+'::'+f.filterId;
+  let rule=(currentLevel&&currentLevel.filterRules&&currentLevel.filterRules[key])||null;
+  let mode=rule?rule.mode:'ALL';
+  let selected=new Set(rule&&rule.values||[]);
+  let options=(f.options||[]).map(o=>`<label class="option-item" data-option-label="${esc(normalize(o.label))}"><input type="checkbox" data-filter-option="${esc(key)}" value="${esc(o.value)}" data-label="${esc(o.label)}" ${selected.has(String(o.value))?'checked':''} ${mode!=='RESTRICT'?'disabled':''}><span>${esc(o.label)}</span></label>`).join('')||'<div class="option-item">SIN VALORES DISPONIBLES</div>';
+  return `<div class="filter-card" data-filter-card="${esc(key)}"><div class="filter-head-row"><div><h4>${esc(f.etiqueta)}</h4><p>${esc(f.filterId)} // PROVEEDOR: ${esc(f.proveedor)}</p></div><select data-filter-mode="${esc(key)}"><option value="ALL" ${mode==='ALL'?'selected':''}>SIN RESTRICCION</option><option value="RESTRICT" ${mode==='RESTRICT'?'selected':''}>SOLO SELECCIONADOS</option><option value="NONE" ${mode==='NONE'?'selected':''}>NINGUN VALOR</option></select></div><input class="option-search" data-filter-search="${esc(key)}" placeholder="BUSCAR VALOR DEL FILTRO"><div class="option-list">${options}</div></div>`;
+}
+
+function bindCatalogControls(){
+  document.querySelectorAll('[data-page-all]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll(`[data-page-id="${CSS.escape(btn.dataset.pageAll)}"]`).forEach(c=>c.checked=true);}));
+  document.querySelectorAll('[data-page-none]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll(`[data-page-id="${CSS.escape(btn.dataset.pageNone)}"]`).forEach(c=>c.checked=false);}));
+  document.querySelectorAll('[data-filter-mode]').forEach(sel=>sel.addEventListener('change',()=>{let key=sel.dataset.filterMode;document.querySelectorAll(`[data-filter-option="${CSS.escape(key)}"]`).forEach(c=>c.disabled=sel.value!=='RESTRICT');}));
+  document.querySelectorAll('[data-filter-search]').forEach(inp=>inp.addEventListener('input',()=>{let key=inp.dataset.filterSearch,q=normalize(inp.value);document.querySelectorAll(`[data-filter-option="${CSS.escape(key)}"]`).forEach(c=>{let row=c.closest('.option-item');row.style.display=!q||normalize(c.dataset.label).includes(q)?'flex':'none';});}));
+}
+
+function collectPayload(){
+  let permissions={};document.querySelectorAll('[data-permission]').forEach(c=>permissions[c.dataset.permission]=c.checked?'SI':'NO');
+  let filterRules=[];
+  document.querySelectorAll('[data-filter-mode]').forEach(sel=>{
+    let key=sel.dataset.filterMode;let split=key.split('::');let values=[];let labels={};
+    document.querySelectorAll(`[data-filter-option="${CSS.escape(key)}"]:checked`).forEach(c=>{values.push(c.value);labels[c.value]=c.dataset.label||c.value;});
+    filterRules.push({htmlId:split[0],filterId:split.slice(1).join('::'),mode:sel.value,values,labels});
+  });
+  return {
+    nivel:document.getElementById('levelName').value,
+    descripcion:document.getElementById('levelDescription').value,
+    activo:document.getElementById('levelActive').value,
+    observacion:document.getElementById('levelObservation').value,
+    permissions,
+    filterRules
+  };
+}
+
+async function saveLevel(){
+  let payload=collectPayload();if(!payload.nivel){toast('DIGITE EL NOMBRE DEL NIVEL.');return;}
+  let ok=await dialog('GUARDAR NIVEL','SE ACTUALIZARAN PERMISOS POR BOTON Y REGLAS DE FILTRO PARA '+normalize(payload.nivel)+'.','GUARDAR','CANCELAR');if(!ok)return;
+  let result=await api('saveLevelAdvanced',{levelData:payload},'GUARDANDO NIVEL Y REGLAS...');
+  if(!result.ok){toast(result.error||'NO FUE POSIBLE GUARDAR.');return;}
+  toast(result.message||'NIVEL GUARDADO');await loadBootstrap(normalize(payload.nivel));
+}
+
+async function syncCatalog(){
+  let ok=await dialog('SINCRONIZAR CATALOGO','ARMA REVISARA BOTONES, COLUMNAS DE PERMISOS, FILTROS Y HOJAS DE ARMA_DATABASE.','SINCRONIZAR','CANCELAR');if(!ok)return;
+  let r=await api('adminAccessSetup',{force:true},'SINCRONIZANDO CATALOGO...');
+  if(!r.ok){toast(r.error||'NO FUE POSIBLE SINCRONIZAR.');return;}
+  toast(r.message||'CATALOGO SINCRONIZADO');await loadBootstrap(currentLevel&&currentLevel.nivel);
+}
+
+function bind(){
+  document.getElementById('levelSearch').addEventListener('input',renderLevelList);
+  document.getElementById('catalogSearch').addEventListener('input',renderCatalog);
+  document.getElementById('btnNew').addEventListener('click',beginNew);
+  document.getElementById('btnClone').addEventListener('click',cloneLevel);
+  document.getElementById('btnSave').addEventListener('click',saveLevel);
+  document.getElementById('btnSync').addEventListener('click',syncCatalog);
+  document.getElementById('dialogAccept').addEventListener('click',()=>closeDialog(true));
+  document.getElementById('dialogCancel').addEventListener('click',()=>closeDialog(false));
+}
+document.addEventListener('DOMContentLoaded',async()=>{bind();try{if(await validateSession())await loadBootstrap();}catch(e){hideLoader();toast(e.message||'ERROR DE CONEXION');}});</script>
+</body>
+</html>
