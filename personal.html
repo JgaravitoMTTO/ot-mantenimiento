@@ -2,11 +2,10 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#004b9b">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ARMA | PERSONAL</title>
   <style>
-/* ARMA_VISUAL_ZOOM_75 */ html{zoom:75%;}@media(max-width:900px){html{zoom:100%;}}
+/* ARMA_VISUAL_ZOOM_75 */ html{zoom:75%;}
 :root{--blue:#004b9b;--blue2:#0076d7;--navy:#002b66;--green:#55b52e;--green2:#00d65f;--cyan:#00bfd6;--line:#dbe5f0;--text:#0f172a;--muted:#64748b;--shadow:0 14px 28px rgba(0,43,102,.12);--soft:0 5px 14px rgba(15,23,42,.12);--bg:#eef3f9;--surface:#fff}
 *{box-sizing:border-box}
 body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);text-transform:uppercase}
@@ -102,8 +101,7 @@ tr:hover{background:#d9ecff;cursor:pointer}
 .footer-card{display:flex;align-items:center;justify-content:center;gap:10px;min-height:38px;padding:9px 18px;border-radius:16px;background:linear-gradient(135deg,#001f4d 0%,#003b86 54%,#004b9b 100%);color:#eaf4ff;font-size:12px;font-weight:850;box-shadow:var(--shadow);flex-wrap:wrap}
 .footer-sep{color:#9dffbf;font-weight:950}
 @media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}.photo-box{grid-template-columns:1fr}.photo-actions{grid-template-columns:1fr}}
-@media(max-width:700px){body{font-size:16px;overflow-x:hidden}.action-grid,.filters,.form-grid{grid-template-columns:1fr}.main{padding:10px}.top-white{padding:10px 12px}.brand-row{gap:10px;flex-wrap:wrap;justify-content:center}.logo-pelex{height:46px}.logo-arma{height:52px}.hero{padding:16px}.hero h1{font-size:24px}.panel{padding:12px}.action-card,.index-nav-card{min-width:0;width:100%}.btn,button,input,select,textarea{font-size:16px!important;min-height:46px}.table-wrap{max-width:100%;-webkit-overflow-scrolling:touch}}
-@media(max-width:700px){.btn,button{font-size:19px!important;}.action-card strong,.index-nav-card .nav-text strong{font-size:19px!important;}.action-card span,.index-nav-card .nav-text span{font-size:13px!important;}}
+@media(max-width:700px){.action-grid,.filters,.form-grid{grid-template-columns:1fr}.main{padding:12px}.logo-pelex{height:58px}.logo-arma{height:64px}}
   </style>
 </head>
 <body>
@@ -182,7 +180,7 @@ tr:hover{background:#d9ecff;cursor:pointer}
       </div>
     </section>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-11 11:17:48</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-11 20:06:01</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -193,10 +191,13 @@ let currentMode="VIEW";
 let currentCanEdit=false;
 let currentEditMode="VIEW";
 let currentPersona={};
+let personalCatalogos={};
+let personalPlants=[];
 const SELECTS={
   ESTADO_PERSONA:["ACTIVO","INACTIVO","RETIRADO"],
   TURNO_BASE:["ROTATIVO","ORDINARIO","ADMON","NA"],
   TIPO_CONTRATO:["DIRECTO PELEX","TEMPORAL","CONTRATISTA","RETIRADO"],
+  PLANTA_ASIGNADA:[""],
   RH:["O+","O-","A+","A-","B+","B-","AB+","AB-"],
   CERTIFICADO_ALTURAS_TIPO:["","APTO","NO APTO","REQUIERE ACTUALIZAR","NO APLICA"],
   TALLA_CAMISA:["","XS","S","M","L","XL","XXL","XXXL"],
@@ -210,7 +211,7 @@ const SECTIONS=[
     ["NOMBRES","NOMBRES","text"],["APELLIDOS","APELLIDOS","text"],["NOMBRE_COMPLETO","NOMBRE COMPLETO","readonly"]
   ]},
   {id:"LAB",title:"INFORMACION LABORAL",fields:[
-    ["CARGO","CARGO","text"],["TURNO_BASE","TURNO BASE","select"],["SALARIO","SALARIO","number"],["PLANTA_ASIGNADA","PLANTA ASIGNADA","text"],
+    ["CARGO","CARGO","text"],["TURNO_BASE","TURNO BASE","select"],["SALARIO","SALARIO","number"],["PLANTA_ASIGNADA","PLANTA ASIGNADA","select"],
     ["AREA_ASIGNADA","AREA ASIGNADA","text"],["MAQUINAS_ASIGNADAS","MAQUINAS ASIGNADAS","text"],["TIPO_CONTRATO","TIPO CONTRATO","select"],["INICIO_CONTRATO","INICIO CONTRATO","date"],["ANTIGUEDAD_ANIOS","ANTIGUEDAD ANIOS","readonly"]
   ]},
   {id:"CONTACTO",title:"CONTACTO Y EMERGENCIA",fields:[
@@ -247,28 +248,94 @@ function readSessionCache(){try{let raw=localStorage.getItem("ARMA_SESSION_CACHE
 function writeSessionCache(){try{if(!armaSession||!armaSession.token)return;localStorage.setItem("ARMA_SESSION_CACHE",JSON.stringify({user:armaSession.user||"",nombre:armaSession.nombre||"",nivel:armaSession.nivel||"",token:armaSession.token||"",permissions:armaSession.permissions||{},ts:Date.now(),source:"PERSONAL"}));}catch(e){}}
 function setSessionData(data,token){armaSession={user:data.user||"",nombre:data.nombre||data.user||"",nivel:data.nivel||"",permissions:data.permissions||{},token:token||data.token||armaSession.token||""};if(armaSession.token)localStorage.setItem("ARMA_TOKEN",armaSession.token);writeSessionCache();document.getElementById("userPill").textContent=(armaSession.nombre||armaSession.user)+" // "+armaSession.nivel;}
 async function api(action,payload,msg){payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem("ARMA_TOKEN")||"";showArmaLoader(msg||loaderMsg(action));try{const res=await fetch(ARMA_API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});return await res.json();}finally{hideArmaLoader();}}
-function startPersonalApp(){document.getElementById("loginWall").classList.add("hidden");document.getElementById("appArea").classList.remove("hidden");let estado=document.getElementById("fEstado");if(estado&&!estado.value){estado.value="ACTIVO";}applyPersonalPermissions();renderForm({},"VIEW",false,"VIEW");if(hasPerm("BTN_PERSONAL_VER")){loadList();}else{setStatus("listStatus","SIN PERMISO PARA LISTA GENERAL");}if(hasPerm("BTN_PERSONAL_MIS_DATOS")||hasPerm("BTN_PERSONAL")){loadMine();}}
+async function loadPersonalCatalogos(){
+  try{
+    let data=await api("personalCatalogos",{},"CARGANDO CATALOGO DE PLANTAS...");
+    if(!data.ok){personalCatalogos={};personalPlants=[];SELECTS.PLANTA_ASIGNADA=[""];return false;}
+    personalCatalogos=data.catalogos||{};
+    let source=Array.isArray(data.plantas)?data.plantas:(personalCatalogos.PLANTA_ASIGNADA||[]);
+    let seen={};personalPlants=[];
+    source.forEach(function(p){
+      let name=typeof p==="string"?p:(p.NOMBRE||p.VALOR||p.DESCRIPCION||"");
+      name=String(name||"").trim();let key=name.toUpperCase();
+      if(name&&!seen[key]){seen[key]=true;personalPlants.push(name);}
+    });
+    personalPlants.sort(function(a,b){return a.localeCompare(b,"es");});
+    SELECTS.PLANTA_ASIGNADA=[""].concat(personalPlants);
+    return personalPlants.length>0;
+  }catch(e){personalCatalogos={};personalPlants=[];SELECTS.PLANTA_ASIGNADA=[""];return false;}
+}
+async function startPersonalApp(){
+  document.getElementById("loginWall").classList.add("hidden");
+  document.getElementById("appArea").classList.remove("hidden");
+  let estado=document.getElementById("fEstado");
+  if(estado&&!estado.value)estado.value="ACTIVO";
+  applyPersonalPermissions();
+  let plantsOk=await loadPersonalCatalogos();
+  renderForm({},"VIEW",false,"VIEW");
+  if(!plantsOk)setStatus("formStatus","SIN PLANTAS DISPONIBLES EN MEL_ACTIVOS / NIVEL PLANTA");
+  if(hasPerm("BTN_PERSONAL_VER"))loadList();
+  else setStatus("listStatus","SIN PERMISO PARA LISTA GENERAL");
+  if(hasPerm("BTN_PERSONAL_MIS_DATOS")||hasPerm("BTN_PERSONAL"))loadMine();
+}
 function armaPersonalPersistToken(){try{if(armaSession&&armaSession.token)localStorage.setItem("ARMA_TOKEN",armaSession.token);}catch(err){}}
 function armaMainStorageIsFresh(maxAgeMs){try{var raw=localStorage.getItem("ARMA_MAIN_ACTIVE")||"";if(!raw)return false;var data=JSON.parse(raw);if(!data||!data.ts)return false;return (Date.now()-Number(data.ts)) <= (maxAgeMs||3500);}catch(err){return false;}}
 function armaAskMainIsActive(){return new Promise(function(resolve){var resolved=false;var bc=null;function finish(active){if(resolved)return;resolved=true;try{if(bc)bc.close();}catch(err){}resolve(!!active);}try{if("BroadcastChannel" in window){bc=new BroadcastChannel("ARMA_CONTROL_CHANNEL");bc.onmessage=function(ev){var msg=ev.data||{};if(msg.type==="MAIN_ACTIVE")finish(true);};bc.postMessage({type:"FOCUS_MAIN",from:location.href,ts:Date.now()});}}catch(err){}try{localStorage.setItem("ARMA_REQUEST_MAIN_FOCUS",String(Date.now()));}catch(err){}if(armaMainStorageIsFresh(3500))setTimeout(function(){finish(true);},120);setTimeout(function(){finish(false);},650);});}
 function armaTryCloseCurrentPage(){try{window.close();}catch(err){}setTimeout(function(){if(!window.closed){try{console.warn("MAIN YA ESTA ABIERTO. CIERRE ESTA PESTANA MANUALMENTE.");}catch(err){}}},220);}
 function goMain(e){if(e&&e.preventDefault)e.preventDefault();armaPersonalPersistToken();armaAskMainIsActive().then(function(active){if(active){try{if(window.opener&&!window.opener.closed)window.opener.focus();}catch(err){}armaTryCloseCurrentPage();}else{window.location.href="main.html";}});return false;}
 function setStatus(id,txt){let el=document.getElementById(id);if(el)el.textContent=txt;}
-async function validateSession(){let token=localStorage.getItem("ARMA_TOKEN")||"";if(!token){showLoginWall();return;}try{let cached=readSessionCache();if(cached&&cached.token===token){setSessionData(cached,token);startPersonalApp();return;}let data=await api("validateSession",{token:token},"VALIDANDO SESION...");if(!data.ok){showLoginWall();return;}setSessionData(data,token);startPersonalApp();}catch(e){showLoginWall();}}
+async function validateSession(){
+  let token=localStorage.getItem("ARMA_TOKEN")||"";
+  if(!token){showLoginWall();return;}
+  try{
+    let cached=readSessionCache();
+    if(cached&&cached.token===token){setSessionData(cached,token);await startPersonalApp();return;}
+    let data=await api("validateSession",{token:token},"VALIDANDO SESION...");
+    if(!data.ok){showLoginWall();return;}
+    setSessionData(data,token);
+    await startPersonalApp();
+  }catch(e){showLoginWall();}
+}
 function showLoginWall(){armaLoaderCount=0;hideArmaLoader();document.getElementById("loginWall").classList.remove("hidden");document.getElementById("appArea").classList.add("hidden");document.getElementById("userPill").textContent="SESION NO VALIDADA";}
 async function loadMine(){if(!hasPerm("BTN_PERSONAL_MIS_DATOS")&&!hasPerm("BTN_PERSONAL")){setStatus("formStatus","SIN PERMISO PARA CONSULTAR MIS DATOS");return;}setStatus("formStatus","CARGANDO MIS DATOS...");try{let data=await api("getMiPersona",{},"CARGANDO MIS DATOS...");if(!data.ok){setStatus("formStatus",data.error||"SIN DATOS PROPIOS ASOCIADOS");return;}currentId=data.persona.ID_PERSONA;currentMode="EDIT";renderForm(data.persona,"EDIT",data.canEdit,data.editMode||"OWN");setStatus("formStatus","DATOS PROPIOS CARGADOS");}catch(e){setStatus("formStatus","ERROR DE CONEXION");}}
 async function loadList(){if(!hasPerm("BTN_PERSONAL_VER")){setStatus("listStatus","SIN PERMISO PARA CONSULTAR LISTA GENERAL");return;}setStatus("listStatus","CARGANDO...");let filters={BUSCAR:document.getElementById("fBuscar").value,PLANTA:document.getElementById("fPlanta").value,AREA:document.getElementById("fArea").value,ESTADO:document.getElementById("fEstado").value};try{let data=await api("listPersonal",{filters:filters},"CARGANDO PERSONAL...");if(!data.ok){setStatus("listStatus",data.error||"ERROR");return;}renderRows(data.rows||[]);setStatus("listStatus",(data.count||0)+" REGISTROS");}catch(e){setStatus("listStatus","ERROR DE CONEXION");}}
 function renderRows(rows){let tb=document.getElementById("personalRows");if(rows.length===0){tb.innerHTML="<tr><td colspan=\"9\">SIN REGISTROS DISPONIBLES PARA SU USUARIO</td></tr>";return;}tb.innerHTML=rows.map(r=>"<tr data-id=\""+esc(r.ID_PERSONA)+"\"><td>"+esc(r.ID_PERSONA)+"</td><td><strong>"+esc(r.NOMBRE_COMPLETO)+"</strong></td><td>"+esc(r.CARGO)+"</td><td>"+esc(r.PLANTA_ASIGNADA)+"</td><td>"+esc(r.AREA_ASIGNADA)+"</td><td>"+esc(r.TURNO_BASE)+"</td><td><span class=\"badge green\">"+esc(r.ESTADO_PERSONA)+"</span></td><td>"+esc(r.CELULAR)+"</td><td>"+esc(r.CORREO)+"</td></tr>").join("");tb.querySelectorAll("tr[data-id]").forEach(function(tr){tr.addEventListener("click",function(){openPerson(this.getAttribute("data-id"));});});}
 async function openPerson(id){setStatus("formStatus","CARGANDO DETALLE...");try{let data=await api("getPersona",{idPersona:id},"CARGANDO DETALLE...");if(!data.ok){setStatus("formStatus",data.error||"ERROR");return;}currentId=id;currentMode="EDIT";renderForm(data.persona,"EDIT",data.canEdit,data.editMode||"SCOPE");setStatus("formStatus",data.canEdit?"EDICION HABILITADA":"SOLO CONSULTA");}catch(e){setStatus("formStatus","ERROR DE CONEXION");}}
-function newPerson(){if(!hasPerm("BTN_PERSONAL_CREAR")){alert("NO TIENE PERMISO PARA CREAR PERSONAS.");return;}currentId="";currentMode="CREATE";renderForm({ESTADO_PERSONA:"ACTIVO"},"CREATE",true,"CREATE");setStatus("formStatus","CREACION DE NUEVA PERSONA");}
+function newPerson(){
+  if(!hasPerm("BTN_PERSONAL_CREAR")){alert("NO TIENE PERMISO PARA CREAR PERSONAS.");return;}
+  if(!personalPlants.length){setStatus("formStatus","NO HAY PLANTAS CONFIGURADAS EN MEL_ACTIVOS CON NIVEL PLANTA");return;}
+  currentId="";currentMode="CREATE";
+  renderForm({ESTADO_PERSONA:"ACTIVO"},"CREATE",true,"CREATE");
+  setStatus("formStatus","CREACION DE NUEVA PERSONA");
+}
 function isFieldEditable(k,typ){if(typ==="readonly")return false;if(k==="SALARIO"){if(currentMode==="CREATE")return isAdminLike();if(!currentCanEdit)return false;return isAdminLike()||currentEditMode==="OWN";}if(currentMode==="CREATE")return IMMUTABLE.indexOf(k)<0;if(!currentCanEdit)return false;if(isAdminLike())return IMMUTABLE.indexOf(k)<0;if(currentEditMode==="OWN")return SELF_EDIT.indexOf(k)>=0;if(hasPerm("BTN_PERSONAL_EDITAR"))return IMMUTABLE.indexOf(k)<0;return false;}
-function inputHtml(k,lab,typ,val,editable,required){let ro=editable?"":"readonly";let req=required?" required":"";let cls="field"+(editable?"":" readonly")+(required?" required":"");if(typ==="textarea")return "<div class=\""+cls+" full\"><label>"+lab+"</label><textarea id=\"fld_"+k+"\" "+(editable?"":"readonly")+req+">"+esc(val)+"</textarea></div>";if(typ==="select"){let opts=(SELECTS[k]||[""]).slice();if(val&&opts.indexOf(String(val))<0)opts.unshift(String(val));return "<div class=\""+cls+"\"><label>"+lab+"</label><select id=\"fld_"+k+"\" "+(editable?"":"disabled")+req+">"+opts.map(o=>"<option value=\""+esc(o)+"\" "+(String(o)===String(val)?"selected":"")+">"+esc(o||"")+"</option>").join("")+"</select></div>";}return "<div class=\""+cls+"\"><label>"+lab+"</label><input id=\"fld_"+k+"\" type=\""+(typ==="readonly"?"text":typ)+"\" value=\""+esc(val)+"\" "+ro+req+"></div>";}
-function renderForm(obj,mode,canEdit,editMode){currentPersona=obj||{};currentMode=mode||"VIEW";currentCanEdit=!!canEdit;currentEditMode=editMode||"VIEW";let root=document.getElementById("personalForm");root.innerHTML=SECTIONS.map(sec=>"<section class=\"form-section\"><h3>"+sec.title+"</h3><div class=\"form-grid\">"+sec.fields.map(def=>{let k=def[0],lab=def[1],typ=def[2],val=(obj&&obj[k]!=null)?obj[k]:"";let required=currentMode==="CREATE"&&REQUIRED_CREATE.indexOf(k)>=0;let editable=isFieldEditable(k,typ);return inputHtml(k,lab,typ,val,editable,required);}).join("")+"</div></section>").join("");document.getElementById("btnSave").disabled=!canEdit;document.getElementById("btnUploadPhoto").disabled=!(canEdit&&currentMode!=="CREATE"&&currentId);document.getElementById("formTitle").textContent=mode==="CREATE"?"CREAR PERSONA":"DETALLE DE PERSONA";updatePhoto(obj?obj.FOTO_URL:"");updatePersonFocusName(obj);wireNameAuto();}
+function inputHtml(k,lab,typ,val,editable,required){let ro=editable?"":"readonly";let req=required?" required":"";let cls="field"+(editable?"":" readonly")+(required?" required":"");if(typ==="textarea")return "<div class=\""+cls+" full\"><label>"+lab+"</label><textarea id=\"fld_"+k+"\" "+(editable?"":"readonly")+req+">"+esc(val)+"</textarea></div>";if(typ==="select"){let opts=(SELECTS[k]||[""]).slice();if(val&&opts.indexOf(String(val))<0&&k!=="PLANTA_ASIGNADA")opts.unshift(String(val));return "<div class=\""+cls+"\"><label>"+lab+"</label><select id=\"fld_"+k+"\" "+(editable?"":"disabled")+req+">"+opts.map(o=>"<option value=\""+esc(o)+"\" "+(String(o)===String(val)?"selected":"")+">"+esc(o||"")+"</option>").join("")+"</select></div>";}return "<div class=\""+cls+"\"><label>"+lab+"</label><input id=\"fld_"+k+"\" type=\""+(typ==="readonly"?"text":typ)+"\" value=\""+esc(val)+"\" "+ro+req+"></div>";}
+function renderForm(obj,mode,canEdit,editMode){currentPersona=obj||{};currentMode=mode||"VIEW";currentCanEdit=!!canEdit;currentEditMode=editMode||"VIEW";let root=document.getElementById("personalForm");root.innerHTML=SECTIONS.map(sec=>"<section class=\"form-section\"><h3>"+sec.title+"</h3><div class=\"form-grid\">"+sec.fields.map(def=>{let k=def[0],lab=def[1],typ=def[2],val=(obj&&obj[k]!=null)?obj[k]:"";let required=currentMode==="CREATE"&&REQUIRED_CREATE.indexOf(k)>=0;let editable=isFieldEditable(k,typ);return inputHtml(k,lab,typ,val,editable,required);}).join("")+"</div></section>").join("");document.getElementById("btnSave").disabled=!canEdit;document.getElementById("btnUploadPhoto").disabled=!(canEdit&&currentMode!=="CREATE"&&currentId);document.getElementById("formTitle").textContent=mode==="CREATE"?"CREAR PERSONA":"DETALLE DE PERSONA";updatePhoto(obj?obj.FOTO_URL:"");updatePersonFocusName(obj);wireNameAuto();wireIdentificationAuto();}
 function updatePersonFocusName(obj){let el=document.getElementById("personFocusName");if(!el)return;let name=String((obj&&(obj.NOMBRE_COMPLETO||((obj.NOMBRES||"")+" "+(obj.APELLIDOS||""))))||"").trim().toUpperCase();if(!name){name="NO_USER";el.classList.add("empty");}else{el.classList.remove("empty");}el.textContent=name;}
 function wireNameAuto(){["NOMBRES","APELLIDOS"].forEach(k=>{let el=document.getElementById("fld_"+k);if(el){el.addEventListener("input",function(){let n=(document.getElementById("fld_NOMBRES")||{}).value||"";let a=(document.getElementById("fld_APELLIDOS")||{}).value||"";let full=document.getElementById("fld_NOMBRE_COMPLETO");let name=(n+" "+a).trim().toUpperCase();if(full)full.value=name;updatePersonFocusName({NOMBRE_COMPLETO:name});});}});}
+function normalizeIdentificationClient(v){return String(v||"").trim().toUpperCase().replace(/[.\s,]/g,"");}
+function wireIdentificationAuto(){
+  let ident=document.getElementById("fld_IDENTIFICACION");
+  let id=document.getElementById("fld_ID_PERSONA");
+  if(!ident||!id)return;
+  function sync(){if(currentMode==="CREATE")id.value=normalizeIdentificationClient(ident.value);}
+  ident.addEventListener("input",sync);sync();
+}
 function updatePhoto(url){let box=document.getElementById("photoPreview");url=String(url||"").trim()||ARMA_DEFAULT_PHOTO_URL;box.innerHTML="<img src=\""+esc(url)+"\" alt=\"FOTO PERSONAL\">";let img=box.querySelector("img");if(img){img.onerror=function(){this.onerror=null;this.src=ARMA_DEFAULT_PHOTO_URL;};}}
 function collectForm(){let data={};SECTIONS.forEach(sec=>sec.fields.forEach(def=>{let el=document.getElementById("fld_"+def[0]);if(el)data[def[0]]=el.value;}));return data;}
-function validateCreate(data){let missing=[];REQUIRED_CREATE.forEach(k=>{if(!String(data[k]||"").trim())missing.push(k);});if(missing.length){alert("FALTAN CAMPOS OBLIGATORIOS: "+missing.join(", "));return false;}let correo=String(data.CORREO||"").trim();if(correo&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)){alert("EL CORREO NO TIENE FORMATO VALIDO.");return false;}return true;}
+function validateCreate(data){
+  data.IDENTIFICACION=normalizeIdentificationClient(data.IDENTIFICACION);
+  data.ID_PERSONA=data.IDENTIFICACION;
+  let missing=[];
+  REQUIRED_CREATE.forEach(function(k){if(!String(data[k]||"").trim())missing.push(k);});
+  if(missing.length){alert("FALTAN CAMPOS OBLIGATORIOS: "+missing.join(", "));return false;}
+  let plant=String(data.PLANTA_ASIGNADA||"").trim();
+  let plantOk=personalPlants.some(function(p){return String(p).toUpperCase()===plant.toUpperCase();});
+  if(!plantOk){alert("SELECCIONE UNA PLANTA VALIDA DEL CATALOGO MEL.");return false;}
+  let correo=String(data.CORREO||"").trim();
+  if(correo&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)){alert("EL CORREO NO TIENE FORMATO VALIDO.");return false;}
+  return true;
+}
 async function saveForm(){let data=collectForm();if(currentMode==="CREATE"&&!validateCreate(data))return;setStatus("formStatus","GUARDANDO...");try{let res=currentMode==="CREATE"?await api("createPersona",{data:data},"CREANDO PERSONA..."):await api("savePersona",{idPersona:currentId,data:data},"GUARDANDO PERSONA...");if(!res.ok){setStatus("formStatus",res.error||"NO FUE POSIBLE GUARDAR");return;}setStatus("formStatus",res.message||"GUARDADO");if(res.idPersona){currentId=res.idPersona;currentMode="EDIT";openPerson(currentId);}if(hasPerm("BTN_PERSONAL_VER"))loadList();}catch(e){setStatus("formStatus","ERROR DE CONEXION");}}
 function fileToBase64(file){return new Promise(function(resolve,reject){let r=new FileReader();r.onload=function(){let s=String(r.result||"");resolve(s.indexOf(",")>=0?s.split(",")[1]:s);};r.onerror=reject;r.readAsDataURL(file);});}
 async function uploadPhoto(){if(!currentId){alert("PRIMERO GUARDE O SELECCIONE UNA PERSONA.");return;}let inp=document.getElementById("photoFile");let file=inp&&inp.files?inp.files[0]:null;if(!file){alert("SELECCIONE UNA IMAGEN.");return;}if(!/^image\/(jpeg|jpg|png|webp)$/i.test(file.type||"")){alert("SOLO SE PERMITEN IMAGENES JPG, PNG O WEBP.");return;}if(file.size>5*1024*1024){alert("LA FOTO NO DEBE SUPERAR 5 MB.");return;}try{let base64=await fileToBase64(file);let res=await api("uploadPersonaFoto",{idPersona:currentId,fileName:file.name,mimeType:file.type,base64:base64},"SUBIENDO FOTOGRAFIA...");if(!res.ok){setStatus("formStatus",res.error||"NO FUE POSIBLE SUBIR LA FOTO");return;}updatePhoto(res.fotoUrl);currentPersona.FOTO_URL=res.fotoUrl;setStatus("formStatus","FOTOGRAFIA ACTUALIZADA");inp.value="";if(hasPerm("BTN_PERSONAL_VER"))loadList();}catch(e){setStatus("formStatus","ERROR AL SUBIR FOTOGRAFIA");}}
