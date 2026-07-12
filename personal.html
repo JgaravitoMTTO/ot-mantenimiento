@@ -153,8 +153,8 @@ tr:hover{background:#d9ecff;cursor:pointer}
       <div class="panel-title"><h2>LISTA DE PERSONAL</h2><div class="status" id="listStatus">SIN CONSULTA</div></div>
       <div class="filters">
         <input id="fBuscar" placeholder="BUSCAR POR NOMBRE, ID, CARGO, PLANTA O AREA">
-        <input id="fPlanta" placeholder="PLANTA">
-        <input id="fArea" placeholder="AREA">
+        <select id="fPlanta"><option value="">TODAS LAS PLANTAS</option></select>
+        <select id="fArea"><option value="">TODAS LAS AREAS</option></select>
         <select id="fEstado"><option value="">ESTADO</option><option selected>ACTIVO</option><option>INACTIVO</option><option>RETIRADO</option></select>
         <button class="btn" type="button" onclick="loadList()">BUSCAR</button>
       </div>
@@ -180,7 +180,7 @@ tr:hover{background:#d9ecff;cursor:pointer}
       </div>
     </section>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-11 20:28:55</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-11 20:49:51</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -193,11 +193,13 @@ let currentEditMode="VIEW";
 let currentPersona={};
 let personalCatalogos={};
 let personalPlants=[];
+const PERSONAL_AREAS=Object.freeze(["MANTENIMIENTO","PRODUCCIÓN","CALIDAD","ADMINISTRACIÓN"]);
 const SELECTS={
   ESTADO_PERSONA:["ACTIVO","INACTIVO","RETIRADO"],
   TURNO_BASE:["ROTATIVO","ORDINARIO","ADMON","NA"],
   TIPO_CONTRATO:["DIRECTO PELEX","TEMPORAL","CONTRATISTA","RETIRADO"],
   PLANTA_ASIGNADA:[""],
+  AREA_ASIGNADA:[""].concat(PERSONAL_AREAS),
   RH:["O+","O-","A+","A-","B+","B-","AB+","AB-"],
   CERTIFICADO_ALTURAS_TIPO:["","APTO","NO APTO","REQUIERE ACTUALIZAR","NO APLICA"],
   TALLA_CAMISA:["","XS","S","M","L","XL","XXL","XXXL"],
@@ -207,12 +209,12 @@ const SELECTS={
 };
 const SECTIONS=[
   {id:"ID",title:"IDENTIFICACION Y ESTADO",fields:[
-    ["ID_PERSONA","ID PERSONA","readonly"],["USER_ARMA","USUARIO ARMA","text"],["ESTADO_PERSONA","ESTADO","select"],["IDENTIFICACION","IDENTIFICACION","text"],
+    ["ID_PERSONA","ID PERSONA","readonly"],["USER_ARMA","USUARIO ARMA","readonly"],["ESTADO_PERSONA","ESTADO","select"],["IDENTIFICACION","IDENTIFICACION","text"],
     ["NOMBRES","NOMBRES","text"],["APELLIDOS","APELLIDOS","text"],["NOMBRE_COMPLETO","NOMBRE COMPLETO","readonly"]
   ]},
   {id:"LAB",title:"INFORMACION LABORAL",fields:[
     ["CARGO","CARGO","text"],["TURNO_BASE","TURNO BASE","select"],["SALARIO","SALARIO","number"],["PLANTA_ASIGNADA","PLANTA ASIGNADA","select"],
-    ["AREA_ASIGNADA","AREA ASIGNADA","text"],["MAQUINAS_ASIGNADAS","MAQUINAS ASIGNADAS","text"],["TIPO_CONTRATO","TIPO CONTRATO","select"],["INICIO_CONTRATO","INICIO CONTRATO","date"],["ANTIGUEDAD_ANIOS","ANTIGUEDAD ANIOS","readonly"]
+    ["AREA_ASIGNADA","AREA ASIGNADA","select"],["MAQUINAS_ASIGNADAS","MAQUINAS ASIGNADAS","readonly"],["TIPO_CONTRATO","TIPO CONTRATO","select"],["INICIO_CONTRATO","INICIO CONTRATO","date"],["ANTIGUEDAD_ANIOS","ANTIGUEDAD ANIOS","readonly"]
   ]},
   {id:"CONTACTO",title:"CONTACTO Y EMERGENCIA",fields:[
     ["CELULAR","CELULAR","text"],["CORREO","CORREO","email"],["CONTACTO_EMERGENCIA","CONTACTO EMERGENCIA","text"],["CEL_EMERGENCIA","CEL EMERGENCIA","text"]
@@ -224,14 +226,14 @@ const SECTIONS=[
     ["TALLA_BOTAS","TALLA BOTAS","select"],["TALLA_CAMISA","TALLA CAMISA","select"],["TALLA_CHAQUETA","TALLA CHAQUETA","select"],["TALLA_PANTALON","TALLA PANTALON","select"]
   ]},
   {id:"ALCANCE",title:"ALCANCE OPERATIVO",fields:[
-    ["ALCANCE_PLANTAS","ALCANCE PLANTAS","text"],["ALCANCE_AREAS","ALCANCE AREAS","text"],["ALCANCE_MAQUINAS","ALCANCE MAQUINAS","text"]
+    ["ALCANCE_PLANTAS","ALCANCE PLANTAS","readonly"],["ALCANCE_AREAS","ALCANCE AREAS","readonly"],["ALCANCE_MAQUINAS","ALCANCE MAQUINAS","readonly"]
   ]},
   {id:"AUD",title:"OBSERVACIONES Y AUDITORIA",fields:[
     ["OBSERVACION","OBSERVACION","textarea"],["FECHA_CREACION","FECHA CREACION","readonly"],["FECHA_ACTUALIZACION","FECHA ACTUALIZACION","readonly"]
   ]}
 ];
 const REQUIRED_CREATE=["IDENTIFICACION","NOMBRES","APELLIDOS","CARGO","ESTADO_PERSONA","PLANTA_ASIGNADA","AREA_ASIGNADA","TIPO_CONTRATO","INICIO_CONTRATO"];
-const IMMUTABLE=["ID_PERSONA","ANTIGUEDAD_ANIOS","EDAD","FECHA_CREACION","FECHA_ACTUALIZACION","NOMBRE_COMPLETO"];
+const IMMUTABLE=["ID_PERSONA","USER_ARMA","MAQUINAS_ASIGNADAS","ALCANCE_PLANTAS","ALCANCE_AREAS","ALCANCE_MAQUINAS","ANTIGUEDAD_ANIOS","EDAD","FECHA_CREACION","FECHA_ACTUALIZACION","NOMBRE_COMPLETO"];
 const SELF_EDIT=["SALARIO","CELULAR","CORREO","EPS","RH","CONTACTO_EMERGENCIA","CEL_EMERGENCIA","TALLA_BOTAS","TALLA_CAMISA","TALLA_CHAQUETA","TALLA_PANTALON","OBSERVACION"];
 function esc(v){let d=document.createElement("div");d.textContent=String(v==null?"":v);return d.innerHTML;}
 function normalizePerms(p){let out={};p=p||{};Object.keys(p).forEach(k=>out[String(k).toUpperCase()]=p[k]===true||String(p[k]).toUpperCase()==="SI");return out;}
@@ -248,10 +250,16 @@ function readSessionCache(){try{let raw=localStorage.getItem("ARMA_SESSION_CACHE
 function writeSessionCache(){try{if(!armaSession||!armaSession.token)return;localStorage.setItem("ARMA_SESSION_CACHE",JSON.stringify({user:armaSession.user||"",nombre:armaSession.nombre||"",nivel:armaSession.nivel||"",token:armaSession.token||"",permissions:armaSession.permissions||{},ts:Date.now(),source:"PERSONAL"}));}catch(e){}}
 function setSessionData(data,token){armaSession={user:data.user||"",nombre:data.nombre||data.user||"",nivel:data.nivel||"",permissions:data.permissions||{},token:token||data.token||armaSession.token||""};if(armaSession.token)localStorage.setItem("ARMA_TOKEN",armaSession.token);writeSessionCache();document.getElementById("userPill").textContent=(armaSession.nombre||armaSession.user)+" // "+armaSession.nivel;}
 async function api(action,payload,msg){payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem("ARMA_TOKEN")||"";showArmaLoader(msg||loaderMsg(action));try{const res=await fetch(ARMA_API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});return await res.json();}finally{hideArmaLoader();}}
+function applyPersonalFilterCatalogs(){
+  let fp=document.getElementById("fPlanta");
+  if(fp){let selected=fp.value||"";fp.innerHTML=`<option value=''>TODAS LAS PLANTAS</option>`+personalPlants.map(function(p){return `<option value='${esc(p)}'>${esc(p)}</option>`;}).join('');if(personalPlants.indexOf(selected)>=0)fp.value=selected;}
+  let fa=document.getElementById("fArea");
+  if(fa){let selected=fa.value||"";fa.innerHTML=`<option value=''>TODAS LAS AREAS</option>`+PERSONAL_AREAS.map(function(a){return `<option value='${esc(a)}'>${esc(a)}</option>`;}).join('');if(PERSONAL_AREAS.indexOf(selected)>=0)fa.value=selected;}
+}
 async function loadPersonalCatalogos(){
   try{
     let data=await api("personalCatalogos",{},"CARGANDO CATALOGO DE PLANTAS...");
-    if(!data.ok){personalCatalogos={};personalPlants=[];SELECTS.PLANTA_ASIGNADA=[""];return false;}
+    if(!data.ok){personalCatalogos={};personalPlants=[];SELECTS.PLANTA_ASIGNADA=[""];applyPersonalFilterCatalogs();return false;}
     personalCatalogos=data.catalogos||{};
     let source=Array.isArray(data.plantas)?data.plantas:(personalCatalogos.PLANTA_ASIGNADA||[]);
     let seen={};personalPlants=[];
@@ -262,8 +270,9 @@ async function loadPersonalCatalogos(){
     });
     personalPlants.sort(function(a,b){return a.localeCompare(b,"es");});
     SELECTS.PLANTA_ASIGNADA=[""].concat(personalPlants);
+    applyPersonalFilterCatalogs();
     return personalPlants.length>0;
-  }catch(e){personalCatalogos={};personalPlants=[];SELECTS.PLANTA_ASIGNADA=[""];return false;}
+  }catch(e){personalCatalogos={};personalPlants=[];SELECTS.PLANTA_ASIGNADA=[""];applyPersonalFilterCatalogs();return false;}
 }
 async function startPersonalApp(){
   document.getElementById("loginWall").classList.add("hidden");
@@ -309,7 +318,7 @@ function newPerson(){
   setStatus("formStatus","CREACION DE NUEVA PERSONA");
 }
 function isFieldEditable(k,typ){if(typ==="readonly")return false;if(k==="SALARIO"){if(currentMode==="CREATE")return isAdminLike();if(!currentCanEdit)return false;return isAdminLike()||currentEditMode==="OWN";}if(currentMode==="CREATE")return IMMUTABLE.indexOf(k)<0;if(!currentCanEdit)return false;if(isAdminLike())return IMMUTABLE.indexOf(k)<0;if(currentEditMode==="OWN")return SELF_EDIT.indexOf(k)>=0;if(hasPerm("BTN_PERSONAL_EDITAR"))return IMMUTABLE.indexOf(k)<0;return false;}
-function inputHtml(k,lab,typ,val,editable,required){let ro=editable?"":"readonly";let req=required?" required":"";let cls="field"+(editable?"":" readonly")+(required?" required":"");if(typ==="textarea")return "<div class=\""+cls+" full\"><label>"+lab+"</label><textarea id=\"fld_"+k+"\" "+(editable?"":"readonly")+req+">"+esc(val)+"</textarea></div>";if(typ==="select"){let opts=(SELECTS[k]||[""]).slice();if(val&&opts.indexOf(String(val))<0&&k!=="PLANTA_ASIGNADA")opts.unshift(String(val));return "<div class=\""+cls+"\"><label>"+lab+"</label><select id=\"fld_"+k+"\" "+(editable?"":"disabled")+req+">"+opts.map(o=>"<option value=\""+esc(o)+"\" "+(String(o)===String(val)?"selected":"")+">"+esc(o||"")+"</option>").join("")+"</select></div>";}return "<div class=\""+cls+"\"><label>"+lab+"</label><input id=\"fld_"+k+"\" type=\""+(typ==="readonly"?"text":typ)+"\" value=\""+esc(val)+"\" "+ro+req+"></div>";}
+function inputHtml(k,lab,typ,val,editable,required){let ro=editable?"":"readonly";let req=required?" required":"";let cls="field"+(editable?"":" readonly")+(required?" required":"");if(typ==="textarea")return "<div class=\""+cls+" full\"><label>"+lab+"</label><textarea id=\"fld_"+k+"\" "+(editable?"":"readonly")+req+">"+esc(val)+"</textarea></div>";if(typ==="select"){let opts=(SELECTS[k]||[""]).slice();if(val&&opts.indexOf(String(val))<0&&["PLANTA_ASIGNADA","AREA_ASIGNADA"].indexOf(k)<0)opts.unshift(String(val));return "<div class=\""+cls+"\"><label>"+lab+"</label><select id=\"fld_"+k+"\" "+(editable?"":"disabled")+req+">"+opts.map(o=>"<option value=\""+esc(o)+"\" "+(String(o)===String(val)?"selected":"")+">"+esc(o||"")+"</option>").join("")+"</select></div>";}return "<div class=\""+cls+"\"><label>"+lab+"</label><input id=\"fld_"+k+"\" type=\""+(typ==="readonly"?"text":typ)+"\" value=\""+esc(val)+"\" "+ro+req+"></div>";}
 function renderForm(obj,mode,canEdit,editMode){currentPersona=obj||{};currentMode=mode||"VIEW";currentCanEdit=!!canEdit;currentEditMode=editMode||"VIEW";let root=document.getElementById("personalForm");root.innerHTML=SECTIONS.map(sec=>"<section class=\"form-section\"><h3>"+sec.title+"</h3><div class=\"form-grid\">"+sec.fields.map(def=>{let k=def[0],lab=def[1],typ=def[2],val=(obj&&obj[k]!=null)?obj[k]:"";let required=currentMode==="CREATE"&&REQUIRED_CREATE.indexOf(k)>=0;let editable=isFieldEditable(k,typ);return inputHtml(k,lab,typ,val,editable,required);}).join("")+"</div></section>").join("");document.getElementById("btnSave").disabled=!canEdit;document.getElementById("btnUploadPhoto").disabled=!(canEdit&&currentMode!=="CREATE"&&currentId);document.getElementById("formTitle").textContent=mode==="CREATE"?"CREAR PERSONA":"DETALLE DE PERSONA";updatePhoto(obj?obj.FOTO_URL:"");updatePersonFocusName(obj);wireNameAuto();wireIdentificationAuto();}
 function updatePersonFocusName(obj){let el=document.getElementById("personFocusName");if(!el)return;let name=String((obj&&(obj.NOMBRE_COMPLETO||((obj.NOMBRES||"")+" "+(obj.APELLIDOS||""))))||"").trim().toUpperCase();if(!name){name="NO_USER";el.classList.add("empty");}else{el.classList.remove("empty");}el.textContent=name;}
 function wireNameAuto(){["NOMBRES","APELLIDOS"].forEach(k=>{let el=document.getElementById("fld_"+k);if(el){el.addEventListener("input",function(){let n=(document.getElementById("fld_NOMBRES")||{}).value||"";let a=(document.getElementById("fld_APELLIDOS")||{}).value||"";let full=document.getElementById("fld_NOMBRE_COMPLETO");let name=(n+" "+a).trim().toUpperCase();if(full)full.value=name;updatePersonFocusName({NOMBRE_COMPLETO:name});});}});}
@@ -332,6 +341,9 @@ function validateCreate(data){
   let plant=String(data.PLANTA_ASIGNADA||"").trim();
   let plantOk=personalPlants.some(function(p){return String(p).toUpperCase()===plant.toUpperCase();});
   if(!plantOk){alert("SELECCIONE UNA PLANTA VALIDA DEL CATALOGO MEL.");return false;}
+  let area=String(data.AREA_ASIGNADA||"").trim().toUpperCase();
+  let areaOk=PERSONAL_AREAS.some(function(a){return a.toUpperCase()===area;});
+  if(!areaOk){alert("SELECCIONE UN AREA VALIDA: MANTENIMIENTO, PRODUCCIÓN, CALIDAD O ADMINISTRACIÓN.");return false;}
   let correo=String(data.CORREO||"").trim();
   if(correo&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)){alert("EL CORREO NO TIENE FORMATO VALIDO.");return false;}
   return true;
