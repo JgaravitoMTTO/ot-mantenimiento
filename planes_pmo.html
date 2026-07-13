@@ -1,0 +1,1379 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#004b9b">
+<meta name="application-name" content="A.R.M.A.">
+<title>ARMA | PLANES PMO</title>
+<link rel="manifest" href="manifest.webmanifest">
+<script src="arma-pwa-navigation.js" defer data-arma-pwa-navigation="1"></script>
+<style>
+:root{
+  --navy:#002b66;
+  --blue:#004b9b;
+  --blue2:#0076d7;
+  --green:#18b957;
+  --green2:#22c55e;
+  --line:#d8e6f4;
+  --bg:#eef3f9;
+  --surface:#ffffff;
+  --muted:#64748b;
+  --danger:#c62828;
+  --warn:#b45309;
+  --shadow:0 14px 32px rgba(0,43,102,.13);
+}
+*{box-sizing:border-box}
+html{zoom:75%}
+body{
+  margin:0;
+  background:var(--bg);
+  font-family:Segoe UI,Arial,sans-serif;
+  color:#0f172a;
+  text-transform:uppercase;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.top{
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:#fff;
+  border-bottom:6px solid var(--blue);
+  padding:12px 24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  box-shadow:0 8px 24px rgba(0,43,102,.10);
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  min-width:300px;
+}
+.brand img{
+  height:66px;
+  max-width:260px;
+  object-fit:contain;
+}
+.brand-fallback{
+  display:none;
+  color:var(--navy);
+  font-size:24px;
+  font-weight:950;
+  letter-spacing:1px;
+}
+.title{text-align:right}
+.title h1{
+  margin:0;
+  color:var(--navy);
+  font-size:25px;
+}
+.title p{
+  margin:5px 0 8px;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:850;
+}
+.pill{
+  display:inline-flex;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:7px 12px;
+  color:var(--navy);
+  background:#f8fbff;
+  font-size:11px;
+  font-weight:950;
+}
+.wrap{padding:14px 20px 22px}
+.hero{
+  background:linear-gradient(135deg,#003b7a,#0076d7);
+  color:#fff;
+  border-radius:20px;
+  padding:18px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  box-shadow:var(--shadow);
+  margin-bottom:14px;
+}
+.hero h2{
+  margin:0 0 6px;
+  font-size:28px;
+}
+.hero p{
+  margin:0;
+  font-size:11px;
+  font-weight:850;
+  color:#e9f5ff;
+}
+.home{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#fff;
+  color:var(--navy);
+  border-radius:15px;
+  padding:10px 16px;
+  text-decoration:none;
+  font-weight:950;
+  white-space:nowrap;
+}
+.home img{width:36px;height:36px;object-fit:contain}
+.notice{
+  margin-bottom:14px;
+  border:1px solid #f6c7c7;
+  border-left:6px solid var(--danger);
+  border-radius:14px;
+  background:#fff5f5;
+  color:#8b1b1b;
+  padding:12px 14px;
+  font-size:12px;
+  font-weight:850;
+  line-height:1.4;
+}
+.grid{
+  display:grid;
+  grid-template-columns:390px minmax(0,1fr);
+  gap:14px;
+  align-items:start;
+}
+.panel{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:var(--shadow);
+  padding:15px;
+  margin-bottom:14px;
+}
+.panel h3{
+  color:var(--navy);
+  margin:0 0 12px;
+  font-size:17px;
+}
+.panel-sub{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:850;
+  margin:-5px 0 12px;
+}
+.filters{
+  display:grid;
+  gap:8px;
+  margin-bottom:10px;
+}
+.row{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+}
+.field label{
+  display:block;
+  color:var(--navy);
+  font-size:10px;
+  font-weight:950;
+  margin-bottom:5px;
+}
+.field.full{grid-column:1/-1}
+input,select,textarea{
+  width:100%;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  color:var(--navy);
+  font-weight:800;
+  text-transform:uppercase;
+  background:#fff;
+  outline:none;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--blue2);
+  box-shadow:0 0 0 3px rgba(0,118,215,.10);
+}
+textarea{
+  min-height:78px;
+  resize:vertical;
+}
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:10px 14px;
+  color:#fff;
+  background:linear-gradient(#1688e8,#004b9b);
+  font-weight:950;
+}
+.btn.green{background:linear-gradient(#25d366,#159447)}
+.btn.red{background:linear-gradient(#ef5350,#b71c1c)}
+.btn.gray{background:linear-gradient(#9ca3af,#64748b)}
+.btn.orange{background:linear-gradient(#f59e0b,#b45309)}
+.btn:disabled{
+  opacity:.45;
+  filter:grayscale(1);
+  cursor:not-allowed;
+}
+.actions{
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+.list{
+  max-height:68vh;
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+}
+.item{
+  padding:10px;
+  border-bottom:1px solid var(--line);
+  cursor:pointer;
+}
+.item:hover,.item.selected{background:#e9f5ff}
+.item strong{
+  display:block;
+  color:var(--navy);
+  line-height:1.3;
+}
+.item small{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-weight:800;
+}
+.badge{
+  display:inline-flex;
+  border-radius:999px;
+  padding:3px 8px;
+  background:#e6f7ed;
+  color:#087735;
+  font-size:9px;
+  font-weight:950;
+  margin-right:4px;
+}
+.badge.warn{background:#fff3cd;color:#8a5800}
+.badge.red{background:#fee2e2;color:#991b1b}
+.picker-toolbar{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+  align-items:center;
+  margin-bottom:10px;
+}
+.counter{
+  border-radius:999px;
+  background:#eaf4ff;
+  color:var(--navy);
+  padding:7px 10px;
+  font-size:10px;
+  font-weight:950;
+  white-space:nowrap;
+}
+.pick-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+  max-height:280px;
+  overflow:auto;
+  padding-right:3px;
+}
+.pick{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:9px;
+  background:#f8fbff;
+}
+.pick.selected{
+  border-color:#7bc59a;
+  background:#ecfff3;
+}
+.pick label{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  font-size:10px;
+  font-weight:850;
+  line-height:1.35;
+  cursor:pointer;
+}
+.pick input{
+  width:auto;
+  margin-top:2px;
+  flex:0 0 auto;
+}
+.table-wrap{
+  max-height:280px;
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:10px;
+  margin-top:12px;
+}
+.table{
+  width:100%;
+  border-collapse:collapse;
+}
+.table th{
+  background:#0f6385;
+  color:#fff;
+  padding:8px;
+  text-align:left;
+  position:sticky;
+  top:0;
+}
+.table td{
+  padding:8px;
+  border-bottom:1px solid var(--line);
+  font-size:11px;
+}
+.status{
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#f8fbff;
+  padding:10px;
+  font-size:11px;
+  font-weight:900;
+  color:var(--muted);
+}
+.loader,.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(2,6,23,.58);
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.box{
+  background:#fff;
+  border-radius:18px;
+  padding:22px;
+  max-width:660px;
+  width:94%;
+  box-shadow:0 24px 70px rgba(0,0,0,.35);
+}
+.box h3{
+  color:var(--navy);
+  margin-top:0;
+}
+.box p{
+  color:#334155;
+  font-weight:750;
+  line-height:1.5;
+  white-space:pre-wrap;
+}
+.spin{
+  width:44px;
+  height:44px;
+  border:5px solid #dbeafe;
+  border-top-color:var(--blue2);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+  margin:auto;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{
+  padding:20px;
+  color:var(--muted);
+  text-align:center;
+  font-weight:850;
+}
+.footer{
+  text-align:center;
+  color:#fff;
+  background:linear-gradient(135deg,#002b66,#006bd1);
+  border-radius:14px;
+  padding:11px;
+  font-size:11px;
+  font-weight:900;
+}
+noscript{
+  display:block;
+  margin:14px 20px;
+  border:2px solid var(--danger);
+  border-radius:12px;
+  background:#fff;
+  color:var(--danger);
+  padding:12px;
+  font-weight:900;
+}
+@media(max-width:1050px){
+  .grid{grid-template-columns:1fr}
+  .row{grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px){
+  html{zoom:100%}
+  .top{position:relative;flex-direction:column;align-items:flex-start}
+  .title{text-align:left}
+  .brand img{height:48px}
+  .row,.pick-grid,.picker-toolbar{grid-template-columns:1fr}
+  .wrap{padding:8px}
+  .hero{flex-direction:column;align-items:flex-start}
+  .home{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+<noscript>ESTA PAGINA NECESITA JAVASCRIPT PARA CONSULTAR A.R.M.A.</noscript>
+<div id="loader" class="loader hidden">
+  <div class="box" style="text-align:center">
+    <div class="spin"></div>
+    <h3 id="loaderText">CARGANDO</h3>
+    <p>ESPERE MIENTRAS A.R.M.A. CONSULTA LA INFORMACION.</p>
+  </div>
+</div>
+<div id="messageModal" class="modal hidden">
+  <div class="box">
+    <h3 id="messageTitle">A.R.M.A.</h3>
+    <p id="messageText"></p>
+    <div class="actions">
+      <button id="messageAccept" class="btn" type="button">ACEPTAR</button>
+    </div>
+  </div>
+</div>
+<div id="confirmModal" class="modal hidden">
+  <div class="box">
+    <h3 id="confirmTitle">CONFIRMAR</h3>
+    <p id="confirmText"></p>
+    <div class="actions">
+      <button id="confirmCancel" class="btn gray" type="button">CANCELAR</button>
+      <button id="confirmAccept" class="btn green" type="button">ACEPTAR</button>
+    </div>
+  </div>
+</div>
+<header class="top">
+  <div class="brand">
+    <img src="logo_pelex.bmp" alt="PELEX" onerror="this.style.display='none';document.getElementById('brandFallback').style.display='block'">
+    <img src="ARMA%20logo%202.png" alt="ARMA" onerror="this.style.display='none';document.getElementById('brandFallback').style.display='block'">
+    <div id="brandFallback" class="brand-fallback">A.R.M.A.</div>
+  </div>
+  <div class="title">
+    <h1>MANTENIMIENTO | PLANES PMO</h1>
+    <p>PLANES OPTIMIZADOS, APROBACION, VERSIONES Y PREPARACION DEL LANZAMIENTO OT</p>
+    <span id="userPill" class="pill">INICIANDO...</span>
+  </div>
+</header>
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <h2>PLANES DE MANTENIMIENTO OPTIMIZADO</h2>
+      <p>CONSTRUYA PMO CON ACTIVIDADES AM Y ACTIVOS MEL. LOS PMO APROBADOS QUEDAN CONGELADOS.</p>
+    </div>
+    <a href="main.html" class="home" data-smart-home="1">
+      <img src="boton-de-inicio.png" alt="INICIO">
+      INICIO
+    </a>
+  </section>
+  <div id="errorBanner" class="notice hidden"></div>
+  <div class="grid">
+    <aside class="panel">
+      <h3>LISTA DE PMO</h3>
+      <div class="filters">
+        <input id="filterText" placeholder="BUSCAR CODIGO O DESCRIPCION">
+        <select id="filterApproval">
+          <option value="">TODA APROBACION</option>
+          <option value="BORRADOR">BORRADOR</option>
+          <option value="PENDIENTE_APROBACION">PENDIENTE APROBACION</option>
+          <option value="APROBADO">APROBADO</option>
+          <option value="RECHAZADO">RECHAZADO</option>
+        </select>
+        <select id="filterPriority">
+          <option value="">TODA PRIORIDAD</option>
+          <option value="P3">P3</option>
+          <option value="P4">P4</option>
+          <option value="P5">P5</option>
+        </select>
+        <button id="searchButton" class="btn" type="button">BUSCAR</button>
+      </div>
+      <div id="pmoList" class="list">
+        <div class="empty">CARGANDO PLANES PMO...</div>
+      </div>
+    </aside>
+    <section>
+      <div class="panel">
+        <h3 id="formTitle">NUEVO PMO</h3>
+        <div class="row">
+          <div class="field">
+            <label for="pmoId">ID PMO</label>
+            <input id="pmoId" readonly>
+          </div>
+          <div class="field">
+            <label for="pmoCode">CODIGO PMO</label>
+            <input id="pmoCode">
+          </div>
+          <div class="field">
+            <label for="pmoPriority">PRIORIDAD</label>
+            <select id="pmoPriority"></select>
+          </div>
+          <div class="field">
+            <label for="pmoSpecialty">ESPECIALIDAD</label>
+            <select id="pmoSpecialty"></select>
+          </div>
+          <div class="field full">
+            <label for="pmoDescription">DESCRIPCION PMO</label>
+            <input id="pmoDescription">
+          </div>
+          <div class="field">
+            <label for="pmoType">TIPO MANTENIMIENTO</label>
+            <select id="pmoType"></select>
+          </div>
+          <div class="field">
+            <label for="pmoFrequency">FRECUENCIA</label>
+            <select id="pmoFrequency"></select>
+          </div>
+          <div class="field">
+            <label for="pmoLastDate">ULTIMA FECHA PROGRAMADA</label>
+            <input id="pmoLastDate" type="date">
+          </div>
+          <div class="field">
+            <label for="pmoNextDate">PROXIMA FECHA REFERENCIA</label>
+            <input id="pmoNextDate" type="date">
+          </div>
+          <div class="field full">
+            <label for="pmoObservation">OBSERVACION / JUSTIFICACION</label>
+            <textarea id="pmoObservation"></textarea>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="clearButton" class="btn gray" type="button">LIMPIAR</button>
+          <button id="saveButton" class="btn green" type="button">GUARDAR BORRADOR</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>ACTIVIDADES AM DEL PMO</h3>
+        <p class="panel-sub">SELECCIONE LAS ACTIVIDADES QUE FORMARAN EL PLAN.</p>
+        <div class="picker-toolbar">
+          <input id="amFilter" placeholder="FILTRAR ACTIVIDADES AM">
+          <span id="amCount" class="counter">0 SELECCIONADAS</span>
+        </div>
+        <div id="amPicker" class="pick-grid">
+          <div class="empty">CARGANDO ACTIVIDADES...</div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>ACTIVOS MEL DEL PMO</h3>
+        <p class="panel-sub">SELECCIONE UNO O VARIOS ACTIVOS REGISTRADOS EN MEL.</p>
+        <div class="picker-toolbar">
+          <input id="assetFilter" placeholder="FILTRAR ACTIVOS MEL">
+          <span id="assetCount" class="counter">0 SELECCIONADOS</span>
+        </div>
+        <div id="assetPicker" class="pick-grid">
+          <div class="empty">CARGANDO ACTIVOS...</div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>FLUJO Y CONTROL</h3>
+        <div id="stateInfo" class="status">NUEVO BORRADOR</div>
+        <div class="actions">
+          <button id="submitButton" class="btn" type="button">ENVIAR APROBACION</button>
+          <button id="approveButton" class="btn green" type="button">APROBAR</button>
+          <button id="rejectButton" class="btn red" type="button">RECHAZAR</button>
+          <button id="versionButton" class="btn orange" type="button">NUEVA VERSION</button>
+          <button id="inactiveButton" class="btn gray" type="button">INACTIVAR</button>
+        </div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>FECHA</th>
+                <th>ESTADO</th>
+                <th>USUARIO</th>
+                <th>OBSERVACION</th>
+              </tr>
+            </thead>
+            <tbody id="historyBody">
+              <tr><td colspan="4">SIN HISTORIAL CARGADO</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>ADMINISTRACION FASE 2</h3>
+        <p class="panel-sub">P5 NO SE LANZA HASTA CRONOGRAMA MP. EL PDF DE OT ESTA APLAZADO.</p>
+        <div class="actions">
+          <button id="setupButton" class="btn gray" type="button">CONFIGURAR FASE 2</button>
+          <button id="triggerButton" class="btn orange" type="button">INSTALAR TRIGGER SEMANAL</button>
+          <button id="launchButton" class="btn green" type="button">EJECUTAR LANZAMIENTO AHORA</button>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="footer">ARMA // PLANES PMO // APROBACION Y LANZAMIENTO CONTROLADO</div>
+</main>
+<script>
+"use strict";
+
+const API = "https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
+
+const state = {
+  session:null,
+  permissions:{},
+  catalog:{
+    am:[],
+    assets:[],
+    prioridades:[],
+    especialidades:[],
+    tiposMantenimiento:[],
+    frecuencias:[]
+  },
+  rows:[],
+  current:null,
+  selectedId:"",
+  selectedAM:new Set(),
+  selectedAssets:new Set(),
+  confirmResolver:null
+};
+
+const ui = {};
+
+function byId(id){
+  return document.getElementById(id);
+}
+
+function bindUI(){
+  const ids = [
+    "loader","loaderText","messageModal","messageTitle","messageText",
+    "messageAccept","confirmModal","confirmTitle","confirmText",
+    "confirmCancel","confirmAccept","userPill","errorBanner",
+    "filterText","filterApproval","filterPriority","searchButton","pmoList",
+    "formTitle","pmoId","pmoCode","pmoPriority","pmoSpecialty",
+    "pmoDescription","pmoType","pmoFrequency","pmoLastDate","pmoNextDate",
+    "pmoObservation","clearButton","saveButton","amFilter","amCount",
+    "amPicker","assetFilter","assetCount","assetPicker","stateInfo",
+    "submitButton","approveButton","rejectButton","versionButton",
+    "inactiveButton","historyBody","setupButton","triggerButton","launchButton"
+  ];
+  ids.forEach(function(id){
+    ui[id] = byId(id);
+  });
+}
+
+function sessionToken(){
+  return localStorage.getItem("ARMA_TOKEN") ||
+    sessionStorage.getItem("ARMA_TOKEN") ||
+    "";
+}
+
+function escapeHtml(value){
+  return String(value == null ? "" : value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#39;");
+}
+
+function normalize(value){
+  return String(value == null ? "" : value).trim().toUpperCase();
+}
+
+function hasPermission(key){
+  return Boolean(
+    state.permissions.ALL ||
+    state.permissions.__SUPER_ADMIN__ ||
+    state.permissions[key]
+  );
+}
+
+function showLoader(text){
+  ui.loaderText.textContent = normalize(text || "CARGANDO").replaceAll("_"," ");
+  ui.loader.classList.remove("hidden");
+}
+
+function hideLoader(){
+  ui.loader.classList.add("hidden");
+}
+
+function showMessage(text,title){
+  ui.messageTitle.textContent = title || "A.R.M.A.";
+  ui.messageText.textContent = String(text || "");
+  ui.messageModal.classList.remove("hidden");
+}
+
+function closeMessage(){
+  ui.messageModal.classList.add("hidden");
+}
+
+function askConfirmation(text,title){
+  ui.confirmTitle.textContent = title || "CONFIRMAR";
+  ui.confirmText.textContent = String(text || "");
+  ui.confirmModal.classList.remove("hidden");
+  return new Promise(function(resolve){
+    state.confirmResolver = resolve;
+  });
+}
+
+function closeConfirmation(result){
+  ui.confirmModal.classList.add("hidden");
+  if(state.confirmResolver){
+    state.confirmResolver(Boolean(result));
+  }
+  state.confirmResolver = null;
+}
+
+function showErrorBanner(text){
+  ui.errorBanner.textContent = String(text || "ERROR NO IDENTIFICADO");
+  ui.errorBanner.classList.remove("hidden");
+}
+
+function clearErrorBanner(){
+  ui.errorBanner.textContent = "";
+  ui.errorBanner.classList.add("hidden");
+}
+
+async function callApi(action,data){
+  showLoader(action);
+  try{
+    const payload = Object.assign(
+      {action:action,token:sessionToken()},
+      data || {}
+    );
+    const response = await fetch(API,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify(payload)
+    });
+    if(!response.ok){
+      throw new Error("HTTP_"+response.status);
+    }
+    const result = await response.json();
+    if(!result || result.ok !== true){
+      throw new Error(
+        result && (result.error || result.detail || result.message) ||
+        "RESPUESTA_BACKEND_INVALIDA"
+      );
+    }
+    return result;
+  }finally{
+    hideLoader();
+  }
+}
+
+function fillSelect(element,values,preferred){
+  const safeValues = Array.isArray(values) ? values : [];
+  element.innerHTML = safeValues.map(function(value){
+    const text = escapeHtml(value);
+    return "<option value=\""+text+"\">"+text+"</option>";
+  }).join("");
+  if(preferred && safeValues.indexOf(preferred) >= 0){
+    element.value = preferred;
+  }
+}
+
+function formatDate(value){
+  if(!value){
+    return "";
+  }
+  const date = new Date(value);
+  if(Number.isNaN(date.getTime())){
+    return String(value).slice(0,10);
+  }
+  return date.toISOString().slice(0,10);
+}
+
+function bindEvents(){
+  ui.messageAccept.addEventListener("click",closeMessage);
+  ui.confirmCancel.addEventListener("click",function(){
+    closeConfirmation(false);
+  });
+  ui.confirmAccept.addEventListener("click",function(){
+    closeConfirmation(true);
+  });
+  ui.searchButton.addEventListener("click",loadList);
+  ui.filterText.addEventListener("keydown",function(event){
+    if(event.key === "Enter"){
+      loadList();
+    }
+  });
+  ui.clearButton.addEventListener("click",newPMO);
+  ui.saveButton.addEventListener("click",saveDraft);
+  ui.amFilter.addEventListener("input",renderAM);
+  ui.assetFilter.addEventListener("input",renderAssets);
+  ui.submitButton.addEventListener("click",submitPMO);
+  ui.approveButton.addEventListener("click",approvePMO);
+  ui.rejectButton.addEventListener("click",rejectPMO);
+  ui.versionButton.addEventListener("click",createVersion);
+  ui.inactiveButton.addEventListener("click",inactivatePMO);
+  ui.setupButton.addEventListener("click",setupPhase2);
+  ui.triggerButton.addEventListener("click",installTrigger);
+  ui.launchButton.addEventListener("click",launchNow);
+  ui.pmoList.addEventListener("click",function(event){
+    const item = event.target.closest("[data-pmo-id]");
+    if(item){
+      openPMO(item.getAttribute("data-pmo-id"));
+    }
+  });
+  ui.amPicker.addEventListener("change",function(event){
+    const box = event.target.closest("[data-am-id]");
+    if(!box){
+      return;
+    }
+    const id = box.getAttribute("data-am-id");
+    if(box.checked){
+      state.selectedAM.add(id);
+    }else{
+      state.selectedAM.delete(id);
+    }
+    renderAM();
+  });
+  ui.assetPicker.addEventListener("change",function(event){
+    const box = event.target.closest("[data-asset-id]");
+    if(!box){
+      return;
+    }
+    const id = box.getAttribute("data-asset-id");
+    if(box.checked){
+      state.selectedAssets.add(id);
+    }else{
+      state.selectedAssets.delete(id);
+    }
+    renderAssets();
+  });
+}
+
+function renderNoSession(){
+  ui.userPill.textContent = "SIN SESION";
+  showErrorBanner(
+    "NO EXISTE UNA SESION A.R.M.A. ACTIVA. REGRESE AL MAIN E INICIE SESION."
+  );
+  ui.pmoList.innerHTML = "<div class=\"empty\">SIN SESION ACTIVA</div>";
+  disableAllActions();
+}
+
+function disableAllActions(){
+  [
+    ui.saveButton,ui.submitButton,ui.approveButton,ui.rejectButton,
+    ui.versionButton,ui.inactiveButton,ui.setupButton,ui.triggerButton,
+    ui.launchButton
+  ].forEach(function(button){
+    button.disabled = true;
+  });
+}
+
+function applyPermissions(){
+  const approval = normalize(
+    state.current && state.current.ESTADO_APROBACION
+  );
+  ui.saveButton.disabled = !(
+    state.current ?
+      hasPermission("BTN_PMO_EDITAR_BORRADOR") :
+      hasPermission("BTN_PMO_CREAR")
+  ) || approval === "APROBADO";
+  ui.submitButton.disabled = !hasPermission("BTN_PMO_ENVIAR_APROBACION") ||
+    !state.current ||
+    ["BORRADOR","RECHAZADO"].indexOf(approval) < 0;
+  ui.approveButton.disabled = !hasPermission("BTN_PMO_APROBAR") ||
+    approval !== "PENDIENTE_APROBACION";
+  ui.rejectButton.disabled = !hasPermission("BTN_PMO_RECHAZAR") ||
+    approval !== "PENDIENTE_APROBACION";
+  ui.versionButton.disabled = !hasPermission("BTN_PMO_NUEVA_VERSION") ||
+    approval !== "APROBADO";
+  ui.inactiveButton.disabled = !hasPermission("BTN_PMO_INACTIVAR") ||
+    !state.current;
+  ui.setupButton.disabled = !hasPermission("BTN_MTTO_CONFIGURAR");
+  ui.triggerButton.disabled = !hasPermission("BTN_MTTO_CONFIGURAR");
+  ui.launchButton.disabled = !hasPermission("BTN_OT_LANZAR_PMO");
+}
+
+async function initializePage(){
+  clearErrorBanner();
+  if(!sessionToken()){
+    renderNoSession();
+    return;
+  }
+  try{
+    const validated = await callApi("validateSession");
+    state.session = validated;
+    state.permissions = validated.permissions || {};
+    ui.userPill.textContent =
+      normalize(validated.user) + " // " + normalize(validated.nivel);
+    const catalog = await callApi("mttoCatalogos");
+    state.catalog = Object.assign(state.catalog,catalog);
+    fillSelect(ui.pmoPriority,state.catalog.prioridades,"P3");
+    fillSelect(
+      ui.pmoSpecialty,
+      state.catalog.especialidades,
+      "MULTIDISCIPLINARIA"
+    );
+    fillSelect(
+      ui.pmoType,
+      state.catalog.tiposMantenimiento,
+      state.catalog.tiposMantenimiento[0]
+    );
+    fillSelect(
+      ui.pmoFrequency,
+      state.catalog.frecuencias,
+      "MENSUAL"
+    );
+    newPMO();
+    await loadList();
+  }catch(error){
+    showErrorBanner(
+      "NO FUE POSIBLE INICIAR PLANES PMO: " + error.message
+    );
+    ui.pmoList.innerHTML =
+      "<div class=\"empty\">ERROR AL CONSULTAR EL BACKEND</div>";
+    disableAllActions();
+  }
+}
+
+async function loadList(){
+  clearErrorBanner();
+  try{
+    const result = await callApi("listPMO",{
+      filters:{
+        q:ui.filterText.value,
+        aprobacion:ui.filterApproval.value,
+        prioridad:ui.filterPriority.value
+      }
+    });
+    state.rows = result.rows || [];
+    renderList();
+  }catch(error){
+    showErrorBanner("NO FUE POSIBLE LISTAR PMO: "+error.message);
+  }
+}
+
+function renderList(){
+  if(!state.rows.length){
+    ui.pmoList.innerHTML = "<div class=\"empty\">SIN PMO PARA MOSTRAR</div>";
+    return;
+  }
+  ui.pmoList.innerHTML = state.rows.map(function(row){
+    const selected = state.selectedId === row.ID_PMO ? " selected" : "";
+    const priorityClass = normalize(row.PRIORIDAD) === "P5" ? " warn" : "";
+    const approvalClass =
+      normalize(row.ESTADO_APROBACION) === "RECHAZADO" ? " red" : "";
+    return [
+      "<div class=\"item"+selected+"\" data-pmo-id=\"",
+      escapeHtml(row.ID_PMO),
+      "\">",
+      "<strong>",
+      escapeHtml(row.CODIGO_PMO || row.ID_PMO),
+      " &mdash; ",
+      escapeHtml(row.DESCRIPCION_PMO),
+      "</strong>",
+      "<small>",
+      "<span class=\"badge"+priorityClass+"\">",
+      escapeHtml(row.PRIORIDAD || "SIN PRIORIDAD"),
+      "</span>",
+      "<span class=\"badge"+approvalClass+"\">",
+      escapeHtml(row.ESTADO_APROBACION || "SIN ESTADO"),
+      "</span>",
+      "VERSION ",
+      escapeHtml(row.VERSION || 1),
+      "</small>",
+      "</div>"
+    ].join("");
+  }).join("");
+}
+
+function newPMO(){
+  state.selectedId = "";
+  state.current = null;
+  state.selectedAM = new Set();
+  state.selectedAssets = new Set();
+  ui.pmoId.value = "";
+  ui.pmoCode.value = "";
+  ui.pmoDescription.value = "";
+  ui.pmoLastDate.value = "";
+  ui.pmoNextDate.value = "";
+  ui.pmoObservation.value = "";
+  if(state.catalog.prioridades.indexOf("P3") >= 0){
+    ui.pmoPriority.value = "P3";
+  }
+  if(state.catalog.especialidades.indexOf("MULTIDISCIPLINARIA") >= 0){
+    ui.pmoSpecialty.value = "MULTIDISCIPLINARIA";
+  }
+  if(state.catalog.frecuencias.indexOf("MENSUAL") >= 0){
+    ui.pmoFrequency.value = "MENSUAL";
+  }
+  ui.formTitle.textContent = "NUEVO PMO";
+  ui.stateInfo.textContent = "NUEVO BORRADOR";
+  ui.historyBody.innerHTML =
+    "<tr><td colspan=\"4\">SIN HISTORIAL CARGADO</td></tr>";
+  renderAM();
+  renderAssets();
+  renderList();
+  applyPermissions();
+}
+
+async function openPMO(id){
+  clearErrorBanner();
+  try{
+    const result = await callApi("getPMO",{idPMO:id});
+    state.selectedId = id;
+    state.current = result.pmo || null;
+    const current = state.current || {};
+    ui.pmoId.value = current.ID_PMO || "";
+    ui.pmoCode.value = current.CODIGO_PMO || "";
+    ui.pmoDescription.value = current.DESCRIPCION_PMO || "";
+    ui.pmoPriority.value = current.PRIORIDAD || "P3";
+    ui.pmoSpecialty.value =
+      current.ESPECIALIDAD || "MULTIDISCIPLINARIA";
+    ui.pmoType.value =
+      current.TIPO_MANTENIMIENTO ||
+      state.catalog.tiposMantenimiento[0] ||
+      "";
+    ui.pmoFrequency.value = current.FRECUENCIA_TEXTO || "MENSUAL";
+    ui.pmoLastDate.value = formatDate(current.ULTIMA_FECHA_PROGRAMADA);
+    ui.pmoNextDate.value = formatDate(current.PROXIMA_FECHA_REFERENCIA);
+    ui.pmoObservation.value = current.OBSERVACION || "";
+    state.selectedAM = new Set(
+      (result.actividades || []).map(function(row){
+        return row.ID_AM;
+      })
+    );
+    state.selectedAssets = new Set(
+      (result.activos || []).map(function(row){
+        return row.ID_ACTIVO_MEL;
+      })
+    );
+    ui.formTitle.textContent = "EDITAR " + id;
+    ui.stateInfo.textContent = [
+      current.ESTADO_APROBACION || "SIN APROBACION",
+      current.ESTADO_PMO || "SIN ESTADO",
+      "VERSION " + (current.VERSION || 1),
+      "LISTO " + (current.LISTO_LANZAMIENTO || "NO")
+    ].join(" // ");
+    renderHistory(result.historial || []);
+    renderAM();
+    renderAssets();
+    renderList();
+    applyPermissions();
+  }catch(error){
+    showErrorBanner("NO FUE POSIBLE ABRIR EL PMO: "+error.message);
+  }
+}
+
+function renderHistory(rows){
+  if(!rows.length){
+    ui.historyBody.innerHTML =
+      "<tr><td colspan=\"4\">SIN HISTORIAL</td></tr>";
+    return;
+  }
+  ui.historyBody.innerHTML = rows.map(function(row){
+    return [
+      "<tr>",
+      "<td>",escapeHtml(formatDate(row.FECHA)),"</td>",
+      "<td>",escapeHtml(row.ESTADO),"</td>",
+      "<td>",escapeHtml(row.USUARIO),"</td>",
+      "<td>",escapeHtml(row.OBSERVACION || ""),"</td>",
+      "</tr>"
+    ].join("");
+  }).join("");
+}
+
+function renderAM(){
+  const query = normalize(ui.amFilter && ui.amFilter.value);
+  const rows = (state.catalog.am || []).filter(function(item){
+    if(!query){
+      return true;
+    }
+    return normalize(
+      [item.codigo,item.descripcion,item.lila,item.especialidad].join(" ")
+    ).includes(query);
+  });
+  ui.amCount.textContent = state.selectedAM.size + " SELECCIONADAS";
+  if(!rows.length){
+    ui.amPicker.innerHTML =
+      "<div class=\"empty\">SIN ACTIVIDADES PARA MOSTRAR</div>";
+    return;
+  }
+  ui.amPicker.innerHTML = rows.map(function(item){
+    const checked = state.selectedAM.has(item.id);
+    return [
+      "<div class=\"pick",checked ? " selected" : "","\">",
+      "<label>",
+      "<input type=\"checkbox\" data-am-id=\"",
+      escapeHtml(item.id),
+      "\"",checked ? " checked" : "",">",
+      "<span>",
+      escapeHtml(item.codigo),
+      " &mdash; ",
+      escapeHtml(item.descripcion),
+      "<br>",
+      escapeHtml(item.duracion),
+      " MIN // ",
+      escapeHtml(item.lila || "SIN LILA"),
+      "</span>",
+      "</label>",
+      "</div>"
+    ].join("");
+  }).join("");
+}
+
+function renderAssets(){
+  const query = normalize(ui.assetFilter && ui.assetFilter.value);
+  const rows = (state.catalog.assets || []).filter(function(item){
+    if(!query){
+      return true;
+    }
+    return normalize(
+      [item.codigo,item.nombre,item.nivel,item.padre].join(" ")
+    ).includes(query);
+  });
+  ui.assetCount.textContent =
+    state.selectedAssets.size + " SELECCIONADOS";
+  if(!rows.length){
+    ui.assetPicker.innerHTML =
+      "<div class=\"empty\">SIN ACTIVOS PARA MOSTRAR</div>";
+    return;
+  }
+  ui.assetPicker.innerHTML = rows.map(function(item){
+    const checked = state.selectedAssets.has(item.id);
+    return [
+      "<div class=\"pick",checked ? " selected" : "","\">",
+      "<label>",
+      "<input type=\"checkbox\" data-asset-id=\"",
+      escapeHtml(item.id),
+      "\"",checked ? " checked" : "",">",
+      "<span>",
+      escapeHtml(item.codigo || item.id),
+      " &mdash; ",
+      escapeHtml(item.nombre),
+      "<br>",
+      escapeHtml(item.nivel || "SIN NIVEL"),
+      "</span>",
+      "</label>",
+      "</div>"
+    ].join("");
+  }).join("");
+}
+
+function collectPMO(){
+  return {
+    ID_PMO:state.selectedId,
+    CODIGO_PMO:ui.pmoCode.value,
+    DESCRIPCION_PMO:ui.pmoDescription.value,
+    PRIORIDAD:ui.pmoPriority.value,
+    ESPECIALIDAD:ui.pmoSpecialty.value,
+    TIPO_MANTENIMIENTO:ui.pmoType.value,
+    FRECUENCIA_TEXTO:ui.pmoFrequency.value,
+    ULTIMA_FECHA_PROGRAMADA:ui.pmoLastDate.value,
+    PROXIMA_FECHA_REFERENCIA:ui.pmoNextDate.value,
+    OBSERVACION:ui.pmoObservation.value,
+    actividades:(state.catalog.am || [])
+      .filter(function(item){
+        return state.selectedAM.has(item.id);
+      })
+      .map(function(item){
+        return {
+          ID_AM:item.id,
+          DURACION_MIN:item.duracion
+        };
+      }),
+    activos:(state.catalog.assets || [])
+      .filter(function(item){
+        return state.selectedAssets.has(item.id);
+      })
+      .map(function(item){
+        return {
+          id:item.id,
+          codigo:item.codigo,
+          nombre:item.nombre
+        };
+      })
+  };
+}
+
+async function saveDraft(){
+  clearErrorBanner();
+  try{
+    const result = await callApi("savePMODraft",{data:collectPMO()});
+    showMessage(
+      result.message + " // " + result.idPMO,
+      "PMO GUARDADO"
+    );
+    await openPMO(result.idPMO);
+  }catch(error){
+    showErrorBanner("NO FUE POSIBLE GUARDAR: "+error.message);
+  }
+}
+
+function requiredObservation(action){
+  const value = String(ui.pmoObservation.value || "").trim();
+  if(!value){
+    showMessage(
+      "ESCRIBA LA JUSTIFICACION EN OBSERVACION ANTES DE "+action,
+      "JUSTIFICACION REQUERIDA"
+    );
+    return "";
+  }
+  return value;
+}
+
+async function submitPMO(){
+  if(!state.selectedId){
+    showMessage("PRIMERO GUARDE EL PMO.","PMO REQUERIDO");
+    return;
+  }
+  const observation = requiredObservation("ENVIAR A APROBACION");
+  if(!observation){
+    return;
+  }
+  try{
+    const result = await callApi("submitPMOApproval",{
+      idPMO:state.selectedId,
+      observacion:observation
+    });
+    showMessage(result.message,"FLUJO PMO");
+    await openPMO(state.selectedId);
+  }catch(error){
+    showErrorBanner("NO FUE POSIBLE ENVIAR: "+error.message);
+  }
+}
+
+async function approvePMO(){
+  const observation = requiredObservation("APROBAR PMO");
+  if(!observation){
+    return;
+  }
+  try{
+    const result = await callApi("approvePMO",{
+      idPMO:state.selectedId,
+      observacion:observation
+    });
+    showMessage(result.message,"PMO APROBADO");
+    await openPMO(state.selectedId);
+  }catch(error){
+    showErrorBanner("NO FUE POSIBLE APROBAR: "+error.message);
+  }
+}
+
+async function rejectPMO(){
+  const observation = requiredObservation("RECHAZAR PMO");
+  if(!observation){
+    return;
+  }
+  try{
+    const result = await callApi("rejectPMO",{
+      idPMO:state.selectedId,
+      observacion:observation
+    });
+    showMessage(result.message,"PMO RECHAZADO");
+    await openPMO(state.selectedId);
+  }catch(error){
+    showErrorBanner("NO FUE POSIBLE RECHAZAR: "+error.message);
+  }
+}
+
+async function inactivatePMO(){
+  const observation = requiredObservation("INACTIVAR PMO");
+  if(!observation){
+    return;
+  }
+  const accepted = await askConfirmation(
+    "SE INACTIVARA EL PMO SELECCIONADO. DESEA CONTINUAR?",
+    "INACTIVAR PMO"
+  );
+  if(!accepted){
+    return;
+  }
+  try{
+    const result = await callApi("inactivatePMO",{
+      idPMO:state.selectedId,
+      observacion:observation
+    });
+    showMessage(result.message,"PMO INACTIVADO");
+    await openPMO(state.selectedId);
+  }catch(error){
+    showErrorBanner("NO FUE POSIBLE INACTIVAR: "+error.message);
+  }
+}
+
+async function createVersion(){
+  const observation = requiredObservation("CREAR NUEVA VERSION");
+  if(!observation){
+    return;
+  }
+  const accepted = await askConfirmation(
+    "SE CREARA UNA NUEVA VERSION EN BORRADOR. DESEA CONTINUAR?",
+    "NUEVA VERSION"
+  );
+  if(!accepted){
+    return;
+  }
+  try{
+    const result = await callApi("newPMOVersion",{
+      idPMO:state.selectedId,
+      observacion:observation
+    });
+    showMessage(
+      result.message + " // " + result.idPMO,
+      "VERSION CREADA"
+    );
+    await openPMO(result.idPMO);
+  }catch(error){
+    showErrorBanner("NO FUE POSIBLE VERSIONAR: "+error.message);
+  }
+}
+
+async function setupPhase2(){
+  const accepted = await askConfirmation(
+    "CONFIGURAR HOJAS, COLUMNAS, CATALOGOS Y PERMISOS DE FASE 2?",
+    "CONFIGURAR FASE 2"
+  );
+  if(!accepted){
+    return;
+  }
+  try{
+    const result = await callApi("setupMantenimientoProgramado");
+    showMessage(result.message,"FASE 2 CONFIGURADA");
+  }catch(error){
+    showErrorBanner("NO FUE POSIBLE CONFIGURAR: "+error.message);
+  }
+}
+
+async function installTrigger(){
+  const accepted = await askConfirmation(
+    "INSTALAR EL TRIGGER SEMANAL DE LANZAMIENTO PARA LOS LUNES EN LA HORA 00?",
+    "INSTALAR TRIGGER"
+  );
+  if(!accepted){
+    return;
+  }
+  try{
+    const result = await callApi("installMttoWeeklyTrigger");
+    showMessage(
+      result.message + "\n" + (result.advertencia || ""),
+      "TRIGGER INSTALADO"
+    );
+  }catch(error){
+    showErrorBanner("NO FUE POSIBLE INSTALAR EL TRIGGER: "+error.message);
+  }
+}
+
+async function launchNow(){
+  const accepted = await askConfirmation(
+    "EJECUTAR EL LANZAMIENTO MANUAL IDEMPOTENTE CON HORIZONTE DE 30 DIAS?",
+    "LANZAMIENTO MANUAL"
+  );
+  if(!accepted){
+    return;
+  }
+  try{
+    const result = await callApi("runMttoLaunchNow");
+    showMessage(
+      "OT CREADAS: "+result.createdCount+
+      "\nHORIZONTE: "+result.horizon,
+      "LANZAMIENTO TERMINADO"
+    );
+  }catch(error){
+    showErrorBanner("NO FUE POSIBLE LANZAR OT: "+error.message);
+  }
+}
+
+document.addEventListener("DOMContentLoaded",function(){
+  bindUI();
+  bindEvents();
+  initializePage();
+});
+</script>
+</body>
+</html>
