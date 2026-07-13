@@ -3,21 +3,17 @@ VALIDAR REPOSITORIO
 CODIGO: 0
 true
 
-
 ======================================================================
 GIT ADD
 CODIGO: 0
-
-
+No fue posible leer la salida del comando.
 ======================================================================
-VERIFICAR CAMBIOS
+VERIFICAR CAMBIOS PREPARADOS
 CODIGO: 0
-
-
+No fue posible leer la salida del comando.
 ======================================================================
 GIT PUSH
 CODIGO: 0
-
 Everything up-to-date
 
 ======================================================================
@@ -25,9 +21,15 @@ CONFIRMAR ARCHIVO CONTROLADO
 CODIGO: 0
 planes_pmo.html
 
-
 ======================================================================
-ESTADO FINAL
+CONFIRMAR ARCHIVO EN HEAD
 CODIGO: 0
-
-
+No fue posible leer la salida del comando.
+======================================================================
+REGISTRAR ESTADO LOCAL
+CODIGO: 0
+No fue posible leer la salida del comando.
+======================================================================
+ADVERTENCIA NO BLOQUEANTE
+CODIGO: 0
+Git reporta diferencia local posterior al commit. El push fue exitoso y HEAD contiene planes_pmo.html. Esto puede corresponder a normalizacion CRLF/LF.
