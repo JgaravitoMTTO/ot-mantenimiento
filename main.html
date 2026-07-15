@@ -534,7 +534,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-07-14 17:19:18</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-07-15 09:56:39</span></div>
   </footer>
 </main>
 </div>
@@ -721,21 +721,34 @@ function armaShowLocationMessage(title,message,mode){
 function armaGeoErrorText(err){if(!err)return 'NO FUE POSIBLE VALIDAR LA UBICACION.';if(err.code===1)return 'NO SE AUTORIZO EL ACCESO A LA UBICACION.';if(err.code===2)return 'LA UBICACION NO ESTA DISPONIBLE. ACTIVE EL GPS.';if(err.code===3)return 'SE AGOTO EL TIEMPO PARA OBTENER LA UBICACION.';return 'NO FUE POSIBLE VALIDAR LA UBICACION.';}
 async function armaCheckMobileLocationWelcome(){
   if(!armaSession||!armaSession.token||!armaIsMobileViewport()||!navigator.geolocation||!window.isSecureContext)return;
-  var key='ARMA_GEO_WELCOME_'+String(armaSession.user||'USER').toUpperCase();
+  var key='ARMA_GEO_WELCOME_V02_'+String(armaSession.user||'USER').toUpperCase();
   if(sessionStorage.getItem(key)==='SI')return;
   sessionStorage.setItem(key,'SI');
-  var plant;
-  try{plant=await armaApi('getPlantLocation',{token:armaSession.token,planta:'PLANTA 2'});}catch(e){return;}
-  if(!plant||!plant.ok)return;
+  var requested=['PLANTA 1','PLANTA 2','PLANTA 3'];
+  var plants=await Promise.all(requested.map(async function(name){
+    try{
+      var p=await armaApi('getPlantLocation',{token:armaSession.token,planta:name});
+      if(p&&p.ok){p.etiqueta=name;return p;}
+    }catch(e){}
+    return null;
+  }));
+  plants=plants.filter(function(p){return !!p;});
+  if(!plants.length)return;
   navigator.geolocation.getCurrentPosition(function(pos){
-    var distance=Math.round(armaGeoDistanceMeters(pos.coords.latitude,pos.coords.longitude,plant.latitud,plant.longitud));
-    var radius=Math.round(Number(plant.radioMetros||150));
     var accuracy=Math.round(Number(pos.coords.accuracy||0));
+    if(accuracy>150)return;
+    var matches=plants.map(function(p){
+      var distance=Math.round(armaGeoDistanceMeters(pos.coords.latitude,pos.coords.longitude,p.latitud,p.longitud));
+      var configured=Number(p.radioMetros||150);
+      var radius=Math.min(150,(isFinite(configured)&&configured>0)?configured:150);
+      return {etiqueta:p.etiqueta,distance:distance,radius:radius};
+    }).filter(function(p){return p.distance<=p.radius;});
+    if(!matches.length)return;
+    matches.sort(function(a,b){return a.distance-b.distance;});
+    var match=matches[0];
     var who=String(armaSession.nombre||armaSession.user||'USUARIO');
-    if(accuracy>250){armaShowLocationMessage('UBICACION CON BAJA PRECISION','HOLA '+who+'.\\n\\nARMA OBTUVO UNA PRECISION APROXIMADA DE '+accuracy+' M. INTENTE NUEVAMENTE CON EL GPS ACTIVO O CERCA DE UNA VENTANA.','warn');return;}
-    if(distance<=radius){armaShowLocationMessage('BIENVENIDO A PLANTA 2','HOLA '+who+'.\\n\\nARMA CONFIRMA QUE SE ENCUENTRA DENTRO DEL RADIO DE PLANTA 2.\\n\\nDISTANCIA APROXIMADA: '+distance+' M.','');}
-    else{armaShowLocationMessage('UBICACION VALIDADA','HOLA '+who+'.\\n\\nARMA CONFIRMA QUE SE ENCUENTRA FUERA DEL RADIO DE PLANTA 2.\\n\\nDISTANCIA APROXIMADA: '+distance+' M.','outside');}
-  },function(err){armaShowLocationMessage('UBICACION NO VALIDADA',armaGeoErrorText(err),'warn');},{enableHighAccuracy:true,timeout:20000,maximumAge:0});
+    armaShowLocationMessage('BIENVENIDO A '+match.etiqueta,'HOLA '+who+'. A.R.M.A. DETECTA QUE SE ENCUENTRA EN '+match.etiqueta+'.','');
+  },function(){},{enableHighAccuracy:true,timeout:20000,maximumAge:0});
 }
 let armaDeferredInstallPrompt=null;
 function armaPWAIsStandalone(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;}
