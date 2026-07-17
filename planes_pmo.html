@@ -887,13 +887,13 @@ async function initializePage(){
     return;
   }
   try{
-    const validated = await callApi("validateSession");
+    const boot = await callApi("pmoBootstrap",{filters:{}});
+    const validated = boot.session || {};
     state.session = validated;
     state.permissions = validated.permissions || {};
     ui.userPill.textContent =
       normalize(validated.user) + " // " + normalize(validated.nivel);
-    const catalog = await callApi("mttoCatalogos");
-    state.catalog = Object.assign(state.catalog,catalog);
+    state.catalog = Object.assign(state.catalog,boot.catalog || {});
     fillSelect(ui.pmoPriority,state.catalog.prioridades,"P3");
     fillSelect(
       ui.pmoSpecialty,
@@ -911,7 +911,7 @@ async function initializePage(){
       "MENSUAL"
     );
     newPMO();
-    await loadList();
+    if(boot.list){state.rows=boot.list.rows||[];renderList();}else{await loadList();}
   }catch(error){
     showErrorBanner(
       "NO FUE POSIBLE INICIAR PLANES PMO: " + error.message
