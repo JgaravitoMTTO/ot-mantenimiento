@@ -180,7 +180,7 @@ tr:hover{background:#d9ecff;cursor:pointer}
       </div>
     </section>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-11 21:00:27</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-17 13:33:34</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -275,18 +275,12 @@ async function loadPersonalCatalogos(){
     return personalPlants.length>0;
   }catch(e){personalCatalogos={};personalPlants=[];SELECTS.PLANTA_ASIGNADA=[""];applyPersonalFilterCatalogs();return false;}
 }
-async function startPersonalApp(){
-  document.getElementById("loginWall").classList.add("hidden");
-  document.getElementById("appArea").classList.remove("hidden");
-  let estado=document.getElementById("fEstado");
-  if(estado&&!estado.value)estado.value="ACTIVO";
-  applyPersonalPermissions();
-  let plantsOk=await loadPersonalCatalogos();
-  renderForm({},"VIEW",false,"VIEW");
-  if(!plantsOk)setStatus("formStatus","SIN PLANTAS DISPONIBLES EN MEL_ACTIVOS / NIVEL PLANTA");
-  if(hasPerm("BTN_PERSONAL_VER"))loadList();
-  else setStatus("listStatus","SIN PERMISO PARA LISTA GENERAL");
-  if(hasPerm("BTN_PERSONAL_MIS_DATOS")||hasPerm("BTN_PERSONAL"))loadMine();
+function applyPersonalCatalogBootstrap(data){personalCatalogos=(data&&data.catalogos)||{};let source=(data&&Array.isArray(data.plantas))?data.plantas:(personalCatalogos.PLANTA_ASIGNADA||[]);let seen={};personalPlants=[];source.forEach(function(p){let name=typeof p==='string'?p:(p.NOMBRE||p.VALOR||p.DESCRIPCION||'');name=String(name||'').trim();let key=name.toUpperCase();if(name&&!seen[key]){seen[key]=true;personalPlants.push(name);}});personalPlants.sort(function(a,b){return a.localeCompare(b,'es');});SELECTS.PLANTA_ASIGNADA=[''].concat(personalPlants);applyPersonalFilterCatalogs();return personalPlants.length>0;}
+async function startPersonalApp(boot){
+  document.getElementById("loginWall").classList.add("hidden");document.getElementById("appArea").classList.remove("hidden");let estado=document.getElementById("fEstado");if(estado&&!estado.value)estado.value="ACTIVO";applyPersonalPermissions();
+  let plantsOk=boot?applyPersonalCatalogBootstrap(boot.catalog||{}):await loadPersonalCatalogos();renderForm({},"VIEW",false,"VIEW");if(!plantsOk)setStatus("formStatus","SIN PLANTAS DISPONIBLES EN MEL_ACTIVOS / NIVEL PLANTA");
+  if(boot&&boot.list&&!boot.list.skipped){renderRows(boot.list.rows||[]);setStatus("listStatus",(boot.list.count||0)+" REGISTROS");}else if(hasPerm("BTN_PERSONAL_VER")){loadList();}else setStatus("listStatus","SIN PERMISO PARA LISTA GENERAL");
+  if(boot&&boot.mine){applyMineData(boot.mine);}else if(hasPerm("BTN_PERSONAL_MIS_DATOS")||hasPerm("BTN_PERSONAL")){loadMine();}
 }
 function armaPersonalPersistToken(){try{if(armaSession&&armaSession.token)localStorage.setItem("ARMA_TOKEN",armaSession.token);}catch(err){}}
 function armaMainStorageIsFresh(maxAgeMs){try{var raw=localStorage.getItem("ARMA_MAIN_ACTIVE")||"";if(!raw)return false;var data=JSON.parse(raw);if(!data||!data.ts)return false;return (Date.now()-Number(data.ts)) <= (maxAgeMs||3500);}catch(err){return false;}}
@@ -294,20 +288,9 @@ function armaAskMainIsActive(){return new Promise(function(resolve){var resolved
 function armaTryCloseCurrentPage(){try{window.close();}catch(err){}setTimeout(function(){if(!window.closed){try{console.warn("MAIN YA ESTA ABIERTO. CIERRE ESTA PESTANA MANUALMENTE.");}catch(err){}}},220);}
 function goMain(e){if(e&&e.preventDefault)e.preventDefault();armaPersonalPersistToken();armaAskMainIsActive().then(function(active){if(active){try{if(window.opener&&!window.opener.closed)window.opener.focus();}catch(err){}armaTryCloseCurrentPage();}else{window.location.href="main.html";}});return false;}
 function setStatus(id,txt){let el=document.getElementById(id);if(el)el.textContent=txt;}
-async function validateSession(){
-  let token=localStorage.getItem("ARMA_TOKEN")||"";
-  if(!token){showLoginWall();return;}
-  try{
-    let cached=readSessionCache();
-    if(cached&&cached.token===token){setSessionData(cached,token);await startPersonalApp();return;}
-    let data=await api("validateSession",{token:token},"VALIDANDO SESION...");
-    if(!data.ok){showLoginWall();return;}
-    setSessionData(data,token);
-    await startPersonalApp();
-  }catch(e){showLoginWall();}
-}
+async function validateSession(){let token=localStorage.getItem("ARMA_TOKEN")||"";if(!token){showLoginWall();return;}try{let data=await api("personalBootstrap",{filters:{ESTADO:"ACTIVO"},includeList:true},"CARGANDO PERSONAL...");if(!data.ok){showLoginWall();return;}setSessionData(data.session||{},token);await startPersonalApp(data);}catch(e){showLoginWall();}}
 function showLoginWall(){armaLoaderCount=0;hideArmaLoader();document.getElementById("loginWall").classList.remove("hidden");document.getElementById("appArea").classList.add("hidden");document.getElementById("userPill").textContent="SESION NO VALIDADA";}
-async function loadMine(){if(!hasPerm("BTN_PERSONAL_MIS_DATOS")&&!hasPerm("BTN_PERSONAL")){setStatus("formStatus","SIN PERMISO PARA CONSULTAR MIS DATOS");return;}setStatus("formStatus","CARGANDO MIS DATOS...");try{let data=await api("getMiPersona",{},"CARGANDO MIS DATOS...");if(!data.ok){setStatus("formStatus",data.error||"SIN DATOS PROPIOS ASOCIADOS");return;}currentId=data.persona.ID_PERSONA;currentMode="EDIT";renderForm(data.persona,"EDIT",data.canEdit,data.editMode||"OWN");setStatus("formStatus","DATOS PROPIOS CARGADOS");}catch(e){setStatus("formStatus","ERROR DE CONEXION");}}
+function applyMineData(data){if(!data||!data.ok){setStatus("formStatus",(data&&data.error)||"SIN DATOS PROPIOS ASOCIADOS");return;}if(data.noPersonaRequired){renderForm({},"VIEW",false,"VIEW");setStatus("formStatus","SUPER_ADMIN ARMA NO REQUIERE PERSONA VINCULADA");return;}currentId=data.persona.ID_PERSONA;currentMode="EDIT";renderForm(data.persona,"EDIT",data.canEdit,data.editMode||"OWN");setStatus("formStatus","DATOS PROPIOS CARGADOS");}async function loadMine(){if(!hasPerm("BTN_PERSONAL_MIS_DATOS")&&!hasPerm("BTN_PERSONAL")){setStatus("formStatus","SIN PERMISO PARA CONSULTAR MIS DATOS");return;}setStatus("formStatus","CARGANDO MIS DATOS...");try{let data=await api("getMiPersona",{},"CARGANDO MIS DATOS...");applyMineData(data);}catch(e){setStatus("formStatus","ERROR DE CONEXION");}}
 async function loadList(){if(!hasPerm("BTN_PERSONAL_VER")){setStatus("listStatus","SIN PERMISO PARA CONSULTAR LISTA GENERAL");return;}setStatus("listStatus","CARGANDO...");let filters={BUSCAR:document.getElementById("fBuscar").value,PLANTA:document.getElementById("fPlanta").value,AREA:document.getElementById("fArea").value,ESTADO:document.getElementById("fEstado").value};try{let data=await api("listPersonal",{filters:filters},"CARGANDO PERSONAL...");if(!data.ok){setStatus("listStatus",data.error||"ERROR");return;}renderRows(data.rows||[]);setStatus("listStatus",(data.count||0)+" REGISTROS");}catch(e){setStatus("listStatus","ERROR DE CONEXION");}}
 function renderRows(rows){let tb=document.getElementById("personalRows");if(rows.length===0){tb.innerHTML="<tr><td colspan=\"9\">SIN REGISTROS DISPONIBLES PARA SU USUARIO</td></tr>";return;}tb.innerHTML=rows.map(r=>"<tr data-id=\""+esc(r.ID_PERSONA)+"\"><td>"+esc(r.ID_PERSONA)+"</td><td><strong>"+esc(r.NOMBRE_COMPLETO)+"</strong></td><td>"+esc(r.CARGO)+"</td><td>"+esc(r.PLANTA_ASIGNADA)+"</td><td>"+esc(r.AREA_ASIGNADA)+"</td><td>"+esc(r.TURNO_BASE)+"</td><td><span class=\"badge green\">"+esc(r.ESTADO_PERSONA)+"</span></td><td>"+esc(r.CELULAR)+"</td><td>"+esc(r.CORREO)+"</td></tr>").join("");tb.querySelectorAll("tr[data-id]").forEach(function(tr){tr.addEventListener("click",function(){openPerson(this.getAttribute("data-id"));});});}
 async function openPerson(id){setStatus("formStatus","CARGANDO DETALLE...");try{let data=await api("getPersona",{idPersona:id},"CARGANDO DETALLE...");if(!data.ok){setStatus("formStatus",data.error||"ERROR");return;}currentId=id;currentMode="EDIT";renderForm(data.persona,"EDIT",data.canEdit,data.editMode||"SCOPE");setStatus("formStatus",data.canEdit?"EDICION HABILITADA":"SOLO CONSULTA");}catch(e){setStatus("formStatus","ERROR DE CONEXION");}}
