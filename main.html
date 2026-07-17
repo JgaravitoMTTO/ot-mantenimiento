@@ -541,7 +541,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-07-15 14:43:50</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-07-17 13:21:29</span></div>
   </footer>
 </main>
 </div>
@@ -725,16 +725,14 @@ function armaShowLocationMessage(title,message,mode){
   back.addEventListener('click',function(e){if(e.target===back)armaCloseLocationMessage();});
   document.body.appendChild(back);setTimeout(function(){ok.focus();},30);
 }
+let armaBootstrapPlants=[];let armaMainLastRefresh=0;let armaMainRefreshPromise=null;
 function armaGeoErrorText(err){if(!err)return 'NO FUE POSIBLE VALIDAR LA UBICACION.';if(err.code===1)return 'NO SE AUTORIZO EL ACCESO A LA UBICACION.';if(err.code===2)return 'LA UBICACION NO ESTA DISPONIBLE. ACTIVE EL GPS.';if(err.code===3)return 'SE AGOTO EL TIEMPO PARA OBTENER LA UBICACION.';return 'NO FUE POSIBLE VALIDAR LA UBICACION.';}
 async function armaCheckMobileLocationWelcome(){
   if(!armaSession||!armaSession.token||!armaIsMobileViewport()||!navigator.geolocation||!window.isSecureContext)return;
   var key='ARMA_GEO_WELCOME_'+String(armaSession.user||'USER').toUpperCase();
   if(sessionStorage.getItem(key)==='SI')return;
   sessionStorage.setItem(key,'SI');
-  var names=['PLANTA 1','PLANTA 2','PLANTA 3'];
-  var plants=[];
-  try{plants=await Promise.all(names.map(function(name){return armaApi('getPlantLocation',{token:armaSession.token,planta:name}).catch(function(){return null;});}));}catch(e){return;}
-  plants=plants.filter(function(p){return p&&p.ok&&isFinite(Number(p.latitud))&&isFinite(Number(p.longitud));});
+  var plants=(armaBootstrapPlants||[]).filter(function(p){return p&&isFinite(Number(p.latitud))&&isFinite(Number(p.longitud));});
   if(!plants.length)return;
   navigator.geolocation.getCurrentPosition(function(pos){
     var accuracy=Math.round(Number(pos.coords.accuracy||0));
@@ -766,12 +764,12 @@ window.addEventListener('appinstalled',function(){try{localStorage.setItem('ARMA
 function armaSetSession(data){
   armaSession={user:data.user||'VISITANTE',nombre:data.nombre||data.user||'VISITANTE',nivel:data.nivel||'USUARIO VALIDADO',token:data.token||'',permissions:data.permissions||{}};
   if(armaSession.token){localStorage.setItem('ARMA_TOKEN', armaSession.token); armaWriteSessionCache();}
-  armaUpdateUserCard(); armaApplyPermissions(); armaLoadMainKpis();
+  armaUpdateUserCard(); armaApplyPermissions();
   setTimeout(armaCheckMobileLocationWelcome,450);
 }
 function armaRenderVisitor(){
   armaSession={user:'VISITANTE',nombre:'VISITANTE',nivel:'INICIAR SESION',token:'',permissions:{}};
-  armaCloseLocationMessage();armaUpdateUserCard();armaApplyPermissions();armaLoadMainKpis();
+  armaCloseLocationMessage();armaUpdateUserCard();armaApplyPermissions();
 }
 function armaSetVisitor(clearStored){
   if(clearStored!==false){
@@ -792,31 +790,28 @@ async function armaPing(){
 function armaHideBootSplash(){var s=document.getElementById('armaBootSplash'); if(!s)return; s.classList.add('hide'); setTimeout(function(){if(s&&s.parentNode){s.parentNode.removeChild(s);}},700);}
 function armaSetTotalActivos(v){var el=document.getElementById('totalActivosText'); if(!el)return; var n=Number(v||0); if(isNaN(n))n=0; el.textContent=String(Math.round(n)).padStart(4,'0');}
 function armaSetOTStateCounts(otpl,ote){var a=document.getElementById('totalOTPLText'),b=document.getElementById('totalOTEText');var n1=Number(otpl||0),n2=Number(ote||0);if(isNaN(n1))n1=0;if(isNaN(n2))n2=0;if(a)a.textContent=String(Math.round(n1));if(b)b.textContent=String(Math.round(n2));}
-async function armaLoadMainKpis(){
-  try{var token=(armaSession&&armaSession.token)||localStorage.getItem('ARMA_TOKEN')||'';var p={};if(token){p.token=token;}var data=await armaApi('mainKpis',p);if(data&&data.ok){var k=data.kpis||{};armaSetTotalActivos(k.totalActivosMEL||data.totalActivosMEL||0);armaSetOTStateCounts(k.totalOTPL||data.totalOTPL||0,k.totalOTE||data.totalOTE||0);}}
-  catch(e){console.warn('ARMA mainKpis',e);}
+function armaApplyMainBootstrap(data,token){
+  if(!data||!data.ok)return false;var s=data.session||{};
+  if(s.authenticated){s.token=token||localStorage.getItem('ARMA_TOKEN')||'';armaSetSession(s);}else{armaRenderVisitor();}
+  var k=data.kpis||{};armaSetTotalActivos(k.totalActivosMEL||0);armaSetOTStateCounts(k.totalOTPL||0,k.totalOTE||0);
+  armaBootstrapPlants=Array.isArray(data.plants)?data.plants:[];var st=document.getElementById('systemStatusText');if(st)st.textContent=(data.health&&data.health.online)?'ONLINE':'OFFLINE';
+  armaMainLastRefresh=Date.now();if(s.authenticated)setTimeout(armaCheckMobileLocationWelcome,220);return true;
 }
+async function armaBootstrapMain(force){
+  if(!force&&Date.now()-armaMainLastRefresh<240000)return true;if(armaMainRefreshPromise)return armaMainRefreshPromise;
+  var token=localStorage.getItem('ARMA_TOKEN')||'';armaMainRefreshPromise=armaApi('mainBootstrap',{token:token}).then(function(data){if(data&&data.ok)return armaApplyMainBootstrap(data,token);if(token)armaSetVisitor(true);return false;}).catch(function(e){console.warn('ARMA mainBootstrap',e);var st=document.getElementById('systemStatusText');if(st)st.textContent='OFFLINE';return false;}).finally(function(){armaMainRefreshPromise=null;});return armaMainRefreshPromise;
+}
+async function armaLoadMainKpis(){return armaBootstrapMain(false);}
 function armaOpenLogin(){document.getElementById('loginModal').classList.add('show');document.getElementById('loginUser').focus();document.getElementById('loginMsg').textContent='';}
 function armaCloseLogin(){document.getElementById('loginModal').classList.remove('show');}
 async function armaLogin(){
   var u=document.getElementById('loginUser').value.trim(); var p=document.getElementById('loginPass').value; var msg=document.getElementById('loginMsg');
   if(!u||!p){msg.textContent='DIGITE USUARIO Y CLAVE.';return;}
   msg.textContent='VALIDANDO...';
-  try{var data=await armaApi('login',{user:u,password:p}); if(data.ok){armaSetSession(data); armaCloseLogin(); document.getElementById('loginPass').value='';} else {msg.textContent=data.error||'LOGIN NO VALIDO';}}
+  try{var data=await armaApi('login',{user:u,password:p}); if(data.ok){armaSetSession(data); armaCloseLogin(); document.getElementById('loginPass').value=''; await armaBootstrapMain(true);} else {msg.textContent=data.error||'LOGIN NO VALIDO';}}
   catch(e){msg.textContent='NO FUE POSIBLE CONECTAR CON ARMA_BACKEND. REVISE CORS/PUBLICACION.';}
 }
-async function armaValidateStoredSession(){
-  var token=localStorage.getItem('ARMA_TOKEN')||'';
-  if(!token){armaRenderVisitor();return false;}
-  try{
-    var data=await armaApi('validateSession',{token:token});
-    if(data&&data.ok){data.token=token;armaSetSession(data);return true;}
-    armaSetVisitor(true);return false;
-  }catch(e){
-    if(!armaSession||!armaSession.token){var cached=armaReadSessionCache();if(cached){armaRestoreSessionCache();}else{armaRenderVisitor();}}
-    console.warn('ARMA validateSession',e);return false;
-  }
-}
+async function armaValidateStoredSession(){return armaBootstrapMain(true);}
 async function armaLogout(){try{if(armaSession.token){await armaApi('logout',{token:armaSession.token});}}catch(e){} armaSetVisitor(true);}
 function armaHtmlEsc(v){
   return String(v==null?'':v).replace(/[&<>"']/g,function(ch){
@@ -1134,7 +1129,7 @@ document.addEventListener('DOMContentLoaded',function(){
   var restored=armaRestoreSessionCache();
   if(!restored){armaRenderVisitor();}
   setTimeout(armaHideBootSplash,internalReturn?80:3000);
-  armaPWARegisterServiceWorker();armaPWAInit();armaStartMainPresence();updateDateCard();setInterval(updateDateCard,60000);armaPing();armaLoadMainKpis();setInterval(armaLoadMainKpis,60000);window.addEventListener('focus',armaLoadMainKpis);document.addEventListener('visibilitychange',function(){if(!document.hidden){armaLoadMainKpis();}});armaValidateStoredSession();
+  armaPWARegisterServiceWorker();armaPWAInit();armaStartMainPresence();updateDateCard();setInterval(updateDateCard,60000);armaValidateStoredSession();setInterval(function(){if(!document.hidden)armaBootstrapMain(false);},300000);window.addEventListener('focus',function(){armaBootstrapMain(false);});document.addEventListener('visibilitychange',function(){if(!document.hidden)armaBootstrapMain(false);});
   document.body.addEventListener('click',function(e){var locked=e.target.closest('.arma-locked'); if(locked){e.preventDefault(); alert('DEBE INICIAR SESION PARA ACCEDER A ESTE MODULO.');}});
   document.body.addEventListener('click',function(e){var a=e.target.closest('a[data-arma-window]'); if(a && !a.classList.contains('arma-locked')){e.preventDefault(); armaOpenChildWindow(a.getAttribute('href'),a.getAttribute('data-arma-window'));}});
   document.getElementById('userCard').addEventListener('click',function(e){e.stopPropagation(); this.classList.toggle('open');});
