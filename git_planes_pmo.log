@@ -9,12 +9,21 @@ CODIGO: 0
 No fue posible leer la salida del comando.
 ======================================================================
 VERIFICAR CAMBIOS PREPARADOS
-CODIGO: 0
+CODIGO: 1
 No fue posible leer la salida del comando.
+======================================================================
+GIT COMMIT
+CODIGO: 0
+[main 412b248] Publica planes_pmo.html V05 2026-07-17 13:26:26
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
 ======================================================================
 GIT PUSH
 CODIGO: 0
-Everything up-to-date
+remote: This repository moved. Please use the new location:        
+remote:   https://github.com/JgaravitoMTTO/ot-mantenimiento.git        
+To https://github.com/jgaravitomtto/ot-mantenimiento.git
+   825f2e5..412b248  main -> main
 
 ======================================================================
 CONFIRMAR ARCHIVO CONTROLADO
