@@ -401,7 +401,7 @@ body.modal-open{overflow:hidden}
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-29 15:01:38</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-29 17:00:14</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -1514,6 +1514,79 @@ async function uploadPhoto() {
 }
 document.getElementById('nivelSelect').addEventListener('change', melOnLevelChange);
 document.getElementById('btnCaptureGeo').addEventListener('click', capturePlantLocation);
+/* === ARMA V12 FASTPATH MEL === */
+const ARMA_V12_MEL_INFLIGHT=new Map();
+function armaV12MelKey(){const t=(armaSession&&armaSession.token)||localStorage.getItem('ARMA_TOKEN')||'';return 'ARMA_V12_MEL_BOOT_'+t.slice(-14);}
+function armaV12MelRead(){try{const x=JSON.parse(sessionStorage.getItem(armaV12MelKey())||'null');if(!x||Date.now()-Number(x.ts||0)>180000)return null;return x.data||null;}catch(e){return null;}}
+function armaV12MelWrite(data){try{sessionStorage.setItem(armaV12MelKey(),JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
+async function api(action,payload){
+  payload=payload||{};payload.action=action;if(armaSession&&armaSession.token&&!payload.token)payload.token=armaSession.token;
+  const read=/^(melBootstrap|getMELActivo|melCatalogos|melListHierarchy|listMELActivos)$/.test(action);
+  const key=read?action+'|'+JSON.stringify(payload):'';
+  if(read&&ARMA_V12_MEL_INFLIGHT.has(key))return ARMA_V12_MEL_INFLIGHT.get(key);
+  const job=(async function(){
+    const ctl=new AbortController();const timer=setTimeout(function(){ctl.abort();},35000);
+    try{
+      const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),signal:ctl.signal});
+      const txt=await res.text();try{return JSON.parse(txt);}catch(e){throw new Error('RESPUESTA_NO_JSON '+res.status);}
+    }finally{clearTimeout(timer);}
+  })();
+  if(read)ARMA_V12_MEL_INFLIGHT.set(key,job);
+  try{return await job;}finally{if(read)ARMA_V12_MEL_INFLIGHT.delete(key);}
+}
+function armaV12MelSetSession(data){
+  if(!data)return;
+  armaSession=Object.assign({},armaSession||{},{
+    user:data.user||((armaSession||{}).user)||'',
+    nombre:data.nombre||data.user||((armaSession||{}).nombre)||'',
+    nivel:data.nivel||((armaSession||{}).nivel)||'',
+    permissions:data.permissions||((armaSession||{}).permissions)||{}
+  });
+  try{localStorage.setItem(ARMA_SESSION_CACHE_KEY,JSON.stringify(Object.assign({},armaSession,{ts:Date.now(),source:'MEL_V12'})));}catch(e){}
+  document.getElementById('userPill').textContent=(armaSession.nombre||armaSession.user||'')+' // '+(armaSession.nivel||'');
+  applyPermissions();
+}
+function armaV12MelApplyBootstrap(data){
+  armaV12MelSetSession(data);
+  melCatalogos=data.catalogos||{};
+  melHierarchyNodes=data.nodes||data.roots||[];
+  melTreeRoots=data.roots||[];
+  melDefaultAssetId=data.defaultAssetId||'';
+  melDefaultPath=data.defaultPath||[];
+  melNodeMap={};melTreeOpen=new Set();
+  melRegisterNodes(melHierarchyNodes);melRegisterNodes(melDefaultPath);melBuildLocalHierarchyIndex();
+  renderCatalogos();
+  document.getElementById('countLabel').textContent=Number(data.count||0)+' ACTIVOS';
+  renderTree();
+}
+async function loadMEL(focusId){
+  const cached=armaV12MelRead();let painted=false;
+  if(cached&&cached.ok){armaV12MelApplyBootstrap(cached);painted=true;}
+  if(!painted)showLoader('CARGANDO INDICE MEL...');
+  try{
+    const data=await api('melBootstrap',{});
+    if(!data.ok)throw new Error(data.error||'ERROR_BOOTSTRAP_MEL');
+    armaV12MelWrite(data);armaV12MelApplyBootstrap(data);
+    const target=focusId||(selectedAsset&&selectedAsset.ID_ACTIVO)||melDefaultAssetId;
+    if(target){document.getElementById('editStatus').textContent='CARGANDO FICHA...';await selectAsset(target,true);document.getElementById('editStatus').textContent='';}
+    else{selectedAsset=null;melSelectedPath=[];setForm(null,[]);}
+  }catch(err){
+    if(painted){
+      const target=focusId||(selectedAsset&&selectedAsset.ID_ACTIVO)||melDefaultAssetId;
+      if(target)await selectAsset(target,true);
+      toast('INDICE EN CACHE // NO FUE POSIBLE ACTUALIZAR');
+    }else{toast('ERROR CARGANDO MEL: '+err.message);}
+  }finally{hideLoader();}
+}
+async function init(){
+  armaSession=getCachedSession();
+  if(!armaSession||!armaSession.token){
+    document.getElementById('userPill').textContent='SIN SESION // VUELVA A MAIN';
+    toast('NO HAY SESION ACTIVA. ABRA MAIN E INICIE SESION.');return;
+  }
+  document.getElementById('userPill').textContent=(armaSession.nombre||armaSession.user||'')+' // '+(armaSession.nivel||'');
+  applyPermissions();await loadMEL();
+}
 init();
 </script>
 </body>
