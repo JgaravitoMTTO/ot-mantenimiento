@@ -180,7 +180,7 @@ tr:hover{background:#d9ecff;cursor:pointer}
       </div>
     </section>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-17 13:33:34</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-29 16:53:44</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -336,6 +336,39 @@ async function saveForm(){let data=collectForm();if(currentMode==="CREATE"&&!val
 function fileToBase64(file){return new Promise(function(resolve,reject){let r=new FileReader();r.onload=function(){let s=String(r.result||"");resolve(s.indexOf(",")>=0?s.split(",")[1]:s);};r.onerror=reject;r.readAsDataURL(file);});}
 async function uploadPhoto(){if(!currentId){alert("PRIMERO GUARDE O SELECCIONE UNA PERSONA.");return;}let inp=document.getElementById("photoFile");let file=inp&&inp.files?inp.files[0]:null;if(!file){alert("SELECCIONE UNA IMAGEN.");return;}if(!/^image\/(jpeg|jpg|png|webp)$/i.test(file.type||"")){alert("SOLO SE PERMITEN IMAGENES JPG, PNG O WEBP.");return;}if(file.size>5*1024*1024){alert("LA FOTO NO DEBE SUPERAR 5 MB.");return;}try{let base64=await fileToBase64(file);let res=await api("uploadPersonaFoto",{idPersona:currentId,fileName:file.name,mimeType:file.type,base64:base64},"SUBIENDO FOTOGRAFIA...");if(!res.ok){setStatus("formStatus",res.error||"NO FUE POSIBLE SUBIR LA FOTO");return;}updatePhoto(res.fotoUrl);currentPersona.FOTO_URL=res.fotoUrl;setStatus("formStatus","FOTOGRAFIA ACTUALIZADA");inp.value="";if(hasPerm("BTN_PERSONAL_VER"))loadList();}catch(e){setStatus("formStatus","ERROR AL SUBIR FOTOGRAFIA");}}
 function clearForm(){currentId="";currentMode="VIEW";renderForm({},"VIEW",false,"VIEW");setStatus("formStatus","FORMULARIO LIMPIO");}
+/* === ARMA V12 FASTPATH PERSONAL === */
+const ARMA_V12_PERSONAL_INFLIGHT=new Map();
+function armaV12PersonalKey(){const t=localStorage.getItem('ARMA_TOKEN')||'';return 'ARMA_V12_PERSONAL_BOOT_'+t.slice(-14);}
+function armaV12PersonalRead(){try{const x=JSON.parse(sessionStorage.getItem(armaV12PersonalKey())||'null');if(!x||Date.now()-Number(x.ts||0)>120000)return null;return x.data||null;}catch(e){return null;}}
+function armaV12PersonalWrite(data){try{sessionStorage.setItem(armaV12PersonalKey(),JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
+async function api(action,payload,msg){
+  payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';
+  const read=/^(personalBootstrap|personalCatalogos|listPersonal|getMiPersona|getPersona)$/.test(action);
+  const key=read?action+'|'+JSON.stringify(payload):'';
+  if(read&&ARMA_V12_PERSONAL_INFLIGHT.has(key))return ARMA_V12_PERSONAL_INFLIGHT.get(key);
+  if(msg)showArmaLoader(msg);
+  const job=(async function(){
+    const ctl=new AbortController();const timer=setTimeout(function(){ctl.abort();},35000);
+    try{
+      const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),signal:ctl.signal});
+      const txt=await res.text();try{return JSON.parse(txt);}catch(e){throw new Error('RESPUESTA_NO_JSON '+res.status);}
+    }finally{clearTimeout(timer);}
+  })();
+  if(read)ARMA_V12_PERSONAL_INFLIGHT.set(key,job);
+  try{return await job;}finally{if(read)ARMA_V12_PERSONAL_INFLIGHT.delete(key);if(msg)hideArmaLoader();}
+}
+async function validateSession(){
+  const cachedSession=readSessionCache();const token=localStorage.getItem('ARMA_TOKEN')||(cachedSession&&cachedSession.token)||'';
+  if(!token){showLoginWall();return;}
+  if(cachedSession)setSessionData(cachedSession,token);
+  const cached=armaV12PersonalRead();let painted=false;
+  if(cached&&cached.ok){setSessionData(cached.session||{},token);await startPersonalApp(cached);painted=true;}
+  try{
+    const data=await api('personalBootstrap',{filters:{ESTADO:'ACTIVO'},includeList:true},painted?'':'CARGANDO PERSONAL...');
+    if(!data.ok){if(!painted)showLoginWall();return;}
+    setSessionData(data.session||{},token);armaV12PersonalWrite(data);await startPersonalApp(data);
+  }catch(e){if(!painted)showLoginWall();else setStatus('listStatus','DATOS EN CACHE // NO FUE POSIBLE ACTUALIZAR');}
+}
 document.addEventListener("DOMContentLoaded",validateSession);
 </script>
 </body>
