@@ -541,7 +541,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-07-17 13:21:29</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-07-29 16:52:11</span></div>
   </footer>
 </main>
 </div>
@@ -1124,11 +1124,52 @@ function armaInitAdminUI(){
   if(udelete){udelete.addEventListener('click',function(){armaRenderUserList('delete');});}
 }
 
+/* === ARMA V12 FASTPATH MAIN === */
+const ARMA_V12_MAIN_INFLIGHT=new Map();
+function armaV12MainCacheRead(){try{const raw=sessionStorage.getItem('ARMA_V12_MAIN_BOOT')||'';if(!raw)return null;const x=JSON.parse(raw);if(!x||Date.now()-Number(x.ts||0)>300000)return null;return x.data||null;}catch(e){return null;}}
+function armaV12MainCacheWrite(data){try{sessionStorage.setItem('ARMA_V12_MAIN_BOOT',JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
+async function armaApi(action,payload){
+  payload=payload||{};payload.action=action;
+  const read=/^(mainBootstrap|validateSession|ping)$/.test(action);
+  const key=read?action+'|'+JSON.stringify(payload):'';
+  if(read&&ARMA_V12_MAIN_INFLIGHT.has(key))return ARMA_V12_MAIN_INFLIGHT.get(key);
+  const job=(async function(){
+    const ctl=new AbortController();const timer=setTimeout(function(){ctl.abort();},30000);
+    try{
+      const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),signal:ctl.signal});
+      const txt=await res.text();let data=null;try{data=JSON.parse(txt);}catch(e){throw new Error('RESPUESTA_NO_JSON '+res.status);}
+      return data;
+    }finally{clearTimeout(timer);}
+  })();
+  if(read)ARMA_V12_MAIN_INFLIGHT.set(key,job);
+  try{return await job;}finally{if(read)ARMA_V12_MAIN_INFLIGHT.delete(key);}
+}
+async function armaBootstrapMain(force){
+  if(!force&&Date.now()-armaMainLastRefresh<240000)return true;
+  if(armaMainRefreshPromise)return armaMainRefreshPromise;
+  const token=localStorage.getItem('ARMA_TOKEN')||'';
+  armaMainRefreshPromise=armaApi('mainBootstrap',{token:token}).then(function(data){
+    if(data&&data.ok){armaV12MainCacheWrite(data);return armaApplyMainBootstrap(data,token);}
+    if(token)armaSetVisitor(true);return false;
+  }).catch(function(e){
+    console.warn('ARMA mainBootstrap',e);
+    const st=document.getElementById('systemStatusText');if(st)st.textContent='OFFLINE';
+    return false;
+  }).finally(function(){armaMainRefreshPromise=null;});
+  return armaMainRefreshPromise;
+}
+function armaV12PrefetchPages(){
+  const pages=['personal.html','turnos.html','mel.html','perfiles.html','reportes_tecnicos_rt.html','usuarios_arma.html','niveles_arma.html'];
+  const run=function(){pages.forEach(function(href){const l=document.createElement('link');l.rel='prefetch';l.href=href;document.head.appendChild(l);});};
+  if('requestIdleCallback' in window)requestIdleCallback(run,{timeout:2500});else setTimeout(run,1200);
+}
 document.addEventListener('DOMContentLoaded',function(){
   var internalReturn=armaConsumeInternalReturn();
   var restored=armaRestoreSessionCache();
   if(!restored){armaRenderVisitor();}
-  setTimeout(armaHideBootSplash,internalReturn?80:3000);
+  var cachedMain=armaV12MainCacheRead();if(cachedMain)armaApplyMainBootstrap(cachedMain,localStorage.getItem('ARMA_TOKEN')||'');
+  setTimeout(armaHideBootSplash,internalReturn?50:350);
+  armaV12PrefetchPages();
   armaPWARegisterServiceWorker();armaPWAInit();armaStartMainPresence();updateDateCard();setInterval(updateDateCard,60000);armaValidateStoredSession();setInterval(function(){if(!document.hidden)armaBootstrapMain(false);},300000);window.addEventListener('focus',function(){armaBootstrapMain(false);});document.addEventListener('visibilitychange',function(){if(!document.hidden)armaBootstrapMain(false);});
   document.body.addEventListener('click',function(e){var locked=e.target.closest('.arma-locked'); if(locked){e.preventDefault(); alert('DEBE INICIAR SESION PARA ACCEDER A ESTE MODULO.');}});
   document.body.addEventListener('click',function(e){var a=e.target.closest('a[data-arma-window]'); if(a && !a.classList.contains('arma-locked')){e.preventDefault(); armaOpenChildWindow(a.getAttribute('href'),a.getAttribute('data-arma-window'));}});
