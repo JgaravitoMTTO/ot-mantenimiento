@@ -156,7 +156,7 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
     <div class="sticky-save"><button id="btnSave" class="btn green">GUARDAR NIVEL Y REGLAS</button></div>
   </section>
 </section>
-<footer class="footer">A.R.M.A. // NIVELES DE USUARIO // ARMA_DATABASE EN LINEA // 2026-07-11 22:27:27</footer>
+<footer class="footer">A.R.M.A. // NIVELES DE USUARIO // ARMA_DATABASE EN LINEA // 2026-07-29 17:03:33</footer>
 </main>
 <script>const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
 const ARMA_UI_MANIFEST={
@@ -343,6 +343,51 @@ function bind(){
   document.getElementById('btnSync').addEventListener('click',syncCatalog);
   document.getElementById('dialogAccept').addEventListener('click',()=>closeDialog(true));
   document.getElementById('dialogCancel').addEventListener('click',()=>closeDialog(false));
+}
+/* === ARMA V12 FASTPATH NIVELES === */
+const ARMA_V12_LEVELS_INFLIGHT=new Map();
+function armaV12LevelsKey(){const t=localStorage.getItem('ARMA_TOKEN')||'';return 'ARMA_V12_LEVELS_BOOT_'+t.slice(-14);}
+function armaV12LevelsRead(){try{const x=JSON.parse(sessionStorage.getItem(armaV12LevelsKey())||'null');if(!x||Date.now()-Number(x.ts||0)>180000)return null;return x.data||null;}catch(e){return null;}}
+function armaV12LevelsWrite(data){try{sessionStorage.setItem(armaV12LevelsKey(),JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
+async function api(action,payload,msg){
+  payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';
+  const read=/^(adminLevelsBootstrap|listLevels|listPermissionCatalog)$/.test(action);
+  const key=read?action+'|'+JSON.stringify(payload):'';
+  if(read&&ARMA_V12_LEVELS_INFLIGHT.has(key))return ARMA_V12_LEVELS_INFLIGHT.get(key);
+  if(msg)showLoader(msg);
+  const job=(async function(){
+    const ctl=new AbortController();const timer=setTimeout(function(){ctl.abort();},40000);
+    try{
+      const r=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),signal:ctl.signal});
+      const txt=await r.text();try{return JSON.parse(txt);}catch(e){throw new Error('RESPUESTA_NO_JSON '+r.status);}
+    }finally{clearTimeout(timer);}
+  })();
+  if(read)ARMA_V12_LEVELS_INFLIGHT.set(key,job);
+  try{return await job;}finally{if(read)ARMA_V12_LEVELS_INFLIGHT.delete(key);if(msg)hideLoader();}
+}
+async function validateSession(){
+  const cache=readCache();const token=localStorage.getItem('ARMA_TOKEN')||(cache&&cache.token)||'';
+  if(!token){location.href='main.html';return false;}
+  if(cache)setSession(cache,token);else armaSession.token=token;
+  return true;
+}
+function armaV12ApplyLevels(data,selectName){
+  if(data.session)setSession(data.session,armaSession.token||localStorage.getItem('ARMA_TOKEN')||'');
+  if(!hasPerm('BTN_ADMIN_NIVELES','BTN_ADMIN_NIVELES')){
+    document.getElementById('appArea').innerHTML='<section class="panel login-wall"><div><h2>ACCESO NO AUTORIZADO</h2><p>SU NIVEL NO TIENE BTN_ADMIN_NIVELES.</p><a class="btn" href="main.html">VOLVER A MAIN</a></div></section>';return false;
+  }
+  appData={levels:data.levels||[],permissionCatalog:data.permissionCatalog||[],filterCatalog:data.filterCatalog||[],pages:data.pages||[]};
+  if(selectName&&appData.levels.some(function(l){return normalize(l.nivel)===normalize(selectName);}))selectLevel(selectName);else if(appData.levels.length)selectLevel(appData.levels[0].nivel);else beginNew();
+  renderLevelList();renderCatalog();setButtons();return true;
+}
+async function loadBootstrap(selectName){
+  const cached=armaV12LevelsRead();let painted=false;
+  if(cached&&cached.ok){painted=armaV12ApplyLevels(cached,selectName)!==false;}
+  try{
+    const data=await api('adminLevelsBootstrap',{},painted?'':'CARGANDO CATALOGO DE PERMISOS Y FILTROS...');
+    if(!data.ok)throw new Error(data.error||'NO SE PUDO CARGAR');
+    armaV12LevelsWrite(data);armaV12ApplyLevels(data,selectName);
+  }catch(e){if(!painted)throw e;toast('DATOS EN CACHE // NO FUE POSIBLE ACTUALIZAR');}
 }
 document.addEventListener('DOMContentLoaded',async()=>{bind();try{if(await validateSession())await loadBootstrap();}catch(e){hideLoader();toast(e.message||'ERROR DE CONEXION');}});</script>
 </body>
