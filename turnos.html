@@ -128,7 +128,7 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
       <div id="novedadesList" class="novedad-list"><div class="novedad-card">SIN NOVEDADES CARGADAS.</div></div>
     </section>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>TURNOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-17 13:32:32</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>TURNOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-29 16:56:14</span></div></footer>
 </main>
 
 <div id="armaDialog" class="arma-dialog-back" role="dialog" aria-modal="true" aria-labelledby="armaDialogTitle" aria-describedby="armaDialogMessage">
@@ -477,6 +477,49 @@ function rotationInfo(){changeEditMode();}
 function armaMainStorageIsFresh(maxAgeMs){try{let raw=localStorage.getItem('ARMA_MAIN_ACTIVE')||'';if(!raw)return false;let data=JSON.parse(raw);return data&&data.ts&&(Date.now()-Number(data.ts)<=maxAgeMs);}catch(e){return false;}}
 function armaAskMainIsActive(){return new Promise(resolve=>{let done=false,bc=null;function finish(v){if(done)return;done=true;try{if(bc)bc.close();}catch(e){}resolve(!!v);}try{if('BroadcastChannel' in window){bc=new BroadcastChannel('ARMA_CONTROL_CHANNEL');bc.onmessage=ev=>{let msg=ev.data||{};if(msg.type==='MAIN_ACTIVE')finish(true);};bc.postMessage({type:'FOCUS_MAIN',from:location.href,ts:Date.now()});}}catch(e){}try{localStorage.setItem('ARMA_REQUEST_MAIN_FOCUS',String(Date.now()));}catch(e){}if(armaMainStorageIsFresh(3500))setTimeout(()=>finish(true),120);setTimeout(()=>finish(false),650);});}
 function goMainSmart(e){if(e)e.preventDefault();armaAskMainIsActive().then(active=>{if(active){try{if(window.opener&&!window.opener.closed)window.opener.focus();}catch(e){}try{window.close();}catch(e){}}else{window.location.href='main.html';}});return false;}
+/* === ARMA V12 FASTPATH TURNOS === */
+const ARMA_V12_TURNOS_INFLIGHT=new Map();
+function armaV12TurnosKey(filters){const t=localStorage.getItem('ARMA_TOKEN')||'';return 'ARMA_V12_TURNOS_'+t.slice(-12)+'_'+String(filters.FECHA_DESDE||'')+'_'+String(filters.FECHA_HASTA||'');}
+function armaV12TurnosRead(filters){try{const x=JSON.parse(sessionStorage.getItem(armaV12TurnosKey(filters))||'null');if(!x||Date.now()-Number(x.ts||0)>180000)return null;return x.data||null;}catch(e){return null;}}
+function armaV12TurnosWrite(filters,data){try{sessionStorage.setItem(armaV12TurnosKey(filters),JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
+async function api(action,payload,msg){
+  payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';
+  const read=/^(listTurnosMatrix|getTurnosMatrix|listNovedadesTurnos)$/.test(action);
+  const key=read?action+'|'+JSON.stringify(payload):'';
+  if(read&&ARMA_V12_TURNOS_INFLIGHT.has(key))return ARMA_V12_TURNOS_INFLIGHT.get(key);
+  if(msg)showArmaLoader(msg);
+  const job=(async function(){
+    const ctl=new AbortController();const timer=setTimeout(function(){ctl.abort();},35000);
+    try{
+      const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),signal:ctl.signal});
+      const txt=await res.text();try{return JSON.parse(txt);}catch(e){throw new Error('RESPUESTA_NO_JSON '+res.status);}
+    }finally{clearTimeout(timer);}
+  })();
+  if(read)ARMA_V12_TURNOS_INFLIGHT.set(key,job);
+  try{return await job;}finally{if(read)ARMA_V12_TURNOS_INFLIGHT.delete(key);if(msg)hideArmaLoader();}
+}
+function armaV12ApplyTurnos(data,token){
+  setSessionData(data,token);turnosData=data;
+  document.getElementById('loginWall').classList.add('hidden');document.getElementById('appArea').classList.remove('hidden');
+  document.getElementById('btnNewTurno').classList.toggle('disabled',!hasPerm('BTN_TURNOS_CREAR_TURNO'));
+  document.getElementById('btnNovedad').classList.toggle('disabled',!hasPerm('BTN_TURNOS_REPORTAR_NOVEDAD'));
+  applyTurnosPermissionUi();renderTurnos(data);
+  setStatus('turnosStatus',(data.rows||[]).length+' DIAS // '+(data.columns||[]).length+' COLUMNAS');
+  armaInitLazyNovedades();
+}
+async function validateSession(){
+  const cachedSession=readSessionCache();const token=localStorage.getItem('ARMA_TOKEN')||(cachedSession&&cachedSession.token)||'';
+  if(!token){showLoginWall();return;}
+  if(cachedSession)setSessionData(cachedSession,token);
+  initDates();const filters={FECHA_DESDE:document.getElementById('fechaDesde').value,FECHA_HASTA:document.getElementById('fechaHasta').value};
+  const cached=armaV12TurnosRead(filters);let painted=false;
+  if(cached&&cached.ok){armaV12ApplyTurnos(cached,token);painted=true;}
+  try{
+    const data=await api('listTurnosMatrix',{filters:filters},painted?'':'CARGANDO TURNOS...');
+    if(!data.ok){if(!painted)showLoginWall();return;}
+    armaV12TurnosWrite(filters,data);armaV12ApplyTurnos(data,token);
+  }catch(e){if(!painted)showLoginWall();else setStatus('turnosStatus','DATOS EN CACHE // NO FUE POSIBLE ACTUALIZAR');}
+}
 document.addEventListener('DOMContentLoaded',validateSession);
 </script>
 </body>
