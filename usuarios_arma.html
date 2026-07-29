@@ -143,7 +143,7 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
     <div class="form-actions"><button id="btnToggle" class="btn orange">ACTIVAR / SUSPENDER</button><button id="btnReset" class="btn">RESTABLECER CLAVE</button><button id="btnDelete" class="btn red">ELIMINAR</button><button id="btnSave" class="btn green">CREAR USUARIO</button></div>
   </article>
 </section>
-<footer class="footer">A.R.M.A. // USUARIOS // ARMA_DATABASE EN LINEA // 2026-07-11 22:26:21</footer>
+<footer class="footer">A.R.M.A. // USUARIOS // ARMA_DATABASE EN LINEA // 2026-07-29 17:01:48</footer>
 </main>
 <script>const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
 const ARMA_UI_MANIFEST={
@@ -373,6 +373,52 @@ function bind(){
   document.getElementById('userActive').addEventListener('change',updateSummary);
   document.getElementById('dialogAccept').addEventListener('click',()=>closeDialog(true));
   document.getElementById('dialogCancel').addEventListener('click',()=>closeDialog(false));
+}
+/* === ARMA V12 FASTPATH USUARIOS === */
+const ARMA_V12_USERS_INFLIGHT=new Map();
+function armaV12UsersKey(){const t=localStorage.getItem('ARMA_TOKEN')||'';return 'ARMA_V12_USERS_BOOT_'+t.slice(-14);}
+function armaV12UsersRead(){try{const x=JSON.parse(sessionStorage.getItem(armaV12UsersKey())||'null');if(!x||Date.now()-Number(x.ts||0)>60000)return null;return x.data||null;}catch(e){return null;}}
+function armaV12UsersWrite(data){try{sessionStorage.setItem(armaV12UsersKey(),JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
+async function api(action,payload,msg){
+  payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';
+  const read=/^(adminUsersBootstrap|listUsers|listPersonalForUserCreate)$/.test(action);
+  const key=read?action+'|'+JSON.stringify(payload):'';
+  if(read&&ARMA_V12_USERS_INFLIGHT.has(key))return ARMA_V12_USERS_INFLIGHT.get(key);
+  if(msg)showLoader(msg);
+  const job=(async function(){
+    const ctl=new AbortController();const timer=setTimeout(function(){ctl.abort();},35000);
+    try{
+      const r=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),signal:ctl.signal});
+      const txt=await r.text();try{return JSON.parse(txt);}catch(e){throw new Error('RESPUESTA_NO_JSON '+r.status);}
+    }finally{clearTimeout(timer);}
+  })();
+  if(read)ARMA_V12_USERS_INFLIGHT.set(key,job);
+  try{return await job;}finally{if(read)ARMA_V12_USERS_INFLIGHT.delete(key);if(msg)hideLoader();}
+}
+async function validateSession(){
+  const cache=readCache();const token=localStorage.getItem('ARMA_TOKEN')||(cache&&cache.token)||'';
+  if(!token){location.href='main.html';return false;}
+  if(cache)setSession(cache,token);else armaSession.token=token;
+  return true;
+}
+function armaV12ApplyUsers(data,selectName){
+  if(data.session)setSession(data.session,armaSession.token||localStorage.getItem('ARMA_TOKEN')||'');
+  if(!hasPerm('BTN_ADMIN_USUARIOS','BTN_ADMIN_USUARIOS')){
+    document.getElementById('appArea').innerHTML='<section class="panel login-wall"><div><h2>ACCESO NO AUTORIZADO</h2><p>SU NIVEL NO TIENE BTN_ADMIN_USUARIOS.</p><a class="btn" href="main.html">VOLVER A MAIN</a></div></section>';return false;
+  }
+  appData={users:data.users||[],levels:data.levels||[],persons:data.persons||[]};
+  fillFilters();
+  if(selectName&&appData.users.some(function(u){return normalize(u.user)===normalize(selectName);}))selectUser(selectName);else beginNew(false);
+  renderUsers();document.getElementById('listStatus').textContent=appData.users.length+' USUARIOS';return true;
+}
+async function loadBootstrap(selectName){
+  const cached=armaV12UsersRead();let painted=false;
+  if(cached&&cached.ok){painted=armaV12ApplyUsers(cached,selectName)!==false;}
+  try{
+    const data=await api('adminUsersBootstrap',{},painted?'':'CARGANDO USUARIOS Y NIVELES...');
+    if(!data.ok)throw new Error(data.error||'NO SE PUDO CARGAR');
+    armaV12UsersWrite(data);armaV12ApplyUsers(data,selectName);
+  }catch(e){if(!painted)throw e;toast('DATOS EN CACHE // NO FUE POSIBLE ACTUALIZAR');}
 }
 document.addEventListener('DOMContentLoaded',async()=>{bind();try{if(await validateSession())await loadBootstrap();}catch(e){hideLoader();toast(e.message||'ERROR DE CONEXION');}});</script>
 </body>
