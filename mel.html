@@ -292,14 +292,25 @@ body.modal-open{overflow:hidden}
           <h4>JERARQUIA DEL ACTIVO</h4>
           <div class="grid">
             <div><label>NIVEL DE JERARQUIA</label><select data-field="NIVEL_DE_JERARQUIA" id="nivelSelect"></select></div>
-            <div class="span2"><label>PADRE</label><select data-field="PADRE" id="padreSelect"><option value="">SIN PADRE</option></select></div>
-            <div><label>PLANTA</label><input data-field="PLANTA"></div>
-            <div><label>AREA</label><input data-field="AREA"></div>
-            <div><label>LINEA / EQUIPO</label><input data-field="LINEA_EQUIPO"></div>
-            <div><label>SISTEMA</label><input data-field="SISTEMA"></div>
-            <div><label>SUBSISTEMA</label><input data-field="SUBSISTEMA"></div>
-            <div><label>SUBEQUIPO</label><input data-field="SUBEQUIPO"></div>
-            <div><label>COMPONENTE</label><input data-field="COMPONENTE"></div>
+            <div class="span2"><label>PADRE FINAL VALIDADO</label><select data-field="PADRE" id="padreSelect" disabled><option value="">SIN PADRE</option></select></div>
+            <div><label>ESTADO DE LA RUTA</label><div id="hierarchyState" class="hierarchy-state">SIN RUTA</div></div>
+            <div id="hierarchyCascade" class="hierarchy-cascade">
+              <div class="hierarchy-cascade-head">
+                <div>
+                  <div class="hierarchy-cascade-title">SELECCION GRADUAL ISO 14224</div>
+                  <div class="hierarchy-cascade-help">ESCOJA EMPRESA, PLANTA, AREA Y LOS NIVELES SIGUIENTES. CADA LISTA SOLO TRAE OPCIONES AUTORIZADAS DENTRO DEL NODO ANTERIOR.</div>
+                </div>
+              </div>
+              <div id="hierarchyCascadeGrid" class="hierarchy-cascade-grid"></div>
+              <div id="hierarchyParentLabel" class="hierarchy-parent"><b>PADRE FINAL:</b> SIN PADRE.</div>
+            </div>
+            <div><label>PLANTA</label><input class="hierarchy-derived" data-field="PLANTA" readonly></div>
+            <div><label>AREA</label><input class="hierarchy-derived" data-field="AREA" readonly></div>
+            <div><label>SISTEMA</label><input class="hierarchy-derived" data-field="SISTEMA" readonly></div>
+            <div><label>SUBSISTEMA</label><input class="hierarchy-derived" data-field="SUBSISTEMA" readonly></div>
+            <div><label>LINEA / EQUIPO</label><input class="hierarchy-derived" data-field="LINEA_EQUIPO" readonly></div>
+            <div><label>SUBEQUIPO</label><input class="hierarchy-derived" data-field="SUBEQUIPO" readonly></div>
+            <div><label>COMPONENTE</label><input class="hierarchy-derived" data-field="COMPONENTE" readonly></div>
             <div class="span4"><label>DETALLE UBICACION</label><input data-field="DETALLE_UBICACION"></div>
           </div>
         </div>
@@ -383,7 +394,7 @@ body.modal-open{overflow:hidden}
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-29 13:36:49</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-29 14:22:05</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -426,6 +437,20 @@ let melCatalogos = {};
 let selectedAsset = null;
 let creatingNew = false;
 let melInitialSelectionApplied = false;
+let melTreeRoots = [];
+let melNodeMap = {};
+let melChildrenMap = {};
+let melChildrenLoaded = {};
+let melDefaultAssetId = '';
+let melDefaultPath = [];
+let melSelectedPath = [];
+let melHierarchySelections = {};
+let melHierarchyOptions = {};
+let melHierarchyBusy = false;
+const MEL_LEVELS = ['EMPRESA','PLANTA','AREA','SISTEMA','SUBSISTEMA','EQUIPO','SUBEQUIPO','COMPONENTE_MANTENIBLE'];
+const MEL_CASCADE_LEVELS = ['EMPRESA','PLANTA','AREA','SISTEMA','SUBSISTEMA','EQUIPO','SUBEQUIPO'];
+const MEL_LEVEL_LABELS = {EMPRESA:'EMPRESA',PLANTA:'PLANTA',AREA:'AREA',SISTEMA:'SISTEMA',SUBSISTEMA:'SUBSISTEMA',EQUIPO:'LINEA / EQUIPO',SUBEQUIPO:'SUBEQUIPO'};
+const MEL_LEVEL_FIELDS = {PLANTA:'PLANTA',AREA:'AREA',SISTEMA:'SISTEMA',SUBSISTEMA:'SUBSISTEMA',EQUIPO:'LINEA_EQUIPO',SUBEQUIPO:'SUBEQUIPO',COMPONENTE_MANTENIBLE:'COMPONENTE'};
 
 function esc(v) {
   return String(v == null ? "" : v).replace(/[&<>"']/g, function(m) { return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[m]; });
@@ -679,7 +704,11 @@ document.getElementById("btnSearch").addEventListener("click", loadMEL);
 document.getElementById("btnNew").addEventListener("click", newAsset);
 document.getElementById("btnSave").addEventListener("click", saveAsset);
 document.getElementById("btnSaveTop").addEventListener("click", saveAsset);
-document.getElementById("btnCancel").addEventListener("click", function() { if (selectedAsset) setForm(selectedAsset); else setForm(null); });
+document.getElementById("btnCancel").addEventListener("click", async function() {
+  if (selectedAsset) { setForm(selectedAsset, melSelectedPath); return; }
+  if (melDefaultAssetId) { await selectAsset(melDefaultAssetId); return; }
+  setForm(null, []);
+});
 function chooseMELPhoto() { document.getElementById("photoFile").click(); }
 document.getElementById("btnUploadPhoto").addEventListener("click", chooseMELPhoto);
 document.getElementById("photoFile").addEventListener("change", function(){ const f=this.files&&this.files[0]; document.getElementById("photoFileName").textContent = f ? f.name : "SIN ARCHIVO SELECCIONADO"; if(f) uploadPhoto(); });
@@ -928,7 +957,619 @@ function setForm(row) {
   if (row && row.LATITUD_GPS && row.LONGITUD_GPS) melGeoStatus('UBICACION GPS GUARDADA. RADIO: ' + (row.RADIO_UBICACION_M || 150) + ' M.','ok');
   else melGeoStatus('SIN UBICACION CAPTURADA.','');
 }
-document.getElementById('nivelSelect').addEventListener('change', updateGeoPlantSection);
+// === MEL v11: carga bajo demanda y cascada jerarquica validada ===
+function melNormLevel(v) {
+  const n = melGeoNorm(v).replace(/[\s\-\/]+/g, '_');
+  if (n === 'SUB_EQUIPO') return 'SUBEQUIPO';
+  if (n === 'COMPONENTE' || n === 'ITEM_MANTENIBLE') return 'COMPONENTE_MANTENIBLE';
+  return n;
+}
+function melLevelIndex(v) {
+  return MEL_LEVELS.indexOf(melNormLevel(v));
+}
+function melNodeCode(node) {
+  return melClean(node && (node.CODIGO_TAG || node.ID_ACTIVO));
+}
+function melRegisterNodes(rows) {
+  (rows || []).forEach(function(row) {
+    const id = melAssetKey(row);
+    if (!id) return;
+    melNodeMap[id] = Object.assign({}, melNodeMap[id] || {}, row);
+  });
+  melRows = Object.keys(melNodeMap).map(function(id) {
+    return melNodeMap[id];
+  });
+}
+function melSetChildren(parentId, rows) {
+  const key = melClean(parentId);
+  melRegisterNodes(rows);
+  melChildrenMap[key] = (rows || []).map(melAssetKey).filter(Boolean);
+  melChildrenLoaded[key] = true;
+}
+function melTreeChildren(parentId) {
+  return (melChildrenMap[melClean(parentId)] || []).map(function(id) {
+    return melNodeMap[id];
+  }).filter(Boolean);
+}
+async function melLoadDirectChildren(parentId, force) {
+  const key = melClean(parentId);
+  if (!force && melChildrenLoaded[key]) return melTreeChildren(key);
+  const res = await api('melListHierarchy', {parentId:key});
+  if (!res.ok) throw new Error(res.error || 'ERROR_JERARQUIA_MEL');
+  melSetChildren(key, res.rows || []);
+  return melTreeChildren(key);
+}
+function melTreeNodeHtml(row, depth) {
+  const id = melAssetKey(row);
+  const children = melTreeChildren(id);
+  const open = melTreeOpen.has(id);
+  const selected = selectedAsset && melAssetKey(selectedAsset) === id ? ' selected' : '';
+  const hasChildren = row.HAS_CHILDREN === true || children.length > 0;
+  const toggle = hasChildren
+    ? '<button type="button" class="tree-toggle" data-toggle="'+esc(id)+'">'+(open?'-':'+')+'</button>'
+    : '<span class="tree-spacer"></span>';
+  const badge = row.ADMITE_OT === 'SI'
+    ? '<span class="badge green">OT</span>'
+    : '<span class="badge gray">NODO</span>';
+  let html = '<div class="tree-node"><div class="tree-row'+selected+'" data-id="'+esc(id)+'"';
+  html += ' style="padding-left:'+(6 + Math.min(depth,9)*8)+'px">'+toggle;
+  html += '<div><div class="name">'+esc(row.CODIGO_TAG || row.ID_ACTIVO);
+  html += ' // '+esc(row.NOMBRE)+'</div>';
+  html += '<div class="meta">'+esc(row.NIVEL_DE_JERARQUIA || '');
+  html += ' // '+esc(row.RUTA_NOMBRE || row.PADRE || '')+'</div></div>';
+  html += badge+'</div>';
+  if (open) {
+    if (melChildrenLoaded[id]) {
+      html += '<div class="tree-children">'+children.map(function(ch) {
+        return melTreeNodeHtml(ch, depth + 1);
+      }).join('')+'</div>';
+    } else {
+      html += '<div class="tree-children"><div class="tree-loading">';
+      html += 'CARGANDO NIVEL...</div></div>';
+    }
+  }
+  return html + '</div>';
+}
+function renderTree() {
+  const box = document.getElementById('treeBox');
+  if (!melTreeRoots.length) {
+    box.innerHTML = '<div class="tree-loading">SIN ACTIVOS AUTORIZADOS.</div>';
+    return;
+  }
+  box.innerHTML = melTreeRoots.map(function(row) {
+    return melTreeNodeHtml(row, 0);
+  }).join('');
+  box.querySelectorAll('[data-toggle]').forEach(function(btn) {
+    btn.addEventListener('click', async function(e) {
+      e.stopPropagation();
+      const id = this.getAttribute('data-toggle');
+      if (melTreeOpen.has(id)) {
+        melTreeOpen.delete(id);
+        renderTree();
+        return;
+      }
+      melTreeOpen.add(id);
+      renderTree();
+      try {
+        await melLoadDirectChildren(id, false);
+        renderTree();
+      } catch(err) {
+        melTreeOpen.delete(id);
+        renderTree();
+        toast('ERROR CARGANDO NIVEL: ' + err.message);
+      }
+    });
+  });
+  box.querySelectorAll('[data-id]').forEach(function(el) {
+    el.addEventListener('click', async function() {
+      const id = this.getAttribute('data-id');
+      const node = melNodeMap[id];
+      if (node && node.CAN_OPEN === false) {
+        if (node.HAS_CHILDREN) {
+          melTreeOpen.add(id);
+          renderTree();
+          try { await melLoadDirectChildren(id, false); renderTree(); }
+          catch(err) { toast('ERROR CARGANDO NIVEL: ' + err.message); }
+        }
+        return;
+      }
+      selectAsset(id);
+    });
+  });
+}
+function melPublicPathNode(row) {
+  return {
+    ID_ACTIVO:row.ID_ACTIVO || '',
+    CODIGO_TAG:row.CODIGO_TAG || '',
+    NOMBRE:row.NOMBRE || '',
+    NIVEL_DE_JERARQUIA:row.NIVEL_DE_JERARQUIA || '',
+    PADRE:row.PADRE || '',
+    RUTA_CODIGO:row.RUTA_CODIGO || '',
+    RUTA_NOMBRE:row.RUTA_NOMBRE || '',
+    ADMITE_OT:row.ADMITE_OT || '',
+    HAS_CHILDREN:row.HAS_CHILDREN === true,
+    CAN_OPEN:row.CAN_OPEN !== false
+  };
+}
+async function melExposeSelectedPath(path, current) {
+  const full = (path || []).slice();
+  if (current) full.push(melPublicPathNode(current));
+  melRegisterNodes(full);
+  for (let i = 0; i < full.length - 1; i++) {
+    const parent = full[i];
+    const child = full[i + 1];
+    const parentId = melAssetKey(parent);
+    if (!parentId) continue;
+    melTreeOpen.add(parentId);
+    if (!melChildrenLoaded[parentId]) {
+      try {
+        await melLoadDirectChildren(parentId, false);
+      } catch(e) {
+        melSetChildren(parentId, [child]);
+      }
+    }
+  }
+}
+async function selectAsset(rowOrId, silent) {
+  const id = typeof rowOrId === 'string' ? rowOrId : melAssetKey(rowOrId);
+  if (!id) return;
+  if (!silent) showLoader('CARGANDO DETALLE DEL ACTIVO...');
+  try {
+    const res = await api('getMELActivo', {idActivo:id});
+    if (!res.ok) throw new Error(res.error || 'ERROR_DETALLE_MEL');
+    selectedAsset = res.activo || null;
+    melSelectedPath = res.path || [];
+    creatingNew = false;
+    await melExposeSelectedPath(melSelectedPath, selectedAsset);
+    setForm(selectedAsset, melSelectedPath);
+    renderTree();
+    document.getElementById('editStatus').textContent = '';
+  } catch(err) {
+    toast('ERROR CARGANDO ACTIVO: ' + err.message);
+  } finally {
+    if (!silent) hideLoader();
+  }
+}
+async function loadMEL(focusId) {
+  showLoader('CARGANDO CONTROLES MEL...');
+  try {
+    const data = await api('melBootstrap', {});
+    if (!data.ok) throw new Error(data.error || 'ERROR_BOOTSTRAP_MEL');
+    melCatalogos = data.catalogos || {};
+    melTreeRoots = data.roots || [];
+    melDefaultAssetId = data.defaultAssetId || '';
+    melDefaultPath = data.defaultPath || [];
+    melNodeMap = {};
+    melChildrenMap = {};
+    melChildrenLoaded = {};
+    melTreeOpen = new Set();
+    melRegisterNodes(melTreeRoots);
+    melRegisterNodes(melDefaultPath);
+    renderCatalogos();
+    document.getElementById('countLabel').textContent =
+      Number(data.count || 0) + ' ACTIVOS';
+    renderTree();
+    const target = focusId ||
+      (selectedAsset && selectedAsset.ID_ACTIVO) ||
+      melDefaultAssetId;
+    if (target) {
+      await selectAsset(target, true);
+      if (melNodeMap[target] && melNodeMap[target].HAS_CHILDREN) {
+        melTreeOpen.add(target);
+        await melLoadDirectChildren(target, false);
+        renderTree();
+      }
+    } else {
+      selectedAsset = null;
+      melSelectedPath = [];
+      setForm(null, []);
+    }
+  } catch(err) {
+    toast('ERROR CARGANDO MEL: ' + err.message);
+  } finally {
+    hideLoader();
+  }
+}
+function melParentLabel(row) {
+  const parent = melSelectedPath.length
+    ? melSelectedPath[melSelectedPath.length - 1]
+    : null;
+  if (!row || !parent) return 'SIN PADRE';
+  const id = melClean(parent.ID_ACTIVO);
+  const name = melClean(parent.NOMBRE);
+  const tag = melClean(parent.CODIGO_TAG);
+  if (name) return id + ' // ' + name;
+  if (tag && tag !== id) return id + ' // ' + tag;
+  return id || 'SIN PADRE';
+}
+function melHierarchySelectionFromPath(path) {
+  const out = {};
+  (path || []).forEach(function(node) {
+    const level = melNormLevel(node.NIVEL_DE_JERARQUIA);
+    if (MEL_CASCADE_LEVELS.indexOf(level) >= 0) out[level] = node;
+  });
+  return out;
+}
+function melHierarchyTargetIndex() {
+  return melLevelIndex(document.getElementById('nivelSelect').value);
+}
+function melHierarchyDeepestSelection() {
+  const targetIndex = melHierarchyTargetIndex();
+  let deepest = null;
+  MEL_CASCADE_LEVELS.forEach(function(level) {
+    const idx = melLevelIndex(level);
+    if (idx >= 0 && idx < targetIndex && melHierarchySelections[level]) {
+      deepest = melHierarchySelections[level];
+    }
+  });
+  return deepest;
+}
+function melHierarchyAncestorFor(level) {
+  const idx = melLevelIndex(level);
+  let ancestor = null;
+  MEL_CASCADE_LEVELS.forEach(function(candidate) {
+    const cidx = melLevelIndex(candidate);
+    if (cidx < idx && melHierarchySelections[candidate]) {
+      ancestor = melHierarchySelections[candidate];
+    }
+  });
+  return ancestor;
+}
+function melHierarchyOptionKey(level) {
+  const ancestor = melHierarchyAncestorFor(level);
+  return melAssetKey(ancestor) + '|' + melNormLevel(level);
+}
+async function melLoadHierarchyOptions(level, force) {
+  const normalized = melNormLevel(level);
+  if (normalized === 'EMPRESA') {
+    melHierarchyOptions['ROOT|EMPRESA'] = melTreeRoots.filter(function(r) {
+      return melNormLevel(r.NIVEL_DE_JERARQUIA) === 'EMPRESA';
+    });
+    return melHierarchyOptions['ROOT|EMPRESA'];
+  }
+  const ancestor = melHierarchyAncestorFor(normalized);
+  if (!ancestor) return [];
+  const key = melHierarchyOptionKey(normalized);
+  if (!force && melHierarchyOptions[key]) return melHierarchyOptions[key];
+  const res = await api('melListHierarchy', {
+    parentId:melAssetKey(ancestor),
+    targetLevel:normalized
+  });
+  if (!res.ok) throw new Error(res.error || 'ERROR_OPCIONES_JERARQUIA');
+  melHierarchyOptions[key] = res.rows || [];
+  melRegisterNodes(res.rows || []);
+  return melHierarchyOptions[key];
+}
+function melHierarchySelectOptions(level) {
+  const normalized = melNormLevel(level);
+  const current = melHierarchySelections[normalized];
+  let options = [];
+  if (normalized === 'EMPRESA') {
+    options = melHierarchyOptions['ROOT|EMPRESA'] || melTreeRoots;
+  } else {
+    options = melHierarchyOptions[melHierarchyOptionKey(normalized)] || [];
+  }
+  if (current && !options.some(function(x) {
+    return melAssetKey(x) === melAssetKey(current);
+  })) {
+    options = [current].concat(options);
+  }
+  return options;
+}
+function melHierarchyCanEdit() {
+  return creatingNew
+    ? hasPerm('BTN_MEL_CREAR')
+    : hasPerm('BTN_MEL_EDITAR');
+}
+function melHierarchyRender() {
+  const grid = document.getElementById('hierarchyCascadeGrid');
+  const targetIndex = melHierarchyTargetIndex();
+  const editable = melHierarchyCanEdit();
+  let html = '';
+  MEL_CASCADE_LEVELS.forEach(function(level) {
+    const idx = melLevelIndex(level);
+    const active = targetIndex > idx;
+    const ancestor = melHierarchyAncestorFor(level);
+    const hasBase = level === 'EMPRESA' || !!ancestor;
+    const options = melHierarchySelectOptions(level);
+    const current = melHierarchySelections[level];
+    const disabled = !editable || !active || !hasBase;
+    html += '<div class="hierarchy-step"><label>';
+    html += esc(MEL_LEVEL_LABELS[level] || level)+'</label>';
+    html += '<select id="hierSelect_'+level+'" data-hier-level="'+level+'"';
+    if (disabled) html += ' disabled';
+    html += '><option value="">';
+    html += active ? 'SELECCIONE...' : 'NO APLICA';
+    html += '</option>';
+    options.forEach(function(node) {
+      const id = melAssetKey(node);
+      const selected = current && melAssetKey(current) === id
+        ? ' selected'
+        : '';
+      html += '<option value="'+esc(id)+'"'+selected+'>';
+      html += esc(melNodeCode(node)+' // '+(node.NOMBRE || ''));
+      html += '</option>';
+    });
+    html += '</select></div>';
+  });
+  grid.innerHTML = html;
+  grid.querySelectorAll('[data-hier-level]').forEach(function(sel) {
+    sel.addEventListener('focus', async function() {
+      const level = this.getAttribute('data-hier-level');
+      if (this.disabled || melHierarchyBusy) return;
+      try {
+        melHierarchyBusy = true;
+        await melLoadHierarchyOptions(level, false);
+        melHierarchyRender();
+      } catch(err) {
+        toast('ERROR CARGANDO ' + level + ': ' + err.message);
+      } finally {
+        melHierarchyBusy = false;
+      }
+    });
+    sel.addEventListener('change', async function() {
+      const level = this.getAttribute('data-hier-level');
+      const id = this.value;
+      const idx = melLevelIndex(level);
+      MEL_CASCADE_LEVELS.forEach(function(nextLevel) {
+        if (melLevelIndex(nextLevel) >= idx) {
+          delete melHierarchySelections[nextLevel];
+        }
+      });
+      if (id && melNodeMap[id]) {
+        melHierarchySelections[level] = melNodeMap[id];
+      }
+      melApplyHierarchyToForm();
+      melHierarchyRender();
+      const next = MEL_CASCADE_LEVELS.find(function(nextLevel) {
+        return melLevelIndex(nextLevel) > idx &&
+          melLevelIndex(nextLevel) < melHierarchyTargetIndex();
+      });
+      if (next && id) {
+        try {
+          melHierarchyBusy = true;
+          await melLoadHierarchyOptions(next, true);
+          melHierarchyRender();
+        } catch(err) {
+          toast('ERROR CARGANDO ' + next + ': ' + err.message);
+        } finally {
+          melHierarchyBusy = false;
+        }
+      }
+    });
+  });
+  const deepest = melHierarchyDeepestSelection();
+  const state = document.getElementById('hierarchyState');
+  state.classList.remove('ok');
+  if (targetIndex === 0) {
+    state.textContent = 'EMPRESA RAIZ';
+    state.classList.add('ok');
+  } else if (deepest) {
+    state.textContent = 'RUTA VALIDADA';
+    state.classList.add('ok');
+  } else {
+    state.textContent = 'RUTA INCOMPLETA';
+  }
+}
+function melSetFieldValue(field, value) {
+  const el = document.querySelector('[data-field="'+field+'"]');
+  if (el) el.value = value || '';
+}
+function melApplyHierarchyToForm() {
+  [
+    'PLANTA','AREA','LINEA_EQUIPO','SISTEMA',
+    'SUBSISTEMA','SUBEQUIPO','COMPONENTE'
+  ].forEach(function(field) {
+    melSetFieldValue(field, '');
+  });
+  MEL_CASCADE_LEVELS.forEach(function(level) {
+    const node = melHierarchySelections[level];
+    const field = MEL_LEVEL_FIELDS[level];
+    if (node && field) melSetFieldValue(field, melNodeCode(node));
+  });
+  const deepest = melHierarchyDeepestSelection();
+  const parent = document.getElementById('padreSelect');
+  parent.innerHTML = '';
+  const option = document.createElement('option');
+  option.value = deepest ? (deepest.ID_ACTIVO || '') : '';
+  option.textContent = deepest
+    ? melNodeCode(deepest) + ' | ' + (deepest.NOMBRE || '')
+    : 'SIN PADRE';
+  parent.appendChild(option);
+  parent.value = option.value;
+  const label = document.getElementById('hierarchyParentLabel');
+  label.innerHTML = deepest
+    ? '<b>PADRE FINAL:</b> '+
+      esc(melNodeCode(deepest)+' // '+
+      (deepest.NOMBRE || deepest.ID_ACTIVO || ''))
+    : '<b>PADRE FINAL:</b> SIN PADRE.';
+}
+async function melPrepareHierarchy(path) {
+  melHierarchySelections = melHierarchySelectionFromPath(path || []);
+  melHierarchyOptions = {};
+  melHierarchyOptions['ROOT|EMPRESA'] = melTreeRoots.filter(function(r) {
+    return melNormLevel(r.NIVEL_DE_JERARQUIA) === 'EMPRESA';
+  });
+  (path || []).forEach(function(node) {
+    const level = melNormLevel(node.NIVEL_DE_JERARQUIA);
+    const parent = melHierarchyAncestorFor(level);
+    const key = level === 'EMPRESA'
+      ? 'ROOT|EMPRESA'
+      : melAssetKey(parent) + '|' + level;
+    if (!melHierarchyOptions[key]) melHierarchyOptions[key] = [];
+    if (!melHierarchyOptions[key].some(function(x) {
+      return melAssetKey(x) === melAssetKey(node);
+    })) {
+      melHierarchyOptions[key].push(node);
+    }
+  });
+  melApplyHierarchyToForm();
+  melHierarchyRender();
+}
+async function melOnLevelChange() {
+  updateGeoPlantSection();
+  const targetIndex = melHierarchyTargetIndex();
+  MEL_CASCADE_LEVELS.forEach(function(level) {
+    if (melLevelIndex(level) >= targetIndex) {
+      delete melHierarchySelections[level];
+    }
+  });
+  melApplyHierarchyToForm();
+  melHierarchyRender();
+  const firstMissing = MEL_CASCADE_LEVELS.find(function(level) {
+    return melLevelIndex(level) < targetIndex &&
+      !melHierarchySelections[level];
+  });
+  if (firstMissing) {
+    try {
+      await melLoadHierarchyOptions(firstMissing, false);
+      melHierarchyRender();
+    } catch(err) {
+      toast('ERROR CARGANDO JERARQUIA: ' + err.message);
+    }
+  }
+}
+function setForm(row, path) {
+  document.querySelectorAll('[data-field]').forEach(function(el) {
+    const k = el.getAttribute('data-field');
+    el.value = row && row[k] != null ? row[k] : '';
+  });
+  melSelectedPath = path || melSelectedPath || [];
+  renderAssetSummary(row);
+  updateSummaryActionState(row);
+  const img = document.getElementById('assetPhoto');
+  img.onerror = function() {
+    this.onerror = null;
+    this.src = MEL_DEFAULT_PHOTO;
+  };
+  img.src = melImageUrl(row && (
+    row.DIR_FOTOGRAFIA ||
+    row.FOTO_URL ||
+    row.UBICACION_FOTOGRAFIA ||
+    row.UBICACION_FOTOGRAFICA
+  ));
+  document.getElementById('photoFile').value = '';
+  document.getElementById('photoFileName').textContent =
+    'SIN ARCHIVO SELECCIONADO';
+  updateGeoPlantSection();
+  if (row && row.LATITUD_GPS && row.LONGITUD_GPS) {
+    melGeoStatus(
+      'UBICACION GPS GUARDADA. RADIO: '+
+      (row.RADIO_UBICACION_M || 150)+' M.',
+      'ok'
+    );
+  } else {
+    melGeoStatus('SIN UBICACION CAPTURADA.','');
+  }
+  melPrepareHierarchy(melSelectedPath);
+}
+function newAsset() {
+  if (!hasPerm('BTN_MEL_CREAR')) {
+    toast('SIN PERMISO PARA CREAR ACTIVOS.');
+    return;
+  }
+  creatingNew = true;
+  selectedAsset = null;
+  const initialRoot = melDefaultPath.length
+    ? melDefaultPath[0]
+    : melTreeRoots[0];
+  const initialPath = initialRoot ? [initialRoot] : [];
+  setForm({
+    ESTADO_ACTIVO:'ACTIVO',
+    FECHA_DE_ALTA:new Date().toISOString().slice(0,10),
+    NIVEL_DE_JERARQUIA:'PLANTA',
+    ACTIVO_MANTENIBLE:'NO',
+    ADMITE_OT:'NO',
+    ADMITE_LECTURAS:'NO',
+    ADMITE_HOJA_VIDA:'NO'
+  }, initialPath);
+  document.getElementById('selectedName').textContent = 'NUEVO ACTIVO';
+  document.getElementById('editStatus').textContent = '';
+  renderTree();
+}
+async function saveAsset() {
+  const data = formData();
+  const targetIndex = melLevelIndex(data.NIVEL_DE_JERARQUIA);
+  const parent = melHierarchyDeepestSelection();
+  if (targetIndex > 0 && !parent) {
+    toast('SELECCIONE LA RUTA JERARQUICA Y EL PADRE FINAL.');
+    return;
+  }
+  if (creatingNew || !data.ID_ACTIVO) {
+    if (!hasPerm('BTN_MEL_CREAR')) {
+      toast('SIN PERMISO PARA CREAR.');
+      return;
+    }
+    showLoader('CREANDO ACTIVO...');
+    try {
+      const res = await api('createMELActivo', {data:data});
+      if (!res.ok) throw new Error(res.error || 'NO_GUARDADO');
+      toast('ACTIVO CREADO: ' + res.idActivo);
+      await loadMEL(res.idActivo);
+    } catch(err) {
+      toast('ERROR: ' + err.message);
+    } finally {
+      hideLoader();
+    }
+    return;
+  }
+  if (!hasPerm('BTN_MEL_EDITAR')) {
+    toast('SIN PERMISO PARA EDITAR.');
+    return;
+  }
+  showLoader('GUARDANDO ACTIVO...');
+  try {
+    const res = await api('saveMELActivo', {
+      idActivo:data.ID_ACTIVO,
+      data:data
+    });
+    if (!res.ok) throw new Error(res.error || 'NO_GUARDADO');
+    toast('ACTIVO ACTUALIZADO.');
+    await loadMEL(data.ID_ACTIVO);
+  } catch(err) {
+    toast('ERROR: ' + err.message);
+  } finally {
+    hideLoader();
+  }
+}
+async function uploadPhoto() {
+  const data = formData();
+  const file = document.getElementById('photoFile').files[0];
+  if (!data.ID_ACTIVO) {
+    toast('SELECCIONE O GUARDE PRIMERO EL ACTIVO.');
+    return;
+  }
+  if (!file) {
+    toast('SELECCIONE UNA IMAGEN.');
+    return;
+  }
+  if (!hasPerm('BTN_MEL_SUBIR_FOTO')) {
+    toast('SIN PERMISO PARA SUBIR FOTO.');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = async function() {
+    showLoader('SUBIENDO FOTO...');
+    try {
+      const res = await api('uploadMELFoto', {
+        idActivo:data.ID_ACTIVO,
+        fileName:file.name,
+        mimeType:file.type,
+        base64:reader.result
+      });
+      if (!res.ok) throw new Error(res.error || 'NO_SUBIDA');
+      toast('FOTO ACTUALIZADA.');
+      document.getElementById('photoFileName').textContent = file.name;
+      await selectAsset(data.ID_ACTIVO, true);
+    } catch(err) {
+      toast('ERROR FOTO: ' + err.message);
+    } finally {
+      hideLoader();
+    }
+  };
+  reader.readAsDataURL(file);
+}
+document.getElementById('nivelSelect').addEventListener('change', melOnLevelChange);
 document.getElementById('btnCaptureGeo').addEventListener('click', capturePlantLocation);
 init();
 </script>
