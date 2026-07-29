@@ -46,11 +46,12 @@ body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);
 .action-card.blue{border-left-color:var(--blue2)}
 .action-card.green{border-left-color:var(--green2)}
 .action-card.dark{border-left-color:#111827}
-.panel{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:15px;margin-bottom:16px}
+.panel{min-width:0;max-width:100%;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:15px;margin-bottom:16px;overflow:hidden}
 .panel-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
 .panel-title h2{margin:0;color:var(--navy);font-size:18px}
 .status{color:var(--muted);font-size:12px;font-weight:900;text-align:right}
-.filters{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr .8fr auto;gap:10px;margin-bottom:12px}
+.filters{display:grid;grid-template-columns:minmax(160px,1.35fr) repeat(3,minmax(108px,.72fr)) minmax(120px,.8fr) auto;gap:8px;margin-bottom:12px;align-items:stretch}
+.filters>*{min-width:0;max-width:100%}
 input,select,textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 11px;font-size:13px;font-weight:750;color:var(--navy);outline:none;background:#fff;text-transform:uppercase}
 input[type=file]{padding:8px;background:#f8fbff;text-transform:none}
 input:focus,select:focus,textarea:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(0,118,215,.10)}
@@ -60,10 +61,11 @@ textarea{min-height:78px;resize:vertical}
 .btn.gray{background:linear-gradient(180deg,#9ca3af,#6b7280)}
 .btn.red{background:linear-gradient(180deg,#ef4444,#b91c1c)}
 .btn:disabled{filter:grayscale(1);opacity:.55;cursor:not-allowed}
-.decision-layout{display:grid;grid-template-columns:minmax(460px,38%) minmax(0,62%);gap:14px;align-items:start}
-.left-stack{display:grid;gap:14px;align-content:start;min-width:0}
-.left-stack .panel{margin-bottom:0}
-.close-workbench{min-width:0;margin-bottom:0}
+.decision-layout{display:grid;grid-template-columns:minmax(0,45fr) minmax(0,55fr);gap:14px;align-items:start;width:100%;max-width:100%}
+.decision-layout>*{min-width:0;width:100%;max-width:100%}
+.left-stack{display:grid;gap:14px;align-content:start;min-width:0;width:100%;max-width:100%}
+.left-stack .panel{margin-bottom:0;min-width:0;width:100%;max-width:100%}
+.close-workbench{min-width:0;width:100%;max-width:100%;margin-bottom:0;overflow:hidden}
 .consult-layout{display:block}
 .detail-grid{display:grid;grid-template-columns:62% 38%;gap:14px;align-items:start}
 .grid-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
@@ -71,10 +73,16 @@ textarea{min-height:78px;resize:vertical}
 .field.full{grid-column:1/-1}
 .field.half{grid-column:span 2}
 .notice{border-left:5px solid var(--green2);background:#f8fbff;border-radius:14px;padding:12px;color:var(--navy);font-size:12px;font-weight:800;line-height:1.4;margin-bottom:10px}
-.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;max-height:520px}
-table{border-collapse:collapse;width:100%;min-width:980px;background:#fff}
-th{background:#0f6385;color:#fff;font-size:12px;text-align:left;padding:10px;position:sticky;top:0;z-index:1}
-td{border-bottom:1px solid var(--line);padding:9px 10px;font-size:12px;font-weight:700;color:#0f172a}
+.table-wrap{width:100%;max-width:100%;overflow-x:auto;overflow-y:auto;border:1px solid var(--line);border-radius:14px;max-height:520px}
+table{border-collapse:collapse;width:100%;min-width:0;table-layout:fixed;background:#fff}
+#listPanel th:nth-child(1),#listPanel td:nth-child(1){width:12%}
+#listPanel th:nth-child(2),#listPanel td:nth-child(2){width:25%}
+#listPanel th:nth-child(3),#listPanel td:nth-child(3){width:19%}
+#listPanel th:nth-child(4),#listPanel td:nth-child(4){width:22%}
+#listPanel th:nth-child(5),#listPanel td:nth-child(5){width:14%}
+#listPanel th:nth-child(6),#listPanel td:nth-child(6){width:8%}
+th{background:#0f6385;color:#fff;font-size:10.5px;text-align:left;padding:9px 7px;position:sticky;top:0;z-index:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+td{border-bottom:1px solid var(--line);padding:8px 7px;font-size:10.5px;font-weight:700;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 tr:nth-child(even){background:#eef7fd}
 tr:hover{background:#d9ecff;cursor:pointer}
 tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
@@ -97,7 +105,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
 .rt-section{border:1px solid var(--line);border-radius:16px;background:#f8fbff;padding:12px}
 .rt-section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px;color:var(--navy);font-size:13px;font-weight:950}
 .rt-section-title span{color:var(--muted);font-size:10px;font-weight:900}
-.rt-fields-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.rt-fields-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;width:100%;max-width:100%}
 .rt-field-card{min-width:0;border:1px solid #d7e4f2;border-radius:12px;background:#fff;padding:9px 10px}
 .rt-field-card.half{grid-column:span 2}
 .rt-field-card.full{grid-column:1/-1}
@@ -107,7 +115,10 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
 .rt-field-value a{color:var(--blue2);font-weight:950;text-decoration:none}
 .rt-loading{min-height:180px;display:grid;place-items:center;border:1px dashed #bcd7f5;border-radius:14px;background:#f8fbff;color:var(--muted);font-size:12px;font-weight:900}
 .decision-divider{margin:14px 0 12px;padding:10px 12px;border-left:5px solid var(--green2);border-radius:12px;background:linear-gradient(90deg,#ecfdf5,#f8fbff);color:var(--navy);font-size:14px;font-weight:950}
-.decision-form textarea{min-height:96px}
+.decision-form{grid-template-columns:repeat(2,minmax(0,1fr))}
+.decision-form .field{min-width:0}
+.decision-form .field.half{grid-column:1/-1}
+.decision-form textarea{min-height:88px}
 .decision-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
 .arma-loader{position:fixed;inset:0;background:rgba(2,6,23,.50);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
 .arma-loader.hidden{display:none!important}
@@ -134,6 +145,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
 .resumen48-table td{vertical-align:top;border-bottom:1px solid var(--line);padding:8px 9px;font-size:11px;line-height:1.25;font-weight:750;color:#0f172a}
 .resumen48-foot{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:12px 18px;background:#fff;border-top:1px solid var(--line)}
 .resumen48-ok{border:0;border-radius:12px;background:linear-gradient(180deg,#00d65f,#55b52e);color:#fff;font-size:12px;font-weight:950;padding:10px 22px;cursor:pointer;box-shadow:var(--soft)}
+@media(max-width:1400px){.decision-layout{grid-template-columns:minmax(0,48fr) minmax(0,52fr)}.rt-fields-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.decision-layout,.detail-grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}.grid-form,.rt-fields-grid{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}}
 @media(max-width:700px){.action-grid,.filters,.grid-form,.rt-fields-grid{grid-template-columns:1fr}.rt-field-card.half{grid-column:1/-1}.main{padding:12px}.logo-pelex{height:58px}.logo-arma{height:64px}.viewer{height:68vh}}
 </style>
@@ -216,7 +228,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-29 18:07:02</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-29 18:17:56</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
