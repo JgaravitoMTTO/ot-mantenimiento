@@ -179,6 +179,20 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
 .qr-modal-actions .btn{min-width:190px}
 body.modal-open{overflow:hidden}
 @media(max-width:700px){.summary-tools{display:grid;grid-template-columns:1fr}.summary-tools .btn{width:100%;min-width:0}.media-modal{padding:7px}.media-modal-card{width:100%;height:98vh;border-radius:12px}.media-modal-card.qr-card{height:auto;max-height:98vh}.qr-preview{width:min(82vw,380px);height:min(82vw,380px)}}
+/* === MEL v11.1 HOTFIX: jerarquia unica, horizontal y sin llamadas repetidas === */
+.hierarchy-cascade{grid-column:1/-1;border:1px solid #dce9f7;border-radius:13px;padding:11px;background:#f7fbff}
+.hierarchy-cascade-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
+.hierarchy-cascade-title{font-size:13px;font-weight:1000;color:#003b7a}
+.hierarchy-cascade-help{font-size:9.5px;font-weight:900;color:#60708a;line-height:1.35;margin-top:3px}
+.hierarchy-cascade-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:end}
+.hierarchy-step{min-width:0}
+.hierarchy-step select{min-width:0}
+.hierarchy-parent{margin-top:9px;border-left:4px solid #19c45a;background:#fff;border-radius:9px;padding:9px 11px;font-size:10px;font-weight:900;color:#42546b}
+.hierarchy-state{min-height:38px;display:flex;align-items:center;border:1px solid #f2c777;border-radius:9px;background:#fff7ed;padding:8px 10px;font-size:10px;font-weight:1000;color:#9a3412}
+.hierarchy-state.ok{border-color:#22c55e;background:#ecfdf5;color:#166534}
+@media(max-width:1200px){.hierarchy-cascade-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:900px){.hierarchy-cascade-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.hierarchy-cascade-grid{grid-template-columns:1fr}.hierarchy-cascade-head{display:block}}
 /* === MEL GEO PLANTAS 150 M === */
 .geo-hidden{display:none!important}
 .geo-plant-section{border:2px solid #86c7ff;background:linear-gradient(180deg,#f8fcff,#edf8ff)}
@@ -291,26 +305,19 @@ body.modal-open{overflow:hidden}
         <div class="form-section">
           <h4>JERARQUIA DEL ACTIVO</h4>
           <div class="grid">
-            <div><label>NIVEL DE JERARQUIA</label><select data-field="NIVEL_DE_JERARQUIA" id="nivelSelect"></select></div>
-            <div class="span2"><label>PADRE FINAL VALIDADO</label><select data-field="PADRE" id="padreSelect" disabled><option value="">SIN PADRE</option></select></div>
-            <div><label>ESTADO DE LA RUTA</label><div id="hierarchyState" class="hierarchy-state">SIN RUTA</div></div>
+            <div class="span2"><label>NIVEL DEL ACTIVO A CREAR</label><select data-field="NIVEL_DE_JERARQUIA" id="nivelSelect"></select></div>
+            <div class="span2"><label>ESTADO DE LA RUTA</label><div id="hierarchyState" class="hierarchy-state">SIN RUTA</div></div>
+            <select data-field="PADRE" id="padreSelect" disabled style="display:none"><option value="">SIN PADRE</option></select>
             <div id="hierarchyCascade" class="hierarchy-cascade">
               <div class="hierarchy-cascade-head">
                 <div>
-                  <div class="hierarchy-cascade-title">SELECCION GRADUAL ISO 14224</div>
-                  <div class="hierarchy-cascade-help">ESCOJA EMPRESA, PLANTA, AREA Y LOS NIVELES SIGUIENTES. CADA LISTA SOLO TRAE OPCIONES AUTORIZADAS DENTRO DEL NODO ANTERIOR.</div>
+                  <div class="hierarchy-cascade-title">RUTA JERARQUICA ISO 14224</div>
+                  <div class="hierarchy-cascade-help">SELECCIONE DE IZQUIERDA A DERECHA. EL INDICE AUTORIZADO SE CARGA UNA SOLA VEZ; CADA CONTROL FILTRA LOCALMENTE EL NIVEL SIGUIENTE.</div>
                 </div>
               </div>
               <div id="hierarchyCascadeGrid" class="hierarchy-cascade-grid"></div>
               <div id="hierarchyParentLabel" class="hierarchy-parent"><b>PADRE FINAL:</b> SIN PADRE.</div>
             </div>
-            <div><label>PLANTA</label><input class="hierarchy-derived" data-field="PLANTA" readonly></div>
-            <div><label>AREA</label><input class="hierarchy-derived" data-field="AREA" readonly></div>
-            <div><label>SISTEMA</label><input class="hierarchy-derived" data-field="SISTEMA" readonly></div>
-            <div><label>SUBSISTEMA</label><input class="hierarchy-derived" data-field="SUBSISTEMA" readonly></div>
-            <div><label>LINEA / EQUIPO</label><input class="hierarchy-derived" data-field="LINEA_EQUIPO" readonly></div>
-            <div><label>SUBEQUIPO</label><input class="hierarchy-derived" data-field="SUBEQUIPO" readonly></div>
-            <div><label>COMPONENTE</label><input class="hierarchy-derived" data-field="COMPONENTE" readonly></div>
             <div class="span4"><label>DETALLE UBICACION</label><input data-field="DETALLE_UBICACION"></div>
           </div>
         </div>
@@ -394,7 +401,7 @@ body.modal-open{overflow:hidden}
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-29 14:22:05</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-29 15:01:38</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -438,6 +445,7 @@ let selectedAsset = null;
 let creatingNew = false;
 let melInitialSelectionApplied = false;
 let melTreeRoots = [];
+let melHierarchyNodes = [];
 let melNodeMap = {};
 let melChildrenMap = {};
 let melChildrenLoaded = {};
@@ -446,7 +454,6 @@ let melDefaultPath = [];
 let melSelectedPath = [];
 let melHierarchySelections = {};
 let melHierarchyOptions = {};
-let melHierarchyBusy = false;
 const MEL_LEVELS = ['EMPRESA','PLANTA','AREA','SISTEMA','SUBSISTEMA','EQUIPO','SUBEQUIPO','COMPONENTE_MANTENIBLE'];
 const MEL_CASCADE_LEVELS = ['EMPRESA','PLANTA','AREA','SISTEMA','SUBSISTEMA','EQUIPO','SUBEQUIPO'];
 const MEL_LEVEL_LABELS = {EMPRESA:'EMPRESA',PLANTA:'PLANTA',AREA:'AREA',SISTEMA:'SISTEMA',SUBSISTEMA:'SUBSISTEMA',EQUIPO:'LINEA / EQUIPO',SUBEQUIPO:'SUBEQUIPO'};
@@ -957,7 +964,7 @@ function setForm(row) {
   if (row && row.LATITUD_GPS && row.LONGITUD_GPS) melGeoStatus('UBICACION GPS GUARDADA. RADIO: ' + (row.RADIO_UBICACION_M || 150) + ' M.','ok');
   else melGeoStatus('SIN UBICACION CAPTURADA.','');
 }
-// === MEL v11: carga bajo demanda y cascada jerarquica validada ===
+// === MEL v11.1: indice jerarquico local y detalle bajo demanda ===
 function melNormLevel(v) {
   const n = melGeoNorm(v).replace(/[\s\-\/]+/g, '_');
   if (n === 'SUB_EQUIPO') return 'SUBEQUIPO';
@@ -986,18 +993,33 @@ function melSetChildren(parentId, rows) {
   melChildrenMap[key] = (rows || []).map(melAssetKey).filter(Boolean);
   melChildrenLoaded[key] = true;
 }
+function melBuildLocalHierarchyIndex() {
+  melChildrenMap = {};
+  melChildrenLoaded = {};
+  Object.keys(melNodeMap).forEach(function(id) {
+    melChildrenMap[id] = [];
+    melChildrenLoaded[id] = true;
+  });
+  melRows.forEach(function(row) {
+    const id = melAssetKey(row);
+    const parent = melClean(row && row.PADRE);
+    if (!id || !parent || !melNodeMap[parent]) return;
+    if (!melChildrenMap[parent]) melChildrenMap[parent] = [];
+    if (melChildrenMap[parent].indexOf(id) < 0) melChildrenMap[parent].push(id);
+  });
+  Object.keys(melChildrenMap).forEach(function(parent) {
+    melChildrenMap[parent].sort(function(a,b) {
+      return melSortKey(melNodeMap[a]).localeCompare(melSortKey(melNodeMap[b]), undefined, {numeric:true, sensitivity:'base'});
+    });
+  });
+}
 function melTreeChildren(parentId) {
   return (melChildrenMap[melClean(parentId)] || []).map(function(id) {
     return melNodeMap[id];
   }).filter(Boolean);
 }
-async function melLoadDirectChildren(parentId, force) {
-  const key = melClean(parentId);
-  if (!force && melChildrenLoaded[key]) return melTreeChildren(key);
-  const res = await api('melListHierarchy', {parentId:key});
-  if (!res.ok) throw new Error(res.error || 'ERROR_JERARQUIA_MEL');
-  melSetChildren(key, res.rows || []);
-  return melTreeChildren(key);
+async function melLoadDirectChildren(parentId) {
+  return melTreeChildren(parentId);
 }
 function melTreeNodeHtml(row, depth) {
   const id = melAssetKey(row);
@@ -1131,34 +1153,32 @@ async function selectAsset(rowOrId, silent) {
   }
 }
 async function loadMEL(focusId) {
-  showLoader('CARGANDO CONTROLES MEL...');
+  showLoader('CARGANDO INDICE MEL...');
   try {
     const data = await api('melBootstrap', {});
     if (!data.ok) throw new Error(data.error || 'ERROR_BOOTSTRAP_MEL');
     melCatalogos = data.catalogos || {};
+    melHierarchyNodes = data.nodes || data.roots || [];
     melTreeRoots = data.roots || [];
     melDefaultAssetId = data.defaultAssetId || '';
     melDefaultPath = data.defaultPath || [];
     melNodeMap = {};
-    melChildrenMap = {};
-    melChildrenLoaded = {};
     melTreeOpen = new Set();
-    melRegisterNodes(melTreeRoots);
+    melRegisterNodes(melHierarchyNodes);
     melRegisterNodes(melDefaultPath);
+    melBuildLocalHierarchyIndex();
     renderCatalogos();
     document.getElementById('countLabel').textContent =
       Number(data.count || 0) + ' ACTIVOS';
     renderTree();
+    hideLoader();
     const target = focusId ||
       (selectedAsset && selectedAsset.ID_ACTIVO) ||
       melDefaultAssetId;
     if (target) {
+      document.getElementById('editStatus').textContent = 'CARGANDO FICHA...';
       await selectAsset(target, true);
-      if (melNodeMap[target] && melNodeMap[target].HAS_CHILDREN) {
-        melTreeOpen.add(target);
-        await melLoadDirectChildren(target, false);
-        renderTree();
-      }
+      document.getElementById('editStatus').textContent = '';
     } else {
       selectedAsset = null;
       melSelectedPath = [];
@@ -1219,41 +1239,42 @@ function melHierarchyOptionKey(level) {
   const ancestor = melHierarchyAncestorFor(level);
   return melAssetKey(ancestor) + '|' + melNormLevel(level);
 }
-async function melLoadHierarchyOptions(level, force) {
+function melHierarchyDescendantsAtLevel(parentId, level) {
+  const wanted = melNormLevel(level);
+  const queue = melTreeChildren(parentId).slice();
+  const visited = {};
+  const out = [];
+  while (queue.length) {
+    const node = queue.shift();
+    const id = melAssetKey(node);
+    if (!id || visited[id]) continue;
+    visited[id] = true;
+    if (melNormLevel(node.NIVEL_DE_JERARQUIA) === wanted && node.CAN_OPEN !== false) out.push(node);
+    melTreeChildren(id).forEach(function(child) { queue.push(child); });
+  }
+  out.sort(function(a,b) {
+    return melSortKey(a).localeCompare(melSortKey(b), undefined, {numeric:true, sensitivity:'base'});
+  });
+  return out;
+}
+function melLoadHierarchyOptions(level) {
   const normalized = melNormLevel(level);
   if (normalized === 'EMPRESA') {
-    melHierarchyOptions['ROOT|EMPRESA'] = melTreeRoots.filter(function(r) {
-      return melNormLevel(r.NIVEL_DE_JERARQUIA) === 'EMPRESA';
+    return melHierarchyNodes.filter(function(r) {
+      return melNormLevel(r.NIVEL_DE_JERARQUIA) === 'EMPRESA' && r.CAN_OPEN !== false;
     });
-    return melHierarchyOptions['ROOT|EMPRESA'];
   }
   const ancestor = melHierarchyAncestorFor(normalized);
   if (!ancestor) return [];
-  const key = melHierarchyOptionKey(normalized);
-  if (!force && melHierarchyOptions[key]) return melHierarchyOptions[key];
-  const res = await api('melListHierarchy', {
-    parentId:melAssetKey(ancestor),
-    targetLevel:normalized
-  });
-  if (!res.ok) throw new Error(res.error || 'ERROR_OPCIONES_JERARQUIA');
-  melHierarchyOptions[key] = res.rows || [];
-  melRegisterNodes(res.rows || []);
-  return melHierarchyOptions[key];
+  return melHierarchyDescendantsAtLevel(melAssetKey(ancestor), normalized);
 }
 function melHierarchySelectOptions(level) {
   const normalized = melNormLevel(level);
   const current = melHierarchySelections[normalized];
-  let options = [];
-  if (normalized === 'EMPRESA') {
-    options = melHierarchyOptions['ROOT|EMPRESA'] || melTreeRoots;
-  } else {
-    options = melHierarchyOptions[melHierarchyOptionKey(normalized)] || [];
-  }
+  let options = melLoadHierarchyOptions(normalized);
   if (current && !options.some(function(x) {
     return melAssetKey(x) === melAssetKey(current);
-  })) {
-    options = [current].concat(options);
-  }
+  })) options = [current].concat(options);
   return options;
 }
 function melHierarchyCanEdit() {
@@ -1283,9 +1304,7 @@ function melHierarchyRender() {
     html += '</option>';
     options.forEach(function(node) {
       const id = melAssetKey(node);
-      const selected = current && melAssetKey(current) === id
-        ? ' selected'
-        : '';
+      const selected = current && melAssetKey(current) === id ? ' selected' : '';
       html += '<option value="'+esc(id)+'"'+selected+'>';
       html += esc(melNodeCode(node)+' // '+(node.NOMBRE || ''));
       html += '</option>';
@@ -1294,48 +1313,16 @@ function melHierarchyRender() {
   });
   grid.innerHTML = html;
   grid.querySelectorAll('[data-hier-level]').forEach(function(sel) {
-    sel.addEventListener('focus', async function() {
-      const level = this.getAttribute('data-hier-level');
-      if (this.disabled || melHierarchyBusy) return;
-      try {
-        melHierarchyBusy = true;
-        await melLoadHierarchyOptions(level, false);
-        melHierarchyRender();
-      } catch(err) {
-        toast('ERROR CARGANDO ' + level + ': ' + err.message);
-      } finally {
-        melHierarchyBusy = false;
-      }
-    });
-    sel.addEventListener('change', async function() {
+    sel.addEventListener('change', function() {
       const level = this.getAttribute('data-hier-level');
       const id = this.value;
       const idx = melLevelIndex(level);
       MEL_CASCADE_LEVELS.forEach(function(nextLevel) {
-        if (melLevelIndex(nextLevel) >= idx) {
-          delete melHierarchySelections[nextLevel];
-        }
+        if (melLevelIndex(nextLevel) >= idx) delete melHierarchySelections[nextLevel];
       });
-      if (id && melNodeMap[id]) {
-        melHierarchySelections[level] = melNodeMap[id];
-      }
+      if (id && melNodeMap[id]) melHierarchySelections[level] = melNodeMap[id];
       melApplyHierarchyToForm();
       melHierarchyRender();
-      const next = MEL_CASCADE_LEVELS.find(function(nextLevel) {
-        return melLevelIndex(nextLevel) > idx &&
-          melLevelIndex(nextLevel) < melHierarchyTargetIndex();
-      });
-      if (next && id) {
-        try {
-          melHierarchyBusy = true;
-          await melLoadHierarchyOptions(next, true);
-          melHierarchyRender();
-        } catch(err) {
-          toast('ERROR CARGANDO ' + next + ': ' + err.message);
-        } finally {
-          melHierarchyBusy = false;
-        }
-      }
     });
   });
   const deepest = melHierarchyDeepestSelection();
@@ -1344,7 +1331,7 @@ function melHierarchyRender() {
   if (targetIndex === 0) {
     state.textContent = 'EMPRESA RAIZ';
     state.classList.add('ok');
-  } else if (deepest) {
+  } else if (deepest && melLevelIndex(deepest.NIVEL_DE_JERARQUIA) === targetIndex - 1) {
     state.textContent = 'RUTA VALIDADA';
     state.classList.add('ok');
   } else {
@@ -1356,17 +1343,6 @@ function melSetFieldValue(field, value) {
   if (el) el.value = value || '';
 }
 function melApplyHierarchyToForm() {
-  [
-    'PLANTA','AREA','LINEA_EQUIPO','SISTEMA',
-    'SUBSISTEMA','SUBEQUIPO','COMPONENTE'
-  ].forEach(function(field) {
-    melSetFieldValue(field, '');
-  });
-  MEL_CASCADE_LEVELS.forEach(function(level) {
-    const node = melHierarchySelections[level];
-    const field = MEL_LEVEL_FIELDS[level];
-    if (node && field) melSetFieldValue(field, melNodeCode(node));
-  });
   const deepest = melHierarchyDeepestSelection();
   const parent = document.getElementById('padreSelect');
   parent.innerHTML = '';
@@ -1379,55 +1355,22 @@ function melApplyHierarchyToForm() {
   parent.value = option.value;
   const label = document.getElementById('hierarchyParentLabel');
   label.innerHTML = deepest
-    ? '<b>PADRE FINAL:</b> '+
-      esc(melNodeCode(deepest)+' // '+
-      (deepest.NOMBRE || deepest.ID_ACTIVO || ''))
+    ? '<b>PADRE FINAL:</b> '+esc(melNodeCode(deepest)+' // '+(deepest.NOMBRE || deepest.ID_ACTIVO || ''))
     : '<b>PADRE FINAL:</b> SIN PADRE.';
 }
-async function melPrepareHierarchy(path) {
+function melPrepareHierarchy(path) {
   melHierarchySelections = melHierarchySelectionFromPath(path || []);
-  melHierarchyOptions = {};
-  melHierarchyOptions['ROOT|EMPRESA'] = melTreeRoots.filter(function(r) {
-    return melNormLevel(r.NIVEL_DE_JERARQUIA) === 'EMPRESA';
-  });
-  (path || []).forEach(function(node) {
-    const level = melNormLevel(node.NIVEL_DE_JERARQUIA);
-    const parent = melHierarchyAncestorFor(level);
-    const key = level === 'EMPRESA'
-      ? 'ROOT|EMPRESA'
-      : melAssetKey(parent) + '|' + level;
-    if (!melHierarchyOptions[key]) melHierarchyOptions[key] = [];
-    if (!melHierarchyOptions[key].some(function(x) {
-      return melAssetKey(x) === melAssetKey(node);
-    })) {
-      melHierarchyOptions[key].push(node);
-    }
-  });
   melApplyHierarchyToForm();
   melHierarchyRender();
 }
-async function melOnLevelChange() {
+function melOnLevelChange() {
   updateGeoPlantSection();
   const targetIndex = melHierarchyTargetIndex();
   MEL_CASCADE_LEVELS.forEach(function(level) {
-    if (melLevelIndex(level) >= targetIndex) {
-      delete melHierarchySelections[level];
-    }
+    if (melLevelIndex(level) >= targetIndex) delete melHierarchySelections[level];
   });
   melApplyHierarchyToForm();
   melHierarchyRender();
-  const firstMissing = MEL_CASCADE_LEVELS.find(function(level) {
-    return melLevelIndex(level) < targetIndex &&
-      !melHierarchySelections[level];
-  });
-  if (firstMissing) {
-    try {
-      await melLoadHierarchyOptions(firstMissing, false);
-      melHierarchyRender();
-    } catch(err) {
-      toast('ERROR CARGANDO JERARQUIA: ' + err.message);
-    }
-  }
 }
 function setForm(row, path) {
   document.querySelectorAll('[data-field]').forEach(function(el) {
