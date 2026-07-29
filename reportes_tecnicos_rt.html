@@ -60,7 +60,10 @@ textarea{min-height:78px;resize:vertical}
 .btn.gray{background:linear-gradient(180deg,#9ca3af,#6b7280)}
 .btn.red{background:linear-gradient(180deg,#ef4444,#b91c1c)}
 .btn:disabled{filter:grayscale(1);opacity:.55;cursor:not-allowed}
-.grid2{display:grid;grid-template-columns:38% 62%;gap:14px}
+.decision-layout{display:grid;grid-template-columns:minmax(460px,38%) minmax(0,62%);gap:14px;align-items:start}
+.left-stack{display:grid;gap:14px;align-content:start;min-width:0}
+.left-stack .panel{margin-bottom:0}
+.close-workbench{min-width:0;margin-bottom:0}
 .consult-layout{display:block}
 .detail-grid{display:grid;grid-template-columns:62% 38%;gap:14px;align-items:start}
 .grid-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
@@ -79,7 +82,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
 .badge.green{background:#e9fff2;color:#166534}
 .badge.red{background:#fee2e2;color:#991b1b}
 .badge.gray{background:#f1f5f9;color:#475569}
-.viewer{height:620px;border:1px dashed #bcd7f5;border-radius:14px;background:#f8fbff;overflow:hidden;display:grid;place-items:center;text-align:center;color:var(--navy)}
+.viewer{height:520px;border:1px dashed #bcd7f5;border-radius:14px;background:#f8fbff;overflow:hidden;display:grid;place-items:center;text-align:center;color:var(--navy)}
 .viewer iframe{width:100%;height:100%;border:0;background:#fff}
 .viewer h2{margin:0 0 6px;font-size:22px;color:var(--navy)}
 .viewer p{font-size:12px;color:var(--muted);font-weight:850}
@@ -90,6 +93,22 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
 .rt-info-block.full strong{font-size:12px;line-height:1.35}
 .rt-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .rt-empty{min-height:380px;display:grid;place-items:center;text-align:center;color:var(--muted);font-size:12px;font-weight:900;border:1px dashed #bcd7f5;border-radius:14px;background:#f8fbff}
+.rt-full-detail{display:grid;gap:12px;margin-bottom:14px}
+.rt-section{border:1px solid var(--line);border-radius:16px;background:#f8fbff;padding:12px}
+.rt-section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px;color:var(--navy);font-size:13px;font-weight:950}
+.rt-section-title span{color:var(--muted);font-size:10px;font-weight:900}
+.rt-fields-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.rt-field-card{min-width:0;border:1px solid #d7e4f2;border-radius:12px;background:#fff;padding:9px 10px}
+.rt-field-card.half{grid-column:span 2}
+.rt-field-card.full{grid-column:1/-1}
+.rt-field-label{display:block;margin-bottom:5px;color:#52657f;font-size:9.5px;font-weight:950;letter-spacing:.2px}
+.rt-field-value{display:block;color:var(--navy);font-size:12px;font-weight:900;line-height:1.4;white-space:pre-wrap;overflow-wrap:anywhere;text-transform:none}
+.rt-field-value.empty{color:#94a3b8;font-style:italic;font-weight:800}
+.rt-field-value a{color:var(--blue2);font-weight:950;text-decoration:none}
+.rt-loading{min-height:180px;display:grid;place-items:center;border:1px dashed #bcd7f5;border-radius:14px;background:#f8fbff;color:var(--muted);font-size:12px;font-weight:900}
+.decision-divider{margin:14px 0 12px;padding:10px 12px;border-left:5px solid var(--green2);border-radius:12px;background:linear-gradient(90deg,#ecfdf5,#f8fbff);color:var(--navy);font-size:14px;font-weight:950}
+.decision-form textarea{min-height:96px}
+.decision-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
 .arma-loader{position:fixed;inset:0;background:rgba(2,6,23,.50);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
 .arma-loader.hidden{display:none!important}
 .arma-loader-box{width:min(390px,92vw);background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 28px 70px rgba(0,0,0,.32);padding:24px;text-align:center;color:var(--navy)}
@@ -115,8 +134,8 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
 .resumen48-table td{vertical-align:top;border-bottom:1px solid var(--line);padding:8px 9px;font-size:11px;line-height:1.25;font-weight:750;color:#0f172a}
 .resumen48-foot{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:12px 18px;background:#fff;border-top:1px solid var(--line)}
 .resumen48-ok{border:0;border-radius:12px;background:linear-gradient(180deg,#00d65f,#55b52e);color:#fff;font-size:12px;font-weight:950;padding:10px 22px;cursor:pointer;box-shadow:var(--soft)}
-@media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.grid2,.detail-grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}.grid-form{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}}
-@media(max-width:700px){.action-grid,.filters,.grid-form{grid-template-columns:1fr}.main{padding:12px}.logo-pelex{height:58px}.logo-arma{height:64px}}
+@media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.decision-layout,.detail-grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}.grid-form,.rt-fields-grid{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}}
+@media(max-width:700px){.action-grid,.filters,.grid-form,.rt-fields-grid{grid-template-columns:1fr}.rt-field-card.half{grid-column:1/-1}.main{padding:12px}.logo-pelex{height:58px}.logo-arma{height:64px}.viewer{height:68vh}}
 </style>
 </head>
 <body>
@@ -160,39 +179,44 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       </div>
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap"><button class="btn gray" type="button" onclick="clearReportForm()">LIMPIAR</button><button class="btn green" type="button" onclick="createRT()">GUARDAR RT</button></div>
     </section>
-    <div id="consultGrid" class="grid2">
-      <section class="panel" id="listPanel">
-        <div class="panel-title"><h2 id="listTitle">LISTA DE RT</h2><div class="status" id="listStatus">SIN CONSULTA</div></div>
-        <div class="filters">
-          <input id="fBuscar" placeholder="BUSCAR BT, RT, EQUIPO O FALLA">
-          <input id="fDesde" type="date">
-          <input id="fHasta" type="date">
-          <select id="fEstado"><option value="">ESTADO</option><option value="RTD">RTD</option><option value="RTCT">RTCT</option></select>
-          <input id="fEquipo" placeholder="EQUIPO">
-          <button class="btn" type="button" onclick="loadRTList(1)">BUSCAR</button>
-        </div>
-        <div class="table-wrap"><table><thead><tr><th>BT</th><th>NUMERO RT</th><th>FECHA</th><th>EQUIPO</th><th>PRIORIDAD</th><th>ESTADO</th></tr></thead><tbody id="rtRows"><tr><td colspan="6">SIN DATOS CARGADOS</td></tr></tbody></table></div>
-        <div class="rt-pager" style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px"><button id="rtPrev" class="btn gray" type="button" onclick="loadRTList(Math.max(1,rtCurrentPage-1))">ANTERIOR</button><strong id="rtPageText">PAGINA 1</strong><button id="rtNext" class="btn" type="button" onclick="loadRTList(rtCurrentPage+1)">SIGUIENTE</button></div>
-      </section>
-      <section class="panel" id="detailPanel">
-        <div class="panel-title"><h2 id="detailTitle">VISOR PDF INTERNO</h2><div class="status" id="detailStatus">SELECCIONE UNA RT</div></div>
-        <div id="viewer" class="viewer"><div><h2>VISOR LISTO</h2><p>SELECCIONE UNA RT PARA CARGAR EL PDF.</p></div></div>
-        <section id="closePanel" class="panel hidden" style="margin-top:14px;box-shadow:none">
-          <div class="panel-title"><h2>CIERRE TECNICO</h2><div class="status" id="closeStatus">SELECCIONE UNA RT DOCUMENTADA</div></div>
-          <div class="grid-form">
-            <div class="field"><label>PRIORIDAD AJUSTADA</label><select id="ctPrioridad"><option value="">MANTENER</option><option value="P1_INMEDIATA">P1 INMEDIATA</option><option value="P2_8_HORAS">P2 8 HORAS</option></select></div>
-            <div class="field"><label>QUIEN REALIZA CIERRE</label><select id="ctPersona"></select></div>
-            <div class="field half"><label>OBSERVACIONES FINALES</label><textarea id="ctObservaciones"></textarea></div>
-            <div class="field half"><label>MOTIVO / JUSTIFICACION DE AJUSTE</label><textarea id="ctMotivo"></textarea></div>
-            <div class="field half"><label>NUEVA OT FUTURA</label><textarea id="ctNuevaOT" placeholder="SOLO DOCUMENTAR POR AHORA. NO CREA OT TODAVIA."></textarea></div>
-            <div class="field half"><label>SOLICITUD / COMPRA FUTURA</label><textarea id="ctSR" placeholder="SOLO DOCUMENTAR POR AHORA. NO CREA SR TODAVIA."></textarea></div>
+    <div id="consultGrid" class="decision-layout">
+      <div class="left-stack">
+        <section class="panel" id="listPanel">
+          <div class="panel-title"><h2 id="listTitle">LISTA DE RT</h2><div class="status" id="listStatus">SIN CONSULTA</div></div>
+          <div class="filters">
+            <input id="fBuscar" placeholder="BUSCAR BT, RT, EQUIPO O FALLA">
+            <input id="fDesde" type="date">
+            <input id="fHasta" type="date">
+            <select id="fEstado"><option value="">ESTADO</option><option value="RTD">RTD</option><option value="RTCT">RTCT</option></select>
+            <input id="fEquipo" placeholder="EQUIPO">
+            <button class="btn" type="button" onclick="loadRTList(1)">BUSCAR</button>
           </div>
-          <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap"><button class="btn green" type="button" onclick="closeSelectedRT()">REALIZAR CIERRE TECNICO</button></div>
+          <div class="table-wrap"><table><thead><tr><th>BT</th><th>NUMERO RT</th><th>FECHA</th><th>EQUIPO</th><th>PRIORIDAD</th><th>ESTADO</th></tr></thead><tbody id="rtRows"><tr><td colspan="6">SIN DATOS CARGADOS</td></tr></tbody></table></div>
+          <div class="rt-pager" style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px"><button id="rtPrev" class="btn gray" type="button" onclick="loadRTList(Math.max(1,rtCurrentPage-1))">ANTERIOR</button><strong id="rtPageText">PAGINA 1</strong><button id="rtNext" class="btn" type="button" onclick="loadRTList(rtCurrentPage+1)">SIGUIENTE</button></div>
         </section>
+        <section class="panel" id="detailPanel">
+          <div class="panel-title"><h2 id="detailTitle">VISOR PDF INTERNO</h2><div class="status" id="detailStatus">SELECCIONE UNA RT</div></div>
+          <div id="viewer" class="viewer"><div><h2>VISOR LISTO</h2><p>SELECCIONE UNA RT PARA CARGAR EL PDF.</p></div></div>
+        </section>
+      </div>
+      <section id="closePanel" class="panel close-workbench hidden">
+        <div class="panel-title"><h2>ANALISIS Y CIERRE TECNICO</h2><div class="status" id="closeStatus">SELECCIONE UNA RT DOCUMENTADA</div></div>
+        <div class="notice">LA FICHA INFERIOR PRESENTA TODOS LOS CAMPOS RETORNADOS POR ARMA_DATA PARA LA RT SELECCIONADA. REVISE FALLA, INTERVENCION, REPUESTOS, PENDIENTES, TIEMPOS Y SOPORTES ANTES DE CERRAR.</div>
+        <div id="rtFullDetail" class="rt-full-detail"><div class="rt-empty">SELECCIONE UNA RT DE LA LISTA PARA CARGAR LA INFORMACION COMPLETA.</div></div>
+        <div class="decision-divider">DECISION Y REGISTRO DE CIERRE</div>
+        <div class="grid-form decision-form">
+          <div class="field"><label>PRIORIDAD AJUSTADA</label><select id="ctPrioridad"><option value="">MANTENER</option><option value="P1_INMEDIATA">P1 INMEDIATA</option><option value="P2_8_HORAS">P2 8 HORAS</option></select></div>
+          <div class="field"><label>QUIEN REALIZA CIERRE</label><select id="ctPersona"></select></div>
+          <div class="field half"><label>OBSERVACIONES FINALES</label><textarea id="ctObservaciones"></textarea></div>
+          <div class="field half"><label>MOTIVO / JUSTIFICACION DE AJUSTE</label><textarea id="ctMotivo"></textarea></div>
+          <div class="field half"><label>NUEVA OT FUTURA</label><textarea id="ctNuevaOT" placeholder="SOLO DOCUMENTAR POR AHORA. NO CREA OT TODAVIA."></textarea></div>
+          <div class="field half"><label>SOLICITUD / COMPRA FUTURA</label><textarea id="ctSR" placeholder="SOLO DOCUMENTAR POR AHORA. NO CREA SR TODAVIA."></textarea></div>
+        </div>
+        <div class="decision-actions"><button id="btnCloseRT" class="btn green" type="button" onclick="closeSelectedRT()" disabled>REALIZAR CIERRE TECNICO</button></div>
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-29 17:05:34</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-29 18:07:02</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -289,22 +313,54 @@ async function resolvePdfForRT(id,rt){
     return rt;
   }catch(e){return rt;}
 }
+const RT_FIELD_LABELS={
+  ID_RT:'ID RT',CONSECUTIVO_BT:'CONSECUTIVO BT',NUM_REGISTRO_RT:'NUMERO RT',PLANTA:'PLANTA',ESTADO_RT:'ESTADO RT',ESTADO_DESCRIPCION:'DESCRIPCION DEL ESTADO',PRIORIDAD:'PRIORIDAD',
+  FECHA_HORA_REPORTE:'FECHA Y HORA DEL REPORTE',CORREO_REPORTA:'CORREO DE QUIEN REPORTA',PERSONAS_REPORTAN:'PERSONAS QUE REPORTAN',USUARIO_ARMA_REPORTA:'USUARIO ARMA QUE REPORTA',ID_PERSONA_REPORTA:'ID PERSONA QUE REPORTA',TIPO_TRABAJO:'TIPO DE TRABAJO',
+  EQUIPO_INTERVENIDO:'EQUIPO INTERVENIDO',ID_ACTIVO_MEL:'ID ACTIVO MEL',CODIGO_TAG_MEL:'CODIGO / TAG MEL',NIVEL_JERARQUIA_MEL:'NIVEL JERARQUICO MEL',ID_PADRE_MEL:'PADRE MEL',SUBSISTEMA_INTERVENIDO:'SUBSISTEMA / COMPONENTE',ID_SUBSISTEMA_MEL:'ID SUBSISTEMA MEL',
+  FECHA_HORA_INICIO:'INICIO DE INTERVENCION',FECHA_HORA_FIN:'FIN DE INTERVENCION',FECHA_INTERVENCION:'FECHA DE INTERVENCION',DURACION_HORAS:'DURACION EN HORAS',DURACION_MIN:'DURACION EN MINUTOS',VALIDACION_TIEMPO:'VALIDACION DE TIEMPO',REQUIERE_APROBACION_TIEMPO:'REQUIERE APROBACION DE TIEMPO',
+  DESCRIPCION_FALLA_NECESIDAD:'FALLA / NECESIDAD',FALLA_NECESIDAD:'FALLA / NECESIDAD',INTERVENCION_REALIZADA:'INTERVENCION REALIZADA',REPUESTOS_USADOS:'REPUESTOS USADOS',PENDIENTES:'PENDIENTES',OBSERVACIONES:'OBSERVACIONES',
+  FOTOS_ORIGEN:'FOTOS DE ORIGEN',FOTOS_DRIVE_IDS:'IDS DE FOTOS EN DRIVE',FOTOS_DRIVE_URLS:'ENLACES DE FOTOS EN DRIVE',PDF_FILE_ID:'ID PDF EN DRIVE',PDF_URL:'ENLACE PDF',PDF_PREVIEW_URL:'ENLACE DE VISTA PREVIA PDF',ESTADO_PDF:'ESTADO DEL PDF',PDF_VALIDADO_DRIVE:'PDF VALIDADO EN DRIVE',
+  OT_CREADA:'OT CREADA',REQUERIMIENTO_CREADO:'REQUERIMIENTO CREADO',REQUIERE_NUEVA_OT:'REQUIERE NUEVA OT',DESCRIPCION_NUEVA_OT:'DESCRIPCION NUEVA OT',REQUIERE_SR_COMPRA:'REQUIERE SOLICITUD / COMPRA',DESCRIPCION_SR_COMPRA:'DESCRIPCION SOLICITUD / COMPRA',
+  QUIEN_CIERRA:'QUIEN CIERRA',ID_PERSONA_CIERRE:'ID PERSONA DE CIERRE',FECHA_CIERRE:'FECHA DE CIERRE',FECHA_HORA_CIERRE:'FECHA Y HORA DE CIERRE',OBSERVACIONES_CIERRE:'OBSERVACIONES DE CIERRE',MOTIVO_EDICION_ADMIN:'MOTIVO DE EDICION / AJUSTE',ULTIMO_USUARIO_EDICION:'ULTIMO USUARIO QUE EDITO',FECHA_ULTIMA_EDICION:'FECHA DE ULTIMA EDICION',
+  ORIGEN_MIGRACION:'ORIGEN DE MIGRACION',CONTROL_ORIGINAL:'CONTROL ORIGINAL',NOTAS_MIGRACION:'NOTAS DE MIGRACION'
+};
+const RT_FIELD_GROUPS=[
+  {title:'IDENTIFICACION Y ESTADO',keys:['ID_RT','ID_INT','CONSECUTIVO_BT','NUM_REGISTRO_RT','PLANTA','ESTADO_RT','ESTADO_DESCRIPCION','PRIORIDAD','TIPO_TRABAJO']},
+  {title:'ACTIVO Y UBICACION',keys:['EQUIPO_INTERVENIDO','EQUIPO','ID_ACTIVO_MEL','CODIGO_TAG_MEL','NIVEL_JERARQUIA_MEL','ID_PADRE_MEL','SUBSISTEMA_INTERVENIDO','SUBSISTEMA','ID_SUBSISTEMA_MEL']},
+  {title:'REPORTANTE Y TIEMPOS',keys:['PERSONAS_REPORTAN','QUIEN_REPORTA','ID_PERSONA_REPORTA','USUARIO_ARMA_REPORTA','CORREO_REPORTA','FECHA_HORA_REPORTE','FECHA_HORA_INICIO','FECHA_HORA_FIN','FECHA_INTERVENCION','DURACION_HORAS','DURACION_MIN','VALIDACION_TIEMPO','REQUIERE_APROBACION_TIEMPO']},
+  {title:'FALLA, TRABAJO Y NECESIDADES',keys:['DESCRIPCION_FALLA_NECESIDAD','FALLA_NECESIDAD','INTERVENCION_REALIZADA','REPUESTOS_USADOS','PENDIENTES','OBSERVACIONES']},
+  {title:'CIERRE Y DECISIONES REGISTRADAS',keys:['QUIEN_CIERRA','ID_PERSONA_CIERRE','FECHA_CIERRE','FECHA_HORA_CIERRE','OBSERVACIONES_CIERRE','MOTIVO_EDICION_ADMIN','OT_CREADA','REQUERIMIENTO_CREADO','REQUIERE_NUEVA_OT','DESCRIPCION_NUEVA_OT','REQUIERE_SR_COMPRA','DESCRIPCION_SR_COMPRA']},
+  {title:'SOPORTES Y AUDITORIA',keys:['FOTOS_ORIGEN','FOTOS_DRIVE_IDS','FOTOS_DRIVE_URLS','PDF_FILE_ID','PDF_URL','PDF_PREVIEW_URL','ESTADO_PDF','PDF_VALIDADO_DRIVE','ULTIMO_USUARIO_EDICION','FECHA_ULTIMA_EDICION','ORIGEN_MIGRACION','CONTROL_ORIGINAL','NOTAS_MIGRACION']}
+];
+function rtHumanLabel(k){return RT_FIELD_LABELS[k]||String(k||'').replace(/_/g,' ');}
+function rtValueText(v){if(v==null)return'';if(typeof v==='object'){try{return JSON.stringify(v,null,2);}catch(e){return String(v);}}return String(v);}
+function rtValueHtml(v){const s=rtValueText(v).trim();if(!s)return '<span class="rt-field-value empty">SIN REGISTRO</span>';if(/^https?:\/\//i.test(s))return '<span class="rt-field-value"><a href="'+esc(s)+'" target="_blank" rel="noopener">ABRIR EN NUEVA PESTANA</a></span>';return '<span class="rt-field-value">'+esc(s)+'</span>';}
+function rtFieldSize(k,v){const s=rtValueText(v);if(/FALLA|INTERVENCION|REPUEST|PENDIENT|OBSERV|DESCRIPCION|MOTIVO|NOTAS|FOTOS_DRIVE_URLS/i.test(k)||s.length>130)return' full';if(s.length>65)return' half';return'';}
+function rtCardHtml(k,v){return '<div class="rt-field-card'+rtFieldSize(k,v)+'"><span class="rt-field-label">'+esc(rtHumanLabel(k))+'</span>'+rtValueHtml(v)+'</div>';}
+function rtSectionHtml(title,keys,rt){if(!keys.length)return'';return '<section class="rt-section"><div class="rt-section-title"><strong>'+esc(title)+'</strong><span>'+keys.length+' CAMPOS</span></div><div class="rt-fields-grid">'+keys.map(function(k){return rtCardHtml(k,rt[k]);}).join('')+'</div></section>';}
+function renderRTFullDetail(rt){const host=document.getElementById('rtFullDetail');if(!host)return;if(!rt){host.innerHTML='<div class="rt-empty">SELECCIONE UNA RT DE LA LISTA PARA CARGAR LA INFORMACION COMPLETA.</div>';return;}const all=Object.keys(rt);const used=new Set();let html='';RT_FIELD_GROUPS.forEach(function(g){const keys=g.keys.filter(function(k){return Object.prototype.hasOwnProperty.call(rt,k);});keys.forEach(function(k){used.add(k);});html+=rtSectionHtml(g.title,keys,rt);});const rest=all.filter(function(k){return !used.has(k);}).sort();if(rest.length)html+=rtSectionHtml('OTROS CAMPOS REGISTRADOS',rest,rt);host.innerHTML=html||'<div class="rt-empty">LA RT NO RETORNO CAMPOS DE DETALLE.</div>';}
+function setClosePerson(value,label){const el=document.getElementById('ctPersona');if(!el)return;const wanted=normTxt(value||label);if(!wanted)return;for(let i=0;i<el.options.length;i++){const o=el.options[i];if(normTxt(o.value)===wanted||normTxt(o.text)===wanted){el.value=o.value;return;}}}
+function populateCloseForm(rt,meta){document.getElementById('ctPrioridad').value='';document.getElementById('ctObservaciones').value=val(rt,['OBSERVACIONES_CIERRE']);document.getElementById('ctMotivo').value=val(rt,['MOTIVO_EDICION_ADMIN']);document.getElementById('ctNuevaOT').value=val(rt,['DESCRIPCION_NUEVA_OT','REQUIERE_NUEVA_OT_DESC']);document.getElementById('ctSR').value=val(rt,['DESCRIPCION_SR_COMPRA','REQUIERE_SR_DESC']);setClosePerson(val(rt,['ID_PERSONA_CIERRE']),val(rt,['QUIEN_CIERRA']));const estado=normTxt(val(rt,['ESTADO_RT','ESTADO']));const canClose=!!(meta&&meta.canClose===true&&estado==='RTD');const btn=document.getElementById('btnCloseRT');if(btn){btn.disabled=!canClose;btn.textContent=canClose?'REALIZAR CIERRE TECNICO':'RT CERRADA O SIN PERMISO DE CIERRE';}document.getElementById('closeStatus').textContent=canClose?'RT DOCUMENTADA // LISTA PARA DECISION':(estado||'DETALLE CARGADO');}
+function resetCloseWorkbench(){renderRTFullDetail(null);['ctPrioridad','ctPersona','ctObservaciones','ctMotivo','ctNuevaOT','ctSR'].forEach(function(id){const el=document.getElementById(id);if(el)el.value='';});const btn=document.getElementById('btnCloseRT');if(btn){btn.disabled=true;btn.textContent='REALIZAR CIERRE TECNICO';}const st=document.getElementById('closeStatus');if(st)st.textContent='SELECCIONE UNA RT DOCUMENTADA';}
 async function openRT(id){
-  document.getElementById("detailStatus").textContent="CARGANDO DETALLE...";
+  document.getElementById('detailStatus').textContent='CARGANDO DETALLE...';
+  document.getElementById('closeStatus').textContent='CARGANDO INFORMACION COMPLETA...';
+  document.getElementById('rtFullDetail').innerHTML='<div class="rt-loading">CONSULTANDO LA RT SELECCIONADA...</div>';
   try{
-    let data=await api("getRT",{idRT:id,idInt:id,ID_INT:id},"CARGANDO DETALLE RT...");
-    if(!data.ok){document.getElementById("detailStatus").textContent=data.error||"ERROR";return;}
+    const data=await api('getRT',{idRT:id,idInt:id,ID_INT:id});
+    if(!data.ok){document.getElementById('detailStatus').textContent=data.error||'ERROR';document.getElementById('rtFullDetail').innerHTML='<div class="rt-empty">'+esc(data.error||'NO FUE POSIBLE CARGAR LA RT')+'</div>';return;}
     selectedRT=data.rt||data.row||data.data||data;
-    selectedRT=await resolvePdfForRT(id,selectedRT);
-    document.getElementById("detailTitle").textContent=(val(selectedRT,["ID_INT","ID_RT","BT","CONSECUTIVO_BT"])||id)+" // "+(val(selectedRT,["NUMERO_RT","NUM_REGISTRO","NUM_REGISTRO_RT","RT"])||"RT");
-    document.getElementById("detailStatus").textContent=val(selectedRT,["ESTADO_RT","ESTADO"])||"DETALLE CARGADO";
-    setViewerFromRT(selectedRT);
-  }catch(e){document.getElementById("detailStatus").textContent="ERROR DE CONEXION";}
+    renderRTFullDetail(selectedRT);
+    populateCloseForm(selectedRT,data);
+    document.getElementById('detailTitle').textContent=(val(selectedRT,['ID_INT','ID_RT','BT','CONSECUTIVO_BT'])||id)+' // '+(val(selectedRT,['NUMERO_RT','NUM_REGISTRO','NUM_REGISTRO_RT','RT'])||'RT');
+    document.getElementById('detailStatus').textContent=val(selectedRT,['ESTADO_RT','ESTADO'])||'DETALLE CARGADO';
+    requestAnimationFrame(function(){setViewerFromRT(selectedRT);});
+  }catch(e){document.getElementById('detailStatus').textContent='ERROR DE CONEXION';document.getElementById('closeStatus').textContent='ERROR DE CONEXION';document.getElementById('rtFullDetail').innerHTML='<div class="rt-empty">ERROR DE CONEXION AL CARGAR EL DETALLE.</div>';}
 }
 function drivePreviewFromUrl(url){url=String(url||"").trim();if(!url)return"";let m=url.match(/\/d\/([^\/]+)/)||url.match(/[?&]id=([^&]+)/);if(m&&m[1])return "https://drive.google.com/file/d/"+encodeURIComponent(m[1])+"/preview";return url;}
 function getPdfUrl(rt){let url=val(rt,["PDF_PREVIEW_URL","DRIVE_PREVIEW_URL","PREVIEW_URL","URL_PREVIEW"]);if(!url)url=val(rt,["PDF_URL","URL_PDF","LINK_PDF"]);if(!url)url=val(rt,["directUrl","DIRECT_URL","PDF_DIRECT_URL","DOWNLOAD_URL"]);return drivePreviewFromUrl(url);}
 function setViewerFromRT(rt){let url=getPdfUrl(rt);let v=document.getElementById("viewer");if(!url){v.innerHTML='<div><h2>PDF NO DISPONIBLE</h2><p>LA RT SELECCIONADA AUN NO TIENE PDF ASOCIADO O EL BACKEND NO RETORNO URL.</p></div>';return;}v.innerHTML='<iframe src="'+esc(url)+'" title="VISOR PDF RT"></iframe>';}
-function clearViewer(){selectedRT=null;document.getElementById("detailTitle").textContent="VISOR PDF INTERNO";document.getElementById("detailStatus").textContent="SELECCIONE UNA RT";document.getElementById("viewer").innerHTML='<div><h2>VISOR LISTO</h2><p>SELECCIONE UNA RT PARA CARGAR EL PDF.</p></div>';}
+function clearViewer(){selectedRT=null;document.getElementById('detailTitle').textContent='VISOR PDF INTERNO';document.getElementById('detailStatus').textContent='SELECCIONE UNA RT';document.getElementById('viewer').innerHTML='<div><h2>VISOR LISTO</h2><p>SELECCIONE UNA RT PARA CARGAR EL PDF.</p></div>';document.querySelectorAll('#rtRows tr').forEach(function(x){x.classList.remove('selected');});resetCloseWorkbench();}
 function parseDt(id){let v=document.getElementById(id).value;if(!v)return null;return new Date(v);}
 function validateTimes(){let ini=parseDt("rtInicio"), fin=parseDt("rtFin");if(!ini||!fin){alert("DILIGENCIE INICIO Y FIN DE INTERVENCION.");return false;}let rawIni=document.getElementById("rtInicio").value, rawFin=document.getElementById("rtFin").value;if(rawIni.indexOf("T24:")>0||rawFin.indexOf("T24:")>0){alert("HORA 24:00 NO ES VALIDA. USE 00:00 DEL DIA SIGUIENTE.");return false;}let hrs=(fin-ini)/3600000;if(hrs<=0){alert("LA FECHA/HORA FIN DEBE SER MAYOR QUE EL INICIO.");return false;}if(hrs>24){alert("NO ES POSIBLE REPORTAR UNA RT MAYOR A 24 HORAS.");return false;}if(hrs>12){return confirm("LA RT SUPERA 12 HORAS. ESTO REQUIERE REVISION/APROBACION DEL JEFE. DESEA CONTINUAR?");}return true;}
 function collectRT(){let eqObj=selectedEquipoObj();let subObj=selectedSubsistemaObj();let equipoNombre=equipoText(eqObj)||selectedOptionText('rtEquipo')||document.getElementById('rtEquipo').value;let subNombre=equipoText(subObj)||selectedOptionText('rtSubsistema')||document.getElementById('rtSubsistema').value;return {
@@ -318,6 +374,7 @@ async function uploadFotosForRT(id){let inp=document.getElementById("rtFotos");l
 function clearReportForm(resetStatus=true){["rtFalla","rtIntervencion","rtRepuestos","rtPendientes","rtObservaciones"].forEach(id=>document.getElementById(id).value="");["rtInicio","rtFin"].forEach(id=>document.getElementById(id).value="");let f=document.getElementById("rtFotos");if(f)f.value="";if(resetStatus)document.getElementById("reportStatus").textContent="FORMULARIO LIMPIO";}
 async function closeSelectedRT(){if(!selectedRT){alert("SELECCIONE UNA RT.");return;}if(!hasPerm("BTN_REPORTES_TECNICOS")&&!hasPerm("BTN_RT_CERRAR")){alert("NO TIENE PERMISO PARA CIERRE TECNICO.");return;}let id=val(selectedRT,["ID_INT","ID_RT","BT"]);let payload={idRT:id,idInt:id,data:{PRIORIDAD:document.getElementById("ctPrioridad").value,ID_PERSONA_CIERRE:document.getElementById("ctPersona").value,OBSERVACIONES_CIERRE:document.getElementById("ctObservaciones").value,MOTIVO_EDICION_ADMIN:document.getElementById("ctMotivo").value,REQUIERE_NUEVA_OT_DESC:document.getElementById("ctNuevaOT").value,REQUIERE_SR_DESC:document.getElementById("ctSR").value}};if(!payload.data.ID_PERSONA_CIERRE){alert("SELECCIONE QUIEN REALIZA EL CIERRE.");return;}if(!payload.data.OBSERVACIONES_CIERRE){alert("DILIGENCIE OBSERVACIONES FINALES.");return;}if(!confirm("CONFIRMA REALIZAR EL CIERRE TECNICO DE "+id+"?"))return;document.getElementById("closeStatus").textContent="CERRANDO RT...";try{let res=await api("closeRT",payload,"REALIZANDO CIERRE TECNICO...");if(!res.ok){document.getElementById("closeStatus").textContent=res.error||"NO FUE POSIBLE CERRAR";return;}try{await api("generateRTPDF",{idRT:id,idInt:id},"ACTUALIZANDO PDF...");}catch(e){}document.getElementById("closeStatus").textContent="RT CERRADA";await openRT(id);await loadRTList(rtCurrentPage);alert("CIERRE TECNICO REALIZADO.");}catch(e){document.getElementById("closeStatus").textContent="ERROR DE CONEXION";}}
 async function generateSelectedPdf(){if(!selectedRT){alert("SELECCIONE UNA RT.");return;}if(!hasPerm("BTN_RT_GENERAR_PDF")&&!hasPerm("BTN_REPORTES_TECNICOS")&&!hasPerm("BTN_DILIGENCIAR_RT")){alert("NO TIENE PERMISO PARA GENERAR PDF.");return;}let id=val(selectedRT,["ID_INT","ID_RT","BT"]);try{let res=await api("generateRTPDF",{idRT:id,idInt:id},"GENERANDO PDF RT...");if(!res.ok){alert(res.error||"NO FUE POSIBLE GENERAR PDF");return;}await openRT(id);alert("PDF ACTUALIZADO.");}catch(e){alert("ERROR DE CONEXION");}}
+/* === ARMA RT V25 DECISION Y CIERRE INTEGRAL === */
 /* === ARMA V12 FASTPATH RT === */
 const ARMA_V12_RT_INFLIGHT=new Map();
 async function api(action,payload,msg){
