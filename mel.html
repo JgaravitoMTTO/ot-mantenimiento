@@ -160,6 +160,25 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
 .summary-right .btn{width:170px;min-height:40px !important;padding:10px 13px !important}
 @media(max-width:1100px){.detail-head{grid-template-columns:1fr !important}.summary-right{align-items:stretch;min-width:0}.asset-qr{align-self:center}.photo-filename,.summary-right .btn{width:100%}}
 @media(max-width:700px){.btn,button{font-size:19px!important;}.action-card strong{font-size:18px!important;}.action-card span{font-size:12px!important;}.tree-toggle{font-size:19px!important;}}
+/* === MEL v10: seleccion inicial, visor de foto y herramientas QR === */
+.summary-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:13px}
+.summary-tools .btn{min-width:235px;min-height:42px!important;padding:10px 15px!important}
+.media-modal{position:fixed;inset:0;z-index:2600;background:rgba(2,18,40,.92);display:flex;align-items:center;justify-content:center;padding:18px}
+.media-modal.hidden{display:none}
+.media-modal-card{width:min(96vw,1500px);height:min(94vh,980px);background:#fff;border-radius:18px;box-shadow:0 28px 80px rgba(0,0,0,.45);display:flex;flex-direction:column;overflow:hidden}
+.media-modal-card.qr-card{width:min(94vw,720px);height:auto;max-height:94vh}
+.media-modal-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid #dce9f7;background:#f8fbff}
+.media-modal-title{font-size:16px;font-weight:1000;color:#003b7a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.media-modal-close{border:0;border-radius:10px;background:#687386;color:#fff;font-weight:1000;padding:10px 14px;cursor:pointer}
+.media-modal-body{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:14px;background:#071a30}
+.media-modal-photo{width:100%;height:100%;object-fit:contain;display:block}
+.qr-modal-body{display:flex;flex-direction:column;align-items:center;gap:14px;padding:20px;overflow:auto;background:#fff}
+.qr-preview{width:min(70vw,420px);height:min(70vw,420px);max-width:420px;max-height:420px;object-fit:contain;border:1px solid #cfe0f2;border-radius:16px;padding:12px;background:#fff}
+.qr-modal-summary{text-align:center;font-size:12px;font-weight:900;line-height:1.5;color:#244668;white-space:pre-line}
+.qr-modal-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;width:100%}
+.qr-modal-actions .btn{min-width:190px}
+body.modal-open{overflow:hidden}
+@media(max-width:700px){.summary-tools{display:grid;grid-template-columns:1fr}.summary-tools .btn{width:100%;min-width:0}.media-modal{padding:7px}.media-modal-card{width:100%;height:98vh;border-radius:12px}.media-modal-card.qr-card{height:auto;max-height:98vh}.qr-preview{width:min(82vw,380px);height:min(82vw,380px)}}
 /* === MEL GEO PLANTAS 150 M === */
 .geo-hidden{display:none!important}
 .geo-plant-section{border:2px solid #86c7ff;background:linear-gradient(180deg,#f8fcff,#edf8ff)}
@@ -216,6 +235,10 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
       <div class="detail-text">
         <div id="selectedName" class="selected-name">NO_ASSET</div>
         <div id="selectedSub" class="selected-sub asset-lines">SELECCIONE UN ACTIVO DEL ARBOL O CREE UNO NUEVO.</div>
+        <div class="summary-tools">
+          <button id="btnViewPhoto" type="button" class="btn" data-perm="BTN_MEL_VER" data-arma-access="BTN_MEL_VER" disabled>VER FOTO EN PANTALLA COMPLETA</button>
+          <button id="btnQrTools" type="button" class="btn" data-perm="BTN_MEL_VER" data-arma-access="BTN_MEL_VER" disabled>DESCARGAR / IMPRIMIR QR</button>
+        </div>
         <input id="photoFile" class="photo-file-hidden" type="file" accept="image/png,image/jpeg,image/webp">
       </div>
       <div class="summary-right">
@@ -360,11 +383,38 @@ label{display:block;font-size:10px;font-weight:1000;color:#003b7a;margin-bottom:
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-11 11:18:03</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-29 13:36:49</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
 <div id="toast" class="toast"></div>
+
+<div id="photoModal" class="media-modal hidden" aria-hidden="true">
+  <div class="media-modal-card" role="dialog" aria-modal="true" aria-labelledby="photoModalTitle">
+    <div class="media-modal-toolbar">
+      <div id="photoModalTitle" class="media-modal-title">FOTO DEL ACTIVO</div>
+      <button type="button" class="media-modal-close" data-close-modal="photoModal">CERRAR</button>
+    </div>
+    <div class="media-modal-body"><img id="photoModalImage" class="media-modal-photo" alt="FOTO DEL ACTIVO EN PANTALLA COMPLETA"></div>
+  </div>
+</div>
+
+<div id="qrModal" class="media-modal hidden" aria-hidden="true">
+  <div class="media-modal-card qr-card" role="dialog" aria-modal="true" aria-labelledby="qrModalTitle">
+    <div class="media-modal-toolbar">
+      <div id="qrModalTitle" class="media-modal-title">CODIGO QR DEL ACTIVO</div>
+      <button type="button" class="media-modal-close" data-close-modal="qrModal">CERRAR</button>
+    </div>
+    <div class="qr-modal-body">
+      <img id="qrModalImage" class="qr-preview" alt="QR DEL ACTIVO">
+      <div id="qrModalSummary" class="qr-modal-summary"></div>
+      <div class="qr-modal-actions">
+        <button id="btnDownloadQr" type="button" class="btn green" data-perm="BTN_MEL_VER" data-arma-access="BTN_MEL_VER">DESCARGAR QR</button>
+        <button id="btnPrintQr" type="button" class="btn" data-perm="BTN_MEL_VER" data-arma-access="BTN_MEL_VER">IMPRIMIR QR</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 const ARMA_API_URL = "https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -375,6 +425,7 @@ let melRows = [];
 let melCatalogos = {};
 let selectedAsset = null;
 let creatingNew = false;
+let melInitialSelectionApplied = false;
 
 function esc(v) {
   return String(v == null ? "" : v).replace(/[&<>"']/g, function(m) { return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[m]; });
@@ -426,14 +477,19 @@ async function init() {
   await loadMEL();
 }
 function applyPermissions() {
+  const canView = hasPerm("BTN_MEL_VER");
   const canCreate = hasPerm("BTN_MEL_CREAR");
   const canEdit = hasPerm("BTN_MEL_EDITAR");
   const canUpload = hasPerm("BTN_MEL_SUBIR_FOTO");
+  document.getElementById("btnReload").classList.toggle("disabled", !canView);
   document.getElementById("btnNew").classList.toggle("disabled", !canCreate);
   document.getElementById("btnSaveTop").classList.toggle("disabled", !canEdit && !canCreate);
   document.getElementById("btnSave").disabled = !canEdit && !canCreate;
   document.getElementById("btnUploadPhoto").disabled = !canUpload;
   document.getElementById("btnCaptureGeo").disabled = !canEdit && !canCreate;
+  document.getElementById("btnDownloadQr").disabled = !canView;
+  document.getElementById("btnPrintQr").disabled = !canView;
+  updateSummaryActionState(selectedAsset);
 }
 function currentFilters() {
   return {
@@ -444,6 +500,17 @@ function currentFilters() {
     area: document.getElementById("filterArea").value
   };
 }
+function findDefaultCompanyAsset() {
+  const exact = melRows.find(function(r) {
+    return melGeoNorm(r.NIVEL_DE_JERARQUIA) === "EMPRESA" && melGeoNorm(r.CODIGO_TAG) === "PLX" && melGeoNorm(r.NOMBRE) === "PELEX SAS";
+  });
+  if (exact) return exact;
+  const rootCompany = melRows.find(function(r) {
+    return melGeoNorm(r.NIVEL_DE_JERARQUIA) === "EMPRESA" && !melParentKey(r);
+  });
+  if (rootCompany) return rootCompany;
+  return melRows.find(function(r) { return melGeoNorm(r.NIVEL_DE_JERARQUIA) === "EMPRESA"; }) || null;
+}
 async function loadMEL() {
   showLoader("CARGANDO MEL_ACTIVOS...");
   try {
@@ -453,8 +520,19 @@ async function loadMEL() {
     melCatalogos = data.catalogos || {};
     renderCatalogos();
     renderParentOptions();
+    if (selectedAsset) {
+      const keep = melRows.find(x => melAssetKey(x) === melAssetKey(selectedAsset) || String(x.CODIGO_TAG || '').trim() === melAssetKey(selectedAsset));
+      if (keep) { selectedAsset = keep; setForm(keep); }
+      else { selectedAsset = null; setForm(null); }
+    } else if (!creatingNew && !melInitialSelectionApplied) {
+      const initial = findDefaultCompanyAsset();
+      melInitialSelectionApplied = true;
+      selectedAsset = initial;
+      setForm(initial);
+    } else {
+      setForm(null);
+    }
     renderTree();
-    if (selectedAsset) { const keep = melRows.find(x => melAssetKey(x) === melAssetKey(selectedAsset) || String(x.CODIGO_TAG||'').trim() === melAssetKey(selectedAsset)); if (keep) { selectedAsset = keep; setForm(keep); } else { selectedAsset = null; setForm(null); } } else { setForm(null); }
     document.getElementById("countLabel").textContent = melRows.length + " ACTIVOS";
     hideLoader();
   } catch(err) {
@@ -605,6 +683,19 @@ document.getElementById("btnCancel").addEventListener("click", function() { if (
 function chooseMELPhoto() { document.getElementById("photoFile").click(); }
 document.getElementById("btnUploadPhoto").addEventListener("click", chooseMELPhoto);
 document.getElementById("photoFile").addEventListener("change", function(){ const f=this.files&&this.files[0]; document.getElementById("photoFileName").textContent = f ? f.name : "SIN ARCHIVO SELECCIONADO"; if(f) uploadPhoto(); });
+document.getElementById("btnViewPhoto").addEventListener("click", openPhotoViewer);
+document.getElementById("btnQrTools").addEventListener("click", openQrTools);
+document.getElementById("btnDownloadQr").addEventListener("click", downloadAssetQr);
+document.getElementById("btnPrintQr").addEventListener("click", printAssetQr);
+document.querySelectorAll("[data-close-modal]").forEach(function(btn) {
+  btn.addEventListener("click", function() { closeMediaModal(this.getAttribute("data-close-modal")); });
+});
+["photoModal","qrModal"].forEach(function(id) {
+  document.getElementById(id).addEventListener("click", function(e) { if (e.target === this) closeMediaModal(id); });
+});
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape") { closeMediaModal("photoModal"); closeMediaModal("qrModal"); }
+});
 ["filterQ","filterEstado","filterNivel","filterPlanta","filterArea"].forEach(function(id) {
   document.getElementById(id).addEventListener("keydown", function(e) { if (e.key === "Enter") loadMEL(); });
 });
@@ -696,6 +787,85 @@ function renderAssetSummary(row){
   const qtxt = row ? melSummaryText(row) : 'NO_ASSET';
   qr.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=8&data=' + encodeURIComponent(qtxt);
 }
+function updateSummaryActionState(row) {
+  const enabled = !!row && hasPerm("BTN_MEL_VER");
+  document.getElementById("btnViewPhoto").disabled = !enabled;
+  document.getElementById("btnQrTools").disabled = !enabled;
+}
+function syncMediaModalState() {
+  const anyOpen = Array.from(document.querySelectorAll(".media-modal")).some(function(el) { return !el.classList.contains("hidden"); });
+  document.body.classList.toggle("modal-open", anyOpen);
+}
+function closeMediaModal(id) {
+  const modal = document.getElementById(id);
+  if (!modal) return;
+  modal.classList.add("hidden");
+  modal.setAttribute("aria-hidden", "true");
+  syncMediaModalState();
+}
+function openPhotoViewer() {
+  if (!selectedAsset || !hasPerm("BTN_MEL_VER")) { toast("SELECCIONE UN ACTIVO AUTORIZADO."); return; }
+  const src = document.getElementById("assetPhoto").src;
+  document.getElementById("photoModalImage").src = src;
+  document.getElementById("photoModalTitle").textContent = "FOTO // " + (selectedAsset.NOMBRE || selectedAsset.CODIGO_TAG || selectedAsset.ID_ACTIVO || "ACTIVO");
+  const modal = document.getElementById("photoModal");
+  modal.classList.remove("hidden");
+  modal.setAttribute("aria-hidden", "false");
+  syncMediaModalState();
+}
+function openQrTools() {
+  if (!selectedAsset || !hasPerm("BTN_MEL_VER")) { toast("SELECCIONE UN ACTIVO AUTORIZADO."); return; }
+  document.getElementById("qrModalImage").src = document.getElementById("assetQr").src;
+  document.getElementById("qrModalSummary").textContent = melSummaryText(selectedAsset);
+  document.getElementById("qrModalTitle").textContent = "CODIGO QR // " + (selectedAsset.CODIGO_TAG || selectedAsset.ID_ACTIVO || "ACTIVO");
+  const modal = document.getElementById("qrModal");
+  modal.classList.remove("hidden");
+  modal.setAttribute("aria-hidden", "false");
+  syncMediaModalState();
+}
+function melSafeFileName(v) {
+  return melClean(v).replace(/[^A-Z0-9_-]+/gi, "_").replace(/^_+|_+$/g, "") || "ACTIVO";
+}
+async function downloadAssetQr() {
+  if (!selectedAsset || !hasPerm("BTN_MEL_VER")) { toast("SELECCIONE UN ACTIVO AUTORIZADO."); return; }
+  const src = document.getElementById("assetQr").src;
+  const fileName = "QR_" + melSafeFileName(selectedAsset.CODIGO_TAG || selectedAsset.ID_ACTIVO) + ".png";
+  showLoader("PREPARANDO QR...");
+  try {
+    const response = await fetch(src);
+    if (!response.ok) throw new Error("HTTP_" + response.status);
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(function() { URL.revokeObjectURL(url); }, 1500);
+    toast("QR DESCARGADO.");
+  } catch(err) {
+    window.open(src, "_blank", "noopener");
+    toast("EL QR SE ABRIO EN OTRA PESTANA PARA GUARDARLO.");
+  } finally {
+    hideLoader();
+  }
+}
+function printAssetQr() {
+  if (!selectedAsset || !hasPerm("BTN_MEL_VER")) { toast("SELECCIONE UN ACTIVO AUTORIZADO."); return; }
+  const src = document.getElementById("assetQr").src;
+  const title = esc(selectedAsset.NOMBRE || selectedAsset.CODIGO_TAG || selectedAsset.ID_ACTIVO || "ACTIVO");
+  const summary = esc(melSummaryText(selectedAsset)).replace(/\n/g, "<br>");
+  const win = window.open("", "_blank", "width=820,height=900");
+  if (!win) { toast("EL NAVEGADOR BLOQUEO LA VENTANA DE IMPRESION."); return; }
+  const html = "<!DOCTYPE html><html lang=\"es\"><head><meta charset=\"UTF-8\"><title>QR " + title + "</title><style>@page{margin:12mm}body{font-family:Arial,sans-serif;text-align:center;color:#002b5c;margin:0;padding:28px}h1{font-size:25px;margin:0 0 8px}.summary{font-size:13px;font-weight:700;line-height:1.55;margin:0 0 18px}.qr{width:420px;max-width:90vw;height:auto;border:1px solid #cfe0f2;padding:14px;border-radius:14px}.foot{margin-top:18px;font-size:10px;font-weight:700}</style></head><body><h1>" + title + "</h1><div class=\"summary\">" + summary + "</div><img id=\"printQr\" class=\"qr\" src=\"" + src + "\" alt=\"CODIGO QR\"><div class=\"foot\">ARMA // MEL EQUIPOS</div></body></html>";
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+  const qr = win.document.getElementById("printQr");
+  const launchPrint = function() { setTimeout(function() { win.focus(); win.print(); }, 250); };
+  if (qr.complete) launchPrint(); else qr.onload = launchPrint;
+}
 function melGeoNorm(v){ return String(v || '').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
 function melIsPlantLevel(){ return melGeoNorm(document.getElementById('nivelSelect').value) === 'PLANTA'; }
 function updateGeoPlantSection() {
@@ -748,6 +918,7 @@ function setForm(row) {
     el.value = row && row[k] != null ? row[k] : '';
   });
   renderAssetSummary(row);
+  updateSummaryActionState(row);
   const img = document.getElementById('assetPhoto');
   img.onerror = function(){ this.onerror = null; this.src = MEL_DEFAULT_PHOTO; };
   img.src = melImageUrl(row && (row.DIR_FOTOGRAFIA || row.FOTO_URL || row.UBICACION_FOTOGRAFIA || row.UBICACION_FOTOGRAFICA));
