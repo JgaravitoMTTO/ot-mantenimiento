@@ -72,7 +72,7 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eaf0f7;color:#0
       <div class='nav-icon'><img src='boton-de-inicio.png' alt='INICIO'></div>
       <div class='nav-text'><strong>Inicio</strong><span>Volver a ARMA</span></div>
     </a>
-    <button id='btnOpenDrive' class='action-card blue' type='button' onclick='armaOpenFolder();'>
+    <button id='btnOpenDrive' class='action-card blue locked' type='button' onclick='armaOpenFolder();'>
       <strong>ABRIR CARPETA DRIVE</strong><span>SOLO ADMIN / ARMA</span>
     </button>
     <button class='action-card green' type='button' onclick='armaLoadFiles();'>
@@ -109,14 +109,19 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eaf0f7;color:#0
   </section>
   <footer class='footer'>
     <span>A.R.M.A. - ASSET RELIABILITY & MAINTENANCE ANALYTICS</span>
-    <span>GENERADO: 2026-07-11 11:17:55</span>
+    <span>GENERADO: 2026-07-29 17:13:37</span>
   </footer>
 </main>
 <script>
 const ARMA_API_URL='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
 const ARMA_PERFILES_FOLDER='https://drive.google.com/drive/folders/1dX_5BOoiMQjFtEog_dJpHgobnuv_wbGd?usp=sharing';
+const ARMA_PERFILES_CACHE_TTL_MS=300000;
+const ARMA_PERFILES_CACHE_STALE_MS=86400000;
 let ARMA_PERFILES_FILES=[];
 let armaLoaderCount=0;
+let armaPerfilesInflight=null;
+let armaCanOpenFolder=false;
+
 function showArmaLoader(msg){
   armaLoaderCount++;
   var o=document.getElementById('armaLoader');
@@ -124,80 +129,176 @@ function showArmaLoader(msg){
   if(t)t.textContent=msg||'CARGANDO...';
   if(o)o.classList.remove('hidden');
 }
+
 function hideArmaLoader(){
   armaLoaderCount=Math.max(0,armaLoaderCount-1);
-  if(armaLoaderCount===0){var o=document.getElementById('armaLoader');if(o)o.classList.add('hidden');}
+  if(armaLoaderCount===0){
+    var o=document.getElementById('armaLoader');
+    if(o)o.classList.add('hidden');
+  }
 }
+
 function armaInicio(){
-  try{if(window.opener && !window.opener.closed){window.opener.focus();window.close();return false;}}catch(e){}
+  try{
+    if(window.opener&&!window.opener.closed){
+      window.opener.focus();
+      window.close();
+      return false;
+    }
+  }catch(e){}
   try{window.location.href='main.html';}catch(e){}
   return false;
 }
+
 function armaReadSession(){
-  try{return JSON.parse(localStorage.getItem('ARMA_SESSION_CACHE')||'{}')||{};}catch(e){return {};}
+  try{return JSON.parse(localStorage.getItem('ARMA_SESSION_CACHE')||'{}')||{};}
+  catch(e){return {};}
 }
+
 function armaToken(){
   var x=armaReadSession();
   return x.token||localStorage.getItem('ARMA_TOKEN')||'';
 }
-function armaIsAdmin(){
-  var x=armaReadSession();
-  var u=String(x.user||'').toUpperCase();
-  var n=String(x.nivel||'').toUpperCase();
-  var p=x.permissions||{};
-  return !!(u==='ARMA'||u==='ARDAN'||n==='ADMIN'||n==='SUPER_ADMIN'||p.ALL===true||p.__SUPER_ADMIN__===true);
+
+function armaHash(value){
+  var s=String(value||'');
+  var h=2166136261;
+  for(var i=0;i<s.length;i++){
+    h^=s.charCodeAt(i);
+    h=Math.imul(h,16777619);
+  }
+  return (h>>>0).toString(36);
 }
+
+function armaPerfilesCacheKey(){
+  return 'ARMA_V12_PERFILES_'+armaHash(armaToken());
+}
+
+function armaReadPerfilesCache(){
+  try{
+    var raw=sessionStorage.getItem(armaPerfilesCacheKey());
+    if(!raw)return null;
+    var saved=JSON.parse(raw);
+    var age=Date.now()-Number(saved.ts||0);
+    if(!saved.data||age>ARMA_PERFILES_CACHE_STALE_MS)return null;
+    return {data:saved.data,age:age,fresh:age<=ARMA_PERFILES_CACHE_TTL_MS};
+  }catch(e){return null;}
+}
+
+function armaWritePerfilesCache(data){
+  try{
+    sessionStorage.setItem(armaPerfilesCacheKey(),JSON.stringify({ts:Date.now(),data:data}));
+  }catch(e){}
+}
+
+function armaClearPerfilesCache(){
+  try{sessionStorage.removeItem(armaPerfilesCacheKey());}catch(e){}
+}
+
+function armaSetFolderPermission(allowed){
+  armaCanOpenFolder=allowed===true;
+  var b=document.getElementById('btnOpenDrive');
+  if(!b)return;
+  b.classList.toggle('locked',!armaCanOpenFolder);
+  b.disabled=!armaCanOpenFolder;
+}
+
 function armaOpenFolder(){
-  if(!armaIsAdmin()){alert('ACCESO RESTRINGIDO A ADMIN / ARMA.');return;}
+  if(!armaCanOpenFolder){
+    alert('ACCESO RESTRINGIDO. EL BACKEND NO AUTORIZO ABRIR LA CARPETA DRIVE.');
+    return;
+  }
   window.open(ARMA_PERFILES_FOLDER,'ARMA_PERFILES_DRIVE');
 }
+
 async function armaApi(action,payload){
+  if(armaPerfilesInflight)return armaPerfilesInflight;
   payload=payload||{};
   payload.action=action;
-  var res=await fetch(ARMA_API_URL,{
-    method:'POST',
-    headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body:JSON.stringify(payload)
-  });
-  return await res.json();
+  payload.token=armaToken();
+  armaPerfilesInflight=(async function(){
+    var ctl=new AbortController();
+    var tm=setTimeout(function(){ctl.abort();},30000);
+    try{
+      var res=await fetch(ARMA_API_URL,{
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body:JSON.stringify(payload),
+        signal:ctl.signal
+      });
+      var txt=await res.text();
+      if(!res.ok)throw new Error('HTTP_'+res.status);
+      try{return JSON.parse(txt);}
+      catch(e){throw new Error('RESPUESTA_BACKEND_NO_JSON');}
+    }finally{
+      clearTimeout(tm);
+    }
+  })();
+  try{return await armaPerfilesInflight;}
+  finally{armaPerfilesInflight=null;}
 }
-async function armaLoadFiles(){
-  showArmaLoader('ACTUALIZANDO LISTA DE PERFILES...');
+
+function armaApplyFiles(data,source,trustPermission){
+  ARMA_PERFILES_FILES=Array.isArray(data&&data.files)?data.files:[];
+  if(trustPermission)armaSetFolderPermission(data&&data.canOpenFolder===true);
+  var label=source||'BACKEND';
+  var stamp=(data&&data.ts)||'';
+  document.getElementById('statusBox').textContent='ARCHIVOS ENCONTRADOS: '+ARMA_PERFILES_FILES.length+' PDF // FUENTE: '+label+(stamp?' // ACTUALIZADO: '+stamp:'');
+  armaRenderFiles();
+}
+
+async function armaRefreshFiles(options){
+  options=options||{};
+  var silent=options.silent===true;
   var st=document.getElementById('statusBox');
-  var box=document.getElementById('fileList');
-  st.textContent='CONSULTANDO CARPETA DRIVE...';
-  box.innerHTML='';
+  if(!silent)showArmaLoader('ACTUALIZANDO LISTA DE PERFILES...');
+  if(!silent)st.textContent='CONSULTANDO BACKEND Y CARPETA DRIVE...';
   try{
-    var ses=armaReadSession();
-    var data=await armaApi('listPerfilesDrive',{token:armaToken(),user:ses.user||'',nivel:ses.nivel||''});
-    if(!data||!data.ok){st.textContent=(data&&data.error)?data.error:'NO FUE POSIBLE CONSULTAR DRIVE.';return;}
-    ARMA_PERFILES_FILES=data.files||[];
-    st.textContent='ARCHIVOS ENCONTRADOS: '+ARMA_PERFILES_FILES.length+' PDF // ACTUALIZADO: '+(data.ts||'');
-    armaRenderFiles();
+    var data=await armaApi('listPerfilesDrive',{});
+    if(!data||!data.ok){
+      if(data&&data.error==='SIN_PERMISO_PERFILES')armaClearPerfilesCache();
+      throw new Error(data&&data.error?data.error:'NO FUE POSIBLE CONSULTAR DRIVE.');
+    }
+    armaWritePerfilesCache(data);
+    armaApplyFiles(data,'BACKEND VALIDADO',true);
   }catch(e){
-    st.textContent='ERROR DE CONEXION CON ARMA_BACKEND: '+e.message;
+    if(ARMA_PERFILES_FILES.length){
+      st.textContent='MOSTRANDO CACHE TEMPORAL // NO FUE POSIBLE ACTUALIZAR: '+e.message;
+    }else{
+      st.textContent='ERROR DE CONEXION CON ARMA_BACKEND: '+e.message;
+      document.getElementById('fileList').innerHTML='<div class='+q('status-box')+'>NO FUE POSIBLE CARGAR LOS PERFILES.</div>';
+    }
   }finally{
-    hideArmaLoader();
+    if(!silent)hideArmaLoader();
   }
 }
+
+function armaLoadFiles(){
+  armaClearPerfilesCache();
+  armaRefreshFiles({silent:false});
+}
+
 function armaRenderFiles(){
   var box=document.getElementById('fileList');
   box.innerHTML='';
   if(!ARMA_PERFILES_FILES.length){
-    box.innerHTML='<div class=' + q('status-box') + '>NO HAY PDF EN LA CARPETA O NO HAY ACCESO.</div>';
+    box.innerHTML='<div class='+q('status-box')+'>NO HAY PDF EN LA CARPETA O NO HAY ACCESO.</div>';
     return;
   }
+  var frag=document.createDocumentFragment();
   ARMA_PERFILES_FILES.forEach(function(f,i){
     var row=document.createElement('div');
     row.className='file-row';
     row.setAttribute('data-index',i);
-    row.innerHTML='<span class=' + q('pdf-ico') + '>PDF</span>' +
-      '<div><div class=' + q('file-title') + '>'+armaEsc(f.name||f.titulo||'PDF SIN NOMBRE')+'</div>' +
-      '<span class=' + q('file-meta') + '>MODIFICADO: '+armaEsc(f.lastUpdated||'')+'</span></div>';
+    row.innerHTML='<span class='+q('pdf-ico')+'>PDF</span>'+
+      '<div><div class='+q('file-title')+'>'+armaEsc(f.name||f.titulo||'PDF SIN NOMBRE')+'</div>'+
+      '<span class='+q('file-meta')+'>MODIFICADO: '+armaEsc(f.lastUpdated||'')+'</span></div>';
     row.onclick=function(){armaPreviewFile(i,row);};
-    box.appendChild(row);
+    frag.appendChild(row);
   });
+  box.appendChild(frag);
 }
+
 function armaPreviewFile(i,row){
   var f=ARMA_PERFILES_FILES[i];
   if(!f||!f.id){alert('EL ARCHIVO NO TIENE ID DE DRIVE.');return;}
@@ -208,20 +309,35 @@ function armaPreviewFile(i,row){
   document.getElementById('emptyPreview').style.display='none';
   var frame=document.getElementById('pdfFrame');
   showArmaLoader('CARGANDO PDF EN VISOR...');
-  frame.onload=function(){hideArmaLoader();frame.onload=null;};
-  setTimeout(function(){hideArmaLoader();},4500);
+  var closed=false;
+  function finish(){
+    if(closed)return;
+    closed=true;
+    hideArmaLoader();
+    frame.onload=null;
+    frame.onerror=null;
+  }
+  frame.onload=finish;
+  frame.onerror=finish;
+  setTimeout(finish,5000);
   frame.style.display='block';
-  frame.src='https://drive.google.com/file/d/'+encodeURIComponent(f.id)+'/preview';
+  frame.src=f.previewUrl||('https://drive.google.com/file/d/'+encodeURIComponent(f.id)+'/preview');
 }
+
 function armaClearPreview(){
   document.querySelectorAll('.file-row').forEach(function(x){x.classList.remove('active');});
   document.getElementById('viewerTitle').textContent='VISOR PDF INTERNO';
   document.getElementById('viewerSub').textContent='Seleccione un archivo de la lista para cargar la vista previa.';
-  document.getElementById('pdfFrame').src='about:blank';
-  document.getElementById('pdfFrame').style.display='none';
+  var frame=document.getElementById('pdfFrame');
+  frame.onload=null;
+  frame.onerror=null;
+  frame.src='about:blank';
+  frame.style.display='none';
   document.getElementById('emptyPreview').style.display='flex';
 }
+
 function q(t){return String.fromCharCode(39)+t+String.fromCharCode(39);}
+
 function armaEsc(t){
   return String(t||'')
     .replace(/&/g,'&amp;')
@@ -230,13 +346,24 @@ function armaEsc(t){
     .replace(/"/g,'&quot;')
     .replace(/'/g,'&#39;');
 }
-document.addEventListener('DOMContentLoaded',function(){
-  if(!armaIsAdmin()){
-    var b=document.getElementById('btnOpenDrive');
-    if(b){b.classList.add('locked');}
+
+function armaInitPerfiles(){
+  armaSetFolderPermission(false);
+  if(!armaToken()){
+    document.getElementById('statusBox').textContent='SIN SESION ACTIVA. REGRESE A MAIN.';
+    document.getElementById('fileList').innerHTML='<div class='+q('status-box')+'>NO HAY TOKEN DE SESION DISPONIBLE.</div>';
+    return;
   }
-  armaLoadFiles();
-});
+  var cached=armaReadPerfilesCache();
+  if(cached&&cached.data&&cached.data.ok){
+    armaApplyFiles(cached.data,cached.fresh?'CACHE TEMPORAL':'CACHE TEMPORAL ANTIGUA',false);
+    armaRefreshFiles({silent:true});
+  }else{
+    armaRefreshFiles({silent:false});
+  }
+}
+
+document.addEventListener('DOMContentLoaded',armaInitPerfiles);
 
 </script>
 </body>
