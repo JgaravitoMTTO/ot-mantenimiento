@@ -205,7 +205,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
         </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-28 18:14:35</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-29 17:05:34</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -395,6 +395,37 @@ async function generateSelectedPdf(){
     await openRT(id);
     document.getElementById("detailStatus").textContent="PDF ACTUALIZADO";
   }catch(e){alert("ERROR DE CONEXION");}
+}
+/* === ARMA V12 FASTPATH RT === */
+const ARMA_V12_RT_INFLIGHT=new Map();
+async function api(action,payload,msg){
+  payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';
+  const read=/^(rtBootstrap|listRT|rtCatalogos|listRTCatalogos|getRT|resolveRTPDF|getRTPDF)$/.test(action);
+  const key=read?action+'|'+JSON.stringify(payload):'';
+  if(read&&ARMA_V12_RT_INFLIGHT.has(key))return ARMA_V12_RT_INFLIGHT.get(key);
+  if(msg)showArmaLoader(msg);
+  const job=(async function(){
+    const ctl=new AbortController();const timer=setTimeout(function(){ctl.abort();},40000);
+    try{
+      const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),signal:ctl.signal});
+      const txt=await res.text();try{return JSON.parse(txt);}catch(e){throw new Error('RESPUESTA_NO_JSON '+res.status);}
+    }finally{clearTimeout(timer);}
+  })();
+  if(read)ARMA_V12_RT_INFLIGHT.set(key,job);
+  try{return await job;}finally{if(read)ARMA_V12_RT_INFLIGHT.delete(key);if(msg)hideArmaLoader();}
+}
+async function validateSession(){
+  const token=localStorage.getItem('ARMA_TOKEN')||'';if(!token){showLoginWall();return;}
+  let painted=false;
+  try{
+    const raw=localStorage.getItem('ARMA_SESSION_CACHE')||'';
+    if(raw){const cachedSession=JSON.parse(raw);if(cachedSession&&cachedSession.token){setSessionData(cachedSession,token);if(PAGE_MODE!=='REPORTAR'){const c=readRTListCache();if(c&&c.rows){startApp({list:{ok:true,rows:c.rows,page:1,hasMore:true,partial:true}});painted=true;}}}}
+  }catch(e){}
+  try{
+    const data=await api('rtBootstrap',{token:token,pageMode:PAGE_MODE,filters:Object.assign(buildFilters(),{PAGE:1,PAGE_SIZE:RT_PAGE_SIZE})},painted?'':'CARGANDO RT...');
+    if(!data.ok){if(!painted)showLoginWall();return;}
+    setSessionData(data.session||{},token);startApp(data);
+  }catch(e){if(!painted)showLoginWall();else document.getElementById('listStatus').textContent='DATOS EN CACHE // NO FUE POSIBLE ACTUALIZAR';}
 }
 document.addEventListener("DOMContentLoaded",validateSession);
 </script>
