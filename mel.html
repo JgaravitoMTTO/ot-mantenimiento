@@ -234,6 +234,15 @@ body.modal-open{overflow:hidden}
 .catalog-status{grid-column:1/-1;border:1px solid #cfe0f2;border-left:5px solid #0076d7;border-radius:10px;background:#f8fbff;padding:10px 12px;color:#42546b;font-size:10px;font-weight:900;line-height:1.35}.catalog-status.ok{border-left-color:#19c45a;background:#ecfdf5;color:#166534}.catalog-status.warn{border-left-color:#f59e0b;background:#fff7ed;color:#9a3412}
 @media(max-width:1100px){.detail-head{grid-template-columns:1fr !important}.summary-right{width:100%;min-width:0 !important}.summary-tools{max-width:none}.summary-right .btn{width:100% !important}}
 @media(max-width:700px){.summary-tools{grid-template-columns:1fr}.summary-tools>.btn,.summary-upload>.btn,.summary-right .btn{height:auto !important;min-height:48px !important}}
+
+/* === MEL V13.3: foto por clic, carga principal, QR compacto y arbol hasta EQUIPO === */
+.summary-tools{display:block !important;max-width:260px !important;width:100%;margin-top:10px}
+.summary-upload{display:grid !important;grid-template-rows:44px auto;gap:4px;width:100%;min-width:0}
+.summary-upload .btn{width:100% !important;min-width:0 !important;height:44px !important;min-height:44px !important;white-space:nowrap !important}
+.summary-upload .photo-filename{width:100% !important;min-width:0;text-align:center}
+#btnQrTools{font-size:11px !important;letter-spacing:0 !important;white-space:nowrap !important;line-height:1 !important;padding:8px 8px !important}
+@media(max-width:1100px){.summary-tools{max-width:none !important}.summary-upload .btn{width:100% !important}#btnQrTools{font-size:12px !important}}
+@media(max-width:700px){#btnQrTools{font-size:13px !important;white-space:nowrap !important}}
 </style>
 </head>
 <body>
@@ -282,7 +291,6 @@ body.modal-open{overflow:hidden}
         <div id="selectedName" class="selected-name">NO_ASSET</div>
         <div id="selectedSub" class="selected-sub asset-lines">SELECCIONE UN ACTIVO DEL ARBOL O CREE UNO NUEVO.</div>
         <div class="summary-tools">
-          <button id="btnViewPhoto" type="button" class="btn" data-perm="BTN_MEL_VER" data-arma-access="BTN_MEL_VER" disabled>VER FOTO</button>
           <div class="summary-upload">
             <button id="btnUploadPhoto" type="button" class="btn green" data-perm="BTN_MEL_SUBIR_FOTO" data-arma-access="BTN_MEL_SUBIR_FOTO">SUBIR FOTO</button>
             <div id="photoFileName" class="photo-filename">SIN ARCHIVO SELECCIONADO</div>
@@ -438,7 +446,7 @@ body.modal-open{overflow:hidden}
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-30 13:33:57</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-30 17:45:09</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -821,7 +829,6 @@ document.getElementById("btnCancel").addEventListener("click", async function() 
 function chooseMELPhoto() { document.getElementById("photoFile").click(); }
 document.getElementById("btnUploadPhoto").addEventListener("click", chooseMELPhoto);
 document.getElementById("photoFile").addEventListener("change", function(){ const f=this.files&&this.files[0]; document.getElementById("photoFileName").textContent = f ? f.name : "SIN ARCHIVO SELECCIONADO"; if(f) uploadPhoto(); });
-document.getElementById("btnViewPhoto").addEventListener("click", openPhotoViewer);
 document.getElementById('assetPhotoBox').addEventListener('click',openPhotoViewer);
 document.getElementById('assetPhotoBox').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openPhotoViewer();}});
 document.getElementById("btnQrTools").addEventListener("click", openQrTools);
@@ -929,7 +936,6 @@ function renderAssetSummary(row){
 }
 function updateSummaryActionState(row) {
   const enabled = !!row && hasPerm("BTN_MEL_VER");
-  document.getElementById("btnViewPhoto").disabled = !enabled;
   document.getElementById("btnQrTools").disabled = !enabled;
 }
 function syncMediaModalState() {
@@ -1185,6 +1191,14 @@ function melNormLevel(v) {
 function melLevelIndex(v) {
   return MEL_LEVELS.indexOf(melNormLevel(v));
 }
+function melExpandTreeThroughEquipment() {
+  const equipmentIndex = melLevelIndex('EQUIPO');
+  Object.keys(melNodeMap).forEach(function(id) {
+    const node = melNodeMap[id];
+    const levelIndex = melLevelIndex(node && node.NIVEL_DE_JERARQUIA);
+    if (equipmentIndex > 0 && levelIndex >= 0 && levelIndex < equipmentIndex) melTreeOpen.add(id);
+  });
+}
 function melNodeCode(node) {
   return melClean(node && (node.CODIGO_TAG || node.ID_ACTIVO));
 }
@@ -1378,6 +1392,7 @@ async function loadMEL(focusId) {
     melRegisterNodes(melHierarchyNodes);
     melRegisterNodes(melDefaultPath);
     melBuildLocalHierarchyIndex();
+    melExpandTreeThroughEquipment();
     renderCatalogos();
     document.getElementById('countLabel').textContent =
       Number(data.count || 0) + ' ACTIVOS';
