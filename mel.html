@@ -202,6 +202,28 @@ body.modal-open{overflow:hidden}
 .geo-status.ok{border-color:#22c55e;background:#ecfdf5;color:#166534}
 .geo-status.warn{border-color:#f59e0b;background:#fff7ed;color:#9a3412}
 @media(max-width:700px){.geo-actions{display:grid;grid-template-columns:1fr}.geo-actions .btn{width:100%}.geo-status{min-width:0;font-size:15px}.geo-plant-section label{font-size:15px}.geo-plant-section input{font-size:18px!important}}
+
+/* === MEL V13: herramientas invertidas, QR rotulado y catalogos ISO administrables === */
+.summary-upload{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.summary-upload .btn{min-width:190px}
+.summary-upload .photo-filename{width:min(100%,360px);text-align:left}
+.iso-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px}
+.iso-section-head h4{margin:0}
+.iso-admin-btn{display:none}
+.iso-admin-btn.allowed{display:inline-flex}
+.catalog-modal-card{width:min(94vw,1050px);height:auto;max-height:94vh}
+.catalog-admin-body{padding:16px;overflow:auto;background:#fff}
+.catalog-admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.catalog-admin-list{grid-column:1/-1;border:1px solid #dce9f7;border-radius:12px;overflow:auto;max-height:360px}
+.catalog-row{display:grid;grid-template-columns:190px minmax(180px,1fr) minmax(240px,1.5fr) auto;gap:8px;align-items:center;padding:9px 10px;border-bottom:1px solid #e8f0f8}
+.catalog-row:last-child{border-bottom:0}
+.catalog-row strong{font-size:10px;color:#003b7a}
+.catalog-row span{font-size:11px;color:#42546b;font-weight:850;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.catalog-row-actions{display:flex;gap:6px}
+.catalog-empty{padding:20px;text-align:center;color:#60708a;font-weight:900}
+.catalog-help{grid-column:1/-1;border-left:5px solid #19c45a;background:#f8fbff;border-radius:10px;padding:10px 12px;font-size:10px;font-weight:900;line-height:1.4;color:#42546b}
+@media(max-width:900px){.catalog-admin-grid{grid-template-columns:1fr}.catalog-row{grid-template-columns:1fr}.catalog-row-actions{justify-content:flex-end}.iso-section-head{align-items:flex-start;flex-direction:column}.iso-admin-btn.allowed{width:100%;justify-content:center}.summary-upload{display:grid;grid-template-columns:1fr}.summary-upload .btn,.summary-upload .photo-filename{width:100%;min-width:0;text-align:center}}
+
 </style>
 </head>
 <body>
@@ -251,14 +273,16 @@ body.modal-open{overflow:hidden}
         <div id="selectedSub" class="selected-sub asset-lines">SELECCIONE UN ACTIVO DEL ARBOL O CREE UNO NUEVO.</div>
         <div class="summary-tools">
           <button id="btnViewPhoto" type="button" class="btn" data-perm="BTN_MEL_VER" data-arma-access="BTN_MEL_VER" disabled>VER FOTO EN PANTALLA COMPLETA</button>
-          <button id="btnQrTools" type="button" class="btn" data-perm="BTN_MEL_VER" data-arma-access="BTN_MEL_VER" disabled>DESCARGAR / IMPRIMIR QR</button>
+          <div class="summary-upload">
+            <button id="btnUploadPhoto" type="button" class="btn green" data-perm="BTN_MEL_SUBIR_FOTO" data-arma-access="BTN_MEL_SUBIR_FOTO">SUBIR FOTO</button>
+            <div id="photoFileName" class="photo-filename">SIN ARCHIVO SELECCIONADO</div>
+          </div>
         </div>
         <input id="photoFile" class="photo-file-hidden" type="file" accept="image/png,image/jpeg,image/webp">
       </div>
       <div class="summary-right">
         <img id="assetQr" class="asset-qr" alt="QR DEL ACTIVO" src="">
-        <button id="btnUploadPhoto" type="button" class="btn green" data-perm="BTN_MEL_SUBIR_FOTO" data-arma-access="BTN_MEL_SUBIR_FOTO">SUBIR FOTO</button>
-        <div id="photoFileName" class="photo-filename">SIN ARCHIVO SELECCIONADO</div>
+        <button id="btnQrTools" type="button" class="btn" data-perm="BTN_MEL_VER" data-arma-access="BTN_MEL_VER" disabled>DESCARGAR / IMPRIMIR QR</button>
       </div>
     </div>
   </section>
@@ -337,12 +361,15 @@ body.modal-open{overflow:hidden}
         </div>
 
         <div class="form-section">
-          <h4>CLASIFICACION ISO 14224</h4>
+          <div class="iso-section-head">
+            <h4>CLASIFICACION ISO 14224</h4>
+            <button id="btnAdminIsoCatalogs" type="button" class="btn gray iso-admin-btn" data-perm="BTN_MEL_ADMIN_CATALOGOS" data-arma-access="BTN_MEL_ADMIN_CATALOGOS">ADMINISTRAR CATALOGOS ISO</button>
+          </div>
           <div class="grid">
-            <div><label>CLASE ISO 14224</label><input data-field="CLASE_DE_EQUIPO_ISO_14224"></div>
-            <div><label>TIPO ISO 14224</label><input data-field="TIPO_DE_EQUIPO_ISO_14224"></div>
-            <div><label>TECNOLOGIA / PROCESO</label><input data-field="TECNOLOGIA_PROCESO"></div>
-            <div><label>FUNCION PRIMARIA</label><input data-field="FUNCION_PRIMARIA"></div>
+            <div><label>CLASE ISO 14224</label><select id="isoClaseSelect" data-field="CLASE_DE_EQUIPO_ISO_14224"><option value="">SELECCIONE...</option></select></div>
+            <div><label>TIPO ISO 14224</label><select id="isoTipoSelect" data-field="TIPO_DE_EQUIPO_ISO_14224"><option value="">SELECCIONE...</option></select></div>
+            <div><label>TECNOLOGIA / PROCESO</label><select id="isoTecnologiaSelect" data-field="TECNOLOGIA_PROCESO"><option value="">SELECCIONE...</option></select></div>
+            <div><label>FUNCION PRIMARIA</label><select id="isoFuncionSelect" data-field="FUNCION_PRIMARIA"><option value="">SELECCIONE...</option></select></div>
           </div>
         </div>
 
@@ -401,7 +428,7 @@ body.modal-open{overflow:hidden}
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-29 17:00:14</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-30 12:43:32</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -434,6 +461,27 @@ body.modal-open{overflow:hidden}
   </div>
 </div>
 
+
+<div id="catalogModal" class="media-modal hidden" aria-hidden="true">
+  <div class="media-modal-card catalog-modal-card" role="dialog" aria-modal="true" aria-labelledby="catalogModalTitle">
+    <div class="media-modal-toolbar">
+      <div id="catalogModalTitle" class="media-modal-title">ADMINISTRAR CATALOGOS ISO 14224</div>
+      <button type="button" class="media-modal-close" data-close-modal="catalogModal">CERRAR</button>
+    </div>
+    <div class="catalog-admin-body">
+      <div class="catalog-admin-grid">
+        <div class="catalog-help">LOS CAMBIOS SE GUARDAN EN ARMA_DATA / CATALOGOS. ELIMINAR DESACTIVA EL REGISTRO PARA CONSERVAR TRAZABILIDAD. SOLO USUARIOS CON BTN_MEL_ADMIN_CATALOGOS PUEDEN MODIFICAR.</div>
+        <div><label>CATALOGO</label><select id="catalogType"><option value="MEL_CLASE_ISO14224">CLASE ISO 14224</option><option value="MEL_TIPO_ISO14224">TIPO ISO 14224</option><option value="MEL_TECNOLOGIA_PROCESO">TECNOLOGIA / PROCESO</option><option value="MEL_FUNCION_PRIMARIA">FUNCION PRIMARIA</option></select></div>
+        <div><label>CODIGO</label><input id="catalogCode" placeholder="CODIGO UNICO"></div>
+        <div><label>VALOR VISIBLE</label><input id="catalogValue" placeholder="VALOR PARA SELECCIONAR"></div>
+        <div><label>DESCRIPCION</label><input id="catalogDescription" placeholder="DESCRIPCION OPCIONAL"></div>
+        <div class="span4" style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap"><button id="btnCatalogClear" type="button" class="btn gray">NUEVO / LIMPIAR</button><button id="btnCatalogSave" type="button" class="btn green">GUARDAR CATALOGO</button></div>
+        <div id="catalogAdminList" class="catalog-admin-list"><div class="catalog-empty">CARGANDO CATALOGOS...</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 const ARMA_API_URL = "https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
 const ARMA_SESSION_CACHE_KEY = "ARMA_SESSION_CACHE";
@@ -443,6 +491,14 @@ let melRows = [];
 let melCatalogos = {};
 let selectedAsset = null;
 let creatingNew = false;
+let melCatalogAdminRows = [];
+let melCatalogEditOriginal = null;
+const MEL_ISO_CATALOG_MAP = {
+  MEL_CLASE_ISO14224:'isoClaseSelect',
+  MEL_TIPO_ISO14224:'isoTipoSelect',
+  MEL_TECNOLOGIA_PROCESO:'isoTecnologiaSelect',
+  MEL_FUNCION_PRIMARIA:'isoFuncionSelect'
+};
 let melInitialSelectionApplied = false;
 let melTreeRoots = [];
 let melHierarchyNodes = [];
@@ -513,6 +569,7 @@ function applyPermissions() {
   const canCreate = hasPerm("BTN_MEL_CREAR");
   const canEdit = hasPerm("BTN_MEL_EDITAR");
   const canUpload = hasPerm("BTN_MEL_SUBIR_FOTO");
+  const canAdminCatalogs = hasPerm("BTN_MEL_ADMIN_CATALOGOS");
   document.getElementById("btnReload").classList.toggle("disabled", !canView);
   document.getElementById("btnNew").classList.toggle("disabled", !canCreate);
   document.getElementById("btnSaveTop").classList.toggle("disabled", !canEdit && !canCreate);
@@ -521,6 +578,8 @@ function applyPermissions() {
   document.getElementById("btnCaptureGeo").disabled = !canEdit && !canCreate;
   document.getElementById("btnDownloadQr").disabled = !canView;
   document.getElementById("btnPrintQr").disabled = !canView;
+  const adminCatalogButton = document.getElementById("btnAdminIsoCatalogs");
+  if (adminCatalogButton) adminCatalogButton.classList.toggle("allowed", canAdminCatalogs);
   updateSummaryActionState(selectedAsset);
 }
 function currentFilters() {
@@ -572,11 +631,39 @@ async function loadMEL() {
     toast("ERROR CARGANDO MEL: " + err.message);
   }
 }
+function catalogValues(type) {
+  return (melCatalogos[type] || []).map(function(x) {
+    return String(x.valor || x.codigo || '').trim();
+  }).filter(Boolean);
+}
+function fillCatalogSelect(id, type) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const current = el.value;
+  const values = catalogValues(type);
+  el.innerHTML = '<option value="">SELECCIONE...</option>';
+  values.forEach(function(v) {
+    const opt = document.createElement('option');
+    opt.value = v;
+    opt.textContent = v;
+    el.appendChild(opt);
+  });
+  if (current && !values.some(function(v){return melGeoNorm(v)===melGeoNorm(current);})) {
+    const legacy = document.createElement('option');
+    legacy.value = current;
+    legacy.textContent = current + ' // VALOR HISTORICO';
+    el.appendChild(legacy);
+  }
+  el.value = current;
+}
 function renderCatalogos() {
   const levels = (melCatalogos.MEL_NIVEL_JERARQUIA || []).map(x => x.valor || x.codigo).filter(Boolean);
   const fallback = ["EMPRESA","PLANTA","AREA","SISTEMA","SUBSISTEMA","EQUIPO","SUBEQUIPO","COMPONENTE MANTENIBLE"];
   fillSelect(document.getElementById("filterNivel"), ["TODOS"].concat(levels.length ? levels : fallback), true);
   fillSelect(document.getElementById("nivelSelect"), levels.length ? levels : fallback, false);
+  Object.keys(MEL_ISO_CATALOG_MAP).forEach(function(type) {
+    fillCatalogSelect(MEL_ISO_CATALOG_MAP[type], type);
+  });
 }
 function fillSelect(sel, values, firstEmpty) {
   const cur = sel.value;
@@ -726,11 +813,11 @@ document.getElementById("btnPrintQr").addEventListener("click", printAssetQr);
 document.querySelectorAll("[data-close-modal]").forEach(function(btn) {
   btn.addEventListener("click", function() { closeMediaModal(this.getAttribute("data-close-modal")); });
 });
-["photoModal","qrModal"].forEach(function(id) {
+["photoModal","qrModal","catalogModal"].forEach(function(id) {
   document.getElementById(id).addEventListener("click", function(e) { if (e.target === this) closeMediaModal(id); });
 });
 document.addEventListener("keydown", function(e) {
-  if (e.key === "Escape") { closeMediaModal("photoModal"); closeMediaModal("qrModal"); }
+  if (e.key === "Escape") { closeMediaModal("photoModal"); closeMediaModal("qrModal"); closeMediaModal("catalogModal"); }
 });
 ["filterQ","filterEstado","filterNivel","filterPlanta","filterArea"].forEach(function(id) {
   document.getElementById(id).addEventListener("keydown", function(e) { if (e.key === "Enter") loadMEL(); });
@@ -862,15 +949,83 @@ function openQrTools() {
 function melSafeFileName(v) {
   return melClean(v).replace(/[^A-Z0-9_-]+/gi, "_").replace(/^_+|_+$/g, "") || "ACTIVO";
 }
+function melCanvasRoundRect(ctx,x,y,w,h,r){
+  const rr=Math.min(r,w/2,h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+rr,y);
+  ctx.arcTo(x+w,y,x+w,y+h,rr);
+  ctx.arcTo(x+w,y+h,x,y+h,rr);
+  ctx.arcTo(x,y+h,x,y,rr);
+  ctx.arcTo(x,y,x+w,y,rr);
+  ctx.closePath();
+}
+function melWrapCanvasText(ctx,text,x,y,maxWidth,lineHeight){
+  const words=String(text||'').split(/\s+/);
+  let line='';
+  let yy=y;
+  words.forEach(function(word){
+    const test=line?line+' '+word:word;
+    if(ctx.measureText(test).width>maxWidth&&line){
+      ctx.fillText(line,x,yy);
+      line=word;
+      yy+=lineHeight;
+    }else line=test;
+  });
+  if(line)ctx.fillText(line,x,yy);
+  return yy+lineHeight;
+}
+async function buildAssetQrLabelBlob(){
+  if(!selectedAsset)throw new Error('SIN_ACTIVO');
+  const src=document.getElementById('assetQr').src;
+  const response=await fetch(src);
+  if(!response.ok)throw new Error('HTTP_'+response.status);
+  const blob=await response.blob();
+  const objectUrl=URL.createObjectURL(blob);
+  try{
+    const img=await new Promise(function(resolve,reject){
+      const im=new Image();
+      im.onload=function(){resolve(im);};
+      im.onerror=reject;
+      im.src=objectUrl;
+    });
+    const canvas=document.createElement('canvas');
+    canvas.width=900;
+    canvas.height=1180;
+    const ctx=canvas.getContext('2d');
+    ctx.fillStyle='#ffffff';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='#003b7a';
+    ctx.textAlign='center';
+    ctx.font='900 42px Arial';
+    ctx.fillText(selectedAsset.NOMBRE||selectedAsset.CODIGO_TAG||selectedAsset.ID_ACTIVO||'ACTIVO',450,70);
+    ctx.strokeStyle='#cfe0f2';
+    ctx.lineWidth=3;
+    melCanvasRoundRect(ctx,90,105,720,720,24);
+    ctx.stroke();
+    ctx.drawImage(img,120,135,660,660);
+    ctx.fillStyle='#122f55';
+    ctx.font='900 25px Arial';
+    const lines=melSummaryText(selectedAsset).split('\n');
+    let y=885;
+    lines.forEach(function(line){
+      y=melWrapCanvasText(ctx,line,450,y,760,38);
+    });
+    ctx.fillStyle='#60708a';
+    ctx.font='700 18px Arial';
+    ctx.fillText('ARMA // MEL EQUIPOS // IDENTIFICACION DE ACTIVO',450,1135);
+    return await new Promise(function(resolve,reject){
+      canvas.toBlob(function(out){out?resolve(out):reject(new Error('CANVAS_SIN_BLOB'));},'image/png',1);
+    });
+  }finally{
+    URL.revokeObjectURL(objectUrl);
+  }
+}
 async function downloadAssetQr() {
   if (!selectedAsset || !hasPerm("BTN_MEL_VER")) { toast("SELECCIONE UN ACTIVO AUTORIZADO."); return; }
-  const src = document.getElementById("assetQr").src;
-  const fileName = "QR_" + melSafeFileName(selectedAsset.CODIGO_TAG || selectedAsset.ID_ACTIVO) + ".png";
-  showLoader("PREPARANDO QR...");
+  const fileName = "QR_ROTULADO_" + melSafeFileName(selectedAsset.CODIGO_TAG || selectedAsset.ID_ACTIVO) + ".png";
+  showLoader("PREPARANDO QR ROTULADO...");
   try {
-    const response = await fetch(src);
-    if (!response.ok) throw new Error("HTTP_" + response.status);
-    const blob = await response.blob();
+    const blob = await buildAssetQrLabelBlob();
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
@@ -879,10 +1034,9 @@ async function downloadAssetQr() {
     link.click();
     link.remove();
     setTimeout(function() { URL.revokeObjectURL(url); }, 1500);
-    toast("QR DESCARGADO.");
+    toast("QR ROTULADO DESCARGADO.");
   } catch(err) {
-    window.open(src, "_blank", "noopener");
-    toast("EL QR SE ABRIO EN OTRA PESTANA PARA GUARDARLO.");
+    toast("NO FUE POSIBLE GENERAR EL QR ROTULADO: " + err.message);
   } finally {
     hideLoader();
   }
@@ -894,7 +1048,7 @@ function printAssetQr() {
   const summary = esc(melSummaryText(selectedAsset)).replace(/\n/g, "<br>");
   const win = window.open("", "_blank", "width=820,height=900");
   if (!win) { toast("EL NAVEGADOR BLOQUEO LA VENTANA DE IMPRESION."); return; }
-  const html = "<!DOCTYPE html><html lang=\"es\"><head><meta charset=\"UTF-8\"><title>QR " + title + "</title><style>@page{margin:12mm}body{font-family:Arial,sans-serif;text-align:center;color:#002b5c;margin:0;padding:28px}h1{font-size:25px;margin:0 0 8px}.summary{font-size:13px;font-weight:700;line-height:1.55;margin:0 0 18px}.qr{width:420px;max-width:90vw;height:auto;border:1px solid #cfe0f2;padding:14px;border-radius:14px}.foot{margin-top:18px;font-size:10px;font-weight:700}</style></head><body><h1>" + title + "</h1><div class=\"summary\">" + summary + "</div><img id=\"printQr\" class=\"qr\" src=\"" + src + "\" alt=\"CODIGO QR\"><div class=\"foot\">ARMA // MEL EQUIPOS</div></body></html>";
+  const html = "<!DOCTYPE html><html lang=\"es\"><head><meta charset=\"UTF-8\"><title>QR " + title + "</title><style>@page{margin:12mm}body{font-family:Arial,sans-serif;text-align:center;color:#002b5c;margin:0;padding:28px}h1{font-size:25px;margin:0 0 16px}.qr{width:420px;max-width:90vw;height:auto;border:1px solid #cfe0f2;padding:14px;border-radius:14px}.summary{font-size:13px;font-weight:700;line-height:1.55;margin:18px 0 0}.foot{margin-top:18px;font-size:10px;font-weight:700}</style></head><body><h1>" + title + "</h1><img id=\"printQr\" class=\"qr\" src=\"" + src + "\" alt=\"CODIGO QR\"><div class=\"summary\">" + summary + "</div><div class=\"foot\">ARMA // MEL EQUIPOS</div></body></html>";
   win.document.open();
   win.document.write(html);
   win.document.close();
@@ -902,6 +1056,91 @@ function printAssetQr() {
   const launchPrint = function() { setTimeout(function() { win.focus(); win.print(); }, 250); };
   if (qr.complete) launchPrint(); else qr.onload = launchPrint;
 }
+
+function melCatalogFormClear(){
+  melCatalogEditOriginal=null;
+  document.getElementById('catalogCode').value='';
+  document.getElementById('catalogValue').value='';
+  document.getElementById('catalogDescription').value='';
+}
+function renderCatalogAdminList(){
+  const host=document.getElementById('catalogAdminList');
+  const type=document.getElementById('catalogType').value;
+  const rows=melCatalogAdminRows.filter(function(r){return String(r.tipo||r.TIPO||'')===type;});
+  if(!rows.length){host.innerHTML='<div class="catalog-empty">SIN REGISTROS ACTIVOS PARA ESTE CATALOGO.</div>';return;}
+  host.innerHTML=rows.map(function(r,index){
+    const code=String(r.codigo||r.CODIGO||'');
+    const value=String(r.valor||r.VALOR||'');
+    const description=String(r.descripcion||r.DESCRIPCION||'');
+    return '<div class="catalog-row"><strong>'+esc(type)+'</strong><span title="'+esc(code)+'">'+esc(code)+'</span><span title="'+esc(value)+'">'+esc(value)+'</span><div class="catalog-row-actions"><button type="button" class="btn" data-cat-edit="'+index+'">EDITAR</button><button type="button" class="btn red" data-cat-delete="'+index+'">ELIMINAR</button></div></div>';
+  }).join('');
+  host.querySelectorAll('[data-cat-edit]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      const row=rows[Number(this.getAttribute('data-cat-edit'))];
+      melCatalogEditOriginal={tipo:type,codigo:String(row.codigo||row.CODIGO||'')};
+      document.getElementById('catalogCode').value=String(row.codigo||row.CODIGO||'');
+      document.getElementById('catalogValue').value=String(row.valor||row.VALOR||'');
+      document.getElementById('catalogDescription').value=String(row.descripcion||row.DESCRIPCION||'');
+    });
+  });
+  host.querySelectorAll('[data-cat-delete]').forEach(function(btn){
+    btn.addEventListener('click',async function(){
+      const row=rows[Number(this.getAttribute('data-cat-delete'))];
+      const code=String(row.codigo||row.CODIGO||'');
+      if(!confirm('CONFIRMA DESACTIVAR '+code+'?'))return;
+      showLoader('DESACTIVANDO CATALOGO...');
+      try{
+        const res=await api('melDeleteCatalogItem',{tipo:type,codigo:code});
+        if(!res.ok)throw new Error(res.error||'NO_ELIMINADO');
+        toast('CATALOGO DESACTIVADO.');
+        await loadCatalogAdmin();
+      }catch(err){toast('ERROR CATALOGO: '+err.message);}
+      finally{hideLoader();}
+    });
+  });
+}
+async function loadCatalogAdmin(){
+  if(!hasPerm('BTN_MEL_ADMIN_CATALOGOS'))return;
+  const res=await api('melCatalogAdminList',{});
+  if(!res.ok)throw new Error(res.error||'NO_CATALOGOS');
+  melCatalogAdminRows=res.rows||[];
+  melCatalogos=res.catalogos||melCatalogos;
+  renderCatalogos();
+  renderCatalogAdminList();
+}
+async function openCatalogAdmin(){
+  if(!hasPerm('BTN_MEL_ADMIN_CATALOGOS')){toast('SIN PERMISO PARA ADMINISTRAR CATALOGOS.');return;}
+  const modal=document.getElementById('catalogModal');
+  modal.classList.remove('hidden');
+  modal.setAttribute('aria-hidden','false');
+  syncMediaModalState();
+  melCatalogFormClear();
+  showLoader('CARGANDO CATALOGOS ISO...');
+  try{await loadCatalogAdmin();}catch(err){toast('ERROR CATALOGO: '+err.message);}
+  finally{hideLoader();}
+}
+async function saveCatalogAdmin(){
+  if(!hasPerm('BTN_MEL_ADMIN_CATALOGOS')){toast('SIN PERMISO PARA ADMINISTRAR CATALOGOS.');return;}
+  const data={
+    tipo:document.getElementById('catalogType').value,
+    codigo:document.getElementById('catalogCode').value.trim(),
+    valor:document.getElementById('catalogValue').value.trim(),
+    descripcion:document.getElementById('catalogDescription').value.trim(),
+    originalTipo:melCatalogEditOriginal?melCatalogEditOriginal.tipo:'',
+    originalCodigo:melCatalogEditOriginal?melCatalogEditOriginal.codigo:''
+  };
+  if(!data.tipo||!data.codigo||!data.valor){toast('COMPLETE CATALOGO, CODIGO Y VALOR.');return;}
+  showLoader('GUARDANDO CATALOGO...');
+  try{
+    const res=await api('melSaveCatalogItem',{data:data});
+    if(!res.ok)throw new Error(res.error||'NO_GUARDADO');
+    toast('CATALOGO GUARDADO.');
+    melCatalogFormClear();
+    await loadCatalogAdmin();
+  }catch(err){toast('ERROR CATALOGO: '+err.message);}
+  finally{hideLoader();}
+}
+
 function melGeoNorm(v){ return String(v || '').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
 function melIsPlantLevel(){ return melGeoNorm(document.getElementById('nivelSelect').value) === 'PLANTA'; }
 function updateGeoPlantSection() {
@@ -1512,81 +1751,12 @@ async function uploadPhoto() {
   };
   reader.readAsDataURL(file);
 }
+document.getElementById('btnAdminIsoCatalogs').addEventListener('click', openCatalogAdmin);
+document.getElementById('btnCatalogSave').addEventListener('click', saveCatalogAdmin);
+document.getElementById('btnCatalogClear').addEventListener('click', melCatalogFormClear);
+document.getElementById('catalogType').addEventListener('change', function(){melCatalogFormClear();renderCatalogAdminList();});
 document.getElementById('nivelSelect').addEventListener('change', melOnLevelChange);
 document.getElementById('btnCaptureGeo').addEventListener('click', capturePlantLocation);
-/* === ARMA V12 FASTPATH MEL === */
-const ARMA_V12_MEL_INFLIGHT=new Map();
-function armaV12MelKey(){const t=(armaSession&&armaSession.token)||localStorage.getItem('ARMA_TOKEN')||'';return 'ARMA_V12_MEL_BOOT_'+t.slice(-14);}
-function armaV12MelRead(){try{const x=JSON.parse(sessionStorage.getItem(armaV12MelKey())||'null');if(!x||Date.now()-Number(x.ts||0)>180000)return null;return x.data||null;}catch(e){return null;}}
-function armaV12MelWrite(data){try{sessionStorage.setItem(armaV12MelKey(),JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
-async function api(action,payload){
-  payload=payload||{};payload.action=action;if(armaSession&&armaSession.token&&!payload.token)payload.token=armaSession.token;
-  const read=/^(melBootstrap|getMELActivo|melCatalogos|melListHierarchy|listMELActivos)$/.test(action);
-  const key=read?action+'|'+JSON.stringify(payload):'';
-  if(read&&ARMA_V12_MEL_INFLIGHT.has(key))return ARMA_V12_MEL_INFLIGHT.get(key);
-  const job=(async function(){
-    const ctl=new AbortController();const timer=setTimeout(function(){ctl.abort();},35000);
-    try{
-      const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),signal:ctl.signal});
-      const txt=await res.text();try{return JSON.parse(txt);}catch(e){throw new Error('RESPUESTA_NO_JSON '+res.status);}
-    }finally{clearTimeout(timer);}
-  })();
-  if(read)ARMA_V12_MEL_INFLIGHT.set(key,job);
-  try{return await job;}finally{if(read)ARMA_V12_MEL_INFLIGHT.delete(key);}
-}
-function armaV12MelSetSession(data){
-  if(!data)return;
-  armaSession=Object.assign({},armaSession||{},{
-    user:data.user||((armaSession||{}).user)||'',
-    nombre:data.nombre||data.user||((armaSession||{}).nombre)||'',
-    nivel:data.nivel||((armaSession||{}).nivel)||'',
-    permissions:data.permissions||((armaSession||{}).permissions)||{}
-  });
-  try{localStorage.setItem(ARMA_SESSION_CACHE_KEY,JSON.stringify(Object.assign({},armaSession,{ts:Date.now(),source:'MEL_V12'})));}catch(e){}
-  document.getElementById('userPill').textContent=(armaSession.nombre||armaSession.user||'')+' // '+(armaSession.nivel||'');
-  applyPermissions();
-}
-function armaV12MelApplyBootstrap(data){
-  armaV12MelSetSession(data);
-  melCatalogos=data.catalogos||{};
-  melHierarchyNodes=data.nodes||data.roots||[];
-  melTreeRoots=data.roots||[];
-  melDefaultAssetId=data.defaultAssetId||'';
-  melDefaultPath=data.defaultPath||[];
-  melNodeMap={};melTreeOpen=new Set();
-  melRegisterNodes(melHierarchyNodes);melRegisterNodes(melDefaultPath);melBuildLocalHierarchyIndex();
-  renderCatalogos();
-  document.getElementById('countLabel').textContent=Number(data.count||0)+' ACTIVOS';
-  renderTree();
-}
-async function loadMEL(focusId){
-  const cached=armaV12MelRead();let painted=false;
-  if(cached&&cached.ok){armaV12MelApplyBootstrap(cached);painted=true;}
-  if(!painted)showLoader('CARGANDO INDICE MEL...');
-  try{
-    const data=await api('melBootstrap',{});
-    if(!data.ok)throw new Error(data.error||'ERROR_BOOTSTRAP_MEL');
-    armaV12MelWrite(data);armaV12MelApplyBootstrap(data);
-    const target=focusId||(selectedAsset&&selectedAsset.ID_ACTIVO)||melDefaultAssetId;
-    if(target){document.getElementById('editStatus').textContent='CARGANDO FICHA...';await selectAsset(target,true);document.getElementById('editStatus').textContent='';}
-    else{selectedAsset=null;melSelectedPath=[];setForm(null,[]);}
-  }catch(err){
-    if(painted){
-      const target=focusId||(selectedAsset&&selectedAsset.ID_ACTIVO)||melDefaultAssetId;
-      if(target)await selectAsset(target,true);
-      toast('INDICE EN CACHE // NO FUE POSIBLE ACTUALIZAR');
-    }else{toast('ERROR CARGANDO MEL: '+err.message);}
-  }finally{hideLoader();}
-}
-async function init(){
-  armaSession=getCachedSession();
-  if(!armaSession||!armaSession.token){
-    document.getElementById('userPill').textContent='SIN SESION // VUELVA A MAIN';
-    toast('NO HAY SESION ACTIVA. ABRA MAIN E INICIE SESION.');return;
-  }
-  document.getElementById('userPill').textContent=(armaSession.nombre||armaSession.user||'')+' // '+(armaSession.nivel||'');
-  applyPermissions();await loadMEL();
-}
 init();
 </script>
 </body>
