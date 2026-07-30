@@ -61,11 +61,12 @@ textarea{min-height:78px;resize:vertical}
 .btn.gray{background:linear-gradient(180deg,#9ca3af,#6b7280)}
 .btn.red{background:linear-gradient(180deg,#ef4444,#b91c1c)}
 .btn:disabled{filter:grayscale(1);opacity:.55;cursor:not-allowed}
-.decision-layout{display:grid;grid-template-columns:minmax(0,45fr) minmax(0,55fr);gap:14px;align-items:start;width:100%;max-width:100%}
+.decision-layout{display:grid;grid-template-columns:minmax(0,45fr) minmax(0,55fr);gap:14px;align-items:stretch;width:100%;max-width:100%}
 .decision-layout>*{min-width:0;width:100%;max-width:100%}
-.left-stack{display:grid;gap:14px;align-content:start;min-width:0;width:100%;max-width:100%}
+.left-stack{display:flex;flex-direction:column;gap:14px;min-width:0;width:100%;max-width:100%;height:100%;align-self:stretch}
 .left-stack .panel{margin-bottom:0;min-width:0;width:100%;max-width:100%}
-.close-workbench{min-width:0;width:100%;max-width:100%;margin-bottom:0;overflow:hidden}
+#listPanel{flex:0 0 auto}#detailPanel{display:flex;flex-direction:column;flex:1 1 auto;min-height:0}#detailPanel .panel-title{flex:0 0 auto}
+.close-workbench{min-width:0;width:100%;max-width:100%;margin-bottom:0;overflow:hidden;align-self:stretch;height:100%}
 .consult-layout{display:block}
 .detail-grid{display:grid;grid-template-columns:62% 38%;gap:14px;align-items:start}
 .grid-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
@@ -73,7 +74,7 @@ textarea{min-height:78px;resize:vertical}
 .field.full{grid-column:1/-1}
 .field.half{grid-column:span 2}
 .notice{border-left:5px solid var(--green2);background:#f8fbff;border-radius:14px;padding:12px;color:var(--navy);font-size:12px;font-weight:800;line-height:1.4;margin-bottom:10px}
-.table-wrap{width:100%;max-width:100%;overflow-x:auto;overflow-y:auto;border:1px solid var(--line);border-radius:14px;max-height:520px}
+.table-wrap{width:100%;max-width:100%;height:600px;max-height:600px;overflow-x:auto;overflow-y:auto;border:1px solid var(--line);border-radius:14px}
 table{border-collapse:collapse;width:100%;min-width:0;table-layout:fixed;background:#fff}
 #listPanel th:nth-child(1),#listPanel td:nth-child(1){width:12%}
 #listPanel th:nth-child(2),#listPanel td:nth-child(2){width:25%}
@@ -90,7 +91,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
 .badge.green{background:#e9fff2;color:#166534}
 .badge.red{background:#fee2e2;color:#991b1b}
 .badge.gray{background:#f1f5f9;color:#475569}
-.viewer{height:520px;border:1px dashed #bcd7f5;border-radius:14px;background:#f8fbff;overflow:hidden;display:grid;place-items:center;text-align:center;color:var(--navy)}
+.viewer{height:auto;min-height:560px;flex:1 1 auto;border:1px dashed #bcd7f5;border-radius:14px;background:#f8fbff;overflow:hidden;display:grid;place-items:center;text-align:center;color:var(--navy)}
 .viewer iframe{width:100%;height:100%;border:0;background:#fff}
 .viewer h2{margin:0 0 6px;font-size:22px;color:var(--navy)}
 .viewer p{font-size:12px;color:var(--muted);font-weight:850}
@@ -146,8 +147,8 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
 .resumen48-foot{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:12px 18px;background:#fff;border-top:1px solid var(--line)}
 .resumen48-ok{border:0;border-radius:12px;background:linear-gradient(180deg,#00d65f,#55b52e);color:#fff;font-size:12px;font-weight:950;padding:10px 22px;cursor:pointer;box-shadow:var(--soft)}
 @media(max-width:1400px){.decision-layout{grid-template-columns:minmax(0,48fr) minmax(0,52fr)}.rt-fields-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.decision-layout,.detail-grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}.grid-form,.rt-fields-grid{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}}
-@media(max-width:700px){.action-grid,.filters,.grid-form,.rt-fields-grid{grid-template-columns:1fr}.rt-field-card.half{grid-column:1/-1}.main{padding:12px}.logo-pelex{height:58px}.logo-arma{height:64px}.viewer{height:68vh}}
+@media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.decision-layout,.detail-grid{grid-template-columns:1fr}.left-stack{height:auto}.close-workbench{height:auto}.filters{grid-template-columns:1fr 1fr}.grid-form,.rt-fields-grid{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}.table-wrap{height:auto;max-height:520px}.viewer{min-height:620px}}
+@media(max-width:700px){.action-grid,.filters,.grid-form,.rt-fields-grid{grid-template-columns:1fr}.rt-field-card.half{grid-column:1/-1}.main{padding:12px}.logo-pelex{height:58px}.logo-arma{height:64px}.viewer{height:68vh;min-height:520px}}
 
 /* === RT V26: lectura ejecutiva, carga visible y soportes bajo demanda === */
 .panel-title-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
@@ -269,7 +270,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-30 12:41:18</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-30 13:25:45</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
