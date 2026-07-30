@@ -224,6 +224,16 @@ body.modal-open{overflow:hidden}
 .catalog-help{grid-column:1/-1;border-left:5px solid #19c45a;background:#f8fbff;border-radius:10px;padding:10px 12px;font-size:10px;font-weight:900;line-height:1.4;color:#42546b}
 @media(max-width:900px){.catalog-admin-grid{grid-template-columns:1fr}.catalog-row{grid-template-columns:1fr}.catalog-row-actions{justify-content:flex-end}.iso-section-head{align-items:flex-start;flex-direction:column}.iso-admin-btn.allowed{width:100%;justify-content:center}.summary-upload{display:grid;grid-template-columns:1fr}.summary-upload .btn,.summary-upload .photo-filename{width:100%;min-width:0;text-align:center}}
 
+/* === MEL V13.1: catalogos inmediatos y resumen superior alineado === */
+.detail-head{grid-template-columns:minmax(288px,368px) minmax(0,1fr) 232px !important;gap:14px !important;overflow:visible !important}
+.photo-box{cursor:pointer;transition:transform .16s ease,box-shadow .16s ease}.photo-box:hover{transform:translateY(-1px);box-shadow:0 12px 25px rgba(0,43,92,.15)}.photo-box:focus-within{outline:3px solid rgba(0,118,215,.25)}
+.summary-tools{display:grid !important;grid-template-columns:minmax(190px,1fr) minmax(190px,1fr);gap:10px;align-items:start;max-width:560px;width:100%;margin-top:10px}
+.summary-tools>.btn,.summary-upload>.btn{height:44px !important;min-height:44px !important;padding:8px 14px !important;display:flex;align-items:center;justify-content:center;white-space:normal !important;line-height:1.12;text-align:center}
+.summary-upload{display:grid !important;grid-template-rows:44px auto;gap:4px;min-width:0;width:100%}.summary-upload .photo-filename{width:100% !important;min-width:0;text-align:center}
+.summary-right{min-width:220px !important;width:220px;justify-content:flex-end !important}.asset-qr{width:158px !important;height:158px !important}.summary-right .btn{width:220px !important;min-height:44px !important;height:auto !important;padding:8px 12px !important;white-space:normal !important;line-height:1.12;text-align:center}
+.catalog-status{grid-column:1/-1;border:1px solid #cfe0f2;border-left:5px solid #0076d7;border-radius:10px;background:#f8fbff;padding:10px 12px;color:#42546b;font-size:10px;font-weight:900;line-height:1.35}.catalog-status.ok{border-left-color:#19c45a;background:#ecfdf5;color:#166534}.catalog-status.warn{border-left-color:#f59e0b;background:#fff7ed;color:#9a3412}
+@media(max-width:1100px){.detail-head{grid-template-columns:1fr !important}.summary-right{width:100%;min-width:0 !important}.summary-tools{max-width:none}.summary-right .btn{width:100% !important}}
+@media(max-width:700px){.summary-tools{grid-template-columns:1fr}.summary-tools>.btn,.summary-upload>.btn,.summary-right .btn{height:auto !important;min-height:48px !important}}
 </style>
 </head>
 <body>
@@ -267,12 +277,12 @@ body.modal-open{overflow:hidden}
       <span id="editStatus" class="status-small"></span>
     </div>
     <div class="detail-head">
-      <div class="photo-box"><img id="assetPhoto" alt="FOTO DEL ACTIVO" src="https://drive.google.com/thumbnail?id=1jMGf3MQmWRTkoEuTcYka31pYpTX9RGxG&sz=w1000"></div>
+      <div id="assetPhotoBox" class="photo-box" role="button" tabindex="0" title="VER FOTO"><img id="assetPhoto" alt="FOTO DEL ACTIVO" src="https://drive.google.com/thumbnail?id=1jMGf3MQmWRTkoEuTcYka31pYpTX9RGxG&sz=w1000"></div>
       <div class="detail-text">
         <div id="selectedName" class="selected-name">NO_ASSET</div>
         <div id="selectedSub" class="selected-sub asset-lines">SELECCIONE UN ACTIVO DEL ARBOL O CREE UNO NUEVO.</div>
         <div class="summary-tools">
-          <button id="btnViewPhoto" type="button" class="btn" data-perm="BTN_MEL_VER" data-arma-access="BTN_MEL_VER" disabled>VER FOTO EN PANTALLA COMPLETA</button>
+          <button id="btnViewPhoto" type="button" class="btn" data-perm="BTN_MEL_VER" data-arma-access="BTN_MEL_VER" disabled>VER FOTO</button>
           <div class="summary-upload">
             <button id="btnUploadPhoto" type="button" class="btn green" data-perm="BTN_MEL_SUBIR_FOTO" data-arma-access="BTN_MEL_SUBIR_FOTO">SUBIR FOTO</button>
             <div id="photoFileName" class="photo-filename">SIN ARCHIVO SELECCIONADO</div>
@@ -428,7 +438,7 @@ body.modal-open{overflow:hidden}
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-30 12:43:32</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-30 13:33:57</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -476,7 +486,8 @@ body.modal-open{overflow:hidden}
         <div><label>VALOR VISIBLE</label><input id="catalogValue" placeholder="VALOR PARA SELECCIONAR"></div>
         <div><label>DESCRIPCION</label><input id="catalogDescription" placeholder="DESCRIPCION OPCIONAL"></div>
         <div class="span4" style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap"><button id="btnCatalogClear" type="button" class="btn gray">NUEVO / LIMPIAR</button><button id="btnCatalogSave" type="button" class="btn green">GUARDAR CATALOGO</button></div>
-        <div id="catalogAdminList" class="catalog-admin-list"><div class="catalog-empty">CARGANDO CATALOGOS...</div></div>
+        <div id="catalogAdminStatus" class="catalog-status">CATALOGOS DISPONIBLES EN MEMORIA. ABRA EL MODULO PARA ACTUALIZAR.</div>
+        <div id="catalogAdminList" class="catalog-admin-list"><div class="catalog-empty">SIN CATALOGO SELECCIONADO.</div></div>
       </div>
     </div>
   </div>
@@ -536,6 +547,10 @@ async function api(action, payload) {
   if (armaSession && armaSession.token && !payload.token) payload.token = armaSession.token;
   const res = await fetch(ARMA_API_URL, {method:"POST", body:JSON.stringify(payload)});
   return await res.json();
+}
+function apiWithTimeout(action,payload,timeoutMs){
+  const limit=Math.max(3000,Number(timeoutMs||12000));
+  return Promise.race([api(action,payload),new Promise(function(_,reject){setTimeout(function(){reject(new Error('TIEMPO_AGOTADO_'+action));},limit);})]);
 }
 function hasPerm(k) {
   const p = (armaSession && armaSession.permissions) || {};
@@ -807,6 +822,8 @@ function chooseMELPhoto() { document.getElementById("photoFile").click(); }
 document.getElementById("btnUploadPhoto").addEventListener("click", chooseMELPhoto);
 document.getElementById("photoFile").addEventListener("change", function(){ const f=this.files&&this.files[0]; document.getElementById("photoFileName").textContent = f ? f.name : "SIN ARCHIVO SELECCIONADO"; if(f) uploadPhoto(); });
 document.getElementById("btnViewPhoto").addEventListener("click", openPhotoViewer);
+document.getElementById('assetPhotoBox').addEventListener('click',openPhotoViewer);
+document.getElementById('assetPhotoBox').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openPhotoViewer();}});
 document.getElementById("btnQrTools").addEventListener("click", openQrTools);
 document.getElementById("btnDownloadQr").addEventListener("click", downloadAssetQr);
 document.getElementById("btnPrintQr").addEventListener("click", printAssetQr);
@@ -1048,7 +1065,8 @@ function printAssetQr() {
   const summary = esc(melSummaryText(selectedAsset)).replace(/\n/g, "<br>");
   const win = window.open("", "_blank", "width=820,height=900");
   if (!win) { toast("EL NAVEGADOR BLOQUEO LA VENTANA DE IMPRESION."); return; }
-  const html = "<!DOCTYPE html><html lang=\"es\"><head><meta charset=\"UTF-8\"><title>QR " + title + "</title><style>@page{margin:12mm}body{font-family:Arial,sans-serif;text-align:center;color:#002b5c;margin:0;padding:28px}h1{font-size:25px;margin:0 0 16px}.qr{width:420px;max-width:90vw;height:auto;border:1px solid #cfe0f2;padding:14px;border-radius:14px}.summary{font-size:13px;font-weight:700;line-height:1.55;margin:18px 0 0}.foot{margin-top:18px;font-size:10px;font-weight:700}</style></head><body><h1>" + title + "</h1><img id=\"printQr\" class=\"qr\" src=\"" + src + "\" alt=\"CODIGO QR\"><div class=\"summary\">" + summary + "</div><div class=\"foot\">ARMA // MEL EQUIPOS</div></body></html>";
+  const html = "<!DOCTYPE html><html lang=\"es\"><head><meta charset=\"UTF-8\"><title>QR " + title + "</title><style>@page{margin:12mm}body{font-family:Arial,sans-serif;text-align:center;color:#002b5c;margin:0;padding:28px}h1{font-size:25px;margin:0 0 16px}.qr{width:420px;max-width:90vw;height:auto;border:1px solid #cfe0f2;padding:14px;border-radius:14px}.summary{font-size:13px;font-weight:700;line-height:1.55;margin:18px 0 0}.foot{margin-top:18px;font-size:10px;font-weight:700}</style></head><body><h1>" + title + "</h1><img id=\"printQr\" class=\"qr\" src=\"" + src + "\" alt=\"CODIGO QR\"><div class=\"summary\">" + summary + "</div>" +
+    "<div class=\"foot\">ARMA // MEL EQUIPOS</div></body></html>";
   win.document.open();
   win.document.write(html);
   win.document.close();
@@ -1057,11 +1075,17 @@ function printAssetQr() {
   if (qr.complete) launchPrint(); else qr.onload = launchPrint;
 }
 
+function melCatalogStatus(text,mode){
+  const el=document.getElementById('catalogAdminStatus');if(!el)return;el.textContent=text||'';el.classList.remove('ok','warn');if(mode)el.classList.add(mode);
+}
 function melCatalogFormClear(){
   melCatalogEditOriginal=null;
   document.getElementById('catalogCode').value='';
   document.getElementById('catalogValue').value='';
   document.getElementById('catalogDescription').value='';
+}
+function seedCatalogAdminRowsFromLoadedCatalogs(){
+  const rows=[];Object.keys(MEL_ISO_CATALOG_MAP).forEach(function(type){(melCatalogos[type]||[]).forEach(function(x){rows.push({tipo:type,codigo:String(x.codigo||x.valor||''),valor:String(x.valor||x.codigo||''),descripcion:String(x.descripcion||'')});});});melCatalogAdminRows=rows;renderCatalogAdminList();return rows.length;
 }
 function renderCatalogAdminList(){
   const host=document.getElementById('catalogAdminList');
@@ -1069,78 +1093,26 @@ function renderCatalogAdminList(){
   const rows=melCatalogAdminRows.filter(function(r){return String(r.tipo||r.TIPO||'')===type;});
   if(!rows.length){host.innerHTML='<div class="catalog-empty">SIN REGISTROS ACTIVOS PARA ESTE CATALOGO.</div>';return;}
   host.innerHTML=rows.map(function(r,index){
-    const code=String(r.codigo||r.CODIGO||'');
-    const value=String(r.valor||r.VALOR||'');
-    const description=String(r.descripcion||r.DESCRIPCION||'');
+    const code=String(r.codigo||r.CODIGO||'');const value=String(r.valor||r.VALOR||'');
     return '<div class="catalog-row"><strong>'+esc(type)+'</strong><span title="'+esc(code)+'">'+esc(code)+'</span><span title="'+esc(value)+'">'+esc(value)+'</span><div class="catalog-row-actions"><button type="button" class="btn" data-cat-edit="'+index+'">EDITAR</button><button type="button" class="btn red" data-cat-delete="'+index+'">ELIMINAR</button></div></div>';
   }).join('');
-  host.querySelectorAll('[data-cat-edit]').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      const row=rows[Number(this.getAttribute('data-cat-edit'))];
-      melCatalogEditOriginal={tipo:type,codigo:String(row.codigo||row.CODIGO||'')};
-      document.getElementById('catalogCode').value=String(row.codigo||row.CODIGO||'');
-      document.getElementById('catalogValue').value=String(row.valor||row.VALOR||'');
-      document.getElementById('catalogDescription').value=String(row.descripcion||row.DESCRIPCION||'');
-    });
-  });
-  host.querySelectorAll('[data-cat-delete]').forEach(function(btn){
-    btn.addEventListener('click',async function(){
-      const row=rows[Number(this.getAttribute('data-cat-delete'))];
-      const code=String(row.codigo||row.CODIGO||'');
-      if(!confirm('CONFIRMA DESACTIVAR '+code+'?'))return;
-      showLoader('DESACTIVANDO CATALOGO...');
-      try{
-        const res=await api('melDeleteCatalogItem',{tipo:type,codigo:code});
-        if(!res.ok)throw new Error(res.error||'NO_ELIMINADO');
-        toast('CATALOGO DESACTIVADO.');
-        await loadCatalogAdmin();
-      }catch(err){toast('ERROR CATALOGO: '+err.message);}
-      finally{hideLoader();}
-    });
-  });
+  host.querySelectorAll('[data-cat-edit]').forEach(function(btn){btn.addEventListener('click',function(){const row=rows[Number(this.getAttribute('data-cat-edit'))];melCatalogEditOriginal={tipo:type,codigo:String(row.codigo||row.CODIGO||'')};document.getElementById('catalogCode').value=String(row.codigo||row.CODIGO||'');document.getElementById('catalogValue').value=String(row.valor||row.VALOR||'');document.getElementById('catalogDescription').value=String(row.descripcion||row.DESCRIPCION||'');});});
+  host.querySelectorAll('[data-cat-delete]').forEach(function(btn){btn.addEventListener('click',async function(){const row=rows[Number(this.getAttribute('data-cat-delete'))];const code=String(row.codigo||row.CODIGO||'');if(!confirm('CONFIRMA DESACTIVAR '+code+'?'))return;showLoader('DESACTIVANDO CATALOGO...');try{const res=await apiWithTimeout('melDeleteCatalogItem',{tipo:type,codigo:code},15000);if(!res.ok)throw new Error(res.error||'NO_ELIMINADO');melCatalogos=res.catalogos||melCatalogos;seedCatalogAdminRowsFromLoadedCatalogs();renderCatalogos();melCatalogStatus('CATALOGO DESACTIVADO Y LISTAS ACTUALIZADAS.','ok');toast('CATALOGO DESACTIVADO.');}catch(err){melCatalogStatus('NO FUE POSIBLE DESACTIVAR: '+err.message,'warn');toast('ERROR CATALOGO: '+err.message);}finally{hideLoader();}});});
 }
-async function loadCatalogAdmin(){
-  if(!hasPerm('BTN_MEL_ADMIN_CATALOGOS'))return;
-  const res=await api('melCatalogAdminList',{});
-  if(!res.ok)throw new Error(res.error||'NO_CATALOGOS');
-  melCatalogAdminRows=res.rows||[];
-  melCatalogos=res.catalogos||melCatalogos;
-  renderCatalogos();
-  renderCatalogAdminList();
+async function refreshCatalogAdminRemote(){
+  const res=await apiWithTimeout('melCatalogAdminList',{},12000);if(!res.ok)throw new Error(res.error||'NO_CATALOGOS');melCatalogAdminRows=res.rows||melCatalogAdminRows;melCatalogos=res.catalogos||melCatalogos;renderCatalogos();renderCatalogAdminList();return melCatalogAdminRows.length;
 }
 async function openCatalogAdmin(){
-  if(!hasPerm('BTN_MEL_ADMIN_CATALOGOS')){toast('SIN PERMISO PARA ADMINISTRAR CATALOGOS.');return;}
-  const modal=document.getElementById('catalogModal');
-  modal.classList.remove('hidden');
-  modal.setAttribute('aria-hidden','false');
-  syncMediaModalState();
-  melCatalogFormClear();
-  showLoader('CARGANDO CATALOGOS ISO...');
-  try{await loadCatalogAdmin();}catch(err){toast('ERROR CATALOGO: '+err.message);}
-  finally{hideLoader();}
+  if(!hasPerm('BTN_MEL_ADMIN_CATALOGOS')){toast('SIN PERMISO PARA ADMINISTRAR CATALOGOS.');return;}const modal=document.getElementById('catalogModal');modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');syncMediaModalState();melCatalogFormClear();const localCount=seedCatalogAdminRowsFromLoadedCatalogs();melCatalogStatus('MOSTRANDO '+localCount+' REGISTROS YA CARGADOS. ACTUALIZANDO EN SEGUNDO PLANO...','');try{const n=await refreshCatalogAdminRemote();melCatalogStatus('CATALOGOS ACTUALIZADOS: '+n+' REGISTROS ACTIVOS.','ok');}catch(err){melCatalogStatus('SE MUESTRAN LOS CATALOGOS YA CARGADOS. ACTUALIZACION REMOTA NO RESPONDIO: '+err.message,'warn');}
 }
 async function saveCatalogAdmin(){
   if(!hasPerm('BTN_MEL_ADMIN_CATALOGOS')){toast('SIN PERMISO PARA ADMINISTRAR CATALOGOS.');return;}
-  const data={
-    tipo:document.getElementById('catalogType').value,
-    codigo:document.getElementById('catalogCode').value.trim(),
-    valor:document.getElementById('catalogValue').value.trim(),
-    descripcion:document.getElementById('catalogDescription').value.trim(),
-    originalTipo:melCatalogEditOriginal?melCatalogEditOriginal.tipo:'',
-    originalCodigo:melCatalogEditOriginal?melCatalogEditOriginal.codigo:''
-  };
+  const data={tipo:document.getElementById('catalogType').value,codigo:document.getElementById('catalogCode').value.trim(),valor:document.getElementById('catalogValue').value.trim(),descripcion:document.getElementById('catalogDescription').value.trim(),originalTipo:melCatalogEditOriginal?melCatalogEditOriginal.tipo:'',originalCodigo:melCatalogEditOriginal?melCatalogEditOriginal.codigo:''};
   if(!data.tipo||!data.codigo||!data.valor){toast('COMPLETE CATALOGO, CODIGO Y VALOR.');return;}
   showLoader('GUARDANDO CATALOGO...');
-  try{
-    const res=await api('melSaveCatalogItem',{data:data});
-    if(!res.ok)throw new Error(res.error||'NO_GUARDADO');
-    toast('CATALOGO GUARDADO.');
-    melCatalogFormClear();
-    await loadCatalogAdmin();
-  }catch(err){toast('ERROR CATALOGO: '+err.message);}
-  finally{hideLoader();}
+  try{const res=await apiWithTimeout('melSaveCatalogItem',{data:data},15000);if(!res.ok)throw new Error(res.error||'NO_GUARDADO');melCatalogos=res.catalogos||melCatalogos;melCatalogFormClear();seedCatalogAdminRowsFromLoadedCatalogs();renderCatalogos();melCatalogStatus('CATALOGO GUARDADO Y LISTAS ACTUALIZADAS.','ok');toast('CATALOGO GUARDADO.');}
+  catch(err){melCatalogStatus('NO FUE POSIBLE GUARDAR: '+err.message,'warn');toast('ERROR CATALOGO: '+err.message);}finally{hideLoader();}
 }
-
 function melGeoNorm(v){ return String(v || '').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
 function melIsPlantLevel(){ return melGeoNorm(document.getElementById('nivelSelect').value) === 'PLANTA'; }
 function updateGeoPlantSection() {
