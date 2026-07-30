@@ -243,6 +243,33 @@ body.modal-open{overflow:hidden}
 #btnQrTools{font-size:11px !important;letter-spacing:0 !important;white-space:nowrap !important;line-height:1 !important;padding:8px 8px !important}
 @media(max-width:1100px){.summary-tools{max-width:none !important}.summary-upload .btn{width:100% !important}#btnQrTools{font-size:12px !important}}
 @media(max-width:700px){#btnQrTools{font-size:13px !important;white-space:nowrap !important}}
+
+/* === MEL V13.4: inicio en banner y acciones profesionales junto al QR === */
+.hero{display:flex;align-items:center;justify-content:space-between;gap:22px;min-height:96px}
+.hero-copy{min-width:0;position:relative;z-index:1}
+.hero-home-btn{position:relative;z-index:2;display:flex;align-items:center;gap:11px;min-width:190px;border:1px solid rgba(255,255,255,.55);border-radius:14px;padding:10px 14px;background:rgba(255,255,255,.96);color:#003b7a;cursor:pointer;box-shadow:0 10px 24px rgba(0,31,79,.22);font-family:inherit;text-align:left;transition:transform .16s ease,box-shadow .16s ease}
+.hero-home-btn:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(0,31,79,.28)}
+.hero-home-icon{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:#eef7ff;border:1px solid #cfe0f2;flex:0 0 40px}
+.hero-home-icon img{width:28px;height:28px;object-fit:contain}
+.hero-home-copy{display:flex;flex-direction:column;gap:3px;line-height:1.05}
+.hero-home-copy strong{font-size:14px;font-weight:1000;color:#003b7a}
+.hero-home-copy span{font-size:9px;font-weight:900;color:#178b45}
+.asset-summary-panel{top:112px !important}
+.detail-head{grid-template-columns:minmax(288px,368px) minmax(0,1fr) minmax(390px,430px) !important}
+.summary-right{width:100% !important;min-width:390px !important;display:grid !important;grid-template-columns:minmax(180px,1fr) 190px;gap:12px;align-items:end;justify-content:stretch !important}
+.summary-command-stack{display:grid;grid-template-rows:1fr 1fr;gap:10px;align-self:end}
+.summary-command{width:100% !important;min-height:66px;border:0;border-radius:13px;padding:11px 13px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:4px;color:#fff;cursor:pointer;font-family:inherit;text-align:left;box-shadow:0 9px 20px rgba(0,43,92,.18);transition:transform .16s ease,filter .16s ease}
+.summary-command:hover{transform:translateY(-2px);filter:brightness(1.04)}
+.summary-command.create{background:linear-gradient(135deg,#16b84e,#27d35f)}
+.summary-command.save{background:linear-gradient(135deg,#0058b5,#0a8ae8)}
+.summary-command strong{font-size:13px;font-weight:1000;line-height:1.05}
+.summary-command span{font-size:8.8px;font-weight:900;line-height:1.15;opacity:.92}
+.summary-command.disabled,.summary-command:disabled{opacity:.48;filter:grayscale(1);cursor:not-allowed;transform:none}
+.summary-qr-stack{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;gap:8px;min-width:0}
+.summary-qr-stack .asset-qr{align-self:center;width:158px !important;height:158px !important}
+.summary-qr-stack #btnQrTools{width:100% !important;min-width:0 !important;font-size:10.5px !important;padding:9px 7px !important}
+@media(max-width:1100px){.hero{align-items:stretch}.detail-head{grid-template-columns:1fr !important}.summary-right{min-width:0 !important;max-width:650px;margin:0 auto}.asset-summary-panel{top:auto !important}}
+@media(max-width:700px){.hero{display:grid;grid-template-columns:1fr;padding:16px}.hero-home-btn{width:100%;min-width:0;justify-content:center}.summary-right{grid-template-columns:1fr;max-width:none}.summary-command-stack{grid-template-columns:1fr;grid-template-rows:auto}.summary-command{min-height:58px}.summary-qr-stack{max-width:280px;width:100%;margin:0 auto}}
 </style>
 </head>
 <body>
@@ -260,24 +287,14 @@ body.modal-open{overflow:hidden}
 
 <main class="main">
   <section class="hero">
-    <h2>MAESTRO DE EQUIPOS Y ACTIVOS</h2>
-    <p>CONSULTE, CREE Y ADMINISTRE ACTIVOS DESDE UNA INTERFAZ SEGURA // DATOS EN LINEA DESDE ARMA_DATA MEDIANTE BACKEND VALIDADO.</p>
-  </section>
-
-  <section class="action-row">
-    <div class="action-card green" id="btnHome" data-arma-access="ACC_MEL_INICIO">
-      <div class="home-icon"><img src="boton-de-inicio.png" alt=""></div>
-      <div><strong>INICIO</strong><span>VOLVER A ARMA SIN PERDER LA SESION ACTIVA.</span></div>
+    <div class="hero-copy">
+      <h2>MAESTRO DE EQUIPOS Y ACTIVOS</h2>
+      <p>CONSULTE, CREE Y ADMINISTRE ACTIVOS DESDE UNA INTERFAZ SEGURA // DATOS EN LINEA DESDE ARMA_DATA MEDIANTE BACKEND VALIDADO.</p>
     </div>
-    <div class="action-card" id="btnReload" data-perm="BTN_MEL_VER" data-arma-access="BTN_MEL_VER">
-      <div><strong>CONSULTAR ACTIVOS</strong><span>LISTA FILTRADA SEGUN NIVEL, PLANTA, AREA O ALCANCE AUTORIZADO.</span></div>
-    </div>
-    <div class="action-card green" id="btnNew" data-perm="BTN_MEL_CREAR" data-arma-access="BTN_MEL_CREAR">
-      <div><strong>CREAR ACTIVO</strong><span>CREAR ACTIVOS BAJO ISO 14224 Y JERARQUIA MEL.</span></div>
-    </div>
-    <div class="action-card" id="btnSaveTop" data-perm="BTN_MEL_EDITAR" data-arma-access="BTN_MEL_EDITAR">
-      <div><strong>GUARDAR CAMBIOS</strong><span>REGISTRAR CREACION O ACTUALIZACION DEL ACTIVO.</span></div>
-    </div>
+    <button id="btnHome" type="button" class="hero-home-btn" data-arma-access="ACC_MEL_INICIO">
+      <span class="hero-home-icon"><img src="boton-de-inicio.png" alt="INICIO"></span>
+      <span class="hero-home-copy"><strong>INICIO</strong><span>VOLVER A ARMA</span></span>
+    </button>
   </section>
 
   <section class="asset-summary-panel">
@@ -299,8 +316,14 @@ body.modal-open{overflow:hidden}
         <input id="photoFile" class="photo-file-hidden" type="file" accept="image/png,image/jpeg,image/webp">
       </div>
       <div class="summary-right">
-        <img id="assetQr" class="asset-qr" alt="QR DEL ACTIVO" src="">
-        <button id="btnQrTools" type="button" class="btn" data-perm="BTN_MEL_VER" data-arma-access="BTN_MEL_VER" disabled>DESCARGAR / IMPRIMIR QR</button>
+        <div class="summary-command-stack">
+          <button id="btnNew" type="button" class="summary-command create" data-perm="BTN_MEL_CREAR" data-arma-access="BTN_MEL_CREAR"><strong>CREAR ACTIVO</strong><span>INICIAR UNA NUEVA FICHA MEL</span></button>
+          <button id="btnSaveTop" type="button" class="summary-command save" data-perm="BTN_MEL_EDITAR" data-arma-access="BTN_MEL_EDITAR"><strong>GUARDAR CAMBIOS</strong><span>REGISTRAR CREACION O ACTUALIZACION</span></button>
+        </div>
+        <div class="summary-qr-stack">
+          <img id="assetQr" class="asset-qr" alt="QR DEL ACTIVO" src="">
+          <button id="btnQrTools" type="button" class="btn" data-perm="BTN_MEL_VER" data-arma-access="BTN_MEL_VER" disabled>DESCARGAR / IMPRIMIR QR</button>
+        </div>
       </div>
     </div>
   </section>
@@ -446,7 +469,7 @@ body.modal-open{overflow:hidden}
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-30 17:45:09</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-07-30 17:58:13</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -593,9 +616,10 @@ function applyPermissions() {
   const canEdit = hasPerm("BTN_MEL_EDITAR");
   const canUpload = hasPerm("BTN_MEL_SUBIR_FOTO");
   const canAdminCatalogs = hasPerm("BTN_MEL_ADMIN_CATALOGOS");
-  document.getElementById("btnReload").classList.toggle("disabled", !canView);
   document.getElementById("btnNew").classList.toggle("disabled", !canCreate);
+  document.getElementById("btnNew").disabled = !canCreate;
   document.getElementById("btnSaveTop").classList.toggle("disabled", !canEdit && !canCreate);
+  document.getElementById("btnSaveTop").disabled = !canEdit && !canCreate;
   document.getElementById("btnSave").disabled = !canEdit && !canCreate;
   document.getElementById("btnUploadPhoto").disabled = !canUpload;
   document.getElementById("btnCaptureGeo").disabled = !canEdit && !canCreate;
@@ -816,7 +840,6 @@ function smartHome() {
   armaAskMainIsActive().then(active=>{ if(active){ try{if(window.opener&&!window.opener.closed)window.opener.focus();}catch(e){} try{window.close();}catch(e){} setTimeout(()=>{if(!window.closed)toast('MAIN YA ESTA ABIERTO. CIERRE ESTA PESTANA MANUALMENTE.');},250); } else { window.location.href='main.html'; } });
 }
 document.getElementById("btnHome").addEventListener("click", smartHome);
-document.getElementById("btnReload").addEventListener("click", loadMEL);
 document.getElementById("btnSearch").addEventListener("click", loadMEL);
 document.getElementById("btnNew").addEventListener("click", newAsset);
 document.getElementById("btnSave").addEventListener("click", saveAsset);
