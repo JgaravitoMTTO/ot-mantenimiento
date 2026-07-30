@@ -23,11 +23,14 @@ body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);
 .top-title-actions{margin-top:9px;display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
 .user-pill{display:inline-flex;align-items:center;gap:8px;background:#f8fbff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--navy);font-size:12px;font-weight:900}
 .main{padding:18px 24px 22px}
-.hero{position:relative;overflow:hidden;border-radius:22px;background:radial-gradient(circle at 74% 10%,#0076d7 0,#004b9b 42%,#002b66 100%);box-shadow:var(--shadow);color:#fff;padding:20px 28px;margin-bottom:16px}
+.hero{position:relative;overflow:hidden;border-radius:22px;background:radial-gradient(circle at 74% 10%,#0076d7 0,#004b9b 42%,#002b66 100%);box-shadow:var(--shadow);color:#fff;padding:20px 28px;margin-bottom:16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,280px);gap:18px;align-items:center}
 .hero:after{content:'REPORTAR';position:absolute;right:20px;bottom:-14px;font-size:68px;font-weight:950;letter-spacing:4px;color:rgba(255,255,255,.055)}
-.hero span{display:inline-block;background:rgba(0,214,95,.15);border:1px solid rgba(0,214,95,.45);color:#b8ffd5;padding:6px 10px;border-radius:999px;font-weight:950;font-size:11px}
+.hero-copy>span{display:inline-block;background:rgba(0,214,95,.15);border:1px solid rgba(0,214,95,.45);color:#b8ffd5;padding:6px 10px;border-radius:999px;font-weight:950;font-size:11px}
 .hero h1{margin:12px 0 5px;font-size:30px}
 .hero p{margin:0;max-width:1220px;color:#eaf4ff;font-size:11px;line-height:1.25;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;z-index:2}
+.hero-copy,.hero-home{position:relative;z-index:2}
+.hero-home{justify-self:end;width:100%;min-width:0;min-height:74px;background:linear-gradient(180deg,#ffffff,#eef7ff)}
+.hero-home .nav-text strong{font-size:17px}.hero-home .nav-text span{font-size:10px}
 .action-grid{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:14px;margin-bottom:16px}
 .index-nav-card{position:relative;display:flex;align-items:center;gap:14px;min-width:230px;min-height:82px;height:100%;padding:14px 18px;border-radius:18px;background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid #dbe5f0;box-shadow:0 10px 22px rgba(0,43,102,.10);text-decoration:none;color:#002b66;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
 .index-nav-card:before{content:'';position:absolute;left:0;top:0;width:100%;height:5px;background:linear-gradient(90deg,#004b9b,#0076d7,#00bfd6,#55b52e)}
@@ -115,8 +118,11 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
 .resumen48-table td{vertical-align:top;border-bottom:1px solid var(--line);padding:8px 9px;font-size:11px;line-height:1.25;font-weight:750;color:#0f172a}
 .resumen48-foot{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:12px 18px;background:#fff;border-top:1px solid var(--line)}
 .resumen48-ok{border:0;border-radius:12px;background:linear-gradient(180deg,#00d65f,#55b52e);color:#fff;font-size:12px;font-weight:950;padding:10px 22px;cursor:pointer;box-shadow:var(--soft)}
-@media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.grid2,.detail-grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}.grid-form{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}}
-@media(max-width:700px){.action-grid,.filters,.grid-form{grid-template-columns:1fr}.main{padding:12px}.logo-pelex{height:58px}.logo-arma{height:64px}}
+.form-actions-report{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+@media(max-width:1100px){.grid2,.detail-grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}.grid-form{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}}
+@media(max-width:900px){html{zoom:100%!important}.top-global{position:relative}.top-white{padding:10px 12px;gap:10px}.brand-row{width:100%;justify-content:center;gap:12px}.brand-separator{height:52px}.logo-pelex{width:38%;height:auto;max-height:64px}.logo-arma{width:52%;height:auto;max-height:70px}.top-title strong{font-size:22px;line-height:1.15}.top-title span{font-size:12px;line-height:1.35}}
+@media(max-width:900px){.main{padding:10px}.hero{grid-template-columns:1fr;padding:16px;gap:13px}.hero:after{font-size:46px}.hero h1{font-size:26px;line-height:1.15}.hero p{font-size:13px;line-height:1.42;white-space:normal}.hero-home{justify-self:stretch;min-height:70px}.panel{padding:12px}.panel-title{align-items:flex-start}.notice{font-size:13px;line-height:1.5}}
+@media(max-width:900px){.grid-form{grid-template-columns:1fr!important}.field,.field.half,.field.full{grid-column:1/-1!important;min-width:0}.field label{font-size:13px;line-height:1.25}input,select,textarea{font-size:16px!important;min-height:52px;padding:12px!important}textarea{min-height:118px}.form-actions-report{display:grid;grid-template-columns:1fr 1fr}.form-actions-report .btn{min-height:52px;font-size:15px}.footer-card{font-size:10px;padding:10px}}
 </style>
 </head>
 <body>
@@ -130,15 +136,9 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
   <div class="red-line"></div>
 </header>
 <main class="main">
-  <section class="hero"><span>ARMA DATA // RT</span><h1>DILIGENCIAR REPORTE TECNICO</h1><p>REGISTRE ACTIVIDADES CORRECTIVAS O NO PROGRAMADAS CON CONTROL DE PRIORIDAD, TIEMPOS, EQUIPO, EVIDENCIAS Y PDF AUTOMATICO.</p></section>
+  <section class="hero"><div class="hero-copy"><span>ARMA DATA // RT</span><h1>DILIGENCIAR REPORTE TECNICO</h1><p>REGISTRE ACTIVIDADES CORRECTIVAS O NO PROGRAMADAS CON CONTROL DE PRIORIDAD, TIEMPOS, EQUIPO, EVIDENCIAS Y PDF AUTOMATICO.</p></div><a class="index-nav-card main-home hero-home" href="main.html" data-smart-home="1" onclick="return goMain(event)"><div class="nav-icon"><img src="boton-de-inicio.png" alt="INICIO"></div><div class="nav-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></div></a></section>
   <section id="loginWall" class="panel login-wall hidden"><div><h2>SESION NO VALIDADA</h2><p>INGRESE PRIMERO DESDE MAIN.HTML. ESTA PAGINA USA EL TOKEN DE ARMA PARA DEFINIR LOS PERMISOS DE RT.</p><button class="btn" type="button" onclick="goMain()">VOLVER A MAIN</button></div></section>
   <section id="appArea" class="hidden">
-    <div class="action-grid">
-      <a class="index-nav-card main-home" href="main.html" data-smart-home="1" onclick="return goMain(event)"><div class="nav-icon"><img src="boton-de-inicio.png" alt="INICIO"></div><div class="nav-text"><strong>Inicio</strong><span>Volver a ARMA</span></div></a>
-      <button class="action-card green" type="button" id="btnRefresh" onclick="refreshAll()"><strong>ACTUALIZAR</strong><span>RECARGAR INFORMACION DESDE ARMA_DATA.</span></button>
-      <button class="action-card blue" type="button" id="btnPdf" onclick="generateSelectedPdf()"><strong>GENERAR PDF</strong><span>REGENERAR SOPORTE PDF DE LA RT SELECCIONADA.</span></button>
-      <button class="action-card dark" type="button" onclick="clearViewer()"><strong>LIMPIAR VISOR</strong><span>RETIRAR PDF ACTUAL DEL PANEL.</span></button>
-    </div>
     <section id="reportPanel" class="panel hidden">
       <div class="panel-title"><h2>NUEVO REPORTE TECNICO</h2><div class="status" id="reportStatus">LISTO PARA DILIGENCIAR</div></div>
       <div class="notice">LA RT NACE EN ESTADO RTD. PRIORIDAD 1 ES ATENCION INMEDIATA. PRIORIDAD 2 DEBE ATENDERSE DENTRO DE LAS SIGUIENTES 8 HORAS. ARMA VALIDARA COHERENCIA DE TIEMPOS ANTES DE GUARDAR.</div>
@@ -158,7 +158,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
         <div class="field half"><label>FOTOS DE REFERENCIA</label><input id="rtFotos" type="file" accept="image/png,image/jpeg,image/webp" multiple></div>
         <div class="field half"><label>OBSERVACIONES</label><textarea id="rtObservaciones"></textarea></div>
       </div>
-      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap"><button class="btn gray" type="button" onclick="clearReportForm()">LIMPIAR</button><button class="btn green" type="button" onclick="createRT()">GUARDAR RT</button></div>
+      <div class="form-actions-report"><button class="btn gray" type="button" onclick="clearReportForm()">LIMPIAR</button><button class="btn green" type="button" onclick="createRT()">GUARDAR RT</button></div>
     </section>
     <div id="consultGrid" class="grid2">
       <section class="panel" id="listPanel">
@@ -192,7 +192,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-30 13:25:45</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-30 15:07:34</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -223,7 +223,7 @@ function armaMainStorageIsFresh(maxAgeMs){try{var raw=localStorage.getItem("ARMA
 function armaAskMainIsActive(){return new Promise(function(resolve){var resolved=false;var bc=null;function finish(active){if(resolved)return;resolved=true;try{if(bc)bc.close();}catch(err){}resolve(!!active);}try{if("BroadcastChannel" in window){bc=new BroadcastChannel("ARMA_CONTROL_CHANNEL");bc.onmessage=function(ev){var msg=ev.data||{};if(msg.type==="MAIN_ACTIVE")finish(true);};bc.postMessage({type:"FOCUS_MAIN",from:location.href,ts:Date.now()});}}catch(err){}try{localStorage.setItem("ARMA_REQUEST_MAIN_FOCUS",String(Date.now()));}catch(err){}if(armaMainStorageIsFresh(3500))setTimeout(function(){finish(true);},120);setTimeout(function(){finish(false);},650);});}
 function armaTryCloseCurrentPage(){try{window.close();}catch(err){}setTimeout(function(){if(!window.closed){try{console.warn("MAIN YA ESTA ABIERTO. CIERRE ESTA PESTANA MANUALMENTE.");}catch(err){}}},220);}
 function goMain(e){if(e&&e.preventDefault)e.preventDefault();armaPersistToken();armaAskMainIsActive().then(function(active){if(active){try{if(window.opener&&!window.opener.closed)window.opener.focus();}catch(err){}armaTryCloseCurrentPage();}else{window.location.href="main.html";}});return false;}
-function configureMode(){let report=document.getElementById("reportPanel"), grid=document.getElementById("consultGrid"), close=document.getElementById("closePanel"), btnPdf=document.getElementById("btnPdf");if(PAGE_MODE==="REPORTAR"){report.classList.remove("hidden");grid.classList.add("hidden");btnPdf.style.display="none";}else{report.classList.add("hidden");grid.classList.remove("hidden");if(PAGE_MODE==="GESTION")close.classList.remove("hidden");else close.classList.add("hidden");}let est=document.getElementById("fEstado");if(PAGE_MODE==="GESTION"&&est)est.value="RTD";}
+function configureMode(){let report=document.getElementById("reportPanel"), grid=document.getElementById("consultGrid"), close=document.getElementById("closePanel"), btnPdf=document.getElementById("btnPdf");if(PAGE_MODE==="REPORTAR"){report.classList.remove("hidden");grid.classList.add("hidden");if(btnPdf)btnPdf.style.display="none";}else{report.classList.add("hidden");grid.classList.remove("hidden");if(PAGE_MODE==="GESTION")close.classList.remove("hidden");else close.classList.add("hidden");}let est=document.getElementById("fEstado");if(PAGE_MODE==="GESTION"&&est)est.value="RTD";}
 function asArr(v){if(!v)return[];if(Array.isArray(v))return v;if(v.rows&&Array.isArray(v.rows))return v.rows;if(v.files&&Array.isArray(v.files))return v.files;return[];}
 function getCat(keys){for(let i=0;i<keys.length;i++){let k=keys[i];if(catalogos[k])return asArr(catalogos[k]);let u=String(k).toUpperCase();if(catalogos[u])return asArr(catalogos[u]);}return[];}
 function val(o,keys){o=o||{};for(let i=0;i<keys.length;i++){let k=keys[i];if(o[k]!=null&&o[k]!=="")return o[k];let u=String(k).toUpperCase();if(o[u]!=null&&o[u]!=="")return o[u];}return"";}
