@@ -23,29 +23,21 @@ body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);
 .top-title-actions{margin-top:9px;display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
 .user-pill{display:inline-flex;align-items:center;gap:8px;background:#f8fbff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--navy);font-size:12px;font-weight:900}
 .main{padding:18px 24px 22px}
-.hero{position:relative;overflow:hidden;border-radius:22px;background:radial-gradient(circle at 74% 10%,#0076d7 0,#004b9b 42%,#002b66 100%);box-shadow:var(--shadow);color:#fff;padding:20px 28px;margin-bottom:16px}
+.hero{position:relative;overflow:hidden;border-radius:22px;background:radial-gradient(circle at 74% 10%,#0076d7 0,#004b9b 42%,#002b66 100%);box-shadow:var(--shadow);color:#fff;padding:18px 22px;margin-bottom:16px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:22px}
 .hero:after{content:'GESTION';position:absolute;right:20px;bottom:-14px;font-size:68px;font-weight:950;letter-spacing:4px;color:rgba(255,255,255,.055)}
 .hero span{display:inline-block;background:rgba(0,214,95,.15);border:1px solid rgba(0,214,95,.45);color:#b8ffd5;padding:6px 10px;border-radius:999px;font-weight:950;font-size:11px}
 .hero h1{margin:12px 0 5px;font-size:30px}
 .hero p{margin:0;max-width:1220px;color:#eaf4ff;font-size:11px;line-height:1.25;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;z-index:2}
-.action-grid{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:14px;margin-bottom:16px}
-.index-nav-card{position:relative;display:flex;align-items:center;gap:14px;min-width:230px;min-height:82px;height:100%;padding:14px 18px;border-radius:18px;background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid #dbe5f0;box-shadow:0 10px 22px rgba(0,43,102,.10);text-decoration:none;color:#002b66;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
-.index-nav-card:before{content:'';position:absolute;left:0;top:0;width:100%;height:5px;background:linear-gradient(90deg,#004b9b,#0076d7,#00bfd6,#55b52e)}
-.index-nav-card:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(0,43,102,.16);border-color:#bcd7f5}
-.index-nav-card .nav-icon{width:54px;height:54px;border-radius:16px;background:#ffffff;border:1px solid #dbe5f0;display:grid;place-items:center;flex:0 0 54px;box-shadow:0 4px 10px rgba(15,23,42,.08)}
-.index-nav-card .nav-icon img{width:38px;height:38px;object-fit:contain;display:block}
-.index-nav-card .nav-text{display:flex;flex-direction:column;line-height:1.1}
-.index-nav-card .nav-text strong{font-size:18px;font-weight:900;color:#002b66;letter-spacing:.2px}
-.index-nav-card .nav-text span{font-size:11px;font-weight:900;color:#008c2e;letter-spacing:.45px;text-transform:uppercase;margin-top:6px}
-.index-nav-card.main-home{background:linear-gradient(180deg,#ffffff,#eef7ff)}
-.index-nav-card.main-home .nav-icon{background:#e8f2ff}
-.action-card{position:relative;overflow:hidden;border:0;border-radius:18px;background:#fff;box-shadow:var(--shadow);padding:17px;text-align:left;cursor:pointer;border-left:6px solid var(--green2);min-height:82px}
-.action-card:hover{filter:brightness(1.03);transform:translateY(-1px)}
-.action-card strong{display:block;color:var(--navy);font-size:16px;font-weight:950;margin-bottom:8px}
-.action-card span{display:block;color:var(--muted);font-size:11px;font-weight:850;line-height:1.35}
-.action-card.blue{border-left-color:var(--blue2)}
-.action-card.green{border-left-color:var(--green2)}
-.action-card.dark{border-left-color:#111827}
+.hero-copy{min-width:0;position:relative;z-index:2}
+.hero-toolbar{display:flex;align-items:stretch;justify-content:flex-end;gap:12px;position:relative;z-index:3}
+.hero-action{min-width:210px;min-height:72px;border:1px solid rgba(255,255,255,.38);border-left:5px solid var(--green2);border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(239,247,255,.96));box-shadow:0 12px 28px rgba(0,24,62,.24);padding:10px 14px;display:flex;align-items:center;gap:11px;text-align:left;text-decoration:none;cursor:pointer;transition:transform .16s ease,box-shadow .16s ease;color:var(--navy);font-family:inherit;text-transform:uppercase}
+.hero-action:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(0,24,62,.30)}
+.hero-action.pdf{border-left-color:var(--blue2)}
+.hero-action-icon{width:45px;height:45px;flex:0 0 45px;border-radius:13px;border:1px solid #d5e5f5;background:#eaf4ff;display:grid;place-items:center;color:var(--blue);font-size:12px;font-weight:1000;box-shadow:0 4px 10px rgba(15,23,42,.08)}
+.hero-action-icon img{width:31px;height:31px;object-fit:contain;display:block}
+.hero-action-text{min-width:0;display:flex;flex-direction:column;gap:4px}
+.hero-action strong{display:block;color:var(--navy);font-size:15px;font-weight:1000;line-height:1.05}
+.hero-action small{display:block;color:var(--muted);font-size:9.5px;font-weight:900;line-height:1.25}
 .panel{min-width:0;max-width:100%;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:15px;margin-bottom:16px;overflow:hidden}
 .panel-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
 .panel-title h2{margin:0;color:var(--navy);font-size:18px}
@@ -147,8 +139,8 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
 .resumen48-foot{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:12px 18px;background:#fff;border-top:1px solid var(--line)}
 .resumen48-ok{border:0;border-radius:12px;background:linear-gradient(180deg,#00d65f,#55b52e);color:#fff;font-size:12px;font-weight:950;padding:10px 22px;cursor:pointer;box-shadow:var(--soft)}
 @media(max-width:1400px){.decision-layout{grid-template-columns:minmax(0,48fr) minmax(0,52fr)}.rt-fields-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.decision-layout,.detail-grid{grid-template-columns:1fr}.left-stack{height:auto}.close-workbench{height:auto}.filters{grid-template-columns:1fr 1fr}.grid-form,.rt-fields-grid{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}.table-wrap{height:auto;max-height:520px}.viewer{min-height:620px}}
-@media(max-width:700px){.action-grid,.filters,.grid-form,.rt-fields-grid{grid-template-columns:1fr}.rt-field-card.half{grid-column:1/-1}.main{padding:12px}.logo-pelex{height:58px}.logo-arma{height:64px}.viewer{height:68vh;min-height:520px}}
+@media(max-width:1100px){.hero{grid-template-columns:1fr}.hero-toolbar{width:100%;justify-content:stretch}.hero-action{flex:1 1 0;min-width:0}.decision-layout,.detail-grid{grid-template-columns:1fr}.left-stack{height:auto}.close-workbench{height:auto}.filters{grid-template-columns:1fr 1fr}.grid-form,.rt-fields-grid{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}.table-wrap{height:auto;max-height:520px}.viewer{min-height:620px}}
+@media(max-width:700px){.hero{padding:15px}.hero-toolbar{display:grid;grid-template-columns:1fr}.hero-action{width:100%;min-height:66px}.filters,.grid-form,.rt-fields-grid{grid-template-columns:1fr}.rt-field-card.half{grid-column:1/-1}.main{padding:12px}.logo-pelex{height:58px}.logo-arma{height:64px}.viewer{height:68vh;min-height:520px}}
 
 /* === RT V26: lectura ejecutiva, carga visible y soportes bajo demanda === */
 .panel-title-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
@@ -190,15 +182,15 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
   <div class="red-line"></div>
 </header>
 <main class="main">
-  <section class="hero"><span>ARMA DATA // RTCT</span><h1>GESTION DE REPORTES TECNICOS</h1><p>GESTIONE EL CIERRE TECNICO DE RT, AJUSTE PRIORIDAD CUANDO APLIQUE, REGISTRE OBSERVACIONES Y ACTUALICE EL PDF DE EVIDENCIA.</p></section>
+  <section class="hero hero-with-actions">
+    <div class="hero-copy"><span>ARMA DATA // RTCT</span><h1>GESTION DE REPORTES TECNICOS</h1><p>GESTIONE EL CIERRE TECNICO DE RT, AJUSTE PRIORIDAD CUANDO APLIQUE, REGISTRE OBSERVACIONES Y ACTUALICE EL PDF DE EVIDENCIA.</p></div>
+    <div class="hero-toolbar">
+      <a class="hero-action home" href="main.html" data-smart-home="1" onclick="return goMain(event)"><span class="hero-action-icon"><img src="boton-de-inicio.png" alt="INICIO"></span><span class="hero-action-text"><strong>INICIO</strong><small>VOLVER A ARMA</small></span></a>
+      <button class="hero-action pdf" type="button" id="btnPdf" onclick="generateSelectedPdf()"><span class="hero-action-icon">PDF</span><span class="hero-action-text"><strong>GENERAR PDF</strong><small>REGENERAR SOPORTE DE LA RT SELECCIONADA</small></span></button>
+    </div>
+  </section>
   <section id="loginWall" class="panel login-wall hidden"><div><h2>SESION NO VALIDADA</h2><p>INGRESE PRIMERO DESDE MAIN.HTML. ESTA PAGINA USA EL TOKEN DE ARMA PARA DEFINIR LOS PERMISOS DE RT.</p><button class="btn" type="button" onclick="goMain()">VOLVER A MAIN</button></div></section>
   <section id="appArea" class="hidden">
-    <div class="action-grid">
-      <a class="index-nav-card main-home" href="main.html" data-smart-home="1" onclick="return goMain(event)"><div class="nav-icon"><img src="boton-de-inicio.png" alt="INICIO"></div><div class="nav-text"><strong>Inicio</strong><span>Volver a ARMA</span></div></a>
-      <button class="action-card green" type="button" id="btnRefresh" onclick="refreshAll()"><strong>ACTUALIZAR</strong><span>RECARGAR INFORMACION DESDE ARMA_DATA.</span></button>
-      <button class="action-card blue" type="button" id="btnPdf" onclick="generateSelectedPdf()"><strong>GENERAR PDF</strong><span>REGENERAR SOPORTE PDF DE LA RT SELECCIONADA.</span></button>
-      <button class="action-card dark" type="button" onclick="clearViewer()"><strong>LIMPIAR VISOR</strong><span>RETIRAR PDF ACTUAL DEL PANEL.</span></button>
-    </div>
     <section id="reportPanel" class="panel hidden">
       <div class="panel-title"><h2>NUEVO REPORTE TECNICO</h2><div class="status" id="reportStatus">LISTO PARA DILIGENCIAR</div></div>
       <div class="notice">LA RT NACE EN ESTADO RTD. PRIORIDAD 1 ES ATENCION INMEDIATA. PRIORIDAD 2 DEBE ATENDERSE DENTRO DE LAS SIGUIENTES 8 HORAS. ARMA VALIDARA COHERENCIA DE TIEMPOS ANTES DE GUARDAR.</div>
@@ -270,7 +262,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-30 15:07:34</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-07-30 17:36:25</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -301,7 +293,7 @@ function armaMainStorageIsFresh(maxAgeMs){try{var raw=localStorage.getItem("ARMA
 function armaAskMainIsActive(){return new Promise(function(resolve){var resolved=false;var bc=null;function finish(active){if(resolved)return;resolved=true;try{if(bc)bc.close();}catch(err){}resolve(!!active);}try{if("BroadcastChannel" in window){bc=new BroadcastChannel("ARMA_CONTROL_CHANNEL");bc.onmessage=function(ev){var msg=ev.data||{};if(msg.type==="MAIN_ACTIVE")finish(true);};bc.postMessage({type:"FOCUS_MAIN",from:location.href,ts:Date.now()});}}catch(err){}try{localStorage.setItem("ARMA_REQUEST_MAIN_FOCUS",String(Date.now()));}catch(err){}if(armaMainStorageIsFresh(3500))setTimeout(function(){finish(true);},120);setTimeout(function(){finish(false);},650);});}
 function armaTryCloseCurrentPage(){try{window.close();}catch(err){}setTimeout(function(){if(!window.closed){try{console.warn("MAIN YA ESTA ABIERTO. CIERRE ESTA PESTANA MANUALMENTE.");}catch(err){}}},220);}
 function goMain(e){if(e&&e.preventDefault)e.preventDefault();armaPersistToken();armaAskMainIsActive().then(function(active){if(active){try{if(window.opener&&!window.opener.closed)window.opener.focus();}catch(err){}armaTryCloseCurrentPage();}else{window.location.href="main.html";}});return false;}
-function configureMode(){let report=document.getElementById("reportPanel"), grid=document.getElementById("consultGrid"), close=document.getElementById("closePanel"), btnPdf=document.getElementById("btnPdf");if(PAGE_MODE==="REPORTAR"){report.classList.remove("hidden");grid.classList.add("hidden");btnPdf.style.display="none";}else{report.classList.add("hidden");grid.classList.remove("hidden");if(PAGE_MODE==="GESTION")close.classList.remove("hidden");else close.classList.add("hidden");}let est=document.getElementById("fEstado");if(PAGE_MODE==="GESTION"&&est)est.value="RTD";}
+function configureMode(){let report=document.getElementById("reportPanel"), grid=document.getElementById("consultGrid"), close=document.getElementById("closePanel"), btnPdf=document.getElementById("btnPdf");if(PAGE_MODE==="REPORTAR"){report.classList.remove("hidden");grid.classList.add("hidden");if(btnPdf)btnPdf.style.display="none";}else{report.classList.add("hidden");grid.classList.remove("hidden");if(PAGE_MODE==="GESTION")close.classList.remove("hidden");else close.classList.add("hidden");}let est=document.getElementById("fEstado");if(PAGE_MODE==="GESTION"&&est)est.value="RTD";}
 function asArr(v){if(!v)return[];if(Array.isArray(v))return v;if(v.rows&&Array.isArray(v.rows))return v.rows;if(v.files&&Array.isArray(v.files))return v.files;return[];}
 function getCat(keys){for(let i=0;i<keys.length;i++){let k=keys[i];if(catalogos[k])return asArr(catalogos[k]);let u=String(k).toUpperCase();if(catalogos[u])return asArr(catalogos[u]);}return[];}
 function val(o,keys){o=o||{};for(let i=0;i<keys.length;i++){let k=keys[i];if(o[k]!=null&&o[k]!=="")return o[k];let u=String(k).toUpperCase();if(o[u]!=null&&o[u]!=="")return o[u];}return"";}
