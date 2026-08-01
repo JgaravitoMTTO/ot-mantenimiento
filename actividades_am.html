@@ -104,17 +104,29 @@ textarea{min-height:78px;resize:vertical}
   display:grid;grid-template-columns:150px 1fr 90px 90px auto;
   gap:7px;margin-bottom:7px
 }
+.measurement-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,.8fr);gap:14px}
+.measurement-card{border:1px solid var(--line);border-radius:14px;padding:12px;background:#f8fbff}
+.measurement-card h4{margin:0 0 10px;color:var(--navy)}
+.variable-toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;margin-bottom:10px}
+.measure-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}
+.metric{background:white;border:1px solid var(--line);border-radius:11px;padding:9px;min-height:65px}
+.metric span{display:block;color:var(--muted);font-size:9px;font-weight:950;margin-bottom:5px}
+.metric strong{color:var(--navy);font-size:15px;word-break:break-word}
+.metric.alarm-normal{border-color:#86efac;background:#f0fdf4}
+.metric.alarm-alto,.metric.alarm-bajo{border-color:#fca5a5;background:#fff1f2}
+.measurement-note{font-size:10px;color:var(--muted);font-weight:850;line-height:1.45;margin:8px 0}
+.source-warning{border-left:5px solid #f59e0b;background:#fff7ed;border-radius:10px;padding:9px;color:#92400e;font-size:10px;font-weight:900;margin-top:10px}
 .footer{
   text-align:center;color:white;background:linear-gradient(135deg,#002b66,#006bd1);
   border-radius:14px;padding:11px;font-weight:900
 }
 @media(max-width:1050px){
-  .grid{grid-template-columns:1fr}
+  .grid,.measurement-grid{grid-template-columns:1fr}
   .row{grid-template-columns:1fr 1fr}
 }
 @media(max-width:700px){
   .top{flex-direction:column}
-  .row,.row.two,.resource-row{grid-template-columns:1fr}
+  .row,.row.two,.resource-row,.variable-toolbar,.measure-summary{grid-template-columns:1fr}
   .wrap{padding:8px}
   .hero{flex-direction:column;gap:10px;align-items:flex-start}
 }
@@ -204,6 +216,53 @@ textarea{min-height:78px;resize:vertical}
           <div class="field full"><label>OBSERVACION</label><textarea id="obs"></textarea></div>
         </div>
       </div>
+      <div class="panel" id="measurementPanel">
+        <h3>VARIABLES Y LECTURAS</h3>
+        <div class="measurement-grid">
+          <div class="measurement-card">
+            <h4>CONFIGURACION DE LA VARIABLE</h4>
+            <div class="variable-toolbar">
+              <select id="variableSelect"><option value="">SIN VARIABLES ASOCIADAS</option></select>
+              <button id="btnNewVariable" class="btn gray" type="button" data-arma-access="BTN_AM_GESTIONAR_VARIABLES">NUEVA</button>
+              <button id="btnToggleVariable" class="btn orange" type="button" data-arma-access="BTN_AM_GESTIONAR_VARIABLES">ACTIVAR / INACTIVAR</button>
+            </div>
+            <div class="row two">
+              <div class="field"><label>ID VARIABLE</label><input id="variableId" readonly></div>
+              <div class="field"><label>CODIGO VARIABLE</label><input id="variableCode"></div>
+              <div class="field full"><label>NOMBRE VARIABLE</label><input id="variableName" placeholder="EJ. CONSUMO DE AGUA CONTADOR PORTERIA"></div>
+              <div class="field"><label>UNIDAD</label><input id="variableUnit" placeholder="M3, KWH, BAR, C"></div>
+              <div class="field"><label>TIPO VARIABLE</label><select id="variableType"><option>INCREMENTAL</option><option>INSTANTANEA</option></select></div>
+              <div class="field"><label>BASE DE ALARMA</label><select id="variableAlarmBase"><option value="PROMEDIO_DIARIO">PROMEDIO DIARIO</option><option value="VALOR">VALOR LEIDO</option></select></div>
+              <div class="field"><label>DECIMALES</label><input id="variableDecimals" type="number" min="0" max="6" value="2"></div>
+              <div class="field"><label>LIMITE INFERIOR</label><input id="variableLow" type="number" step="any"></div>
+              <div class="field"><label>LIMITE SUPERIOR</label><input id="variableHigh" type="number" step="any"></div>
+              <div class="field"><label>FUENTE DE DATOS</label><select id="variableSource"><option>MANUAL</option><option>ENERGIA</option><option>DATAPEL</option><option>OTRA</option></select></div>
+              <div class="field"><label>CLAVE EXTERNA</label><input id="variableExternalKey" placeholder="IDENTIFICADOR, NO CONTRASENA"></div>
+              <div class="field full"><label>OBSERVACION VARIABLE</label><textarea id="variableObs"></textarea></div>
+            </div>
+            <div class="actions"><button id="btnSaveVariable" class="btn green" type="button" data-arma-access="BTN_AM_GESTIONAR_VARIABLES">GUARDAR VARIABLE</button></div>
+            <div class="source-warning">ENERGIA Y DATAPEL QUEDAN PREPARADOS COMO FUENTES. NO GUARDE USUARIOS NI CONTRASENAS EN ESTA PANTALLA, EL CODIGO VBA O GOOGLE SHEETS.</div>
+          </div>
+          <div class="measurement-card">
+            <h4>REGISTRAR LECTURA</h4>
+            <div class="measure-summary">
+              <div class="metric"><span>ULTIMO VALOR</span><strong id="metricLast">SIN DATO</strong></div>
+              <div class="metric"><span>VALOR ANTERIOR</span><strong id="metricPrevious">SIN DATO</strong></div>
+              <div class="metric"><span>DIFERENCIA</span><strong id="metricDifference">SIN DATO</strong></div>
+              <div class="metric"><span>DIAS TRANSCURRIDOS</span><strong id="metricDays">SIN DATO</strong></div>
+              <div class="metric"><span>PROMEDIO DIARIO</span><strong id="metricDaily">SIN DATO</strong></div>
+              <div id="metricAlarmBox" class="metric"><span>ESTADO DE ALARMA</span><strong id="metricAlarm">SIN DATO</strong></div>
+            </div>
+            <div class="row two">
+              <div class="field"><label>FECHA Y HORA DE LECTURA</label><input id="readingDate" type="datetime-local"></div>
+              <div class="field"><label>VALOR LEIDO</label><input id="readingValue" type="number" step="any"></div>
+              <div class="field full"><label>OBSERVACION DE LECTURA</label><textarea id="readingObs"></textarea></div>
+            </div>
+            <p class="measurement-note">PARA VARIABLES INCREMENTALES, ARMA CALCULA LA DIFERENCIA CONTRA LA LECTURA ANTERIOR Y LA DIVIDE ENTRE LOS DIAS TRANSCURRIDOS. SI EL CONTADOR DISMINUYE, MARCA POSIBLE REINICIO.</p>
+            <div class="actions"><button id="btnSaveReading" class="btn green" type="button" data-arma-access="BTN_AM_REGISTRAR_LECTURA">REGISTRAR LECTURA</button></div>
+          </div>
+        </div>
+      </div>
       <div class="panel">
         <h3>HERRAMIENTAS Y REPUESTOS</h3>
         <div id="resources"></div>
@@ -216,11 +275,11 @@ textarea{min-height:78px;resize:vertical}
       </div>
     </section>
   </div>
-  <div class="footer">ARMA // ACTIVIDADES AM // DATOS EN LINEA</div>
+  <div class="footer">ARMA // ACTIVIDADES AM // VARIABLES Y LECTURAS // DATOS EN LINEA</div>
 </main>
 <script>
 const API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
-const AM_CLIENT_CACHE_BASE='ARMA_AM_FAST_CLIENT_V03';
+const AM_CLIENT_CACHE_BASE='ARMA_AM_FAST_CLIENT_V04_VARIABLES';
 const AM_CLIENT_CACHE_MAX_AGE=43200000;
 const AM_REQUEST_TIMEOUT=25000;
 let session=null;
@@ -230,6 +289,8 @@ let catalog={};
 let rows=[];
 let details={};
 let detailOrder=[];
+let variables=[];
+let selectedVariableId='';
 let requestSequence=0;
 let loaderCount=0;
 let filterTimer=0;
@@ -400,7 +461,14 @@ function renderList(){
 }
 function applyPerms(){
   byId('btnSave').disabled=!has(selectedId?'BTN_AM_EDITAR':'BTN_AM_CREAR');
-  byId('btnToggle').disabled=!selectedId||!has('BTN_AM_INACTIVAR')
+  byId('btnToggle').disabled=!selectedId||!has('BTN_AM_INACTIVAR');
+  const canVariable=!!selectedId&&has('BTN_AM_GESTIONAR_VARIABLES');
+  const currentVariable=variables.find(function(v){return String(v.ID_VARIABLE)===String(selectedVariableId)});
+  const canReading=!!selectedId&&!!selectedVariableId&&has('BTN_AM_REGISTRAR_LECTURA')&&normalize(currentVariable&&currentVariable.ESTADO_VARIABLE)!=='INACTIVO';
+  byId('btnNewVariable').disabled=!canVariable;
+  byId('btnSaveVariable').disabled=!canVariable;
+  byId('btnToggleVariable').disabled=!canVariable||!selectedVariableId;
+  byId('btnSaveReading').disabled=!canReading
 }
 function setBaseFields(am){
   am=am||{};
@@ -433,18 +501,108 @@ function rememberDetail(idv,value){
     delete details[old]
   }
 }
+function localDateTimeValue(date){
+  const d=date instanceof Date?date:new Date(date||Date.now());
+  const local=new Date(d.getTime()-d.getTimezoneOffset()*60000);
+  return local.toISOString().slice(0,16)
+}
+function finiteText(value,decimals){
+  if(value===''||value==null||!Number.isFinite(Number(value)))return 'SIN DATO';
+  return Number(value).toLocaleString('es-CO',{maximumFractionDigits:Number(decimals||2)})
+}
+function clearVariableForm(){
+  selectedVariableId='';
+  byId('variableId').value='';byId('variableCode').value='';
+  byId('variableName').value=byId('desc').value||'';
+  byId('variableUnit').value=byId('unidad').value==='NA'?'':byId('unidad').value;
+  byId('variableType').value='INCREMENTAL';byId('variableAlarmBase').value='PROMEDIO_DIARIO';
+  byId('variableDecimals').value='2';byId('variableLow').value='';byId('variableHigh').value='';
+  byId('variableSource').value='MANUAL';byId('variableExternalKey').value='';byId('variableObs').value='';
+  renderVariableSummary(null);applyPerms()
+}
+function renderVariableSummary(variable){
+  variable=variable||{};const decimals=Number(variable.DECIMALES||2);
+  byId('metricLast').textContent=finiteText(variable.ULTIMO_VALOR,decimals);
+  byId('metricPrevious').textContent=finiteText(variable.VALOR_ANTERIOR,decimals);
+  byId('metricDifference').textContent=finiteText(variable.DIFERENCIA,decimals);
+  byId('metricDays').textContent=finiteText(variable.DIAS_TRANSCURRIDOS,2);
+  byId('metricDaily').textContent=finiteText(variable.PROMEDIO_DIARIO,decimals);
+  const alarm=String(variable.ESTADO_ALARMA||'SIN DATO').replaceAll('_',' ');
+  byId('metricAlarm').textContent=alarm;
+  const box=byId('metricAlarmBox');box.className='metric';
+  if(alarm==='NORMAL')box.classList.add('alarm-normal');
+  if(alarm==='ALTO')box.classList.add('alarm-alto');
+  if(alarm==='BAJO')box.classList.add('alarm-bajo')
+}
+function setVariableForm(variable){
+  variable=variable||{};selectedVariableId=String(variable.ID_VARIABLE||'');
+  byId('variableId').value=selectedVariableId;byId('variableCode').value=variable.CODIGO_VARIABLE||'';
+  byId('variableName').value=variable.NOMBRE_VARIABLE||'';byId('variableUnit').value=variable.UNIDAD||'';
+  byId('variableType').value=variable.TIPO_VARIABLE||'INCREMENTAL';
+  byId('variableAlarmBase').value=variable.BASE_ALARMA||((variable.TIPO_VARIABLE||'INCREMENTAL')==='INCREMENTAL'?'PROMEDIO_DIARIO':'VALOR');
+  byId('variableDecimals').value=variable.DECIMALES==null?2:variable.DECIMALES;
+  byId('variableLow').value=variable.LIMITE_INFERIOR==null?'':variable.LIMITE_INFERIOR;
+  byId('variableHigh').value=variable.LIMITE_SUPERIOR==null?'':variable.LIMITE_SUPERIOR;
+  byId('variableSource').value=variable.FUENTE_DATOS||'MANUAL';
+  byId('variableExternalKey').value=variable.CLAVE_EXTERNA||'';byId('variableObs').value=variable.OBSERVACION||'';
+  renderVariableSummary(variable);applyPerms()
+}
+function renderVariables(preferredId){
+  const select=byId('variableSelect');
+  select.innerHTML=variables.length?variables.map(function(variable){
+    return '<option value="'+esc(variable.ID_VARIABLE)+'">'+esc(variable.CODIGO_VARIABLE)+' // '+esc(variable.NOMBRE_VARIABLE)+(normalize(variable.ESTADO_VARIABLE)==='INACTIVO'?' [INACTIVA]':'')+'</option>'
+  }).join(''):'<option value="">SIN VARIABLES ASOCIADAS</option>';
+  const target=preferredId||selectedVariableId||(variables[0]&&variables[0].ID_VARIABLE)||'';
+  if(target&&variables.some(function(v){return String(v.ID_VARIABLE)===String(target)}))select.value=target;
+  const variable=variables.find(function(v){return String(v.ID_VARIABLE)===String(select.value)});
+  if(variable)setVariableForm(variable);else clearVariableForm()
+}
+function collectVariable(){
+  return{ID_VARIABLE:selectedVariableId,ID_AM:selectedId,CODIGO_VARIABLE:byId('variableCode').value,NOMBRE_VARIABLE:byId('variableName').value,UNIDAD:byId('variableUnit').value,TIPO_VARIABLE:byId('variableType').value,BASE_ALARMA:byId('variableAlarmBase').value,LIMITE_INFERIOR:byId('variableLow').value,LIMITE_SUPERIOR:byId('variableHigh').value,DECIMALES:byId('variableDecimals').value,FUENTE_DATOS:byId('variableSource').value,CLAVE_EXTERNA:byId('variableExternalKey').value,OBSERVACION:byId('variableObs').value}
+}
+async function saveVariable(){
+  if(!selectedId)return msg('GUARDE O SELECCIONE PRIMERO UNA AM');
+  try{const response=await api('saveAMVariable',{data:collectVariable()},{busy:true,busyText:'GUARDANDO VARIABLE'});
+    const variable=response.variable||{};const index=variables.findIndex(function(v){return String(v.ID_VARIABLE)===String(variable.ID_VARIABLE)});
+    if(index>=0)variables[index]=variable;else variables.push(variable);selectedVariableId=String(variable.ID_VARIABLE||'');renderVariables(selectedVariableId);
+    if(details[selectedId])details[selectedId].variables=variables;persistClientCache();msg(response.message+' // '+selectedVariableId,'VARIABLE GUARDADA')
+  }catch(error){msg(error.message,'NO FUE POSIBLE GUARDAR VARIABLE')}
+}
+async function toggleVariable(){
+  if(!selectedVariableId)return msg('SELECCIONE UNA VARIABLE');
+  if(!(await confirmArma('CAMBIAR ESTADO DE '+selectedVariableId+'?')))return;
+  try{const response=await api('toggleAMVariable',{idVariable:selectedVariableId},{busy:true,busyText:'ACTUALIZANDO VARIABLE'});
+    const variable=variables.find(function(v){return String(v.ID_VARIABLE)===selectedVariableId});if(variable)variable.ESTADO_VARIABLE=response.estado;
+    renderVariables(selectedVariableId);if(details[selectedId])details[selectedId].variables=variables;persistClientCache();msg(response.message+' // '+response.estado)
+  }catch(error){msg(error.message,'ERROR VARIABLE')}
+}
+function readingClientKey(){
+  if(window.crypto&&crypto.randomUUID)return crypto.randomUUID();
+  return 'AMR-'+Date.now()+'-'+Math.random().toString(16).slice(2)
+}
+async function saveReading(){
+  if(!selectedVariableId)return msg('SELECCIONE UNA VARIABLE');
+  const data={ID_VARIABLE:selectedVariableId,FECHA_LECTURA:byId('readingDate').value,VALOR:byId('readingValue').value,OBSERVACION:byId('readingObs').value,CLAVE_IDEMPOTENCIA:readingClientKey(),ORIGEN_LECTURA:'MANUAL_WEB'};
+  try{const response=await api('saveAMReading',{data:data},{busy:true,busyText:'REGISTRANDO LECTURA'});
+    const index=variables.findIndex(function(v){return String(v.ID_VARIABLE)===selectedVariableId});if(index>=0)variables[index]=response.variable;
+    renderVariables(selectedVariableId);byId('readingValue').value='';byId('readingObs').value='';byId('readingDate').value=localDateTimeValue(new Date());
+    if(details[selectedId])details[selectedId].variables=variables;persistClientCache();msg(response.message,'LECTURA GUARDADA')
+  }catch(error){msg(error.message,'NO FUE POSIBLE REGISTRAR LECTURA')}
+}
 function newAM(){
   selectedId='';
   setBaseFields({ESTADO_AM:'ACTIVO',REQUIERE_MEDICION:'NO'});
+  variables=[];selectedVariableId='';renderVariables();
   renderResources([]);
   byId('formTitle').textContent='NUEVA ACTIVIDAD AM';
   renderList();
   applyPerms()
 }
-function applyAMDetail(am,resourceRows){
+function applyAMDetail(am,resourceRows,variableRows){
   selectedId=String(am.ID_AM||selectedId||'');
   setBaseFields(am);
   renderResources(resourceRows||[]);
+  variables=Array.isArray(variableRows)?variableRows:[];renderVariables();
   byId('formTitle').textContent='EDITAR '+selectedId;
   renderList();
   applyPerms()
@@ -455,9 +613,10 @@ async function openAM(idv){
   selectedId=String(idv||'');
   if(summary)setBaseFields(summary);
   if(details[selectedId]){
-    renderResources(details[selectedId].recursos||[]);
+    renderResources(details[selectedId].recursos||[]);variables=details[selectedId].variables||[];renderVariables();
   }else{
-    byId('resources').innerHTML='<div class="status">CARGANDO RECURSOS...</div>'
+    byId('resources').innerHTML='<div class="status">CARGANDO RECURSOS...</div>';
+    variables=[];selectedVariableId='';renderVariables()
   }
   byId('formTitle').textContent='EDITAR '+selectedId+' // CARGANDO DETALLE';
   renderList();
@@ -466,9 +625,9 @@ async function openAM(idv){
     const response=await api('getAM',{idAM:selectedId});
     if(seq!==requestSequence||selectedId!==String(idv||''))return;
     rememberDetail(selectedId,{
-      am:response.am,recursos:response.recursos||[]
+      am:response.am,recursos:response.recursos||[],variables:response.variables||[]
     });
-    applyAMDetail(response.am,response.recursos||[]);
+    applyAMDetail(response.am,response.recursos||[],response.variables||[]);
     persistClientCache()
   }catch(error){
     if(seq===requestSequence){
@@ -535,9 +694,9 @@ async function saveAM(){
     upsertRow(saved);
     rememberDetail(selectedId,{
       am:saved,
-      recursos:response.recursos||data.recursos||[]
+      recursos:response.recursos||data.recursos||[],variables:variables
     });
-    applyAMDetail(saved,details[selectedId].recursos);
+    applyAMDetail(saved,details[selectedId].recursos,variables);
     persistClientCache();
     msg(response.message+' // '+selectedId,'ACTIVIDAD GUARDADA')
   }catch(error){
@@ -570,6 +729,7 @@ async function toggleAM(){
   }
 }
 async function bootstrap(){
+  byId('readingDate').value=localDateTimeValue(new Date());
   if(!token()){
     location.href='main.html';
     return
@@ -627,6 +787,12 @@ byId('q').addEventListener('input',function(){
 });
 byId('fEstado').addEventListener('change',renderList);
 byId('fLila').addEventListener('change',renderList);
+byId('variableSelect').addEventListener('change',function(){const variable=variables.find(function(v){return String(v.ID_VARIABLE)===String(byId('variableSelect').value)});if(variable)setVariableForm(variable);else clearVariableForm()});
+byId('btnNewVariable').addEventListener('click',clearVariableForm);
+byId('btnSaveVariable').addEventListener('click',saveVariable);
+byId('btnToggleVariable').addEventListener('click',toggleVariable);
+byId('btnSaveReading').addEventListener('click',saveReading);
+byId('variableType').addEventListener('change',function(){if(this.value==='INCREMENTAL'&&!selectedVariableId)byId('variableAlarmBase').value='PROMEDIO_DIARIO';if(this.value==='INSTANTANEA'&&!selectedVariableId)byId('variableAlarmBase').value='VALOR'});
 document.addEventListener('DOMContentLoaded',bootstrap);
 </script>
 </body>
