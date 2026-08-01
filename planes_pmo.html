@@ -38,398 +38,269 @@ button{cursor:pointer}
 .top{
   position:sticky;
   top:0;
-  z-index:30;
+  z-index:60;
+  min-height:112px;
   background:#fff;
-  border-bottom:6px solid var(--blue);
-  padding:12px 24px;
+  border-bottom:6px solid #0066c9;
+  box-shadow:0 8px 26px rgba(0,43,92,.10);
   display:flex;
+  align-items:center;
   justify-content:space-between;
-  align-items:center;
-  gap:18px;
-  box-shadow:0 8px 24px rgba(0,43,102,.10);
+  gap:20px;
+  padding:14px 24px 12px;
 }
-.brand{
-  display:flex;
-  align-items:center;
-  gap:18px;
-  min-width:300px;
-}
-.brand img{
-  height:66px;
-  max-width:260px;
-  object-fit:contain;
-}
-.brand-fallback{
-  display:none;
-  color:var(--navy);
-  font-size:24px;
-  font-weight:950;
-  letter-spacing:1px;
-}
+.brand{display:flex;align-items:center;gap:24px}
+.brand img{height:58px;object-fit:contain}
+.brand-fallback{display:none;font-size:30px;font-weight:1000;color:var(--navy)}
 .title{text-align:right}
-.title h1{
-  margin:0;
-  color:var(--navy);
-  font-size:25px;
-}
-.title p{
-  margin:5px 0 8px;
-  color:var(--muted);
-  font-size:11px;
-  font-weight:850;
-}
+.title h1{margin:0;color:var(--navy);font-size:28px;letter-spacing:.4px}
+.title p{margin:5px 0 10px;color:#50627a;font-size:11px;font-weight:900}
 .pill{
   display:inline-flex;
   border:1px solid var(--line);
   border-radius:999px;
-  padding:7px 12px;
+  padding:9px 14px;
+  background:#fff;
   color:var(--navy);
-  background:#f8fbff;
-  font-size:11px;
-  font-weight:950;
+  font-size:12px;
+  font-weight:1000;
+  box-shadow:0 8px 20px rgba(0,0,0,.07);
 }
-.wrap{padding:14px 20px 22px}
+.wrap{padding:10px 22px 18px}
 .hero{
-  background:linear-gradient(135deg,#003b7a,#0076d7);
-  color:#fff;
-  border-radius:20px;
-  padding:18px 24px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:18px;
+  gap:20px;
+  background:linear-gradient(135deg,#003b7a,#0076d7);
+  border-radius:18px;
+  color:#fff;
+  padding:18px 26px;
   box-shadow:var(--shadow);
-  margin-bottom:14px;
+  position:relative;
+  overflow:hidden;
+  margin-bottom:12px;
 }
-.hero h2{
-  margin:0 0 6px;
-  font-size:28px;
+.hero:after{
+  content:"PMO";
+  position:absolute;
+  right:24px;
+  bottom:-20px;
+  font-size:72px;
+  font-weight:1000;
+  opacity:.08;
+  letter-spacing:8px;
 }
-.hero p{
-  margin:0;
-  font-size:11px;
-  font-weight:850;
-  color:#e9f5ff;
-}
+.hero h2{font-size:30px;margin:0 0 5px}
+.hero p{margin:0;font-size:12px;font-weight:900;line-height:1.5}
 .home{
+  position:relative;
+  z-index:2;
   display:flex;
   align-items:center;
   gap:10px;
   background:#fff;
   color:var(--navy);
-  border-radius:15px;
-  padding:10px 16px;
   text-decoration:none;
-  font-weight:950;
+  border-radius:14px;
+  padding:11px 16px;
+  font-weight:1000;
+  box-shadow:0 10px 24px rgba(0,0,0,.14);
   white-space:nowrap;
 }
-.home img{width:36px;height:36px;object-fit:contain}
+.home img{width:32px;height:32px;object-fit:contain}
 .notice{
-  margin-bottom:14px;
-  border:1px solid #f6c7c7;
-  border-left:6px solid var(--danger);
-  border-radius:14px;
-  background:#fff5f5;
-  color:#8b1b1b;
-  padding:12px 14px;
-  font-size:12px;
-  font-weight:850;
-  line-height:1.4;
-}
-.grid{
-  display:grid;
-  grid-template-columns:390px minmax(0,1fr);
-  gap:14px;
-  align-items:start;
-}
-.panel{
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:18px;
-  box-shadow:var(--shadow);
-  padding:15px;
-  margin-bottom:14px;
-}
-.panel h3{
-  color:var(--navy);
-  margin:0 0 12px;
-  font-size:17px;
-}
-.panel-sub{
-  color:var(--muted);
-  font-size:10px;
-  font-weight:850;
-  margin:-5px 0 12px;
-}
-.filters{
-  display:grid;
-  gap:8px;
-  margin-bottom:10px;
-}
-.row{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:10px;
-}
-.field label{
-  display:block;
-  color:var(--navy);
-  font-size:10px;
-  font-weight:950;
-  margin-bottom:5px;
-}
-.field.full{grid-column:1/-1}
-input,select,textarea{
-  width:100%;
-  padding:10px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  color:var(--navy);
-  font-weight:800;
-  text-transform:uppercase;
-  background:#fff;
-  outline:none;
-}
-input:focus,select:focus,textarea:focus{
-  border-color:var(--blue2);
-  box-shadow:0 0 0 3px rgba(0,118,215,.10);
-}
-textarea{
-  min-height:78px;
-  resize:vertical;
-}
-.btn{
-  border:0;
-  border-radius:10px;
-  padding:10px 14px;
-  color:#fff;
-  background:linear-gradient(#1688e8,#004b9b);
-  font-weight:950;
-}
-.btn.green{background:linear-gradient(#25d366,#159447)}
-.btn.red{background:linear-gradient(#ef5350,#b71c1c)}
-.btn.gray{background:linear-gradient(#9ca3af,#64748b)}
-.btn.orange{background:linear-gradient(#f59e0b,#b45309)}
-.btn:disabled{
-  opacity:.45;
-  filter:grayscale(1);
-  cursor:not-allowed;
-}
-.actions{
-  display:flex;
-  gap:8px;
-  justify-content:flex-end;
-  flex-wrap:wrap;
-  margin-top:12px;
-}
-.list{
-  max-height:68vh;
-  overflow:auto;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:#fff;
-}
-.item{
-  padding:10px;
-  border-bottom:1px solid var(--line);
-  cursor:pointer;
-}
-.item:hover,.item.selected{background:#e9f5ff}
-.item strong{
-  display:block;
-  color:var(--navy);
-  line-height:1.3;
-}
-.item small{
-  display:block;
-  margin-top:5px;
-  color:var(--muted);
-  font-weight:800;
-}
-.badge{
-  display:inline-flex;
-  border-radius:999px;
-  padding:3px 8px;
-  background:#e6f7ed;
-  color:#087735;
-  font-size:9px;
-  font-weight:950;
-  margin-right:4px;
-}
-.badge.warn{background:#fff3cd;color:#8a5800}
-.badge.red{background:#fee2e2;color:#991b1b}
-.picker-toolbar{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:8px;
-  align-items:center;
-  margin-bottom:10px;
-}
-.counter{
-  border-radius:999px;
-  background:#eaf4ff;
-  color:var(--navy);
-  padding:7px 10px;
-  font-size:10px;
-  font-weight:950;
-  white-space:nowrap;
-}
-.pick-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:7px;
-  max-height:280px;
-  overflow:auto;
-  padding-right:3px;
-}
-.pick{
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:9px;
-  background:#f8fbff;
-}
-.pick.selected{
-  border-color:#7bc59a;
-  background:#ecfff3;
-}
-.pick label{
-  display:flex;
-  align-items:flex-start;
-  gap:8px;
-  font-size:10px;
-  font-weight:850;
-  line-height:1.35;
-  cursor:pointer;
-}
-.pick input{
-  width:auto;
-  margin-top:2px;
-  flex:0 0 auto;
-}
-.table-wrap{
-  max-height:280px;
-  overflow:auto;
-  border:1px solid var(--line);
-  border-radius:10px;
-  margin-top:12px;
-}
-.table{
-  width:100%;
-  border-collapse:collapse;
-}
-.table th{
-  background:#0f6385;
-  color:#fff;
-  padding:8px;
-  text-align:left;
-  position:sticky;
-  top:0;
-}
-.table td{
-  padding:8px;
-  border-bottom:1px solid var(--line);
-  font-size:11px;
-}
-.status{
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:#f8fbff;
-  padding:10px;
-  font-size:11px;
-  font-weight:900;
-  color:var(--muted);
-}
-.loader,.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(2,6,23,.58);
-  z-index:100;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-}
-.box{
-  background:#fff;
-  border-radius:18px;
-  padding:22px;
-  max-width:660px;
-  width:94%;
-  box-shadow:0 24px 70px rgba(0,0,0,.35);
-}
-.box h3{
-  color:var(--navy);
-  margin-top:0;
-}
-.box p{
-  color:#334155;
-  font-weight:750;
-  line-height:1.5;
-  white-space:pre-wrap;
-}
-.spin{
-  width:44px;
-  height:44px;
-  border:5px solid #dbeafe;
-  border-top-color:var(--blue2);
-  border-radius:50%;
-  animation:spin .8s linear infinite;
-  margin:auto;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-.empty{
-  padding:20px;
-  color:var(--muted);
-  text-align:center;
-  font-weight:850;
-}
-.footer{
-  text-align:center;
-  color:#fff;
-  background:linear-gradient(135deg,#002b66,#006bd1);
-  border-radius:14px;
-  padding:11px;
-  font-size:11px;
-  font-weight:900;
-}
-noscript{
-  display:block;
-  margin:14px 20px;
-  border:2px solid var(--danger);
+  border-left:5px solid var(--danger);
   border-radius:12px;
   background:#fff;
   color:var(--danger);
-  padding:12px;
-  font-weight:900;
+  padding:12px 14px;
+  margin-bottom:10px;
+  font-size:12px;
+  font-weight:950;
 }
-@media(max-width:1050px){
+.grid{display:grid;grid-template-columns:390px minmax(0,1fr);gap:14px;align-items:start}
+.grid>*{min-width:0}
+.panel{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  padding:14px;
+  margin-bottom:14px;
+  min-width:0;
+}
+.panel h3{margin:0 0 10px;color:var(--navy);font-size:18px}
+.panel-sub{margin:-3px 0 11px;color:var(--muted);font-size:10px;font-weight:900;line-height:1.4}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.panel-head h3{margin:0}
+.filters{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:10px}
+input,select,textarea{
+  width:100%;
+  border:1px solid #cfe0f2;
+  border-radius:9px;
+  padding:10px 11px;
+  color:var(--navy);
+  background:#fff;
+  font-size:12px;
+  font-weight:850;
+  text-transform:uppercase;
+}
+textarea{min-height:74px;resize:vertical}
+label{display:block;margin-bottom:5px;color:var(--blue);font-size:10px;font-weight:1000}
+.row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.field.full{grid-column:1/-1}
+.field.span2{grid-column:span 2}
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:11px 15px;
+  color:#fff;
+  background:linear-gradient(135deg,#0063c7,#0a8ae8);
+  box-shadow:0 8px 18px rgba(0,80,160,.25);
+  font-weight:1000;
+  text-transform:uppercase;
+}
+.btn.green{background:linear-gradient(135deg,#16b84e,#27d35f)}
+.btn.gray{background:linear-gradient(135deg,#687386,#9aa3b2)}
+.btn.red{background:linear-gradient(135deg,#b42318,#ef4444)}
+.btn.orange{background:linear-gradient(135deg,#b45309,#f59e0b)}
+.btn.small{padding:8px 11px;font-size:10px}
+.btn:disabled{opacity:.45;filter:grayscale(1);cursor:not-allowed}
+.actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:12px}
+.list{max-height:720px;overflow:auto;border:1px solid var(--line);border-radius:12px;background:#f8fbff}
+.item{padding:11px 12px;border-bottom:1px solid #e3edf8;background:#fff;cursor:pointer}
+.item:hover{background:#eef7ff}
+.item.selected{background:#dcfce7;border-left:5px solid var(--green2)}
+.item strong{display:block;color:var(--navy);font-size:12px;line-height:1.35}
+.item small{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:7px;color:var(--muted);font-size:9px;font-weight:900}
+.badge{display:inline-flex;border-radius:999px;background:#e0f2fe;color:#005b9e;padding:4px 8px;font-size:9px;font-weight:1000}
+.badge.warn{background:#fff7ed;color:#9a3412}
+.badge.red{background:#fee2e2;color:#991b1b}
+.status{border:1px solid var(--line);border-radius:11px;background:#f8fbff;padding:11px 13px;color:#42546b;font-size:11px;font-weight:950;line-height:1.4}
+.assigned-list{display:grid;gap:8px}
+.assigned-card{
+  display:grid;
+  grid-template-columns:44px minmax(0,1fr) auto;
+  gap:10px;
+  align-items:center;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#f8fbff;
+  padding:10px 11px;
+}
+.assigned-order{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  color:#fff;
+  background:linear-gradient(135deg,#004b9b,#0a8ae8);
+  font-size:13px;
+  font-weight:1000;
+}
+.assigned-title{color:var(--navy);font-size:12px;font-weight:1000;line-height:1.35}
+.assigned-meta{margin-top:4px;color:var(--muted);font-size:9px;font-weight:900;line-height:1.35}
+.counter{display:inline-flex;border-radius:999px;background:#e0f2fe;color:#005b9e;padding:7px 10px;font-size:10px;font-weight:1000;white-space:nowrap}
+.table-wrap{max-width:100%;overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:10px}
+.table{width:100%;border-collapse:collapse;min-width:640px}
+.table th,.table td{border-bottom:1px solid var(--line);padding:8px;text-align:left;font-size:10px}
+.table th{background:#eaf4ff;color:var(--navy);font-weight:1000}
+.table td{font-weight:800}
+.empty{padding:20px;color:var(--muted);text-align:center;font-weight:850}
+.loader,.modal{
+  position:fixed;
+  inset:0;
+  z-index:2000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(2,15,35,.72);
+  backdrop-filter:blur(3px);
+  padding:16px;
+}
+.loader .box,.modal .box{
+  width:min(980px,96vw);
+  max-height:92vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:18px;
+  box-shadow:0 24px 60px rgba(0,0,0,.28);
+  padding:18px;
+}
+.modal .box.small-box{width:min(560px,94vw)}
+.modal-title{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
+.modal-title h3{margin:0;color:var(--navy);font-size:19px}
+.spin{width:44px;height:44px;border:5px solid #dbeafe;border-top-color:var(--blue2);border-radius:50%;animation:spin .8s linear infinite;margin:auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.picker-toolbar{display:grid;grid-template-columns:minmax(0,1fr) 190px auto;gap:8px;align-items:center;margin-bottom:10px}
+.picker-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:56vh;overflow:auto;padding:2px}
+.pick{
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:#f8fbff;
+  padding:10px;
+  transition:.15s;
+}
+.pick.selected{background:#dcfce7;border-color:#22c55e;box-shadow:0 0 0 2px rgba(34,197,94,.12)}
+.pick label{display:grid;grid-template-columns:24px minmax(0,1fr);gap:8px;align-items:start;margin:0;cursor:pointer}
+.pick input{width:20px;height:20px;margin:0;min-height:0;padding:0}
+.pick-title{color:var(--navy);font-size:11px;font-weight:1000;line-height:1.35}
+.pick-meta{display:block;margin-top:4px;color:var(--muted);font-size:9px;font-weight:900;line-height:1.35}
+.picker-summary{margin:0 0 10px;border-left:5px solid var(--green2);border-radius:10px;background:#f0fdf4;padding:10px 12px;color:#166534;font-size:10px;font-weight:950}
+.picker-selected{display:grid;gap:6px;margin:0 0 12px;max-height:190px;overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fbfdff;padding:8px}
+.picker-selected-row{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:8px;align-items:center;border:1px solid #bfdbfe;border-radius:10px;background:#eff6ff;padding:7px}
+.picker-selected-order{width:30px;height:30px;display:grid;place-items:center;border-radius:8px;background:#004b9b;color:#fff;font-size:10px;font-weight:1000}
+.picker-selected-actions{display:flex;gap:4px}
+.order-btn{width:32px;height:32px;min-height:32px;border:0;border-radius:8px;background:#e2e8f0;color:#0b376f;font-size:15px;font-weight:1000;cursor:pointer}
+.order-btn.remove{background:#fee2e2;color:#b91c1c}
+.order-btn:disabled{opacity:.35;cursor:not-allowed}
+details.admin-box{border:1px solid var(--line);border-radius:12px;background:#fbfdff;padding:10px}
+details.admin-box summary{cursor:pointer;color:var(--navy);font-weight:1000;font-size:12px}
+.footer{text-align:center;color:#fff;background:linear-gradient(135deg,#002b66,#006bd1);border-radius:14px;padding:11px;font-size:11px;font-weight:900}
+@media(max-width:1120px){
   .grid{grid-template-columns:1fr}
+  .list{max-height:420px}
   .row{grid-template-columns:1fr 1fr}
 }
-@media(max-width:700px){
+@media(max-width:760px){
   html{zoom:100%}
-  .top{position:relative;flex-direction:column;align-items:flex-start}
+  body{font-size:16px;overflow-x:hidden}
+  .top{position:relative;flex-direction:column;align-items:flex-start;padding:11px 12px}
+  .brand{width:100%;justify-content:space-between;gap:10px}
+  .brand img{height:auto;max-height:52px;max-width:48%}
   .title{text-align:left}
-  .brand img{height:48px}
-  .row,.pick-grid,.picker-toolbar{grid-template-columns:1fr}
+  .title h1{font-size:21px}
   .wrap{padding:8px}
-  .hero{flex-direction:column;align-items:flex-start}
+  .hero{flex-direction:column;align-items:flex-start;padding:16px}
+  .hero h2{font-size:24px}
   .home{width:100%;justify-content:center}
+  .row,.picker-toolbar,.picker-list{grid-template-columns:1fr}
+  .field.span2,.field.full{grid-column:1}
+  .assigned-card{grid-template-columns:42px minmax(0,1fr)}
+  .assigned-card .counter{grid-column:1/-1;justify-self:start}
+  input,select,textarea,.btn{font-size:16px;min-height:48px}
+  label{font-size:13px}
+  .actions{display:grid;grid-template-columns:1fr}
+  .actions .btn{width:100%}
 }
 </style>
 </head>
 <body>
 <noscript>ESTA PAGINA NECESITA JAVASCRIPT PARA CONSULTAR A.R.M.A.</noscript>
 <div id="loader" class="loader hidden">
-  <div class="box" style="text-align:center">
+  <div class="box small-box" style="text-align:center">
     <div class="spin"></div>
     <h3 id="loaderText">CARGANDO</h3>
     <p>ESPERE MIENTRAS A.R.M.A. CONSULTA LA INFORMACION.</p>
   </div>
 </div>
 <div id="messageModal" class="modal hidden">
-  <div class="box">
-    <h3 id="messageTitle">A.R.M.A.</h3>
+  <div class="box small-box">
+    <div class="modal-title">
+      <h3 id="messageTitle">A.R.M.A.</h3>
+    </div>
     <p id="messageText"></p>
     <div class="actions">
       <button id="messageAccept" class="btn" type="button">ACEPTAR</button>
@@ -437,12 +308,38 @@ noscript{
   </div>
 </div>
 <div id="confirmModal" class="modal hidden">
-  <div class="box">
-    <h3 id="confirmTitle">CONFIRMAR</h3>
+  <div class="box small-box">
+    <div class="modal-title">
+      <h3 id="confirmTitle">CONFIRMAR</h3>
+    </div>
     <p id="confirmText"></p>
     <div class="actions">
       <button id="confirmCancel" class="btn gray" type="button">CANCELAR</button>
       <button id="confirmAccept" class="btn green" type="button">ACEPTAR</button>
+    </div>
+  </div>
+</div>
+<div id="pickerModal" class="modal hidden">
+  <div class="box">
+    <div class="modal-title">
+      <h3 id="pickerTitle">SELECCIONAR</h3>
+      <button id="pickerClose" class="btn gray small" type="button">CERRAR</button>
+    </div>
+    <div id="pickerSummary" class="picker-summary">0 SELECCIONADOS</div>
+    <div id="pickerSelected" class="picker-selected"><div class="empty">SIN ELEMENTOS SELECCIONADOS</div></div>
+    <div class="picker-toolbar">
+      <input id="pickerSearch" placeholder="BUSCAR CODIGO, DESCRIPCION O EQUIPO">
+      <select id="pickerTypeFilter">
+        <option value="">TODOS</option>
+      </select>
+      <button id="pickerOpenMaster" class="btn gray" type="button">ABRIR MAESTRO</button>
+    </div>
+    <div id="pickerList" class="picker-list">
+      <div class="empty">CARGANDO OPCIONES...</div>
+    </div>
+    <div class="actions">
+      <button id="pickerCancel" class="btn gray" type="button">CANCELAR</button>
+      <button id="pickerApply" class="btn green" type="button">APLICAR SELECCION</button>
     </div>
   </div>
 </div>
@@ -454,7 +351,7 @@ noscript{
   </div>
   <div class="title">
     <h1>MANTENIMIENTO | PLANES PMO</h1>
-    <p>PLANES OPTIMIZADOS, APROBACION, VERSIONES Y PREPARACION DEL LANZAMIENTO OT</p>
+    <p>PLANES, ACTIVIDADES, ACTIVOS, APROBACION, VERSIONES Y LANZAMIENTO CONTROLADO</p>
     <span id="userPill" class="pill">INICIANDO...</span>
   </div>
 </header>
@@ -462,7 +359,7 @@ noscript{
   <section class="hero">
     <div>
       <h2>PLANES DE MANTENIMIENTO OPTIMIZADO</h2>
-      <p>CONSTRUYA PMO CON ACTIVIDADES AM Y ACTIVOS MEL. LOS PMO APROBADOS QUEDAN CONGELADOS.</p>
+      <p>CONSULTE EL CONTENIDO REAL DE CADA PLAN. LAS ACTIVIDADES Y LOS ACTIVOS COMPLETOS SOLO SE CARGAN CUANDO SE SOLICITA MODIFICAR.</p>
     </div>
     <a href="main.html" class="home" data-smart-home="1">
       <img src="boton-de-inicio.png" alt="INICIO">
@@ -472,7 +369,10 @@ noscript{
   <div id="errorBanner" class="notice hidden"></div>
   <div class="grid">
     <aside class="panel">
-      <h3>LISTA DE PMO</h3>
+      <div class="panel-head">
+        <h3>LISTA DE PMO</h3>
+        <span id="listCount" class="counter">0 PLANES</span>
+      </div>
       <div class="filters">
         <input id="filterText" placeholder="BUSCAR CODIGO O DESCRIPCION">
         <select id="filterApproval">
@@ -488,7 +388,7 @@ noscript{
           <option value="P4">P4</option>
           <option value="P5">P5</option>
         </select>
-        <button id="searchButton" class="btn" type="button">BUSCAR</button>
+        <button id="newButton" class="btn green" type="button">NUEVO PMO</button>
       </div>
       <div id="pmoList" class="list">
         <div class="empty">CARGANDO PLANES PMO...</div>
@@ -496,7 +396,10 @@ noscript{
     </aside>
     <section>
       <div class="panel">
-        <h3 id="formTitle">NUEVO PMO</h3>
+        <div class="panel-head">
+          <h3 id="formTitle">NUEVO PMO</h3>
+          <span id="stateInfo" class="counter">NUEVO BORRADOR</span>
+        </div>
         <div class="row">
           <div class="field">
             <label for="pmoId">ID PMO</label>
@@ -545,30 +448,33 @@ noscript{
         </div>
       </div>
       <div class="panel">
-        <h3>ACTIVIDADES AM DEL PMO</h3>
-        <p class="panel-sub">SELECCIONE LAS ACTIVIDADES QUE FORMARAN EL PLAN.</p>
-        <div class="picker-toolbar">
-          <input id="amFilter" placeholder="FILTRAR ACTIVIDADES AM">
-          <span id="amCount" class="counter">0 SELECCIONADAS</span>
+        <div class="panel-head">
+          <h3>ACTIVIDADES AM DEL PMO</h3>
+          <span id="amCount" class="counter">0 ASIGNADAS</span>
         </div>
-        <div id="amPicker" class="pick-grid">
-          <div class="empty">CARGANDO ACTIVIDADES...</div>
+        <p class="panel-sub">SE MUESTRAN UNICAMENTE LAS ACTIVIDADES DEL PLAN SELECCIONADO, EN SU ORDEN DE EJECUCION.</p>
+        <div id="assignedAMList" class="assigned-list">
+          <div class="empty">SELECCIONE UN PMO O CREE UNO NUEVO.</div>
+        </div>
+        <div class="actions">
+          <button id="editAMButton" class="btn" type="button">AGREGAR / MODIFICAR ACTIVIDADES</button>
         </div>
       </div>
       <div class="panel">
-        <h3>ACTIVOS MEL DEL PMO</h3>
-        <p class="panel-sub">SELECCIONE UNO O VARIOS ACTIVOS REGISTRADOS EN MEL.</p>
-        <div class="picker-toolbar">
-          <input id="assetFilter" placeholder="FILTRAR ACTIVOS MEL">
-          <span id="assetCount" class="counter">0 SELECCIONADOS</span>
+        <div class="panel-head">
+          <h3>ACTIVOS MEL DEL PMO</h3>
+          <span id="assetCount" class="counter">0 ASIGNADOS</span>
         </div>
-        <div id="assetPicker" class="pick-grid">
-          <div class="empty">CARGANDO ACTIVOS...</div>
+        <p class="panel-sub">SE MUESTRAN UNICAMENTE LOS EQUIPOS Y ACTIVOS A LOS QUE APLICA EL PLAN.</p>
+        <div id="assignedAssetList" class="assigned-list">
+          <div class="empty">SELECCIONE UN PMO O CREE UNO NUEVO.</div>
+        </div>
+        <div class="actions">
+          <button id="editAssetButton" class="btn" type="button">AGREGAR / MODIFICAR ACTIVOS</button>
         </div>
       </div>
       <div class="panel">
         <h3>FLUJO Y CONTROL</h3>
-        <div id="stateInfo" class="status">NUEVO BORRADOR</div>
         <div class="actions">
           <button id="submitButton" class="btn" type="button">ENVIAR APROBACION</button>
           <button id="approveButton" class="btn green" type="button">APROBAR</button>
@@ -593,559 +499,549 @@ noscript{
         </div>
       </div>
       <div class="panel">
-        <h3>ADMINISTRACION FASE 2</h3>
-        <p class="panel-sub">P5 NO SE LANZA HASTA CRONOGRAMA MP. EL PDF DE OT ESTA APLAZADO.</p>
-        <div class="actions">
-          <button id="setupButton" class="btn gray" type="button">CONFIGURAR FASE 2</button>
-          <button id="triggerButton" class="btn orange" type="button">INSTALAR TRIGGER SEMANAL</button>
-          <button id="launchButton" class="btn green" type="button">EJECUTAR LANZAMIENTO AHORA</button>
-        </div>
+        <details class="admin-box">
+          <summary>ADMINISTRACION FASE 2 Y LANZAMIENTO OT</summary>
+          <p class="panel-sub">NO INSTALE EL TRIGGER SEMANAL ANTES DE VALIDAR DOS LANZAMIENTOS MANUALES IDEMPOTENTES. P5 CONTINUA BLOQUEADO PARA LANZAMIENTO.</p>
+          <div class="actions">
+            <button id="setupButton" class="btn gray" type="button">CONFIGURAR FASE 2</button>
+            <button id="triggerButton" class="btn orange" type="button">INSTALAR TRIGGER SEMANAL</button>
+            <button id="launchButton" class="btn green" type="button">EJECUTAR LANZAMIENTO AHORA</button>
+          </div>
+        </details>
       </div>
     </section>
   </div>
-  <div class="footer">ARMA // PLANES PMO // APROBACION Y LANZAMIENTO CONTROLADO</div>
+  <div class="footer">ARMA // PLANES PMO // DETALLE PRIMERO // SELECTORES BAJO DEMANDA</div>
 </main>
 <script>
 "use strict";
-
 const API = "https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
-
+const CACHE_PREFIX = "ARMA_PMO_V07_";
+const CACHE_TTL_MS = 300000;
 const state = {
   session:null,
   permissions:{},
-  catalog:{
-    am:[],
-    assets:[],
-    prioridades:[],
-    especialidades:[],
-    tiposMantenimiento:[],
-    frecuencias:[]
-  },
+  catalog:{prioridades:[],especialidades:[],tiposMantenimiento:[],frecuencias:[]},
   rows:[],
   current:null,
   selectedId:"",
-  selectedAM:new Set(),
-  selectedAssets:new Set(),
-  confirmResolver:null
+  assignedAM:[],
+  assignedAssets:[],
+  history:[],
+  pickerMode:"",
+  pickerAM:[],
+  pickerAssets:[],
+  pendingOrder:[],
+  pickerLoaded:{am:false,assets:false},
+  detailRequest:0,
+  confirmResolver:null,
+  loaderCount:0
 };
-
 const ui = {};
-
-function byId(id){
-  return document.getElementById(id);
-}
-
+function byId(id){return document.getElementById(id);}
 function bindUI(){
-  const ids = [
-    "loader","loaderText","messageModal","messageTitle","messageText",
-    "messageAccept","confirmModal","confirmTitle","confirmText",
-    "confirmCancel","confirmAccept","userPill","errorBanner",
-    "filterText","filterApproval","filterPriority","searchButton","pmoList",
-    "formTitle","pmoId","pmoCode","pmoPriority","pmoSpecialty",
-    "pmoDescription","pmoType","pmoFrequency","pmoLastDate","pmoNextDate",
-    "pmoObservation","clearButton","saveButton","amFilter","amCount",
-    "amPicker","assetFilter","assetCount","assetPicker","stateInfo",
-    "submitButton","approveButton","rejectButton","versionButton",
+  [
+    "loader","loaderText","messageModal","messageTitle","messageText","messageAccept",
+    "confirmModal","confirmTitle","confirmText","confirmCancel","confirmAccept",
+    "pickerModal","pickerTitle","pickerClose","pickerSummary","pickerSelected","pickerSearch",
+    "pickerTypeFilter","pickerOpenMaster","pickerList","pickerCancel","pickerApply",
+    "userPill","errorBanner","filterText","filterApproval","filterPriority",
+    "newButton","pmoList","listCount","formTitle","stateInfo","pmoId","pmoCode",
+    "pmoPriority","pmoSpecialty","pmoDescription","pmoType","pmoFrequency",
+    "pmoLastDate","pmoNextDate","pmoObservation","clearButton","saveButton",
+    "amCount","assignedAMList","editAMButton","assetCount","assignedAssetList",
+    "editAssetButton","submitButton","approveButton","rejectButton","versionButton",
     "inactiveButton","historyBody","setupButton","triggerButton","launchButton"
-  ];
-  ids.forEach(function(id){
-    ui[id] = byId(id);
-  });
+  ].forEach(function(id){ui[id]=byId(id);});
 }
-
 function sessionToken(){
-  return localStorage.getItem("ARMA_TOKEN") ||
-    sessionStorage.getItem("ARMA_TOKEN") ||
-    "";
+  try{
+    const cached=JSON.parse(localStorage.getItem("ARMA_SESSION_CACHE")||"{}");
+    if(cached&&cached.token)return cached.token;
+  }catch(error){}
+  return localStorage.getItem("ARMA_TOKEN")||sessionStorage.getItem("ARMA_TOKEN")||"";
 }
-
 function escapeHtml(value){
-  return String(value == null ? "" : value)
+  return String(value==null?"":value)
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#39;");
 }
-
-function normalize(value){
-  return String(value == null ? "" : value).trim().toUpperCase();
-}
-
+function normalize(value){return String(value==null?"":value).trim().toUpperCase();}
 function hasPermission(key){
-  return Boolean(
-    state.permissions.ALL ||
-    state.permissions.__SUPER_ADMIN__ ||
-    state.permissions[key]
-  );
+  return Boolean(state.permissions.ALL||state.permissions.__SUPER_ADMIN__||state.permissions[key]);
 }
-
 function showLoader(text){
-  ui.loaderText.textContent = normalize(text || "CARGANDO").replaceAll("_"," ");
+  state.loaderCount++;
+  ui.loaderText.textContent=normalize(text||"CARGANDO").replaceAll("_"," ");
   ui.loader.classList.remove("hidden");
 }
-
 function hideLoader(){
-  ui.loader.classList.add("hidden");
+  state.loaderCount=Math.max(0,state.loaderCount-1);
+  if(state.loaderCount===0)ui.loader.classList.add("hidden");
 }
-
 function showMessage(text,title){
-  ui.messageTitle.textContent = title || "A.R.M.A.";
-  ui.messageText.textContent = String(text || "");
+  ui.messageTitle.textContent=title||"A.R.M.A.";
+  ui.messageText.textContent=String(text||"");
   ui.messageModal.classList.remove("hidden");
 }
-
-function closeMessage(){
-  ui.messageModal.classList.add("hidden");
-}
-
+function closeMessage(){ui.messageModal.classList.add("hidden");}
 function askConfirmation(text,title){
-  ui.confirmTitle.textContent = title || "CONFIRMAR";
-  ui.confirmText.textContent = String(text || "");
+  ui.confirmTitle.textContent=title||"CONFIRMAR";
+  ui.confirmText.textContent=String(text||"");
   ui.confirmModal.classList.remove("hidden");
-  return new Promise(function(resolve){
-    state.confirmResolver = resolve;
-  });
+  return new Promise(function(resolve){state.confirmResolver=resolve;});
 }
-
 function closeConfirmation(result){
   ui.confirmModal.classList.add("hidden");
-  if(state.confirmResolver){
-    state.confirmResolver(Boolean(result));
-  }
-  state.confirmResolver = null;
+  if(state.confirmResolver)state.confirmResolver(Boolean(result));
+  state.confirmResolver=null;
 }
-
 function showErrorBanner(text){
-  ui.errorBanner.textContent = String(text || "ERROR NO IDENTIFICADO");
+  ui.errorBanner.textContent=String(text||"ERROR NO IDENTIFICADO");
   ui.errorBanner.classList.remove("hidden");
 }
-
 function clearErrorBanner(){
-  ui.errorBanner.textContent = "";
+  ui.errorBanner.textContent="";
   ui.errorBanner.classList.add("hidden");
 }
-
-async function callApi(action,data){
-  showLoader(action);
+async function callApi(action,data,options){
+  options=options||{};
+  const useLoader=options.loader!==false;
+  if(useLoader)showLoader(options.message||action);
+  const controller=new AbortController();
+  const timer=setTimeout(function(){controller.abort();},Number(options.timeout||30000));
   try{
-    const payload = Object.assign(
-      {action:action,token:sessionToken()},
-      data || {}
-    );
-    const response = await fetch(API,{
+    const payload=Object.assign({action:action,token:sessionToken()},data||{});
+    const response=await fetch(API,{
       method:"POST",
       headers:{"Content-Type":"text/plain;charset=utf-8"},
-      body:JSON.stringify(payload)
+      body:JSON.stringify(payload),
+      signal:controller.signal
     });
-    if(!response.ok){
-      throw new Error("HTTP_"+response.status);
-    }
-    const result = await response.json();
-    if(!result || result.ok !== true){
-      throw new Error(
-        result && (result.error || result.detail || result.message) ||
-        "RESPUESTA_BACKEND_INVALIDA"
-      );
+    if(!response.ok)throw new Error("HTTP_"+response.status);
+    const result=await response.json();
+    if(!result||result.ok!==true){
+      throw new Error(result&&(result.error||result.detail||result.message)||"RESPUESTA_BACKEND_INVALIDA");
     }
     return result;
+  }catch(error){
+    if(error&&error.name==="AbortError")throw new Error("TIEMPO_DE_ESPERA_AGOTADO");
+    throw error;
   }finally{
-    hideLoader();
+    clearTimeout(timer);
+    if(useLoader)hideLoader();
   }
 }
-
+function cacheIdentity(){
+  const direct=normalize(state.session&&state.session.user||"");
+  if(direct)return direct;
+  try{
+    const cached=JSON.parse(localStorage.getItem("ARMA_SESSION_CACHE")||"{}");
+    const user=normalize(cached&&(cached.user||cached.nombre)||"");
+    if(user)return user;
+  }catch(error){}
+  const value=sessionToken();
+  let hash=0;
+  for(let i=0;i<value.length;i++)hash=((hash<<5)-hash+value.charCodeAt(i))|0;
+  return "TOKEN_"+Math.abs(hash);
+}
+function cacheKey(name){return CACHE_PREFIX+name+"_"+cacheIdentity();}
+function cacheGet(name){
+  try{
+    const obj=JSON.parse(localStorage.getItem(cacheKey(name))||"null");
+    if(!obj||!obj.ts||Date.now()-obj.ts>CACHE_TTL_MS)return null;
+    return obj.data;
+  }catch(error){return null;}
+}
+function cachePut(name,data){
+  try{localStorage.setItem(cacheKey(name),JSON.stringify({ts:Date.now(),data:data}));}catch(error){}
+}
+function cacheRemove(name){try{localStorage.removeItem(cacheKey(name));}catch(error){}}
 function fillSelect(element,values,preferred){
-  const safeValues = Array.isArray(values) ? values : [];
-  element.innerHTML = safeValues.map(function(value){
-    const text = escapeHtml(value);
-    return "<option value=\""+text+"\">"+text+"</option>";
+  const safe=Array.isArray(values)?values:[];
+  element.innerHTML=safe.map(function(value){
+    return "<option value=\""+escapeHtml(value)+"\">"+escapeHtml(value)+"</option>";
   }).join("");
-  if(preferred && safeValues.indexOf(preferred) >= 0){
-    element.value = preferred;
-  }
+  if(preferred&&safe.indexOf(preferred)>=0)element.value=preferred;
 }
-
 function formatDate(value){
-  if(!value){
-    return "";
-  }
-  const date = new Date(value);
-  if(Number.isNaN(date.getTime())){
-    return String(value).slice(0,10);
-  }
+  if(!value)return "";
+  const date=new Date(value);
+  if(Number.isNaN(date.getTime()))return String(value).slice(0,10);
   return date.toISOString().slice(0,10);
 }
-
-function bindEvents(){
-  ui.messageAccept.addEventListener("click",closeMessage);
-  ui.confirmCancel.addEventListener("click",function(){
-    closeConfirmation(false);
-  });
-  ui.confirmAccept.addEventListener("click",function(){
-    closeConfirmation(true);
-  });
-  ui.searchButton.addEventListener("click",loadList);
-  ui.filterText.addEventListener("keydown",function(event){
-    if(event.key === "Enter"){
-      loadList();
-    }
-  });
-  ui.clearButton.addEventListener("click",newPMO);
-  ui.saveButton.addEventListener("click",saveDraft);
-  ui.amFilter.addEventListener("input",renderAM);
-  ui.assetFilter.addEventListener("input",renderAssets);
-  ui.submitButton.addEventListener("click",submitPMO);
-  ui.approveButton.addEventListener("click",approvePMO);
-  ui.rejectButton.addEventListener("click",rejectPMO);
-  ui.versionButton.addEventListener("click",createVersion);
-  ui.inactiveButton.addEventListener("click",inactivatePMO);
-  ui.setupButton.addEventListener("click",setupPhase2);
-  ui.triggerButton.addEventListener("click",installTrigger);
-  ui.launchButton.addEventListener("click",launchNow);
-  ui.pmoList.addEventListener("click",function(event){
-    const item = event.target.closest("[data-pmo-id]");
-    if(item){
-      openPMO(item.getAttribute("data-pmo-id"));
-    }
-  });
-  ui.amPicker.addEventListener("change",function(event){
-    const box = event.target.closest("[data-am-id]");
-    if(!box){
-      return;
-    }
-    const id = box.getAttribute("data-am-id");
-    if(box.checked){
-      state.selectedAM.add(id);
-    }else{
-      state.selectedAM.delete(id);
-    }
-    renderAM();
-  });
-  ui.assetPicker.addEventListener("change",function(event){
-    const box = event.target.closest("[data-asset-id]");
-    if(!box){
-      return;
-    }
-    const id = box.getAttribute("data-asset-id");
-    if(box.checked){
-      state.selectedAssets.add(id);
-    }else{
-      state.selectedAssets.delete(id);
-    }
-    renderAssets();
-  });
+function fieldEditable(){
+  const approval=normalize(state.current&&state.current.ESTADO_APROBACION);
+  if(approval==="APROBADO")return false;
+  return state.current?hasPermission("BTN_PMO_EDITAR_BORRADOR"):hasPermission("BTN_PMO_CREAR");
 }
-
-function renderNoSession(){
-  ui.userPill.textContent = "SIN SESION";
-  showErrorBanner(
-    "NO EXISTE UNA SESION A.R.M.A. ACTIVA. REGRESE AL MAIN E INICIE SESION."
-  );
-  ui.pmoList.innerHTML = "<div class=\"empty\">SIN SESION ACTIVA</div>";
-  disableAllActions();
-}
-
-function disableAllActions(){
-  [
-    ui.saveButton,ui.submitButton,ui.approveButton,ui.rejectButton,
-    ui.versionButton,ui.inactiveButton,ui.setupButton,ui.triggerButton,
-    ui.launchButton
-  ].forEach(function(button){
-    button.disabled = true;
-  });
-}
-
 function applyPermissions(){
-  const approval = normalize(
-    state.current && state.current.ESTADO_APROBACION
-  );
-  ui.saveButton.disabled = !(
-    state.current ?
-      hasPermission("BTN_PMO_EDITAR_BORRADOR") :
-      hasPermission("BTN_PMO_CREAR")
-  ) || approval === "APROBADO";
-  ui.submitButton.disabled = !hasPermission("BTN_PMO_ENVIAR_APROBACION") ||
-    !state.current ||
-    ["BORRADOR","RECHAZADO"].indexOf(approval) < 0;
-  ui.approveButton.disabled = !hasPermission("BTN_PMO_APROBAR") ||
-    approval !== "PENDIENTE_APROBACION";
-  ui.rejectButton.disabled = !hasPermission("BTN_PMO_RECHAZAR") ||
-    approval !== "PENDIENTE_APROBACION";
-  ui.versionButton.disabled = !hasPermission("BTN_PMO_NUEVA_VERSION") ||
-    approval !== "APROBADO";
-  ui.inactiveButton.disabled = !hasPermission("BTN_PMO_INACTIVAR") ||
-    !state.current;
-  ui.setupButton.disabled = !hasPermission("BTN_MTTO_CONFIGURAR");
-  ui.triggerButton.disabled = !hasPermission("BTN_MTTO_CONFIGURAR");
-  ui.launchButton.disabled = !hasPermission("BTN_OT_LANZAR_PMO");
+  const approval=normalize(state.current&&state.current.ESTADO_APROBACION);
+  const canEdit=fieldEditable();
+  [ui.pmoCode,ui.pmoPriority,ui.pmoSpecialty,ui.pmoDescription,ui.pmoType,
+   ui.pmoFrequency,ui.pmoLastDate,ui.pmoNextDate,ui.pmoObservation].forEach(function(el){
+    el.disabled=!canEdit;
+  });
+  ui.saveButton.disabled=!canEdit;
+  ui.editAMButton.disabled=!canEdit||!hasPermission("BTN_PMO_ASIGNAR_AM");
+  ui.editAssetButton.disabled=!canEdit||!hasPermission("BTN_PMO_ASIGNAR_ACTIVOS");
+  ui.newButton.disabled=!hasPermission("BTN_PMO_CREAR");
+  ui.submitButton.disabled=!hasPermission("BTN_PMO_ENVIAR_APROBACION")||
+    !state.current||["BORRADOR","RECHAZADO"].indexOf(approval)<0;
+  ui.approveButton.disabled=!hasPermission("BTN_PMO_APROBAR")||approval!=="PENDIENTE_APROBACION";
+  ui.rejectButton.disabled=!hasPermission("BTN_PMO_RECHAZAR")||approval!=="PENDIENTE_APROBACION";
+  ui.versionButton.disabled=!hasPermission("BTN_PMO_NUEVA_VERSION")||approval!=="APROBADO";
+  ui.inactiveButton.disabled=!hasPermission("BTN_PMO_INACTIVAR")||!state.current;
+  ui.setupButton.disabled=!hasPermission("BTN_MTTO_CONFIGURAR");
+  ui.triggerButton.disabled=!hasPermission("BTN_MTTO_CONFIGURAR");
+  ui.launchButton.disabled=!hasPermission("BTN_OT_LANZAR_PMO");
 }
-
-async function initializePage(){
-  clearErrorBanner();
-  if(!sessionToken()){
-    renderNoSession();
-    return;
-  }
-  try{
-    const boot = await callApi("pmoBootstrap",{filters:{}});
-    const validated = boot.session || {};
-    state.session = validated;
-    state.permissions = validated.permissions || {};
-    ui.userPill.textContent =
-      normalize(validated.user) + " // " + normalize(validated.nivel);
-    state.catalog = Object.assign(state.catalog,boot.catalog || {});
-    fillSelect(ui.pmoPriority,state.catalog.prioridades,"P3");
-    fillSelect(
-      ui.pmoSpecialty,
-      state.catalog.especialidades,
-      "MULTIDISCIPLINARIA"
-    );
-    fillSelect(
-      ui.pmoType,
-      state.catalog.tiposMantenimiento,
-      state.catalog.tiposMantenimiento[0]
-    );
-    fillSelect(
-      ui.pmoFrequency,
-      state.catalog.frecuencias,
-      "MENSUAL"
-    );
-    newPMO();
-    if(boot.list){state.rows=boot.list.rows||[];renderList();}else{await loadList();}
-  }catch(error){
-    showErrorBanner(
-      "NO FUE POSIBLE INICIAR PLANES PMO: " + error.message
-    );
-    ui.pmoList.innerHTML =
-      "<div class=\"empty\">ERROR AL CONSULTAR EL BACKEND</div>";
-    disableAllActions();
-  }
+function renderNoSession(){
+  ui.userPill.textContent="SIN SESION";
+  ui.pmoList.innerHTML="<div class=\"empty\">ABRA MAIN E INICIE SESION.</div>";
+  showErrorBanner("NO HAY SESION ACTIVA. REGRESE A MAIN.");
 }
-
-async function loadList(){
-  clearErrorBanner();
-  try{
-    const result = await callApi("listPMO",{
-      filters:{
-        q:ui.filterText.value,
-        aprobacion:ui.filterApproval.value,
-        prioridad:ui.filterPriority.value
-      }
-    });
-    state.rows = result.rows || [];
-    renderList();
-  }catch(error){
-    showErrorBanner("NO FUE POSIBLE LISTAR PMO: "+error.message);
-  }
-}
-
-function renderList(){
-  if(!state.rows.length){
-    ui.pmoList.innerHTML = "<div class=\"empty\">SIN PMO PARA MOSTRAR</div>";
-    return;
-  }
-  ui.pmoList.innerHTML = state.rows.map(function(row){
-    const selected = state.selectedId === row.ID_PMO ? " selected" : "";
-    const priorityClass = normalize(row.PRIORIDAD) === "P5" ? " warn" : "";
-    const approvalClass =
-      normalize(row.ESTADO_APROBACION) === "RECHAZADO" ? " red" : "";
-    return [
-      "<div class=\"item"+selected+"\" data-pmo-id=\"",
-      escapeHtml(row.ID_PMO),
-      "\">",
-      "<strong>",
-      escapeHtml(row.CODIGO_PMO || row.ID_PMO),
-      " &mdash; ",
-      escapeHtml(row.DESCRIPCION_PMO),
-      "</strong>",
-      "<small>",
-      "<span class=\"badge"+priorityClass+"\">",
-      escapeHtml(row.PRIORIDAD || "SIN PRIORIDAD"),
-      "</span>",
-      "<span class=\"badge"+approvalClass+"\">",
-      escapeHtml(row.ESTADO_APROBACION || "SIN ESTADO"),
-      "</span>",
-      "VERSION ",
-      escapeHtml(row.VERSION || 1),
-      "</small>",
-      "</div>"
-    ].join("");
-  }).join("");
-}
-
-function newPMO(){
-  state.selectedId = "";
-  state.current = null;
-  state.selectedAM = new Set();
-  state.selectedAssets = new Set();
-  ui.pmoId.value = "";
-  ui.pmoCode.value = "";
-  ui.pmoDescription.value = "";
-  ui.pmoLastDate.value = "";
-  ui.pmoNextDate.value = "";
-  ui.pmoObservation.value = "";
-  if(state.catalog.prioridades.indexOf("P3") >= 0){
-    ui.pmoPriority.value = "P3";
-  }
-  if(state.catalog.especialidades.indexOf("MULTIDISCIPLINARIA") >= 0){
-    ui.pmoSpecialty.value = "MULTIDISCIPLINARIA";
-  }
-  if(state.catalog.frecuencias.indexOf("MENSUAL") >= 0){
-    ui.pmoFrequency.value = "MENSUAL";
-  }
-  ui.formTitle.textContent = "NUEVO PMO";
-  ui.stateInfo.textContent = "NUEVO BORRADOR";
-  ui.historyBody.innerHTML =
-    "<tr><td colspan=\"4\">SIN HISTORIAL CARGADO</td></tr>";
-  renderAM();
-  renderAssets();
+function bootFromData(boot){
+  const validated=boot.session||{};
+  state.session=validated;
+  state.permissions=validated.permissions||{};
+  ui.userPill.textContent=normalize(validated.user)+" // "+normalize(validated.nivel);
+  state.catalog=Object.assign(state.catalog,boot.catalog||{});
+  state.rows=(boot.list&&boot.list.rows)||[];
+  fillSelect(ui.pmoPriority,state.catalog.prioridades,"P3");
+  fillSelect(ui.pmoSpecialty,state.catalog.especialidades,"MULTIDISCIPLINARIA");
+  fillSelect(ui.pmoType,state.catalog.tiposMantenimiento,state.catalog.tiposMantenimiento[0]);
+  fillSelect(ui.pmoFrequency,state.catalog.frecuencias,"MENSUAL");
   renderList();
   applyPermissions();
 }
-
+async function initializePage(){
+  clearErrorBanner();
+  if(!sessionToken()){renderNoSession();return;}
+  const cached=cacheGet("BOOT");
+  if(cached){
+    bootFromData(cached);
+    newPMO(false);
+  }
+  try{
+    const boot=await callApi("pmoFastBootstrap",{filters:{}},{loader:!cached,message:"CARGANDO PLANES PMO"});
+    bootFromData(boot);
+    cachePut("BOOT",boot);
+    if(!cached)newPMO(false);
+  }catch(error){
+    if(!cached){
+      showErrorBanner("NO FUE POSIBLE INICIAR PLANES PMO: "+error.message);
+      ui.pmoList.innerHTML="<div class=\"empty\">ERROR AL CONSULTAR EL BACKEND</div>";
+    }else{
+      showErrorBanner("SE MUESTRA INFORMACION TEMPORAL. ACTUALIZACION PENDIENTE: "+error.message);
+    }
+  }
+}
+function filteredRows(){
+  const q=normalize(ui.filterText.value);
+  const approval=normalize(ui.filterApproval.value);
+  const priority=normalize(ui.filterPriority.value);
+  return state.rows.filter(function(row){
+    if(q&&normalize([row.ID_PMO,row.CODIGO_PMO,row.DESCRIPCION_PMO].join(" ")).indexOf(q)<0)return false;
+    if(approval&&normalize(row.ESTADO_APROBACION)!==approval)return false;
+    if(priority&&normalize(row.PRIORIDAD)!==priority)return false;
+    return true;
+  });
+}
+function renderList(){
+  const rows=filteredRows();
+  ui.listCount.textContent=rows.length+" PLANES";
+  if(!rows.length){ui.pmoList.innerHTML="<div class=\"empty\">SIN PMO PARA MOSTRAR</div>";return;}
+  ui.pmoList.innerHTML=rows.map(function(row){
+    const selected=state.selectedId===row.ID_PMO?" selected":"";
+    const priorityClass=normalize(row.PRIORIDAD)==="P5"?" warn":"";
+    const approvalClass=normalize(row.ESTADO_APROBACION)==="RECHAZADO"?" red":"";
+    return [
+      "<div class=\"item",selected,"\" data-pmo-id=\"",escapeHtml(row.ID_PMO),"\">",
+      "<strong>",escapeHtml(row.CODIGO_PMO||row.ID_PMO)," &mdash; ",escapeHtml(row.DESCRIPCION_PMO),"</strong>",
+      "<small>",
+      "<span class=\"badge",priorityClass,"\">",escapeHtml(row.PRIORIDAD||"SIN PRIORIDAD"),"</span>",
+      "<span class=\"badge",approvalClass,"\">",escapeHtml(row.ESTADO_APROBACION||"SIN ESTADO"),"</span>",
+      "VERSION ",escapeHtml(row.VERSION||1),
+      "</small></div>"
+    ].join("");
+  }).join("");
+}
+function newPMO(focusForm){
+  state.selectedId="";
+  state.current=null;
+  state.assignedAM=[];
+  state.assignedAssets=[];
+  state.history=[];
+  ui.pmoId.value="";
+  ui.pmoCode.value="";
+  ui.pmoDescription.value="";
+  ui.pmoLastDate.value="";
+  ui.pmoNextDate.value="";
+  ui.pmoObservation.value="";
+  if(state.catalog.prioridades.indexOf("P3")>=0)ui.pmoPriority.value="P3";
+  if(state.catalog.especialidades.indexOf("MULTIDISCIPLINARIA")>=0)ui.pmoSpecialty.value="MULTIDISCIPLINARIA";
+  if(state.catalog.frecuencias.indexOf("MENSUAL")>=0)ui.pmoFrequency.value="MENSUAL";
+  ui.formTitle.textContent="NUEVO PMO";
+  ui.stateInfo.textContent="NUEVO BORRADOR";
+  renderAssigned();
+  renderHistory([]);
+  renderList();
+  applyPermissions();
+  if(focusForm!==false)ui.pmoDescription.focus();
+}
+function applyDetail(result){
+  state.current=result.pmo||null;
+  const current=state.current||{};
+  state.assignedAM=(result.actividades||[]).slice().sort(function(a,b){return Number(a.SECUENCIA||0)-Number(b.SECUENCIA||0);});
+  state.assignedAssets=(result.activos||[]).slice().sort(function(a,b){return Number(a.ORDEN||0)-Number(b.ORDEN||0);});
+  state.history=result.historial||[];
+  ui.pmoId.value=current.ID_PMO||"";
+  ui.pmoCode.value=current.CODIGO_PMO||"";
+  ui.pmoDescription.value=current.DESCRIPCION_PMO||"";
+  ui.pmoPriority.value=current.PRIORIDAD||"P3";
+  ui.pmoSpecialty.value=current.ESPECIALIDAD||"MULTIDISCIPLINARIA";
+  ui.pmoType.value=current.TIPO_MANTENIMIENTO||state.catalog.tiposMantenimiento[0]||"";
+  ui.pmoFrequency.value=current.FRECUENCIA_TEXTO||"MENSUAL";
+  ui.pmoLastDate.value=formatDate(current.ULTIMA_FECHA_PROGRAMADA);
+  ui.pmoNextDate.value=formatDate(current.PROXIMA_FECHA_REFERENCIA);
+  ui.pmoObservation.value=current.OBSERVACION||"";
+  ui.formTitle.textContent="EDITAR "+(current.CODIGO_PMO||state.selectedId);
+  ui.stateInfo.textContent=[
+    current.ESTADO_APROBACION||"SIN APROBACION",
+    current.ESTADO_PMO||"SIN ESTADO",
+    "VERSION "+(current.VERSION||1),
+    "LISTO "+(current.LISTO_LANZAMIENTO||"NO")
+  ].join(" // ");
+  renderAssigned();
+  renderHistory(state.history);
+  renderList();
+  applyPermissions();
+}
 async function openPMO(id){
   clearErrorBanner();
+  const request=++state.detailRequest;
+  state.selectedId=id;
+  renderList();
+  const cached=cacheGet("DETAIL_"+id);
+  if(cached)applyDetail(cached);
   try{
-    const result = await callApi("getPMO",{idPMO:id});
-    state.selectedId = id;
-    state.current = result.pmo || null;
-    const current = state.current || {};
-    ui.pmoId.value = current.ID_PMO || "";
-    ui.pmoCode.value = current.CODIGO_PMO || "";
-    ui.pmoDescription.value = current.DESCRIPCION_PMO || "";
-    ui.pmoPriority.value = current.PRIORIDAD || "P3";
-    ui.pmoSpecialty.value =
-      current.ESPECIALIDAD || "MULTIDISCIPLINARIA";
-    ui.pmoType.value =
-      current.TIPO_MANTENIMIENTO ||
-      state.catalog.tiposMantenimiento[0] ||
-      "";
-    ui.pmoFrequency.value = current.FRECUENCIA_TEXTO || "MENSUAL";
-    ui.pmoLastDate.value = formatDate(current.ULTIMA_FECHA_PROGRAMADA);
-    ui.pmoNextDate.value = formatDate(current.PROXIMA_FECHA_REFERENCIA);
-    ui.pmoObservation.value = current.OBSERVACION || "";
-    state.selectedAM = new Set(
-      (result.actividades || []).map(function(row){
-        return row.ID_AM;
-      })
-    );
-    state.selectedAssets = new Set(
-      (result.activos || []).map(function(row){
-        return row.ID_ACTIVO_MEL;
-      })
-    );
-    ui.formTitle.textContent = "EDITAR " + id;
-    ui.stateInfo.textContent = [
-      current.ESTADO_APROBACION || "SIN APROBACION",
-      current.ESTADO_PMO || "SIN ESTADO",
-      "VERSION " + (current.VERSION || 1),
-      "LISTO " + (current.LISTO_LANZAMIENTO || "NO")
-    ].join(" // ");
-    renderHistory(result.historial || []);
-    renderAM();
-    renderAssets();
-    renderList();
-    applyPermissions();
+    const result=await callApi("pmoGetDetailFast",{idPMO:id},{loader:!cached,message:"CARGANDO CONTENIDO DEL PMO"});
+    if(request!==state.detailRequest)return;
+    applyDetail(result);
+    cachePut("DETAIL_"+id,result);
   }catch(error){
+    if(request!==state.detailRequest)return;
     showErrorBanner("NO FUE POSIBLE ABRIR EL PMO: "+error.message);
   }
 }
-
+function renderAssigned(){
+  ui.amCount.textContent=state.assignedAM.length+" ASIGNADAS";
+  ui.assetCount.textContent=state.assignedAssets.length+" ASIGNADOS";
+  if(!state.assignedAM.length){
+    ui.assignedAMList.innerHTML="<div class=\"empty\">ESTE PMO NO TIENE ACTIVIDADES ASIGNADAS.</div>";
+  }else{
+    ui.assignedAMList.innerHTML=state.assignedAM.map(function(row,index){
+      const code=row.CODIGO_AM_SNAPSHOT||row.CODIGO_AM||row.codigo||row.ID_AM;
+      const desc=row.DESCRIPCION_SNAPSHOT||row.DESCRIPCION_AM||row.descripcion||"";
+      const duration=row.DURACION_MIN_SNAPSHOT||row.DURACION_MIN||row.duracion||0;
+      const lila=row.TIPO_LILA_SNAPSHOT||row.TIPO_LILA||row.lila||"SIN LILA";
+      const specialty=row.ESPECIALIDAD_SNAPSHOT||row.ESPECIALIDAD||row.especialidad||"";
+      return [
+        "<div class=\"assigned-card\">",
+        "<div class=\"assigned-order\">",index+1,"</div>",
+        "<div><div class=\"assigned-title\">",escapeHtml(code)," &mdash; ",escapeHtml(desc),"</div>",
+        "<div class=\"assigned-meta\">",escapeHtml(duration)," MIN // ",escapeHtml(lila),
+        specialty?" // "+escapeHtml(specialty):"","</div></div>",
+        "<span class=\"counter\">AM</span></div>"
+      ].join("");
+    }).join("");
+  }
+  if(!state.assignedAssets.length){
+    ui.assignedAssetList.innerHTML="<div class=\"empty\">ESTE PMO NO TIENE ACTIVOS ASIGNADOS.</div>";
+  }else{
+    ui.assignedAssetList.innerHTML=state.assignedAssets.map(function(row,index){
+      const code=row.CODIGO_TAG||row.codigo||row.ID_ACTIVO_MEL||row.id;
+      const name=row.NOMBRE_ACTIVO||row.nombre||"";
+      const level=row.NIVEL_DE_JERARQUIA||row.nivel||"ACTIVO MEL";
+      return [
+        "<div class=\"assigned-card\">",
+        "<div class=\"assigned-order\">",index+1,"</div>",
+        "<div><div class=\"assigned-title\">",escapeHtml(code)," &mdash; ",escapeHtml(name),"</div>",
+        "<div class=\"assigned-meta\">",escapeHtml(level),"</div></div>",
+        "<span class=\"counter\">MEL</span></div>"
+      ].join("");
+    }).join("");
+  }
+}
 function renderHistory(rows){
-  if(!rows.length){
-    ui.historyBody.innerHTML =
-      "<tr><td colspan=\"4\">SIN HISTORIAL</td></tr>";
-    return;
-  }
-  ui.historyBody.innerHTML = rows.map(function(row){
-    return [
-      "<tr>",
-      "<td>",escapeHtml(formatDate(row.FECHA)),"</td>",
-      "<td>",escapeHtml(row.ESTADO),"</td>",
-      "<td>",escapeHtml(row.USUARIO),"</td>",
-      "<td>",escapeHtml(row.OBSERVACION || ""),"</td>",
-      "</tr>"
-    ].join("");
+  if(!rows.length){ui.historyBody.innerHTML="<tr><td colspan=\"4\">SIN HISTORIAL</td></tr>";return;}
+  ui.historyBody.innerHTML=rows.map(function(row){
+    return "<tr><td>"+escapeHtml(formatDate(row.FECHA))+"</td><td>"+
+      escapeHtml(row.ESTADO)+"</td><td>"+escapeHtml(row.USUARIO)+"</td><td>"+
+      escapeHtml(row.OBSERVACION||"")+"</td></tr>";
   }).join("");
 }
-
-function renderAM(){
-  const query = normalize(ui.amFilter && ui.amFilter.value);
-  const rows = (state.catalog.am || []).filter(function(item){
-    if(!query){
-      return true;
+function pickerSource(){return state.pickerMode==="am"?state.pickerAM:state.pickerAssets;}
+function currentAssignedIds(mode){
+  if(mode==="am")return state.assignedAM.map(function(row){return normalize(row.ID_AM||row.id);}).filter(Boolean);
+  return state.assignedAssets.map(function(row){return normalize(row.ID_ACTIVO_MEL||row.id);}).filter(Boolean);
+}
+async function openPicker(mode){
+  clearErrorBanner();
+  if(mode==="am"&&!hasPermission("BTN_PMO_ASIGNAR_AM")){showMessage("SIN PERMISO PARA ASIGNAR ACTIVIDADES.");return;}
+  if(mode==="assets"&&!hasPermission("BTN_PMO_ASIGNAR_ACTIVOS")){showMessage("SIN PERMISO PARA ASIGNAR ACTIVOS.");return;}
+  state.pickerMode=mode;
+  state.pendingOrder=currentAssignedIds(mode);
+  ui.pickerSearch.value="";
+  ui.pickerTitle.textContent=mode==="am"?"SELECCIONAR ACTIVIDADES AM":"SELECCIONAR ACTIVOS MEL";
+  ui.pickerOpenMaster.textContent=mode==="am"?"ABRIR MAESTRO AM":"ABRIR MEL";
+  ui.pickerTypeFilter.innerHTML=mode==="am"?
+    "<option value=\"\">TODOS LOS TIPOS LILA</option><option>LIMPIEZA</option><option>INSPECCION</option><option>LUBRICACION</option><option>AJUSTE</option><option>OTRA</option>":
+    "<option value=\"\">TODOS LOS NIVELES</option><option>EQUIPO</option><option>SUBEQUIPO</option><option>COMPONENTE MANTENIBLE</option><option>SISTEMA</option><option>SUBSISTEMA</option>";
+  ui.pickerModal.classList.remove("hidden");
+  if(!state.pickerLoaded[mode]){
+    ui.pickerList.innerHTML="<div class=\"empty\">CARGANDO OPCIONES AUTORIZADAS...</div>";
+    try{
+      const result=await callApi(mode==="am"?"pmoListAMOptions":"pmoListAssetOptions",{},
+        {message:mode==="am"?"CARGANDO ACTIVIDADES AM":"CARGANDO ACTIVOS MEL"});
+      if(mode==="am")state.pickerAM=result.rows||[];
+      else state.pickerAssets=result.rows||[];
+      state.pickerLoaded[mode]=true;
+    }catch(error){
+      ui.pickerList.innerHTML="<div class=\"empty\">ERROR: "+escapeHtml(error.message)+"</div>";
+      return;
     }
-    return normalize(
-      [item.codigo,item.descripcion,item.lila,item.especialidad].join(" ")
-    ).includes(query);
-  });
-  ui.amCount.textContent = state.selectedAM.size + " SELECCIONADAS";
-  if(!rows.length){
-    ui.amPicker.innerHTML =
-      "<div class=\"empty\">SIN ACTIVIDADES PARA MOSTRAR</div>";
+  }
+  renderPicker();
+}
+function pickerItemMap(){
+  const map={};
+  pickerSource().forEach(function(item){map[normalize(item.id)]=item;});
+  return map;
+}
+function renderPickerSelected(){
+  const map=pickerItemMap();
+  if(!state.pendingOrder.length){
+    ui.pickerSelected.innerHTML="<div class=\"empty\">SIN ELEMENTOS SELECCIONADOS</div>";
     return;
   }
-  ui.amPicker.innerHTML = rows.map(function(item){
-    const checked = state.selectedAM.has(item.id);
+  ui.pickerSelected.innerHTML=state.pendingOrder.map(function(id,index){
+    const item=map[id]||{};
+    const title=state.pickerMode==="am"?
+      ((item.codigo||id)+" — "+(item.descripcion||"")):
+      ((item.codigo||id)+" — "+(item.nombre||""));
     return [
-      "<div class=\"pick",checked ? " selected" : "","\">",
-      "<label>",
-      "<input type=\"checkbox\" data-am-id=\"",
-      escapeHtml(item.id),
-      "\"",checked ? " checked" : "",">",
-      "<span>",
-      escapeHtml(item.codigo),
-      " &mdash; ",
-      escapeHtml(item.descripcion),
-      "<br>",
-      escapeHtml(item.duracion),
-      " MIN // ",
-      escapeHtml(item.lila || "SIN LILA"),
-      "</span>",
-      "</label>",
-      "</div>"
+      "<div class=\"picker-selected-row\">",
+      "<div class=\"picker-selected-order\">",index+1,"</div>",
+      "<div class=\"pick-title\">",escapeHtml(title),"</div>",
+      "<div class=\"picker-selected-actions\">",
+      "<button class=\"order-btn\" type=\"button\" data-picker-move=\"-1\" data-picker-id=\"",escapeHtml(id),"\"",index===0?" disabled":"",">&#8593;</button>",
+      "<button class=\"order-btn\" type=\"button\" data-picker-move=\"1\" data-picker-id=\"",escapeHtml(id),"\"",index===state.pendingOrder.length-1?" disabled":"",">&#8595;</button>",
+      "<button class=\"order-btn remove\" type=\"button\" data-picker-remove=\"1\" data-picker-id=\"",escapeHtml(id),"\">&#215;</button>",
+      "</div></div>"
     ].join("");
   }).join("");
 }
-
-function renderAssets(){
-  const query = normalize(ui.assetFilter && ui.assetFilter.value);
-  const rows = (state.catalog.assets || []).filter(function(item){
-    if(!query){
-      return true;
-    }
-    return normalize(
-      [item.codigo,item.nombre,item.nivel,item.padre].join(" ")
-    ).includes(query);
+function renderPicker(){
+  const source=pickerSource();
+  const q=normalize(ui.pickerSearch.value);
+  const type=normalize(ui.pickerTypeFilter.value);
+  const selected=new Set(state.pendingOrder);
+  const rows=source.filter(function(item){
+    const hay=normalize(state.pickerMode==="am"?
+      [item.id,item.codigo,item.descripcion,item.lila,item.especialidad].join(" "):
+      [item.id,item.codigo,item.nombre,item.nivel,item.ruta].join(" "));
+    if(q&&hay.indexOf(q)<0)return false;
+    const itemType=normalize(state.pickerMode==="am"?item.lila:item.nivel);
+    if(type&&itemType!==type)return false;
+    return true;
+  }).sort(function(a,b){
+    const sa=selected.has(normalize(a.id))?0:1;
+    const sb=selected.has(normalize(b.id))?0:1;
+    if(sa!==sb)return sa-sb;
+    return String(a.codigo||a.nombre||a.id).localeCompare(String(b.codigo||b.nombre||b.id),"es",{numeric:true});
   });
-  ui.assetCount.textContent =
-    state.selectedAssets.size + " SELECCIONADOS";
-  if(!rows.length){
-    ui.assetPicker.innerHTML =
-      "<div class=\"empty\">SIN ACTIVOS PARA MOSTRAR</div>";
-    return;
-  }
-  ui.assetPicker.innerHTML = rows.map(function(item){
-    const checked = state.selectedAssets.has(item.id);
+  ui.pickerSummary.textContent=state.pendingOrder.length+" SELECCIONADOS // USE LAS FLECHAS PARA DEFINIR EL ORDEN";
+  renderPickerSelected();
+  if(!rows.length){ui.pickerList.innerHTML="<div class=\"empty\">SIN OPCIONES PARA MOSTRAR</div>";return;}
+  ui.pickerList.innerHTML=rows.map(function(item){
+    const id=normalize(item.id);
+    const checked=selected.has(id);
+    const title=state.pickerMode==="am"?
+      (item.codigo+" — "+item.descripcion):
+      ((item.codigo||item.id)+" — "+item.nombre);
+    const meta=state.pickerMode==="am"?
+      ((item.duracion||0)+" MIN // "+(item.lila||"SIN LILA")+" // "+(item.especialidad||"")):
+      ((item.nivel||"SIN NIVEL")+(item.ruta?" // "+item.ruta:""));
     return [
-      "<div class=\"pick",checked ? " selected" : "","\">",
-      "<label>",
-      "<input type=\"checkbox\" data-asset-id=\"",
-      escapeHtml(item.id),
-      "\"",checked ? " checked" : "",">",
-      "<span>",
-      escapeHtml(item.codigo || item.id),
-      " &mdash; ",
-      escapeHtml(item.nombre),
-      "<br>",
-      escapeHtml(item.nivel || "SIN NIVEL"),
-      "</span>",
-      "</label>",
-      "</div>"
+      "<div class=\"pick",checked?" selected":"","\"><label>",
+      "<input type=\"checkbox\" data-picker-id=\"",escapeHtml(id),"\"",checked?" checked":"",">",
+      "<span><span class=\"pick-title\">",escapeHtml(title),"</span>",
+      "<span class=\"pick-meta\">",escapeHtml(meta),"</span></span></label></div>"
     ].join("");
   }).join("");
 }
-
+function pickerToggle(id,checked){
+  id=normalize(id);
+  const index=state.pendingOrder.indexOf(id);
+  if(checked&&index<0)state.pendingOrder.push(id);
+  if(!checked&&index>=0)state.pendingOrder.splice(index,1);
+  renderPicker();
+}
+function pickerMove(id,direction){
+  id=normalize(id);
+  const index=state.pendingOrder.indexOf(id);
+  const target=index+Number(direction||0);
+  if(index<0||target<0||target>=state.pendingOrder.length)return;
+  const temp=state.pendingOrder[index];
+  state.pendingOrder[index]=state.pendingOrder[target];
+  state.pendingOrder[target]=temp;
+  renderPicker();
+}
+function closePicker(){ui.pickerModal.classList.add("hidden");state.pickerMode="";state.pendingOrder=[];}
+function applyPicker(){
+  const mode=state.pickerMode;
+  const source=pickerSource();
+  const map={};
+  source.forEach(function(item){map[normalize(item.id)]=item;});
+  if(mode==="am"){
+    const old={};
+    state.assignedAM.forEach(function(row){old[normalize(row.ID_AM||row.id)]=row;});
+    state.assignedAM=state.pendingOrder.map(function(id,index){
+      const item=map[id];
+      if(!item)return old[id];
+      return {
+        ID_AM:item.id,
+        SECUENCIA:index+1,
+        CODIGO_AM_SNAPSHOT:item.codigo,
+        DESCRIPCION_SNAPSHOT:item.descripcion,
+        DURACION_MIN_SNAPSHOT:item.duracion,
+        TIPO_LILA_SNAPSHOT:item.lila,
+        ESPECIALIDAD_SNAPSHOT:item.especialidad
+      };
+    }).filter(Boolean);
+  }else{
+    const old={};
+    state.assignedAssets.forEach(function(row){old[normalize(row.ID_ACTIVO_MEL||row.id)]=row;});
+    state.assignedAssets=state.pendingOrder.map(function(id,index){
+      const item=map[id];
+      if(!item)return old[id];
+      return {
+        ID_ACTIVO_MEL:item.id,
+        ORDEN:index+1,
+        CODIGO_TAG:item.codigo,
+        NOMBRE_ACTIVO:item.nombre,
+        NIVEL_DE_JERARQUIA:item.nivel
+      };
+    }).filter(Boolean);
+  }
+  renderAssigned();
+  closePicker();
+}
 function collectPMO(){
   return {
     ID_PMO:state.selectedId,
@@ -1158,217 +1054,158 @@ function collectPMO(){
     ULTIMA_FECHA_PROGRAMADA:ui.pmoLastDate.value,
     PROXIMA_FECHA_REFERENCIA:ui.pmoNextDate.value,
     OBSERVACION:ui.pmoObservation.value,
-    actividades:(state.catalog.am || [])
-      .filter(function(item){
-        return state.selectedAM.has(item.id);
-      })
-      .map(function(item){
-        return {
-          ID_AM:item.id,
-          DURACION_MIN:item.duracion
-        };
-      }),
-    activos:(state.catalog.assets || [])
-      .filter(function(item){
-        return state.selectedAssets.has(item.id);
-      })
-      .map(function(item){
-        return {
-          id:item.id,
-          codigo:item.codigo,
-          nombre:item.nombre
-        };
-      })
+    actividades:state.assignedAM.map(function(row,index){
+      return {ID_AM:row.ID_AM||row.id,DURACION_MIN:row.DURACION_MIN_SNAPSHOT||row.DURACION_MIN||row.duracion||0,SECUENCIA:index+1};
+    }),
+    activos:state.assignedAssets.map(function(row,index){
+      return {id:row.ID_ACTIVO_MEL||row.id,codigo:row.CODIGO_TAG||row.codigo||"",nombre:row.NOMBRE_ACTIVO||row.nombre||"",ORDEN:index+1};
+    })
   };
 }
-
+async function refreshBootstrap(){
+  const boot=await callApi("pmoFastBootstrap",{filters:{}},{loader:false});
+  bootFromData(boot);
+  cachePut("BOOT",boot);
+}
 async function saveDraft(){
   clearErrorBanner();
   try{
-    const result = await callApi("savePMODraft",{data:collectPMO()});
-    showMessage(
-      result.message + " // " + result.idPMO,
-      "PMO GUARDADO"
-    );
+    const result=await callApi("savePMODraft",{data:collectPMO()},{message:"GUARDANDO PMO"});
+    cacheRemove("BOOT");
+    cacheRemove("DETAIL_"+(state.selectedId||result.idPMO));
+    await refreshBootstrap();
     await openPMO(result.idPMO);
-  }catch(error){
-    showErrorBanner("NO FUE POSIBLE GUARDAR: "+error.message);
-  }
+    showMessage(result.message+" // "+result.idPMO,"PMO GUARDADO");
+  }catch(error){showErrorBanner("NO FUE POSIBLE GUARDAR EL PMO: "+error.message);}
 }
-
 function requiredObservation(action){
-  const value = String(ui.pmoObservation.value || "").trim();
-  if(!value){
-    showMessage(
-      "ESCRIBA LA JUSTIFICACION EN OBSERVACION ANTES DE "+action,
-      "JUSTIFICACION REQUERIDA"
-    );
-    return "";
-  }
+  const value=String(ui.pmoObservation.value||"").trim();
+  if(!value){showMessage("ESCRIBA LA JUSTIFICACION EN OBSERVACION ANTES DE "+action,"JUSTIFICACION REQUERIDA");return "";}
   return value;
 }
-
 async function submitPMO(){
-  if(!state.selectedId){
-    showMessage("PRIMERO GUARDE EL PMO.","PMO REQUERIDO");
-    return;
-  }
-  const observation = requiredObservation("ENVIAR A APROBACION");
-  if(!observation){
-    return;
-  }
+  if(!state.selectedId){showMessage("SELECCIONE Y GUARDE UN PMO.");return;}
+  const observation=requiredObservation("ENVIAR A APROBACION");
+  if(!observation)return;
+  if(!(await askConfirmation("ENVIAR EL PMO A APROBACION?")))return;
   try{
-    const result = await callApi("submitPMOApproval",{
-      idPMO:state.selectedId,
-      observacion:observation
-    });
-    showMessage(result.message,"FLUJO PMO");
+    const result=await callApi("submitPMOApproval",{idPMO:state.selectedId,observacion:observation});
+    cacheRemove("DETAIL_"+state.selectedId);
+    await refreshBootstrap();
     await openPMO(state.selectedId);
-  }catch(error){
-    showErrorBanner("NO FUE POSIBLE ENVIAR: "+error.message);
-  }
+    showMessage(result.message,"PMO ENVIADO");
+  }catch(error){showErrorBanner(error.message);}
 }
-
 async function approvePMO(){
-  const observation = requiredObservation("APROBAR PMO");
-  if(!observation){
-    return;
-  }
+  const observation=requiredObservation("APROBAR");
+  if(!observation)return;
+  if(!(await askConfirmation("APROBAR Y CONGELAR ESTE PMO?")))return;
   try{
-    const result = await callApi("approvePMO",{
-      idPMO:state.selectedId,
-      observacion:observation
-    });
+    const result=await callApi("approvePMO",{idPMO:state.selectedId,observacion:observation});
+    cacheRemove("DETAIL_"+state.selectedId);
+    await refreshBootstrap();
+    await openPMO(state.selectedId);
     showMessage(result.message,"PMO APROBADO");
-    await openPMO(state.selectedId);
-  }catch(error){
-    showErrorBanner("NO FUE POSIBLE APROBAR: "+error.message);
-  }
+  }catch(error){showErrorBanner(error.message);}
 }
-
 async function rejectPMO(){
-  const observation = requiredObservation("RECHAZAR PMO");
-  if(!observation){
-    return;
-  }
+  const observation=requiredObservation("RECHAZAR");
+  if(!observation)return;
+  if(!(await askConfirmation("RECHAZAR ESTE PMO?")))return;
   try{
-    const result = await callApi("rejectPMO",{
-      idPMO:state.selectedId,
-      observacion:observation
-    });
+    const result=await callApi("rejectPMO",{idPMO:state.selectedId,observacion:observation});
+    cacheRemove("DETAIL_"+state.selectedId);
+    await refreshBootstrap();
+    await openPMO(state.selectedId);
     showMessage(result.message,"PMO RECHAZADO");
-    await openPMO(state.selectedId);
-  }catch(error){
-    showErrorBanner("NO FUE POSIBLE RECHAZAR: "+error.message);
-  }
+  }catch(error){showErrorBanner(error.message);}
 }
-
 async function inactivatePMO(){
-  const observation = requiredObservation("INACTIVAR PMO");
-  if(!observation){
-    return;
-  }
-  const accepted = await askConfirmation(
-    "SE INACTIVARA EL PMO SELECCIONADO. DESEA CONTINUAR?",
-    "INACTIVAR PMO"
-  );
-  if(!accepted){
-    return;
-  }
+  const observation=requiredObservation("INACTIVAR");
+  if(!observation)return;
+  if(!(await askConfirmation("INACTIVAR ESTE PMO?")))return;
   try{
-    const result = await callApi("inactivatePMO",{
-      idPMO:state.selectedId,
-      observacion:observation
-    });
-    showMessage(result.message,"PMO INACTIVADO");
+    const result=await callApi("inactivatePMO",{idPMO:state.selectedId,observacion:observation});
+    cacheRemove("BOOT");
+    cacheRemove("DETAIL_"+state.selectedId);
+    await refreshBootstrap();
     await openPMO(state.selectedId);
-  }catch(error){
-    showErrorBanner("NO FUE POSIBLE INACTIVAR: "+error.message);
-  }
+    showMessage(result.message,"PMO INACTIVADO");
+  }catch(error){showErrorBanner(error.message);}
 }
-
 async function createVersion(){
-  const observation = requiredObservation("CREAR NUEVA VERSION");
-  if(!observation){
-    return;
-  }
-  const accepted = await askConfirmation(
-    "SE CREARA UNA NUEVA VERSION EN BORRADOR. DESEA CONTINUAR?",
-    "NUEVA VERSION"
-  );
-  if(!accepted){
-    return;
-  }
+  const observation=requiredObservation("CREAR NUEVA VERSION");
+  if(!observation)return;
+  if(!(await askConfirmation("CREAR UNA NUEVA VERSION BORRADOR?")))return;
   try{
-    const result = await callApi("newPMOVersion",{
-      idPMO:state.selectedId,
-      observacion:observation
-    });
-    showMessage(
-      result.message + " // " + result.idPMO,
-      "VERSION CREADA"
-    );
+    const result=await callApi("newPMOVersion",{idPMO:state.selectedId,observacion:observation});
+    cacheRemove("BOOT");
+    await refreshBootstrap();
     await openPMO(result.idPMO);
-  }catch(error){
-    showErrorBanner("NO FUE POSIBLE VERSIONAR: "+error.message);
-  }
+    showMessage(result.message+" // "+result.idPMO,"NUEVA VERSION");
+  }catch(error){showErrorBanner(error.message);}
 }
-
 async function setupPhase2(){
-  const accepted = await askConfirmation(
-    "CONFIGURAR HOJAS, COLUMNAS, CATALOGOS Y PERMISOS DE FASE 2?",
-    "CONFIGURAR FASE 2"
-  );
-  if(!accepted){
-    return;
-  }
-  try{
-    const result = await callApi("setupMantenimientoProgramado");
-    showMessage(result.message,"FASE 2 CONFIGURADA");
-  }catch(error){
-    showErrorBanner("NO FUE POSIBLE CONFIGURAR: "+error.message);
-  }
+  if(!(await askConfirmation("CONFIGURAR HOJAS, COLUMNAS Y CATALOGOS DE FASE 2?")))return;
+  try{const result=await callApi("setupMantenimientoProgramado",{});showMessage(result.message,"FASE 2");}
+  catch(error){showErrorBanner(error.message);}
 }
-
 async function installTrigger(){
-  const accepted = await askConfirmation(
-    "INSTALAR EL TRIGGER SEMANAL DE LANZAMIENTO PARA LOS LUNES EN LA HORA 00?",
-    "INSTALAR TRIGGER"
-  );
-  if(!accepted){
-    return;
-  }
-  try{
-    const result = await callApi("installMttoWeeklyTrigger");
-    showMessage(
-      result.message + "\n" + (result.advertencia || ""),
-      "TRIGGER INSTALADO"
-    );
-  }catch(error){
-    showErrorBanner("NO FUE POSIBLE INSTALAR EL TRIGGER: "+error.message);
-  }
+  if(!(await askConfirmation("INSTALAR TRIGGER SEMANAL? SOLO DEBE HACERSE DESPUES DE DOS LANZAMIENTOS MANUALES IDEMPOTENTES.")))return;
+  try{const result=await callApi("installMttoWeeklyTrigger",{});showMessage(result.message+" // "+(result.advertencia||""),"TRIGGER");}
+  catch(error){showErrorBanner(error.message);}
 }
-
 async function launchNow(){
-  const accepted = await askConfirmation(
-    "EJECUTAR EL LANZAMIENTO MANUAL IDEMPOTENTE CON HORIZONTE DE 30 DIAS?",
-    "LANZAMIENTO MANUAL"
-  );
-  if(!accepted){
-    return;
-  }
+  if(!(await askConfirmation("EJECUTAR LANZAMIENTO MANUAL IDEMPOTENTE HASTA 30 DIAS?")))return;
   try{
-    const result = await callApi("runMttoLaunchNow");
-    showMessage(
-      "OT CREADAS: "+result.createdCount+
-      "\nHORIZONTE: "+result.horizon,
-      "LANZAMIENTO TERMINADO"
-    );
-  }catch(error){
-    showErrorBanner("NO FUE POSIBLE LANZAR OT: "+error.message);
-  }
+    const result=await callApi("runMttoLaunchNow",{});
+    showMessage("OT CREADAS: "+result.createdCount+" // EXISTENTES: "+result.existingCount+" // "+(result.validation||""),"LANZAMIENTO TERMINADO");
+  }catch(error){showErrorBanner(error.message);}
 }
-
+function bindEvents(){
+  ui.messageAccept.addEventListener("click",closeMessage);
+  ui.confirmCancel.addEventListener("click",function(){closeConfirmation(false);});
+  ui.confirmAccept.addEventListener("click",function(){closeConfirmation(true);});
+  ui.filterText.addEventListener("input",renderList);
+  ui.filterApproval.addEventListener("change",renderList);
+  ui.filterPriority.addEventListener("change",renderList);
+  ui.newButton.addEventListener("click",function(){newPMO(true);});
+  ui.clearButton.addEventListener("click",function(){newPMO(true);});
+  ui.saveButton.addEventListener("click",saveDraft);
+  ui.editAMButton.addEventListener("click",function(){openPicker("am");});
+  ui.editAssetButton.addEventListener("click",function(){openPicker("assets");});
+  ui.submitButton.addEventListener("click",submitPMO);
+  ui.approveButton.addEventListener("click",approvePMO);
+  ui.rejectButton.addEventListener("click",rejectPMO);
+  ui.versionButton.addEventListener("click",createVersion);
+  ui.inactiveButton.addEventListener("click",inactivatePMO);
+  ui.setupButton.addEventListener("click",setupPhase2);
+  ui.triggerButton.addEventListener("click",installTrigger);
+  ui.launchButton.addEventListener("click",launchNow);
+  ui.pmoList.addEventListener("click",function(event){
+    const item=event.target.closest("[data-pmo-id]");
+    if(item)openPMO(item.getAttribute("data-pmo-id"));
+  });
+  ui.pickerSearch.addEventListener("input",renderPicker);
+  ui.pickerTypeFilter.addEventListener("change",renderPicker);
+  ui.pickerList.addEventListener("change",function(event){
+    const input=event.target.closest("input[data-picker-id]");
+    if(input)pickerToggle(input.getAttribute("data-picker-id"),input.checked);
+  });
+  ui.pickerSelected.addEventListener("click",function(event){
+    const button=event.target.closest("button[data-picker-id]");
+    if(!button)return;
+    const id=button.getAttribute("data-picker-id");
+    if(button.hasAttribute("data-picker-remove"))pickerToggle(id,false);
+    else if(button.hasAttribute("data-picker-move"))pickerMove(id,button.getAttribute("data-picker-move"));
+  });
+  ui.pickerClose.addEventListener("click",closePicker);
+  ui.pickerCancel.addEventListener("click",closePicker);
+  ui.pickerApply.addEventListener("click",applyPicker);
+  ui.pickerOpenMaster.addEventListener("click",function(){
+    window.open(state.pickerMode==="am"?"actividades_am.html":"mel.html","_blank","noopener");
+  });
+}
 document.addEventListener("DOMContentLoaded",function(){
   bindUI();
   bindEvents();
