@@ -1916,6 +1916,218 @@ bindEvents=function(){
     window.open('gestion_ot.html','_blank','noopener');
   });
 };
+
+// === PMO V13: automatizacion segura, pausa y actualizacion de datos ===
+const PMO_V13_BASE_BIND_UI=bindUI;
+const PMO_V13_BASE_BIND_EVENTS=bindEvents;
+
+function ensurePmoV13UI(){
+  if(!document.getElementById('pmoV13Style')){
+    const style=document.createElement('style');
+    style.id='pmoV13Style';
+    style.textContent=`
+      .automation-box{border:1px solid #bfdbfe;border-radius:16px;background:linear-gradient(180deg,#f8fbff,#eef7ff);padding:13px}
+      .automation-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px}
+      .automation-head h4{margin:0;color:#003b7a;font-size:15px}
+      .automation-head p{margin:4px 0 0;color:#5b6b82;font-size:10px;font-weight:900;line-height:1.45}
+      .automation-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin-bottom:11px}
+      .automation-card{border:1px solid #d8e6f4;border-radius:12px;background:#fff;padding:10px;text-align:center;min-width:0}
+      .automation-card b{display:block;color:#003b7a;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .automation-card span{display:block;color:#64748b;font-size:8px;font-weight:950;margin-top:4px}
+      .automation-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+      .automation-actions .btn{min-width:185px}
+      .automation-actions .danger{background:linear-gradient(135deg,#b42318,#ef4444)}
+      .automation-actions .pause{background:linear-gradient(135deg,#475569,#64748b)}
+      .automation-help{border-left:4px solid #0076d7;border-radius:10px;background:#eff6ff;color:#003b7a;padding:10px 12px;font-size:9px;font-weight:900;line-height:1.5;margin-bottom:10px}
+      .automation-detail{margin-top:10px;border:1px solid #d8e6f4;border-radius:12px;background:#fff;padding:9px}
+      .automation-detail summary{cursor:pointer;color:#003b7a;font-size:10px;font-weight:1000}
+      .automation-detail-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:9px}
+      .automation-badge{display:inline-flex;border-radius:999px;padding:6px 10px;background:#e2e8f0;color:#475569;font-size:9px;font-weight:1000;white-space:nowrap}
+      .automation-badge.ok{background:#dcfce7;color:#166534}
+      .automation-badge.warn{background:#fff7ed;color:#9a3412}
+      .automation-badge.bad{background:#fee2e2;color:#991b1b}
+      .admin-box>summary{display:flex;align-items:center;justify-content:space-between;gap:10px}
+      @media(max-width:1050px){.automation-grid{grid-template-columns:repeat(3,1fr)}.automation-detail-grid{grid-template-columns:repeat(3,1fr)}}
+      @media(max-width:760px){.automation-head{display:block}.automation-grid,.automation-detail-grid{grid-template-columns:1fr}.automation-actions .btn{width:100%;min-width:0}.automation-head h4{font-size:16px}.automation-head p,.automation-help{font-size:11px}}
+    `;
+    document.head.appendChild(style);
+  }
+  const details=document.querySelector('.admin-box');
+  if(!details)return;
+  details.innerHTML=[
+    '<summary><span>AUTOMATIZACION PMO A OT</span><span id="automationSummaryBadge" class="automation-badge">CONSULTANDO</span></summary>',
+    '<div id="automationControlV13" class="automation-box">',
+    '<div class="automation-head"><div><h4>OPERACION AUTOMATICA CONTROLADA</h4><p>EL TRIGGER PUEDE PERMANECER INSTALADO Y PAUSADO. ANTES DE REEMPLAZAR DATOS, PREPARE LA ACTUALIZACION. DESPUES REVALIDE LA BASE, EJECUTE DOS PRUEBAS MANUALES E ACTIVE LA AUTOMATIZACION.</p></div><span id="launchOverallState" class="automation-badge">CONSULTANDO</span></div>',
+    '<div class="automation-grid">',
+    '<div class="automation-card"><b id="automationModeText">PAUSADA</b><span>OPERACION</span></div>',
+    '<div class="automation-card"><b id="automationTriggerText">NO INSTALADO</b><span>TRIGGER SEMANAL</span></div>',
+    '<div class="automation-card"><b id="automationSignatureText">SIN FIRMA</b><span>CONTROL DE DATOS</span></div>',
+    '<div class="automation-card"><b id="automationIdempotenceText">PENDIENTE</b><span>IDEMPOTENCIA</span></div>',
+    '<div class="automation-card"><b id="automationScheduleText">LUNES 00H</b><span>VENTANA HORARIA</span></div>',
+    '</div>',
+    '<div id="launchIssues" class="automation-help">CONSULTANDO ESTADO DEL SISTEMA...</div>',
+    '<div class="automation-actions">',
+    '<button id="setupButton" class="btn gray" type="button">CONFIGURAR FASE 2</button>',
+    '<button id="prepareRefreshButton" class="btn orange" type="button">PREPARAR CAMBIO DE DATOS</button>',
+    '<button id="revalidateDataButton" class="btn" type="button">REVALIDAR BASE ACTUAL</button>',
+    '<button id="launchButton" class="btn green" type="button">LANZAMIENTO MANUAL</button>',
+    '<button id="triggerButton" class="btn orange" type="button">INSTALAR TRIGGER</button>',
+    '<button id="activateAutomationButton" class="btn green" type="button">ACTIVAR AUTOMATIZACION</button>',
+    '<button id="pauseAutomationButton" class="btn pause" type="button">PAUSAR AUTOMATIZACION</button>',
+    '<button id="removeTriggerButton" class="btn danger" type="button">RETIRAR TRIGGER</button>',
+    '<button id="openOTButton" class="btn" type="button">ABRIR ORDENES DE MTTO</button>',
+    '</div>',
+    '<details class="automation-detail"><summary>VER DETALLE TECNICO Y METRICAS</summary>',
+    '<div class="automation-detail-grid">',
+    '<div class="commission-metric"><b id="metricReadyPlans">0</b><span>PMO LISTOS</span></div>',
+    '<div class="commission-metric"><b id="metricDuePlans">0</b><span>EN HORIZONTE</span></div>',
+    '<div class="commission-metric"><b id="metricBlockedPlans">0</b><span>CON BLOQUEOS</span></div>',
+    '<div class="commission-metric"><b id="metricManualRuns">0</b><span>PRUEBAS MANUALES</span></div>',
+    '<div class="commission-metric"><b id="metricPendingKeys">0</b><span>CLAVES PENDIENTES</span></div>',
+    '</div></details></div>'
+  ].join('');
+}
+
+bindUI=function(){
+  PMO_V13_BASE_BIND_UI();
+  ensurePmoV13UI();
+  ['automationControlV13','automationSummaryBadge','launchOverallState','automationModeText','automationTriggerText','automationSignatureText','automationIdempotenceText','automationScheduleText','metricReadyPlans','metricDuePlans','metricBlockedPlans','metricManualRuns','metricPendingKeys','launchIssues','setupButton','prepareRefreshButton','revalidateDataButton','launchButton','triggerButton','activateAutomationButton','pauseAutomationButton','removeTriggerButton','openOTButton'].forEach(function(id){ui[id]=byId(id);});
+};
+
+function renderLaunchReadiness(){
+  const status=state.launchStatus||{};
+  const structure=Boolean(status.structure&&status.structure.ready);
+  const plans=status.plans||{};
+  const idem=status.idempotence||{};
+  const automation=status.automation||{};
+  const triggerInstalled=Boolean(automation.triggerInstalled);
+  const signatureMatches=Boolean(automation.signatureMatches);
+  const active=Boolean(automation.active);
+  const canAdmin=hasPermission('BTN_MTTO_CONFIGURAR');
+  const canLaunch=hasPermission('BTN_OT_LANZAR_PMO');
+  const details=document.querySelector('.admin-box');
+  if(details){
+    details.classList.toggle('hidden',!(canAdmin||canLaunch));
+    if(state.launchStatus&&state.launchStatus.automation&&!details.dataset.statusInitialized){details.open=!active;details.dataset.statusInitialized='1';}
+  }
+  if(!(canAdmin||canLaunch))return;
+  let badgeText='PAUSADA';
+  let badgeClass='warn';
+  if(automation.dataChanged||automation.signatureError){badgeText='DATOS CAMBIARON';badgeClass='bad';}
+  else if(active){badgeText='AUTOMATIZACION ACTIVA';badgeClass='ok';}
+  else if(triggerInstalled){badgeText='TRIGGER PAUSADO';badgeClass='warn';}
+  ui.automationSummaryBadge.textContent=badgeText;
+  ui.automationSummaryBadge.className='automation-badge '+badgeClass;
+  ui.launchOverallState.textContent=String(status.nextStep||badgeText).replaceAll('_',' ');
+  ui.launchOverallState.className='automation-badge '+badgeClass;
+  ui.automationModeText.textContent=active?'ACTIVA':'PAUSADA';
+  ui.automationTriggerText.textContent=triggerInstalled?'INSTALADO':'NO INSTALADO';
+  ui.automationSignatureText.textContent=automation.signatureError?'ERROR':(signatureMatches?'VALIDA':(automation.signatureExpected?'CAMBIO DETECTADO':'SIN REVALIDAR'));
+  ui.automationIdempotenceText.textContent=idem.validated?'VALIDADA':'PENDIENTE';
+  ui.automationScheduleText.textContent=(automation.schedule&&automation.schedule.day?automation.schedule.day:'LUNES')+' 00H';
+  ui.metricReadyPlans.textContent=String(plans.readyCount||0);
+  ui.metricDuePlans.textContent=String(plans.dueCount||0);
+  ui.metricBlockedPlans.textContent=String(plans.blockedCount||0);
+  ui.metricManualRuns.textContent=String(idem.manualRunCount||0);
+  ui.metricPendingKeys.textContent=String(idem.pendingKeyCount||0);
+  const reason=String(automation.reason||'').replaceAll('_',' ');
+  const last=automation.lastTrigger;
+  const lastText=last?('ULTIMO TRIGGER: '+(last.skipped?'OMITIDO':'EJECUTADO')+' // OT CREADAS: '+(last.createdCount||0)+' // '+(last.error||last.reason||'')):'SIN EJECUCION AUTOMATICA REGISTRADA.';
+  const dataText=automation.dataChanged?'CAMBIO DIRECTO EN PMO, ACTIVIDADES O ACTIVOS DETECTADO. LA AUTOMATIZACION FUE BLOQUEADA. ':'';
+  ui.launchIssues.textContent=dataText+'MODO: '+(automation.mode||'PAUSED')+' // FIRMA: '+(automation.signatureCurrent||'SIN FIRMA')+' // '+(reason||'SIN NOVEDAD')+' // '+lastText;
+  ui.setupButton.classList.toggle('hidden',structure);
+  ui.setupButton.disabled=!canAdmin||structure;
+  ui.prepareRefreshButton.disabled=!canAdmin||active;
+  ui.revalidateDataButton.disabled=!canAdmin||!structure||active;
+  ui.launchButton.disabled=!canLaunch||!structure||active||Boolean(idem.validated)||Number(plans.dueCount||0)<1;
+  ui.triggerButton.disabled=!canAdmin||!idem.validated||triggerInstalled||!signatureMatches;
+  ui.activateAutomationButton.disabled=!canAdmin||active||!triggerInstalled||!idem.validated||!signatureMatches;
+  ui.pauseAutomationButton.disabled=!canAdmin||!active;
+  ui.removeTriggerButton.disabled=!canAdmin||!triggerInstalled;
+  ui.openOTButton.disabled=!(hasPermission('BTN_GESTIONAR_OT')||hasPermission('BTN_OT'));
+  ui.launchButton.textContent=idem.pendingKeyCount>0?'SEGUNDO LANZAMIENTO / VALIDAR':'LANZAMIENTO MANUAL';
+  ui.triggerButton.textContent=triggerInstalled?'TRIGGER INSTALADO':'INSTALAR TRIGGER PAUSADO';
+}
+
+refreshLaunchStatus=async function(showBusy){
+  try{
+    const result=await callApi('mttoLaunchStatus',{}, {loader:showBusy!==false,message:'VERIFICANDO AUTOMATIZACION',timeout:90000});
+    state.launchStatus=result;
+    renderLaunchReadiness();
+    return result;
+  }catch(error){
+    if(ui.launchOverallState){ui.launchOverallState.textContent='ERROR CONSULTANDO';ui.launchOverallState.className='automation-badge bad';}
+    if(ui.launchIssues)ui.launchIssues.textContent='NO FUE POSIBLE VERIFICAR AUTOMATIZACION: '+friendlyPmoError(error.message);
+    return null;
+  }
+};
+
+setupPhase2=async function(){
+  if(!(await askConfirmation('CONFIGURAR O REPARAR FASE 2? ESTA ACCION PAUSA LA AUTOMATIZACION Y OBLIGA A REVALIDAR.','CONFIGURAR FASE 2')))return;
+  try{const result=await callApi('setupMantenimientoProgramado',{}, {message:'CONFIGURANDO FASE 2',timeout:120000});await refreshLaunchStatus(false);showMessage(result.message,'FASE 2');}
+  catch(error){showErrorBanner(friendlyPmoError(error.message));}
+};
+
+launchNow=async function(){
+  if(state.launchStatus&&state.launchStatus.automation&&state.launchStatus.automation.active){showMessage('PAUSE LA AUTOMATIZACION ANTES DE UN LANZAMIENTO MANUAL.','AUTOMATIZACION ACTIVA');return;}
+  const second=state.launchStatus&&state.launchStatus.idempotence&&Number(state.launchStatus.idempotence.pendingKeyCount||0)>0;
+  const question=second?'EJECUTAR SEGUNDO LANZAMIENTO PARA VALIDAR QUE NO SE CREEN DUPLICADOS?':'EJECUTAR LANZAMIENTO MANUAL DE TODOS LOS PMO EN HORIZONTE?';
+  if(!(await askConfirmation(question,second?'VALIDAR IDEMPOTENCIA':'LANZAMIENTO MANUAL')))return;
+  try{
+    const result=await callApi('runMttoLaunchNow',{}, {message:second?'VALIDANDO IDEMPOTENCIA':'LANZANDO PMO',timeout:300000});
+    await refreshLaunchStatus(false);
+    showMessage('OT CREADAS: '+(result.createdCount||0)+' // EXISTENTES: '+(result.existingCount||0)+' // '+(result.validation||''),'LANZAMIENTO TERMINADO');
+  }catch(error){showErrorBanner(friendlyPmoError(error.message));}
+};
+
+installTrigger=async function(){
+  if(!(await askConfirmation('INSTALAR EL TRIGGER SEMANAL EN MODO PAUSADO? NO CREARA OT HASTA PULSAR ACTIVAR AUTOMATIZACION.','INSTALAR TRIGGER')))return;
+  try{const result=await callApi('installMttoWeeklyTrigger',{}, {message:'INSTALANDO TRIGGER'});await refreshLaunchStatus(false);showMessage(result.message+' // '+(result.advertencia||''),'TRIGGER INSTALADO');}
+  catch(error){showErrorBanner(friendlyPmoError(error.message));}
+};
+
+async function prepareDataRefresh(){
+  if(!(await askConfirmation('CREAR RESPALDO, PAUSAR AUTOMATIZACION Y PREPARAR EL REEMPLAZO DE ARMA_DATA? EL TRIGGER INSTALADO QUEDARA INERTE.','PREPARAR CAMBIO DE DATOS')))return;
+  try{
+    const result=await callApi('prepareMttoDataRefresh',{}, {message:'CREANDO RESPALDOS Y PAUSANDO',timeout:240000});
+    await refreshLaunchStatus(false);
+    const backup=result.backup||{};
+    showMessage('AUTOMATIZACION PAUSADA. RESPALDO: '+(backup.stamp||'CREADO')+'. AHORA PUEDE ACTUALIZAR LOS DATOS Y DESPUES REVALIDAR.','CAMBIO DE DATOS PREPARADO');
+  }catch(error){showErrorBanner(friendlyPmoError(error.message));}
+}
+
+async function revalidateDataset(){
+  if(!(await askConfirmation('CONFIRMA QUE TERMINO DE ACTUALIZAR ARMA_DATA Y DESEA REVALIDAR LA BASE ACTUAL? SE REINICIARAN LAS DOS PRUEBAS MANUALES.','REVALIDAR BASE')))return;
+  try{const result=await callApi('revalidateMttoDataset',{}, {message:'REVALIDANDO BASE ACTUAL',timeout:180000});await refreshLaunchStatus(false);showMessage(result.message+' // PMO EN HORIZONTE: '+((result.plans&&result.plans.dueCount)||0)+' // '+(result.nextStep||''),'BASE REVALIDADA');}
+  catch(error){showErrorBanner(friendlyPmoError(error.message));}
+}
+
+async function activateAutomation(){
+  if(!(await askConfirmation('ACTIVAR EL LANZAMIENTO AUTOMATICO SEMANAL LOS LUNES ENTRE 00:00 Y 00:59?','ACTIVAR AUTOMATIZACION')))return;
+  try{const result=await callApi('activateMttoAutomation',{}, {message:'ACTIVANDO AUTOMATIZACION'});await refreshLaunchStatus(false);showMessage(result.message+' // '+(result.schedule||''),'AUTOMATIZACION ACTIVA');}
+  catch(error){showErrorBanner(friendlyPmoError(error.message));}
+}
+
+async function pauseAutomation(){
+  if(!(await askConfirmation('PAUSAR LA AUTOMATIZACION? EL TRIGGER PERMANECERA INSTALADO PERO NO CREARA OT.','PAUSAR AUTOMATIZACION')))return;
+  try{const result=await callApi('pauseMttoAutomation',{}, {message:'PAUSANDO AUTOMATIZACION'});await refreshLaunchStatus(false);showMessage(result.message,'AUTOMATIZACION PAUSADA');}
+  catch(error){showErrorBanner(friendlyPmoError(error.message));}
+}
+
+async function removeWeeklyTrigger(){
+  if(!(await askConfirmation('RETIRAR COMPLETAMENTE EL TRIGGER SEMANAL?','RETIRAR TRIGGER')))return;
+  try{const result=await callApi('removeMttoWeeklyTrigger',{}, {message:'RETIRANDO TRIGGER'});await refreshLaunchStatus(false);showMessage(result.message,'TRIGGER RETIRADO');}
+  catch(error){showErrorBanner(friendlyPmoError(error.message));}
+}
+
+bindEvents=function(){
+  PMO_V13_BASE_BIND_EVENTS();
+  ui.prepareRefreshButton.addEventListener('click',prepareDataRefresh);
+  ui.revalidateDataButton.addEventListener('click',revalidateDataset);
+  ui.activateAutomationButton.addEventListener('click',activateAutomation);
+  ui.pauseAutomationButton.addEventListener('click',pauseAutomation);
+  ui.removeTriggerButton.addEventListener('click',removeWeeklyTrigger);
+};
   try{
     bindUI();
     bindEvents();
