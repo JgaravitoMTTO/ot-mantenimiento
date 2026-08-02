@@ -1208,6 +1208,256 @@ function bindEvents(){
 }
 document.addEventListener("DOMContentLoaded",function(){
   bindUI();
+// === PMO V08: flujo editable, justificacion independiente y permisos visibles ===
+const PMO_V08_ORIGINAL_BIND_UI=bindUI;
+const PMO_V08_ORIGINAL_BIND_EVENTS=bindEvents;
+const PMO_V08_ORIGINAL_NEW_PMO=newPMO;
+const PMO_V08_ORIGINAL_APPLY_DETAIL=applyDetail;
+const PMO_V08_ORIGINAL_OPEN_PMO=openPMO;
+const PMO_V08_ORIGINAL_OPEN_PICKER=openPicker;
+const PMO_V08_ORIGINAL_APPLY_PICKER=applyPicker;
+const PMO_V08_ORIGINAL_SAVE_DRAFT=saveDraft;
+state.dirty=false;
+state.guardBypass=false;
+state.workflowResolver=null;
+function ensurePmoV08UI(){
+  if(!document.getElementById('pmoV08Style')){
+    const style=document.createElement('style');
+    style.id='pmoV08Style';
+    style.textContent=`
+      .flow-guide{border-left:5px solid #0076d7;border-radius:12px;background:#eff6ff;padding:11px 13px;margin:0 0 12px;color:#0b376f;font-size:11px;font-weight:950;line-height:1.45}
+      .flow-guide.editable{border-left-color:#22c55e;background:#f0fdf4;color:#166534}
+      .flow-guide.locked{border-left-color:#f59e0b;background:#fff7ed;color:#9a3412}
+      .flow-guide.danger{border-left-color:#dc2626;background:#fef2f2;color:#991b1b}
+      .permission-summary{display:flex;flex-wrap:wrap;gap:6px;margin:-3px 0 12px}
+      .permission-chip{border-radius:999px;padding:6px 9px;background:#e2e8f0;color:#475569;font-size:9px;font-weight:1000}
+      .permission-chip.ok{background:#dcfce7;color:#166534}
+      .workflow-help{border-left:5px solid #0076d7;border-radius:10px;background:#eff6ff;padding:10px 12px;color:#0b376f;font-size:11px;font-weight:900;line-height:1.45;margin-bottom:10px}
+      #workflowReason{min-height:120px}
+      .dirty-mark{color:#b45309}
+      @media(max-width:760px){.flow-guide{font-size:14px}.permission-chip{font-size:11px}.modal .box.small-box{width:96vw}}
+    `;
+    document.head.appendChild(style);
+  }
+  const formPanel=document.getElementById('formTitle').closest('.panel');
+  if(formPanel&&!document.getElementById('editRuleBanner')){
+    const head=formPanel.querySelector('.panel-head');
+    head.insertAdjacentHTML('afterend','<div id="editRuleBanner" class="flow-guide">CARGANDO REGLAS DEL PMO...</div><div id="permissionSummary" class="permission-summary"></div>');
+  }
+  if(!document.getElementById('workflowModal')){
+    document.body.insertAdjacentHTML('beforeend',[
+      '<div id="workflowModal" class="modal hidden">',
+      '<div class="box small-box">',
+      '<div class="modal-title"><h3 id="workflowTitle">JUSTIFICACION</h3></div>',
+      '<div id="workflowHelp" class="workflow-help"></div>',
+      '<label for="workflowReason">JUSTIFICACION O COMENTARIO DE CONTROL</label>',
+      '<textarea id="workflowReason" placeholder="DESCRIBA EL MOTIVO DEL CAMBIO O DECISION"></textarea>',
+      '<div class="actions">',
+      '<button id="workflowCancel" class="btn gray" type="button">CANCELAR</button>',
+      '<button id="workflowAccept" class="btn green" type="button">CONTINUAR</button>',
+      '</div></div></div>'
+    ].join(''));
+  }
+  const obsLabel=document.querySelector('label[for="pmoObservation"]');
+  if(obsLabel)obsLabel.textContent='OBSERVACION DEL BORRADOR (OPCIONAL)';
+  if(document.getElementById('versionButton'))document.getElementById('versionButton').textContent='CREAR VERSION EDITABLE';
+}
+bindUI=function(){
+  PMO_V08_ORIGINAL_BIND_UI();
+  ensurePmoV08UI();
+  ['editRuleBanner','permissionSummary','workflowModal','workflowTitle','workflowHelp','workflowReason','workflowCancel','workflowAccept'].forEach(function(id){ui[id]=byId(id);});
+};
+function workflowReason(title,help){
+  ui.workflowTitle.textContent=title||'JUSTIFICACION';
+  ui.workflowHelp.textContent=help||'REGISTRE EL MOTIVO PARA CONSERVAR TRAZABILIDAD.';
+  ui.workflowReason.value='';
+  ui.workflowModal.classList.remove('hidden');
+  setTimeout(function(){ui.workflowReason.focus();},60);
+  return new Promise(function(resolve){state.workflowResolver=resolve;});
+}
+function closeWorkflow(accepted){
+  const value=String(ui.workflowReason.value||'').trim();
+  if(accepted&&!value){showMessage('ESCRIBA UNA JUSTIFICACION PARA CONTINUAR.','JUSTIFICACION REQUERIDA');return;}
+  ui.workflowModal.classList.add('hidden');
+  if(state.workflowResolver)state.workflowResolver(accepted?value:'');
+  state.workflowResolver=null;
+}
+function friendlyPmoError(value){
+  const code=String(value||'ERROR_NO_IDENTIFICADO');
+  const map={
+    PMO_APROBADO_CONGELADO_USE_NUEVA_VERSION:'EL PMO APROBADO ESTA CONGELADO. CREE UNA VERSION EDITABLE.',
+    PMO_PENDIENTE_APROBACION_NO_EDITABLE:'EL PMO ESTA PENDIENTE DE APROBACION Y NO PUEDE MODIFICARSE.',
+    PMO_REQUIERE_AL_MENOS_UNA_AM_Y_UN_ACTIVO:'EL PMO REQUIERE AL MENOS UNA ACTIVIDAD AM Y UN ACTIVO.',
+    JUSTIFICACION_REQUERIDA:'DEBE REGISTRAR UNA JUSTIFICACION.',
+    VERSION_EDITABLE_PENDIENTE_APROBACION:'YA EXISTE UNA VERSION DEL PLAN PENDIENTE DE APROBACION.',
+    SIN_PERMISO:'EL NIVEL DEL USUARIO NO TIENE EL PERMISO REQUERIDO.'
+  };
+  return map[code]||code.replaceAll('_',' ');
+}
+function approvalState(){return normalize(state.current&&state.current.ESTADO_APROBACION);}
+function pmoOperationalState(){return normalize(state.current&&state.current.ESTADO_PMO||'ACTIVO');}
+function fieldEditable(){
+  if(!state.current)return hasPermission('BTN_PMO_CREAR');
+  if(pmoOperationalState()==='INACTIVO')return false;
+  const approval=approvalState();
+  return ['BORRADOR','RECHAZADO'].indexOf(approval)>=0&&hasPermission('BTN_PMO_EDITAR_BORRADOR');
+}
+function permissionChip(label,allowed){return '<span class="permission-chip'+(allowed?' ok':'')+'">'+escapeHtml(label)+': '+(allowed?'SI':'NO')+'</span>';}
+function updatePmoFlowUI(){
+  if(!ui.editRuleBanner||!ui.permissionSummary)return;
+  const approval=approvalState();
+  const operational=pmoOperationalState();
+  const canEdit=fieldEditable();
+  let text='NUEVO PMO: COMPLETE DATOS, ASIGNE ACTIVIDADES Y ACTIVOS, Y GUARDE EL BORRADOR.';
+  let mode='editable';
+  if(state.current){
+    if(operational==='INACTIVO'){text='PMO INACTIVO: CONSULTA DE SOLO LECTURA. NO SE PERMITEN CAMBIOS NI LANZAMIENTOS.';mode='danger';}
+    else if(approval==='BORRADOR'){text='BORRADOR EDITABLE: PUEDE MODIFICAR DATOS, ACTIVIDADES Y ACTIVOS SEGUN SUS PERMISOS. GUARDE ANTES DE ENVIAR A APROBACION.';mode=canEdit?'editable':'locked';}
+    else if(approval==='RECHAZADO'){text='PMO RECHAZADO: CORRIJA EL BORRADOR Y GUARDE. AL GUARDAR REGRESA A ESTADO BORRADOR.';mode=canEdit?'editable':'locked';}
+    else if(approval==='PENDIENTE_APROBACION'){text='PENDIENTE DE APROBACION: VERSION CONGELADA. SOLO USUARIOS AUTORIZADOS PUEDEN APROBAR O RECHAZAR.';mode='locked';}
+    else if(approval==='APROBADO'){text='PMO APROBADO Y CONGELADO: PARA CAMBIAR DATOS, ACTIVIDADES O ACTIVOS DEBE CREAR UNA NUEVA VERSION EDITABLE.';mode='locked';}
+  }
+  ui.editRuleBanner.className='flow-guide '+mode;
+  ui.editRuleBanner.textContent=text;
+  ui.permissionSummary.innerHTML=[
+    permissionChip('CREAR',hasPermission('BTN_PMO_CREAR')),
+    permissionChip('EDITAR BORRADOR',hasPermission('BTN_PMO_EDITAR_BORRADOR')),
+    permissionChip('ASIGNAR AM',hasPermission('BTN_PMO_ASIGNAR_AM')),
+    permissionChip('ASIGNAR ACTIVOS',hasPermission('BTN_PMO_ASIGNAR_ACTIVOS')),
+    permissionChip('ENVIAR',hasPermission('BTN_PMO_ENVIAR_APROBACION')),
+    permissionChip('APROBAR',hasPermission('BTN_PMO_APROBAR')),
+    permissionChip('VERSIONAR',hasPermission('BTN_PMO_NUEVA_VERSION'))
+  ].join('');
+  const dirty=state.dirty?' // CAMBIOS SIN GUARDAR':'';
+  if(state.current){
+    ui.stateInfo.textContent=[state.current.ESTADO_APROBACION||'SIN APROBACION',state.current.ESTADO_PMO||'SIN ESTADO','VERSION '+(state.current.VERSION||1),'LISTO '+(state.current.LISTO_LANZAMIENTO||'NO')].join(' // ')+dirty;
+  }else ui.stateInfo.textContent='NUEVO BORRADOR'+dirty;
+}
+applyPermissions=function(){
+  const approval=approvalState();
+  const operational=pmoOperationalState();
+  const canEdit=fieldEditable();
+  [ui.pmoCode,ui.pmoPriority,ui.pmoSpecialty,ui.pmoDescription,ui.pmoType,ui.pmoFrequency,ui.pmoLastDate,ui.pmoNextDate,ui.pmoObservation].forEach(function(el){el.disabled=!canEdit;});
+  ui.saveButton.disabled=!canEdit;
+  ui.saveButton.textContent=canEdit?'GUARDAR BORRADOR':'SOLO LECTURA';
+  const approved=approval==='APROBADO'&&operational!=='INACTIVO';
+  const canPrepareVersion=approved&&hasPermission('BTN_PMO_NUEVA_VERSION')&&hasPermission('BTN_PMO_EDITAR_BORRADOR');
+  ui.editAMButton.disabled=approved?!(canPrepareVersion&&hasPermission('BTN_PMO_ASIGNAR_AM')):(!canEdit||!hasPermission('BTN_PMO_ASIGNAR_AM'));
+  ui.editAssetButton.disabled=approved?!(canPrepareVersion&&hasPermission('BTN_PMO_ASIGNAR_ACTIVOS')):(!canEdit||!hasPermission('BTN_PMO_ASIGNAR_ACTIVOS'));
+  ui.editAMButton.textContent=approved?'CREAR VERSION PARA MODIFICAR ACTIVIDADES':'AGREGAR / MODIFICAR ACTIVIDADES';
+  ui.editAssetButton.textContent=approved?'CREAR VERSION PARA MODIFICAR ACTIVOS':'AGREGAR / MODIFICAR ACTIVOS';
+  ui.newButton.disabled=!hasPermission('BTN_PMO_CREAR');
+  ui.clearButton.disabled=!hasPermission('BTN_PMO_CREAR');
+  ui.submitButton.disabled=!hasPermission('BTN_PMO_ENVIAR_APROBACION')||!state.current||['BORRADOR','RECHAZADO'].indexOf(approval)<0||operational==='INACTIVO';
+  ui.approveButton.disabled=!hasPermission('BTN_PMO_APROBAR')||approval!=='PENDIENTE_APROBACION'||operational==='INACTIVO';
+  ui.rejectButton.disabled=!hasPermission('BTN_PMO_RECHAZAR')||approval!=='PENDIENTE_APROBACION'||operational==='INACTIVO';
+  ui.versionButton.disabled=!hasPermission('BTN_PMO_NUEVA_VERSION')||approval!=='APROBADO'||operational==='INACTIVO';
+  ui.inactiveButton.disabled=!hasPermission('BTN_PMO_INACTIVAR')||!state.current||operational==='INACTIVO';
+  ui.setupButton.disabled=!hasPermission('BTN_MTTO_CONFIGURAR');
+  ui.triggerButton.disabled=!hasPermission('BTN_MTTO_CONFIGURAR');
+  ui.launchButton.disabled=!hasPermission('BTN_OT_LANZAR_PMO');
+  updatePmoFlowUI();
+};
+function markPmoDirty(){
+  if(!fieldEditable())return;
+  state.dirty=true;
+  updatePmoFlowUI();
+}
+newPMO=async function(focusForm){
+  if(state.dirty&&!state.guardBypass){
+    const discard=await askConfirmation('HAY CAMBIOS SIN GUARDAR. DESEA DESCARTARLOS Y CREAR UN NUEVO PMO?','DESCARTAR CAMBIOS');
+    if(!discard)return;
+  }
+  PMO_V08_ORIGINAL_NEW_PMO(focusForm);
+  state.dirty=false;
+  updatePmoFlowUI();
+};
+applyDetail=function(result){
+  PMO_V08_ORIGINAL_APPLY_DETAIL(result);
+  state.dirty=false;
+  updatePmoFlowUI();
+};
+openPMO=async function(id){
+  if(state.dirty&&!state.guardBypass&&normalize(id)!==normalize(state.selectedId)){
+    const discard=await askConfirmation('HAY CAMBIOS SIN GUARDAR. DESEA DESCARTARLOS Y ABRIR OTRO PMO?','DESCARTAR CAMBIOS');
+    if(!discard)return;
+  }
+  return PMO_V08_ORIGINAL_OPEN_PMO(id);
+};
+openPicker=async function(mode){
+  const approval=approvalState();
+  if(approval==='APROBADO'){
+    const needed=mode==='am'?'BTN_PMO_ASIGNAR_AM':'BTN_PMO_ASIGNAR_ACTIVOS';
+    if(!hasPermission('BTN_PMO_NUEVA_VERSION')||!hasPermission('BTN_PMO_EDITAR_BORRADOR')||!hasPermission(needed)){
+      showMessage('ESTE PMO ESTA APROBADO. PARA MODIFICARLO SE REQUIEREN PERMISOS DE NUEVA VERSION, EDITAR BORRADOR Y '+(mode==='am'?'ASIGNAR AM.':'ASIGNAR ACTIVOS.'),'PMO CONGELADO');
+      return;
+    }
+    await createVersion(mode);
+    return;
+  }
+  if(approval==='PENDIENTE_APROBACION'){showMessage('EL PMO ESTA PENDIENTE DE APROBACION Y NO PUEDE MODIFICARSE.','PMO CONGELADO');return;}
+  if(pmoOperationalState()==='INACTIVO'){showMessage('EL PMO ESTA INACTIVO Y ES DE SOLO LECTURA.','PMO INACTIVO');return;}
+  return PMO_V08_ORIGINAL_OPEN_PICKER(mode);
+};
+applyPicker=function(){
+  PMO_V08_ORIGINAL_APPLY_PICKER();
+  markPmoDirty();
+};
+saveDraft=async function(){
+  if(!fieldEditable()){showMessage('ESTA VERSION NO ES EDITABLE. SI ESTA APROBADA, CREE UNA VERSION EDITABLE.','SOLO LECTURA');return;}
+  state.guardBypass=true;
+  try{await PMO_V08_ORIGINAL_SAVE_DRAFT();state.dirty=false;}
+  finally{state.guardBypass=false;updatePmoFlowUI();}
+};
+async function runPmoTransition(action,title,help,question){
+  if(!state.selectedId){showMessage('SELECCIONE Y GUARDE UN PMO.');return null;}
+  const reason=await workflowReason(title,help);
+  if(!reason)return null;
+  if(!(await askConfirmation(question,title)))return null;
+  try{
+    const result=await callApi(action,{idPMO:state.selectedId,observacion:reason},{message:title});
+    cacheRemove('BOOT');cacheRemove('DETAIL_'+state.selectedId);
+    state.guardBypass=true;
+    await refreshBootstrap();
+    await openPMO(result.idPMO||state.selectedId);
+    state.guardBypass=false;
+    showMessage(result.message||'OPERACION COMPLETADA',title);
+    return result;
+  }catch(error){state.guardBypass=false;showErrorBanner(friendlyPmoError(error.message));return null;}
+}
+submitPMO=function(){return runPmoTransition('submitPMOApproval','ENVIAR A APROBACION','EXPLIQUE POR QUE EL BORRADOR ESTA LISTO PARA REVISION.','ENVIAR EL PMO A APROBACION?');};
+approvePMO=function(){return runPmoTransition('approvePMO','APROBAR PMO','REGISTRE EL CRITERIO DE APROBACION. LA VERSION QUEDARA CONGELADA.','APROBAR Y CONGELAR ESTE PMO?');};
+rejectPMO=function(){return runPmoTransition('rejectPMO','RECHAZAR PMO','INDIQUE LOS CAMBIOS QUE DEBEN REALIZARSE ANTES DE UNA NUEVA REVISION.','RECHAZAR ESTE PMO?');};
+inactivatePMO=function(){return runPmoTransition('inactivatePMO','INACTIVAR PMO','EXPLIQUE POR QUE EL PLAN DEBE RETIRARSE DE OPERACION.','INACTIVAR ESTE PMO?');};
+createVersion=async function(targetMode){
+  targetMode=(targetMode==='am'||targetMode==='assets')?targetMode:'';
+  if(!state.selectedId||approvalState()!=='APROBADO'){showMessage('SOLO UN PMO APROBADO PUEDE CREAR UNA NUEVA VERSION.');return null;}
+  if(!hasPermission('BTN_PMO_NUEVA_VERSION')){showMessage('SIN PERMISO PARA CREAR NUEVA VERSION.');return null;}
+  const reason=await workflowReason('CREAR VERSION EDITABLE','EXPLIQUE QUE DEBE CAMBIAR. LA VERSION APROBADA ORIGINAL PERMANECERA INALTERADA.');
+  if(!reason)return null;
+  if(!(await askConfirmation('CREAR UNA NUEVA VERSION BORRADOR A PARTIR DE ESTE PMO?','NUEVA VERSION')))return null;
+  try{
+    const sourceId=state.selectedId;
+    const result=await callApi('newPMOVersion',{idPMO:sourceId,observacion:reason},{message:'CREANDO VERSION EDITABLE'});
+    cacheRemove('BOOT');cacheRemove('DETAIL_'+sourceId);cacheRemove('DETAIL_'+result.idPMO);
+    state.guardBypass=true;
+    await refreshBootstrap();
+    await openPMO(result.idPMO);
+    state.guardBypass=false;
+    showMessage((result.message||'VERSION EDITABLE CREADA')+' // '+result.idPMO,'NUEVA VERSION');
+    if(targetMode)await PMO_V08_ORIGINAL_OPEN_PICKER(targetMode);
+    return result;
+  }catch(error){state.guardBypass=false;showErrorBanner(friendlyPmoError(error.message));return null;}
+};
+bindEvents=function(){
+  PMO_V08_ORIGINAL_BIND_EVENTS();
+  ui.workflowCancel.addEventListener('click',function(){closeWorkflow(false);});
+  ui.workflowAccept.addEventListener('click',function(){closeWorkflow(true);});
+  [ui.pmoCode,ui.pmoPriority,ui.pmoSpecialty,ui.pmoDescription,ui.pmoType,ui.pmoFrequency,ui.pmoLastDate,ui.pmoNextDate,ui.pmoObservation].forEach(function(el){
+    el.addEventListener('input',markPmoDirty);
+    el.addEventListener('change',markPmoDirty);
+  });
+};
   bindEvents();
   initializePage();
 });
