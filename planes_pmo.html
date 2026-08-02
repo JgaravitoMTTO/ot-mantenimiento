@@ -516,7 +516,7 @@ details.admin-box summary{cursor:pointer;color:var(--navy);font-weight:1000;font
 <script>
 "use strict";
 const API = "https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
-const CACHE_PREFIX = "ARMA_PMO_V07_";
+const CACHE_PREFIX = "ARMA_PMO_V09_";
 const CACHE_TTL_MS = 300000;
 const state = {
   session:null,
@@ -1207,7 +1207,7 @@ function bindEvents(){
   });
 }
 document.addEventListener("DOMContentLoaded",function(){
-  bindUI();
+  // PMO V09: la interfaz extendida se instala antes de enlazar eventos.
 // === PMO V08: flujo editable, justificacion independiente y permisos visibles ===
 const PMO_V08_ORIGINAL_BIND_UI=bindUI;
 const PMO_V08_ORIGINAL_BIND_EVENTS=bindEvents;
@@ -1458,8 +1458,18 @@ bindEvents=function(){
     el.addEventListener('change',markPmoDirty);
   });
 };
-  bindEvents();
-  initializePage();
+  try{
+    bindUI();
+    bindEvents();
+    initializePage().catch(function(error){
+      console.error('PMO_INIT_ASYNC_ERROR',error);
+      showErrorBanner('NO FUE POSIBLE CARGAR LOS PLANES PMO: '+(error&&error.message?error.message:error));
+    });
+  }catch(error){
+    console.error('PMO_INIT_ERROR',error);
+    const banner=document.getElementById('errorBanner');
+    if(banner){banner.textContent='ERROR INICIANDO PLANES PMO: '+(error&&error.message?error.message:error);banner.classList.remove('hidden');}
+  }
 });
 </script>
 </body>
