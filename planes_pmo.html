@@ -1717,6 +1717,203 @@ bindEvents=function(){
   ui.amInlineClear.addEventListener('click',clearInlineAMForm);
   ui.amInlineSave.addEventListener('click',createInlineAM);
 };
+
+// === PMO V11: comisionamiento guiado PMO -> OT ===
+const PMO_V11_BASE_BIND_UI=bindUI;
+const PMO_V11_BASE_BIND_EVENTS=bindEvents;
+const PMO_V11_BASE_APPLY_PERMISSIONS=applyPermissions;
+const PMO_V11_BASE_INITIALIZE=initializePage;
+state.launchStatus=null;
+
+function ensurePmoV11UI(){
+  if(!document.getElementById('pmoV11Style')){
+    const style=document.createElement('style');
+    style.id='pmoV11Style';
+    style.textContent=`
+      .commission-box{border:1px solid #bfdbfe;border-radius:16px;background:linear-gradient(180deg,#f8fbff,#eef7ff);padding:13px}
+      .commission-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:11px}
+      .commission-head h4{margin:0;color:#003b7a;font-size:15px}
+      .commission-head p{margin:4px 0 0;color:#5b6b82;font-size:10px;font-weight:900;line-height:1.4}
+      .commission-state{border-radius:999px;padding:7px 11px;background:#e2e8f0;color:#475569;font-size:9px;font-weight:1000;white-space:nowrap}
+      .commission-state.ok{background:#dcfce7;color:#166534}
+      .commission-state.warn{background:#fff7ed;color:#9a3412}
+      .commission-state.bad{background:#fee2e2;color:#991b1b}
+      .commission-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:11px}
+      .commission-step{position:relative;border:1px solid #d8e6f4;border-radius:13px;background:#fff;padding:11px 11px 11px 43px;min-height:78px}
+      .commission-step .num{position:absolute;left:10px;top:11px;width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:#e2e8f0;color:#475569;font-weight:1000}
+      .commission-step strong{display:block;color:#003b7a;font-size:10px;margin-bottom:4px}
+      .commission-step span{display:block;color:#64748b;font-size:9px;font-weight:850;line-height:1.35}
+      .commission-step.ok{border-color:#86efac;background:#f0fdf4}
+      .commission-step.ok .num{background:#22c55e;color:#fff}
+      .commission-step.current{border-color:#60a5fa;background:#eff6ff;box-shadow:0 0 0 2px rgba(59,130,246,.12)}
+      .commission-step.current .num{background:#0076d7;color:#fff}
+      .commission-step.blocked{border-color:#fed7aa;background:#fff7ed}
+      .commission-step.blocked .num{background:#f59e0b;color:#fff}
+      .commission-metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:0 0 11px}
+      .commission-metric{border:1px solid #d8e6f4;border-radius:11px;background:#fff;padding:9px;text-align:center}
+      .commission-metric b{display:block;color:#003b7a;font-size:18px}
+      .commission-metric span{display:block;color:#64748b;font-size:8px;font-weight:950;margin-top:3px}
+      .commission-issues{border-left:4px solid #f59e0b;border-radius:10px;background:#fff7ed;color:#9a3412;padding:9px 11px;font-size:9px;font-weight:900;line-height:1.45;margin-bottom:10px}
+      .commission-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+      .commission-actions .btn{min-width:185px}
+      @media(max-width:1050px){.commission-steps{grid-template-columns:1fr 1fr}.commission-metrics{grid-template-columns:repeat(3,1fr)}}
+      @media(max-width:760px){.commission-head{display:block}.commission-state{display:inline-block;margin-top:8px}.commission-steps,.commission-metrics{grid-template-columns:1fr}.commission-actions .btn{width:100%;min-width:0}.commission-step strong{font-size:13px}.commission-step span,.commission-issues{font-size:11px}}
+    `;
+    document.head.appendChild(style);
+  }
+  const details=document.querySelector('.admin-box');
+  if(details&&!document.getElementById('launchReadiness')){
+    details.open=true;
+    details.innerHTML=[
+      '<summary>COMISIONAMIENTO PMO Y LANZAMIENTO CONTROLADO DE OT</summary>',
+      '<div id="launchReadiness" class="commission-box">',
+      '<div class="commission-head"><div><h4>RUTA SEGURA ANTES DE OPERAR ORDENES DE MANTENIMIENTO</h4><p>ARMA VERIFICA ESTRUCTURA, PLANES ELEGIBLES, PRIMERA CREACION, AUSENCIA DE DUPLICADOS Y TRIGGER. NO INSTALE EL TRIGGER ANTES DE LA VALIDACION.</p></div><span id="launchOverallState" class="commission-state">CONSULTANDO...</span></div>',
+      '<div class="commission-steps">',
+      '<div id="launchStep1" class="commission-step"><span class="num">1</span><strong>ESTRUCTURA FASE 2</strong><span id="launchStep1Text">VALIDANDO HOJAS Y COLUMNAS.</span></div>',
+      '<div id="launchStep2" class="commission-step"><span class="num">2</span><strong>PMO DE PRUEBA LISTO</strong><span id="launchStep2Text">VALIDANDO APROBACION, AM, ACTIVOS Y FECHA.</span></div>',
+      '<div id="launchStep3" class="commission-step"><span class="num">3</span><strong>PRIMER LANZAMIENTO</strong><span id="launchStep3Text">CREAR OTPL CON SNAPSHOTS.</span></div>',
+      '<div id="launchStep4" class="commission-step"><span class="num">4</span><strong>REVISAR OT GENERADA</strong><span id="launchStep4Text">CONFIRMAR PLAN, AM, ACTIVO, FECHA Y PRIORIDAD.</span></div>',
+      '<div id="launchStep5" class="commission-step"><span class="num">5</span><strong>SEGUNDO LANZAMIENTO</strong><span id="launchStep5Text">DEBE CREAR CERO DUPLICADOS.</span></div>',
+      '<div id="launchStep6" class="commission-step"><span class="num">6</span><strong>TRIGGER SEMANAL</strong><span id="launchStep6Text">SOLO DESPUES DE IDEMPOTENCIA CONFIRMADA.</span></div>',
+      '</div>',
+      '<div class="commission-metrics">',
+      '<div class="commission-metric"><b id="metricReadyPlans">0</b><span>PMO LISTOS</span></div>',
+      '<div class="commission-metric"><b id="metricDuePlans">0</b><span>EN HORIZONTE</span></div>',
+      '<div class="commission-metric"><b id="metricBlockedPlans">0</b><span>CON BLOQUEOS</span></div>',
+      '<div class="commission-metric"><b id="metricManualRuns">0</b><span>LANZAMIENTOS MANUALES</span></div>',
+      '<div class="commission-metric"><b id="metricPendingKeys">0</b><span>CLAVES POR VALIDAR</span></div>',
+      '</div>',
+      '<div id="launchIssues" class="commission-issues">CONSULTANDO ESTADO DEL SISTEMA...</div>',
+      '<div class="commission-actions">',
+      '<button id="setupButton" class="btn gray" type="button">CONFIGURAR FASE 2</button>',
+      '<button id="launchButton" class="btn green" type="button">EJECUTAR PRIMER LANZAMIENTO</button>',
+      '<button id="openOTButton" class="btn" type="button">ABRIR ORDENES DE MTTO</button>',
+      '<button id="triggerButton" class="btn orange" type="button">INSTALAR TRIGGER SEMANAL</button>',
+      '</div></div>'
+    ].join('');
+  }
+}
+
+bindUI=function(){
+  ensurePmoV11UI();
+  PMO_V11_BASE_BIND_UI();
+  ['launchReadiness','launchOverallState','launchStep1','launchStep1Text','launchStep2','launchStep2Text','launchStep3','launchStep3Text','launchStep4','launchStep4Text','launchStep5','launchStep5Text','launchStep6','launchStep6Text','metricReadyPlans','metricDuePlans','metricBlockedPlans','metricManualRuns','metricPendingKeys','launchIssues','openOTButton'].forEach(function(id){ui[id]=byId(id);});
+};
+
+function launchStepClass(element,status){
+  element.classList.remove('ok','current','blocked');
+  if(status)element.classList.add(status);
+}
+
+function reasonLabel(key){
+  const map={PMO_INACTIVO:'INACTIVOS',PMO_EN_REVISION:'EN REVISION',NO_APROBADO:'NO APROBADOS',NO_LISTO_LANZAMIENTO:'NO LISTOS',PRIORIDAD_P5_BLOQUEADA:'PRIORIDAD P5',PRIORIDAD_INVALIDA:'PRIORIDAD INVALIDA',SIN_ACTIVIDADES_AM:'SIN AM',SIN_ACTIVOS_MEL:'SIN ACTIVOS',SIN_FECHA_REFERENCIA:'SIN FECHA'};
+  return map[key]||key.replaceAll('_',' ');
+}
+
+function renderLaunchReadiness(){
+  const status=state.launchStatus;
+  if(!status){ui.launchOverallState.textContent='SIN ESTADO';ui.launchOverallState.className='commission-state warn';return;}
+  const structure=Boolean(status.structure&&status.structure.ready);
+  const plans=status.plans||{};
+  const idem=status.idempotence||{};
+  const trigger=status.trigger||{};
+  ui.metricReadyPlans.textContent=String(plans.readyCount||0);
+  ui.metricDuePlans.textContent=String(plans.dueCount||0);
+  ui.metricBlockedPlans.textContent=String(plans.blockedCount||0);
+  ui.metricManualRuns.textContent=String(idem.manualRunCount||0);
+  ui.metricPendingKeys.textContent=String(idem.pendingKeyCount||0);
+  ui.launchStep1Text.textContent=structure?'ESTRUCTURA COMPLETA Y VALIDADA.':'FALTAN HOJAS O COLUMNAS. CONFIGURE UNA SOLA VEZ.';
+  launchStepClass(ui.launchStep1,structure?'ok':'current');
+  const planReady=Number(plans.dueCount||0)>0;
+  ui.launchStep2Text.textContent=planReady?(plans.dueCount+' PMO CON FECHA HASTA '+(plans.horizon||'')):'APRUEBE UN PMO P1-P4 CON AM, ACTIVO Y FECHA DENTRO DEL HORIZONTE.';
+  launchStepClass(ui.launchStep2,!structure?'blocked':(planReady?'ok':'current'));
+  const firstDone=Number(idem.pendingKeyCount||0)>0||Boolean(idem.validated);
+  ui.launchStep3Text.textContent=firstDone?'PRIMERA CREACION REGISTRADA.':'EJECUTE EL PRIMER LANZAMIENTO Y ANOTE LAS OT CREADAS.';
+  launchStepClass(ui.launchStep3,firstDone?'ok':(structure&&planReady?'current':'blocked'));
+  ui.launchStep4Text.textContent=firstDone?'ABRA GESTION OT Y REVISE SNAPSHOTS, ACTIVO, FECHA Y PRIORIDAD.':'SE HABILITA DESPUES DEL PRIMER LANZAMIENTO.';
+  launchStepClass(ui.launchStep4,idem.validated?'ok':(firstDone?'current':'blocked'));
+  ui.launchStep5Text.textContent=idem.validated?'IDEMPOTENCIA CONFIRMADA: UNA OT Y UN LOG POR CLAVE.':(firstDone?'EJECUTE DE NUEVO. DEBE CREAR CERO OT NUEVAS.':'PENDIENTE DEL PRIMER LANZAMIENTO.');
+  launchStepClass(ui.launchStep5,idem.validated?'ok':(firstDone?'current':'blocked'));
+  const unsafeTrigger=Boolean(trigger.installed&&!idem.validated);
+  ui.launchStep6Text.textContent=unsafeTrigger?'TRIGGER INSTALADO PERO BLOQUEADO HASTA REVALIDAR IDEMPOTENCIA.':(trigger.installed?'TRIGGER UNICO INSTALADO PARA LUNES, HORA 00.':(idem.validated?'YA PUEDE INSTALARSE.':'BLOQUEADO HASTA VALIDAR IDEMPOTENCIA.'));
+  launchStepClass(ui.launchStep6,unsafeTrigger?'blocked':(trigger.installed?'ok':(idem.validated?'current':'blocked')));
+  const complete=Boolean(idem.validated&&trigger.installed);
+  ui.launchOverallState.textContent=complete?'LISTO PARA OPERACION OT':String(status.nextStep||'PENDIENTE').replaceAll('_',' ');
+  ui.launchOverallState.className='commission-state '+(complete?'ok':(structure?'warn':'bad'));
+  const reasons=plans.blockedByReason||{};
+  const reasonText=Object.keys(reasons).filter(function(key){return Number(reasons[key])>0;}).map(function(key){return reasonLabel(key)+': '+reasons[key];}).join(' // ');
+  const last=status.lastManual;
+  const lastText=last?('ULTIMO MANUAL: '+(last.createdCount||0)+' CREADAS // '+(last.validation||'')):'SIN LANZAMIENTOS MANUALES REGISTRADOS.';
+  ui.launchIssues.textContent=(reasonText?('BLOQUEOS: '+reasonText+' // '):'')+lastText;
+  ui.setupButton.disabled=!hasPermission('BTN_MTTO_CONFIGURAR')||structure;
+  ui.setupButton.textContent=structure?'FASE 2 CONFIGURADA':'CONFIGURAR FASE 2';
+  ui.launchButton.disabled=!hasPermission('BTN_OT_LANZAR_PMO')||!structure||(!planReady&&!firstDone)||Boolean(idem.validated);
+  ui.launchButton.textContent=idem.validated?'IDEMPOTENCIA VALIDADA':(firstDone?'VALIDAR SEGUNDO LANZAMIENTO':'EJECUTAR PRIMER LANZAMIENTO');
+  ui.triggerButton.disabled=!hasPermission('BTN_MTTO_CONFIGURAR')||!idem.validated||Boolean(trigger.installed);
+  ui.triggerButton.textContent=trigger.installed?'TRIGGER SEMANAL INSTALADO':'INSTALAR TRIGGER SEMANAL';
+  ui.openOTButton.disabled=!(hasPermission('BTN_GESTIONAR_OT')||hasPermission('BTN_OT'))||!status.readyForOTReview;
+}
+
+async function refreshLaunchStatus(showBusy){
+  try{
+    const result=await callApi('mttoLaunchStatus',{}, {loader:showBusy!==false,message:'VERIFICANDO FASE 2'});
+    state.launchStatus=result;
+    renderLaunchReadiness();
+    return result;
+  }catch(error){
+    ui.launchOverallState.textContent='ERROR CONSULTANDO';
+    ui.launchOverallState.className='commission-state bad';
+    ui.launchIssues.textContent='NO FUE POSIBLE VERIFICAR FASE 2: '+friendlyPmoError(error.message);
+    return null;
+  }
+}
+
+setupPhase2=async function(){
+  if(!(await askConfirmation('CONFIGURAR O REPARAR HOJAS Y COLUMNAS DE FASE 2? ESTA ACCION CREA RESPALDOS Y REINICIA LA VALIDACION DE IDEMPOTENCIA.','CONFIGURAR FASE 2')))return;
+  try{
+    const result=await callApi('setupMantenimientoProgramado',{}, {message:'CONFIGURANDO FASE 2',timeout:90000});
+    await refreshLaunchStatus(false);
+    showMessage(result.message+' // TRIGGER: '+(result.trigger||''),'FASE 2 CONFIGURADA');
+  }catch(error){showErrorBanner(friendlyPmoError(error.message));}
+};
+
+launchNow=async function(){
+  const second=state.launchStatus&&state.launchStatus.idempotence&&Number(state.launchStatus.idempotence.pendingKeyCount||0)>0;
+  const question=second?'EJECUTAR EL SEGUNDO LANZAMIENTO? DEBE CREAR CERO OT DUPLICADAS Y VALIDAR UNA OT POR CLAVE.':'EJECUTAR EL PRIMER LANZAMIENTO MANUAL HASTA '+((state.launchStatus&&state.launchStatus.plans&&state.launchStatus.plans.horizon)||'30 DIAS')+'?';
+  if(!(await askConfirmation(question,second?'VALIDAR IDEMPOTENCIA':'PRIMER LANZAMIENTO')))return;
+  try{
+    const result=await callApi('runMttoLaunchNow',{}, {message:second?'VALIDANDO IDEMPOTENCIA':'CREANDO OT DE PRUEBA',timeout:90000});
+    await refreshLaunchStatus(false);
+    showMessage('OT CREADAS: '+(result.createdCount||0)+' // EXISTENTES: '+(result.existingCount||0)+' // '+(result.validation||''),'LANZAMIENTO TERMINADO');
+  }catch(error){showErrorBanner(friendlyPmoError(error.message));}
+};
+
+installTrigger=async function(){
+  if(!(await askConfirmation('INSTALAR UN UNICO TRIGGER SEMANAL LOS LUNES? SOLO CONTINUE SI YA REVISO LAS OT DE PRUEBA.','INSTALAR TRIGGER')))return;
+  try{
+    const result=await callApi('installMttoWeeklyTrigger',{}, {message:'INSTALANDO TRIGGER'});
+    await refreshLaunchStatus(false);
+    showMessage(result.message+' // '+(result.advertencia||''),'TRIGGER SEMANAL');
+  }catch(error){showErrorBanner(friendlyPmoError(error.message));}
+};
+
+applyPermissions=function(){
+  PMO_V11_BASE_APPLY_PERMISSIONS();
+  renderLaunchReadiness();
+};
+
+initializePage=async function(){
+  await PMO_V11_BASE_INITIALIZE();
+  await refreshLaunchStatus(false);
+};
+
+bindEvents=function(){
+  PMO_V11_BASE_BIND_EVENTS();
+  ui.openOTButton.addEventListener('click',function(){
+    if(ui.openOTButton.disabled)return;
+    window.open('gestion_ot.html','_blank','noopener');
+  });
+};
   try{
     bindUI();
     bindEvents();
