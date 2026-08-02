@@ -516,7 +516,7 @@ details.admin-box summary{cursor:pointer;color:var(--navy);font-weight:1000;font
 <script>
 "use strict";
 const API = "https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
-const CACHE_PREFIX = "ARMA_PMO_V09_";
+const CACHE_PREFIX = "ARMA_PMO_V10_";
 const CACHE_TTL_MS = 300000;
 const state = {
   session:null,
@@ -1457,6 +1457,265 @@ bindEvents=function(){
     el.addEventListener('input',markPmoDirty);
     el.addEventListener('change',markPmoDirty);
   });
+};
+
+// === PMO V10: familia unica, trazabilidad y creacion AM dentro del PMO ===
+const PMO_V10_BASE_BIND_UI=bindUI;
+const PMO_V10_BASE_BIND_EVENTS=bindEvents;
+const PMO_V10_BASE_RENDER_LIST=renderList;
+const PMO_V10_BASE_RENDER_PICKER=renderPicker;
+const PMO_V10_BASE_OPEN_PICKER=openPicker;
+const PMO_V10_BASE_APPLY_DETAIL=applyDetail;
+
+function ensurePmoV10UI(){
+  if(!document.getElementById('pmoV10Style')){
+    const style=document.createElement('style');
+    style.id='pmoV10Style';
+    style.textContent=`
+      .version-trace{border-left:5px solid #0ea5e9;border-radius:12px;background:#f0f9ff;padding:10px 12px;margin:0 0 12px;color:#0c4a6e;font-size:10px;font-weight:950;line-height:1.45}
+      .version-trace strong{color:#003b7a}
+      .badge.trace{background:#ede9fe;color:#5b21b6}
+      .badge.review{background:#fff7ed;color:#9a3412}
+      .am-inline-wrap{margin:10px 0;border:1px solid #bfdbfe;border-radius:14px;background:#f8fbff;overflow:hidden}
+      .am-inline-wrap summary{cursor:pointer;padding:12px 14px;color:#003b7a;font-size:11px;font-weight:1000;background:#eff6ff}
+      .am-inline-form{padding:12px}
+      .am-inline-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+      .am-inline-grid .span2{grid-column:span 2}
+      .am-inline-grid .full{grid-column:1/-1}
+      .am-inline-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:10px}
+      #pickerCreateAM.hidden{display:none!important}
+      @media(max-width:760px){
+        .am-inline-grid{grid-template-columns:1fr}
+        .am-inline-grid .span2,.am-inline-grid .full{grid-column:1}
+        .am-inline-actions .btn{width:100%}
+        .version-trace{font-size:13px}
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  const formPanel=document.getElementById('formTitle').closest('.panel');
+  if(formPanel&&!document.getElementById('versionTrace')){
+    const anchor=document.getElementById('permissionSummary');
+    if(anchor)anchor.insertAdjacentHTML('afterend','<div id="versionTrace" class="version-trace">PLAN NUEVO SIN HISTORIAL DE VERSIONES.</div>');
+  }
+
+  const toolbar=document.querySelector('#pickerModal .picker-toolbar');
+  if(toolbar&&!document.getElementById('pickerCreateAM')){
+    document.getElementById('pickerOpenMaster').insertAdjacentHTML(
+      'afterend',
+      '<button id="pickerCreateAM" class="btn green hidden" type="button">CREAR AM EN ESTE PMO</button>'
+    );
+  }
+
+  if(toolbar&&!document.getElementById('amInlineBox')){
+    toolbar.insertAdjacentHTML('afterend',[
+      '<details id="amInlineBox" class="am-inline-wrap hidden">',
+      '<summary>CREAR NUEVA ACTIVIDAD AM SIN SALIR DEL PMO</summary>',
+      '<div class="am-inline-form">',
+      '<div class="am-inline-grid">',
+      '<div class="field span2"><label for="amInlineDescription">DESCRIPCION AM *</label><input id="amInlineDescription" placeholder="ACTIVIDAD A REALIZAR"></div>',
+      '<div class="field"><label for="amInlineDuration">DURACION MIN *</label><input id="amInlineDuration" type="number" min="1" step="1" value="5"></div>',
+      '<div class="field"><label for="amInlinePoint">PUNTO / UBICACION</label><input id="amInlinePoint" placeholder="MAQUINA, TALLER, AREA"></div>',
+      '<div class="field"><label for="amInlineLila">TIPO LILA</label><select id="amInlineLila"><option>LIMPIEZA</option><option>INSPECCION</option><option>LUBRICACION</option><option>AJUSTE</option><option selected>OTRA</option></select></div>',
+      '<div class="field"><label for="amInlineSpecialty">ESPECIALIDAD</label><select id="amInlineSpecialty"></select></div>',
+      '<div class="field"><label for="amInlineMeasurement">REQUIERE MEDICION</label><select id="amInlineMeasurement"><option>NO</option><option>SI</option></select></div>',
+      '<div class="field"><label for="amInlineRange">RANGO</label><input id="amInlineRange" value="NA"></div>',
+      '<div class="field"><label for="amInlineUnit">UNIDAD</label><input id="amInlineUnit" value="NA"></div>',
+      '<div class="field full"><label for="amInlineObservation">OBSERVACION</label><textarea id="amInlineObservation" placeholder="INSTRUCCION O ACLARACION OPCIONAL"></textarea></div>',
+      '</div>',
+      '<div class="am-inline-actions">',
+      '<button id="amInlineClear" class="btn gray" type="button">LIMPIAR</button>',
+      '<button id="amInlineSave" class="btn green" type="button">CREAR Y SELECCIONAR AM</button>',
+      '</div></div></details>'
+    ].join(''));
+  }
+}
+
+bindUI=function(){
+  PMO_V10_BASE_BIND_UI();
+  ensurePmoV10UI();
+  [
+    'versionTrace','pickerCreateAM','amInlineBox','amInlineDescription',
+    'amInlineDuration','amInlinePoint','amInlineLila','amInlineSpecialty',
+    'amInlineMeasurement','amInlineRange','amInlineUnit',
+    'amInlineObservation','amInlineClear','amInlineSave'
+  ].forEach(function(id){ui[id]=byId(id);});
+};
+
+function canCreateAMInline(){
+  return hasPermission('BTN_PMO_ASIGNAR_AM')&&hasPermission('BTN_AM_CREAR');
+}
+
+function fillInlineAMSpecialties(){
+  const values=(state.catalog.especialidades||[]).slice();
+  if(values.indexOf('MULTIDISCIPLINARIA')<0)values.unshift('MULTIDISCIPLINARIA');
+  const current=ui.amInlineSpecialty.value;
+  ui.amInlineSpecialty.innerHTML=values.map(function(value){
+    return '<option value="'+escapeHtml(value)+'">'+escapeHtml(value)+'</option>';
+  }).join('');
+  ui.amInlineSpecialty.value=values.indexOf(current)>=0?current:'MULTIDISCIPLINARIA';
+}
+
+function clearInlineAMForm(){
+  ui.amInlineDescription.value='';
+  ui.amInlineDuration.value='5';
+  ui.amInlinePoint.value='';
+  ui.amInlineLila.value='OTRA';
+  fillInlineAMSpecialties();
+  ui.amInlineMeasurement.value='NO';
+  ui.amInlineRange.value='NA';
+  ui.amInlineUnit.value='NA';
+  ui.amInlineObservation.value='';
+}
+
+function syncInlineAMUI(){
+  const isAM=state.pickerMode==='am';
+  const allowed=isAM&&canCreateAMInline();
+  ui.pickerCreateAM.classList.toggle('hidden',!allowed);
+  ui.amInlineBox.classList.toggle('hidden',!allowed);
+  if(!isAM)ui.amInlineBox.open=false;
+  if(isAM){
+    ui.pickerOpenMaster.textContent='ABRIR MAESTRO AM (AVANZADO)';
+    fillInlineAMSpecialties();
+  }
+}
+
+renderPicker=function(){
+  PMO_V10_BASE_RENDER_PICKER();
+  syncInlineAMUI();
+};
+
+openPicker=async function(mode){
+  const result=await PMO_V10_BASE_OPEN_PICKER(mode);
+  syncInlineAMUI();
+  return result;
+};
+
+async function createInlineAM(){
+  if(state.pickerMode!=='am'){showMessage('ABRA EL SELECTOR DE ACTIVIDADES AM.');return;}
+  if(!canCreateAMInline()){
+    showMessage('SE REQUIEREN LOS PERMISOS CREAR AM Y ASIGNAR AM AL PMO.','SIN PERMISO');
+    return;
+  }
+  const description=String(ui.amInlineDescription.value||'').trim();
+  const duration=Number(ui.amInlineDuration.value||0);
+  if(!description||!(duration>0)){
+    showMessage('DESCRIPCION Y DURACION MAYOR QUE CERO SON OBLIGATORIAS.','DATOS INCOMPLETOS');
+    return;
+  }
+
+  const data={
+    DESCRIPCION_AM:description,
+    DURACION_MIN:duration,
+    PUNTO_UBICACION:ui.amInlinePoint.value,
+    TIPO_LILA:ui.amInlineLila.value,
+    ESPECIALIDAD:ui.amInlineSpecialty.value,
+    REQUIERE_MEDICION:ui.amInlineMeasurement.value,
+    RANGO:ui.amInlineRange.value||'NA',
+    UNIDAD:ui.amInlineUnit.value||'NA',
+    OBSERVACION:ui.amInlineObservation.value,
+    ESTADO_AM:'ACTIVO',
+    recursos:[]
+  };
+
+  try{
+    ui.amInlineSave.disabled=true;
+    const result=await callApi(
+      'pmoCreateAMOption',
+      {data:data},
+      {message:'CREANDO ACTIVIDAD AM'}
+    );
+    const option=result.option;
+    if(!option||!option.id)throw new Error('AM_CREADA_SIN_IDENTIFICADOR');
+
+    const normalizedId=normalize(option.id);
+    const existingIndex=state.pickerAM.findIndex(function(item){
+      return normalize(item.id)===normalizedId;
+    });
+    if(existingIndex>=0)state.pickerAM[existingIndex]=option;
+    else state.pickerAM.unshift(option);
+
+    state.pickerLoaded.am=true;
+    if(state.pendingOrder.indexOf(normalizedId)<0)state.pendingOrder.push(normalizedId);
+    clearInlineAMForm();
+    ui.amInlineBox.open=false;
+    renderPicker();
+    showMessage(
+      (result.message||'AM CREADA')+' // '+(option.codigo||option.id)+
+      '. QUEDO SELECCIONADA; APLIQUE LA SELECCION Y GUARDE EL PMO.',
+      'AM CREADA'
+    );
+  }catch(error){
+    showErrorBanner('NO FUE POSIBLE CREAR LA AM: '+friendlyPmoError(error.message));
+  }finally{
+    ui.amInlineSave.disabled=false;
+  }
+}
+
+function renderVersionTrace(result){
+  const versions=(result&&result.versiones)||[];
+  const operational=(result&&result.versionOperativa)||null;
+  if(!state.current){
+    ui.versionTrace.textContent='PLAN NUEVO SIN HISTORIAL DE VERSIONES.';
+    return;
+  }
+  const root=state.current.ID_PMO_RAIZ||state.current.ID_PMO||'';
+  const working='V'+(state.current.VERSION||1)+' // '+(state.current.ESTADO_APROBACION||'SIN ESTADO');
+  const operative=operational?
+    ('V'+(operational.VERSION||1)+' // '+(operational.ID_PMO||'')+' // APROBADA ACTIVA'):
+    'SIN VERSION APROBADA ACTIVA';
+  ui.versionTrace.innerHTML=
+    '<strong>FAMILIA '+escapeHtml(root)+'</strong> // '+
+    escapeHtml(String(versions.length||1))+' VERSIONES // '+
+    'VERSION ABIERTA: '+escapeHtml(working)+' // OPERATIVA: '+escapeHtml(operative);
+}
+
+applyDetail=function(result){
+  PMO_V10_BASE_APPLY_DETAIL(result);
+  renderVersionTrace(result);
+};
+
+renderList=function(){
+  const rows=filteredRows();
+  ui.listCount.textContent=rows.length+' PLANES';
+  if(!rows.length){
+    ui.pmoList.innerHTML='<div class="empty">SIN PMO PARA MOSTRAR</div>';
+    return;
+  }
+  ui.pmoList.innerHTML=rows.map(function(row){
+    const selected=state.selectedId===row.ID_PMO?' selected':'';
+    const priorityClass=normalize(row.PRIORIDAD)==='P5'?' warn':'';
+    const approvalClass=normalize(row.ESTADO_APROBACION)==='RECHAZADO'?' red':'';
+    const reviewClass=normalize(row.ESTADO_PMO)==='EN_REVISION'?' review':'';
+    const traceCount=Number(row.VERSIONES_FAMILIA||1);
+    return [
+      '<div class="item',selected,'" data-pmo-id="',escapeHtml(row.ID_PMO),'">',
+      '<strong>',escapeHtml(row.CODIGO_PMO||row.ID_PMO),' &mdash; ',escapeHtml(row.DESCRIPCION_PMO),'</strong>',
+      '<small>',
+      '<span class="badge',priorityClass,'">',escapeHtml(row.PRIORIDAD||'SIN PRIORIDAD'),'</span>',
+      '<span class="badge',approvalClass,'">',escapeHtml(row.ESTADO_APROBACION||'SIN ESTADO'),'</span>',
+      '<span class="badge',reviewClass,'">',escapeHtml(row.ESTADO_PMO||'SIN ESTADO PMO'),'</span>',
+      traceCount>1?'<span class="badge trace">TRAZABILIDAD '+traceCount+' VERSIONES</span>':'',
+      'VERSION ',escapeHtml(row.VERSION||1),
+      row.VERSION_OPERATIVA?' // OPERATIVA V'+escapeHtml(row.VERSION_OPERATIVA):'',
+      '</small></div>'
+    ].join('');
+  }).join('');
+};
+
+bindEvents=function(){
+  PMO_V10_BASE_BIND_EVENTS();
+  ui.pickerCreateAM.addEventListener('click',function(){
+    if(!canCreateAMInline()){
+      showMessage('SE REQUIEREN LOS PERMISOS CREAR AM Y ASIGNAR AM AL PMO.','SIN PERMISO');
+      return;
+    }
+    ui.amInlineBox.open=!ui.amInlineBox.open;
+    if(ui.amInlineBox.open)setTimeout(function(){ui.amInlineDescription.focus();},50);
+  });
+  ui.amInlineClear.addEventListener('click',clearInlineAMForm);
+  ui.amInlineSave.addEventListener('click',createInlineAM);
 };
   try{
     bindUI();
