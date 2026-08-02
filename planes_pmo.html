@@ -1825,7 +1825,7 @@ function renderLaunchReadiness(){
   ui.launchStep1Text.textContent=structure?'ESTRUCTURA COMPLETA Y VALIDADA.':'FALTAN HOJAS O COLUMNAS. CONFIGURE UNA SOLA VEZ.';
   launchStepClass(ui.launchStep1,structure?'ok':'current');
   const planReady=Number(plans.dueCount||0)>0;
-  ui.launchStep2Text.textContent=planReady?(plans.dueCount+' PMO CON FECHA HASTA '+(plans.horizon||'')):'APRUEBE UN PMO P1-P4 CON AM, ACTIVO Y FECHA DENTRO DEL HORIZONTE.';
+  ui.launchStep2Text.textContent=planReady?(plans.dueCount+' PMO ACTIVOS APROBADOS CON FECHA HASTA '+(plans.horizon||'')):'NO HAY PMO ACTIVOS APROBADOS CON AM, ACTIVO Y FECHA DENTRO DEL HORIZONTE.';
   launchStepClass(ui.launchStep2,!structure?'blocked':(planReady?'ok':'current'));
   const firstDone=Number(idem.pendingKeyCount||0)>0||Boolean(idem.validated);
   ui.launchStep3Text.textContent=firstDone?'PRIMERA CREACION REGISTRADA.':'EJECUTE EL PRIMER LANZAMIENTO Y ANOTE LAS OT CREADAS.';
@@ -1842,13 +1842,14 @@ function renderLaunchReadiness(){
   ui.launchOverallState.className='commission-state '+(complete?'ok':(structure?'warn':'bad'));
   const reasons=plans.blockedByReason||{};
   const reasonText=Object.keys(reasons).filter(function(key){return Number(reasons[key])>0;}).map(function(key){return reasonLabel(key)+': '+reasons[key];}).join(' // ');
+  const normalizeTextInfo=(Number(plans.priorityToNormalize||0)>0||Number(plans.versionToNormalize||0)>0)?('NORMALIZACION AUTOMATICA: PRIORIDAD P3 '+(plans.priorityToNormalize||0)+' // VERSION '+(plans.versionToNormalize||0)+' // '):'';
   const last=status.lastManual;
   const lastText=last?('ULTIMO MANUAL: '+(last.createdCount||0)+' CREADAS // '+(last.validation||'')):'SIN LANZAMIENTOS MANUALES REGISTRADOS.';
-  ui.launchIssues.textContent=(reasonText?('BLOQUEOS: '+reasonText+' // '):'')+lastText;
+  ui.launchIssues.textContent=normalizeTextInfo+(reasonText?('BLOQUEOS REALES: '+reasonText+' // '):'')+lastText;
   ui.setupButton.disabled=!hasPermission('BTN_MTTO_CONFIGURAR')||structure;
   ui.setupButton.textContent=structure?'FASE 2 CONFIGURADA':'CONFIGURAR FASE 2';
   ui.launchButton.disabled=!hasPermission('BTN_OT_LANZAR_PMO')||!structure||(!planReady&&!firstDone)||Boolean(idem.validated);
-  ui.launchButton.textContent=idem.validated?'IDEMPOTENCIA VALIDADA':(firstDone?'VALIDAR SEGUNDO LANZAMIENTO':'EJECUTAR PRIMER LANZAMIENTO');
+  ui.launchButton.textContent=idem.validated?'IDEMPOTENCIA VALIDADA':(firstDone?(planReady?'CONTINUAR LANZAMIENTO MASIVO':'VALIDAR IDEMPOTENCIA'):'LANZAR TODOS LOS PMO');
   ui.triggerButton.disabled=!hasPermission('BTN_MTTO_CONFIGURAR')||!idem.validated||Boolean(trigger.installed);
   ui.triggerButton.textContent=trigger.installed?'TRIGGER SEMANAL INSTALADO':'INSTALAR TRIGGER SEMANAL';
   ui.openOTButton.disabled=!(hasPermission('BTN_GESTIONAR_OT')||hasPermission('BTN_OT'))||!status.readyForOTReview;
@@ -1856,7 +1857,7 @@ function renderLaunchReadiness(){
 
 async function refreshLaunchStatus(showBusy){
   try{
-    const result=await callApi('mttoLaunchStatus',{}, {loader:showBusy!==false,message:'VERIFICANDO FASE 2'});
+    const result=await callApi('mttoLaunchStatus',{}, {loader:showBusy!==false,message:'VERIFICANDO FASE 2',timeout:60000});
     state.launchStatus=result;
     renderLaunchReadiness();
     return result;
@@ -1879,12 +1880,13 @@ setupPhase2=async function(){
 
 launchNow=async function(){
   const second=state.launchStatus&&state.launchStatus.idempotence&&Number(state.launchStatus.idempotence.pendingKeyCount||0)>0;
-  const question=second?'EJECUTAR EL SEGUNDO LANZAMIENTO? DEBE CREAR CERO OT DUPLICADAS Y VALIDAR UNA OT POR CLAVE.':'EJECUTAR EL PRIMER LANZAMIENTO MANUAL HASTA '+((state.launchStatus&&state.launchStatus.plans&&state.launchStatus.plans.horizon)||'30 DIAS')+'?';
-  if(!(await askConfirmation(question,second?'VALIDAR IDEMPOTENCIA':'PRIMER LANZAMIENTO')))return;
+  const moreDue=state.launchStatus&&state.launchStatus.plans&&Number(state.launchStatus.plans.dueCount||0)>0;
+  const question=(second&&!moreDue)?'VALIDAR IDEMPOTENCIA? NO DEBE CREAR OT NUEVAS Y DEBE EXISTIR UNA OT COMPLETA POR CLAVE.':'LANZAR TODOS LOS PMO ACTIVOS APROBADOS CON FECHA HASTA '+((state.launchStatus&&state.launchStatus.plans&&state.launchStatus.plans.horizon)||'30 DIAS')+'? LAS PRIORIDADES LEGACY VACIAS SE NORMALIZARAN A P3.';
+  if(!(await askConfirmation(question,(second&&!moreDue)?'VALIDAR IDEMPOTENCIA':'LANZAMIENTO MASIVO')))return;
   try{
-    const result=await callApi('runMttoLaunchNow',{}, {message:second?'VALIDANDO IDEMPOTENCIA':'CREANDO OT DE PRUEBA',timeout:90000});
+    const result=await callApi('runMttoLaunchNow',{}, {message:(second&&!moreDue)?'VALIDANDO IDEMPOTENCIA':'LANZANDO PMO ACTIVOS',timeout:240000});
     await refreshLaunchStatus(false);
-    showMessage('OT CREADAS: '+(result.createdCount||0)+' // EXISTENTES: '+(result.existingCount||0)+' // '+(result.validation||''),'LANZAMIENTO TERMINADO');
+    showMessage('PMO OPERATIVOS: '+(result.operationalPlans||0)+' // PMO EN HORIZONTE: '+(result.duePlans||0)+' // OT CREADAS: '+(result.createdCount||0)+' // EXISTENTES: '+(result.existingCount||0)+' // PRIORIDADES/VERSIONES NORMALIZADAS: '+(result.normalizedPlansCount||0)+' // CLAVES LEGACY MIGRADAS: '+(result.migratedLegacyKeysCount||0)+' // '+(result.validation||''),'LANZAMIENTO TERMINADO');
   }catch(error){showErrorBanner(friendlyPmoError(error.message));}
 };
 
