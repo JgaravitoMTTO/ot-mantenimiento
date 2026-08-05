@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="arma-avatar-192.png">
 <script src="arma-pwa-navigation.js" defer data-arma-pwa-navigation="1"></script>
-<title>ARMA | ADMINISTRACION DE USUARIOS</title>
+<title>ARMA | USUARIOS Y ALCANCES V03</title>
 <style>:root{
   --navy:#002b66;--blue:#004b9b;--blue2:#0076d7;--cyan:#00bfd6;
   --green:#18c65b;--green2:#55b52e;--red:#dc2626;--orange:#f59e0b;
@@ -107,7 +107,7 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
 .summary-box{padding:10px;border:1px solid var(--line);border-radius:12px;background:#fff}
 .summary-box span{display:block;color:var(--muted);font-size:9px;font-weight:900}
 .summary-box strong{display:block;margin-top:4px;color:var(--navy);font-size:14px}
-@media(max-width:1150px){.workspace{grid-template-columns:1fr}.users-table{max-height:420px}}
+.scope-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.scope-groups{min-height:130px}.scope-summary{margin-top:8px;padding:10px;border-left:5px solid var(--cyan);border-radius:9px;background:#eefaff;color:var(--navy);font-size:10px;font-weight:900;line-height:1.45}.group-admin{border:1px solid #bcd8ef;background:#f7fbff}.group-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:10px}@media(max-width:1150px){.workspace{grid-template-columns:1fr}.users-table{max-height:420px}}
 @media(max-width:700px){.filters,.form-grid,.access-summary{grid-template-columns:1fr}.field.full{grid-column:1}.btn{min-height:48px;font-size:14px}}</style>
 </head>
 <body>
@@ -121,7 +121,7 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
   <article class="panel">
     <div class="panel-title"><h2>LISTA DE USUARIOS</h2><span id="listStatus" class="status">0 USUARIOS</span></div>
     <div class="filters"><input id="filterQ" placeholder="BUSCAR USUARIO, PERSONA, CORREO O ID"><select id="filterLevel"><option value="">TODOS LOS NIVELES</option></select><select id="filterActive"><option value="">TODOS LOS ESTADOS</option><option value="SI">ACTIVOS</option><option value="NO">SUSPENDIDOS</option></select><button id="btnSearch" class="btn">BUSCAR</button></div>
-    <div class="table-wrap users-table"><table><thead><tr><th>USUARIO</th><th>NOMBRE</th><th>NIVEL</th><th>ACTIVO</th><th>ID PERSONA</th><th>CORREO</th><th>PERMISOS</th></tr></thead><tbody id="usersRows"></tbody></table></div>
+    <div class="table-wrap users-table"><table><thead><tr><th>USUARIO</th><th>NOMBRE</th><th>NIVEL</th><th>ACTIVO</th><th>ID PERSONA</th><th>CORREO</th><th>ALCANCE</th><th>PERMISOS</th></tr></thead><tbody id="usersRows"></tbody></table></div>
     <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px"><button id="btnReload" class="btn gray">ACTUALIZAR</button><button id="btnNew" class="btn green">NUEVO USUARIO</button></div>
   </article>
   <article class="panel">
@@ -138,12 +138,25 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
       <div><label>DEBE CAMBIAR CLAVE</label><select id="userMustChange"><option value="SI">SI</option><option value="NO">NO</option></select></div>
       <div class="field full"><label>CLAVE TEMPORAL / NUEVA CLAVE</label><input id="userPassword" type="password" placeholder="MINIMO 8 CARACTERES"></div>
     </div></div>
+    <div class="form-section"><h3>ALCANCE DE DATOS</h3><div class="scope-grid">
+      <div><label>MODO DE ALCANCE</label><select id="userScopeMode"><option value="PERSONA">HEREDAR DE LA PERSONA</option><option value="GRUPOS">USAR GRUPOS</option><option value="GLOBAL">GLOBAL - SOLO ADMIN / SUPER_ADMIN</option></select></div>
+      <div><label>GRUPOS AUTORIZADOS</label><select id="userScopeGroups" class="scope-groups" multiple></select></div>
+    </div><div id="userScopeSummary" class="scope-summary">EL ALCANCE SE VALIDARA EN BACKEND PARA CADA OT.</div></div>
+    <div id="scopeGroupAdmin" class="form-section group-admin"><h3>ADMINISTRAR GRUPOS DE EMPRESA / PLANTA / ACTIVOS</h3><div class="form-grid">
+      <div><label>GRUPO EXISTENTE</label><select id="scopeGroupSelect"><option value="">NUEVO GRUPO</option></select></div>
+      <div><label>NOMBRE DEL GRUPO</label><input id="scopeGroupName" placeholder="EJ: PLANEACION PLANTA 2"></div>
+      <div><label>EMPRESAS</label><select id="scopeGroupCompanies" multiple class="scope-groups"></select></div>
+      <div><label>PLANTAS</label><select id="scopeGroupPlants" multiple class="scope-groups"></select></div>
+      <div class="field full"><label>AREAS (SEPARADAS POR |)</label><input id="scopeGroupAreas"></div>
+      <div class="field full"><label>ACTIVOS / TAG / ID (SEPARADOS POR |)</label><textarea id="scopeGroupAssets"></textarea></div>
+      <div class="field full"><label>OBSERVACION</label><textarea id="scopeGroupObservation"></textarea></div>
+    </div><div class="group-actions"><button id="btnScopeNew" class="btn gray">NUEVO GRUPO</button><button id="btnScopeDeactivate" class="btn red">INACTIVAR</button><button id="btnScopeSave" class="btn green">GUARDAR GRUPO</button></div></div>
     <div class="form-section"><h3>RESUMEN DEL NIVEL</h3><div class="access-summary"><div class="summary-box"><span>PERMISOS ACTIVOS</span><strong id="sumPermissions">0</strong></div><div class="summary-box"><span>FILTROS RESTRINGIDOS</span><strong id="sumFilters">0</strong></div><div class="summary-box"><span>ESTADO CUENTA</span><strong id="sumStatus">-</strong></div></div></div>
     <div class="form-section"><h3>AUDITORIA</h3><div class="form-grid"><div><label>ULTIMO LOGIN</label><input id="userLastLogin" readonly></div><div class="field full"><label>OBSERVACION</label><textarea id="userObservation" readonly></textarea></div></div></div>
     <div class="form-actions"><button id="btnToggle" class="btn orange">ACTIVAR / SUSPENDER</button><button id="btnReset" class="btn">RESTABLECER CLAVE</button><button id="btnDelete" class="btn red">ELIMINAR</button><button id="btnSave" class="btn green">CREAR USUARIO</button></div>
   </article>
 </section>
-<footer class="footer">A.R.M.A. // USUARIOS // ARMA_DATABASE EN LINEA // 2026-08-01 22:08:33</footer>
+<footer class="footer">A.R.M.A. // USUARIOS // ARMA_DATABASE EN LINEA // 2026-08-05 12:00:47</footer>
 </main>
 <script>const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
 const ARMA_UI_MANIFEST={
@@ -154,7 +167,8 @@ const ARMA_UI_MANIFEST={
     {key:'BTN_USUARIOS_EDITAR',label:'EDITAR USUARIO',group:'OPERACIONES'},
     {key:'BTN_USUARIOS_ACTIVAR',label:'ACTIVAR O SUSPENDER',group:'OPERACIONES'},
     {key:'BTN_USUARIOS_RESETEAR_CLAVE',label:'RESTABLECER CLAVE',group:'SEGURIDAD'},
-    {key:'BTN_USUARIOS_ELIMINAR',label:'ELIMINAR USUARIO',group:'SEGURIDAD'}
+    {key:'BTN_USUARIOS_ELIMINAR',label:'ELIMINAR USUARIO',group:'SEGURIDAD'},
+    {key:'BTN_USUARIOS_GESTIONAR_ALCANCE',label:'GESTIONAR GRUPOS Y ALCANCE DE DATOS',group:'ALCANCE'}
   ],
   filters:[
     {id:'USUARIOS_NIVEL',label:'NIVEL DE USUARIO',provider:'NIVELES_USUARIO',type:'SELECT_MULTIPLE',order:10},
@@ -162,7 +176,7 @@ const ARMA_UI_MANIFEST={
   ]
 };
 let armaSession={user:'',nombre:'',nivel:'',permissions:{},token:''};
-let appData={users:[],levels:[],persons:[]};
+let appData={users:[],levels:[],persons:[],scopeGroups:[],scopeCatalog:{companies:[],plants:[],areas:[],assets:[]},scopeModes:[]};
 let selectedUser=null;
 let createMode=false;
 let dialogResolver=null;
@@ -198,8 +212,8 @@ async function validateSession(){
 async function loadBootstrap(selectName){
   let data=await api('adminUsersBootstrap',{},'CARGANDO USUARIOS Y NIVELES...');
   if(!data.ok)throw new Error(data.error||'NO SE PUDO CARGAR');
-  appData={users:data.users||[],levels:data.levels||[],persons:data.persons||[]};
-  fillFilters();
+  appData={users:data.users||[],levels:data.levels||[],persons:data.persons||[],scopeGroups:data.scopeGroups||[],scopeCatalog:data.scopeCatalog||{companies:[],plants:[],areas:[],assets:[]},scopeModes:data.scopeModes||[]};
+  fillFilters();fillScopeCatalogs();
   if(selectName&&appData.users.some(u=>normalize(u.user)===normalize(selectName)))selectUser(selectName);else beginNew(false);
   renderUsers();
   document.getElementById('listStatus').textContent=appData.users.length+' USUARIOS';
@@ -216,6 +230,66 @@ function fillFilters(){
   person.innerHTML='<option value="">SELECCIONE PERSONA CREADA EN PERSONAL</option>'+appData.persons.map(p=>{let linked=normalize(p.USER_ARMA);let disabled=linked?' disabled':'';let suffix=linked?' // YA VINCULADA: '+linked:'';return `<option value="${esc(p.ID_PERSONA)}"${disabled}>${esc(p.NOMBRE_COMPLETO)} // ${esc(p.ID_PERSONA)}${esc(suffix)}</option>`;}).join('');
 }
 
+function splitScope(v){return String(v||'').split(/[|,;\n]+/).map(normalize).filter(Boolean);}
+function selectedValues(id){return Array.from(document.getElementById(id).selectedOptions||[]).map(o=>o.value);}
+function setSelectedValues(id,values){let wanted=splitScope(Array.isArray(values)?values.join('|'):values);Array.from(document.getElementById(id).options||[]).forEach(o=>o.selected=wanted.indexOf(normalize(o.value))>=0);}
+function scopeGroupById(id){return appData.scopeGroups.find(g=>normalize(g.ID_GRUPO)===normalize(id));}
+function fillScopeCatalogs(){
+  let activeGroups=appData.scopeGroups.filter(g=>normalize(g.ACTIVO||'SI')==='SI');
+  let userGroups=document.getElementById('userScopeGroups');
+  userGroups.innerHTML=activeGroups.map(g=>`<option value="${esc(g.ID_GRUPO)}">${esc(g.NOMBRE_GRUPO)} // ${esc(g.PLANTAS||g.EMPRESAS||'')}</option>`).join('');
+  let groupSelect=document.getElementById('scopeGroupSelect');
+  groupSelect.innerHTML='<option value="">NUEVO GRUPO</option>'+appData.scopeGroups.map(g=>`<option value="${esc(g.ID_GRUPO)}">${esc(g.NOMBRE_GRUPO)} // ${esc(g.ACTIVO)}</option>`).join('');
+  let companies=document.getElementById('scopeGroupCompanies');
+  companies.innerHTML=(appData.scopeCatalog.companies||[]).map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
+  let plants=document.getElementById('scopeGroupPlants');
+  plants.innerHTML=(appData.scopeCatalog.plants||[]).map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
+  document.getElementById('scopeGroupAdmin').classList.toggle('hidden',!hasPerm('BTN_USUARIOS_GESTIONAR_ALCANCE','BTN_ADMIN_USUARIOS'));
+}
+function resetScopeGroup(){
+  document.getElementById('scopeGroupSelect').value='';
+  document.getElementById('scopeGroupName').value='';
+  setSelectedValues('scopeGroupCompanies',[]);
+  setSelectedValues('scopeGroupPlants',[]);
+  document.getElementById('scopeGroupAreas').value='';
+  document.getElementById('scopeGroupAssets').value='';
+  document.getElementById('scopeGroupObservation').value='';
+}
+function loadScopeGroup(){
+  let g=scopeGroupById(document.getElementById('scopeGroupSelect').value);
+  if(!g){resetScopeGroup();return;}
+  document.getElementById('scopeGroupName').value=g.NOMBRE_GRUPO||'';
+  setSelectedValues('scopeGroupCompanies',g.EMPRESAS||'');
+  setSelectedValues('scopeGroupPlants',g.PLANTAS||'');
+  document.getElementById('scopeGroupAreas').value=g.AREAS||'';
+  document.getElementById('scopeGroupAssets').value=g.ACTIVOS||'';
+  document.getElementById('scopeGroupObservation').value=g.OBSERVACION||'';
+}
+function updateScopeModeOptions(){let level=normalize(document.getElementById('userLevel').value);let globalOption=Array.from(document.getElementById('userScopeMode').options).find(o=>o.value==='GLOBAL');let allowed=['ADMIN','SUPER_ADMIN'].indexOf(level)>=0||(selectedUser&&selectedUser.protegido);if(globalOption)globalOption.disabled=!allowed;if(!allowed&&document.getElementById('userScopeMode').value==='GLOBAL')document.getElementById('userScopeMode').value='PERSONA';}
+function updateScopeSummary(){
+  let mode=document.getElementById('userScopeMode').value||'PERSONA';
+  let groups=selectedValues('userScopeGroups');
+  let person=personById(document.getElementById('userIdPersona').value)||{};
+  let text=mode==='GLOBAL'?'ACCESO GLOBAL A TODAS LAS EMPRESAS, PLANTAS Y ACTIVOS.':mode==='GRUPOS'?('GRUPOS: '+(groups.join(' // ')||'NINGUNO SELECCIONADO')):('HEREDA PERSONA: '+(person.EMPRESA_ASIGNADA||'')+' // '+(person.PLANTA_ASIGNADA||'SIN PLANTA'));
+  document.getElementById('userScopeSummary').textContent=text+' // EL BACKEND VALIDARA NUEVAMENTE CADA CONSULTA Y TRANSICION.';
+  document.getElementById('userScopeGroups').disabled=mode!=='GRUPOS'||!(createMode?actionAllowed('BTN_USUARIOS_CREAR'):actionAllowed('BTN_USUARIOS_EDITAR'));
+}
+async function saveScopeGroup(){
+  if(!hasPerm('BTN_USUARIOS_GESTIONAR_ALCANCE','BTN_ADMIN_USUARIOS'))return toast('NO TIENE PERMISO PARA GESTIONAR ALCANCES.');
+  let data={ID_GRUPO:document.getElementById('scopeGroupSelect').value,NOMBRE_GRUPO:document.getElementById('scopeGroupName').value,EMPRESAS:selectedValues('scopeGroupCompanies').join('|'),PLANTAS:selectedValues('scopeGroupPlants').join('|'),AREAS:document.getElementById('scopeGroupAreas').value,ACTIVOS:document.getElementById('scopeGroupAssets').value,OBSERVACION:document.getElementById('scopeGroupObservation').value,ACTIVO:'SI'};
+  if(!data.NOMBRE_GRUPO)return toast('DIGITE EL NOMBRE DEL GRUPO.');
+  let r=await api('saveScopeGroup',{data},'GUARDANDO GRUPO DE ALCANCE...');
+  if(!r.ok)return toast(r.error||'NO FUE POSIBLE GUARDAR EL GRUPO.');
+  toast(r.message||'GRUPO GUARDADO');await loadBootstrap(selectedUser&&selectedUser.user);
+}
+async function deactivateScopeGroup(){
+  let id=document.getElementById('scopeGroupSelect').value;if(!id)return toast('SELECCIONE UN GRUPO.');
+  let ok=await dialog('INACTIVAR GRUPO','LOS USUARIOS ASIGNADOS DEJARAN DE HEREDAR ESTE ALCANCE.','INACTIVAR','CANCELAR');if(!ok)return;
+  let r=await api('deactivateScopeGroup',{idGrupo:id},'INACTIVANDO GRUPO...');
+  if(!r.ok)return toast(r.error||'NO FUE POSIBLE INACTIVAR.');
+  toast(r.message||'GRUPO INACTIVADO');await loadBootstrap(selectedUser&&selectedUser.user);
+}
+
 function filteredUsers(){
   let q=normalize(document.getElementById('filterQ').value);
   let level=normalize(document.getElementById('filterLevel').value);
@@ -228,7 +302,7 @@ function filteredUsers(){
 
 function renderUsers(){
   let rows=filteredUsers();
-  document.getElementById('usersRows').innerHTML=rows.map(u=>`<tr data-user="${esc(u.user)}" class="${selectedUser&&normalize(selectedUser.user)===normalize(u.user)?'selected':''}"><td><strong>${esc(u.user)}</strong>${u.protegido?'<br><span class="badge gray">PROTEGIDO</span>':''}</td><td>${esc(u.nombre)}</td><td>${esc(u.nivel)}</td><td><span class="badge ${u.activo==='SI'?'green':'red'}">${esc(u.activo)}</span></td><td>${esc(u.idPersona)}</td><td>${esc(u.correo)}</td><td>${u.permissionCount||0}</td></tr>`).join('')||'<tr><td colspan="7">SIN RESULTADOS</td></tr>';
+  document.getElementById('usersRows').innerHTML=rows.map(u=>`<tr data-user="${esc(u.user)}" class="${selectedUser&&normalize(selectedUser.user)===normalize(u.user)?'selected':''}"><td><strong>${esc(u.user)}</strong>${u.protegido?'<br><span class="badge gray">PROTEGIDO</span>':''}</td><td>${esc(u.nombre)}</td><td>${esc(u.nivel)}</td><td><span class="badge ${u.activo==='SI'?'green':'red'}">${esc(u.activo)}</span></td><td>${esc(u.idPersona)}</td><td>${esc(u.correo)}</td><td>${esc(u.modoAlcance||'PERSONA')}${u.gruposAlcance?'<br><small>'+esc(u.gruposAlcance)+'</small>':''}</td><td>${u.permissionCount||0}</td></tr>`).join('')||'<tr><td colspan="8">SIN RESULTADOS</td></tr>';
   document.querySelectorAll('#usersRows tr[data-user]').forEach(tr=>tr.addEventListener('click',()=>selectUser(tr.dataset.user)));
   document.getElementById('listStatus').textContent=rows.length+' DE '+appData.users.length+' USUARIOS';
 }
@@ -248,9 +322,11 @@ function beginNew(focus=true){
   document.getElementById('userMustChange').value='SI';
   document.getElementById('userLastLogin').value='';
   document.getElementById('userObservation').value='';
+  document.getElementById('userScopeMode').value='PERSONA';
+  setSelectedValues('userScopeGroups',[]);
   document.getElementById('btnSave').textContent='CREAR USUARIO';
   setActionButtons();
-  renderUsers();updateSummary();
+  renderUsers();updateSummary();updateScopeSummary();
   if(focus)document.getElementById('personSelect').focus();
 }
 
@@ -272,6 +348,8 @@ function selectUser(user){
   document.getElementById('userPassword').value='';
   document.getElementById('userLastLogin').value=formatDate(u.ultimoLogin);
   document.getElementById('userObservation').value=u.observacion||'';
+  document.getElementById('userScopeMode').value=u.modoAlcance||'PERSONA';
+  setSelectedValues('userScopeGroups',u.gruposAlcance||'');
   document.getElementById('btnSave').textContent='GUARDAR CAMBIOS';
   setActionButtons();renderUsers();updateSummary();
 }
@@ -287,6 +365,9 @@ function setActionButtons(){
   document.getElementById('userLevel').disabled=!createMode&&(!actionAllowed('BTN_USUARIOS_EDITAR')||protectedUser);
   document.getElementById('userActive').disabled=!createMode&&(!actionAllowed('BTN_USUARIOS_EDITAR')||protectedUser);
   document.getElementById('userMustChange').disabled=!createMode&&(!actionAllowed('BTN_USUARIOS_EDITAR')||protectedUser);
+  document.getElementById('userScopeMode').disabled=!createMode&&(!actionAllowed('BTN_USUARIOS_EDITAR')||protectedUser);
+  document.getElementById('userScopeGroups').disabled=protectedUser||document.getElementById('userScopeMode').value!=='GRUPOS'||!(createMode?actionAllowed('BTN_USUARIOS_CREAR'):actionAllowed('BTN_USUARIOS_EDITAR'));
+  ['btnScopeNew','btnScopeDeactivate','btnScopeSave'].forEach(id=>document.getElementById(id).disabled=!hasPerm('BTN_USUARIOS_GESTIONAR_ALCANCE','BTN_ADMIN_USUARIOS'));
 }
 
 function updateSummary(){
@@ -294,6 +375,7 @@ function updateSummary(){
   document.getElementById('sumPermissions').textContent=level.permissionCount||0;
   document.getElementById('sumFilters').textContent=level.filterRuleCount||0;
   document.getElementById('sumStatus').textContent=document.getElementById('userActive').value||'-';
+  updateScopeModeOptions();updateScopeSummary();
 }
 
 function onPersonChange(){
@@ -305,6 +387,7 @@ function onPersonChange(){
   document.getElementById('identityName').textContent=p.NOMBRE_COMPLETO||'NUEVO USUARIO';
   document.getElementById('identitySub').textContent=(p.ID_PERSONA||'')+' // '+(p.CARGO||'')+' // '+(p.PLANTA_ASIGNADA||'');
   if(!document.getElementById('userName').value)document.getElementById('userName').value=suggestUser(p.NOMBRE_COMPLETO||'');
+  updateScopeSummary();
 }
 
 function suggestUser(name){
@@ -320,11 +403,14 @@ async function saveUser(){
     correo:document.getElementById('userMail').value,
     nivel:document.getElementById('userLevel').value,
     activo:document.getElementById('userActive').value,
-    debeCambiarClave:document.getElementById('userMustChange').value
+    debeCambiarClave:document.getElementById('userMustChange').value,
+    modoAlcance:document.getElementById('userScopeMode').value,
+    gruposAlcance:selectedValues('userScopeGroups')
   };
   if(createMode)data.password=document.getElementById('userPassword').value;
   if(!data.user||!data.nivel||(!data.idPersona&&createMode)){toast('COMPLETE USUARIO, PERSONA Y NIVEL.');return;}
   if(createMode&&!data.password){toast('DIGITE UNA CLAVE TEMPORAL.');return;}
+  if(data.modoAlcance==='GRUPOS'&&!data.gruposAlcance.length){toast('SELECCIONE AL MENOS UN GRUPO DE ALCANCE.');return;}
   let ok=await dialog(createMode?'CREAR USUARIO':'GUARDAR CAMBIOS',createMode?'SE CREARA EL USUARIO Y SE VINCULARA A PERSONAL.':'SE ACTUALIZARA EL USUARIO SELECCIONADO.','CONTINUAR','CANCELAR');if(!ok)return;
   let wasCreate=createMode;let targetUser=data.user;
   let result=await api(wasCreate?'createUser':'updateUserAdmin',{userData:data},wasCreate?'CREANDO USUARIO...':'GUARDANDO CAMBIOS...');
@@ -371,6 +457,12 @@ function bind(){
   document.getElementById('personSelect').addEventListener('change',onPersonChange);
   document.getElementById('userLevel').addEventListener('change',updateSummary);
   document.getElementById('userActive').addEventListener('change',updateSummary);
+  document.getElementById('userScopeMode').addEventListener('change',()=>{setActionButtons();updateScopeSummary();});
+  document.getElementById('userScopeGroups').addEventListener('change',updateScopeSummary);
+  document.getElementById('scopeGroupSelect').addEventListener('change',loadScopeGroup);
+  document.getElementById('btnScopeNew').addEventListener('click',resetScopeGroup);
+  document.getElementById('btnScopeSave').addEventListener('click',saveScopeGroup);
+  document.getElementById('btnScopeDeactivate').addEventListener('click',deactivateScopeGroup);
   document.getElementById('dialogAccept').addEventListener('click',()=>closeDialog(true));
   document.getElementById('dialogCancel').addEventListener('click',()=>closeDialog(false));
 }
