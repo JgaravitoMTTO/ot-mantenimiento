@@ -1,9 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ARMA | PERSONAL</title>
+  <title>ARMA | PERSONAL V20</title>
   <style>
 /* ARMA_VISUAL_ZOOM_75 */ html{zoom:75%;}
 :root{--blue:#004b9b;--blue2:#0076d7;--navy:#002b66;--green:#55b52e;--green2:#00d65f;--cyan:#00bfd6;--line:#dbe5f0;--text:#0f172a;--muted:#64748b;--shadow:0 14px 28px rgba(0,43,102,.12);--soft:0 5px 14px rgba(15,23,42,.12);--bg:#eef3f9;--surface:#fff}
@@ -111,7 +111,7 @@ tr:hover{background:#d9ecff;cursor:pointer}
 .footer-sep{color:#9dffbf;font-weight:950}
 @media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}.photo-box{grid-template-columns:1fr}.photo-actions{grid-template-columns:1fr}}
 @media(max-width:700px){.action-grid,.filters,.form-grid{grid-template-columns:1fr}.main{padding:10px}.logo-pelex{height:58px}.logo-arma{height:64px}.hero{align-items:stretch;flex-direction:column}.hero-home-card{width:100%;max-width:none}.detail-create-row{justify-content:stretch}.create-person-small{width:100%}}
-  </style>
+  .turno-policy{margin:10px 0;padding:11px 13px;border-left:5px solid var(--cyan);border-radius:10px;background:#effaff;color:var(--navy);font-size:11px;font-weight:850;line-height:1.45}</style>
 </head>
 <body>
 <div id="armaLoader" class="arma-loader hidden">
@@ -173,14 +173,14 @@ tr:hover{background:#d9ecff;cursor:pointer}
           </div>
         </div>
       </div>
-      <div id="personalForm" class="form-sections"></div>
+      <div class="turno-policy"><strong>POLITICA DE TURNOS:</strong> LA COLUMNA SE CREA VACIA SOLO PARA PERSONAL PROGRAMABLE Y LOS TURNOS SE ASIGNAN MANUALMENTE. JEFE DE MANTENIMIENTO, GERENTE, COORDINADOR SG-SST Y ASISTENTE ADMINISTRATIVA NO GENERAN COLUMNA.</div><div id="personalForm" class="form-sections"></div>
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap">
         <button class="btn gray" type="button" onclick="clearForm()">LIMPIAR</button>
         <button class="btn green" id="btnSave" type="button" data-perm="BTN_PERSONAL_EDITAR" data-arma-access="BTN_PERSONAL_EDITAR" onclick="saveForm()">GUARDAR CAMBIOS</button>
       </div>
     </section>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-01 22:08:26</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-05 12:02:45</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -213,8 +213,8 @@ const SECTIONS=[
     ["NOMBRES","NOMBRES","text"],["APELLIDOS","APELLIDOS","text"],["NOMBRE_COMPLETO","NOMBRE COMPLETO","readonly"]
   ]},
   {id:"LAB",title:"INFORMACION LABORAL",fields:[
-    ["CARGO","CARGO","text"],["TURNO_BASE","TURNO BASE","select"],["SALARIO","SALARIO","number"],["PLANTA_ASIGNADA","PLANTA ASIGNADA","select"],
-    ["AREA_ASIGNADA","AREA ASIGNADA","select"],["MAQUINAS_ASIGNADAS","MAQUINAS ASIGNADAS","readonly"],["TIPO_CONTRATO","TIPO CONTRATO","select"],["INICIO_CONTRATO","INICIO CONTRATO","date"],["ANTIGUEDAD_ANIOS","ANTIGUEDAD ANIOS","readonly"]
+    ["CARGO","CARGO","text"],["TURNO_BASE","TURNO BASE (REFERENCIA, NO AUTOLLENA)","select"],["SALARIO","SALARIO","number"],["EMPRESA_ASIGNADA","EMPRESA DERIVADA","readonly"],["PLANTA_ASIGNADA","PLANTA ASIGNADA","select"],
+    ["AREA_ASIGNADA","AREA ASIGNADA","select"],["PROGRAMABLE_MTTO","PROGRAMABLE EN OT / TURNOS","readonly"],["MAQUINAS_ASIGNADAS","MAQUINAS ASIGNADAS","readonly"],["TIPO_CONTRATO","TIPO CONTRATO","select"],["INICIO_CONTRATO","INICIO CONTRATO","date"],["ANTIGUEDAD_ANIOS","ANTIGUEDAD ANIOS","readonly"]
   ]},
   {id:"CONTACTO",title:"CONTACTO Y EMERGENCIA",fields:[
     ["CELULAR","CELULAR","text"],["CORREO","CORREO","email"],["CONTACTO_EMERGENCIA","CONTACTO EMERGENCIA","text"],["CEL_EMERGENCIA","CEL EMERGENCIA","text"]
@@ -233,7 +233,7 @@ const SECTIONS=[
   ]}
 ];
 const REQUIRED_CREATE=["IDENTIFICACION","NOMBRES","APELLIDOS","CARGO","ESTADO_PERSONA","PLANTA_ASIGNADA","AREA_ASIGNADA","TIPO_CONTRATO","INICIO_CONTRATO"];
-const IMMUTABLE=["ID_PERSONA","USER_ARMA","MAQUINAS_ASIGNADAS","ALCANCE_PLANTAS","ALCANCE_AREAS","ALCANCE_MAQUINAS","ANTIGUEDAD_ANIOS","EDAD","FECHA_CREACION","FECHA_ACTUALIZACION","NOMBRE_COMPLETO"];
+const IMMUTABLE=["ID_PERSONA","USER_ARMA","EMPRESA_ASIGNADA","PROGRAMABLE_MTTO","MAQUINAS_ASIGNADAS","ALCANCE_PLANTAS","ALCANCE_AREAS","ALCANCE_MAQUINAS","ANTIGUEDAD_ANIOS","EDAD","FECHA_CREACION","FECHA_ACTUALIZACION","NOMBRE_COMPLETO"];
 const SELF_EDIT=["SALARIO","CELULAR","CORREO","EPS","RH","CONTACTO_EMERGENCIA","CEL_EMERGENCIA","TALLA_BOTAS","TALLA_CAMISA","TALLA_CHAQUETA","TALLA_PANTALON","OBSERVACION"];
 function esc(v){let d=document.createElement("div");d.textContent=String(v==null?"":v);return d.innerHTML;}
 function normalizePerms(p){let out={};p=p||{};Object.keys(p).forEach(k=>out[String(k).toUpperCase()]=p[k]===true||String(p[k]).toUpperCase()==="SI");return out;}
@@ -332,7 +332,7 @@ function validateCreate(data){
   if(correo&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)){alert("EL CORREO NO TIENE FORMATO VALIDO.");return false;}
   return true;
 }
-async function saveForm(){let data=collectForm();if(currentMode==="CREATE"&&!validateCreate(data))return;setStatus("formStatus","GUARDANDO...");try{let res=currentMode==="CREATE"?await api("createPersona",{data:data},"CREANDO PERSONA..."):await api("savePersona",{idPersona:currentId,data:data},"GUARDANDO PERSONA...");if(!res.ok){setStatus("formStatus",res.error||"NO FUE POSIBLE GUARDAR");return;}setStatus("formStatus",res.message||"GUARDADO");if(res.idPersona){currentId=res.idPersona;currentMode="EDIT";openPerson(currentId);}if(hasPerm("BTN_PERSONAL_VER"))loadList();}catch(e){setStatus("formStatus","ERROR DE CONEXION");}}
+function turnoResultMessage(res){const c=(res&&res.turnoColumn)||{};if(c.created)return"COLUMNA DE TURNOS CREADA VACIA. ASIGNE LOS TURNOS MANUALMENTE.";if(c.exists)return"COLUMNA DE TURNOS EXISTENTE. VERIFIQUE LA PROGRAMACION MANUAL.";if(c.skipped&&String(c.reason||"").indexOf("CARGO_NO_PROGRAMABLE")>=0)return"CARGO NO PROGRAMABLE: NO SE CREO COLUMNA EN TURNOS.";if(res&&res.turnoReminder)return String(res.turnoReminder).replace(/_/g," ");return"";}async function saveForm(){let data=collectForm();if(currentMode==="CREATE"&&!validateCreate(data))return;setStatus("formStatus","GUARDANDO...");try{let res=currentMode==="CREATE"?await api("createPersona",{data:data},"CREANDO PERSONA..."):await api("savePersona",{idPersona:currentId,data:data},"GUARDANDO PERSONA...");if(!res.ok){setStatus("formStatus",res.error||"NO FUE POSIBLE GUARDAR");return;}const reminder=turnoResultMessage(res);setStatus("formStatus",(res.message||"GUARDADO")+(reminder?" // "+reminder:""));if(res.idPersona){currentId=res.idPersona;currentMode="EDIT";await openPerson(currentId);}if(hasPerm("BTN_PERSONAL_VER"))loadList();}catch(e){setStatus("formStatus","ERROR DE CONEXION: "+(e.message||e));}}
 function fileToBase64(file){return new Promise(function(resolve,reject){let r=new FileReader();r.onload=function(){let s=String(r.result||"");resolve(s.indexOf(",")>=0?s.split(",")[1]:s);};r.onerror=reject;r.readAsDataURL(file);});}
 async function uploadPhoto(){if(!currentId){alert("PRIMERO GUARDE O SELECCIONE UNA PERSONA.");return;}let inp=document.getElementById("photoFile");let file=inp&&inp.files?inp.files[0]:null;if(!file){alert("SELECCIONE UNA IMAGEN.");return;}if(!/^image\/(jpeg|jpg|png|webp)$/i.test(file.type||"")){alert("SOLO SE PERMITEN IMAGENES JPG, PNG O WEBP.");return;}if(file.size>5*1024*1024){alert("LA FOTO NO DEBE SUPERAR 5 MB.");return;}try{let base64=await fileToBase64(file);let res=await api("uploadPersonaFoto",{idPersona:currentId,fileName:file.name,mimeType:file.type,base64:base64},"SUBIENDO FOTOGRAFIA...");if(!res.ok){setStatus("formStatus",res.error||"NO FUE POSIBLE SUBIR LA FOTO");return;}updatePhoto(res.fotoUrl);currentPersona.FOTO_URL=res.fotoUrl;setStatus("formStatus","FOTOGRAFIA ACTUALIZADA");inp.value="";if(hasPerm("BTN_PERSONAL_VER"))loadList();}catch(e){setStatus("formStatus","ERROR AL SUBIR FOTOGRAFIA");}}
 function clearForm(){currentId="";currentMode="VIEW";renderForm({},"VIEW",false,"VIEW");setStatus("formStatus","FORMULARIO LIMPIO");}
