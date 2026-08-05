@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V26.8 | BUILD: 2026-08-02 21:44:51 -->
+<!-- ARMA RT MODULE V26.9 | BUILD: 2026-08-05 09:43:39 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -195,7 +195,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-02 21:44:51</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-05 09:43:39</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -269,16 +269,44 @@ async function loadCatalogos(source){
 function refreshAll(){if(PAGE_MODE==="REPORTAR"){clearReportForm(false);}else{loadRTList(1);}}
 function buildFilters(){return {BUSCAR:document.getElementById("fBuscar").value,FECHA_DESDE:document.getElementById("fDesde").value,FECHA_HASTA:document.getElementById("fHasta").value,ESTADO:document.getElementById("fEstado").value,EQUIPO:document.getElementById("fEquipo").value};}
 function hasActiveFilters(){let f=buildFilters();return !!(String(f.BUSCAR||'').trim()||String(f.FECHA_DESDE||'').trim()||String(f.FECHA_HASTA||'').trim()||String(f.ESTADO||'').trim()||String(f.EQUIPO||'').trim());}
-function rtListCacheKey(){return 'ARMA_RT_LIST_CACHE_'+PAGE_MODE;}
+function rtListCacheKey(){return 'ARMA_RT_LIST_CACHE_V26_9_'+PAGE_MODE;}
 function readRTListCache(){try{let raw=sessionStorage.getItem(rtListCacheKey())||'';if(!raw)return null;let c=JSON.parse(raw);if(!c||!c.rows||Date.now()-Number(c.ts||0)>60000)return null;return c;}catch(e){return null;}}
 function writeRTListCache(rows,count){try{sessionStorage.setItem(rtListCacheKey(),JSON.stringify({rows:rows||[],count:count||0,ts:Date.now()}));}catch(e){}}
-function applyRTListData(data){if(!data||!data.ok){document.getElementById('listStatus').textContent=(data&&data.error)||'ERROR';return;}let rows=data.rows||data.rt||[];renderRows(rows);rtCurrentPage=Number(data.page||1);rtHasMore=data.hasMore===true;let extra=(data.partial&&PAGE_MODE==='BITACORA')?' - CONSULTA PAGINADA':'';document.getElementById('listStatus').textContent=rows.length+' REGISTROS EN ESTA PAGINA'+extra;let pt=document.getElementById('rtPageText'),pb=document.getElementById('rtPrev'),nb=document.getElementById('rtNext');if(pt)pt.textContent='PAGINA '+rtCurrentPage;if(pb)pb.disabled=rtCurrentPage<=1;if(nb)nb.disabled=!rtHasMore;if(PAGE_MODE==='BITACORA'&&rtCurrentPage===1&&!hasActiveFilters())writeRTListCache(rows,rows.length);if(PAGE_MODE==='BITACORA'&&rtCurrentPage===1)showResumen48FromRows(rows);}
-async function loadRTList(page=1){document.getElementById('listStatus').textContent='CARGANDO PAGINA...';try{if(page===1&&PAGE_MODE==='BITACORA'&&!hasActiveFilters()){let cached=readRTListCache();if(cached){applyRTListData({ok:true,rows:cached.rows,page:1,hasMore:true,partial:true});return;}}let data=await api('listRT',{pageMode:PAGE_MODE,filters:Object.assign(buildFilters(),{PAGE:page,PAGE_SIZE:RT_PAGE_SIZE})},'CARGANDO RT...');applyRTListData(data);}catch(e){document.getElementById('listStatus').textContent='ERROR DE CONEXION';}}
+function rtBtNumber(r){let v=val(r,['ID_RT','CONSECUTIVO_BT','BT','ID']);let m=String(v||'').match(/(\d+)/);return m?Number(m[1]):0;}
+function sortRTNewest(rows){return asArr(rows).slice().sort((a,b)=>rtBtNumber(b)-rtBtNumber(a));}
+function applyRTListData(data){
+  if(!data||!data.ok){document.getElementById('listStatus').textContent=(data&&data.error)||'ERROR';return;}
+  let rows=sortRTNewest(data.rows||data.rt||[]);renderRows(rows);
+  rtCurrentPage=Number(data.page||1);rtHasMore=data.hasMore===true;
+  let extra=(data.partial&&PAGE_MODE==='BITACORA')?' - CONSULTA PAGINADA':'';
+  document.getElementById('listStatus').textContent=rows.length+' REGISTROS EN ESTA PAGINA'+extra;
+  let pt=document.getElementById('rtPageText'),pb=document.getElementById('rtPrev'),nb=document.getElementById('rtNext');
+  if(pt)pt.textContent='PAGINA '+rtCurrentPage;if(pb)pb.disabled=rtCurrentPage<=1;if(nb)nb.disabled=!rtHasMore;
+  if(PAGE_MODE==='BITACORA'&&rtCurrentPage===1&&!hasActiveFilters())writeRTListCache(rows,rows.length);
+  if(PAGE_MODE==='BITACORA'&&rtCurrentPage===1&&data.recent48Rows!==null)showResumen48FromRows(Array.isArray(data.recent48Rows)?data.recent48Rows:rows);
+}
+async function loadRTListFresh48(){
+  try{
+    let data=await api('listRT',{pageMode:PAGE_MODE,filters:Object.assign(buildFilters(),{PAGE:1,PAGE_SIZE:RT_PAGE_SIZE})},'ACTUALIZANDO BITACORA...');
+    resumen48Shown=false;applyRTListData(data);
+  }catch(e){}
+}
+async function loadRTList(page=1){
+  document.getElementById('listStatus').textContent='CARGANDO PAGINA...';
+  try{
+    if(page===1&&PAGE_MODE==='BITACORA'&&!hasActiveFilters()){
+      let cached=readRTListCache();
+      if(cached){applyRTListData({ok:true,rows:cached.rows,page:1,hasMore:true,partial:true,recent48Rows:null});setTimeout(function(){loadRTListFresh48();},10);return;}
+    }
+    let data=await api('listRT',{pageMode:PAGE_MODE,filters:Object.assign(buildFilters(),{PAGE:page,PAGE_SIZE:RT_PAGE_SIZE})},'CARGANDO RT...');
+    applyRTListData(data);
+  }catch(e){document.getElementById('listStatus').textContent='ERROR DE CONEXION';}
+}
 function renderRows(rows){rows=asArr(rows);let tb=document.getElementById("rtRows");if(!rows.length){tb.innerHTML='<tr><td colspan="6">SIN REGISTROS DISPONIBLES</td></tr>';return;}tb.innerHTML=rows.map(r=>{let id=val(r,["ID_INT","ID_RT","BT","ID"]);let estado=val(r,["ESTADO_RT","ESTADO"]);let cls=estado==="RTCT"?"green":(estado==="RTD"?"red":"gray");return '<tr data-id="'+esc(id)+'"><td><strong>'+esc(id)+'</strong></td><td>'+esc(val(r,["NUMERO_RT","NUM_REGISTRO_RT","NUM_REGISTRO","RT"]))+'</td><td>'+esc(val(r,["FECHA_HORA_REPORTE","FECHA_INTERVENCION","FECHA"]))+'</td><td>'+esc(val(r,["EQUIPO","EQUIPO_INTERVENIDO","NOMBRE_EQUIPO"]))+'</td><td>'+esc(val(r,["PRIORIDAD"]))+'</td><td><span class="badge '+cls+'">'+esc(estado)+'</span></td></tr>';}).join("");tb.querySelectorAll("tr[data-id]").forEach(tr=>tr.addEventListener("click",function(){tb.querySelectorAll("tr").forEach(x=>x.classList.remove("selected"));this.classList.add("selected");openRT(this.getAttribute("data-id"));}));}
 function parseDateAny(v){v=String(v==null?'':v).trim();if(!v)return null;let m=v.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);if(m)return new Date(+m[1],+m[2]-1,+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0));m=v.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);if(m)return new Date(+m[3],+m[2]-1,+m[1],+(m[4]||0),+(m[5]||0),+(m[6]||0));let d=new Date(v);return isNaN(d.getTime())?null:d;}
 function closeResumen48(){let m=document.getElementById('resumen48Modal');if(m)m.classList.add('hidden');}
 function resumen48Row(r){return '<tr><td>'+esc(val(r,['EQUIPO','EQUIPO_INTERVENIDO','NOMBRE_EQUIPO']))+'</td><td>'+esc(val(r,['FECHA_HORA_REPORTE','FECHA_INTERVENCION','FECHA']))+'</td><td>'+esc(val(r,['PERSONAS_REPORTAN','QUIEN_REPORTA','REPORTA']))+'</td><td>'+esc(val(r,['DESCRIPCION_FALLA_NECESIDAD','FALLA_NECESIDAD','FALLA']))+'</td><td>'+esc(val(r,['INTERVENCION_REALIZADA','INTERVENCION']))+'</td><td>'+esc(val(r,['PENDIENTES']))+'</td></tr>'; }
-function showResumen48FromRows(rows){if(PAGE_MODE!=='BITACORA'||resumen48Shown)return;resumen48Shown=true;rows=asArr(rows);let lim=Date.now()-48*60*60*1000;let recent=rows.filter(r=>{let d=parseDateAny(val(r,['FECHA_HORA_REPORTE','FECHA_INTERVENCION','FECHA','FECHA_HORA_INICIO']));return d&&d.getTime()>=lim;});let body=document.getElementById('resumen48Body'),modal=document.getElementById('resumen48Modal');if(!body||!modal)return;if(!recent.length){body.innerHTML=`<div style='padding:18px;font-weight:900;color:#002b66'>NO HAY RT REGISTRADAS EN LAS ULTIMAS 48 HORAS SEGUN LA CONSULTA ACTUAL.</div>`;modal.classList.remove('hidden');return;}body.innerHTML=`<table class='resumen48-table'><thead><tr><th>MAQUINA</th><th>FECHA REPORTE</th><th>REPORTA</th><th>FALLA</th><th>INTERVENCION</th><th>PENDIENTES</th></tr></thead><tbody>`+recent.map(resumen48Row).join('')+`</tbody></table>`;modal.classList.remove('hidden');}
+function showResumen48FromRows(rows){if(PAGE_MODE!=='BITACORA'||resumen48Shown)return;resumen48Shown=true;rows=asArr(rows);let lim=Date.now()-48*60*60*1000;let recent=rows.filter(r=>{let d=parseDateAny(val(r,['FECHA_HORA_REPORTE','FECHA_INTERVENCION','FECHA','FECHA_HORA_INICIO']));return d&&d.getTime()>=lim;});let body=document.getElementById('resumen48Body'),modal=document.getElementById('resumen48Modal');if(!body||!modal)return;if(!recent.length){body.innerHTML=`<div style='padding:18px;font-weight:900;color:#002b66'>NO HAY RT REGISTRADAS EN LAS ULTIMAS 48 HORAS SEGUN EL BACKEND.</div>`;modal.classList.remove('hidden');return;}body.innerHTML=`<table class='resumen48-table'><thead><tr><th>MAQUINA</th><th>FECHA REPORTE</th><th>REPORTA</th><th>FALLA</th><th>INTERVENCION</th><th>PENDIENTES</th></tr></thead><tbody>`+recent.map(resumen48Row).join('')+`</tbody></table>`;modal.classList.remove('hidden');}
 let armaDialogResolver=null;
 function armaDialogOpen(text,title,confirmMode){let m=document.getElementById('armaMsgModal'),t=document.getElementById('armaMsgTitle'),b=document.getElementById('armaMsgText'),c=document.getElementById('armaMsgCancel');if(!m)return Promise.resolve(confirmMode?false:true);t.textContent=title||'A.R.M.A.';b.textContent=String(text||'');c.classList.toggle('hidden',!confirmMode);m.classList.remove('hidden');m.setAttribute('aria-hidden','false');return new Promise(function(resolve){armaDialogResolver=resolve;});}
 function armaDialogClose(value){let m=document.getElementById('armaMsgModal');if(m){m.classList.add('hidden');m.setAttribute('aria-hidden','true');}let r=armaDialogResolver;armaDialogResolver=null;if(r)r(Boolean(value));}
