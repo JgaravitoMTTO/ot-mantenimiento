@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="arma-avatar-192.png">
 <script src="arma-pwa-navigation.js" defer data-arma-pwa-navigation="1"></script>
-<title>ARMA | USUARIOS Y ALCANCES V04</title>
+<title>ARMA | USUARIOS Y ALCANCES V05</title>
 <style>:root{
   --navy:#002b66;--blue:#004b9b;--blue2:#0076d7;--cyan:#00bfd6;
   --green:#18c65b;--green2:#55b52e;--red:#dc2626;--orange:#f59e0b;
@@ -157,7 +157,7 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
     <div class="form-actions"><button id="btnToggle" class="btn orange">ACTIVAR / SUSPENDER</button><button id="btnReset" class="btn">RESTABLECER CLAVE</button><button id="btnDelete" class="btn red">ELIMINAR</button><button id="btnSave" class="btn green">CREAR USUARIO</button></div>
   </article>
 </section>
-<footer class="footer">A.R.M.A. // USUARIOS V04 // ARMA_DATABASE EN LINEA // {{ARMA_BUILD_STAMP}}</footer>
+<footer class="footer">A.R.M.A. // USUARIOS V05 // ARMA_DATABASE EN LINEA // {{ARMA_BUILD_STAMP}}</footer>
 </main>
 <script>const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
 const ARMA_UI_MANIFEST={
@@ -255,8 +255,8 @@ function resetScopeGroup(){document.getElementById('scopeGroupSelect').value='';
 function loadScopeGroup(){let g=scopeGroupById(document.getElementById('scopeGroupSelect').value);if(!g){resetScopeGroup();return;}document.getElementById('scopeGroupName').value=g.NOMBRE_GRUPO||'';document.getElementById('scopeGroupObservation').value=g.OBSERVACION||'';document.getElementById('scopeCanView').checked=normalize(g.PERMITE_VER||'SI')==='SI';document.getElementById('scopeCanManage').checked=normalize(g.PERMITE_GESTIONAR||'NO')==='SI';treeSelectionReset();treeSelectionSet('EMPRESA',g.EMPRESAS||'');treeSelectionSet('PLANTA',g.PLANTAS||'');treeSelectionSet('AREA',g.AREAS||'');treeSelectionSet('ACTIVO',g.ACTIVOS||'');renderScopeTree();}
 function updateScopeModeOptions(){let level=normalize(document.getElementById('userLevel').value);let globalOption=Array.from(document.getElementById('userScopeMode').options).find(o=>o.value==='GLOBAL');let allowed=['ADMIN','SUPER_ADMIN'].indexOf(level)>=0||(selectedUser&&selectedUser.protegido);if(globalOption)globalOption.disabled=!allowed;if(!allowed&&document.getElementById('userScopeMode').value==='GLOBAL')document.getElementById('userScopeMode').value='PERSONA';}
 function updateScopeSummary(){let mode=document.getElementById('userScopeMode').value||'PERSONA';let groups=selectedValues('userScopeGroups');let person=personById(document.getElementById('userIdPersona').value)||{};let groupText=groups.map(id=>{let g=scopeGroupById(id);return g?(g.NOMBRE_GRUPO+' ['+scopeCapabilityLabel(g)+']'):id;}).join(' // ');let text=mode==='GLOBAL'?'ACCESO GLOBAL A TODAS LAS EMPRESAS, PLANTAS Y ACTIVOS.':mode==='GRUPOS'?('GRUPOS: '+(groupText||'NINGUNO SELECCIONADO')):('HEREDA PERSONA: '+(person.EMPRESA_ASIGNADA||'')+' // '+(person.PLANTA_ASIGNADA||'SIN PLANTA'));document.getElementById('userScopeSummary').textContent=text+' // EL BACKEND VALIDARA VER Y GESTIONAR EN CADA OT.';document.getElementById('userScopeGroups').disabled=mode!=='GRUPOS'||!(createMode?actionAllowed('BTN_USUARIOS_CREAR'):actionAllowed('BTN_USUARIOS_EDITAR'));}
-async function saveScopeGroup(){if(!hasPerm('BTN_USUARIOS_GESTIONAR_ALCANCE','BTN_ADMIN_USUARIOS'))return toast('NO TIENE PERMISO PARA GESTIONAR ALCANCES.');let tree=selectedTreeData();let canManage=document.getElementById('scopeCanManage').checked;let canView=document.getElementById('scopeCanView').checked||canManage;let data={ID_GRUPO:document.getElementById('scopeGroupSelect').value,NOMBRE_GRUPO:document.getElementById('scopeGroupName').value,EMPRESAS:tree.EMPRESAS.join('|'),PLANTAS:tree.PLANTAS.join('|'),AREAS:tree.AREAS.join('|'),ACTIVOS:tree.ACTIVOS.join('|'),PERMITE_VER:canView?'SI':'NO',PERMITE_GESTIONAR:canManage?'SI':'NO',OBSERVACION:document.getElementById('scopeGroupObservation').value,ACTIVO:'SI'};if(!data.NOMBRE_GRUPO)return toast('DIGITE EL NOMBRE DEL GRUPO.');if(!data.EMPRESAS&&!data.PLANTAS&&!data.AREAS&&!data.ACTIVOS)return toast('SELECCIONE AL MENOS UN NODO DEL ARBOL.');let r=await api('saveScopeGroup',{data},'GUARDANDO GRUPO DE ALCANCE...');if(!r.ok)return toast(r.error||'NO FUE POSIBLE GUARDAR EL GRUPO.');toast(r.message||'GRUPO GUARDADO');await loadBootstrap(selectedUser&&selectedUser.user);}
-async function deactivateScopeGroup(){let id=document.getElementById('scopeGroupSelect').value;if(!id)return toast('SELECCIONE UN GRUPO.');let ok=await dialog('INACTIVAR GRUPO','LOS USUARIOS ASIGNADOS DEJARAN DE HEREDAR ESTE ALCANCE.','INACTIVAR','CANCELAR');if(!ok)return;let r=await api('deactivateScopeGroup',{idGrupo:id},'INACTIVANDO GRUPO...');if(!r.ok)return toast(r.error||'NO FUE POSIBLE INACTIVAR.');toast(r.message||'GRUPO INACTIVADO');await loadBootstrap(selectedUser&&selectedUser.user);}
+async function saveScopeGroup(){if(!hasPerm('BTN_USUARIOS_GESTIONAR_ALCANCE','BTN_ADMIN_USUARIOS'))return toast('NO TIENE PERMISO PARA GESTIONAR ALCANCES.');let tree=selectedTreeData();let canManage=document.getElementById('scopeCanManage').checked;let canView=document.getElementById('scopeCanView').checked||canManage;let data={ID_GRUPO:document.getElementById('scopeGroupSelect').value,NOMBRE_GRUPO:document.getElementById('scopeGroupName').value,EMPRESAS:tree.EMPRESAS.join('|'),PLANTAS:tree.PLANTAS.join('|'),AREAS:tree.AREAS.join('|'),ACTIVOS:tree.ACTIVOS.join('|'),PERMITE_VER:canView?'SI':'NO',PERMITE_GESTIONAR:canManage?'SI':'NO',OBSERVACION:document.getElementById('scopeGroupObservation').value,ACTIVO:'SI'};if(!data.NOMBRE_GRUPO)return toast('DIGITE EL NOMBRE DEL GRUPO.');if(!data.EMPRESAS&&!data.PLANTAS&&!data.AREAS&&!data.ACTIVOS)return toast('SELECCIONE AL MENOS UN NODO DEL ARBOL.');let r=await api('saveScopeGroup',{data},'GUARDANDO GRUPO DE ALCANCE...');if(!r.ok)return toast(r.error||'NO FUE POSIBLE GUARDAR EL GRUPO.');toast(r.message||'GRUPO GUARDADO');await loadBootstrap(selectedUser&&selectedUser.user,true);}
+async function deactivateScopeGroup(){let id=document.getElementById('scopeGroupSelect').value;if(!id)return toast('SELECCIONE UN GRUPO.');let ok=await dialog('INACTIVAR GRUPO','LOS USUARIOS ASIGNADOS DEJARAN DE HEREDAR ESTE ALCANCE.','INACTIVAR','CANCELAR');if(!ok)return;let r=await api('deactivateScopeGroup',{idGrupo:id},'INACTIVANDO GRUPO...');if(!r.ok)return toast(r.error||'NO FUE POSIBLE INACTIVAR.');toast(r.message||'GRUPO INACTIVADO');await loadBootstrap(selectedUser&&selectedUser.user,true);}
 function filteredUsers(){
   let q=normalize(document.getElementById('filterQ').value);
   let level=normalize(document.getElementById('filterLevel').value);
@@ -382,7 +382,7 @@ async function saveUser(){
   let wasCreate=createMode;let targetUser=data.user;
   let result=await api(wasCreate?'createUser':'updateUserAdmin',{userData:data},wasCreate?'CREANDO USUARIO...':'GUARDANDO CAMBIOS...');
   if(!result.ok){toast(result.error||'NO FUE POSIBLE GUARDAR.');return;}
-  toast(result.message||'OPERACION COMPLETADA');await loadBootstrap(targetUser);
+  toast(result.message||'OPERACION COMPLETADA');await loadBootstrap(targetUser,true);
 }
 
 async function toggleUser(){
@@ -391,7 +391,7 @@ async function toggleUser(){
   let ok=await dialog(targetActive==='SI'?'SUSPENDER USUARIO':'ACTIVAR USUARIO','USUARIO: '+targetUser+'\nESTADO ACTUAL: '+targetActive,'CONFIRMAR','CANCELAR');if(!ok)return;
   let r=await api('toggleUserActive',{user:targetUser},'ACTUALIZANDO ESTADO...');
   if(!r.ok){toast(r.error||'NO FUE POSIBLE CAMBIAR EL ESTADO.');return;}
-  toast('ESTADO ACTUALIZADO: '+r.activo);await loadBootstrap(targetUser);
+  toast('ESTADO ACTUALIZADO: '+r.activo);await loadBootstrap(targetUser,true);
 }
 
 async function resetPassword(){
@@ -409,7 +409,7 @@ async function deleteSelected(){
   let ok=await dialog('ELIMINAR USUARIO','ESTA ACCION ELIMINA LA CUENTA, CIERRA SUS SESIONES Y DESVINCULA USER_ARMA EN PERSONAL.\n\nUSUARIO: '+selectedUser.user,'ELIMINAR','CANCELAR');if(!ok)return;
   let r=await api('deleteUser',{user:selectedUser.user},'ELIMINANDO USUARIO...');
   if(!r.ok){toast(r.error||'NO FUE POSIBLE ELIMINAR.');return;}
-  toast(r.message||'USUARIO ELIMINADO');await loadBootstrap();
+  toast(r.message||'USUARIO ELIMINADO');await loadBootstrap(null,true);
 }
 
 function bind(){
@@ -438,52 +438,18 @@ function bind(){
   document.getElementById('dialogAccept').addEventListener('click',()=>closeDialog(true));
   document.getElementById('dialogCancel').addEventListener('click',()=>closeDialog(false));
 }
-/* === ARMA V12 FASTPATH USUARIOS === */
-const ARMA_V12_USERS_INFLIGHT=new Map();
-function armaV12UsersKey(){const t=localStorage.getItem('ARMA_TOKEN')||'';return 'ARMA_USERS_V04_BOOT_'+t.slice(-14);}
-function armaV12UsersRead(){try{const x=JSON.parse(sessionStorage.getItem(armaV12UsersKey())||'null');if(!x||Date.now()-Number(x.ts||0)>60000)return null;return x.data||null;}catch(e){return null;}}
-function armaV12UsersWrite(data){try{sessionStorage.setItem(armaV12UsersKey(),JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
-async function api(action,payload,msg){
-  payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';
-  const read=/^(adminUsersBootstrap|listUsers|listPersonalForUserCreate)$/.test(action);
-  const key=read?action+'|'+JSON.stringify(payload):'';
-  if(read&&ARMA_V12_USERS_INFLIGHT.has(key))return ARMA_V12_USERS_INFLIGHT.get(key);
-  if(msg)showLoader(msg);
-  const job=(async function(){
-    const ctl=new AbortController();const timer=setTimeout(function(){ctl.abort();},35000);
-    try{
-      const r=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),signal:ctl.signal});
-      const txt=await r.text();try{return JSON.parse(txt);}catch(e){throw new Error('RESPUESTA_NO_JSON '+r.status);}
-    }finally{clearTimeout(timer);}
-  })();
-  if(read)ARMA_V12_USERS_INFLIGHT.set(key,job);
-  try{return await job;}finally{if(read)ARMA_V12_USERS_INFLIGHT.delete(key);if(msg)hideLoader();}
-}
-async function validateSession(){
-  const cache=readCache();const token=localStorage.getItem('ARMA_TOKEN')||(cache&&cache.token)||'';
-  if(!token){location.href='main.html';return false;}
-  if(cache)setSession(cache,token);else armaSession.token=token;
-  return true;
-}
-function armaV12ApplyUsers(data,selectName){
-  if(data.session)setSession(data.session,armaSession.token||localStorage.getItem('ARMA_TOKEN')||'');
-  if(!hasPerm('BTN_ADMIN_USUARIOS','BTN_ADMIN_USUARIOS')){
-    document.getElementById('appArea').innerHTML='<section class="panel login-wall"><div><h2>ACCESO NO AUTORIZADO</h2><p>SU NIVEL NO TIENE BTN_ADMIN_USUARIOS.</p><a class="btn" href="main.html">VOLVER A MAIN</a></div></section>';return false;
-  }
-  appData={users:data.users||[],levels:data.levels||[],persons:data.persons||[],scopeGroups:data.scopeGroups||[],scopeCatalog:data.scopeCatalog||{companies:[],plants:[],areas:[],assets:[],tree:[],diagnostics:{}},scopeModes:data.scopeModes||[]};
-  fillFilters();fillScopeCatalogs();
-  if(selectName&&appData.users.some(function(u){return normalize(u.user)===normalize(selectName);}))selectUser(selectName);else beginNew(false);
-  renderUsers();document.getElementById('listStatus').textContent=appData.users.length+' USUARIOS';return true;
-}
-async function loadBootstrap(selectName){
-  const cached=armaV12UsersRead();let painted=false;
-  if(cached&&cached.ok){painted=armaV12ApplyUsers(cached,selectName)!==false;}
-  try{
-    const data=await api('adminUsersBootstrap',{},painted?'':'CARGANDO USUARIOS Y NIVELES...');
-    if(!data.ok)throw new Error(data.error||'NO SE PUDO CARGAR');
-    armaV12UsersWrite(data);armaV12ApplyUsers(data,selectName);
-  }catch(e){if(!painted)throw e;toast('DATOS EN CACHE // NO FUE POSIBLE ACTUALIZAR');}
-}
+/* === ARMA V16 FASTPATH USUARIOS V05 === */
+const ARMA_V16_USERS_INFLIGHT=new Map();
+function armaV16UsersKey(){const t=localStorage.getItem('ARMA_TOKEN')||'';return 'ARMA_USERS_V05_BOOT_'+t.slice(-14);}
+function armaV16BundleComplete(data){return !!(data&&data.ok&&data.bundleComplete===true&&Array.isArray(data.users)&&Array.isArray(data.levels)&&Array.isArray(data.persons)&&Array.isArray(data.scopeGroups)&&data.scopeCatalog&&Array.isArray(data.scopeCatalog.tree)&&data.counts);}
+function armaV16UsersRead(){try{const raw=sessionStorage.getItem(armaV16UsersKey());const x=JSON.parse(raw||'null');if(!x||Date.now()-Number(x.ts||0)>120000||!armaV16BundleComplete(x.data))return null;return x.data;}catch(e){return null;}}
+function armaV16UsersWrite(data){if(!armaV16BundleComplete(data))return;try{sessionStorage.setItem(armaV16UsersKey(),JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
+function armaV16UsersClear(){try{sessionStorage.removeItem(armaV16UsersKey());sessionStorage.removeItem('ARMA_USERS_V04_BOOT_'+(localStorage.getItem('ARMA_TOKEN')||'').slice(-14));}catch(e){}}
+function armaV16Delay(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
+async function api(action,payload,msg){payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';const read=/^(adminUsersBootstrap|listUsers|listPersonalForUserCreate)$/.test(action);const key=read?action+'|'+JSON.stringify(payload):'';if(read&&ARMA_V16_USERS_INFLIGHT.has(key))return ARMA_V16_USERS_INFLIGHT.get(key);if(msg)showLoader(msg);const job=(async function(){const ctl=new AbortController();const timer=setTimeout(()=>ctl.abort(),60000);try{const r=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8','Cache-Control':'no-store'},body:JSON.stringify(payload),signal:ctl.signal,cache:'no-store'});const txt=await r.text();let data;try{data=JSON.parse(txt);}catch(e){throw new Error('RESPUESTA_NO_JSON // HTTP '+r.status);}if(!r.ok)throw new Error('HTTP '+r.status);return data;}finally{clearTimeout(timer);}})();if(read)ARMA_V16_USERS_INFLIGHT.set(key,job);try{return await job;}finally{if(read)ARMA_V16_USERS_INFLIGHT.delete(key);if(msg)hideLoader();}}
+async function validateSession(){const cache=readCache();const token=localStorage.getItem('ARMA_TOKEN')||(cache&&cache.token)||'';if(!token){location.href='main.html';return false;}if(cache)setSession(cache,token);else armaSession.token=token;return true;}
+function armaV16ApplyUsers(data,selectName){if(!armaV16BundleComplete(data))throw new Error('PAQUETE_USUARIOS_INCOMPLETO');if(data.session)setSession(data.session,armaSession.token||localStorage.getItem('ARMA_TOKEN')||'');if(!hasPerm('BTN_ADMIN_USUARIOS','BTN_ADMIN_USUARIOS')){document.getElementById('appArea').innerHTML='<section class="panel login-wall"><div><h2>ACCESO NO AUTORIZADO</h2><p>SU NIVEL NO TIENE BTN_ADMIN_USUARIOS.</p><a class="btn" href="main.html">VOLVER A MAIN</a></div></section>';return false;}appData={users:data.users,levels:data.levels,persons:data.persons,scopeGroups:data.scopeGroups,scopeCatalog:data.scopeCatalog,scopeModes:data.scopeModes||[]};fillFilters();fillScopeCatalogs();if(selectName&&appData.users.some(u=>normalize(u.user)===normalize(selectName)))selectUser(selectName);else beginNew(false);renderUsers();const c=data.counts||{};document.getElementById('listStatus').textContent=appData.users.length+' USUARIOS // '+(c.plants||0)+' PLANTAS MEL';return true;}
+async function loadBootstrap(selectNameOrEvent,force){const selectName=typeof selectNameOrEvent==='string'?selectNameOrEvent:'';const manual=force===true||!!(selectNameOrEvent&&selectNameOrEvent.type);if(manual)armaV16UsersClear();let painted=false;const cached=manual?null:armaV16UsersRead();if(cached){try{painted=armaV16ApplyUsers(cached,selectName)!==false;}catch(e){armaV16UsersClear();}}let lastError=null;for(let attempt=1;attempt<=3;attempt++){try{const data=await api('adminUsersBootstrap',{force:manual||attempt>1},painted?'':'CARGANDO USUARIOS, PERSONAS Y ALCANCES...');if(!armaV16BundleComplete(data))throw new Error((data&&data.error)||'PAQUETE_USUARIOS_INCOMPLETO');armaV16UsersWrite(data);armaV16ApplyUsers(data,selectName);if(attempt>1)toast('USUARIOS ACTUALIZADOS EN INTENTO '+attempt);return;}catch(e){lastError=e;if(attempt<3)await armaV16Delay(attempt*900);}}if(painted){toast('SE MUESTRAN DATOS COMPLETOS EN CACHE. NO FUE POSIBLE ACTUALIZAR.');return;}document.getElementById('listStatus').textContent='ERROR DE CARGA // USE ACTUALIZAR';throw lastError||new Error('NO SE PUDO CARGAR USUARIOS');}
 document.addEventListener('DOMContentLoaded',async()=>{bind();try{if(await validateSession())await loadBootstrap();}catch(e){hideLoader();toast(e.message||'ERROR DE CONEXION');}});</script>
 </body>
 </html>
