@@ -29,7 +29,7 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eaf0f7;color:#0
 .file-row{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center;padding:13px 14px;border-bottom:1px solid #d7e4f2;cursor:pointer;background:#fff;}.file-row:hover{background:#eef7ff;}.file-row.active{background:#dff1ff;border-left:6px solid #0078d7;}
 .pdf-ico{width:24px;height:24px;border-radius:5px;background:#e53935;color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;}.file-title{font-size:12px;color:#001f4f;line-height:1.25;word-break:break-word;}.file-meta{display:block;font-size:10px;color:#6b7d96;margin-top:4px;}
 .pdf-frame{width:100%;height:585px;border:1px solid #d7e4f2;border-radius:14px;background:#f8fbff;display:none;}.empty-preview{height:585px;border:2px dashed #cbdced;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#5b6d87;background:#f8fbff;text-align:center;gap:10px;}
-.empty-preview strong{font-size:24px;color:#002c6d;}.empty-preview span{font-size:13px;text-transform:uppercase;}.footer{display:flex;justify-content:space-between;margin-top:18px;color:#5d6f89;font-size:11px;letter-spacing:.5px;}
+.empty-preview strong{font-size:24px;color:#002c6d;}.empty-preview span{font-size:13px;text-transform:uppercase;}.footer{text-align:center;margin-top:14px;}.footer-card{display:flex;align-items:center;justify-content:center;gap:10px;min-height:38px;padding:9px 18px;border-radius:16px;background:linear-gradient(135deg,#001f4d 0%,#003b86 54%,#004b9b 100%);color:#eaf4ff;font-size:11px;font-weight:850;box-shadow:0 14px 28px rgba(0,43,102,.12);}.footer-sep{color:#9dffbf;font-weight:950;}
 .arma-loader{position:fixed;inset:0;background:rgba(2,6,23,.50);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
 .arma-loader.hidden{display:none!important;}.arma-loader-box{width:min(420px,92vw);background:#fff;border:1px solid #dbe5f0;border-radius:22px;box-shadow:0 28px 70px rgba(0,0,0,.32);padding:24px;text-align:center;color:#002b66;}
 .arma-spinner{width:54px;height:54px;border:6px solid #dbeafe;border-top-color:#0076d7;border-radius:50%;margin:0 auto 14px;animation:armaSpin .8s linear infinite;}
@@ -107,10 +107,7 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eaf0f7;color:#0
       <iframe id='pdfFrame' name='pdfFrame' class='pdf-frame' src='about:blank'></iframe>
     </div>
   </section>
-  <footer class='footer'>
-    <span>A.R.M.A. - ASSET RELIABILITY & MAINTENANCE ANALYTICS</span>
-    <span>GENERADO: 2026-08-07 10:28:02</span>
-  </footer>
+  <footer class='footer'><div class='footer-card'><span>ARMA&trade;</span><span class='footer-sep'>//</span><span>PERFILES DEL PERSONAL</span><span class='footer-sep'>//</span><span>ARMA DATA EN LINEA</span><span class='footer-sep'>//</span><span>GENERADO: 2026-08-07 10:39:47</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
