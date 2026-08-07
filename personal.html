@@ -112,11 +112,6 @@ tr:hover{background:#d9ecff;cursor:pointer}
 @media(max-width:1100px){.action-grid{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:repeat(2,1fr)}.top-white{flex-direction:column}.top-title{text-align:center}.top-title-actions{justify-content:center}.hero p{white-space:normal}.photo-box{grid-template-columns:1fr}.photo-actions{grid-template-columns:1fr}}
 @media(max-width:700px){.action-grid,.filters,.form-grid{grid-template-columns:1fr}.main{padding:10px}.logo-pelex{height:58px}.logo-arma{height:64px}.hero{align-items:stretch;flex-direction:column}.hero-home-card{width:100%;max-width:none}.detail-create-row{justify-content:stretch}.create-person-small{width:100%}}
   .turno-policy{margin:10px 0;padding:11px 13px;border-left:5px solid var(--cyan);border-radius:10px;background:#effaff;color:var(--navy);font-size:11px;font-weight:850;line-height:1.45}.arma-modal{position:fixed;inset:0;background:rgba(2,6,23,.58);z-index:9999;display:flex;align-items:center;justify-content:center;padding:18px}.arma-modal.hidden{display:none}.arma-modal-box{width:min(560px,94vw);background:#fff;border-radius:17px;box-shadow:0 24px 70px rgba(0,0,0,.35);overflow:hidden}.arma-modal-head{padding:14px 18px;background:linear-gradient(135deg,#003b7a,#087bcf);color:#fff;font-weight:950}.arma-modal-body{padding:20px;color:#0f2f61;font-weight:800;white-space:pre-wrap}.arma-modal-actions{display:flex;justify-content:flex-end;padding:0 18px 18px}.arma-modal-actions button{border:0;border-radius:10px;padding:10px 18px;background:linear-gradient(#2bd36b,#159447);color:#fff;font-weight:950;cursor:pointer}</style>
-<!-- ARMA_PUBLICATION_HEAD_START -->
-<meta name="arma-build-file" content="personal.html">
-<meta name="arma-build-generated" content="2026-08-07 07:45:41">
-<meta name="arma-build-id" content="20260807074542-personal">
-<!-- ARMA_PUBLICATION_HEAD_END -->
 </head>
 <body>
 <div id="armaLoader" class="arma-loader hidden">
@@ -185,7 +180,7 @@ tr:hover{background:#d9ecff;cursor:pointer}
       </div>
     </section>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: {{ARMA_BUILD_STAMP}}</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-07 11:20:06</span></div></footer>
 </main>
 <div class="arma-modal hidden" id="armaMsg"><div class="arma-modal-box"><div class="arma-modal-head" id="armaMsgTitle">A.R.M.A.</div><div class="arma-modal-body" id="armaMsgText"></div><div class="arma-modal-actions"><button type="button" onclick="armaCloseAlert()">ACEPTAR</button></div></div></div><script>function armaAlert(text,title="A.R.M.A."){document.getElementById("armaMsgTitle").textContent=title;document.getElementById("armaMsgText").textContent=String(text||"");document.getElementById("armaMsg").classList.remove("hidden")}function armaCloseAlert(){document.getElementById("armaMsg").classList.add("hidden")}
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -401,68 +396,5 @@ async function validateSession(){
 }
 document.addEventListener("DOMContentLoaded",validateSession);
 </script>
-<!-- ARMA_PUBLICATION_SEAL_START -->
-<style id="armaPublicationSealStyle">
-#armaPublicationSeal{margin:12px 18px 16px;padding:10px 14px;border-radius:12px;background:linear-gradient(135deg,#002b66,#006bd1);color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;text-align:center;font:800 10px/1.35 Segoe UI,Arial,sans-serif;letter-spacing:.2px;text-transform:uppercase}
-#armaPublicationSeal .arma-pub-title{font-weight:1000}
-#armaPublicationSeal .arma-pub-state[data-state="ok"]{color:#b8ffd5}
-#armaPublicationSeal .arma-pub-state[data-state="warn"]{color:#ffe7a3}
-#armaPublicationSeal .arma-pub-state[data-state="error"]{color:#fecaca}
-#armaPublicationSeal button{border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(255,255,255,.12);color:#fff;padding:5px 9px;font:900 9px Segoe UI,Arial,sans-serif;cursor:pointer}
-</style>
-<div id="armaPublicationSeal" role="contentinfo" data-arma-file="personal.html">
-  <span class="arma-pub-title">A.R.M.A. // CONTROL DE PUBLICACION</span>
-  <span id="armaPublicationStatus" class="arma-pub-state" data-state="warn">GENERADO: 2026-08-07 07:45:41 // GITHUB: VERIFICANDO...</span>
-  <button type="button" onclick="window.ARMA_VerificarPublicacion&&window.ARMA_VerificarPublicacion(true)">VERIFICAR</button>
-</div>
-<script id="armaPublicationSealScript">
-(function(){
-  'use strict';
-  const OWNER='jgaravitomtto',REPO='ot-mantenimiento',BRANCH='main';
-  const PAGES_BASE='https://jgaravitomtto.github.io/ot-mantenimiento/';
-  const meta=n=>document.querySelector('meta[name="'+n+'"]')?.content||'';
-  const file=meta('arma-build-file')||location.pathname.split('/').pop()||'main.html';
-  const buildId=meta('arma-build-id');
-  const generated=meta('arma-build-generated')||'2026-08-07 07:45:41';
-  const cacheKey='ARMA_PUBLICATION_V01|'+file+'|'+buildId;
-  const status=()=>document.getElementById('armaPublicationStatus');
-  function paint(text,state){const el=status();if(!el)return;el.textContent=text;el.dataset.state=state||'warn';}
-  function localDate(value){const d=new Date(value);if(Number.isNaN(d.getTime()))return String(value||'');return d.toLocaleString('es-CO',{timeZone:'America/Bogota',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});}
-  function readCache(){try{const x=JSON.parse(localStorage.getItem(cacheKey)||'null');return x&&Date.now()-Number(x.ts||0)<900000?x:null;}catch(e){return null;}}
-  function writeCache(text,state){try{localStorage.setItem(cacheKey,JSON.stringify({ts:Date.now(),text:text,state:state}));}catch(e){}}
-  async function verify(force){
-    const saved=!force&&readCache();if(saved){paint(saved.text,saved.state);return saved;}
-    paint('GENERADO: '+generated+' // GITHUB: VERIFICANDO...','warn');
-    try{
-      const commitUrl='https://api.github.com/repos/'+OWNER+'/'+REPO+'/commits?path='+encodeURIComponent(file)+'&per_page=1';
-      const rawUrl='https://raw.githubusercontent.com/'+OWNER+'/'+REPO+'/'+BRANCH+'/'+encodeURIComponent(file)+'?arma_build='+Date.now();
-      const pagesUrl=PAGES_BASE+encodeURIComponent(file)+'?arma_deploy='+Date.now();
-      const results=await Promise.allSettled([
-        fetch(commitUrl,{headers:{Accept:'application/vnd.github+json'},cache:'no-store'}),
-        fetch(rawUrl,{cache:'no-store'}),
-        fetch(pagesUrl,{cache:'no-store',headers:{'Cache-Control':'no-cache'}})
-      ]);
-      let sha='',published='',raw='',pages='',apiOk=false,rawOk=false,pagesOk=false;
-      if(results[0].status==='fulfilled'&&results[0].value.ok){const list=await results[0].value.json();const c=list&&list[0];if(c){sha=String(c.sha||'').slice(0,7);published=c.commit?.committer?.date||c.commit?.author?.date||'';apiOk=true;}}
-      if(results[1].status==='fulfilled'&&results[1].value.ok){raw=await results[1].value.text();rawOk=true;}
-      if(results[2].status==='fulfilled'&&results[2].value.ok){pages=await results[2].value.text();pagesOk=true;}
-      const marker='name="arma-build-id" content="'+buildId+'"';
-      const rawSame=rawOk&&raw.indexOf(marker)>=0;
-      const pagesSame=pagesOk&&pages.indexOf(marker)>=0;
-      let text,state;
-      if(pagesSame&&rawSame&&apiOk){text='PUBLICADO: '+localDate(published)+' // COMMIT '+sha+' // GITHUB PAGES VERIFICADO';state='ok';}
-      else if(pagesSame&&rawSame){text='GITHUB PAGES VERIFICADO // SHA NO DISPONIBLE';state='ok';}
-      else if(rawSame&&apiOk){text='REPOSITORIO: '+localDate(published)+' // COMMIT '+sha+' // GITHUB PAGES AUN NO PUBLICA ESTE BUILD';state='warn';}
-      else if(pagesSame){text='GITHUB PAGES CONTIENE ESTE BUILD // REPOSITORIO NO VERIFICADO';state='warn';}
-      else if(apiOk){text='ULTIMO COMMIT DEL ARCHIVO: '+localDate(published)+' // '+sha+' // BUILD ACTUAL NO VERIFICADO';state='warn';}
-      else{text='GENERADO: '+generated+' // GITHUB: NO VERIFICADO';state='error';}
-      paint(text,state);writeCache(text,state);return {text:text,state:state};
-    }catch(e){const text='GENERADO: '+generated+' // GITHUB: NO VERIFICADO // '+String(e&&e.message||e);paint(text,'error');return {text:text,state:'error'};}
-  }
-  window.ARMA_VerificarPublicacion=verify;
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>verify(false),{once:true});else verify(false);
-})();
-</script>
-<!-- ARMA_PUBLICATION_SEAL_END -->
 </body>
 </html>
