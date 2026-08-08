@@ -1,0 +1,123 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#004b9b">
+<title>ARMA | REPORTAR OT</title>
+<link rel="manifest" href="manifest.webmanifest">
+<script data-arma-pwa-navigation="1" defer src="arma-pwa-navigation.js"></script>
+<style>
+:root{--navy:#002b66;--pelex:#064b9a;--blue:#087bd0;--cyan:#19a6bb;--green:#59ad35;--line:#d5e2ef;--bg:#edf3f9;--muted:#60748b;--danger:#b42318;--orange:#d97706;--shadow:0 14px 34px rgba(0,43,102,.12)}
+*{box-sizing:border-box}
+html{zoom:80%}@media(max-width:900px){html{zoom:100%}}
+body{margin:0;background:var(--bg);font-family:Segoe UI,Arial,sans-serif;color:#10233f;text-transform:uppercase}
+button,input,select,textarea{font:inherit;text-transform:uppercase}
+.top{position:sticky;top:0;z-index:30;background:#fff;border-bottom:5px solid var(--blue);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:18px}.brand img{height:58px;object-fit:contain}
+.top-title{text-align:right}.top-title h1{margin:0;color:var(--navy);font-size:24px}.top-sub{margin-top:4px;color:var(--muted);font-weight:800;font-size:11px}
+.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:7px 11px;background:#f8fbff;color:var(--navy);font-weight:950;margin-top:6px}
+.wrap{padding:14px 18px}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(135deg,#003d82,#087fd0);border-radius:19px;color:#fff;padding:16px 20px;box-shadow:var(--shadow);margin-bottom:12px}
+.hero h2{margin:0;font-size:27px}.hero p{margin:4px 0 0;font-weight:800;opacity:.9}
+.home{display:flex;align-items:center;gap:9px;background:#fff;color:var(--navy);border-radius:13px;padding:9px 14px;text-decoration:none;font-weight:950}.home img{width:32px;height:32px}
+.stats{display:grid;grid-template-columns:repeat(6,minmax(110px,1fr));gap:8px;margin-bottom:12px}
+.stat{border:0;border-radius:13px;padding:10px 12px;text-align:left;cursor:pointer;box-shadow:0 7px 18px rgba(0,43,102,.08);transition:.16s ease;color:#fff;position:relative;overflow:hidden}
+.stat:after{content:"";position:absolute;inset:0;background:linear-gradient(145deg,rgba(255,255,255,.18),transparent 58%);pointer-events:none}
+.stat:hover,.stat.active{transform:translateY(-2px);box-shadow:0 12px 24px rgba(0,43,102,.17)}
+.stat[data-state="OTPR"]{background:#0b4f9c}.stat[data-state="OTE"]{background:#1179ad}.stat[data-state="OTD"]{background:#169ca5}.stat[data-state="OTRPR"]{background:#d28a22}.stat[data-state="OTER"]{background:#2aa87d}.stat[data-state="OTCT"]{background:#58ad37}
+.stat span,.stat strong{position:relative;z-index:1;display:block}.stat span{font-size:9px;font-weight:950;opacity:.92}.stat strong{font-size:23px;font-weight:1000;margin-top:2px}
+.layout{display:grid;grid-template-columns:440px minmax(0,1fr);gap:12px;align-items:stretch}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:13px;min-width:0}
+.left{display:flex;flex-direction:column;min-height:690px;max-height:calc(100vh - 245px)}
+.panel-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}.panel-title h3{margin:0;color:var(--navy);font-size:18px}
+.filters{display:grid;grid-template-columns:1fr auto;gap:7px;margin-bottom:8px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 10px;color:var(--navy);font-weight:800;background:#fff}
+.btn{border:0;border-radius:10px;padding:10px 13px;color:#fff;background:linear-gradient(#1688e8,#004b9b);font-weight:950;cursor:pointer}
+.btn.green{background:linear-gradient(#2aca67,#159247)}.btn.orange{background:linear-gradient(#f4a31e,#bd6906)}.btn.gray{background:linear-gradient(#9aa7b7,#65758b)}.btn.red{background:linear-gradient(#ef5a56,#b42318)}.btn:disabled{opacity:.45;filter:grayscale(1);cursor:not-allowed}
+.list{flex:1;min-height:0;overflow-y:auto;border:1px solid var(--line);border-radius:11px;background:#fff}
+.ot-item{padding:11px 10px;border-bottom:1px solid var(--line);cursor:pointer;transition:.12s ease}.ot-item:hover,.ot-item.sel{background:#edf7ff}
+.ot-head{display:grid;grid-template-columns:max-content 14px minmax(0,1fr);gap:6px;align-items:baseline;line-height:1.25}.ot-num{font-size:15px;font-weight:1000;color:#00468f}.ot-sep{color:#8fa2b7;font-weight:950}.ot-desc{font-size:11.5px;font-weight:900;color:#173e68}.ot-meta{margin-top:4px;color:#62768e;font-size:9.5px;font-weight:850;line-height:1.35}
+.badge{display:inline-flex;border-radius:999px;padding:3px 7px;font-size:8px;font-weight:950;margin-right:4px;background:#dbeafe;color:#1d4ed8}.badge.p3{background:#fff0bd;color:#825800}.badge.active{background:#dcfce7;color:#166534}
+.pager{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;color:var(--navy);font-weight:900}
+.detail{min-height:690px}.empty{display:flex;min-height:420px;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-weight:900}
+.ot-title-main{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}.ot-title-main h2{margin:0;color:var(--navy);font-size:23px}.state-big{display:inline-flex;border-radius:999px;padding:6px 10px;background:#e8f3ff;color:#064b9a;font-weight:950}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.card{border:1px solid var(--line);border-radius:12px;background:#f9fbfd;padding:10px}.card label,.field label{display:block;font-size:8px;color:#65788e;font-weight:950;margin-bottom:4px}.card strong{display:block;color:var(--navy);font-size:12px;line-height:1.25}
+.section{margin-top:11px;border:1px solid var(--line);border-radius:13px;padding:11px;background:#fff}.section h3{margin:0 0 8px;color:var(--navy);font-size:15px}
+.chips{display:flex;gap:7px;flex-wrap:wrap}.chip{border:1px solid #c9dcec;background:#eef7ff;color:#064b9a;border-radius:999px;padding:6px 9px;font-size:9px;font-weight:900}
+.am-list{display:grid;gap:6px}.am{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:8px;align-items:start;border:1px solid #dce7f1;border-radius:10px;padding:8px;background:#fbfdff}.am-num{font-weight:1000;color:#0870b9}.am-desc{font-weight:850;color:#193e68;line-height:1.3}.am-min{font-size:9px;color:#65788e;font-weight:900}
+.exec{background:linear-gradient(180deg,#f7fff9,#effcf3);border-color:#bfe4ca}.exec-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.field.full{grid-column:1/-1}textarea{min-height:82px;resize:vertical}.actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:10px}
+.note{border-radius:10px;padding:9px 10px;background:#eef6ff;color:#204b7c;font-size:9px;font-weight:850;line-height:1.35}.note.warn{background:#fff7e6;color:#8a5300;border-left:4px solid #f0a11f}.note.good{background:#ecfdf3;color:#166534;border-left:4px solid #22c55e}
+.readonly-report{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.readonly-report .wide{grid-column:1/-1}
+.modal{position:fixed;inset:0;background:rgba(2,6,23,.58);z-index:100;display:flex;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(2px)}.hidden{display:none!important}.modal-box{background:#fff;border-radius:17px;box-shadow:0 24px 70px rgba(0,0,0,.35);padding:18px;width:min(620px,96vw)}.modal-box h3{margin:0 0 8px;color:var(--navy)}
+.loader{position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:120;display:flex;align-items:center;justify-content:center}.loader-box{background:#fff;border-radius:16px;padding:20px 28px;text-align:center;color:var(--navy);font-weight:950;box-shadow:0 20px 60px rgba(0,0,0,.3)}.spin{width:42px;height:42px;margin:0 auto 10px;border:5px solid #dbeafe;border-top-color:#0780dd;border-radius:50%;animation:s .8s linear infinite}@keyframes s{to{transform:rotate(360deg)}}
+.footer{display:flex;align-items:center;justify-content:center;gap:10px;min-height:38px;margin-top:14px;padding:9px 18px;border-radius:16px;background:linear-gradient(135deg,#001f4d,#003b86 54%,#004b9b);color:#eaf4ff;font-size:10px;font-weight:850;box-shadow:var(--shadow);flex-wrap:wrap}.footer-sep{color:#9dffbf;font-weight:950}
+@media(max-width:1200px){.layout{grid-template-columns:390px minmax(0,1fr)}.stats{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.top{position:relative;align-items:flex-start}.brand img{height:48px}.top-title h1{font-size:19px}.layout{grid-template-columns:1fr}.left{min-height:0;max-height:none}.list{height:430px;flex:none}.detail{min-height:0}.exec-grid,.readonly-report{grid-template-columns:1fr}.readonly-report .wide{grid-column:auto}}
+@media(max-width:650px){.wrap{padding:8px}.hero{align-items:flex-start;flex-direction:column}.stats{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.exec-grid{grid-template-columns:1fr}input,select,textarea,.btn{min-height:46px;font-size:15px}.actions .btn{flex:1}}
+</style>
+</head>
+<body>
+<div class="loader hidden" id="loader"><div class="loader-box"><div class="spin"></div><div id="loadText">CARGANDO</div></div></div>
+<div class="modal hidden" id="msgModal"><div class="modal-box"><h3 id="msgTitle">A.R.M.A.</h3><p id="msgText"></p><div class="actions"><button class="btn" onclick="closeMessage()">ACEPTAR</button></div></div></div>
+<div class="modal hidden" id="reprogramModal"><div class="modal-box"><h3>SOLICITAR REPROGRAMACION</h3><div class="note warn">LA OT PASARA A OTRPR Y VOLVERA A PLANEACION. EL TECNICO SOLO REGISTRA LA CAUSA.</div><div class="field" style="margin-top:10px"><label>CAUSA</label><select id="reprogramCause"><option value="">SELECCIONE</option><option value="EMERGENCIA_P1_P2">SE PRESENTO TRABAJO DE PRIORIDAD P1 O P2</option><option value="SIN_PERSONAL">NO HUBO PERSONAL DISPONIBLE</option><option value="EQUIPO_NO_DISPONIBLE">EL EQUIPO NO ESTUVO DISPONIBLE</option><option value="ALCANCE_NO_EJECUTABLE">EL ALCANCE DE LA OT NO PUDO CUMPLIRSE</option><option value="RECURSO_NO_DISPONIBLE">NO HUBO REPUESTO, MATERIAL O RECURSO</option><option value="CONDICION_OPERATIVA">CONDICION OPERATIVA IMPIDIO LA EJECUCION</option><option value="OTRO">OTRA CAUSA</option></select></div><div class="field" style="margin-top:8px"><label>DETALLE SOLO SI SELECCIONA OTRA CAUSA</label><textarea id="reprogramDetail"></textarea></div><div class="actions"><button class="btn gray" onclick="closeReprogram()">CANCELAR</button><button class="btn orange" onclick="submitReprogram()">CONFIRMAR OTRPR</button></div></div></div>
+
+<header class="top">
+  <div class="brand"><img src="logo_pelex.bmp" alt="PELEX"><img src="ARMA%20logo%202.png" alt="ARMA"></div>
+  <div class="top-title"><h1>MANTENIMIENTO | REPORTAR OT</h1><div class="top-sub" id="techInfo">VALIDANDO TECNICO...</div><span class="pill" id="userPill">VALIDANDO...</span></div>
+</header>
+
+<main class="wrap">
+<section class="hero"><div><h2>MIS ORDENES DE TRABAJO</h2><p>CONSULTE, DOCUMENTE EJECUCION O SOLICITE REPROGRAMACION DE SUS OT ASIGNADAS.</p></div><a class="home" href="main.html"><img src="boton-de-inicio.png" alt="INICIO">INICIO</a></section>
+<section class="stats" id="stats"></section>
+<div class="layout">
+  <aside class="panel left">
+    <div class="panel-title"><h3>OT ASIGNADAS</h3><span class="pill" id="listState">OTE</span></div>
+    <div class="filters"><input id="q" placeholder="BUSCAR OT, DESCRIPCION O EQUIPO"><button class="btn" onclick="loadList(1)">BUSCAR</button></div>
+    <div class="list" id="otList"><div class="empty">CARGANDO...</div></div>
+    <div class="pager"><button class="btn gray" id="prevBtn" onclick="loadList(currentPage-1)">ANTERIOR</button><span id="pageText">PAGINA 1</span><button class="btn gray" id="nextBtn" onclick="loadList(currentPage+1)">SIGUIENTE</button></div>
+  </aside>
+  <section class="panel detail" id="detailPanel"><div class="empty"><div><h2>SELECCIONE UNA OT</h2><p>SE MOSTRARA EL ACTIVO, LAS ACTIVIDADES AM Y EL REPORTE DE EJECUCION.</p></div></div></section>
+</div>
+<div class="footer"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTAR OT</span><span class="footer-sep">//</span><span>TECNICO VALIDADO POR SESION</span><span class="footer-sep">//</span><span>GENERADO: {BUILD_STAMP}</span></div>
+</main>
+
+<script>
+const API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
+const CACHE_TTL=90000;
+const STATES=[['OTPR','PROGRAMADAS'],['OTE','EN EJECUCION'],['OTD','DOCUMENTADAS'],['OTRPR','REPROGRAMACION'],['OTER','ESPERA RECURSO'],['OTCT','CERRADAS']];
+let session=null,technician=null,counts={},currentState='OTE',currentPage=1,totalPages=1,selectedId='',selected=null;
+
+function token(){return localStorage.getItem('ARMA_TOKEN')||sessionStorage.getItem('ARMA_TOKEN')||''}
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function showLoad(t){loadText.textContent=t||'CARGANDO';loader.classList.remove('hidden')}
+function hideLoad(){loader.classList.add('hidden')}
+function message(text,title='A.R.M.A.'){msgTitle.textContent=title;msgText.textContent=text;msgModal.classList.remove('hidden')}
+function closeMessage(){msgModal.classList.add('hidden')}
+function apiError(e){const t=String((e&&e.message)||e||'ERROR');if(/FAILED TO FETCH|NETWORKERROR|LOAD FAILED/i.test(t))return 'NO FUE POSIBLE CONECTAR CON EL BACKEND.';return t}
+async function api(action,data={},loading=''){if(loading)showLoad(loading);try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,token:token()},data))});const raw=await r.text();let j;try{j=JSON.parse(raw)}catch(x){throw new Error('RESPUESTA_BACKEND_NO_VALIDA')}if(!j.ok)throw new Error(j.detail||j.error||'ERROR');return j}finally{if(loading)hideLoad()}}
+function cacheKey(){return 'ARMA_TECHOT_BOOT_'+token().slice(-14)}
+function readCache(){try{const x=JSON.parse(sessionStorage.getItem(cacheKey())||'null');if(!x||Date.now()-Number(x.ts||0)>CACHE_TTL)return null;return x.data}catch(e){return null}}
+function writeCache(data){try{sessionStorage.setItem(cacheKey(),JSON.stringify({ts:Date.now(),data}))}catch(e){}}
+function dateText(v){if(!v)return '—';const s=String(v).slice(0,10);const p=s.split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:s}
+function stateLabel(s){const x=STATES.find(r=>r[0]===s);return x?x[1]:s}
+function nowLocal(){const d=new Date(),z=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())+'T'+z(d.getHours())+':'+z(d.getMinutes())}
+function renderStats(){stats.innerHTML=STATES.map(([s,l])=>`<button class="stat ${currentState===s?'active':''}" data-state="${s}" onclick="selectState('${s}')"><span>${esc(s)} // ${esc(l)}</span><strong>${Number(counts[s]||0)}</strong></button>`).join('')}
+function selectState(s){currentState=s;currentPage=1;selectedId='';selected=null;detailPanel.innerHTML='<div class="empty"><div><h2>SELECCIONE UNA OT</h2><p>'+esc(stateLabel(s))+'</p></div></div>';renderStats();listState.textContent=s+' // '+stateLabel(s);loadList(1)}
+function applyList(j){currentPage=Number(j.page||1);totalPages=Number(j.pages||1);otList.innerHTML=(j.rows||[]).map(r=>`<div class="ot-item ${selectedId===r.ID_OT?'sel':''}" onclick="openOT('${esc(r.ID_OT)}')"><div class="ot-head"><span class="ot-num">${esc(r.ID_OT)}</span><span class="ot-sep">—</span><span class="ot-desc">${esc(r.DESCRIPCION_OT||'SIN DESCRIPCION')}</span></div><div class="ot-meta"><span class="badge">${esc(r.ESTADO_OT)}</span><span class="badge p3">${esc(r.PRIORIDAD||'')}</span>${r.ASIGNACION_ACTIVA?'<span class="badge active">ASIGNACION ACTIVA</span>':''}<br>${dateText(r.FECHA_PROGRAMADA)} // ${esc(r.EQUIPOS_TEXTO_LEGADO||r.NOMBRE_PM_ORIGEN||'SIN EQUIPO')}</div></div>`).join('')||'<div class="empty">SIN OT EN ESTE ESTADO</div>';pageText.textContent=`PAGINA ${currentPage} DE ${totalPages} // ${Number(j.total||0)} OT`;prevBtn.disabled=currentPage<=1;nextBtn.disabled=currentPage>=totalPages}
+async function loadList(page=1){try{const j=await api('techOTList',{filters:{state:currentState,q:q.value,page,pageSize:30}});counts=j.counts||counts;renderStats();applyList(j.list||{})}catch(e){message(apiError(e),'NO FUE POSIBLE CARGAR OT')}}
+function paintCached(b){if(!b)return false;session=b.session||{};technician=b.technician||{};counts=b.counts||{};currentState=b.defaultState||'OTE';userPill.textContent=(session.user||'')+' // '+(session.nivel||'');techInfo.textContent=(technician.nombre||'')+(technician.cargo?' // '+technician.cargo:'')+(technician.planta?' // '+technician.planta:'');listState.textContent=currentState+' // '+stateLabel(currentState);renderStats();applyList(b.list||{});return true}
+async function bootstrap(){if(!token()){location.href='main.html';return}const cached=readCache();if(cached)paintCached(cached);try{const b=await api('techOTBootstrap',{filters:{page:1,pageSize:30}},cached?'':'VALIDANDO TECNICO Y OT...');paintCached(b);writeCache(b)}catch(e){message(apiError(e),'NO FUE POSIBLE INICIAR REPORTAR OT')}}
+function renderAssets(rows){return rows&&rows.length?`<div class="chips">${rows.map(a=>`<span class="chip">${esc(a.tag||a.id)} // ${esc(a.nombre||'')}</span>`).join('')}</div>`:'<div class="note">SIN ACTIVOS ASOCIADOS.</div>'}
+function renderAM(rows){return rows&&rows.length?`<div class="am-list">${rows.map(a=>`<div class="am"><div class="am-num">${esc(a.secuencia||'')}</div><div><div class="am-desc">${esc(a.descripcion||a.idAM||'')}</div><div class="ot-meta">${esc(a.idAM||'')}</div></div><div class="am-min">${Number(a.duracionMin||0)} MIN</div></div>`).join('')}</div>`:'<div class="note">SIN ACTIVIDADES AM ASOCIADAS.</div>'}
+function execPanel(d){const o=d.ot||{};if(!d.editable)return `<div class="section"><h3>REPORTE DE EJECUCION</h3><div class="readonly-report"><div class="card"><label>EJECUTA</label><strong>${esc(o.NOMBRE_PERSONA_EJECUTA||'SIN REGISTRO')}</strong></div><div class="card"><label>DURACION</label><strong>${Number(o.DURACION_EJECUCION_MIN||0)} MIN</strong></div><div class="card"><label>INICIO</label><strong>${esc(o.FECHA_HORA_INICIO_DISPLAY||'SIN REGISTRO')}</strong></div><div class="card"><label>FIN</label><strong>${esc(o.FECHA_HORA_FIN_DISPLAY||'SIN REGISTRO')}</strong></div><div class="card wide"><label>ACTIVIDAD REALIZADA</label><strong>${esc(o.REPORTE_ACTIVIDAD||'SIN REGISTRO')}</strong></div><div class="card wide"><label>OBSERVACIONES</label><strong>${esc(o.OBSERVACION_EJECUCION||'SIN REGISTRO')}</strong></div></div>${o.CAUSA_REPROGRAMACION_TECNICO?`<div class="note warn" style="margin-top:8px">REPROGRAMACION: ${esc(o.CAUSA_REPROGRAMACION_TECNICO)}</div>`:''}</div>`;
+return `<div class="section exec"><h3>REPORTAR EJECUCION</h3><div class="note good">SOLO ESTOS CAMPOS SON MODIFICABLES. AL CONFIRMAR, LA OT PASA DE OTE A OTD.</div><div class="exec-grid" style="margin-top:9px"><div class="field"><label>FECHA Y HORA INICIO</label><input id="execStart" type="datetime-local"></div><div class="field"><label>FECHA Y HORA FIN OPCIONAL</label><input id="execEnd" type="datetime-local"></div><div class="field"><label>DURACION TOTAL MINUTOS</label><input id="execMinutes" type="number" min="1" max="1440" placeholder="EJ: 35"></div><div class="field full"><label>DESCRIPCION DE LA ACTIVIDAD REALIZADA</label><textarea id="execReport" placeholder="DESCRIBA LO REALIZADO"></textarea></div><div class="field full"><label>OBSERVACIONES</label><textarea id="execObs" placeholder="OBSERVACIONES DE EJECUCION"></textarea></div></div><div class="actions"><button class="btn orange" onclick="openReprogram()">NO FUE POSIBLE // SOLICITAR REPROGRAMACION</button><button class="btn green" onclick="confirmExecuted()">CONFIRMAR OT EJECUTADA</button></div></div>`}
+function renderDetail(d){selected=d;const o=d.ot||{};detailPanel.innerHTML=`<div class="ot-title-main"><h2>${esc(o.ID_OT)} — ${esc(o.DESCRIPCION_OT||'')}</h2><span class="state-big">${esc(o.ESTADO_OT)} // ${esc(stateLabel(o.ESTADO_OT))}</span></div><div class="grid"><div class="card"><label>PRIORIDAD</label><strong>${esc(o.PRIORIDAD)}</strong></div><div class="card"><label>FECHA PROGRAMADA</label><strong>${dateText(o.FECHA_PROGRAMADA)}</strong></div><div class="card"><label>PM / ORIGEN</label><strong>${esc(o.NOMBRE_PM_ORIGEN||o.ID_PMO||o.TIPO_ORIGEN||'MANUAL')}</strong></div><div class="card"><label>DURACION ESTIMADA</label><strong>${Number(o.DURACION_ESTIMADA_MIN||0)} MIN</strong></div></div><div class="section"><h3>ACTIVO / EQUIPOS</h3>${renderAssets(d.assets)}</div><div class="section"><h3>ACTIVIDADES A.M.</h3>${renderAM(d.activities)}</div>${execPanel(d)}`;if(d.editable){execStart.value=nowLocal();execReport.value=o.REPORTE_ACTIVIDAD||'';execObs.value=o.OBSERVACION_EJECUCION||''}}
+async function openOT(id){selectedId=id;try{const d=await api('techOTGet',{idOT:id},'CARGANDO '+id+'...');renderDetail(d);document.querySelectorAll('.ot-item').forEach(x=>x.classList.toggle('sel',x.textContent.includes(id)))}catch(e){message(apiError(e),'NO FUE POSIBLE ABRIR OT')}}
+async function confirmExecuted(){if(!selected||!selected.editable)return message('LA OT NO ESTA DISPONIBLE PARA DOCUMENTAR.');const start=execStart.value,end=execEnd.value,mins=Number(execMinutes.value||0),report=execReport.value.trim(),obs=execObs.value.trim();if(!start)return message('DILIGENCIE FECHA Y HORA DE INICIO.');if(!end&&!(mins>0))return message('DILIGENCIE DURACION EN MINUTOS O FECHA/HORA FIN.');if(!report)return message('DILIGENCIE LA DESCRIPCION DE LA ACTIVIDAD REALIZADA.');if(!confirm('CONFIRMA QUE '+selected.ot.ID_OT+' FUE EJECUTADA Y DEBE PASAR A OTD?'))return;try{const r=await api('techOTReport',{idOT:selected.ot.ID_OT,data:{inicio:start,fin:end,duracionMin:mins,reporte:report,observacion:obs}},'GUARDANDO EJECUCION...');const old=currentState;counts[old]=Math.max(0,Number(counts[old]||0)-1);counts.OTD=Number(counts.OTD||0)+1;renderStats();selectedId='';selected=null;detailPanel.innerHTML='<div class="empty"><div><h2>'+esc(r.idOT)+'</h2><p>OT DOCUMENTADA CORRECTAMENTE // OTE ? OTD</p></div></div>';sessionStorage.removeItem(cacheKey());await loadList(1);message('OT DOCUMENTADA CORRECTAMENTE. PASO A OTD.','A.R.M.A. | OT EJECUTADA')}catch(e){message(apiError(e),'NO FUE POSIBLE DOCUMENTAR OT')}}
+function openReprogram(){if(!selected||!selected.canReprogram)return message('LA OT NO ESTA DISPONIBLE PARA REPROGRAMACION.');reprogramCause.value='';reprogramDetail.value='';reprogramModal.classList.remove('hidden')}
+function closeReprogram(){reprogramModal.classList.add('hidden')}
+async function submitReprogram(){if(!selected)return;const cause=reprogramCause.value,detail=reprogramDetail.value.trim();if(!cause)return message('SELECCIONE LA CAUSA.');if(cause==='OTRO'&&!detail)return message('DESCRIBA LA OTRA CAUSA.');if(!confirm('CONFIRMA ENVIAR '+selected.ot.ID_OT+' A OTRPR?'))return;try{const r=await api('techOTReprogram',{idOT:selected.ot.ID_OT,data:{causa:cause,detalle:detail}},'REGISTRANDO REPROGRAMACION...');closeReprogram();counts[currentState]=Math.max(0,Number(counts[currentState]||0)-1);counts.OTRPR=Number(counts.OTRPR||0)+1;renderStats();selectedId='';selected=null;detailPanel.innerHTML='<div class="empty"><div><h2>'+esc(r.idOT)+'</h2><p>SOLICITUD DE REPROGRAMACION REGISTRADA // OTE ? OTRPR</p></div></div>';sessionStorage.removeItem(cacheKey());await loadList(1);message('LA OT PASO A OTRPR PARA NUEVA PLANEACION.','A.R.M.A. | REPROGRAMACION')}catch(e){message(apiError(e),'NO FUE POSIBLE SOLICITAR REPROGRAMACION')}}
+document.addEventListener('DOMContentLoaded',bootstrap);
+</script>
+</body>
+</html>
