@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="arma-avatar-192.png">
 <script src="arma-pwa-navigation.js" defer data-arma-pwa-navigation="1"></script>
-<title>ARMA | USUARIOS Y ALCANCES V05.4</title>
+<title>ARMA | USUARIOS Y ALCANCES V05.5</title>
 <style>:root{
   --navy:#002b66;--blue:#004b9b;--blue2:#0076d7;--cyan:#00bfd6;
   --green:#18c65b;--green2:#55b52e;--red:#dc2626;--orange:#f59e0b;
@@ -109,17 +109,12 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
 .summary-box strong{display:block;margin-top:4px;color:var(--navy);font-size:14px}
 .scope-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.scope-groups{min-height:130px}.scope-summary{margin-top:8px;padding:10px;border-left:5px solid var(--cyan);border-radius:9px;background:#eefaff;color:var(--navy);font-size:10px;font-weight:900;line-height:1.45}.group-admin{border:1px solid #bcd8ef;background:#f7fbff}.group-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:10px}.scope-capabilities{display:grid;grid-template-columns:1fr 1fr;gap:10px}.capability-card{display:flex;align-items:flex-start;gap:9px;padding:11px;border:1px solid var(--line);border-radius:12px;background:#fff}.capability-card input{width:18px;height:18px;margin-top:1px}.capability-card strong{display:block;color:var(--navy);font-size:11px}.capability-card small{display:block;margin-top:3px;color:var(--muted);font-size:9px;line-height:1.35}.scope-tree-toolbar{display:grid;grid-template-columns:1fr auto auto;gap:8px;margin:8px 0}.scope-tree-status{padding:8px 10px;border-radius:9px;background:#eaf7ff;color:var(--navy);font-size:9px;font-weight:900}.scope-tree{max-height:410px;overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fff;padding:8px}.tree-node{margin:1px 0}.tree-row{display:grid;grid-template-columns:25px 22px auto 1fr;align-items:center;gap:5px;min-height:30px;padding:3px 5px;border-radius:8px}.tree-row:hover{background:#eef7ff}.tree-toggle{border:0;background:transparent;color:var(--navy);font-weight:1000;cursor:pointer;width:24px;height:24px}.tree-toggle.empty{visibility:hidden}.tree-check{width:17px;height:17px}.tree-type{display:inline-block;padding:3px 6px;border-radius:999px;background:#dbeeff;color:var(--navy);font-size:8px;font-weight:1000}.tree-label{color:var(--navy);font-size:10px;font-weight:850;line-height:1.25}.tree-children{margin-left:18px;border-left:1px dashed #bdd5e8;padding-left:5px}.tree-children.hidden{display:none}.scope-tree-summary{margin-top:8px;padding:9px;border-left:4px solid var(--green);border-radius:8px;background:#effff5;color:#075f2c;font-size:9px;font-weight:900;line-height:1.45}.scope-empty{padding:25px;text-align:center;color:var(--muted);font-size:10px;font-weight:900}@media(max-width:1150px){.workspace{grid-template-columns:1fr}.users-table{max-height:420px}}
 @media(max-width:700px){.filters,.form-grid,.access-summary{grid-template-columns:1fr}.field.full{grid-column:1}.btn{min-height:48px;font-size:14px}}</style>
-<!-- ARMA_PUBLICATION_HEAD_START -->
-<meta name="arma-build-file" content="usuarios_arma.html">
-<meta name="arma-build-generated" content="2026-08-06 18:34:49">
-<meta name="arma-build-id" content="20260806183449-usuarios-arma">
-<!-- ARMA_PUBLICATION_HEAD_END -->
 </head>
 <body>
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><h2 id="loaderText">CARGANDO...</h2><p>ARMA ESTA VALIDANDO Y ACTUALIZANDO INFORMACION EN LINEA.</p></div></div>
 <div id="toast" class="toast"></div>
 <div id="dialog" class="dialog hidden"><div class="dialog-card"><div class="dialog-head"><h2 id="dialogTitle">A.R.M.A.</h2></div><div id="dialogMessage" class="dialog-body"></div><div class="dialog-actions"><button id="dialogCancel" class="btn gray">CANCELAR</button><button id="dialogAccept" class="btn green">ACEPTAR</button></div></div></div>
-<header class="top-global"><div class="top-white"><div class="brand-row"><img src="logo_pelex.bmp" class="logo-pelex" alt="PELEX"><div class="brand-separator"></div><img src="ARMA%20logo%202.png" class="logo-arma" alt="ARMA"></div><div class="top-title"><strong>ADMINISTRACION | USUARIOS</strong><span>CUENTAS ARMA VINCULADAS A PERSONAL Y NIVELES DE ACCESO</span><div id="userPill" class="user-pill">VALIDANDO SESION...</div></div></div><div class="blue-line"></div></header>
+<header class="top-global"><div class="top-white"><div class="brand-row"><img src="logo_pelex.bmp" class="logo-pelex" alt="PELEX"><div class="brand-separator"></div><img src="ARMA%20logo%202.png" class="logo-arma" alt="ARMA"></div><div class="top-title"><strong>ADMINISTRACION | USUARIOS</strong><span>CUENTAS ARMA VINCULADAS A PERSONAL // UNA PERSONA PUEDE TENER VARIOS USUARIOS</span><div id="userPill" class="user-pill">VALIDANDO SESION...</div></div></div><div class="blue-line"></div></header>
 <main id="appArea" class="main">
 <section class="hero" data-mark="USUARIOS"><div class="hero-copy"><h1>GESTION DE USUARIOS ARMA</h1><p>CREE, ACTUALICE, ACTIVE, SUSPENDA Y PROTEJA CUENTAS. LOS PERMISOS SE HEREDAN DEL NIVEL ASIGNADO.</p></div><a class="home-card" href="main.html" data-smart-home="1"><span class="home-icon"><img src="boton-de-inicio.png" alt="INICIO"></span><span class="home-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></span></a></section>
 <section class="workspace">
@@ -142,6 +137,7 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
       <div><label>ACTIVO</label><select id="userActive"><option value="SI">SI</option><option value="NO">NO</option></select></div>
       <div><label>DEBE CAMBIAR CLAVE</label><select id="userMustChange"><option value="SI">SI</option><option value="NO">NO</option></select></div>
       <div class="field full"><label>CLAVE TEMPORAL / NUEVA CLAVE</label><input id="userPassword" type="password" placeholder="MINIMO 8 CARACTERES"></div>
+      <div class="field full"><div class="scope-summary">SEGURIDAD: ARMA NO GUARDA NI PUEDE MOSTRAR LA CLAVE ACTUAL EN TEXTO PLANO. SUPER_ADMIN PUEDE RESTABLECER UNA NUEVA CLAVE TEMPORAL.</div></div>
     </div></div>
     <div class="form-section"><h3>ALCANCE DE DATOS</h3><div class="scope-grid">
       <div><label>MODO DE ALCANCE</label><select id="userScopeMode"><option value="PERSONA">HEREDAR DE LA PERSONA</option><option value="GRUPOS">USAR GRUPOS</option><option value="GLOBAL">GLOBAL - SOLO ADMIN / SUPER_ADMIN</option></select></div>
@@ -162,7 +158,7 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
     <div class="form-actions"><button id="btnToggle" class="btn orange">ACTIVAR / SUSPENDER</button><button id="btnReset" class="btn">RESTABLECER CLAVE</button><button id="btnDelete" class="btn red">ELIMINAR</button><button id="btnSave" class="btn green">CREAR USUARIO</button></div>
   </article>
 </section>
-<footer class="footer">A.R.M.A. // USUARIOS V05 // ARMA_DATABASE EN LINEA // {{ARMA_BUILD_STAMP}}</footer>
+<footer class="footer">A.R.M.A. // USUARIOS V05.5 // ARMA_DATABASE EN LINEA // GENERADO: 2026-08-08 08:28:05</footer>
 </main>
 <script>const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
 const ARMA_UI_MANIFEST={
@@ -235,7 +231,7 @@ function fillFilters(){
   formLevel.innerHTML='<option value="">SELECCIONE NIVEL</option>'+appData.levels.map(l=>`<option value="${esc(l.nivel)}">${esc(l.nivel)} // ${esc(l.descripcion||'')}</option>`).join('');
   if(current)formLevel.value=current;
   let person=document.getElementById('personSelect');
-  person.innerHTML='<option value="">SELECCIONE PERSONA CREADA EN PERSONAL</option>'+appData.persons.map(p=>{let linked=normalize(p.USER_ARMA);let disabled=linked?' disabled':'';let suffix=linked?' // YA VINCULADA: '+linked:'';return `<option value="${esc(p.ID_PERSONA)}"${disabled}>${esc(p.NOMBRE_COMPLETO)} // ${esc(p.ID_PERSONA)}${esc(suffix)}</option>`;}).join('');
+  person.innerHTML='<option value="">SELECCIONE PERSONA CREADA EN PERSONAL</option>'+appData.persons.map(p=>{let linked=normalize(p.USER_ARMA);let suffix=linked?' // USUARIO PRINCIPAL: '+linked+' // ADMITE CUENTAS ADICIONALES':' // SIN USUARIO PRINCIPAL';return `<option value="${esc(p.ID_PERSONA)}">${esc(p.NOMBRE_COMPLETO)} // ${esc(p.ID_PERSONA)}${esc(suffix)}</option>`;}).join('');
 }
 
 function splitScope(v){return String(v||'').split(/[|,;\n]+/).map(normalize).filter(Boolean);}
@@ -383,7 +379,7 @@ async function saveUser(){
   if(!data.user||!data.nivel||(!data.idPersona&&createMode)){toast('COMPLETE USUARIO, PERSONA Y NIVEL.');return;}
   if(createMode&&!data.password){toast('DIGITE UNA CLAVE TEMPORAL.');return;}
   if(data.modoAlcance==='GRUPOS'&&!data.gruposAlcance.length){toast('SELECCIONE AL MENOS UN GRUPO DE ALCANCE.');return;}
-  let ok=await dialog(createMode?'CREAR USUARIO':'GUARDAR CAMBIOS',createMode?'SE CREARA EL USUARIO Y SE VINCULARA A PERSONAL.':'SE ACTUALIZARA EL USUARIO SELECCIONADO.','CONTINUAR','CANCELAR');if(!ok)return;
+  let ok=await dialog(createMode?'CREAR USUARIO':'GUARDAR CAMBIOS',createMode?'SE CREARA UNA CUENTA ARMA VINCULADA A LA PERSONA. SI YA TIENE OTRA CUENTA, SE CONSERVARA COMO USUARIO ADICIONAL.':'SE ACTUALIZARA EL USUARIO SELECCIONADO.','CONTINUAR','CANCELAR');if(!ok)return;
   let wasCreate=createMode;let targetUser=data.user;
   let result=await api(wasCreate?'createUser':'updateUserAdmin',{userData:data},wasCreate?'CREANDO USUARIO...':'GUARDANDO CAMBIOS...');
   if(!result.ok){toast(result.error||'NO FUE POSIBLE GUARDAR.');return;}
@@ -411,7 +407,7 @@ async function resetPassword(){
 
 async function deleteSelected(){
   if(!selectedUser)return;
-  let ok=await dialog('ELIMINAR USUARIO','ESTA ACCION ELIMINA LA CUENTA, CIERRA SUS SESIONES Y DESVINCULA USER_ARMA EN PERSONAL.\n\nUSUARIO: '+selectedUser.user,'ELIMINAR','CANCELAR');if(!ok)return;
+  let ok=await dialog('ELIMINAR USUARIO','ESTA ACCION ELIMINA LA CUENTA Y CIERRA SUS SESIONES. SI ERA EL USUARIO PRINCIPAL, ARMA PROMOVERA OTRA CUENTA DE LA MISMA PERSONA.\n\nUSUARIO: '+selectedUser.user,'ELIMINAR','CANCELAR');if(!ok)return;
   let r=await api('deleteUser',{user:selectedUser.user},'ELIMINANDO USUARIO...');
   if(!r.ok){toast(r.error||'NO FUE POSIBLE ELIMINAR.');return;}
   toast(r.message||'USUARIO ELIMINADO');await loadBootstrap(null,true);
@@ -448,16 +444,17 @@ const ARMA_V1603_USERS_INFLIGHT=new Map();
 let ARMA_V1603_PERSONS_READY=false;
 let ARMA_V1603_SCOPE_READY=false;
 let ARMA_V1603_DEFERRED_JOB=null;
-function armaV1603UsersKey(){const t=localStorage.getItem('ARMA_TOKEN')||'';return 'ARMA_USERS_V1603_CORE_'+t.slice(-14);}
+function armaV1603UsersKey(){const t=localStorage.getItem('ARMA_TOKEN')||'';return 'ARMA_USERS_V055_CORE_'+t.slice(-14);}
 function armaV1603CoreUsable(data){return !!(data&&data.ok&&Array.isArray(data.users)&&Array.isArray(data.levels));}
+function armaIsSuperAdminSession(){return normalize(armaSession.nivel)==='SUPER_ADMIN'||!!(armaSession.permissions&&armaSession.permissions.__SUPER_ADMIN__===true);}
 function armaV1603ScopeUsable(data){return !!(data&&data.ok&&data.scopeCatalog&&Array.isArray(data.scopeCatalog.tree));}
 function armaV1603UsersRead(){try{const raw=sessionStorage.getItem(armaV1603UsersKey());const x=JSON.parse(raw||'null');if(!x||Date.now()-Number(x.ts||0)>300000||!armaV1603CoreUsable(x.data))return null;return x.data;}catch(e){return null;}}
 function armaV1603UsersWrite(data){if(!armaV1603CoreUsable(data))return;const slim={ok:true,version:data.version||'',session:data.session||null,users:data.users||[],levels:data.levels||[],scopeGroups:data.scopeGroups||[],counts:data.counts||{},performance:data.performance||{}};try{sessionStorage.setItem(armaV1603UsersKey(),JSON.stringify({ts:Date.now(),data:slim}));}catch(e){}}
-function armaV1603UsersClear(){try{sessionStorage.removeItem(armaV1603UsersKey());sessionStorage.removeItem('ARMA_USERS_V05_BOOT_'+(localStorage.getItem('ARMA_TOKEN')||'').slice(-14));sessionStorage.removeItem('ARMA_USERS_V04_BOOT_'+(localStorage.getItem('ARMA_TOKEN')||'').slice(-14));}catch(e){}}
+function armaV1603UsersClear(){try{const tail=(localStorage.getItem('ARMA_TOKEN')||'').slice(-14);sessionStorage.removeItem(armaV1603UsersKey());sessionStorage.removeItem('ARMA_USERS_V1603_CORE_'+tail);sessionStorage.removeItem('ARMA_USERS_V05_BOOT_'+tail);sessionStorage.removeItem('ARMA_USERS_V04_BOOT_'+tail);}catch(e){}}
 function armaV1603Delay(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
 async function api(action,payload,msg,options){payload=payload||{};options=options||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';const read=/^(adminUsersBootstrap|adminUsersScopeCatalog|listUsers|listLevels|listPersonalForUserCreate|listScopeGroups)$/.test(action);const key=read?action+'|'+JSON.stringify(payload):'';if(read&&ARMA_V1603_USERS_INFLIGHT.has(key))return ARMA_V1603_USERS_INFLIGHT.get(key);if(msg)showLoader(msg);const attempts=Math.max(1,Number(options.attempts||1));const timeoutMs=read?Math.max(10000,Number(options.timeoutMs||45000)):0;const job=(async function(){let lastError=null;for(let n=1;n<=attempts;n++){const ctl=read?new AbortController():null;const timer=read?setTimeout(()=>ctl.abort(),timeoutMs):0;try{const req={method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)};if(ctl)req.signal=ctl.signal;const r=await fetch(ARMA_API_URL,req);const txt=await r.text();let data;try{data=JSON.parse(txt);}catch(e){throw new Error('RESPUESTA_NO_JSON // HTTP '+r.status);}if(!r.ok)throw new Error('HTTP '+r.status);return data;}catch(e){lastError=e;if(n<attempts)await armaV1603Delay(700*n);}finally{if(timer)clearTimeout(timer);}}throw lastError||new Error('ERROR_DE_CONEXION');})();if(read)ARMA_V1603_USERS_INFLIGHT.set(key,job);try{return await job;}finally{if(read)ARMA_V1603_USERS_INFLIGHT.delete(key);if(msg)hideLoader();}}
 async function validateSession(){const cache=readCache();const currentToken=localStorage.getItem('ARMA_TOKEN')||(cache&&cache.token)||'';if(!currentToken){location.href='main.html';return false;}if(cache)setSession(cache,currentToken);else armaSession.token=currentToken;return true;}
-function armaV1603ApplyCore(data,selectName){if(!armaV1603CoreUsable(data))throw new Error((data&&data.error)||'PAQUETE_USUARIOS_CORE_INVALIDO');if(data.session)setSession(data.session,armaSession.token||localStorage.getItem('ARMA_TOKEN')||'');if(!hasPerm('BTN_ADMIN_USUARIOS','BTN_ADMIN_USUARIOS')){document.getElementById('appArea').innerHTML='<section class="panel login-wall"><div><h2>ACCESO NO AUTORIZADO</h2><p>SU NIVEL NO TIENE BTN_ADMIN_USUARIOS.</p><a class="btn" href="main.html">VOLVER A MAIN</a></div></section>';return false;}appData.users=data.users||[];appData.levels=data.levels||[];if(Array.isArray(data.persons)&&data.persons.length){appData.persons=data.persons;ARMA_V1603_PERSONS_READY=true;}if(Array.isArray(data.scopeGroups))appData.scopeGroups=data.scopeGroups;if(armaV1603ScopeUsable(data)){appData.scopeCatalog=data.scopeCatalog;appData.scopeModes=data.scopeModes||[];ARMA_V1603_SCOPE_READY=true;}fillFilters();armaV1604PrepareGroupOptions();if(ARMA_V1603_SCOPE_READY)fillScopeCatalogs();if(selectName&&appData.users.some(u=>normalize(u.user)===normalize(selectName)))selectUser(selectName);else beginNew(false);renderUsers();const c=data.counts||{};const perf=data.performance||{};document.getElementById('listStatus').textContent=appData.users.length+' USUARIOS // CORE '+Number(perf.coreMs||0)+' MS'+(c.groups!=null?' // '+c.groups+' GRUPOS':'');return true;}
+function armaV1603ApplyCore(data,selectName){if(!armaV1603CoreUsable(data))throw new Error((data&&data.error)||'PAQUETE_USUARIOS_CORE_INVALIDO');if(data.session)setSession(data.session,armaSession.token||localStorage.getItem('ARMA_TOKEN')||'');if(!hasPerm('BTN_ADMIN_USUARIOS','BTN_ADMIN_USUARIOS')){document.getElementById('appArea').innerHTML='<section class="panel login-wall"><div><h2>ACCESO NO AUTORIZADO</h2><p>SU NIVEL NO TIENE BTN_ADMIN_USUARIOS.</p><a class="btn" href="main.html">VOLVER A MAIN</a></div></section>';return false;}appData.users=(data.users||[]).filter(u=>armaIsSuperAdminSession()||normalize(u.nivel)!=='SUPER_ADMIN');appData.levels=(data.levels||[]).filter(l=>armaIsSuperAdminSession()||normalize(l.nivel)!=='SUPER_ADMIN');if(Array.isArray(data.persons)&&data.persons.length){appData.persons=data.persons;ARMA_V1603_PERSONS_READY=true;}if(Array.isArray(data.scopeGroups))appData.scopeGroups=data.scopeGroups;if(armaV1603ScopeUsable(data)){appData.scopeCatalog=data.scopeCatalog;appData.scopeModes=data.scopeModes||[];ARMA_V1603_SCOPE_READY=true;}fillFilters();armaV1604PrepareGroupOptions();if(ARMA_V1603_SCOPE_READY)fillScopeCatalogs();if(selectName&&appData.users.some(u=>normalize(u.user)===normalize(selectName)))selectUser(selectName);else beginNew(false);renderUsers();const c=data.counts||{};const perf=data.performance||{};document.getElementById('listStatus').textContent=appData.users.length+' USUARIOS // CORE '+Number(perf.coreMs||0)+' MS'+(c.groups!=null?' // '+c.groups+' GRUPOS':'');return true;}
 function armaV1603ApplyPersons(data){const rows=Array.isArray(data)?data:((data&&data.rows)||[]);appData.persons=rows;ARMA_V1603_PERSONS_READY=true;fillFilters();setActionButtons();return rows.length;}
 function armaV1603ApplyScope(data){if(!armaV1603ScopeUsable(data))throw new Error((data&&data.error)||'CATALOGO_ALCANCE_NO_DISPONIBLE');appData.scopeGroups=data.scopeGroups||appData.scopeGroups||[];appData.scopeCatalog=data.scopeCatalog;appData.scopeModes=data.scopeModes||appData.scopeModes||[];ARMA_V1603_SCOPE_READY=true;fillScopeCatalogs();setActionButtons();const perf=data.performance||{};document.getElementById('scopeCatalogStatus').textContent='ARBOL MEL LISTO // '+((data.counts&&data.counts.treeNodes)||appData.scopeCatalog.tree.length)+' NODOS // '+Number(perf.coreMs||0)+' MS';return true;}
 /* === ARMA V16.0.5 EMERGENCIA: LISTA PRIMERO / GRUPOS SIN ARBOL === */
@@ -522,7 +519,7 @@ async function armaV1605EnsureLevels(showMessage){
   try{data=await api('adminUsersLevelsLite',{},showMessage?'CARGANDO NIVELES...':'',{attempts:1});}
   catch(e){data=await api('listLevels',{},showMessage?'CARGANDO NIVELES...':'',{attempts:1});}
   if(!data||data.ok===false)throw new Error((data&&data.error)||'NIVELES_NO_DISPONIBLES');
-  appData.levels=(data.levels||[]).map(x=>Object.assign({},x,{permissionCount:Number(x.permissionCount||Object.values(x.permissions||{}).filter(Boolean).length),filterRuleCount:Number(x.filterRuleCount||0)}));
+  appData.levels=(data.levels||[]).filter(x=>armaIsSuperAdminSession()||normalize(x.nivel||x.NIVEL)!=='SUPER_ADMIN').map(x=>Object.assign({},x,{permissionCount:Number(x.permissionCount||Object.values(x.permissions||{}).filter(Boolean).length),filterRuleCount:Number(x.filterRuleCount||0)}));
   ARMA_V1605_LEVELS_READY=true;
   const selectedLevel=selectedUser&&selectedUser.nivel||document.getElementById('userLevel').value;
   fillFilters();
@@ -612,68 +609,5 @@ bind=function(){
 };
 document.addEventListener('DOMContentLoaded',async()=>{bind();try{if(await validateSession())await loadBootstrap();}catch(e){hideLoader();toast(e.message||'ERROR DE CONEXION');}});
 </script>
-<!-- ARMA_PUBLICATION_SEAL_START -->
-<style id="armaPublicationSealStyle">
-#armaPublicationSeal{margin:12px 18px 16px;padding:10px 14px;border-radius:12px;background:linear-gradient(135deg,#002b66,#006bd1);color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;text-align:center;font:800 10px/1.35 Segoe UI,Arial,sans-serif;letter-spacing:.2px;text-transform:uppercase}
-#armaPublicationSeal .arma-pub-title{font-weight:1000}
-#armaPublicationSeal .arma-pub-state[data-state="ok"]{color:#b8ffd5}
-#armaPublicationSeal .arma-pub-state[data-state="warn"]{color:#ffe7a3}
-#armaPublicationSeal .arma-pub-state[data-state="error"]{color:#fecaca}
-#armaPublicationSeal button{border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(255,255,255,.12);color:#fff;padding:5px 9px;font:900 9px Segoe UI,Arial,sans-serif;cursor:pointer}
-</style>
-<div id="armaPublicationSeal" role="contentinfo" data-arma-file="usuarios_arma.html">
-  <span class="arma-pub-title">A.R.M.A. // CONTROL DE PUBLICACION</span>
-  <span id="armaPublicationStatus" class="arma-pub-state" data-state="warn">GENERADO: 2026-08-06 18:34:49 // GITHUB: VERIFICANDO...</span>
-  <button type="button" onclick="window.ARMA_VerificarPublicacion&&window.ARMA_VerificarPublicacion(true)">VERIFICAR</button>
-</div>
-<script id="armaPublicationSealScript">
-(function(){
-  'use strict';
-  const OWNER='jgaravitomtto',REPO='ot-mantenimiento',BRANCH='main';
-  const PAGES_BASE='https://jgaravitomtto.github.io/ot-mantenimiento/';
-  const meta=n=>document.querySelector('meta[name="'+n+'"]')?.content||'';
-  const file=meta('arma-build-file')||location.pathname.split('/').pop()||'main.html';
-  const buildId=meta('arma-build-id');
-  const generated=meta('arma-build-generated')||'2026-08-06 18:34:49';
-  const cacheKey='ARMA_PUBLICATION_V01|'+file+'|'+buildId;
-  const status=()=>document.getElementById('armaPublicationStatus');
-  function paint(text,state){const el=status();if(!el)return;el.textContent=text;el.dataset.state=state||'warn';}
-  function localDate(value){const d=new Date(value);if(Number.isNaN(d.getTime()))return String(value||'');return d.toLocaleString('es-CO',{timeZone:'America/Bogota',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});}
-  function readCache(){try{const x=JSON.parse(localStorage.getItem(cacheKey)||'null');return x&&Date.now()-Number(x.ts||0)<900000?x:null;}catch(e){return null;}}
-  function writeCache(text,state){try{localStorage.setItem(cacheKey,JSON.stringify({ts:Date.now(),text:text,state:state}));}catch(e){}}
-  async function verify(force){
-    const saved=!force&&readCache();if(saved){paint(saved.text,saved.state);return saved;}
-    paint('GENERADO: '+generated+' // GITHUB: VERIFICANDO...','warn');
-    try{
-      const commitUrl='https://api.github.com/repos/'+OWNER+'/'+REPO+'/commits?path='+encodeURIComponent(file)+'&per_page=1';
-      const rawUrl='https://raw.githubusercontent.com/'+OWNER+'/'+REPO+'/'+BRANCH+'/'+encodeURIComponent(file)+'?arma_build='+Date.now();
-      const pagesUrl=PAGES_BASE+encodeURIComponent(file)+'?arma_deploy='+Date.now();
-      const results=await Promise.allSettled([
-        fetch(commitUrl,{headers:{Accept:'application/vnd.github+json'},cache:'no-store'}),
-        fetch(rawUrl,{cache:'no-store'}),
-        fetch(pagesUrl,{cache:'no-store',headers:{'Cache-Control':'no-cache'}})
-      ]);
-      let sha='',published='',raw='',pages='',apiOk=false,rawOk=false,pagesOk=false;
-      if(results[0].status==='fulfilled'&&results[0].value.ok){const list=await results[0].value.json();const c=list&&list[0];if(c){sha=String(c.sha||'').slice(0,7);published=c.commit?.committer?.date||c.commit?.author?.date||'';apiOk=true;}}
-      if(results[1].status==='fulfilled'&&results[1].value.ok){raw=await results[1].value.text();rawOk=true;}
-      if(results[2].status==='fulfilled'&&results[2].value.ok){pages=await results[2].value.text();pagesOk=true;}
-      const marker='name="arma-build-id" content="'+buildId+'"';
-      const rawSame=rawOk&&raw.indexOf(marker)>=0;
-      const pagesSame=pagesOk&&pages.indexOf(marker)>=0;
-      let text,state;
-      if(pagesSame&&rawSame&&apiOk){text='PUBLICADO: '+localDate(published)+' // COMMIT '+sha+' // GITHUB PAGES VERIFICADO';state='ok';}
-      else if(pagesSame&&rawSame){text='GITHUB PAGES VERIFICADO // SHA NO DISPONIBLE';state='ok';}
-      else if(rawSame&&apiOk){text='REPOSITORIO: '+localDate(published)+' // COMMIT '+sha+' // GITHUB PAGES AUN NO PUBLICA ESTE BUILD';state='warn';}
-      else if(pagesSame){text='GITHUB PAGES CONTIENE ESTE BUILD // REPOSITORIO NO VERIFICADO';state='warn';}
-      else if(apiOk){text='ULTIMO COMMIT DEL ARCHIVO: '+localDate(published)+' // '+sha+' // BUILD ACTUAL NO VERIFICADO';state='warn';}
-      else{text='GENERADO: '+generated+' // GITHUB: NO VERIFICADO';state='error';}
-      paint(text,state);writeCache(text,state);return {text:text,state:state};
-    }catch(e){const text='GENERADO: '+generated+' // GITHUB: NO VERIFICADO // '+String(e&&e.message||e);paint(text,'error');return {text:text,state:'error'};}
-  }
-  window.ARMA_VerificarPublicacion=verify;
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>verify(false),{once:true});else verify(false);
-})();
-</script>
-<!-- ARMA_PUBLICATION_SEAL_END -->
 </body>
 </html>
