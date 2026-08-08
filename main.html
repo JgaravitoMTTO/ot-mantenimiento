@@ -353,7 +353,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </div>
     <div class='kpi kpi-static'>
       <div class='kpi-icon-img blue'><img src='prueba-de-velocidad.png' alt='CUMPLIMIENTO'></div>
-      <div><span>CUMPLIMIENTO OTCT</span><strong>0,0%</strong><small>PROGRAMADAS VS CERRADAS</small></div>
+      <div><span>INDICE OT PENDIENTE</span><strong id='otPendingPctText'>--%</strong><small id='otPendingWindowText'>DESDE OT ABIERTA MAS ANTIGUA</small></div>
     </div>
     <div class='kpi kpi-static'>
       <div class='kpi-icon-img green'><img src='megafono.png' alt='SOLICITUDES'></div>
@@ -549,7 +549,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-08-07 21:09:07</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-08-08 08:29:21</span></div>
   </footer>
 </main>
 </div>
@@ -778,10 +778,11 @@ async function armaPing(){
 function armaHideBootSplash(){var s=document.getElementById('armaBootSplash'); if(!s)return; s.classList.add('hide'); setTimeout(function(){if(s&&s.parentNode){s.parentNode.removeChild(s);}},700);}
 function armaSetTotalActivos(v){var el=document.getElementById('totalActivosText'); if(!el)return; var n=Number(v||0); if(isNaN(n))n=0; el.textContent=String(Math.round(n)).padStart(4,'0');}
 function armaSetOTStateCounts(otpl,ote){var a=document.getElementById('totalOTPLText'),b=document.getElementById('totalOTEText');var n1=Number(otpl||0),n2=Number(ote||0);if(isNaN(n1))n1=0;if(isNaN(n2))n2=0;if(a)a.textContent=String(Math.round(n1));if(b)b.textContent=String(Math.round(n2));}
+function armaSetOTPendingWindow(m){var p=document.getElementById('otPendingPctText'),s=document.getElementById('otPendingWindowText');m=m||{};var v=Number(m.percent||0);if(isNaN(v))v=0;if(p)p.textContent=v.toFixed(1).replace('.',',')+'%';if(s)s.textContent=(m.startDate?'DESDE '+m.startDate+' // ':'')+String(Number(m.pending||0))+' ABIERTAS / '+String(Number(m.closed||0))+' OTCT';}
 function armaApplyMainBootstrap(data,token){
   if(!data||!data.ok)return false;var s=data.session||{};
   if(s.authenticated){s.token=token||localStorage.getItem('ARMA_TOKEN')||'';armaSetSession(s);}else{armaRenderVisitor();}
-  var k=data.kpis||{};armaSetTotalActivos(k.totalActivosMEL||0);armaSetOTStateCounts(k.totalOTPL||0,k.totalOTE||0);
+  var k=data.kpis||{};armaSetTotalActivos(k.totalActivosMEL||0);armaSetOTStateCounts(k.totalOTPL||0,k.totalOTE||0);armaSetOTPendingWindow(k.otPendingWindow||{});
   armaBootstrapPlants=Array.isArray(data.plants)?data.plants:[];var st=document.getElementById('systemStatusText');if(st)st.textContent=(data.health&&data.health.online)?'ONLINE':'OFFLINE';
   armaMainLastRefresh=Date.now();if(s.authenticated)setTimeout(armaCheckMobileLocationWelcome,220);return true;
 }
@@ -1197,7 +1198,7 @@ function armaApplyAuthBootstrap(data,token){
 }
 function armaApplyDashboard(data){
   if(!data||!data.ok)return false;const k=data.kpis||{};
-  armaSetTotalActivos(k.totalActivosMEL||0);armaSetOTStateCounts(k.totalOTPL||0,k.totalOTE||0);
+  armaSetTotalActivos(k.totalActivosMEL||0);armaSetOTStateCounts(k.totalOTPL||0,k.totalOTE||0);armaSetOTPendingWindow(k.otPendingWindow||{});
   armaBootstrapPlants=Array.isArray(data.plants)?data.plants:[];
   const st=document.getElementById('systemStatusText');if(st)st.textContent=(data.health&&data.health.online)?'ONLINE':'OFFLINE';
   armaV13DashboardLastRefresh=Date.now();
