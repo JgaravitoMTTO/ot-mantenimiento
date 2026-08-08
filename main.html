@@ -357,7 +357,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </div>
     <div class='kpi kpi-static'>
       <div class='kpi-icon-img cyan'><img src='lista-de-verificacion.png' alt='PROGRAMACION'></div>
-      <div><span>INDICE PROGRAMACION</span><strong id='otProgrammingPctText'>--%</strong><small id='otProgrammingCutoffText'>HASTA PROXIMO LUNES</small><small id='otProgrammingCountsText'>0 PROGRAMADAS / 0 TOTAL</small></div>
+      <div><span>INDICE PROGRAMACION</span><strong id='otProgrammingPctText'>--%</strong><small id='otProgrammingCutoffText'>HASTA PROXIMO LUNES + SIN FECHA</small><small id='otProgrammingCountsText'>0 SIN PROGRAMAR / 0 TOTAL</small></div>
     </div>
     <div class='kpi kpi-static'>
       <div class='kpi-icon-img green'><img src='megafono.png' alt='SOLICITUDES'></div>
@@ -553,7 +553,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-08-08 08:47:26</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-08-08 09:19:54</span></div>
   </footer>
 </main>
 </div>
@@ -783,7 +783,7 @@ function armaHideBootSplash(){var s=document.getElementById('armaBootSplash'); i
 function armaSetTotalActivos(v){var el=document.getElementById('totalActivosText'); if(!el)return; var n=Number(v||0); if(isNaN(n))n=0; el.textContent=String(Math.round(n)).padStart(4,'0');}
 function armaSetOTStateCounts(otpl,ote){var a=document.getElementById('totalOTPLText'),b=document.getElementById('totalOTEText');var n1=Number(otpl||0),n2=Number(ote||0);if(isNaN(n1))n1=0;if(isNaN(n2))n2=0;if(a)a.textContent=String(Math.round(n1));if(b)b.textContent=String(Math.round(n2));}
 function armaSetOTPendingWindow(m){var p=document.getElementById('otPendingPctText'),d=document.getElementById('otPendingDateText'),c=document.getElementById('otPendingCountsText');m=m||{};var v=Number(m.percent||0);if(isNaN(v))v=0;if(p)p.textContent=v.toFixed(1).replace('.',',')+'%';if(d)d.textContent=m.startDate?'DESDE '+m.startDate:'SIN FECHA BASE';if(c)c.textContent=String(Number(m.pending||0))+' ABIERTAS / '+String(Number(m.closed||0))+' OTCT';}
-function armaSetOTProgramming(m){var p=document.getElementById('otProgrammingPctText'),d=document.getElementById('otProgrammingCutoffText'),c=document.getElementById('otProgrammingCountsText');m=m||{};var v=Number(m.percent||0);if(isNaN(v))v=0;if(p)p.textContent=v.toFixed(1).replace('.',',')+'%';if(d)d.textContent=m.cutoffDate?'HASTA '+m.cutoffDate:'HASTA PROXIMO LUNES';if(c)c.textContent=String(Number(m.programmed||0))+' PROGRAMADAS / '+String(Number(m.total||0))+' TOTAL';}
+function armaSetOTProgramming(m){var p=document.getElementById('otProgrammingPctText'),d=document.getElementById('otProgrammingCutoffText'),c=document.getElementById('otProgrammingCountsText');m=m||{};var v=Number(m.percent||0),n=Number(m.numerator||m.unprogrammed||0),t=Number(m.total||0),sf=Number(m.withoutDate||0);if(isNaN(v))v=0;if(p)p.textContent=v.toFixed(1).replace('.',',')+'%';if(d)d.textContent=(m.cutoffDate?'HASTA '+m.cutoffDate:'HASTA PROXIMO LUNES')+' // '+sf+' SIN FECHA';if(c)c.textContent=String(n)+' SIN PROGRAMAR / '+String(t)+' TOTAL';}
 function armaApplyMainBootstrap(data,token){
   if(!data||!data.ok)return false;var s=data.session||{};
   if(s.authenticated){s.token=token||localStorage.getItem('ARMA_TOKEN')||'';armaSetSession(s);}else{armaRenderVisitor();}
@@ -1177,13 +1177,15 @@ function armaSetSession(data){
   armaUpdateUserCard();armaApplyPermissions();
 }
 function armaSetVisitor(clearStored){
-  armaV13AuthValidated=false;if(clearStored!==false){localStorage.removeItem('ARMA_TOKEN');localStorage.removeItem('ARMA_SESSION_CACHE');try{sessionStorage.removeItem('ARMA_V13_AUTH_BOOT');sessionStorage.removeItem('ARMA_V13_DASH_PHONE');sessionStorage.removeItem('ARMA_V13_DASH_PC');Object.keys(sessionStorage).filter(function(k){return k.indexOf('ARMA_GEO_WELCOME_')===0;}).forEach(function(k){sessionStorage.removeItem(k);});}catch(e){}}armaRenderVisitor();
+  armaV13AuthValidated=false;if(clearStored!==false){localStorage.removeItem('ARMA_TOKEN');localStorage.removeItem('ARMA_SESSION_CACHE');try{sessionStorage.removeItem('ARMA_V13_AUTH_BOOT');sessionStorage.removeItem('ARMA_V13_DASH_PHONE');sessionStorage.removeItem('ARMA_V13_DASH_PC');localStorage.removeItem('ARMA_V136_DASH_PHONE');localStorage.removeItem('ARMA_V136_DASH_PC');localStorage.removeItem('ARMA_V136_DASH_LAST_NET');Object.keys(sessionStorage).filter(function(k){return k.indexOf('ARMA_GEO_WELCOME_')===0;}).forEach(function(k){sessionStorage.removeItem(k);});}catch(e){}}armaRenderVisitor();
 }
 function armaV13AuthCacheWrite(session){try{sessionStorage.setItem('ARMA_V13_AUTH_BOOT',JSON.stringify({ts:Date.now(),session:session}));}catch(e){}}
 function armaV13AuthCacheRead(){try{const raw=sessionStorage.getItem('ARMA_V13_AUTH_BOOT')||'';if(!raw)return null;const x=JSON.parse(raw);if(!x||Date.now()-Number(x.ts||0)>300000)return null;return x.session||null;}catch(e){return null;}}
-function armaV13DashboardCacheKey(){return armaIsPhoneDevice()?'ARMA_V13_DASH_PHONE':'ARMA_V13_DASH_PC';}
-function armaV13DashboardCacheWrite(data){try{sessionStorage.setItem(armaV13DashboardCacheKey(),JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
-function armaV13DashboardCacheRead(){try{const raw=sessionStorage.getItem(armaV13DashboardCacheKey())||'';if(!raw)return null;const x=JSON.parse(raw);if(!x||Date.now()-Number(x.ts||0)>300000)return null;return x.data||null;}catch(e){return null;}}
+function armaV13DashboardCacheKey(){return armaIsPhoneDevice()?'ARMA_V136_DASH_PHONE':'ARMA_V136_DASH_PC';}
+function armaV13DashboardCacheWrite(data){try{localStorage.setItem(armaV13DashboardCacheKey(),JSON.stringify({ts:Date.now(),data:data}));localStorage.setItem('ARMA_V136_DASH_LAST_NET',String(Date.now()));}catch(e){}}
+function armaV13DashboardCacheEnvelope(){try{const raw=localStorage.getItem(armaV13DashboardCacheKey())||'';if(!raw)return null;const x=JSON.parse(raw);if(!x||!x.data)return null;if(Date.now()-Number(x.ts||0)>3600000)return null;return x;}catch(e){return null;}}
+function armaV13DashboardCacheRead(){const x=armaV13DashboardCacheEnvelope();return x?x.data:null;}
+function armaV13DashboardNeedsNetwork(){try{const ts=Number(localStorage.getItem('ARMA_V136_DASH_LAST_NET')||0);return !ts||Date.now()-ts>300000;}catch(e){return true;}}
 async function armaApi(action,payload){
   payload=payload||{};payload.action=action;
   const read=/^(authBootstrap|mainDashboard|validateSession|mainBootstrap|ping)$/.test(action);
@@ -1219,7 +1221,7 @@ async function armaV13RefreshAuth(force){
 async function armaV13RefreshDashboard(force){
   if(!force&&Date.now()-armaV13DashboardLastRefresh<240000)return true;if(armaV13DashboardPromise)return armaV13DashboardPromise;
   const mobile=armaIsPhoneDevice();const token=localStorage.getItem('ARMA_TOKEN')||'';
-  armaV13DashboardPromise=armaApi('mainDashboard',{token:token,options:{mobile:mobile,includePlants:mobile}}).then(function(data){if(data&&data.ok){armaV13DashboardCacheWrite(data);return armaApplyDashboard(data);}return false;}).catch(function(e){console.warn('ARMA mainDashboard',e);const st=document.getElementById('systemStatusText');if(st)st.textContent='OFFLINE';return false;}).finally(function(){armaV13DashboardPromise=null;});
+  armaV13DashboardPromise=armaApi('mainDashboard',{token:token,options:{mobile:mobile,includePlants:mobile,forceKpiRefresh:force===true}}).then(function(data){if(data&&data.ok){armaV13DashboardCacheWrite(data);return armaApplyDashboard(data);}return false;}).catch(function(e){console.warn('ARMA mainDashboard',e);const st=document.getElementById('systemStatusText');if(st)st.textContent='OFFLINE';return false;}).finally(function(){armaV13DashboardPromise=null;});
   return armaV13DashboardPromise;
 }
 async function armaBootstrapMain(force){const ok=await armaV13RefreshAuth(force);armaV13RefreshDashboard(force);return ok;}
@@ -1248,10 +1250,11 @@ document.addEventListener('DOMContentLoaded',function(){
   const cachedDash=armaV13DashboardCacheRead();if(cachedDash)armaApplyDashboard(cachedDash);
   setTimeout(armaHideBootSplash,internalReturn?40:220);
   armaV12PrefetchPages();armaPWARegisterServiceWorker();armaPWAInit();armaStartMainPresence();updateDateCard();setInterval(updateDateCard,60000);
-  armaValidateStoredSession();
-  setInterval(function(){if(!document.hidden){armaV13RefreshAuth(false);armaV13RefreshDashboard(false);}},300000);
-  window.addEventListener('focus',function(){armaV13RefreshAuth(false);armaV13RefreshDashboard(false);});
-  document.addEventListener('visibilitychange',function(){if(!document.hidden){armaV13RefreshAuth(false);armaV13RefreshDashboard(false);}});
+  armaV13RefreshAuth(true);
+  if(!cachedDash){armaV13RefreshDashboard(false);}else if(armaV13DashboardNeedsNetwork()||!!((cachedDash.kpis||{}).snapshotStale)){setTimeout(function(){armaV13RefreshDashboard(true);},900);}
+  setInterval(function(){if(!document.hidden){armaV13RefreshAuth(false);if(armaV13DashboardNeedsNetwork())armaV13RefreshDashboard(true);}},300000);
+  window.addEventListener('focus',function(){armaV13RefreshAuth(false);if(armaV13DashboardNeedsNetwork())armaV13RefreshDashboard(true);});
+  document.addEventListener('visibilitychange',function(){if(!document.hidden){armaV13RefreshAuth(false);if(armaV13DashboardNeedsNetwork())armaV13RefreshDashboard(true);}});
   document.body.addEventListener('click',function(e){const locked=e.target.closest('.arma-locked');if(locked){e.preventDefault();alert('DEBE INICIAR SESION PARA ACCEDER A ESTE MODULO.');}});
   document.body.addEventListener('click',function(e){const a=e.target.closest('a[data-arma-window]');if(a&&!a.classList.contains('arma-locked')){e.preventDefault();armaOpenChildWindow(a.getAttribute('href'),a.getAttribute('data-arma-window'));}});
   document.getElementById('userCard').addEventListener('click',function(e){e.stopPropagation();this.classList.toggle('open');});
