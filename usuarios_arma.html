@@ -97,13 +97,13 @@ button{cursor:pointer}
 
 .scope-help{margin-top:8px;border-left:4px solid var(--cyan);background:#eefbff;border-radius:10px;padding:9px 11px;color:#31566f;font-size:10px;font-weight:850;line-height:1.45}
 
-.group-modal{position:fixed;inset:0;z-index:100;background:rgba(2,18,40,.62);display:grid;place-items:center;padding:18px}
+.group-modal{position:fixed;inset:0;z-index:100;background:rgba(2,18,40,.66);display:grid;place-items:center;padding:6px}
 
-.group-modal-card{width:min(1500px,97vw);height:min(92vh,940px);background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.3);display:flex;flex-direction:column}
+.group-modal-card{width:min(1900px,99.2vw);height:96.5vh;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.34);display:flex;flex-direction:column}
 
-.group-modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:linear-gradient(90deg,var(--navy),var(--blue2));color:#fff}
+.group-modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 16px;background:linear-gradient(90deg,var(--navy),var(--blue2));color:#fff;flex:0 0 auto}
 
-.group-modal-head strong{font-size:14px}
+.group-modal-head strong{font-size:16px}
 .group-modal iframe{width:100%;height:100%;border:0;background:#eef3f9}
 
 input,select,textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:10px 11px;background:#fff;color:var(--navy);font-size:12px;font-weight:800;outline:none}
@@ -268,11 +268,11 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
   </article>
 </section>
 <div id="groupManagerModal" class="group-modal hidden"><div class="group-modal-card"><div class="group-modal-head"><strong>ADMINISTRAR GRUPOS DE ALCANCE</strong><button id="btnCloseGroupManager" class="btn gray" type="button">CERRAR</button></div><iframe id="groupManagerFrame" title="GRUPOS DE ALCANCE"></iframe></div></div>
-<footer class="footer">A.R.M.A. // USUARIOS V06 // ARMA_DATABASE EN LINEA // GENERADO: 2026-08-08 20:16:56</footer>
+<footer class="footer">A.R.M.A. // USUARIOS V06.1 // ARMA_DATABASE EN LINEA // GENERADO: 2026-08-08 22:14:10</footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
-const ARMA_USERS_V06='USUARIOS_V06_FINAL_20260808';
+const ARMA_USERS_V06='USUARIOS_V06_1_MODAL_GRUPOS_20260808';
 const state={session:{user:'',nombre:'',nivel:'',permissions:{},token:''},users:[],levels:[],persons:[],groups:[],selected:null,createMode:true,levelsReady:false,personsReady:false,groupsReady:false};
 const $=id=>document.getElementById(id);
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
