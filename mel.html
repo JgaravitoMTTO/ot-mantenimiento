@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -270,12 +270,6 @@ body.modal-open{overflow:hidden}
 .summary-qr-stack #btnQrTools{width:100% !important;min-width:0 !important;font-size:10.5px !important;padding:9px 7px !important}
 @media(max-width:1100px){.hero{align-items:stretch}.detail-head{grid-template-columns:1fr !important}.summary-right{min-width:0 !important;max-width:650px;margin:0 auto}.asset-summary-panel{top:auto !important}}
 @media(max-width:700px){.hero{display:grid;grid-template-columns:1fr;padding:16px}.hero-home-btn{width:100%;min-width:0;justify-content:center}.summary-right{grid-template-columns:1fr;max-width:none}.summary-command-stack{grid-template-columns:1fr;grid-template-rows:auto}.summary-command{min-height:58px}.summary-qr-stack{max-width:280px;width:100%;margin:0 auto}}
-/* === MEL V13.6: FICHA SOLO LECTURA SEGUN PERMISOS === */
-.mel-readonly-active [data-field].mel-readonly-field{background:#f3f6fa!important;color:#42546b!important;border-color:#d8e1eb!important;box-shadow:none!important;cursor:default!important}
-.mel-readonly-active select[data-field].mel-readonly-field:disabled{opacity:1!important;color:#42546b!important;background:#f3f6fa!important;-webkit-text-fill-color:#42546b!important}
-.mel-readonly-active textarea[data-field].mel-readonly-field[readonly]{resize:none!important}
-.mel-readonly-active .form-section{background:#f8fafc!important}
-.mel-readonly-active .form-section h4:after{content:' // SOLO LECTURA';font-size:9px;color:#64748b;font-weight:1000}
 </style>
 </head>
 <body>
@@ -475,7 +469,7 @@ body.modal-open{overflow:hidden}
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-08-09 09:29:58</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-08-09 09:37:52</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -616,51 +610,6 @@ async function init() {
   applyPermissions();
   await loadMEL();
 }
-function melCanCreateCurrent() {
-  return hasPerm('BTN_MEL_CREAR');
-}
-function melCanEditCurrent() {
-  return hasPerm('BTN_MEL_EDITAR');
-}
-function melCanModifyCurrent() {
-  return creatingNew ? melCanCreateCurrent() : melCanEditCurrent();
-}
-function melApplyFormAccess() {
-  const canModify = melCanModifyCurrent();
-  const readOnly = !canModify;
-  const form = document.getElementById('assetForm');
-  if (form) form.classList.toggle('mel-readonly-active', readOnly);
-  const btnSaveTop = document.getElementById('btnSaveTop');
-  const btnSave = document.getElementById('btnSave');
-  const btnCaptureGeo = document.getElementById('btnCaptureGeo');
-  if (btnSaveTop) { btnSaveTop.disabled = !canModify; btnSaveTop.classList.toggle('disabled', !canModify); }
-  if (btnSave) btnSave.disabled = !canModify;
-  if (btnCaptureGeo) btnCaptureGeo.disabled = !canModify;
-  document.querySelectorAll('[data-field]').forEach(function(el) {
-    const tag = String(el.tagName || '').toUpperCase();
-    if (readOnly) {
-      if ((tag === 'INPUT' || tag === 'TEXTAREA') && !el.readOnly) {
-        el.setAttribute('data-arma-ro-readonly','1');
-        el.readOnly = true;
-      }
-      if (tag === 'SELECT' && !el.disabled) {
-        el.setAttribute('data-arma-ro-disabled','1');
-        el.disabled = true;
-      }
-      el.classList.add('mel-readonly-field');
-    } else {
-      if (el.getAttribute('data-arma-ro-readonly') === '1') {
-        el.readOnly = false;
-        el.removeAttribute('data-arma-ro-readonly');
-      }
-      if (el.getAttribute('data-arma-ro-disabled') === '1') {
-        el.disabled = false;
-        el.removeAttribute('data-arma-ro-disabled');
-      }
-      el.classList.remove('mel-readonly-field');
-    }
-  });
-}
 function applyPermissions() {
   const canView = hasPerm("BTN_MEL_VER");
   const canCreate = hasPerm("BTN_MEL_CREAR");
@@ -679,7 +628,6 @@ function applyPermissions() {
   const adminCatalogButton = document.getElementById("btnAdminIsoCatalogs");
   if (adminCatalogButton) adminCatalogButton.classList.toggle("allowed", canAdminCatalogs);
   updateSummaryActionState(selectedAsset);
-  melApplyFormAccess();
 }
 function currentFilters() {
   return {
@@ -1146,13 +1094,7 @@ function printAssetQr() {
   const summary = esc(melSummaryText(selectedAsset)).replace(/\n/g, "<br>");
   const win = window.open("", "_blank", "width=820,height=900");
   if (!win) { toast("EL NAVEGADOR BLOQUEO LA VENTANA DE IMPRESION."); return; }
-  const html = "<!DOCTYPE html><html lang=\"es\"><head><meta charset=\"UTF-8\"><title>QR " + title + "</title><style>@page{margin:12mm}body{font-family:Arial,sans-serif;text-align:center;color:#002b5c;margin:0;padding:28px}h1{font-size:25px;margin:0 0 16px}.qr{width:420px;max-width:90vw;height:auto;border:1px solid #cfe0f2;padding:14px;border-radius:14px}.summary{font-size:13px;font-weight:700;line-height:1.55;margin:18px 0 0}.foot{margin-top:18px;font-size:10px;font-weight:700}</style>
-<!-- ARMA_PUBLICATION_HEAD_START -->
-<meta name="arma-build-file" content="mel.html">
-<meta name="arma-build-generated" content="2026-08-09 09:29:58">
-<meta name="arma-build-id" content="20260809092958-mel">
-<!-- ARMA_PUBLICATION_HEAD_END -->
-</head><body><h1>" + title + "</h1><img id=\"printQr\" class=\"qr\" src=\"" + src + "\" alt=\"CODIGO QR\"><div class=\"summary\">" + summary + "</div>" +
+  const html = "<!DOCTYPE html><html lang=\"es\"><head><meta charset=\"UTF-8\"><title>QR " + title + "</title><style>@page{margin:12mm}body{font-family:Arial,sans-serif;text-align:center;color:#002b5c;margin:0;padding:28px}h1{font-size:25px;margin:0 0 16px}.qr{width:420px;max-width:90vw;height:auto;border:1px solid #cfe0f2;padding:14px;border-radius:14px}.summary{font-size:13px;font-weight:700;line-height:1.55;margin:18px 0 0}.foot{margin-top:18px;font-size:10px;font-weight:700}</style></head><body><h1>" + title + "</h1><img id=\"printQr\" class=\"qr\" src=\"" + src + "\" alt=\"CODIGO QR\"><div class=\"summary\">" + summary + "</div>" +
     "<div class=\"foot\">ARMA // MEL EQUIPOS</div></body></html>";
   win.document.open();
   win.document.write(html);
@@ -1712,7 +1654,6 @@ function setForm(row, path) {
     melGeoStatus('SIN UBICACION CAPTURADA.','');
   }
   melPrepareHierarchy(melSelectedPath);
-  melApplyFormAccess();
 }
 function newAsset() {
   if (!hasPerm('BTN_MEL_CREAR')) {
@@ -1828,68 +1769,5 @@ document.getElementById('nivelSelect').addEventListener('change', melOnLevelChan
 document.getElementById('btnCaptureGeo').addEventListener('click', capturePlantLocation);
 init();
 </script>
-<!-- ARMA_PUBLICATION_SEAL_START -->
-<style id="armaPublicationSealStyle">
-#armaPublicationSeal{margin:12px 18px 16px;padding:10px 14px;border-radius:12px;background:linear-gradient(135deg,#002b66,#006bd1);color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;text-align:center;font:800 10px/1.35 Segoe UI,Arial,sans-serif;letter-spacing:.2px;text-transform:uppercase}
-#armaPublicationSeal .arma-pub-title{font-weight:1000}
-#armaPublicationSeal .arma-pub-state[data-state="ok"]{color:#b8ffd5}
-#armaPublicationSeal .arma-pub-state[data-state="warn"]{color:#ffe7a3}
-#armaPublicationSeal .arma-pub-state[data-state="error"]{color:#fecaca}
-#armaPublicationSeal button{border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(255,255,255,.12);color:#fff;padding:5px 9px;font:900 9px Segoe UI,Arial,sans-serif;cursor:pointer}
-</style>
-<div id="armaPublicationSeal" role="contentinfo" data-arma-file="mel.html">
-  <span class="arma-pub-title">A.R.M.A. // CONTROL DE PUBLICACION</span>
-  <span id="armaPublicationStatus" class="arma-pub-state" data-state="warn">GENERADO: 2026-08-09 09:29:58 // GITHUB: VERIFICANDO...</span>
-  <button type="button" onclick="window.ARMA_VerificarPublicacion&&window.ARMA_VerificarPublicacion(true)">VERIFICAR</button>
-</div>
-<script id="armaPublicationSealScript">
-(function(){
-  'use strict';
-  const OWNER='jgaravitomtto',REPO='ot-mantenimiento',BRANCH='main';
-  const PAGES_BASE='https://jgaravitomtto.github.io/ot-mantenimiento/';
-  const meta=n=>document.querySelector('meta[name="'+n+'"]')?.content||'';
-  const file=meta('arma-build-file')||location.pathname.split('/').pop()||'main.html';
-  const buildId=meta('arma-build-id');
-  const generated=meta('arma-build-generated')||'2026-08-09 09:29:58';
-  const cacheKey='ARMA_PUBLICATION_V01|'+file+'|'+buildId;
-  const status=()=>document.getElementById('armaPublicationStatus');
-  function paint(text,state){const el=status();if(!el)return;el.textContent=text;el.dataset.state=state||'warn';}
-  function localDate(value){const d=new Date(value);if(Number.isNaN(d.getTime()))return String(value||'');return d.toLocaleString('es-CO',{timeZone:'America/Bogota',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});}
-  function readCache(){try{const x=JSON.parse(localStorage.getItem(cacheKey)||'null');return x&&Date.now()-Number(x.ts||0)<900000?x:null;}catch(e){return null;}}
-  function writeCache(text,state){try{localStorage.setItem(cacheKey,JSON.stringify({ts:Date.now(),text:text,state:state}));}catch(e){}}
-  async function verify(force){
-    const saved=!force&&readCache();if(saved){paint(saved.text,saved.state);return saved;}
-    paint('GENERADO: '+generated+' // GITHUB: VERIFICANDO...','warn');
-    try{
-      const commitUrl='https://api.github.com/repos/'+OWNER+'/'+REPO+'/commits?path='+encodeURIComponent(file)+'&per_page=1';
-      const rawUrl='https://raw.githubusercontent.com/'+OWNER+'/'+REPO+'/'+BRANCH+'/'+encodeURIComponent(file)+'?arma_build='+Date.now();
-      const pagesUrl=PAGES_BASE+encodeURIComponent(file)+'?arma_deploy='+Date.now();
-      const results=await Promise.allSettled([
-        fetch(commitUrl,{headers:{Accept:'application/vnd.github+json'},cache:'no-store'}),
-        fetch(rawUrl,{cache:'no-store'}),
-        fetch(pagesUrl,{cache:'no-store',headers:{'Cache-Control':'no-cache'}})
-      ]);
-      let sha='',published='',raw='',pages='',apiOk=false,rawOk=false,pagesOk=false;
-      if(results[0].status==='fulfilled'&&results[0].value.ok){const list=await results[0].value.json();const c=list&&list[0];if(c){sha=String(c.sha||'').slice(0,7);published=c.commit?.committer?.date||c.commit?.author?.date||'';apiOk=true;}}
-      if(results[1].status==='fulfilled'&&results[1].value.ok){raw=await results[1].value.text();rawOk=true;}
-      if(results[2].status==='fulfilled'&&results[2].value.ok){pages=await results[2].value.text();pagesOk=true;}
-      const marker='name="arma-build-id" content="'+buildId+'"';
-      const rawSame=rawOk&&raw.indexOf(marker)>=0;
-      const pagesSame=pagesOk&&pages.indexOf(marker)>=0;
-      let text,state;
-      if(pagesSame&&rawSame&&apiOk){text='PUBLICADO: '+localDate(published)+' // COMMIT '+sha+' // GITHUB PAGES VERIFICADO';state='ok';}
-      else if(pagesSame&&rawSame){text='GITHUB PAGES VERIFICADO // SHA NO DISPONIBLE';state='ok';}
-      else if(rawSame&&apiOk){text='REPOSITORIO: '+localDate(published)+' // COMMIT '+sha+' // GITHUB PAGES AUN NO PUBLICA ESTE BUILD';state='warn';}
-      else if(pagesSame){text='GITHUB PAGES CONTIENE ESTE BUILD // REPOSITORIO NO VERIFICADO';state='warn';}
-      else if(apiOk){text='ULTIMO COMMIT DEL ARCHIVO: '+localDate(published)+' // '+sha+' // BUILD ACTUAL NO VERIFICADO';state='warn';}
-      else{text='GENERADO: '+generated+' // GITHUB: NO VERIFICADO';state='error';}
-      paint(text,state);writeCache(text,state);return {text:text,state:state};
-    }catch(e){const text='GENERADO: '+generated+' // GITHUB: NO VERIFICADO // '+String(e&&e.message||e);paint(text,'error');return {text:text,state:'error'};}
-  }
-  window.ARMA_VerificarPublicacion=verify;
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>verify(false),{once:true});else verify(false);
-})();
-</script>
-<!-- ARMA_PUBLICATION_SEAL_END -->
 </body>
 </html>
