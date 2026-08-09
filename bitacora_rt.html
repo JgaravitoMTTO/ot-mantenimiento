@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V27.0 | BUILD: 2026-08-09 08:02:39 -->
+<!-- ARMA RT MODULE V27.1 | BUILD: 2026-08-09 09:01:33 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -208,7 +208,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
         </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-09 08:02:39</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-09 09:01:33</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -475,7 +475,7 @@ async function validateSession(){
     if(cachedSession){setSessionData(cachedSession,token);if(PAGE_MODE!=='REPORTAR'){const c=readRTListCache();if(c&&c.rows){startApp({list:{ok:true,rows:c.rows,page:1,hasMore:true,partial:true}});painted=true;}}}
   }catch(e){}
   try{
-    const data=await api('rtBootstrap',{token:token,pageMode:PAGE_MODE,filters:Object.assign(buildFilters(),{PAGE:1,PAGE_SIZE:RT_PAGE_SIZE})},painted?'':'CARGANDO RT...');
+    const data=await api('rtBootstrap',{token:token,pageMode:PAGE_MODE,filters:Object.assign(buildFilters(),{PAGE:1,PAGE_SIZE:RT_PAGE_SIZE})},painted?'':'CARGANDO RT...',90000);
     if(!data||data.ok===false){const msg=[data&&data.error,data&&data.stage,data&&data.detail].filter(Boolean).join(' // ')||'BACKEND RECHAZO LA SESION RT';showLoginWall(msg);return;}
     setSessionData(data.session||{},token);startApp(data);
   }catch(e){const msg=apiErrorText(e);if(!painted)showLoginWall(msg);else document.getElementById('listStatus').textContent='CACHE DE ESTA SESION // '+msg;}
