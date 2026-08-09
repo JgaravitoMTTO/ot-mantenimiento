@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="arma-avatar-192.png">
 <script src="arma-pwa-navigation.js" defer data-arma-pwa-navigation="1"></script>
-<title>ARMA | USUARIOS Y ALCANCES V06</title>
+<title>ARMA | USUARIOS Y ALCANCES V06.2</title>
 <style>:root{
   --navy:#002b66;--blue:#004b9b;--blue2:#0076d7;--cyan:#00bfd6;
   --green:#18c65b;--green2:#55b52e;--red:#dc2626;--orange:#f59e0b;
@@ -219,6 +219,15 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
 .scope-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .scope-groups{min-height:130px}
 .scope-summary{margin-top:8px;padding:10px;border-left:5px solid var(--cyan);border-radius:9px;background:#eefaff;color:var(--navy);font-size:10px;font-weight:900;line-height:1.45}
+
+/* === USUARIOS V06.2 // PC: PANEL IZQUIERDO SINCRONIZADO + SCROLL INTERNO === */
+@media(min-width:1151px){
+  #usersListPanel{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+  #usersListPanel>.panel-title,#usersListPanel>.filters,#usersListPanel>.users-actions{flex:0 0 auto}
+  #usersListPanel>.users-table{flex:1 1 0;min-height:0;max-height:none;overflow-y:auto;overflow-x:auto;scrollbar-gutter:stable}
+  #usersListPanel>.users-table th{position:sticky;top:0;z-index:3}
+}
+
 @media(max-width:1150px){.workspace{grid-template-columns:1fr}
 .users-table{max-height:420px}
 }
@@ -237,13 +246,13 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
 <main id="appArea" class="main">
 <section class="hero" data-mark="USUARIOS"><div class="hero-copy"><h1>GESTION DE USUARIOS ARMA</h1><p>CREE, ACTUALICE, ACTIVE, SUSPENDA Y PROTEJA CUENTAS. LOS PERMISOS SE HEREDAN DEL NIVEL ASIGNADO.</p></div><a class="home-card" href="main.html" data-smart-home="1"><span class="home-icon"><img src="boton-de-inicio.png" alt="INICIO"></span><span class="home-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></span></a></section>
 <section class="workspace">
-  <article class="panel">
+  <article id="usersListPanel" class="panel">
     <div class="panel-title"><h2>LISTA DE USUARIOS</h2><span id="listStatus" class="status">0 USUARIOS</span></div>
     <div class="filters"><input id="filterQ" placeholder="BUSCAR USUARIO, PERSONA, CORREO O ID"><select id="filterLevel"><option value="">TODOS LOS NIVELES</option></select><select id="filterActive"><option value="">TODOS LOS ESTADOS</option><option value="SI">ACTIVOS</option><option value="NO">SUSPENDIDOS</option></select><button id="btnSearch" class="btn">BUSCAR</button></div>
     <div class="table-wrap users-table"><table><thead><tr><th>USUARIO</th><th>NOMBRE</th><th>NIVEL</th><th>ACTIVO</th><th>ID PERSONA</th><th>CORREO</th><th>ALCANCE</th><th>PERMISOS</th></tr></thead><tbody id="usersRows"></tbody></table></div>
-    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px"><button id="btnReload" class="btn gray">ACTUALIZAR</button><button id="btnNew" class="btn green">NUEVO USUARIO</button></div>
+    <div class="users-actions" style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px"><button id="btnReload" class="btn gray">ACTUALIZAR</button><button id="btnNew" class="btn green">NUEVO USUARIO</button></div>
   </article>
-  <article class="panel">
+  <article id="usersDetailPanel" class="panel">
     <div class="panel-title"><h2 id="formTitle">CREAR USUARIO</h2><span class="status">ARMA_DATABASE / USUARIOS</span></div>
     <div class="identity-card"><div><strong id="identityName">NUEVO USUARIO</strong><span id="identitySub">SELECCIONE UNA PERSONA CREADA EN PERSONAL</span></div><span class="badge">ACCESO CONTROLADO</span></div>
     <div id="personField" class="form-section"><h3>PERSONA VINCULADA</h3><label>PERSONA CREADA EN PERSONAL</label><select id="personSelect"><option value="">SELECCIONE PERSONA</option></select></div>
@@ -268,11 +277,11 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
   </article>
 </section>
 <div id="groupManagerModal" class="group-modal hidden"><div class="group-modal-card"><div class="group-modal-head"><strong>ADMINISTRAR GRUPOS DE ALCANCE</strong><button id="btnCloseGroupManager" class="btn gray" type="button">CERRAR</button></div><iframe id="groupManagerFrame" title="GRUPOS DE ALCANCE"></iframe></div></div>
-<footer class="footer">A.R.M.A. // USUARIOS V06.1 // ARMA_DATABASE EN LINEA // GENERADO: 2026-08-08 22:14:10</footer>
+<footer class="footer">A.R.M.A. // USUARIOS V06.2 // ARMA_DATABASE EN LINEA // GENERADO: 2026-08-09 15:41:48</footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
-const ARMA_USERS_V06='USUARIOS_V06_1_MODAL_GRUPOS_20260808';
+const ARMA_USERS_V06='USUARIOS_V06_2_PANEL_PC_SCROLL_20260809';
 const state={session:{user:'',nombre:'',nivel:'',permissions:{},token:''},users:[],levels:[],persons:[],groups:[],selected:null,createMode:true,levelsReady:false,personsReady:false,groupsReady:false};
 const $=id=>document.getElementById(id);
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
@@ -334,9 +343,12 @@ async function loadUsers(force=false,selectName=''){let painted=false;if(!force)
 async function refreshGroupsOnly(show=true){state.groupsReady=false;await ensureGroups(show,true);if(state.selected&&norm(state.selected.modoAlcance)==='GRUPOS')setSelectedGroups(state.selected.gruposAlcance||'');}
 function openGroupManager(){if(!canAdminGroups())return toast('SOLO ADMIN O SUPER_ADMIN PUEDE ADMINISTRAR GRUPOS.');$('groupManagerFrame').src='grupos_alcance.html?embed=1&v='+Date.now();$('groupManagerModal').classList.remove('hidden');}
 async function closeGroupManager(){$('groupManagerModal').classList.add('hidden');$('groupManagerFrame').src='about:blank';if($('userScopeMode').value==='GRUPOS'){try{await refreshGroupsOnly(false);}catch(e){toast(e.message);}}}
+let usersPanelResizeObserver=null;let usersPanelResizeTimer=0;
+function syncUsersPanelsPC(){const left=$('usersListPanel'),right=$('usersDetailPanel');if(!left||!right)return;if(window.innerWidth<=1150){left.style.height='';return;}const h=Math.ceil(right.getBoundingClientRect().height);if(h>0)left.style.height=h+'px';}
+function initUsersPanelsPC(){const right=$('usersDetailPanel');if(!right)return;if(window.ResizeObserver){usersPanelResizeObserver=new ResizeObserver(()=>requestAnimationFrame(syncUsersPanelsPC));usersPanelResizeObserver.observe(right);}window.addEventListener('resize',()=>{clearTimeout(usersPanelResizeTimer);usersPanelResizeTimer=setTimeout(syncUsersPanelsPC,100);});requestAnimationFrame(syncUsersPanelsPC);}
 function bind(){['filterQ'].forEach(id=>$(id).addEventListener('input',renderUsers));['filterLevel','filterActive'].forEach(id=>$(id).addEventListener('change',renderUsers));$('btnSearch').onclick=renderUsers;$('btnReload').onclick=()=>{clearCache();loadUsers(true).catch(e=>toast(e.message));};$('btnNew').onclick=beginNew;$('btnSave').onclick=saveUser;$('btnToggle').onclick=toggleUser;$('btnReset').onclick=resetPassword;$('btnDelete').onclick=deleteSelected;$('personSelect').onchange=onPersonChange;$('userLevel').onchange=()=>{updateScopeModeOptions();updateSummary();};$('userActive').onchange=updateSummary;$('userScopeMode').onchange=updateScopeModeOptions;$('userScopeGroups')
 .onchange=updateScopeSummary;$('btnRefreshGroups').onclick=()=>refreshGroupsOnly(true).catch(e=>toast(e.message));$('btnOpenGroupManager').onclick=openGroupManager;$('btnCloseGroupManager').onclick=closeGroupManager;$('dialogAccept').onclick=()=>closeDialog(true);$('dialogCancel').onclick=()=>closeDialog(false);window.addEventListener('message',e=>{if(e.data&&e.data.type==='ARMA_GROUPS_CHANGED'){state.groupsReady=false;if($('userScopeMode').value==='GRUPOS')refreshGroupsOnly(false).catch(()=>{});}});}
-document.addEventListener('DOMContentLoaded',async()=>{bind();try{if(!await validate())return;await loadUsers(false);setActionButtons();setTimeout(()=>ensureLevels(false).catch(()=>{}),80);}catch(e){hideLoader();toast(e.message||'ERROR DE CONEXION');}});
+document.addEventListener('DOMContentLoaded',async()=>{bind();initUsersPanelsPC();try{if(!await validate())return;await loadUsers(false);setActionButtons();setTimeout(()=>ensureLevels(false).catch(()=>{}),80);}catch(e){hideLoader();toast(e.message||'ERROR DE CONEXION');}});
 </script>
 </body>
 </html>
