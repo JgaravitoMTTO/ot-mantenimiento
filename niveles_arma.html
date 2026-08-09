@@ -158,7 +158,7 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
     <div class="sticky-save"><button id="btnSave" class="btn green">GUARDAR NIVEL Y REGLAS</button></div>
   </section>
 </section>
-<footer class="footer">A.R.M.A. // NIVELES DE USUARIO // ARMA_DATABASE EN LINEA // 2026-08-08 20:16:11</footer>
+<footer class="footer">A.R.M.A. // NIVELES DE USUARIO // ARMA_DATABASE EN LINEA // 2026-08-08 20:43:36</footer>
 </main>
 <script>const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
 const ARMA_UI_MANIFEST={
@@ -323,17 +323,23 @@ function collectPayload(){
 
 async function saveLevel(){
   let payload=collectPayload();if(!payload.nivel){toast('DIGITE EL NOMBRE DEL NIVEL.');return;}
-  let ok=await dialog('GUARDAR NIVEL','SE ACTUALIZARAN PERMISOS POR BOTON Y REGLAS DE FILTRO PARA '+normalize(payload.nivel)+'.','GUARDAR','CANCELAR');if(!ok)return;
-  let result=await api('saveLevelAdvanced',{levelData:payload},'GUARDANDO NIVEL Y REGLAS...');
+  const requestedCount=Object.values(payload.permissions||{}).filter(v=>normalize(v)==='SI').length;
+  let ok=await dialog('GUARDAR NIVEL','SE GUARDARAN '+requestedCount+' PERMISOS ACTIVOS PARA '+normalize(payload.nivel)+'.','GUARDAR','CANCELAR');if(!ok)return;
+  let result=await api('saveLevelAdvanced',{levelData:payload},'GUARDANDO Y VERIFICANDO NIVEL...');
   if(!result.ok){toast(result.error||'NO FUE POSIBLE GUARDAR.');return;}
-  toast(result.message||'NIVEL GUARDADO');await loadBootstrap(normalize(payload.nivel));
+  armaV12LevelsClear();
+  const saved=result.savedLevel||null;const realCount=saved?Number(saved.permissionCount||0):Number(result.permissionCount||0);
+  toast('NIVEL GUARDADO Y VERIFICADO // '+realCount+' PERMISOS ACTIVOS');
+  const fresh=await api('adminLevelsBootstrap',{nonce:Date.now()},'RECARGANDO PERMISOS REALES...');
+  if(!fresh.ok)throw new Error(fresh.error||'NO SE PUDO RELEER EL NIVEL');
+  armaV12LevelsWrite(fresh);armaV12ApplyLevels(fresh,normalize(payload.nivel));
 }
 
 async function syncCatalog(){
   let ok=await dialog('SINCRONIZAR CATALOGO','ARMA REVISARA BOTONES, COLUMNAS DE PERMISOS, FILTROS Y HOJAS DE ARMA_DATABASE.','SINCRONIZAR','CANCELAR');if(!ok)return;
   let r=await api('adminAccessSetup',{force:true},'SINCRONIZANDO CATALOGO...');
   if(!r.ok){toast(r.error||'NO FUE POSIBLE SINCRONIZAR.');return;}
-  toast(r.message||'CATALOGO SINCRONIZADO');await loadBootstrap(currentLevel&&currentLevel.nivel);
+  armaV12LevelsClear();toast(r.message||'CATALOGO SINCRONIZADO');await loadBootstrap(currentLevel&&currentLevel.nivel);
 }
 
 function bind(){
@@ -348,9 +354,10 @@ function bind(){
 }
 /* === ARMA V12 FASTPATH NIVELES === */
 const ARMA_V12_LEVELS_INFLIGHT=new Map();
-function armaV12LevelsKey(){const t=localStorage.getItem('ARMA_TOKEN')||'';return 'ARMA_V12_LEVELS_BOOT_'+t.slice(-14);}
+function armaV12LevelsKey(){const t=localStorage.getItem('ARMA_TOKEN')||'';return 'ARMA_V031_LEVELS_BOOT_'+t.slice(-14);}
 function armaV12LevelsRead(){try{const x=JSON.parse(sessionStorage.getItem(armaV12LevelsKey())||'null');if(!x||Date.now()-Number(x.ts||0)>180000)return null;return x.data||null;}catch(e){return null;}}
 function armaV12LevelsWrite(data){try{sessionStorage.setItem(armaV12LevelsKey(),JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
+function armaV12LevelsClear(){try{sessionStorage.removeItem(armaV12LevelsKey());}catch(e){}}
 async function api(action,payload,msg){
   payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';
   const read=/^(adminLevelsBootstrap|listLevels|listPermissionCatalog)$/.test(action);
