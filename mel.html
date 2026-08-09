@@ -270,6 +270,13 @@ body.modal-open{overflow:hidden}
 .summary-qr-stack #btnQrTools{width:100% !important;min-width:0 !important;font-size:10.5px !important;padding:9px 7px !important}
 @media(max-width:1100px){.hero{align-items:stretch}.detail-head{grid-template-columns:1fr !important}.summary-right{min-width:0 !important;max-width:650px;margin:0 auto}.asset-summary-panel{top:auto !important}}
 @media(max-width:700px){.hero{display:grid;grid-template-columns:1fr;padding:16px}.hero-home-btn{width:100%;min-width:0;justify-content:center}.summary-right{grid-template-columns:1fr;max-width:none}.summary-command-stack{grid-template-columns:1fr;grid-template-rows:auto}.summary-command{min-height:58px}.summary-qr-stack{max-width:280px;width:100%;margin:0 auto}}
+/* === MEL V13.5: FICHA SOLO LECTURA SEGUN PERMISOS === */
+.mel-readonly-field{background:#f3f6fa!important;color:#42546b!important;border-color:#d8e1eb!important;box-shadow:none!important;cursor:default!important}
+input.mel-readonly-field[readonly],textarea.mel-readonly-field[readonly]{caret-color:transparent!important}
+select.mel-readonly-field:disabled{opacity:1!important;color:#42546b!important;background:#f3f6fa!important;-webkit-text-fill-color:#42546b!important;appearance:none!important;-webkit-appearance:none!important;background-image:none!important}
+.mel-readonly-field[data-arma-ro-readonly="1"]{pointer-events:none!important}
+textarea.mel-readonly-field[readonly]{resize:none!important}
+.mel-readonly-active .form-section{background:#f8fafc!important}
 </style>
 </head>
 <body>
@@ -469,7 +476,7 @@ body.modal-open{overflow:hidden}
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-08-09 09:37:52</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-08-09 09:44:30</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -610,24 +617,61 @@ async function init() {
   applyPermissions();
   await loadMEL();
 }
+function melCanModifyCurrent() {
+  return creatingNew ? hasPerm('BTN_MEL_CREAR') : hasPerm('BTN_MEL_EDITAR');
+}
+function melApplyFormAccess() {
+  const canModify = melCanModifyCurrent();
+  const readOnly = !canModify;
+  const form = document.getElementById('assetForm');
+  if (form) form.classList.toggle('mel-readonly-active', readOnly);
+  document.querySelectorAll('[data-field]').forEach(function(el) {
+    const tag = String(el.tagName || '').toUpperCase();
+    if (readOnly) {
+      if ((tag === 'INPUT' || tag === 'TEXTAREA') && !el.readOnly) {
+        el.setAttribute('data-arma-ro-readonly','1');
+        el.readOnly = true;
+      }
+      if (tag === 'SELECT' && !el.disabled) {
+        el.setAttribute('data-arma-ro-disabled','1');
+        el.disabled = true;
+      }
+      el.classList.add('mel-readonly-field');
+    } else {
+      if (el.getAttribute('data-arma-ro-readonly') === '1') {
+        el.readOnly = false;
+        el.removeAttribute('data-arma-ro-readonly');
+      }
+      if (el.getAttribute('data-arma-ro-disabled') === '1') {
+        el.disabled = false;
+        el.removeAttribute('data-arma-ro-disabled');
+      }
+      el.classList.remove('mel-readonly-field');
+    }
+  });
+  const btnSaveTop = document.getElementById('btnSaveTop');
+  const btnSave = document.getElementById('btnSave');
+  const btnCancel = document.getElementById('btnCancel');
+  const btnCaptureGeo = document.getElementById('btnCaptureGeo');
+  if (btnSaveTop) { btnSaveTop.disabled = readOnly; btnSaveTop.classList.toggle('disabled', readOnly); }
+  if (btnSave) btnSave.disabled = readOnly;
+  if (btnCancel) btnCancel.disabled = readOnly;
+  if (btnCaptureGeo) btnCaptureGeo.disabled = readOnly;
+}
 function applyPermissions() {
   const canView = hasPerm("BTN_MEL_VER");
   const canCreate = hasPerm("BTN_MEL_CREAR");
-  const canEdit = hasPerm("BTN_MEL_EDITAR");
   const canUpload = hasPerm("BTN_MEL_SUBIR_FOTO");
   const canAdminCatalogs = hasPerm("BTN_MEL_ADMIN_CATALOGOS");
   document.getElementById("btnNew").classList.toggle("disabled", !canCreate);
   document.getElementById("btnNew").disabled = !canCreate;
-  document.getElementById("btnSaveTop").classList.toggle("disabled", !canEdit && !canCreate);
-  document.getElementById("btnSaveTop").disabled = !canEdit && !canCreate;
-  document.getElementById("btnSave").disabled = !canEdit && !canCreate;
   document.getElementById("btnUploadPhoto").disabled = !canUpload;
-  document.getElementById("btnCaptureGeo").disabled = !canEdit && !canCreate;
   document.getElementById("btnDownloadQr").disabled = !canView;
   document.getElementById("btnPrintQr").disabled = !canView;
   const adminCatalogButton = document.getElementById("btnAdminIsoCatalogs");
   if (adminCatalogButton) adminCatalogButton.classList.toggle("allowed", canAdminCatalogs);
   updateSummaryActionState(selectedAsset);
+  melApplyFormAccess();
 }
 function currentFilters() {
   return {
@@ -1654,6 +1698,7 @@ function setForm(row, path) {
     melGeoStatus('SIN UBICACION CAPTURADA.','');
   }
   melPrepareHierarchy(melSelectedPath);
+  melApplyFormAccess();
 }
 function newAsset() {
   if (!hasPerm('BTN_MEL_CREAR')) {
