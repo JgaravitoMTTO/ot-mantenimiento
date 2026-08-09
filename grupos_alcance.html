@@ -9,7 +9,7 @@
 <title>ARMA | GRUPOS DE ALCANCE</title>
 <style>:root{--navy:#002b66;--blue:#004b9b;--blue2:#087fd0;--cyan:#00bfd6;--green:#18c65b;--red:#dc2626;--orange:#f59e0b;--bg:#eef3f9;--line:#d7e4f2;--muted:#64748b;--shadow:0 14px 34px rgba(0,43,102,.13)}
 *{box-sizing:border-box}
-html{zoom:75%}
+html{zoom:100%}
 body{margin:0;background:var(--bg);font-family:Segoe UI,Roboto,Arial,sans-serif;color:#0f172a;text-transform:uppercase}
 button,input,textarea{font:inherit;text-transform:uppercase}
 .hidden{display:none!important}
@@ -24,55 +24,58 @@ button,input,textarea{font:inherit;text-transform:uppercase}
 .hero{border-radius:18px;padding:14px 17px;background:linear-gradient(110deg,#003b7d,#0a82d5);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;box-shadow:var(--shadow)}
 .hero h2{margin:0;font-size:23px}
 .hero p{margin:4px 0 0;font-size:10px;font-weight:800;color:#e8f5ff}
-.btn{border:0;border-radius:10px;padding:9px 12px;background:linear-gradient(180deg,var(--blue2),var(--blue));color:#fff;font-weight:950;font-size:10px;cursor:pointer}
+.btn{border:0;border-radius:10px;padding:10px 14px;background:linear-gradient(180deg,var(--blue2),var(--blue));color:#fff;font-weight:950;font-size:12px;cursor:pointer}
 .btn.gray{background:linear-gradient(180deg,#9ca3af,#64748b)}
 .btn.green{background:linear-gradient(180deg,#22d566,#16a34a)}
 .btn.red{background:linear-gradient(180deg,#ef4444,#b91c1c)}
 .btn.orange{background:linear-gradient(180deg,#fbbf24,#d97706)}
 .btn:disabled{opacity:.45;cursor:not-allowed}
-.layout{display:grid;grid-template-columns:350px minmax(0,1fr);gap:12px;align-items:start}
+.layout{display:grid;grid-template-columns:330px minmax(0,1fr);gap:14px;align-items:start}
 .panel{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:13px}
 .left{position:sticky;top:102px}
 .panel-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
 .panel-title h3{margin:0;color:var(--navy)}
-input,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 10px;color:var(--navy);font-weight:800;outline:none}
+input,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 11px;color:var(--navy);font-size:12px;font-weight:800;outline:none}
 textarea{min-height:75px;resize:vertical}
 .groups-list{border:1px solid var(--line);border-radius:12px;overflow:auto;height:590px;margin-top:9px;background:#fbfdff}
 .group-item{padding:10px;border-bottom:1px solid #e3edf6;cursor:pointer}
 .group-item:hover,.group-item.sel{background:#eaf6ff}
-.group-item strong{display:block;color:#003d80;font-size:11px}
-.group-item small{display:block;margin-top:3px;color:#64748b;font-size:8.5px;font-weight:850}
-.badge{display:inline-flex;padding:3px 7px;border-radius:999px;background:#e8f2ff;color:#004b9b;font-weight:950;font-size:8px}
+.group-item strong{display:block;color:#003d80;font-size:13px;line-height:1.25}
+.group-item small{display:block;margin-top:4px;color:#64748b;font-size:10px;font-weight:850;line-height:1.35}
+.badge{display:inline-flex;padding:4px 8px;border-radius:999px;background:#e8f2ff;color:#004b9b;font-weight:950;font-size:10px}
 .badge.green{background:#e7f9ed;color:#08752d}
 .badge.gray{background:#eef1f4;color:#64748b}
 .editor-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.editor-head h2{margin:0;color:var(--navy);font-size:20px}
+.editor-head h2{margin:0;color:var(--navy);font-size:23px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
-.field label{display:block;margin-bottom:4px;color:#31526f;font-size:9px;font-weight:950}
+.field label{display:block;margin-bottom:5px;color:#31526f;font-size:11px;font-weight:950}
 .full{grid-column:1/-1}
 .caps{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .cap{display:flex;align-items:flex-start;gap:8px;border:1px solid var(--line);border-radius:11px;padding:9px;background:#f8fbff}
 .cap input{width:auto;margin-top:2px}
 .cap strong{display:block;color:#003d80}
-.cap small{display:block;margin-top:3px;color:#64748b;font-size:8px;font-weight:800}
+.cap small{display:block;margin-top:3px;color:#64748b;font-size:10px;font-weight:800;line-height:1.35}
 .tree-toolbar{display:grid;grid-template-columns:1fr auto auto;gap:7px;margin:8px 0}
-.tree-status,.summary{border-left:4px solid var(--cyan);background:#eefbff;border-radius:9px;padding:8px 10px;color:#31566f;font-size:9px;font-weight:850}
-.tree{height:430px;overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fff;padding:6px}
+.tree-status,.summary{border-left:4px solid var(--cyan);background:#eefbff;border-radius:9px;padding:9px 11px;color:#31566f;font-size:11px;font-weight:850;line-height:1.4}
+.tree{height:min(56vh,610px);min-height:390px;overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fff;padding:8px}
 .tree.empty{display:grid;place-items:center;color:#64748b;font-weight:850}
-.node-row{display:flex;align-items:center;gap:6px;padding:4px 5px;border-radius:7px}
+.node-row{display:grid;grid-template-columns:28px 22px auto minmax(0,1fr);align-items:center;gap:7px;padding:6px 7px;border-radius:8px;min-height:34px}
 .node-row:hover{background:#f0f7ff}
-.toggle{width:23px;height:23px;border:0;background:#e7f1fb;border-radius:6px;color:#004b9b;font-weight:950}
+.toggle{width:27px;height:27px;border:0;background:#e7f1fb;border-radius:7px;color:#004b9b;font-weight:950;font-size:16px}
 .toggle.empty{visibility:hidden}
 .node-check{width:auto}
-.node-type{font-size:7px;font-weight:950;color:#087fd0;border:1px solid #cce7fa;border-radius:999px;padding:2px 5px}
-.node-label{font-size:9px;font-weight:850;color:#183d61}
+.node-type{font-size:9px;font-weight:950;color:#087fd0;border:1px solid #cce7fa;border-radius:999px;padding:3px 6px;white-space:nowrap}
+.node-label{font-size:12px;font-weight:850;color:#183d61;line-height:1.25;min-width:0}
+.node-row.inherited{background:#effcf3}.node-row.explicit{background:#e8f4ff}.node-row.partial{background:#fffaf0}
+.node-check:disabled{opacity:.72}.node-meta{display:block;margin-top:2px;color:#718096;font-size:9.5px;font-weight:750;text-transform:none}
+.selection-legend{margin-top:7px;display:flex;gap:8px;flex-wrap:wrap;font-size:10px;font-weight:850;color:#50657a}
 .children.hidden{display:none}
 .actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:10px}
-.note{margin-top:8px;border-left:4px solid var(--green);background:#effcf3;border-radius:9px;padding:8px 10px;color:#245c36;font-size:9px;font-weight:850}
+.note{margin-top:9px;border-left:4px solid var(--green);background:#effcf3;border-radius:9px;padding:10px 12px;color:#245c36;font-size:11px;font-weight:850;line-height:1.45}
 .footer{margin-top:12px;background:linear-gradient(90deg,#003d82,#087fd0);color:#fff;border-radius:12px;padding:9px;text-align:center;font-size:8.5px;font-weight:900}
 body.embed .top,body.embed .hero .home{display:none}
-body.embed .main{padding:7px}
-body.embed .hero{margin-bottom:7px;padding:10px 13px}
+body.embed .main{padding:10px 12px}
+body.embed .hero{margin-bottom:9px;padding:12px 15px}
 body.embed .left{top:8px}
 @media(max-width:1000px){.layout{grid-template-columns:1fr}
 .left{position:static}
@@ -84,12 +87,12 @@ body.embed .left{top:8px}
 </head>
 <body>
 <header class="top"><div class="brand"><img src="logo_pelex.bmp" alt="PELEX"><img src="ARMA%20logo%202.png" alt="ARMA"></div><div><h1>ADMINISTRACION | GRUPOS DE ALCANCE</h1><small>CATALOGO INDEPENDIENTE // MEL BAJO DEMANDA</small><div id="userPill" class="user">VALIDANDO SESION...</div></div></header>
-<main class="main"><section class="hero"><div><h2>GRUPOS DE EMPRESA / PLANTA / AREA / ACTIVO</h2><p>NIVEL DICE QUE PUEDE HACER. EL GRUPO DICE DONDE. SELECCIONAR UN NODO SUPERIOR INCLUYE TODO SU CONTENIDO.</p></div><a class="btn gray home" href="usuarios_arma.html">VOLVER A USUARIOS</a></section>
+<main class="main"><section class="hero"><div><h2>GRUPOS DE EMPRESA / PLANTA / AREA / ACTIVO</h2><p>NIVEL DICE QUE PUEDE HACER. EL GRUPO DICE DONDE. EL ARBOL ES EL MISMO DE MEL. UN PADRE INCLUYE TODO LO QUE EXISTA Y SE CREE DEBAJO.</p></div><a class="btn gray home" href="usuarios_arma.html">VOLVER A USUARIOS</a></section>
 <section class="layout"><aside class="panel left"><div class="panel-title"><h3>GRUPOS</h3><span id="groupCount" class="badge">0</span></div><input id="groupSearch" placeholder="BUSCAR GRUPO"><div class="actions" style="justify-content:flex-start"><button id="btnNew" class="btn green" type="button">NUEVO GRUPO</button><button id="btnReload" class="btn gray" type="button">ACTUALIZAR</button></div><div id="groupsList" class="groups-list"></div></aside>
 <article class="panel"><div class="editor-head"><div><h2 id="editorTitle">SELECCIONE O CREE UN GRUPO</h2><div id="editorMeta" class="badge gray">MEL NO CARGADO</div></div><div><span id="usageBadge" class="badge">0 USUARIOS</span></div></div><div class="grid"><div class="field"><label>NOMBRE DEL GRUPO</label><input id="groupName" placeholder="EJ: PLANTA 2 - EXTRUSION"></div><div class="field"><label>ID GRUPO</label><input id="groupId" readonly></div><div class="field full"><label>CAPACIDAD</label><div class="caps"><label class="cap"><input id="canView" type="checkbox" checked><span><strong>PERMITIR VER</strong><small>PUEDE CONSULTAR DATOS DEL ALCANCE.</small></span></label><label class="cap">
 <input id="canManage" type="checkbox"><span><strong>PERMITIR GESTIONAR</strong><small>HABILITA ACCIONES QUE SU NIVEL YA PERMITA. GESTIONAR INCLUYE VER.</small></span></label></div></div><div class="field full"><label>ALCANCE MEL</label><div class="tree-toolbar"><input id="treeSearch" placeholder="BUSCAR EMPRESA, PLANTA, AREA, ACTIVO O TAG"><button id="btnExpand" class="btn gray" type="button">EXPANDIR</button><button id="btnCollapse" class="btn gray" type="button">CONTRAER</button></div><div id="treeStatus" class="tree-status">MEL NO SE CARGA HASTA CREAR O EDITAR UN GRUPO.</div><div id="tree" class="tree empty">SELECCIONE NUEVO GRUPO O UN GRUPO EXISTENTE.</div><div id="treeSummary" 
-class="summary">0 NODOS SELECCIONADOS.</div></div><div class="field full"><label>OBSERVACION</label><textarea id="groupObservation"></textarea></div></div><div class="note">REGLA: CADA NODO SELECCIONADO ES UNA REGLA INDEPENDIENTE. PLANTA 2 O ACTIVO E7 SIGNIFICA PLANTA 2 COMPLETA O E7, SIN CREAR COMBINACIONES IMPOSIBLES.</div><div class="actions"><button id="btnDeactivate" class="btn red" type="button">INACTIVAR</button><button id="btnSave" class="btn green" type="button">GUARDAR GRUPO</button></div></article></section>
-<footer class="footer">A.R.M.A. // GRUPOS DE ALCANCE V01 // MEL BAJO DEMANDA // GENERADO: 2026-08-08 20:14:31</footer></main>
+class="summary">0 NODOS SELECCIONADOS.</div></div><div class="field full"><label>OBSERVACION</label><textarea id="groupObservation"></textarea></div></div><div class="note">REGLA: CADA SELECCION EXPLICITA ES UNA RAIZ INDEPENDIENTE. SI MARCA PELEX, TODO DESCENDIENTE ACTUAL O FUTURO QUEDA INCLUIDO. SI MARCA PLANTA 1 + UN ACTIVO DE PLANTA 2 + UN ACTIVO DE PLANTA 3, SOLO ESAS TRES REGLAS FORMAN EL ALCANCE.</div><div class="actions"><button id="btnDeactivate" class="btn red" type="button">INACTIVAR</button><button id="btnSave" class="btn green" type="button">GUARDAR GRUPO</button></div></article></section>
+<footer class="footer">A.R.M.A. // GRUPOS DE ALCANCE V02 // MEL BAJO DEMANDA // GENERADO: 2026-08-08 22:16:42</footer></main>
 <script>
 const ARMA_API_URL='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
 let session={token:'',user:'',nivel:'',permissions:{}};
@@ -103,18 +106,25 @@ async function validate(){const t=localStorage.getItem('ARMA_TOKEN')||'';if(!t){
 function renderGroups(){const q=norm(groupSearch.value);const rows=groups.filter(g=>!q||norm([g.NOMBRE_GRUPO,g.ID_GRUPO,g.scopeSummary].join(' ')).includes(q));groupCount.textContent=groups.length;groupsList.innerHTML=rows.map(g=>`<div class="group-item ${selected&&selected.ID_GRUPO===g.ID_GRUPO?'sel':''}" data-id="${esc(g.ID_GRUPO)}"><strong>${esc(g.NOMBRE_GRUPO)}</strong><small>${esc(g.capability||'')} // ${Number(g.nodeCount||0)} NODOS // ${Number(g.usageCount||0)} USUARIOS // ${esc(g.ACTIVO||'SI')}</small></div>`).join('')||'<div style="padding:16px;color:#64748b;font-weight:800">SIN GRUPOS.</div>';groupsList.querySelectorAll('.group-item').forEach(el=>el.onclick=()=>
 openGroup(el.dataset.id));}
 async function loadGroups(){const j=await api('scopeGroupsV2List',{});groups=j.rows||[];renderGroups();}
-function flatten(nodes){(nodes||[]).forEach(n=>{nodeMap[n.key]=n;flatten(n.children||[]);});}
-async function ensureCatalog(){if(catalogReady)return;treeStatus.textContent='CARGANDO ARBOL MEL...';const j=await api('scopeGroupV2Catalog',{});treeRoots=j.tree||[];nodeMap={};flatten(treeRoots);catalogReady=true;treeStatus.textContent=`MEL: ${(j.diagnostics&&j.diagnostics.companies)||0} EMPRESAS // ${(j.diagnostics&&j.diagnostics.plants)||0} PLANTAS // ${(j.diagnostics&&j.diagnostics.areas)||0} AREAS // ${(j.diagnostics&&j.diagnostics.assets)||0} ACTIVOS`;expanded=new Set(treeRoots.map(n=>n.key));renderTree();}
-function contains(n,q){if(!q)return true;if(norm([n.label,n.value,n.type,n.empresa,n.planta,n.area].join(' ')).includes(q))return true;return (n.children||[]).some(c=>contains(c,q));}
-function nodeEl(n,depth,q){if(!contains(n,q))return null;const w=document.createElement('div'),row=document.createElement('div');row.className='node-row';row.style.paddingLeft=Math.min(depth,6)*7+'px';const kids=(n.children||[]).length>0;const tog=document.createElement('button');tog.type='button';tog.className='toggle'+(kids?'':' empty');tog.textContent=expanded.has(n.key)?'?':'+';const cb=document.createElement('input');cb.type='checkbox';cb.className='node-check';cb.checked=selectedNodes.has(n.key);cb.disabled=n.selectable===false;cb.onchange=()=>{if(cb.checked)selectedNodes.add(n.key);else selectedNodes.delete(n.key);updateSummary();};const ty=document.createElement('span');
-ty.className='node-type';ty.textContent=n.type;const la=document.createElement('span');la.className='node-label';la.textContent=n.label||n.value||n.key;row.append(tog,cb,ty,la);w.appendChild(row);if(kids){const c=document.createElement('div');c.className='children'+(expanded.has(n.key)||q?'':' hidden');(n.children||[]).forEach(ch=>{const e=nodeEl(ch,depth+1,q);if(e)c.appendChild(e);});w.appendChild(c);tog.onclick=()=>{if(expanded.has(n.key))expanded.delete(n.key);else expanded.add(n.key);renderTree();};}return w;}
+function flatten(nodes,parentKey){(nodes||[]).forEach(n=>{n._parentKey=parentKey||n.parentKey||'';nodeMap[n.key]=n;flatten(n.children||[],n.key);});}
+async function ensureCatalog(){if(catalogReady)return;treeStatus.textContent='CARGANDO ARBOL EXACTO DESDE MEL...';const j=await api('scopeGroupV2Catalog',{});treeRoots=j.tree||[];nodeMap={};flatten(treeRoots,'');catalogReady=true;const d=j.diagnostics||{};const levels=Object.entries(d.levels||{}).map(x=>x[0]+': '+x[1]).join(' // ');treeStatus.textContent=`MEL EXACTO: ${Number(d.nodes||0)} NODOS // ${Number(d.roots||0)} RAICES${levels?' // '+levels:''}`;expanded=new Set(treeRoots.map(n=>n.key));renderTree();}
+function contains(n,q){if(!q)return true;if(norm([n.label,n.code,n.name,n.type,n.routeCode,n.routeName,n.id].join(' ')).includes(q))return true;return (n.children||[]).some(c=>contains(c,q));}
+function ancestorSelected(n){let p=n&&n._parentKey;while(p){if(selectedNodes.has(p))return p;const x=nodeMap[p];p=x?x._parentKey:'';}return '';}
+function descendantSelected(n){return (n.children||[]).some(c=>selectedNodes.has(c.key)||descendantSelected(c));}
+function removeDescendantSelections(n){(n.children||[]).forEach(c=>{selectedNodes.delete(c.key);removeDescendantSelections(c);});}
+function nodeState(n){if(selectedNodes.has(n.key))return 'explicit';if(ancestorSelected(n))return 'inherited';if(descendantSelected(n))return 'partial';return 'none';}
+function selectNode(n,checked){if(checked){selectedNodes.add(n.key);removeDescendantSelections(n);}else{selectedNodes.delete(n.key);}renderTree();}
+function nodeEl(n,depth,q){if(!contains(n,q))return null;const w=document.createElement('div'),row=document.createElement('div');const stateNow=nodeState(n);row.className='node-row '+stateNow;row.style.paddingLeft=Math.min(depth,10)*8+'px';
+const kids=(n.children||[]).length>0;const tog=document.createElement('button');tog.type='button';tog.className='toggle'+(kids?'':' empty');tog.textContent=expanded.has(n.key)?'?':'+';
+const cb=document.createElement('input');cb.type='checkbox';cb.className='node-check';cb.checked=stateNow==='explicit'||stateNow==='inherited';cb.indeterminate=stateNow==='partial';cb.disabled=stateNow==='inherited'||n.selectable===false;cb.title=stateNow==='inherited'?'INCLUIDO AUTOMATICAMENTE POR UN NODO SUPERIOR':'';cb.onchange=()=>selectNode(n,cb.checked);
+const ty=document.createElement('span');ty.className='node-type';ty.textContent=n.type||'NODO';const la=document.createElement('span');la.className='node-label';la.innerHTML=esc(n.label||n.id||n.key)+(n.routeName?`<span class="node-meta">${esc(n.routeName)}</span>`:'');row.append(tog,cb,ty,la);w.appendChild(row);
+if(kids){const c=document.createElement('div');c.className='children'+(expanded.has(n.key)||q?'':' hidden');(n.children||[]).forEach(ch=>{const e=nodeEl(ch,depth+1,q);if(e)c.appendChild(e);});w.appendChild(c);tog.onclick=()=>{if(expanded.has(n.key))expanded.delete(n.key);else expanded.add(n.key);renderTree();};}return w;}
 function renderTree(){if(!catalogReady){tree.className='tree empty';tree.textContent='MEL TODAVIA NO CARGADO.';return;}tree.className='tree';tree.innerHTML='';const q=norm(treeSearch.value);treeRoots.forEach(n=>{const e=nodeEl(n,0,q);if(e)tree.appendChild(e);});if(!tree.children.length){tree.className='tree empty';tree.textContent='SIN COINCIDENCIAS.';}updateSummary();}
-function updateSummary(){const counts={EMPRESA:0,PLANTA:0,AREA:0,ACTIVO:0};selectedNodes.forEach(k=>{const n=nodeMap[k];if(n&&counts.hasOwnProperty(norm(n.type)))counts[norm(n.type)]++;});treeSummary.textContent=`${selectedNodes.size} NODOS // ${counts.EMPRESA} EMPRESAS // ${counts.PLANTA} PLANTAS // ${counts.AREA} AREAS // ${counts.ACTIVO} ACTIVOS`;}
-function clearEditor(){selected=null;selectedNodes=new Set();groupId.value='';groupName.value='';groupObservation.value='';canView.checked=true;canManage.checked=false;usageBadge.textContent='0 USUARIOS';editorTitle.textContent='NUEVO GRUPO';editorMeta.textContent=catalogReady?'MEL LISTO':'MEL BAJO DEMANDA';btnDeactivate.disabled=true;renderGroups();renderTree();}
+function updateSummary(){const counts={};selectedNodes.forEach(k=>{const n=nodeMap[k];if(n){const t=norm(n.type)||'NODO';counts[t]=Number(counts[t]||0)+1;}});const parts=Object.entries(counts).map(x=>x[0]+': '+x[1]);treeSummary.textContent=`${selectedNodes.size} RAICES EXPLICITAS // ${parts.join(' // ')||'SIN SELECCION'} // LOS DESCENDIENTES SE HEREDAN DINAMICAMENTE`;}
+function clearEditor(){selected=null;selectedNodes=new Set();groupId.value='';groupName.value='';groupObservation.value='';canView.checked=true;canManage.checked=false;usageBadge.textContent='0 USUARIOS';editorTitle.textContent='NUEVO GRUPO';editorMeta.textContent=catalogReady?'MEL EXACTO LISTO':'MEL BAJO DEMANDA';btnDeactivate.disabled=true;renderGroups();renderTree();}
 async function newGroup(){clearEditor();await ensureCatalog();groupName.focus();}
-async function openGroup(id){const j=await api('scopeGroupV2Get',{idGrupo:id});selected=j.group;await ensureCatalog();selectedNodes=new Set(selected.nodes||[]);groupId.value=selected.ID_GRUPO||'';groupName.value=selected.NOMBRE_GRUPO||'';groupObservation.value=selected.OBSERVACION||'';canView.checked=norm(selected.PERMITE_VER||'SI')==='SI';canManage.checked=norm(selected.PERMITE_GESTIONAR||'NO')==='SI';usageBadge.textContent=Number(selected.usageCount||0)+' USUARIOS';editorTitle.textContent=selected.NOMBRE_GRUPO||selected.ID_GRUPO;editorMeta.textContent=(selected.ACTIVO||'SI')+' // '+(selected.PERMITE_GESTIONAR==='SI'?'VER + GESTIONAR':'SOLO VER')
-+(selected.legacyPreview?' // GRUPO LEGACY: GUARDAR PARA MIGRAR A NODOS MEL':'');btnDeactivate.disabled=norm(selected.ACTIVO)!=='SI';renderGroups();renderTree();}
-async function save(){if(!groupName.value.trim())return alert('DIGITE NOMBRE DEL GRUPO.');if(!selectedNodes.size)return alert('SELECCIONE AL MENOS UN NODO MEL.');if(canManage.checked)canView.checked=true;const data={idGrupo:groupId.value,nombre:groupName.value,nodes:Array.from(selectedNodes),permiteVer:canView.checked?'SI':'NO',permiteGestionar:canManage.checked?'SI':'NO',observacion:groupObservation.value};if(!confirm('GUARDAR GRUPO DE ALCANCE?'))return;const r=await api('scopeGroupV2Save',{data});notifyChanged();await loadGroups();await openGroup(r.idGrupo);}
+async function openGroup(id){const j=await api('scopeGroupV2Get',{idGrupo:id});selected=j.group;await ensureCatalog();selectedNodes=new Set((selected.nodes||[]).filter(k=>nodeMap[k]));groupId.value=selected.ID_GRUPO||'';groupName.value=selected.NOMBRE_GRUPO||'';groupObservation.value=selected.OBSERVACION||'';canView.checked=norm(selected.PERMITE_VER||'SI')==='SI';canManage.checked=norm(selected.PERMITE_GESTIONAR||'NO')==='SI';usageBadge.textContent=Number(selected.usageCount||0)+' USUARIOS';editorTitle.textContent=selected.NOMBRE_GRUPO||selected.ID_GRUPO;editorMeta.textContent=(selected.ACTIVO||'SI')+' // '+(selected.PERMITE_GESTIONAR==='SI'?'VER + GESTIONAR':'SOLO VER')+(selected.legacyPreview?' // LEGACY: RECREAR O GUARDAR':'');btnDeactivate.disabled=norm(selected.ACTIVO)!=='SI';renderGroups();renderTree();}
+async function save(){if(!groupName.value.trim())return alert('DIGITE NOMBRE DEL GRUPO.');if(!selectedNodes.size)return alert('SELECCIONE AL MENOS UNA RAIZ DEL ARBOL MEL.');if(canManage.checked)canView.checked=true;const data={idGrupo:groupId.value,nombre:groupName.value,nodes:Array.from(selectedNodes),permiteVer:canView.checked?'SI':'NO',permiteGestionar:canManage.checked?'SI':'NO',observacion:groupObservation.value};if(!confirm('GUARDAR GRUPO? LOS NODOS PADRE INCLUIRAN AUTOMATICAMENTE SUS DESCENDIENTES ACTUALES Y FUTUROS.'))return;const r=await api('scopeGroupV2Save',{data});notifyChanged();await loadGroups();await openGroup(r.idGrupo);}
 async function deactivate(){if(!selected)return;let r;try{r=await api('scopeGroupV2Deactivate',{idGrupo:selected.ID_GRUPO,force:false});}catch(e){const msg=String(e.message||'');if(msg.includes('GRUPO_ASIGNADO_A_USUARIOS_REQUIERE_CONFIRMACION')){if(!confirm('ESTE GRUPO ESTA ASIGNADO A USUARIOS. INACTIVARLO HARA QUE DEJEN DE RECIBIR ESE ALCANCE. CONTINUAR?'))return;r=await api('scopeGroupV2Deactivate',{idGrupo:selected.ID_GRUPO,force:true});}else throw e;}notifyChanged();await loadGroups();clearEditor();}
 function expand(all){expanded=new Set();if(all){(function w(ns){(ns||[]).forEach(n=>{if((n.children||[]).length)expanded.add(n.key);w(n.children||[]);});})(treeRoots);}renderTree();}
 document.addEventListener('DOMContentLoaded',async()=>{if(new URLSearchParams(location.search).get('embed')==='1')document.body.classList.add('embed');try{if(!await validate())return;await loadGroups();}catch(e){alert(e.message||'ERROR DE CARGA');}groupSearch.oninput=renderGroups;btnReload.onclick=loadGroups;btnNew.onclick=newGroup;btnSave.onclick=save;btnDeactivate.onclick=deactivate;treeSearch.oninput=renderTree;btnExpand.onclick=()=>expand(true);btnCollapse.onclick=()=>expand(false);canManage.onchange=()=>{if(canManage.checked)canView.checked=true;};canView.onchange=()=>{if(!canView.checked&&canManage.checked)canView.checked=true;};});
