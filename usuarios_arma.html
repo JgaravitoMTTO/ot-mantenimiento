@@ -7,108 +7,227 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="arma-avatar-192.png">
 <script src="arma-pwa-navigation.js" defer data-arma-pwa-navigation="1"></script>
-<title>ARMA | USUARIOS Y ALCANCES V05.5</title>
+<title>ARMA | USUARIOS Y ALCANCES V06</title>
 <style>:root{
   --navy:#002b66;--blue:#004b9b;--blue2:#0076d7;--cyan:#00bfd6;
   --green:#18c65b;--green2:#55b52e;--red:#dc2626;--orange:#f59e0b;
   --line:#d7e4f2;--bg:#eef3f9;--surface:#ffffff;--text:#0f172a;
   --muted:#64748b;--shadow:0 14px 34px rgba(0,43,102,.13);
 }
+
 *{box-sizing:border-box}
+
 html{zoom:75%}
+
 body{margin:0;background:var(--bg);color:var(--text);font-family:Segoe UI,Roboto,Arial,sans-serif;text-transform:uppercase}
+
 button,input,select,textarea{font:inherit;text-transform:uppercase}
+
 button{cursor:pointer}
+
 .hidden{display:none!important}
+
 .top-global{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 10px 24px rgba(0,43,102,.14)}
+
 .top-white{min-height:108px;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+
 .blue-line{height:6px;background:linear-gradient(90deg,var(--blue),var(--blue2),var(--blue))}
+
 .brand-row{display:flex;align-items:center;gap:22px}
+
 .brand-separator{width:1px;height:68px;background:#d8e5f2}
+
 .logo-pelex{height:72px;max-width:250px;object-fit:contain}
+
 .logo-arma{height:80px;max-width:360px;object-fit:contain}
+
 .top-title{text-align:right}
+
 .top-title strong{display:block;color:var(--navy);font-size:24px;font-weight:950}
+
 .top-title span{display:block;color:var(--muted);font-size:11px;font-weight:900;margin-top:5px}
+
 .user-pill{display:inline-flex;align-items:center;gap:8px;margin-top:8px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#f8fbff;color:var(--navy);font-size:11px;font-weight:950}
+
 .main{padding:12px 20px 22px}
+
 .hero{position:relative;overflow:hidden;min-height:92px;border-radius:22px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:18px;background:radial-gradient(circle at 72% 0,#0b83e8 0,#0057aa 43%,#002b66 100%);color:#fff;box-shadow:var(--shadow);margin-bottom:12px}
+
 .hero:after{content:attr(data-mark);position:absolute;right:22px;bottom:-18px;font-size:66px;font-weight:1000;letter-spacing:4px;color:rgba(255,255,255,.06)}
+
 .hero-copy{position:relative;z-index:2;min-width:0}
+
 .hero h1{margin:0 0 5px;font-size:29px;font-weight:950}
+
 .hero p{margin:0;color:#eaf4ff;font-size:11px;font-weight:850;line-height:1.35}
+
 .home-card{position:relative;z-index:3;display:flex;align-items:center;gap:12px;min-width:205px;padding:10px 14px;border-radius:17px;background:linear-gradient(180deg,#fff,#eef7ff);border:1px solid #cfe0f2;text-decoration:none;color:var(--navy);box-shadow:0 12px 26px rgba(0,0,0,.14)}
+
 .home-card:before{content:"";position:absolute;left:0;top:0;width:100%;height:5px;border-radius:17px 17px 0 0;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--green))}
+
 .home-icon{width:46px;height:46px;border-radius:14px;background:#e8f2ff;border:1px solid var(--line);display:grid;place-items:center;flex:0 0 46px}
+
 .home-icon img{width:32px;height:32px;object-fit:contain}
+
 .home-text strong{display:block;font-size:16px;font-weight:950}
+
 .home-text span{display:block;margin-top:4px;color:#008c2e;font-size:9px;font-weight:950;letter-spacing:.4px}
+
 .panel{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:15px}
+
 .panel-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+
 .panel-title h2{margin:0;color:var(--navy);font-size:18px}
+
 .status{font-size:11px;font-weight:900;color:var(--muted);text-align:right}
+
 .btn{border:0;border-radius:11px;padding:10px 14px;color:#fff;background:linear-gradient(180deg,var(--blue2),var(--blue));font-size:11px;font-weight:950;box-shadow:0 6px 14px rgba(0,75,155,.18)}
+
 .btn.green{background:linear-gradient(180deg,#22d566,#16a34a)}
+
 .btn.gray{background:linear-gradient(180deg,#9ca3af,#64748b)}
+
 .btn.red{background:linear-gradient(180deg,#ef4444,#b91c1c)}
+
 .btn.orange{background:linear-gradient(180deg,#fbbf24,#d97706)}
+
 .btn:disabled{opacity:.45;filter:grayscale(1);cursor:not-allowed}
+
+.scope-simple-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+
+.scope-help{margin-top:8px;border-left:4px solid var(--cyan);background:#eefbff;border-radius:10px;padding:9px 11px;color:#31566f;font-size:10px;font-weight:850;line-height:1.45}
+
+.group-modal{position:fixed;inset:0;z-index:100;background:rgba(2,18,40,.62);display:grid;place-items:center;padding:18px}
+
+.group-modal-card{width:min(1500px,97vw);height:min(92vh,940px);background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.3);display:flex;flex-direction:column}
+
+.group-modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:linear-gradient(90deg,var(--navy),var(--blue2));color:#fff}
+
+.group-modal-head strong{font-size:14px}
+.group-modal iframe{width:100%;height:100%;border:0;background:#eef3f9}
+
 input,select,textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:10px 11px;background:#fff;color:var(--navy);font-size:12px;font-weight:800;outline:none}
+
 input:focus,select:focus,textarea:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(0,118,215,.10)}
+
 input[readonly],textarea[readonly]{background:#edf3fa;color:#53677f}
+
 label{display:block;margin-bottom:5px;color:var(--navy);font-size:10px;font-weight:950}
+
 .badge{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:4px 8px;font-size:9px;font-weight:950;background:#e8f2ff;color:var(--navy)}
+
 .badge.green{background:#dcfce7;color:#166534}
+
 .badge.red{background:#fee2e2;color:#991b1b}
+
 .badge.gray{background:#e5e7eb;color:#475569}
+
 .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:13px;background:#fff}
+
 table{border-collapse:collapse;width:100%;min-width:920px}
+
 th{position:sticky;top:0;z-index:2;background:#0f6385;color:#fff;padding:10px;text-align:left;font-size:10px;font-weight:950}
+
 td{padding:9px 10px;border-bottom:1px solid var(--line);font-size:10px;font-weight:760}
+
 tr:nth-child(even){background:#eef7fd}
+
 tbody tr:hover{background:#d9ecff;cursor:pointer}
+
 tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,.25)}
+
 .loader{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(2,6,23,.56);backdrop-filter:blur(3px)}
+
 .loader-card{width:min(390px,92vw);padding:25px;border-radius:22px;background:#fff;text-align:center;color:var(--navy);box-shadow:0 28px 70px rgba(0,0,0,.34)}
+
 .spinner{width:54px;height:54px;border-radius:50%;border:6px solid #dbeafe;border-top-color:var(--blue2);margin:0 auto 14px;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+
+@keyframes spin{to{transform:rotate(360deg)}
+}
+
 .loader-card h2{margin:0 0 7px;font-size:17px}
+
 .loader-card p{margin:0;color:var(--muted);font-size:11px;font-weight:850}
+
 .toast{position:fixed;right:18px;bottom:18px;z-index:10000;max-width:520px;padding:13px 16px;border-radius:12px;background:#002b66;color:#fff;font-size:11px;font-weight:900;box-shadow:var(--shadow);display:none}
+
 .toast.show{display:block}
+
 .dialog{position:fixed;inset:0;z-index:10001;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(2,6,23,.58);backdrop-filter:blur(3px)}
+
 .dialog-card{width:min(520px,94vw);border-radius:22px;background:#fff;border:1px solid var(--line);box-shadow:0 28px 70px rgba(0,0,0,.35);overflow:hidden}
+
 .dialog-head{padding:17px 20px;background:linear-gradient(135deg,#002b66,#0076d7);color:#fff}
+
 .dialog-head h2{margin:0;font-size:18px}
+
 .dialog-body{padding:20px;color:var(--navy);font-size:12px;font-weight:850;line-height:1.45;white-space:pre-wrap}
+
 .dialog-actions{display:flex;justify-content:flex-end;gap:9px;padding:12px 18px;border-top:1px solid var(--line)}
+
 .login-wall{min-height:300px;display:grid;place-items:center;text-align:center}
+
 .footer{margin-top:14px;padding:11px 16px;border-radius:14px;background:linear-gradient(135deg,#001f4d,#004b9b);color:#eaf4ff;text-align:center;font-size:10px;font-weight:900}
+
 @media(max-width:900px){
   html{zoom:100%}
+
   .top-white{flex-direction:column;padding:10px 12px}
+
   .top-title{text-align:center}
+
   .main{padding:10px}
+
   .hero{align-items:stretch;flex-direction:column}
+
   .home-card{width:100%}
-  .logo-pelex{height:45px}.logo-arma{height:50px}
-}.workspace{display:grid;grid-template-columns:minmax(430px,42%) minmax(0,1fr);gap:14px;align-items:start}
+
+  .logo-pelex{height:45px}
+.logo-arma{height:50px}
+
+}
+.workspace{display:grid;grid-template-columns:minmax(430px,42%) minmax(0,1fr);gap:14px;align-items:start}
+
 .filters{display:grid;grid-template-columns:1.5fr 1fr 1fr auto;gap:8px;margin-bottom:10px}
+
 .users-table{max-height:620px}
+
 .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+
 .field.full{grid-column:1/-1}
+
 .form-section{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fbfdff;margin-bottom:11px}
+
 .form-section h3{margin:0 0 11px;color:var(--navy);font-size:14px}
+
 .form-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;padding-top:12px;border-top:1px solid var(--line)}
+
 .identity-card{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(135deg,#f8fbff,#eef7ff);margin-bottom:11px}
+
 .identity-card strong{display:block;color:var(--navy);font-size:20px}
+
 .identity-card span{display:block;margin-top:4px;color:var(--muted);font-size:10px;font-weight:900}
+
 .access-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+
 .summary-box{padding:10px;border:1px solid var(--line);border-radius:12px;background:#fff}
+
 .summary-box span{display:block;color:var(--muted);font-size:9px;font-weight:900}
+
 .summary-box strong{display:block;margin-top:4px;color:var(--navy);font-size:14px}
-.scope-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.scope-groups{min-height:130px}.scope-summary{margin-top:8px;padding:10px;border-left:5px solid var(--cyan);border-radius:9px;background:#eefaff;color:var(--navy);font-size:10px;font-weight:900;line-height:1.45}.group-admin{border:1px solid #bcd8ef;background:#f7fbff}.group-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:10px}.scope-capabilities{display:grid;grid-template-columns:1fr 1fr;gap:10px}.capability-card{display:flex;align-items:flex-start;gap:9px;padding:11px;border:1px solid var(--line);border-radius:12px;background:#fff}.capability-card input{width:18px;height:18px;margin-top:1px}.capability-card strong{display:block;color:var(--navy);font-size:11px}.capability-card small{display:block;margin-top:3px;color:var(--muted);font-size:9px;line-height:1.35}.scope-tree-toolbar{display:grid;grid-template-columns:1fr auto auto;gap:8px;margin:8px 0}.scope-tree-status{padding:8px 10px;border-radius:9px;background:#eaf7ff;color:var(--navy);font-size:9px;font-weight:900}.scope-tree{max-height:410px;overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fff;padding:8px}.tree-node{margin:1px 0}.tree-row{display:grid;grid-template-columns:25px 22px auto 1fr;align-items:center;gap:5px;min-height:30px;padding:3px 5px;border-radius:8px}.tree-row:hover{background:#eef7ff}.tree-toggle{border:0;background:transparent;color:var(--navy);font-weight:1000;cursor:pointer;width:24px;height:24px}.tree-toggle.empty{visibility:hidden}.tree-check{width:17px;height:17px}.tree-type{display:inline-block;padding:3px 6px;border-radius:999px;background:#dbeeff;color:var(--navy);font-size:8px;font-weight:1000}.tree-label{color:var(--navy);font-size:10px;font-weight:850;line-height:1.25}.tree-children{margin-left:18px;border-left:1px dashed #bdd5e8;padding-left:5px}.tree-children.hidden{display:none}.scope-tree-summary{margin-top:8px;padding:9px;border-left:4px solid var(--green);border-radius:8px;background:#effff5;color:#075f2c;font-size:9px;font-weight:900;line-height:1.45}.scope-empty{padding:25px;text-align:center;color:var(--muted);font-size:10px;font-weight:900}@media(max-width:1150px){.workspace{grid-template-columns:1fr}.users-table{max-height:420px}}
-@media(max-width:700px){.filters,.form-grid,.access-summary{grid-template-columns:1fr}.field.full{grid-column:1}.btn{min-height:48px;font-size:14px}}</style>
+
+.scope-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.scope-groups{min-height:130px}
+.scope-summary{margin-top:8px;padding:10px;border-left:5px solid var(--cyan);border-radius:9px;background:#eefaff;color:var(--navy);font-size:10px;font-weight:900;line-height:1.45}
+@media(max-width:1150px){.workspace{grid-template-columns:1fr}
+.users-table{max-height:420px}
+}
+
+@media(max-width:700px){.filters,.form-grid,.access-summary{grid-template-columns:1fr}
+.field.full{grid-column:1}
+.btn{min-height:48px;font-size:14px}
+}
+</style>
 </head>
 <body>
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><h2 id="loaderText">CARGANDO...</h2><p>ARMA ESTA VALIDANDO Y ACTUALIZANDO INFORMACION EN LINEA.</p></div></div>
@@ -140,474 +259,84 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
       <div class="field full"><div class="scope-summary">SEGURIDAD: ARMA NO GUARDA NI PUEDE MOSTRAR LA CLAVE ACTUAL EN TEXTO PLANO. SUPER_ADMIN PUEDE RESTABLECER UNA NUEVA CLAVE TEMPORAL.</div></div>
     </div></div>
     <div class="form-section"><h3>ALCANCE DE DATOS</h3><div class="scope-grid">
-      <div><label>MODO DE ALCANCE</label><select id="userScopeMode"><option value="PERSONA">HEREDAR DE LA PERSONA</option><option value="GRUPOS">USAR GRUPOS</option><option value="GLOBAL">GLOBAL - SOLO ADMIN / SUPER_ADMIN</option></select></div>
-      <div><label>GRUPOS AUTORIZADOS</label><select id="userScopeGroups" class="scope-groups" multiple></select></div>
-    </div><div id="userScopeSummary" class="scope-summary">EL ALCANCE SE VALIDARA EN BACKEND PARA CADA OT.</div></div>
-    <div id="scopeGroupAdmin" class="form-section group-admin"><h3>ADMINISTRAR GRUPOS DE EMPRESA / PLANTA / AREA / ACTIVO</h3><div class="form-grid">
-      <div><label>GRUPO EXISTENTE</label><select id="scopeGroupSelect"><option value="">NUEVO GRUPO</option></select></div>
-      <div><label>NOMBRE DEL GRUPO</label><input id="scopeGroupName" placeholder="EJ: PLANEACION PLANTA 2"></div>
-      <div class="field full"><label>CAPACIDAD DEL GRUPO</label><div class="scope-capabilities">
-        <label class="capability-card"><input id="scopeCanView" type="checkbox" checked><span><strong>PERMITIR VER</strong><small>EL USUARIO PUEDE CONSULTAR LAS OT DEL ALCANCE.</small></span></label>
-        <label class="capability-card"><input id="scopeCanManage" type="checkbox" checked><span><strong>PERMITIR GESTIONAR</strong><small>EL USUARIO PUEDE DAR FLUJO SI SU ROL FUNCIONAL ES PLANEADOR O JEFE. GESTIONAR INCLUYE VER.</small></span></label>
-      </div></div>
-      <div class="field full"><label>SELECCIONAR ALCANCE DESDE EL ARBOL MEL</label><div class="scope-tree-toolbar"><input id="scopeTreeSearch" placeholder="BUSCAR EMPRESA, PLANTA, AREA, EQUIPO, TAG O ID"><button id="btnTreeExpand" class="btn gray" type="button">EXPANDIR</button><button id="btnTreeCollapse" class="btn gray" type="button">CONTRAER</button></div><div id="scopeCatalogStatus" class="scope-tree-status">ARBOL MEL BAJO DEMANDA // SOLO AL ADMINISTRAR UN GRUPO</div><div id="scopeTree" class="scope-tree"><div class="scope-empty">SE CARGARA AL PULSAR NUEVO GRUPO O SELECCIONAR UN GRUPO EXISTENTE.</div></div><div id="scopeTreeSummary" class="scope-tree-summary">SIN NODOS SELECCIONADOS.</div></div>
-      <div class="field full"><label>OBSERVACION</label><textarea id="scopeGroupObservation"></textarea></div>
-    </div><div class="group-actions"><button id="btnScopeNew" class="btn gray">NUEVO GRUPO</button><button id="btnScopeDeactivate" class="btn red">INACTIVAR</button><button id="btnScopeSave" class="btn green">GUARDAR GRUPO</button></div></div>
+      <div><label>MODO DE ALCANCE</label><select id="userScopeMode"><option value="PERSONA">HEREDAR DE LA PERSONA</option><option value="GRUPOS">USAR GRUPOS</option><option value="GLOBAL">GLOBAL - SOLO SUPER_ADMIN</option></select></div>
+      <div><label>GRUPOS AUTORIZADOS</label><select id="userScopeGroups" class="scope-groups" multiple></select><div class="scope-simple-actions"><button id="btnRefreshGroups" class="btn gray" type="button">ACTUALIZAR GRUPOS</button><button id="btnOpenGroupManager" class="btn" type="button">ADMINISTRAR GRUPOS</button></div></div>
+    </div><div id="userScopeSummary" class="scope-summary">EL ALCANCE SE VALIDARA EN BACKEND PARA CADA OT.</div><div class="scope-help">PERSONA = USA SOLO LOS DATOS DE PERSONAL. // GRUPOS = ASIGNA UNO O VARIOS GRUPOS YA CREADOS. // GLOBAL = SOLO SUPER_ADMIN. EL ARBOL MEL NO SE CARGA EN USUARIOS.</div></div>
     <div class="form-section"><h3>RESUMEN DEL NIVEL</h3><div class="access-summary"><div class="summary-box"><span>PERMISOS ACTIVOS</span><strong id="sumPermissions">0</strong></div><div class="summary-box"><span>FILTROS RESTRINGIDOS</span><strong id="sumFilters">0</strong></div><div class="summary-box"><span>ESTADO CUENTA</span><strong id="sumStatus">-</strong></div></div></div>
     <div class="form-section"><h3>AUDITORIA</h3><div class="form-grid"><div><label>ULTIMO LOGIN</label><input id="userLastLogin" readonly></div><div class="field full"><label>OBSERVACION</label><textarea id="userObservation" readonly></textarea></div></div></div>
     <div class="form-actions"><button id="btnToggle" class="btn orange">ACTIVAR / SUSPENDER</button><button id="btnReset" class="btn">RESTABLECER CLAVE</button><button id="btnDelete" class="btn red">ELIMINAR</button><button id="btnSave" class="btn green">CREAR USUARIO</button></div>
   </article>
 </section>
-<footer class="footer">A.R.M.A. // USUARIOS V05.5 // ARMA_DATABASE EN LINEA // GENERADO: 2026-08-08 08:28:05</footer>
+<div id="groupManagerModal" class="group-modal hidden"><div class="group-modal-card"><div class="group-modal-head"><strong>ADMINISTRAR GRUPOS DE ALCANCE</strong><button id="btnCloseGroupManager" class="btn gray" type="button">CERRAR</button></div><iframe id="groupManagerFrame" title="GRUPOS DE ALCANCE"></iframe></div></div>
+<footer class="footer">A.R.M.A. // USUARIOS V06 // ARMA_DATABASE EN LINEA // GENERADO: 2026-08-08 20:16:56</footer>
 </main>
-<script>const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
-const ARMA_UI_MANIFEST={
-  page:{htmlId:'usuarios_arma.html',htmlTitle:'ADMINISTRACION | USUARIOS',url:'usuarios_arma.html',module:'ADMIN_USUARIOS',order:800},
-  buttons:[
-    {key:'BTN_ADMIN_USUARIOS',label:'ABRIR ADMINISTRACION DE USUARIOS',group:'ACCESO'},
-    {key:'BTN_USUARIOS_CREAR',label:'CREAR USUARIO',group:'OPERACIONES'},
-    {key:'BTN_USUARIOS_EDITAR',label:'EDITAR USUARIO',group:'OPERACIONES'},
-    {key:'BTN_USUARIOS_ACTIVAR',label:'ACTIVAR O SUSPENDER',group:'OPERACIONES'},
-    {key:'BTN_USUARIOS_RESETEAR_CLAVE',label:'RESTABLECER CLAVE',group:'SEGURIDAD'},
-    {key:'BTN_USUARIOS_ELIMINAR',label:'ELIMINAR USUARIO',group:'SEGURIDAD'},
-    {key:'BTN_USUARIOS_GESTIONAR_ALCANCE',label:'GESTIONAR GRUPOS Y ALCANCE DE DATOS',group:'ALCANCE'}
-  ],
-  filters:[
-    {id:'USUARIOS_NIVEL',label:'NIVEL DE USUARIO',provider:'NIVELES_USUARIO',type:'SELECT_MULTIPLE',order:10},
-    {id:'USUARIOS_ESTADO',label:'ESTADO DE USUARIO',values:['SI','NO'],type:'SELECT_MULTIPLE',order:20}
-  ]
-};
-let armaSession={user:'',nombre:'',nivel:'',permissions:{},token:''};
-let appData={users:[],levels:[],persons:[],scopeGroups:[],scopeCatalog:{companies:[],plants:[],areas:[],assets:[],tree:[],diagnostics:{}},scopeModes:[]};
-let scopeTreeSelection={EMPRESA:new Set(),PLANTA:new Set(),AREA:new Set(),ACTIVO:new Set()};
-let scopeTreeExpanded=new Set();
-let selectedUser=null;
-let createMode=false;
-let dialogResolver=null;
-
+<script>
+const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
+const ARMA_USERS_V06='USUARIOS_V06_FINAL_20260808';
+const state={session:{user:'',nombre:'',nivel:'',permissions:{},token:''},users:[],levels:[],persons:[],groups:[],selected:null,createMode:true,levelsReady:false,personsReady:false,groupsReady:false};
+const $=id=>document.getElementById(id);
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function normalize(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toUpperCase();}
-function readCache(){try{let raw=localStorage.getItem('ARMA_SESSION_CACHE')||'';if(!raw)return null;let x=JSON.parse(raw);return x&&x.token?x:null;}catch(e){return null;}}
-function setSession(data,token){armaSession={user:data.user||'',nombre:data.nombre||data.user||'',nivel:data.nivel||'',permissions:data.permissions||{},token:token||data.token||''};if(armaSession.token)localStorage.setItem('ARMA_TOKEN',armaSession.token);document.getElementById('userPill').textContent=(armaSession.nombre||armaSession.user)+' // '+armaSession.nivel;}
-function hasPerm(key,parent){if(armaSession.nivel==='SUPER_ADMIN'||armaSession.permissions.__SUPER_ADMIN__===true)return true;if(Object.prototype.hasOwnProperty.call(armaSession.permissions,key))return armaSession.permissions[key]===true;return parent?armaSession.permissions[parent]===true:false;}
-function showLoader(msg){document.getElementById('loaderText').textContent=msg||'CARGANDO...';document.getElementById('loader').classList.remove('hidden');}
-function hideLoader(){document.getElementById('loader').classList.add('hidden');}
-function toast(msg){let el=document.getElementById('toast');el.textContent=msg||'';el.classList.add('show');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>el.classList.remove('show'),4200);}
-async function api(action,payload,msg){payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';if(msg)showLoader(msg);try{let r=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});return await r.json();}finally{if(msg)hideLoader();}}
-function dialog(title,message,confirmText='ACEPTAR',cancelText=''){return new Promise(resolve=>{dialogResolver=resolve;document.getElementById('dialogTitle').textContent=title;document.getElementById('dialogMessage').textContent=message;let cancel=document.getElementById('dialogCancel');document.getElementById('dialogAccept').textContent=confirmText;cancel.textContent=cancelText||'CANCELAR';cancel.classList.toggle('hidden',!cancelText);document.getElementById('dialog').classList.remove('hidden');});}
-function closeDialog(value){document.getElementById('dialog').classList.add('hidden');if(dialogResolver)dialogResolver(value);dialogResolver=null;}
-function formatDate(v){if(!v)return '';let d=new Date(v);return isNaN(d)?String(v):d.toLocaleString('es-CO');}
-function actionAllowed(key){return hasPerm(key,'BTN_ADMIN_USUARIOS');}
-function personById(id){return appData.persons.find(p=>normalize(p.ID_PERSONA)===normalize(id));}
-function levelByName(name){return appData.levels.find(l=>normalize(l.nivel)===normalize(name));}
-
-async function validateSession(){
-  let cache=readCache();let token=localStorage.getItem('ARMA_TOKEN')||(cache&&cache.token)||'';
-  if(!token){location.href='main.html';return false;}
-  if(cache)setSession(cache,token);
-  let data=await api('validateSession',{token});
-  if(!data.ok){localStorage.removeItem('ARMA_TOKEN');localStorage.removeItem('ARMA_SESSION_CACHE');location.href='main.html';return false;}
-  setSession(data,token);
-  if(!hasPerm('BTN_ADMIN_USUARIOS','BTN_ADMIN_USUARIOS')){document.getElementById('appArea').innerHTML='<section class="panel login-wall"><div><h2>ACCESO NO AUTORIZADO</h2><p>SU NIVEL NO TIENE BTN_ADMIN_USUARIOS.</p><a class="btn" href="main.html">VOLVER A MAIN</a></div></section>';return false;}
-  try{await api('registerUiManifest',{manifest:ARMA_UI_MANIFEST});}catch(e){}
-  return true;
-}
-
-async function loadBootstrap(selectName){
-  let data=await api('adminUsersBootstrap',{},'CARGANDO USUARIOS Y NIVELES...');
-  if(!data.ok)throw new Error(data.error||'NO SE PUDO CARGAR');
-  appData={users:data.users||[],levels:data.levels||[],persons:data.persons||[],scopeGroups:data.scopeGroups||[],scopeCatalog:data.scopeCatalog||{companies:[],plants:[],areas:[],assets:[],tree:[],diagnostics:{}},scopeModes:data.scopeModes||[]};
-  fillFilters();fillScopeCatalogs();
-  if(selectName&&appData.users.some(u=>normalize(u.user)===normalize(selectName)))selectUser(selectName);else beginNew(false);
-  renderUsers();
-  document.getElementById('listStatus').textContent=appData.users.length+' USUARIOS';
-}
-
-function fillFilters(){
-  let level=document.getElementById('filterLevel');let old=level.value;
-  level.innerHTML='<option value="">TODOS LOS NIVELES</option>'+appData.levels.map(l=>`<option value="${esc(l.nivel)}">${esc(l.nivel)}</option>`).join('');
-  level.value=old;
-  let formLevel=document.getElementById('userLevel');let current=formLevel.value;
-  formLevel.innerHTML='<option value="">SELECCIONE NIVEL</option>'+appData.levels.map(l=>`<option value="${esc(l.nivel)}">${esc(l.nivel)} // ${esc(l.descripcion||'')}</option>`).join('');
-  if(current)formLevel.value=current;
-  let person=document.getElementById('personSelect');
-  person.innerHTML='<option value="">SELECCIONE PERSONA CREADA EN PERSONAL</option>'+appData.persons.map(p=>{let linked=normalize(p.USER_ARMA);let suffix=linked?' // USUARIO PRINCIPAL: '+linked+' // ADMITE CUENTAS ADICIONALES':' // SIN USUARIO PRINCIPAL';return `<option value="${esc(p.ID_PERSONA)}">${esc(p.NOMBRE_COMPLETO)} // ${esc(p.ID_PERSONA)}${esc(suffix)}</option>`;}).join('');
-}
-
-function splitScope(v){return String(v||'').split(/[|,;\n]+/).map(normalize).filter(Boolean);}
-function selectedValues(id){return Array.from(document.getElementById(id).selectedOptions||[]).map(o=>o.value);}
-function setSelectedValues(id,values){let wanted=splitScope(Array.isArray(values)?values.join('|'):values);Array.from(document.getElementById(id).options||[]).forEach(o=>o.selected=wanted.indexOf(normalize(o.value))>=0);}
-function scopeGroupById(id){return appData.scopeGroups.find(g=>normalize(g.ID_GRUPO)===normalize(id));}
-function scopeCapabilityLabel(g){let parts=[];if(normalize(g.PERMITE_VER||'SI')==='SI')parts.push('VER');if(normalize(g.PERMITE_GESTIONAR||'NO')==='SI')parts.push('GESTIONAR');return parts.join('+')||'SIN PERMISO';}
-function treeSelectionReset(){scopeTreeSelection={EMPRESA:new Set(),PLANTA:new Set(),AREA:new Set(),ACTIVO:new Set()};}
-function treeSelectionSet(type,values){let key=String(type||'').toUpperCase();if(!scopeTreeSelection[key])return;scopeTreeSelection[key]=new Set(splitScope(values));}
-function treeSelectionHas(type,value){let key=String(type||'').toUpperCase();return !!(scopeTreeSelection[key]&&scopeTreeSelection[key].has(normalize(value)));}
-function treeSelectionToggle(type,value,checked){let key=String(type||'').toUpperCase();let val=normalize(value);if(!scopeTreeSelection[key]||!val)return;if(checked)scopeTreeSelection[key].add(val);else scopeTreeSelection[key].delete(val);updateTreeSummary();}
-function selectedTreeData(){return{EMPRESAS:Array.from(scopeTreeSelection.EMPRESA),PLANTAS:Array.from(scopeTreeSelection.PLANTA),AREAS:Array.from(scopeTreeSelection.AREA),ACTIVOS:Array.from(scopeTreeSelection.ACTIVO)};}
-function buildFallbackTree(){let companies={};(appData.scopeCatalog.assets||[]).forEach(a=>{let co=String(a.empresa||'SIN EMPRESA DEFINIDA');let pl=String(a.planta||'SIN PLANTA DEFINIDA');let ar=String(a.area||'SIN AREA DEFINIDA');companies[co]=companies[co]||{};companies[co][pl]=companies[co][pl]||{};companies[co][pl][ar]=companies[co][pl][ar]||[];companies[co][pl][ar].push(a);});return Object.keys(companies).sort().map(co=>({key:'EMPRESA:'+normalize(co),type:'EMPRESA',value:co==='SIN EMPRESA DEFINIDA'?'':co,label:co,selectable:co!=='SIN EMPRESA DEFINIDA',children:Object.keys(companies[co]).sort().map(pl=>({key:'EMPRESA:'+normalize(co)+'/PLANTA:'+normalize(pl),type:'PLANTA',value:pl==='SIN PLANTA DEFINIDA'?'':pl,label:pl,selectable:pl!=='SIN PLANTA DEFINIDA',children:Object.keys(companies[co][pl]).sort().map(ar=>({key:'EMPRESA:'+normalize(co)+'/PLANTA:'+normalize(pl)+'/AREA:'+normalize(ar),type:'AREA',value:ar==='SIN AREA DEFINIDA'?'':ar,label:ar,selectable:ar!=='SIN AREA DEFINIDA',children:companies[co][pl][ar].map(a=>({key:'ACTIVO:'+normalize(a.id||a.tag||a.nombre),type:'ACTIVO',value:a.id||a.tag||a.nombre,label:[a.nombre,a.tag,a.id].filter(Boolean).join(' // '),selectable:true,children:[]}))}))}))}));}
-function scopeTreeRoots(){let roots=appData.scopeCatalog.tree||[];return roots.length?roots:buildFallbackTree();}
-function nodeContainsQuery(node,q){if(!q)return true;let own=normalize([node.label,node.value,node.type,node.empresa,node.planta,node.area].join(' '));if(own.includes(q))return true;return (node.children||[]).some(c=>nodeContainsQuery(c,q));}
-function createTreeNode(node,depth,q){if(!nodeContainsQuery(node,q))return null;let wrap=document.createElement('div');wrap.className='tree-node';let row=document.createElement('div');row.className='tree-row';row.style.paddingLeft=Math.min(depth,5)*3+'px';let hasChildren=(node.children||[]).length>0;let toggle=document.createElement('button');toggle.type='button';toggle.className='tree-toggle'+(hasChildren?'':' empty');toggle.textContent=scopeTreeExpanded.has(node.key)?'?':'+';let check=document.createElement('input');check.type='checkbox';check.className='tree-check';check.checked=treeSelectionHas(node.type,node.value);check.disabled=node.selectable===false||!hasPerm('BTN_USUARIOS_GESTIONAR_ALCANCE','BTN_ADMIN_USUARIOS');check.addEventListener('change',()=>treeSelectionToggle(node.type,node.value,check.checked));let type=document.createElement('span');type.className='tree-type';type.textContent=node.type;let label=document.createElement('span');label.className='tree-label';label.textContent=node.label||node.value||node.key;row.append(toggle,check,type,label);wrap.appendChild(row);if(hasChildren){let children=document.createElement('div');children.className='tree-children'+(scopeTreeExpanded.has(node.key)||q?'':' hidden');(node.children||[]).forEach(child=>{let el=createTreeNode(child,depth+1,q);if(el)children.appendChild(el);});wrap.appendChild(children);toggle.addEventListener('click',()=>{if(scopeTreeExpanded.has(node.key))scopeTreeExpanded.delete(node.key);else scopeTreeExpanded.add(node.key);renderScopeTree();});}return wrap;}
-function renderScopeTree(){let container=document.getElementById('scopeTree');if(!container)return;let roots=scopeTreeRoots();let q=normalize(document.getElementById('scopeTreeSearch').value);container.innerHTML='';if(!roots.length){container.innerHTML='<div class="scope-empty">EL BACKEND NO DEVOLVIO EMPRESAS, PLANTAS O ACTIVOS DESDE MEL.</div>';updateTreeSummary();return;}roots.forEach(node=>{let el=createTreeNode(node,0,q);if(el)container.appendChild(el);});if(!container.children.length)container.innerHTML='<div class="scope-empty">SIN COINCIDENCIAS PARA LA BUSQUEDA.</div>';updateTreeSummary();}
-function updateTreeSummary(){let d=selectedTreeData();let text=['EMPRESAS '+d.EMPRESAS.length,'PLANTAS '+d.PLANTAS.length,'AREAS '+d.AREAS.length,'ACTIVOS '+d.ACTIVOS.length].join(' // ');document.getElementById('scopeTreeSummary').textContent=text+'. DENTRO DEL GRUPO LAS DIMENSIONES SE VALIDAN EN CONJUNTO.';}
-function expandTree(all){scopeTreeExpanded=new Set();if(all){(function walk(nodes){(nodes||[]).forEach(n=>{if((n.children||[]).length)scopeTreeExpanded.add(n.key);walk(n.children||[]);});})(scopeTreeRoots());}renderScopeTree();}
-function fillScopeCatalogs(){let activeGroups=appData.scopeGroups.filter(g=>normalize(g.ACTIVO||'SI')==='SI');let userGroups=document.getElementById('userScopeGroups');userGroups.innerHTML=activeGroups.map(g=>`<option value="${esc(g.ID_GRUPO)}">${esc(g.NOMBRE_GRUPO)} // ${esc(scopeCapabilityLabel(g))} // ${esc(g.PLANTAS||g.EMPRESAS||'')}</option>`).join('');let groupSelect=document.getElementById('scopeGroupSelect');groupSelect.innerHTML='<option value="">NUEVO GRUPO</option>'+appData.scopeGroups.map(g=>`<option value="${esc(g.ID_GRUPO)}">${esc(g.NOMBRE_GRUPO)} // ${esc(scopeCapabilityLabel(g))} // ${esc(g.ACTIVO)}</option>`).join('');let d=appData.scopeCatalog.diagnostics||{};document.getElementById('scopeCatalogStatus').textContent=`CATALOGO MEL: ${d.companies||0} EMPRESAS // ${d.plants||0} PLANTAS // ${d.areas||0} AREAS // ${d.assets||0} ACTIVOS`;document.getElementById('scopeGroupAdmin').classList.toggle('hidden',!hasPerm('BTN_USUARIOS_GESTIONAR_ALCANCE','BTN_ADMIN_USUARIOS'));scopeTreeExpanded=new Set((scopeTreeRoots()||[]).map(n=>n.key));renderScopeTree();}
-function resetScopeGroup(){document.getElementById('scopeGroupSelect').value='';document.getElementById('scopeGroupName').value='';document.getElementById('scopeGroupObservation').value='';document.getElementById('scopeCanView').checked=true;document.getElementById('scopeCanManage').checked=true;treeSelectionReset();renderScopeTree();}
-function loadScopeGroup(){let g=scopeGroupById(document.getElementById('scopeGroupSelect').value);if(!g){resetScopeGroup();return;}document.getElementById('scopeGroupName').value=g.NOMBRE_GRUPO||'';document.getElementById('scopeGroupObservation').value=g.OBSERVACION||'';document.getElementById('scopeCanView').checked=normalize(g.PERMITE_VER||'SI')==='SI';document.getElementById('scopeCanManage').checked=normalize(g.PERMITE_GESTIONAR||'NO')==='SI';treeSelectionReset();treeSelectionSet('EMPRESA',g.EMPRESAS||'');treeSelectionSet('PLANTA',g.PLANTAS||'');treeSelectionSet('AREA',g.AREAS||'');treeSelectionSet('ACTIVO',g.ACTIVOS||'');renderScopeTree();}
-function updateScopeModeOptions(){let level=normalize(document.getElementById('userLevel').value);let globalOption=Array.from(document.getElementById('userScopeMode').options).find(o=>o.value==='GLOBAL');let allowed=['ADMIN','SUPER_ADMIN'].indexOf(level)>=0||(selectedUser&&selectedUser.protegido);if(globalOption)globalOption.disabled=!allowed;if(!allowed&&document.getElementById('userScopeMode').value==='GLOBAL')document.getElementById('userScopeMode').value='PERSONA';}
-function updateScopeSummary(){let mode=document.getElementById('userScopeMode').value||'PERSONA';let groups=selectedValues('userScopeGroups');let person=personById(document.getElementById('userIdPersona').value)||{};let groupText=groups.map(id=>{let g=scopeGroupById(id);return g?(g.NOMBRE_GRUPO+' ['+scopeCapabilityLabel(g)+']'):id;}).join(' // ');let text=mode==='GLOBAL'?'ACCESO GLOBAL A TODAS LAS EMPRESAS, PLANTAS Y ACTIVOS.':mode==='GRUPOS'?('GRUPOS: '+(groupText||'NINGUNO SELECCIONADO')):('HEREDA PERSONA: '+(person.EMPRESA_ASIGNADA||'')+' // '+(person.PLANTA_ASIGNADA||'SIN PLANTA'));document.getElementById('userScopeSummary').textContent=text+' // EL BACKEND VALIDARA VER Y GESTIONAR EN CADA OT.';document.getElementById('userScopeGroups').disabled=mode!=='GRUPOS'||!(createMode?actionAllowed('BTN_USUARIOS_CREAR'):actionAllowed('BTN_USUARIOS_EDITAR'));}
-async function saveScopeGroup(){if(!hasPerm('BTN_USUARIOS_GESTIONAR_ALCANCE','BTN_ADMIN_USUARIOS'))return toast('NO TIENE PERMISO PARA GESTIONAR ALCANCES.');let tree=selectedTreeData();let canManage=document.getElementById('scopeCanManage').checked;let canView=document.getElementById('scopeCanView').checked||canManage;let data={ID_GRUPO:document.getElementById('scopeGroupSelect').value,NOMBRE_GRUPO:document.getElementById('scopeGroupName').value,EMPRESAS:tree.EMPRESAS.join('|'),PLANTAS:tree.PLANTAS.join('|'),AREAS:tree.AREAS.join('|'),ACTIVOS:tree.ACTIVOS.join('|'),PERMITE_VER:canView?'SI':'NO',PERMITE_GESTIONAR:canManage?'SI':'NO',OBSERVACION:document.getElementById('scopeGroupObservation').value,ACTIVO:'SI'};if(!data.NOMBRE_GRUPO)return toast('DIGITE EL NOMBRE DEL GRUPO.');if(!data.EMPRESAS&&!data.PLANTAS&&!data.AREAS&&!data.ACTIVOS)return toast('SELECCIONE AL MENOS UN NODO DEL ARBOL.');let r=await api('saveScopeGroup',{data},'GUARDANDO GRUPO DE ALCANCE...');if(!r.ok)return toast(r.error||'NO FUE POSIBLE GUARDAR EL GRUPO.');toast(r.message||'GRUPO GUARDADO');await loadBootstrap(selectedUser&&selectedUser.user,true);}
-async function deactivateScopeGroup(){let id=document.getElementById('scopeGroupSelect').value;if(!id)return toast('SELECCIONE UN GRUPO.');let ok=await dialog('INACTIVAR GRUPO','LOS USUARIOS ASIGNADOS DEJARAN DE HEREDAR ESTE ALCANCE.','INACTIVAR','CANCELAR');if(!ok)return;let r=await api('deactivateScopeGroup',{idGrupo:id},'INACTIVANDO GRUPO...');if(!r.ok)return toast(r.error||'NO FUE POSIBLE INACTIVAR.');toast(r.message||'GRUPO INACTIVADO');await loadBootstrap(selectedUser&&selectedUser.user,true);}
-function filteredUsers(){
-  let q=normalize(document.getElementById('filterQ').value);
-  let level=normalize(document.getElementById('filterLevel').value);
-  let active=normalize(document.getElementById('filterActive').value);
-  return appData.users.filter(u=>{
-    let hay=normalize([u.user,u.nombre,u.correo,u.idPersona,u.nivel].join(' '));
-    return (!q||hay.includes(q))&&(!level||normalize(u.nivel)===level)&&(!active||normalize(u.activo)===active);
-  });
-}
-
-function renderUsers(){
-  let rows=filteredUsers();
-  document.getElementById('usersRows').innerHTML=rows.map(u=>`<tr data-user="${esc(u.user)}" class="${selectedUser&&normalize(selectedUser.user)===normalize(u.user)?'selected':''}"><td><strong>${esc(u.user)}</strong>${u.protegido?'<br><span class="badge gray">PROTEGIDO</span>':''}</td><td>${esc(u.nombre)}</td><td>${esc(u.nivel)}</td><td><span class="badge ${u.activo==='SI'?'green':'red'}">${esc(u.activo)}</span></td><td>${esc(u.idPersona)}</td><td>${esc(u.correo)}</td><td>${esc(u.modoAlcance||'PERSONA')}${u.gruposAlcance?'<br><small>'+esc(u.gruposAlcance)+'</small>':''}</td><td>${u.permissionCount||0}</td></tr>`).join('')||'<tr><td colspan="8">SIN RESULTADOS</td></tr>';
-  document.querySelectorAll('#usersRows tr[data-user]').forEach(tr=>tr.addEventListener('click',()=>selectUser(tr.dataset.user)));
-  document.getElementById('listStatus').textContent=rows.length+' DE '+appData.users.length+' USUARIOS';
-}
-
-function beginNew(focus=true){
-  createMode=true;selectedUser=null;
-  document.getElementById('formTitle').textContent='CREAR USUARIO';
-  document.getElementById('identityName').textContent='NUEVO USUARIO';
-  document.getElementById('identitySub').textContent='SELECCIONE UNA PERSONA CREADA EN PERSONAL';
-  document.getElementById('personField').classList.remove('hidden');
-  ['userName','userMail','userPassword'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('userName').readOnly=false;
-  document.getElementById('userIdPersona').value='';
-  document.getElementById('userFullName').value='';
-  document.getElementById('userLevel').value='';
-  document.getElementById('userActive').value='SI';
-  document.getElementById('userMustChange').value='SI';
-  document.getElementById('userLastLogin').value='';
-  document.getElementById('userObservation').value='';
-  document.getElementById('userScopeMode').value='PERSONA';
-  setSelectedValues('userScopeGroups',[]);
-  document.getElementById('btnSave').textContent='CREAR USUARIO';
-  setActionButtons();
-  renderUsers();updateSummary();updateScopeSummary();
-  if(focus)document.getElementById('personSelect').focus();
-}
-
-function selectUser(user){
-  let u=appData.users.find(x=>normalize(x.user)===normalize(user));if(!u)return;
-  createMode=false;selectedUser=u;
-  document.getElementById('formTitle').textContent='DETALLE DE USUARIO';
-  document.getElementById('identityName').textContent=u.nombre||u.user;
-  document.getElementById('identitySub').textContent=u.user+' // '+u.nivel+(u.protegido?' // PROTEGIDO':'');
-  document.getElementById('personField').classList.add('hidden');
-  document.getElementById('userName').value=u.user||'';
-  document.getElementById('userName').readOnly=true;
-  document.getElementById('userIdPersona').value=u.idPersona||'';
-  document.getElementById('userFullName').value=u.nombre||'';
-  document.getElementById('userMail').value=u.correo||'';
-  document.getElementById('userLevel').value=u.nivel||'';
-  document.getElementById('userActive').value=u.activo||'SI';
-  document.getElementById('userMustChange').value=u.debeCambiarClave||'NO';
-  document.getElementById('userPassword').value='';
-  document.getElementById('userLastLogin').value=formatDate(u.ultimoLogin);
-  document.getElementById('userObservation').value=u.observacion||'';
-  document.getElementById('userScopeMode').value=u.modoAlcance||'PERSONA';
-  setSelectedValues('userScopeGroups',u.gruposAlcance||'');
-  document.getElementById('btnSave').textContent='GUARDAR CAMBIOS';
-  setActionButtons();renderUsers();updateSummary();
-}
-
-function setActionButtons(){
-  let protectedUser=!!(selectedUser&&selectedUser.protegido);
-  document.getElementById('btnNew').disabled=!actionAllowed('BTN_USUARIOS_CREAR');
-  document.getElementById('btnSave').disabled=createMode?!actionAllowed('BTN_USUARIOS_CREAR'):(!actionAllowed('BTN_USUARIOS_EDITAR')||protectedUser);
-  document.getElementById('btnToggle').disabled=createMode||!actionAllowed('BTN_USUARIOS_ACTIVAR')||protectedUser;
-  document.getElementById('btnReset').disabled=createMode||!actionAllowed('BTN_USUARIOS_RESETEAR_CLAVE')||protectedUser;
-  document.getElementById('btnDelete').disabled=createMode||!actionAllowed('BTN_USUARIOS_ELIMINAR')||protectedUser;
-  document.getElementById('userMail').readOnly=!createMode&&(!actionAllowed('BTN_USUARIOS_EDITAR')||protectedUser);
-  document.getElementById('userLevel').disabled=!createMode&&(!actionAllowed('BTN_USUARIOS_EDITAR')||protectedUser);
-  document.getElementById('userActive').disabled=!createMode&&(!actionAllowed('BTN_USUARIOS_EDITAR')||protectedUser);
-  document.getElementById('userMustChange').disabled=!createMode&&(!actionAllowed('BTN_USUARIOS_EDITAR')||protectedUser);
-  document.getElementById('userScopeMode').disabled=!createMode&&(!actionAllowed('BTN_USUARIOS_EDITAR')||protectedUser);
-  document.getElementById('userScopeGroups').disabled=protectedUser||document.getElementById('userScopeMode').value!=='GRUPOS'||!(createMode?actionAllowed('BTN_USUARIOS_CREAR'):actionAllowed('BTN_USUARIOS_EDITAR'));
-  ['btnScopeNew','btnScopeDeactivate','btnScopeSave','btnTreeExpand','btnTreeCollapse','scopeTreeSearch','scopeCanView','scopeCanManage'].forEach(id=>{let el=document.getElementById(id);if(el)el.disabled=!hasPerm('BTN_USUARIOS_GESTIONAR_ALCANCE','BTN_ADMIN_USUARIOS');});
-}
-
-function updateSummary(){
-  let level=levelByName(document.getElementById('userLevel').value)||{};
-  document.getElementById('sumPermissions').textContent=level.permissionCount||0;
-  document.getElementById('sumFilters').textContent=level.filterRuleCount||0;
-  document.getElementById('sumStatus').textContent=document.getElementById('userActive').value||'-';
-  updateScopeModeOptions();updateScopeSummary();
-}
-
-function onPersonChange(){
-  let p=personById(document.getElementById('personSelect').value);
-  if(!p)return;
-  document.getElementById('userIdPersona').value=p.ID_PERSONA||'';
-  document.getElementById('userFullName').value=p.NOMBRE_COMPLETO||'';
-  document.getElementById('userMail').value=p.CORREO||'';
-  document.getElementById('identityName').textContent=p.NOMBRE_COMPLETO||'NUEVO USUARIO';
-  document.getElementById('identitySub').textContent=(p.ID_PERSONA||'')+' // '+(p.CARGO||'')+' // '+(p.PLANTA_ASIGNADA||'');
-  if(!document.getElementById('userName').value)document.getElementById('userName').value=suggestUser(p.NOMBRE_COMPLETO||'');
-  updateScopeSummary();
-}
-
-function suggestUser(name){
-  let parts=normalize(name).replace(/[^A-Z0-9 ]/g,' ').split(/\s+/).filter(Boolean);
-  if(!parts.length)return '';
-  return parts.length===1?parts[0]:(parts[0]+'.'+parts[parts.length-1]).slice(0,40);
-}
-
-async function saveUser(){
-  let data={
-    user:document.getElementById('userName').value,
-    idPersona:document.getElementById('userIdPersona').value,
-    correo:document.getElementById('userMail').value,
-    nivel:document.getElementById('userLevel').value,
-    activo:document.getElementById('userActive').value,
-    debeCambiarClave:document.getElementById('userMustChange').value,
-    modoAlcance:document.getElementById('userScopeMode').value,
-    gruposAlcance:selectedValues('userScopeGroups')
-  };
-  if(createMode)data.password=document.getElementById('userPassword').value;
-  if(!data.user||!data.nivel||(!data.idPersona&&createMode)){toast('COMPLETE USUARIO, PERSONA Y NIVEL.');return;}
-  if(createMode&&!data.password){toast('DIGITE UNA CLAVE TEMPORAL.');return;}
-  if(data.modoAlcance==='GRUPOS'&&!data.gruposAlcance.length){toast('SELECCIONE AL MENOS UN GRUPO DE ALCANCE.');return;}
-  let ok=await dialog(createMode?'CREAR USUARIO':'GUARDAR CAMBIOS',createMode?'SE CREARA UNA CUENTA ARMA VINCULADA A LA PERSONA. SI YA TIENE OTRA CUENTA, SE CONSERVARA COMO USUARIO ADICIONAL.':'SE ACTUALIZARA EL USUARIO SELECCIONADO.','CONTINUAR','CANCELAR');if(!ok)return;
-  let wasCreate=createMode;let targetUser=data.user;
-  let result=await api(wasCreate?'createUser':'updateUserAdmin',{userData:data},wasCreate?'CREANDO USUARIO...':'GUARDANDO CAMBIOS...');
-  if(!result.ok){toast(result.error||'NO FUE POSIBLE GUARDAR.');return;}
-  toast(result.message||'OPERACION COMPLETADA');await loadBootstrap(targetUser,true);
-}
-
-async function toggleUser(){
-  if(!selectedUser)return;
-  let targetUser=selectedUser.user;let targetActive=selectedUser.activo;
-  let ok=await dialog(targetActive==='SI'?'SUSPENDER USUARIO':'ACTIVAR USUARIO','USUARIO: '+targetUser+'\nESTADO ACTUAL: '+targetActive,'CONFIRMAR','CANCELAR');if(!ok)return;
-  let r=await api('toggleUserActive',{user:targetUser},'ACTUALIZANDO ESTADO...');
-  if(!r.ok){toast(r.error||'NO FUE POSIBLE CAMBIAR EL ESTADO.');return;}
-  toast('ESTADO ACTUALIZADO: '+r.activo);await loadBootstrap(targetUser,true);
-}
-
-async function resetPassword(){
-  if(!selectedUser)return;
-  let pass=document.getElementById('userPassword').value;
-  if(pass.length<8){toast('LA CLAVE TEMPORAL DEBE TENER MINIMO 8 CARACTERES.');return;}
-  let ok=await dialog('RESTABLECER CLAVE','SE CERRARAN LAS SESIONES DEL USUARIO '+selectedUser.user+'.','RESTABLECER','CANCELAR');if(!ok)return;
-  let r=await api('resetUserPasswordAdmin',{user:selectedUser.user,password:pass,mustChange:true},'ACTUALIZANDO CLAVE...');
-  if(!r.ok){toast(r.error||'NO FUE POSIBLE ACTUALIZAR LA CLAVE.');return;}
-  document.getElementById('userPassword').value='';toast(r.message||'CLAVE ACTUALIZADA');
-}
-
-async function deleteSelected(){
-  if(!selectedUser)return;
-  let ok=await dialog('ELIMINAR USUARIO','ESTA ACCION ELIMINA LA CUENTA Y CIERRA SUS SESIONES. SI ERA EL USUARIO PRINCIPAL, ARMA PROMOVERA OTRA CUENTA DE LA MISMA PERSONA.\n\nUSUARIO: '+selectedUser.user,'ELIMINAR','CANCELAR');if(!ok)return;
-  let r=await api('deleteUser',{user:selectedUser.user},'ELIMINANDO USUARIO...');
-  if(!r.ok){toast(r.error||'NO FUE POSIBLE ELIMINAR.');return;}
-  toast(r.message||'USUARIO ELIMINADO');await loadBootstrap(null,true);
-}
-
-function bind(){
-  ['filterQ','filterLevel','filterActive'].forEach(id=>document.getElementById(id).addEventListener(id==='filterQ'?'input':'change',renderUsers));
-  document.getElementById('btnSearch').addEventListener('click',renderUsers);
-  document.getElementById('btnReload').addEventListener('click',loadBootstrap);
-  document.getElementById('btnNew').addEventListener('click',()=>beginNew(true));
-  document.getElementById('btnSave').addEventListener('click',saveUser);
-  document.getElementById('btnToggle').addEventListener('click',toggleUser);
-  document.getElementById('btnReset').addEventListener('click',resetPassword);
-  document.getElementById('btnDelete').addEventListener('click',deleteSelected);
-  document.getElementById('personSelect').addEventListener('change',onPersonChange);
-  document.getElementById('userLevel').addEventListener('change',updateSummary);
-  document.getElementById('userActive').addEventListener('change',updateSummary);
-  document.getElementById('userScopeMode').addEventListener('change',()=>{setActionButtons();updateScopeSummary();if(document.getElementById('userScopeMode').value==='GRUPOS')armaV1604EnsureScope(false).catch(e=>toast(e.message||'NO FUE POSIBLE CARGAR EL ARBOL MEL'));});
-  document.getElementById('userScopeGroups').addEventListener('change',updateScopeSummary);
-  document.getElementById('scopeGroupSelect').addEventListener('change',async()=>{await armaV1604EnsureScope(false);loadScopeGroup();});
-  document.getElementById('btnScopeNew').addEventListener('click',async()=>{await armaV1604EnsureScope(false);resetScopeGroup();});
-  document.getElementById('btnScopeSave').addEventListener('click',async()=>{await armaV1604EnsureScope(false);saveScopeGroup();});
-  document.getElementById('btnScopeDeactivate').addEventListener('click',deactivateScopeGroup);
-  document.getElementById('scopeTreeSearch').addEventListener('focus',()=>armaV1604EnsureScope(false).catch(()=>{}));document.getElementById('scopeTreeSearch').addEventListener('input',renderScopeTree);
-  document.getElementById('btnTreeExpand').addEventListener('click',async()=>{await armaV1604EnsureScope(false);expandTree(true);});
-  document.getElementById('btnTreeCollapse').addEventListener('click',async()=>{await armaV1604EnsureScope(false);expandTree(false);});
-  document.getElementById('scopeCanManage').addEventListener('change',function(){if(this.checked)document.getElementById('scopeCanView').checked=true;});
-  document.getElementById('scopeCanView').addEventListener('change',function(){if(!this.checked&&document.getElementById('scopeCanManage').checked)this.checked=true;});
-  document.getElementById('dialogAccept').addEventListener('click',()=>closeDialog(true));
-  document.getElementById('dialogCancel').addEventListener('click',()=>closeDialog(false));
-}
-/* === ARMA V16.0.3 USUARIOS CORE FIRST / DEFERRED HEAVY DATA === */
-const ARMA_V1603_USERS_INFLIGHT=new Map();
-let ARMA_V1603_PERSONS_READY=false;
-let ARMA_V1603_SCOPE_READY=false;
-let ARMA_V1603_DEFERRED_JOB=null;
-function armaV1603UsersKey(){const t=localStorage.getItem('ARMA_TOKEN')||'';return 'ARMA_USERS_V055_CORE_'+t.slice(-14);}
-function armaV1603CoreUsable(data){return !!(data&&data.ok&&Array.isArray(data.users)&&Array.isArray(data.levels));}
-function armaIsSuperAdminSession(){return normalize(armaSession.nivel)==='SUPER_ADMIN'||!!(armaSession.permissions&&armaSession.permissions.__SUPER_ADMIN__===true);}
-function armaV1603ScopeUsable(data){return !!(data&&data.ok&&data.scopeCatalog&&Array.isArray(data.scopeCatalog.tree));}
-function armaV1603UsersRead(){try{const raw=sessionStorage.getItem(armaV1603UsersKey());const x=JSON.parse(raw||'null');if(!x||Date.now()-Number(x.ts||0)>300000||!armaV1603CoreUsable(x.data))return null;return x.data;}catch(e){return null;}}
-function armaV1603UsersWrite(data){if(!armaV1603CoreUsable(data))return;const slim={ok:true,version:data.version||'',session:data.session||null,users:data.users||[],levels:data.levels||[],scopeGroups:data.scopeGroups||[],counts:data.counts||{},performance:data.performance||{}};try{sessionStorage.setItem(armaV1603UsersKey(),JSON.stringify({ts:Date.now(),data:slim}));}catch(e){}}
-function armaV1603UsersClear(){try{const tail=(localStorage.getItem('ARMA_TOKEN')||'').slice(-14);sessionStorage.removeItem(armaV1603UsersKey());sessionStorage.removeItem('ARMA_USERS_V1603_CORE_'+tail);sessionStorage.removeItem('ARMA_USERS_V05_BOOT_'+tail);sessionStorage.removeItem('ARMA_USERS_V04_BOOT_'+tail);}catch(e){}}
-function armaV1603Delay(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
-async function api(action,payload,msg,options){payload=payload||{};options=options||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';const read=/^(adminUsersBootstrap|adminUsersScopeCatalog|listUsers|listLevels|listPersonalForUserCreate|listScopeGroups)$/.test(action);const key=read?action+'|'+JSON.stringify(payload):'';if(read&&ARMA_V1603_USERS_INFLIGHT.has(key))return ARMA_V1603_USERS_INFLIGHT.get(key);if(msg)showLoader(msg);const attempts=Math.max(1,Number(options.attempts||1));const timeoutMs=read?Math.max(10000,Number(options.timeoutMs||45000)):0;const job=(async function(){let lastError=null;for(let n=1;n<=attempts;n++){const ctl=read?new AbortController():null;const timer=read?setTimeout(()=>ctl.abort(),timeoutMs):0;try{const req={method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)};if(ctl)req.signal=ctl.signal;const r=await fetch(ARMA_API_URL,req);const txt=await r.text();let data;try{data=JSON.parse(txt);}catch(e){throw new Error('RESPUESTA_NO_JSON // HTTP '+r.status);}if(!r.ok)throw new Error('HTTP '+r.status);return data;}catch(e){lastError=e;if(n<attempts)await armaV1603Delay(700*n);}finally{if(timer)clearTimeout(timer);}}throw lastError||new Error('ERROR_DE_CONEXION');})();if(read)ARMA_V1603_USERS_INFLIGHT.set(key,job);try{return await job;}finally{if(read)ARMA_V1603_USERS_INFLIGHT.delete(key);if(msg)hideLoader();}}
-async function validateSession(){const cache=readCache();const currentToken=localStorage.getItem('ARMA_TOKEN')||(cache&&cache.token)||'';if(!currentToken){location.href='main.html';return false;}if(cache)setSession(cache,currentToken);else armaSession.token=currentToken;return true;}
-function armaV1603ApplyCore(data,selectName){if(!armaV1603CoreUsable(data))throw new Error((data&&data.error)||'PAQUETE_USUARIOS_CORE_INVALIDO');if(data.session)setSession(data.session,armaSession.token||localStorage.getItem('ARMA_TOKEN')||'');if(!hasPerm('BTN_ADMIN_USUARIOS','BTN_ADMIN_USUARIOS')){document.getElementById('appArea').innerHTML='<section class="panel login-wall"><div><h2>ACCESO NO AUTORIZADO</h2><p>SU NIVEL NO TIENE BTN_ADMIN_USUARIOS.</p><a class="btn" href="main.html">VOLVER A MAIN</a></div></section>';return false;}appData.users=(data.users||[]).filter(u=>armaIsSuperAdminSession()||normalize(u.nivel)!=='SUPER_ADMIN');appData.levels=(data.levels||[]).filter(l=>armaIsSuperAdminSession()||normalize(l.nivel)!=='SUPER_ADMIN');if(Array.isArray(data.persons)&&data.persons.length){appData.persons=data.persons;ARMA_V1603_PERSONS_READY=true;}if(Array.isArray(data.scopeGroups))appData.scopeGroups=data.scopeGroups;if(armaV1603ScopeUsable(data)){appData.scopeCatalog=data.scopeCatalog;appData.scopeModes=data.scopeModes||[];ARMA_V1603_SCOPE_READY=true;}fillFilters();armaV1604PrepareGroupOptions();if(ARMA_V1603_SCOPE_READY)fillScopeCatalogs();if(selectName&&appData.users.some(u=>normalize(u.user)===normalize(selectName)))selectUser(selectName);else beginNew(false);renderUsers();const c=data.counts||{};const perf=data.performance||{};document.getElementById('listStatus').textContent=appData.users.length+' USUARIOS // CORE '+Number(perf.coreMs||0)+' MS'+(c.groups!=null?' // '+c.groups+' GRUPOS':'');return true;}
-function armaV1603ApplyPersons(data){const rows=Array.isArray(data)?data:((data&&data.rows)||[]);appData.persons=rows;ARMA_V1603_PERSONS_READY=true;fillFilters();setActionButtons();return rows.length;}
-function armaV1603ApplyScope(data){if(!armaV1603ScopeUsable(data))throw new Error((data&&data.error)||'CATALOGO_ALCANCE_NO_DISPONIBLE');appData.scopeGroups=data.scopeGroups||appData.scopeGroups||[];appData.scopeCatalog=data.scopeCatalog;appData.scopeModes=data.scopeModes||appData.scopeModes||[];ARMA_V1603_SCOPE_READY=true;fillScopeCatalogs();setActionButtons();const perf=data.performance||{};document.getElementById('scopeCatalogStatus').textContent='ARBOL MEL LISTO // '+((data.counts&&data.counts.treeNodes)||appData.scopeCatalog.tree.length)+' NODOS // '+Number(perf.coreMs||0)+' MS';return true;}
-/* === ARMA V16.0.5 EMERGENCIA: LISTA PRIMERO / GRUPOS SIN ARBOL === */
-let ARMA_V1605_LEVELS_READY=false;
-let ARMA_V1605_GROUPS_READY=false;
-const ARMA_V1605_INFLIGHT=new Map();
-function armaV1604PrepareGroupOptions(){
-  const active=(appData.scopeGroups||[]).filter(g=>normalize(g.ACTIVO||'SI')==='SI');
-  const userGroups=document.getElementById('userScopeGroups');
-  if(userGroups)userGroups.innerHTML=active.map(g=>`<option value="${esc(g.ID_GRUPO)}">${esc(g.NOMBRE_GRUPO)} // ${esc(scopeCapabilityLabel(g))}</option>`).join('');
-  const groupSelect=document.getElementById('scopeGroupSelect');
-  if(groupSelect)groupSelect.innerHTML='<option value="">NUEVO GRUPO</option>'+(appData.scopeGroups||[]).map(g=>`<option value="${esc(g.ID_GRUPO)}">${esc(g.NOMBRE_GRUPO)} // ${esc(g.ACTIVO||'SI')}</option>`).join('');
-}
-async function armaV1604EnsurePersons(){
-  if(ARMA_V1603_PERSONS_READY)return true;
-  const data=await api('listPersonalForUserCreate',{},'CARGANDO PERSONAL PARA CREAR USUARIO...',{attempts:1});
-  if(!data||data.ok===false)throw new Error((data&&data.error)||'PERSONAL_NO_DISPONIBLE');
-  armaV1603ApplyPersons(data);
-  return true;
-}
-const ARMA_V1605_BEGIN_NEW_BASE=beginNew;
-const ARMA_V1605_SELECT_USER_BASE=selectUser;
-api=async function(action,payload,msg,options){
-  payload=payload||{};options=options||{};
-  payload.action=action;
-  payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';
-  const read=/^(adminUsersListLite|adminUsersLevelsLite|adminUsersGroupsLite|adminUsersScopeCatalog|listUsers|listLevels|listPersonalForUserCreate)$/.test(action);
-  const key=read?action+'|'+JSON.stringify(payload):'';
-  if(read&&ARMA_V1605_INFLIGHT.has(key))return ARMA_V1605_INFLIGHT.get(key);
-  if(msg)showLoader(msg);
-  const attempts=Math.max(1,Number(options.attempts||1));
-  const job=(async()=>{
-    let lastError=null;
-    for(let n=1;n<=attempts;n++){
-      try{
-        const r=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
-        const txt=await r.text();
-        let data;
-        try{data=JSON.parse(txt);}catch(e){throw new Error('RESPUESTA_NO_JSON // HTTP '+r.status);}
-        if(!r.ok)throw new Error('HTTP '+r.status);
-        if(data&&data.ok===false)throw new Error(data.error+(data.detail?' // '+data.detail:''));
-        return data;
-      }catch(e){lastError=e;if(n<attempts)await armaV1603Delay(650*n);}
-    }
-    throw lastError||new Error('ERROR_DE_CONEXION');
-  })();
-  if(read)ARMA_V1605_INFLIGHT.set(key,job);
-  try{return await job;}finally{if(read)ARMA_V1605_INFLIGHT.delete(key);if(msg)hideLoader();}
-};
-async function armaV1605FetchUsersList(msg){
-  try{
-    const data=await api('adminUsersListLite',{},msg,{attempts:1});
-    if(armaV1603CoreUsable(data))return data;
-  }catch(e){}
-  const fallback=await api('listUsers',{},msg,{attempts:1});
-  if(!fallback||fallback.ok===false)throw new Error((fallback&&fallback.error)||'NO_SE_PUDO_CARGAR_USUARIOS');
-  return {ok:true,version:'V16.0.5_FALLBACK_LIST_USERS',session:armaSession,users:fallback.users||[],levels:[],scopeGroups:[],counts:{users:(fallback.users||[]).length,levels:0,groups:0},performance:{coreMs:0,fallback:true}};
-}
-async function armaV1605EnsureLevels(showMessage){
-  if(ARMA_V1605_LEVELS_READY)return true;
-  let data;
-  try{data=await api('adminUsersLevelsLite',{},showMessage?'CARGANDO NIVELES...':'',{attempts:1});}
-  catch(e){data=await api('listLevels',{},showMessage?'CARGANDO NIVELES...':'',{attempts:1});}
-  if(!data||data.ok===false)throw new Error((data&&data.error)||'NIVELES_NO_DISPONIBLES');
-  appData.levels=(data.levels||[]).filter(x=>armaIsSuperAdminSession()||normalize(x.nivel||x.NIVEL)!=='SUPER_ADMIN').map(x=>Object.assign({},x,{permissionCount:Number(x.permissionCount||Object.values(x.permissions||{}).filter(Boolean).length),filterRuleCount:Number(x.filterRuleCount||0)}));
-  ARMA_V1605_LEVELS_READY=true;
-  const selectedLevel=selectedUser&&selectedUser.nivel||document.getElementById('userLevel').value;
-  fillFilters();
-  if(selectedLevel)document.getElementById('userLevel').value=selectedLevel;
-  updateSummary();
-  return true;
-}
-async function armaV1605EnsureGroups(showMessage){
-  if(ARMA_V1605_GROUPS_READY)return true;
-  const data=await api('adminUsersGroupsLite',{},showMessage?'CARGANDO GRUPOS...':'',{attempts:1});
-  if(!data||data.ok===false)throw new Error((data&&data.error)||'GRUPOS_NO_DISPONIBLES');
-  appData.scopeGroups=data.scopeGroups||data.rows||[];
-  ARMA_V1605_GROUPS_READY=true;
-  armaV1604PrepareGroupOptions();
-  if(selectedUser)setSelectedValues('userScopeGroups',selectedUser.gruposAlcance||'');
-  updateScopeSummary();
-  return true;
-}
-async function armaV1605EnsureTree(force){
-  if(ARMA_V1603_SCOPE_READY&&!force)return true;
-  document.getElementById('scopeCatalogStatus').textContent='CARGANDO ARBOL MEL SOLO PARA ADMINISTRAR GRUPOS...';
-  const data=await api('adminUsersScopeCatalog',{force:force===true},'CARGANDO ARBOL MEL...',{attempts:1});
-  armaV1603ApplyScope(data);
-  ARMA_V1605_GROUPS_READY=true;
-  return true;
-}
-armaV1604EnsureScope=armaV1605EnsureTree;
-loadBootstrap=async function(selectNameOrEvent,force){
-  const selectName=typeof selectNameOrEvent==='string'?selectNameOrEvent:'';
-  const manual=force===true||!!(selectNameOrEvent&&selectNameOrEvent.type);
-  if(manual)armaV1603UsersClear();
-  let painted=false;
-  const cached=manual?null:armaV1603UsersRead();
-  if(cached){try{painted=armaV1603ApplyCore(cached,selectName)!==false;}catch(e){armaV1603UsersClear();}}
-  try{
-    const data=await armaV1605FetchUsersList(painted?'':'CARGANDO LISTA DE USUARIOS...');
-    armaV1603UsersWrite(data);
-    if(armaV1603ApplyCore(data,selectName)===false)return;
-    document.getElementById('scopeCatalogStatus').textContent='ARBOL MEL BAJO DEMANDA // SOLO SE CARGA AL ADMINISTRAR UN GRUPO';
-    setTimeout(()=>armaV1605EnsureLevels(false).catch(()=>{}),50);
-  }catch(e){
-    if(painted){toast('SE MUESTRA LA LISTA EN CACHE. BACKEND PENDIENTE.');return;}
-    document.getElementById('listStatus').textContent='ERROR AL CARGAR LISTA DE USUARIOS';
-    throw e;
-  }
-};
-beginNew=async function(focus=true){
-  if(focus){
-    try{await Promise.all([armaV1605EnsureLevels(true),armaV1604EnsurePersons()]);}
-    catch(e){toast(e.message||'NO FUE POSIBLE PREPARAR NUEVO USUARIO');return;}
-  }
-  return ARMA_V1605_BEGIN_NEW_BASE(focus);
-};
-selectUser=function(user){
-  ARMA_V1605_SELECT_USER_BASE(user);
-  armaV1605EnsureLevels(false).then(()=>{if(selectedUser)document.getElementById('userLevel').value=selectedUser.nivel||'';updateSummary();}).catch(()=>{});
-  if(selectedUser&&normalize(selectedUser.modoAlcance)==='GRUPOS'){
-    armaV1605EnsureGroups(false).then(()=>{setSelectedValues('userScopeGroups',selectedUser.gruposAlcance||'');updateScopeSummary();}).catch(e=>toast(e.message||'NO FUE POSIBLE CARGAR LOS GRUPOS'));
-  }
-};
-bind=function(){
-  ['filterQ','filterLevel','filterActive'].forEach(id=>document.getElementById(id).addEventListener(id==='filterQ'?'input':'change',renderUsers));
-  document.getElementById('btnSearch').addEventListener('click',renderUsers);
-  document.getElementById('btnReload').addEventListener('click',()=>loadBootstrap('',true));
-  document.getElementById('btnNew').addEventListener('click',()=>beginNew(true));
-  document.getElementById('btnSave').addEventListener('click',saveUser);
-  document.getElementById('btnToggle').addEventListener('click',toggleUser);
-  document.getElementById('btnReset').addEventListener('click',resetPassword);
-  document.getElementById('btnDelete').addEventListener('click',deleteSelected);
-  document.getElementById('personSelect').addEventListener('change',onPersonChange);
-  document.getElementById('userLevel').addEventListener('change',updateSummary);
-  document.getElementById('userActive').addEventListener('change',updateSummary);
-  document.getElementById('userScopeMode').addEventListener('change',async()=>{setActionButtons();updateScopeSummary();if(document.getElementById('userScopeMode').value==='GRUPOS'){try{await armaV1605EnsureGroups(true);if(selectedUser)setSelectedValues('userScopeGroups',selectedUser.gruposAlcance||'');}catch(e){toast(e.message||'NO FUE POSIBLE CARGAR LOS GRUPOS');}}});
-  document.getElementById('userScopeGroups').addEventListener('change',updateScopeSummary);
-  document.getElementById('scopeGroupSelect').addEventListener('change',async()=>{await armaV1605EnsureTree(false);loadScopeGroup();});
-  document.getElementById('btnScopeNew').addEventListener('click',async()=>{await armaV1605EnsureTree(false);resetScopeGroup();document.getElementById('scopeGroupName').focus();});
-  document.getElementById('btnScopeSave').addEventListener('click',async()=>{await armaV1605EnsureTree(false);saveScopeGroup();});
-  document.getElementById('btnScopeDeactivate').addEventListener('click',deactivateScopeGroup);
-  document.getElementById('scopeTreeSearch').addEventListener('focus',()=>armaV1605EnsureTree(false).catch(()=>{}));
-  document.getElementById('scopeTreeSearch').addEventListener('input',renderScopeTree);
-  document.getElementById('btnTreeExpand').addEventListener('click',async()=>{await armaV1605EnsureTree(false);expandTree(true);});
-  document.getElementById('btnTreeCollapse').addEventListener('click',async()=>{await armaV1605EnsureTree(false);expandTree(false);});
-  document.getElementById('scopeCanManage').addEventListener('change',function(){if(this.checked)document.getElementById('scopeCanView').checked=true;});
-  document.getElementById('scopeCanView').addEventListener('change',function(){if(!this.checked&&document.getElementById('scopeCanManage').checked)this.checked=true;});
-  document.getElementById('dialogAccept').addEventListener('click',()=>closeDialog(true));
-  document.getElementById('dialogCancel').addEventListener('click',()=>closeDialog(false));
-};
-document.addEventListener('DOMContentLoaded',async()=>{bind();try{if(await validateSession())await loadBootstrap();}catch(e){hideLoader();toast(e.message||'ERROR DE CONEXION');}});
+function norm(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toUpperCase();}
+function token(){return state.session.token||localStorage.getItem('ARMA_TOKEN')||'';}
+function isSuper(){return norm(state.session.nivel)==='SUPER_ADMIN'||!!(state.session.permissions&&state.session.permissions.__SUPER_ADMIN__===true);}
+function isAdmin(){return norm(state.session.nivel)==='ADMIN';}
+function hasPerm(key,parent){if(isSuper())return true;const p=state.session.permissions||{};if(Object.prototype.hasOwnProperty.call(p,key))return p[key]===true;return !!(parent&&p[parent]===true);}
+function canAdminGroups(){return (isSuper()||isAdmin())&&hasPerm('BTN_ADMIN_GRUPOS_ALCANCE','BTN_ADMIN_USUARIOS');}
+function showLoader(text){$('loaderText').textContent=text||'CARGANDO...';$('loader').classList.remove('hidden');}
+function hideLoader(){$('loader').classList.add('hidden');}
+let toastTimer=0;
+function toast(text){clearTimeout(toastTimer);$('toast').textContent=text||'';$('toast').classList.add('show');toastTimer=setTimeout(()=>$('toast').classList.remove('show'),3600);}
+let dialogResolve=null;
+function dialog(title,message,accept='ACEPTAR',cancel='CANCELAR'){$('dialogTitle').textContent=title;$('dialogMessage').textContent=message;$('dialogAccept').textContent=accept;$('dialogCancel').textContent=cancel;$('dialog').classList.remove('hidden');return new Promise(r=>dialogResolve=r);}
+function closeDialog(value){$('dialog').classList.add('hidden');if(dialogResolve){const r=dialogResolve;dialogResolve=null;r(value);}}
+async function api(action,data={},message=''){if(message)showLoader(message);try{const payload=Object.assign({action,token:token()},data||{});const r=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});const j=await r.json();if(!j||j.ok===false)throw new Error((j&&j.detail)||(j&&j.error)||'ERROR_BACKEND');return j;}finally{if(message)hideLoader();}}
+function cacheKey(){return 'ARMA_USERS_V06_LIST_'+token().slice(-16);}
+function readCache(){try{const raw=localStorage.getItem(cacheKey());if(!raw)return null;const x=JSON.parse(raw);if(!x||Date.now()-Number(x.ts||0)>300000)return null;return x.data||null;}catch(e){return null;}}
+function writeCache(data){try{localStorage.setItem(cacheKey(),JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
+function clearCache(){try{localStorage.removeItem(cacheKey());}catch(e){}}
+function formatDate(v){if(!v)return'';const d=new Date(v);return isNaN(d)?String(v):d.toLocaleString('es-CO');}
+function levelByName(name){return state.levels.find(x=>norm(x.nivel)===norm(name))||null;}
+function personById(id){return state.persons.find(x=>norm(x.ID_PERSONA)===norm(id))||null;}
+function splitScope(v){return String(v||'').split(/[|;,\n]+/).map(norm).filter(Boolean);}
+function selectedGroupIds(){return Array.from($('userScopeGroups').selectedOptions||[]).map(o=>norm(o.value)).filter(Boolean);}
+function setSelectedGroups(value){const set=new Set(Array.isArray(value)?value.map(norm):splitScope(value));Array.from($('userScopeGroups').options).forEach(o=>o.selected=set.has(norm(o.value)));}
+function scopeLabel(u){const mode=norm(u.modoAlcance||'PERSONA');if(mode==='GLOBAL')return'GLOBAL';if(mode==='GRUPOS'){const n=splitScope(u.gruposAlcance).length;return 'GRUPOS ('+n+')';}return'PERSONA';}
+async function validate(){const t=localStorage.getItem('ARMA_TOKEN')||'';if(!t){location.href='index.html';return false;}const j=await api('validateSession',{token:t});state.session={token:t,user:j.user||'',nombre:j.nombre||j.user||'',nivel:j.nivel||'',permissions:j.permissions||{}};if(!hasPerm('BTN_ADMIN_USUARIOS','BTN_ADMIN_USUARIOS')){$('appArea').innerHTML='<section class="panel login-wall"><div><h2>ACCESO NO AUTORIZADO</h2><p>SU NIVEL NO TIENE BTN_ADMIN_USUARIOS.</p><a class="btn" href="main.html">VOLVER A MAIN</a></div></section>';return false;}$('userPill').textContent=state.session.nombre+' // '+state.session.nivel;return true;}
+function fillFilterLevels(){const values=new Set(state.users.map(u=>norm(u.nivel)).filter(Boolean));const current=$('filterLevel').value;$('filterLevel').innerHTML='<option value="">TODOS LOS NIVELES</option>'+Array.from(values).sort().map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');$('filterLevel').value=current;}
+function fillLevelSelect(){const current=$('userLevel').value;const visible=state.levels.filter(l=>norm(l.activo||'SI')==='SI'||(state.selected&&norm(l.nivel)===norm(state.selected.nivel)));$('userLevel').innerHTML='<option value="">SELECCIONE NIVEL</option>'+visible.map(l=>`<option value="${esc(l.nivel)}">${esc(l.nivel)}${norm(l.activo||'SI')==='SI'?'':' // INACTIVO'}</option>`).join('');if(current)$('userLevel').value=current;updateScopeModeOptions();}
+function fillPersons(){const current=$('personSelect').value;$('personSelect').innerHTML='<option value="">SELECCIONE PERSONA</option>'+state.persons.map(p=>`<option value="${esc(p.ID_PERSONA)}">${esc(p.NOMBRE_COMPLETO||p.ID_PERSONA)} // ${esc(p.CARGO||'')} // ${esc(p.PLANTA_ASIGNADA||'')}${p.USER_ARMA?' // PRINCIPAL: '+esc(p.USER_ARMA):''}</option>`).join('');if(current)$('personSelect').value=current;}
+function fillGroups(){const current=selectedGroupIds();const active=state.groups.filter(g=>norm(g.ACTIVO||'SI')==='SI'||(state.selected&&splitScope(state.selected.gruposAlcance).includes(norm(g.ID_GRUPO))));$('userScopeGroups').innerHTML=active.map(g=>`<option value="${esc(g.ID_GRUPO)}">${esc(g.NOMBRE_GRUPO)} // ${esc(g.capability||'')} // ${Number(g.usageCount||0)} USUARIOS</option>`).join('');setSelectedGroups(current.length?current:(state.selected?state.selected.gruposAlcance:''));}
+async function ensureLevels(show=true){if(state.levelsReady)return;const j=await api('adminUsersLevelsLite',{},show?'CARGANDO NIVELES...':'');state.levels=j.levels||[];state.levelsReady=true;fillLevelSelect();}
+async function ensurePersons(show=true){if(state.personsReady)return;const j=await api('listPersonalForUserCreate',{},show?'CARGANDO PERSONAL...':'');state.persons=j.rows||[];state.personsReady=true;fillPersons();}
+async function ensureGroups(show=true,force=false){if(state.groupsReady&&!force)return;const j=await api('adminUsersGroupsLite',{},show?'CARGANDO GRUPOS...':'');state.groups=j.scopeGroups||j.rows||[];state.groupsReady=true;fillGroups();updateScopeSummary();}
+function filteredUsers(){const q=norm($('filterQ').value),l=norm($('filterLevel').value),a=norm($('filterActive').value);return state.users.filter(u=>(!q||norm([u.user,u.nombre,u.correo,u.idPersona].join(' ')).includes(q))&&(!l||norm(u.nivel)===l)&&(!a||norm(u.activo)===a));}
+function renderUsers(){const rows=filteredUsers();$('listStatus').textContent=rows.length+' DE '+state.users.length+' USUARIOS';$('usersRows').innerHTML=rows.map(u=>`<tr data-user="${esc(u.user)}" class="${state.selected&&norm(state.selected.user)===norm(u.user)?'selected':''}"><td><strong>${esc(u.user)}</strong>${u.protegido?'<br><span class="badge">PROTEGIDO</span>':''}</td><td>${esc(u.nombre||'')}</td><td>${esc(u.nivel||'')}</td><td><span class="badge ${norm(u.activo)==='SI'?'green':'red'}">${esc(u.activo||'')}</span></td><td>${esc(u.idPersona||'')}</td><td>${esc(u.correo||'')}</td><td>${esc(scopeLabel(u))}</td><td>${Number(u.permissionCount||0)}</td></tr>`).join('')
+||'<tr><td colspan="8">SIN USUARIOS PARA EL FILTRO.</td></tr>';$('usersRows').querySelectorAll('tr[data-user]').forEach(tr=>tr.onclick=()=>selectUser(tr.dataset.user));}
+function clearForm(){state.selected=null;state.createMode=true;$('formTitle').textContent='CREAR USUARIO';$('identityName').textContent='NUEVO USUARIO';$('identitySub').textContent='SELECCIONE PERSONA O CREE SUPER_ADMIN SIN PERSONA';$('personField').classList.remove('hidden');$('personSelect').value='';$('userName').value='';$('userName').readOnly=false;$('userIdPersona').value='';$('userFullName').value='';$('userMail').value='';$('userLevel').value='';$('userActive').value='SI';$('userMustChange').value='SI';$('userPassword').value='';$('userScopeMode').value='PERSONA';setSelectedGroups([]);$('userLastLogin').value='';$('userObservation').value='';updateScopeModeOptions();
+updateScopeSummary();updateSummary();setActionButtons();renderUsers();}
+async function beginNew(){try{await Promise.all([ensureLevels(true),ensurePersons(true)]);clearForm();$('personSelect').focus();}catch(e){toast(e.message||'NO FUE POSIBLE PREPARAR NUEVO USUARIO');}}
+async function selectUser(user){const u=state.users.find(x=>norm(x.user)===norm(user));if(!u)return;state.selected=u;state.createMode=false;await ensureLevels(false);$('formTitle').textContent='DETALLE DE USUARIO';$('identityName').textContent=u.nombre||u.user;$('identitySub').textContent=(u.nivel||'')+(u.protegido?' // PROTEGIDO':'');$('personField').classList.add('hidden');$('userName').value=u.user||'';$('userName').readOnly=true;$('userIdPersona').value=u.idPersona||'';$('userFullName').value=u.nombre||'';$('userMail').value=u.correo||'';$('userLevel').value=u.nivel||'';$('userActive').value=u.activo||'SI';$('userMustChange').value=u.debeCambiarClave||'NO';$('userPassword').value='';
+$('userScopeMode').value=norm(u.modoAlcance)==='GRUPOS'?'GRUPOS':(norm(u.nivel)==='SUPER_ADMIN'?'GLOBAL':'PERSONA');$('userLastLogin').value=formatDate(u.ultimoLogin);$('userObservation').value=u.observacion||'';updateScopeModeOptions();if($('userScopeMode').value==='GRUPOS'){try{await ensureGroups(false);setSelectedGroups(u.gruposAlcance||'');}catch(e){toast(e.message||'NO FUE POSIBLE CARGAR GRUPOS');}}else setSelectedGroups([]);updateScopeSummary();updateSummary();setActionButtons();renderUsers();}
+function onPersonChange(){const p=personById($('personSelect').value);if(!p){$('userIdPersona').value='';$('userFullName').value='';return;}$('userIdPersona').value=p.ID_PERSONA||'';$('userFullName').value=p.NOMBRE_COMPLETO||'';$('userMail').value=p.CORREO||'';$('identityName').textContent=p.NOMBRE_COMPLETO||'NUEVO USUARIO';$('identitySub').textContent=(p.ID_PERSONA||'')+' // '+(p.CARGO||'')+' // '+(p.PLANTA_ASIGNADA||'');if(!$('userName').value)$('userName').value=suggestUser(p.NOMBRE_COMPLETO||'');}
+function suggestUser(name){const parts=norm(name).replace(/[^A-Z0-9 ]/g,' ').split(/\s+/).filter(Boolean);return parts.length<2?(parts[0]||''):(parts[0]+'.'+parts[parts.length-1]).slice(0,40);}
+function updateScopeModeOptions(){const level=norm($('userLevel').value);const canGlobal=isSuper()&&level==='SUPER_ADMIN';Array.from($('userScopeMode').options).forEach(o=>{if(o.value==='GLOBAL')o.hidden=!canGlobal;});if(!canGlobal&&$('userScopeMode').value==='GLOBAL')$('userScopeMode').value='PERSONA';const groups=$('userScopeMode').value==='GRUPOS';$('userScopeGroups').disabled=!groups;$('btnRefreshGroups').disabled=!groups;$('btnOpenGroupManager').disabled=!canAdminGroups();if(groups&&!state.groupsReady)ensureGroups(false).catch(e=>toast(e.message));updateScopeSummary();}
+function updateScopeSummary(){const mode=$('userScopeMode').value;if(mode==='GLOBAL'){$('userScopeSummary').textContent='GLOBAL // SOLO SUPER_ADMIN // TODAS LAS EMPRESAS, PLANTAS Y ACTIVOS.';return;}if(mode==='PERSONA'){$('userScopeSummary').textContent='PERSONA // EL BACKEND USA PERSONAL COMO UNICA FUENTE DE ALCANCE. USUARIOS NO DUPLICA EMPRESA, PLANTA, AREA O ACTIVO.';return;}const ids=selectedGroupIds();const labels=ids.map(id=>{const g=state.groups.find(x=>norm(x.ID_GRUPO)===id);return g?(g.NOMBRE_GRUPO+' ['+(g.capability||'')+']'):id;});$('userScopeSummary').textContent=ids.length?('GRUPOS // '+labels.join(' // ')):'GRUPOS // SELECCIONE AL MENOS UNO.';}
+function updateSummary(){const level=levelByName($('userLevel').value);$('sumPermissions').textContent=level?Number(level.permissionCount||0):Number(state.selected&&state.selected.permissionCount||0);$('sumFilters').textContent=level?Number(level.filterRuleCount||0):0;$('sumStatus').textContent=$('userActive').value||'-';}
+function setActionButtons(){const p=!!(state.selected&&state.selected.protegido);$('btnSave').textContent=state.createMode?'CREAR USUARIO':'GUARDAR CAMBIOS';$('btnSave').disabled=state.createMode?!hasPerm('BTN_USUARIOS_CREAR','BTN_ADMIN_USUARIOS'):(p||!hasPerm('BTN_USUARIOS_EDITAR','BTN_ADMIN_USUARIOS'));$('btnToggle').disabled=state.createMode||p||!hasPerm('BTN_USUARIOS_ACTIVAR','BTN_ADMIN_USUARIOS');$('btnReset').disabled=state.createMode||p||!hasPerm('BTN_USUARIOS_RESETEAR_CLAVE','BTN_ADMIN_USUARIOS');$('btnDelete').disabled=state.createMode||p||!hasPerm('BTN_USUARIOS_ELIMINAR','BTN_ADMIN_USUARIOS');$('btnOpenGroupManager').disabled=!canAdminGroups();}
+async function saveUser(){await ensureLevels(true);const level=norm($('userLevel').value),mode=$('userScopeMode').value,idPersona=norm($('userIdPersona').value);const data={user:norm($('userName').value),idPersona:idPersona,correo:$('userMail').value.trim(),nivel:level,activo:$('userActive').value,debeCambiarClave:$('userMustChange').value,modoAlcance:mode,gruposAlcance:selectedGroupIds()};if(state.createMode)data.password=$('userPassword').value;if(!data.user||!data.nivel)return toast('COMPLETE USUARIO Y NIVEL.');if(level!=='SUPER_ADMIN'&&!idPersona)return toast('SELECCIONE UNA PERSONA PARA ESTA CUENTA.');if(state.createMode&&String(data.password||'').length<8)return 
+toast('LA CLAVE TEMPORAL DEBE TENER MINIMO 8 CARACTERES.');if(mode==='GLOBAL'&&!(isSuper()&&level==='SUPER_ADMIN'))return toast('GLOBAL SOLO PUEDE ASIGNARSE A SUPER_ADMIN.');if(mode==='GRUPOS'&&!data.gruposAlcance.length)return toast('SELECCIONE AL MENOS UN GRUPO.');const ok=await dialog(state.createMode?'CREAR USUARIO':'GUARDAR CAMBIOS',state.createMode?'SE CREARA LA CUENTA. UNA PERSONA PUEDE TENER VARIOS USUARIOS ARMA.':'SE ACTUALIZARA NIVEL, ESTADO Y ALCANCE.','CONTINUAR','CANCELAR');if(!ok)return;try{const target=data.user;const r=await api(state.createMode?'createUser':'updateUserAdmin',{userData:data},state.createMode?'CREANDO USUARIO...':'GUARDANDO CAMBIOS...');
+toast(r.message||'OPERACION COMPLETADA');clearCache();await loadUsers(true,target);}catch(e){toast(e.message||'NO FUE POSIBLE GUARDAR');}}
+async function toggleUser(){if(!state.selected)return;const ok=await dialog('ACTIVAR / SUSPENDER','USUARIO: '+state.selected.user+'\nESTADO ACTUAL: '+state.selected.activo,'CONFIRMAR','CANCELAR');if(!ok)return;try{const r=await api('toggleUserActive',{user:state.selected.user},'ACTUALIZANDO ESTADO...');toast('ESTADO: '+r.activo);clearCache();await loadUsers(true,state.selected.user);}catch(e){toast(e.message);}}
+async function resetPassword(){if(!state.selected)return;const pass=$('userPassword').value;if(pass.length<8)return toast('DIGITE NUEVA CLAVE TEMPORAL DE MINIMO 8 CARACTERES.');const ok=await dialog('RESTABLECER CLAVE','SE INVALIDARAN LAS SESIONES ABIERTAS DE '+state.selected.user+'.','RESTABLECER','CANCELAR');if(!ok)return;try{const r=await api('resetUserPasswordAdmin',{user:state.selected.user,password:pass,mustChange:true},'RESTABLECIENDO CLAVE...');$('userPassword').value='';toast(r.message||'CLAVE ACTUALIZADA');}catch(e){toast(e.message);}}
+async function deleteSelected(){if(!state.selected)return;const user=state.selected.user;const ok=await dialog('ELIMINAR USUARIO','SE ELIMINARA '+user+'. SI ES LA CUENTA PRINCIPAL DE UNA PERSONA, ARMA PROMOVERA OTRA CUENTA DISPONIBLE.','ELIMINAR','CANCELAR');if(!ok)return;try{const r=await api('deleteUser',{user:user},'ELIMINANDO USUARIO...');toast(r.message||'USUARIO ELIMINADO');clearCache();state.selected=null;await loadUsers(true,'');clearForm();}catch(e){toast(e.message);}}
+function applyUsersData(data,selectName=''){state.users=(data.users||[]).filter(u=>isSuper()||norm(u.nivel)!=='SUPER_ADMIN');fillFilterLevels();renderUsers();if(selectName&&state.users.some(u=>norm(u.user)===norm(selectName)))selectUser(selectName);$('listStatus').textContent=state.users.length+' USUARIOS';}
+async function loadUsers(force=false,selectName=''){let painted=false;if(!force){const cached=readCache();if(cached){applyUsersData(cached,selectName);painted=true;}}try{const data=await api('adminUsersListLite',{},painted?'':'CARGANDO USUARIOS...');writeCache(data);applyUsersData(data,selectName);}catch(e){if(!painted)throw e;toast('MOSTRANDO CACHE LOCAL. BACKEND PENDIENTE.');}}
+async function refreshGroupsOnly(show=true){state.groupsReady=false;await ensureGroups(show,true);if(state.selected&&norm(state.selected.modoAlcance)==='GRUPOS')setSelectedGroups(state.selected.gruposAlcance||'');}
+function openGroupManager(){if(!canAdminGroups())return toast('SOLO ADMIN O SUPER_ADMIN PUEDE ADMINISTRAR GRUPOS.');$('groupManagerFrame').src='grupos_alcance.html?embed=1&v='+Date.now();$('groupManagerModal').classList.remove('hidden');}
+async function closeGroupManager(){$('groupManagerModal').classList.add('hidden');$('groupManagerFrame').src='about:blank';if($('userScopeMode').value==='GRUPOS'){try{await refreshGroupsOnly(false);}catch(e){toast(e.message);}}}
+function bind(){['filterQ'].forEach(id=>$(id).addEventListener('input',renderUsers));['filterLevel','filterActive'].forEach(id=>$(id).addEventListener('change',renderUsers));$('btnSearch').onclick=renderUsers;$('btnReload').onclick=()=>{clearCache();loadUsers(true).catch(e=>toast(e.message));};$('btnNew').onclick=beginNew;$('btnSave').onclick=saveUser;$('btnToggle').onclick=toggleUser;$('btnReset').onclick=resetPassword;$('btnDelete').onclick=deleteSelected;$('personSelect').onchange=onPersonChange;$('userLevel').onchange=()=>{updateScopeModeOptions();updateSummary();};$('userActive').onchange=updateSummary;$('userScopeMode').onchange=updateScopeModeOptions;$('userScopeGroups')
+.onchange=updateScopeSummary;$('btnRefreshGroups').onclick=()=>refreshGroupsOnly(true).catch(e=>toast(e.message));$('btnOpenGroupManager').onclick=openGroupManager;$('btnCloseGroupManager').onclick=closeGroupManager;$('dialogAccept').onclick=()=>closeDialog(true);$('dialogCancel').onclick=()=>closeDialog(false);window.addEventListener('message',e=>{if(e.data&&e.data.type==='ARMA_GROUPS_CHANGED'){state.groupsReady=false;if($('userScopeMode').value==='GRUPOS')refreshGroupsOnly(false).catch(()=>{});}});}
+document.addEventListener('DOMContentLoaded',async()=>{bind();try{if(!await validate())return;await loadUsers(false);setActionButtons();setTimeout(()=>ensureLevels(false).catch(()=>{}),80);}catch(e){hideLoader();toast(e.message||'ERROR DE CONEXION');}});
 </script>
 </body>
 </html>
