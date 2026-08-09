@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="arma-avatar-192.png">
 <script src="arma-pwa-navigation.js" defer data-arma-pwa-navigation="1"></script>
-<title>ARMA | NIVELES DE USUARIO</title>
+<title>ARMA | NIVELES DE USUARIO V03</title>
 <style>:root{
   --navy:#002b66;--blue:#004b9b;--blue2:#0076d7;--cyan:#00bfd6;
   --green:#18c65b;--green2:#55b52e;--red:#dc2626;--orange:#f59e0b;
@@ -32,6 +32,7 @@ button{cursor:pointer}
 .top-title span{display:block;color:var(--muted);font-size:11px;font-weight:900;margin-top:5px}
 .user-pill{display:inline-flex;align-items:center;gap:8px;margin-top:8px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#f8fbff;color:var(--navy);font-size:11px;font-weight:950}
 .main{padding:12px 20px 22px}
+.architecture-note{margin:0 0 12px;padding:11px 14px;border-left:5px solid var(--cyan);border-radius:12px;background:#eefaff;color:var(--navy);font-size:10px;font-weight:900;line-height:1.45}
 .hero{position:relative;overflow:hidden;min-height:92px;border-radius:22px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:18px;background:radial-gradient(circle at 72% 0,#0b83e8 0,#0057aa 43%,#002b66 100%);color:#fff;box-shadow:var(--shadow);margin-bottom:12px}
 .hero:after{content:attr(data-mark);position:absolute;right:22px;bottom:-18px;font-size:66px;font-weight:1000;letter-spacing:4px;color:rgba(255,255,255,.06)}
 .hero-copy{position:relative;z-index:2;min-width:0}
@@ -139,6 +140,7 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
 <header class="top-global"><div class="top-white"><div class="brand-row"><img src="logo_pelex.bmp" class="logo-pelex" alt="PELEX"><div class="brand-separator"></div><img src="ARMA%20logo%202.png" class="logo-arma" alt="ARMA"></div><div class="top-title"><strong>ADMINISTRACION | NIVELES DE USUARIO</strong><span>PERMISOS DINAMICOS POR HTML, BOTON Y VALOR DE FILTRO</span><div id="userPill" class="user-pill">VALIDANDO SESION...</div></div></div><div class="blue-line"></div></header>
 <main id="appArea" class="main">
 <section class="hero" data-mark="NIVELES"><div class="hero-copy"><h1>DISENADOR DE NIVELES Y PERMISOS</h1><p>CADA TARJETA REPRESENTA UNA HTML. LOS BOTONES Y FILTROS SE LEEN DINAMICAMENTE DESDE ARMA_DATABASE.</p></div><a class="home-card" href="main.html" data-smart-home="1"><span class="home-icon"><img src="boton-de-inicio.png" alt="INICIO"></span><span class="home-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></span></a></section>
+<div class="architecture-note"><strong>NIVEL = QUE PUEDE HACER.</strong> ESTA PANTALLA SOLO ADMINISTRA PERMISOS Y FILTROS. <strong>ALCANCE = SOBRE QUE DATOS.</strong> EL ALCANCE SE ASIGNA EN USUARIOS Y LOS GRUPOS SE ADMINISTRAN EN GRUPOS DE ALCANCE; EL ARBOL MEL NO PERTENECE A NIVELES.</div>
 <section class="workspace">
   <aside class="panel">
     <div class="panel-title"><h2>NIVELES</h2><span class="status" id="levelCount"></span></div>
@@ -156,7 +158,7 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
     <div class="sticky-save"><button id="btnSave" class="btn green">GUARDAR NIVEL Y REGLAS</button></div>
   </section>
 </section>
-<footer class="footer">A.R.M.A. // NIVELES DE USUARIO // ARMA_DATABASE EN LINEA // 2026-08-07 11:00:00</footer>
+<footer class="footer">A.R.M.A. // NIVELES DE USUARIO // ARMA_DATABASE EN LINEA // 2026-08-08 20:12:11</footer>
 </main>
 <script>const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
 const ARMA_UI_MANIFEST={
