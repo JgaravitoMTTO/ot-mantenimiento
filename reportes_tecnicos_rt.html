@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V28.0_PLUS_RT_TURBO_20260813 | BUILD: 2026-08-13 16:44:06 -->
+<!-- ARMA RT MODULE V28.1_PLUS_RT_TURBO_HOTFIX_SESION_20260813 | BUILD: 2026-08-13 17:58:42 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -252,7 +252,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-13 16:44:06</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-13 17:58:42</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -370,7 +370,6 @@ async function loadRTList(page=1){
   }catch(e){document.getElementById('listStatus').textContent='ERROR DE CONEXION';}
 }
 function renderRows(rows){rows=asArr(rows);let tb=document.getElementById("rtRows");if(!rows.length){tb.innerHTML='<tr><td colspan="6">SIN REGISTROS DISPONIBLES</td></tr>';return;}tb.innerHTML=rows.map(r=>{let id=val(r,["ID_INT","ID_RT","BT","ID"]);let estado=val(r,["ESTADO_RT","ESTADO"]);let cls=estado==="RTCT"?"green":(estado==="RTD"?"red":"gray");return '<tr data-id="'+esc(id)+'"><td><strong>'+esc(id)+'</strong></td><td>'+esc(val(r,["NUMERO_RT","NUM_REGISTRO_RT","NUM_REGISTRO","RT"]))+'</td><td>'+esc(val(r,["FECHA_HORA_REPORTE","FECHA_INTERVENCION","FECHA"]))+'</td><td>'+esc(val(r,["EQUIPO","EQUIPO_INTERVENIDO","NOMBRE_EQUIPO"]))+'</td><td>'+esc(val(r,["PRIORIDAD"]))+'</td><td><span class="badge '+cls+'">'+esc(estado)+'</span></td></tr>';}).join("");tb.querySelectorAll("tr[data-id]").forEach(tr=>tr.addEventListener("click",function(){tb.querySelectorAll("tr").forEach(x=>x.classList.remove("selected"));this.classList.add("selected");openRT(this.getAttribute("data-id"));}));}
-tb.querySelectorAll('tr[data-id]').forEach(function(tr){tr.addEventListener('mouseenter',function(){prefetchRT(this.getAttribute('data-id'));},{once:true});});
 let armaDialogResolver=null;
 function armaDialogOpen(text,title,confirmMode){let m=document.getElementById('armaMsgModal'),t=document.getElementById('armaMsgTitle'),b=document.getElementById('armaMsgText'),c=document.getElementById('armaMsgCancel');if(!m)return Promise.resolve(confirmMode?false:true);t.textContent=title||'A.R.M.A.';b.textContent=String(text||'');c.classList.toggle('hidden',!confirmMode);m.classList.remove('hidden');m.setAttribute('aria-hidden','false');return new Promise(function(resolve){armaDialogResolver=resolve;});}
 function armaDialogClose(value){let m=document.getElementById('armaMsgModal');if(m){m.classList.add('hidden');m.setAttribute('aria-hidden','true');}let r=armaDialogResolver;armaDialogResolver=null;if(r)r(Boolean(value));}
