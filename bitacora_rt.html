@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V27.1 | BUILD: 2026-08-12 10:07:24 -->
+<!-- ARMA RT MODULE V28.0_PLUS_RT_TURBO_20260813 | BUILD: 2026-08-13 16:44:06 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -208,7 +208,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
         </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-12 10:07:24</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-13 16:44:06</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -216,7 +216,7 @@ const PAGE_MODE="BITACORA";
 const REQUIRED_PERM="BTN_LEER_BITACORA";
 const ALT_PERM="BTN_RT_CONSULTAR";
 let armaSession={user:"",nombre:"",nivel:"",permissions:{},token:""};
-let selectedRT=null;
+let selectedRT=null;let rtDetailCache=new Map();const RT_DETAIL_TTL=300000;
 let catalogos={};let rtEquiposAll=[];let rtPersonasAll=[];let rtPlantasAll=[];
 let armaLoaderCount=0;let resumen48Shown=false;let rtCurrentPage=1;let rtHasMore=false;const RT_PAGE_SIZE=25;
 function esc(v){let d=document.createElement("div");d.textContent=String(v==null?"":v);return d.innerHTML;}
@@ -227,12 +227,21 @@ function canOpenPage(){return hasPerm(REQUIRED_PERM)||hasPerm(ALT_PERM);}
 function showArmaLoader(msg){armaLoaderCount++;let o=document.getElementById("armaLoader");let t=document.getElementById("armaLoaderText");if(t)t.textContent=msg||"CARGANDO...";if(o)o.classList.remove("hidden");}
 function hideArmaLoader(){armaLoaderCount=Math.max(0,armaLoaderCount-1);if(armaLoaderCount===0)document.getElementById("armaLoader").classList.add("hidden");}
 async function api(action,payload,msg,timeoutMs=40000){payload=payload||{};payload.action=action;payload.token=localStorage.getItem("ARMA_TOKEN")||armaSession.token||"";showArmaLoader(msg||"CONSULTANDO ARMA...");try{const res=await fetch(ARMA_API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});return await res.json();}finally{hideArmaLoader();}}
-async function apiSilent(action,payload){payload=payload||{};payload.action=action;payload.token=localStorage.getItem("ARMA_TOKEN")||armaSession.token||"";const res=await fetch(ARMA_API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});return await res.json();}
+async function apiSilent(action,payload,timeoutMs=40000){return api(action,payload||{},null,timeoutMs);}
+function rtDetailKey(id){let t=String(armaSession.token||localStorage.getItem('ARMA_TOKEN')||'');return t.slice(-14)+'|'+String(id||'').trim().toUpperCase();}
+function rtCacheGet(id){let x=rtDetailCache.get(rtDetailKey(id));if(!x)return null;if(Date.now()-Number(x.at||0)>RT_DETAIL_TTL){rtDetailCache.delete(rtDetailKey(id));return null}return x.data||null;}
+function rtCachePut(id,data){if(!id||!data||!data.ok)return;rtDetailCache.set(rtDetailKey(id),{at:Date.now(),data:data});}
+function rtCacheDrop(id){rtDetailCache.delete(rtDetailKey(id));}
+async function getRTFast(id,msg){let c=rtCacheGet(id);if(c)return c;let d=await api('getRT',{idRT:id,idInt:id,ID_INT:id},msg||'CARGANDO DETALLE RT...');if(d&&d.ok)rtCachePut(id,d);return d;}
+async function prefetchRT(id){if(!id||rtCacheGet(id))return;try{let d=await apiSilent('getRT',{idRT:id,idInt:id,ID_INT:id});if(d&&d.ok)rtCachePut(id,d);}catch(e){}}
+function applyPdfResponse(rt,res){if(!rt||!res||!res.ok)return rt;rt.PDF_FILE_ID=res.fileId||rt.PDF_FILE_ID||'';rt.PDF_URL=res.url||rt.PDF_URL||'';rt.PDF_PREVIEW_URL=res.previewUrl||rt.PDF_PREVIEW_URL||'';rt.ESTADO_PDF=res.estadoPdf||res.message||rt.ESTADO_PDF||'ENCONTRADO_DRIVE';return rt;}
+function applyGeneratedPdf(id,res){selectedRT=applyPdfResponse(selectedRT||{},res);let c=rtCacheGet(id);if(c&&c.rt){applyPdfResponse(c.rt,res);rtCachePut(id,c)}setViewerFromRT(selectedRT);}
+async function hydratePdfLazy(id,rt,seq){if(!rt||getPdfUrl(rt))return rt;try{let res=await apiSilent('resolveRTPDF',{idRT:id,idInt:id,ID_RT:id,CONSECUTIVO_BT:id},60000);if(res&&res.ok){applyPdfResponse(rt,res);let c=rtCacheGet(id);if(c&&c.rt){applyPdfResponse(c.rt,res);rtCachePut(id,c)}let same=selectedRT&&String(val(selectedRT,['ID_INT','ID_RT','BT','CONSECUTIVO_BT'])||'').toUpperCase()===String(id||'').toUpperCase();if(same&&(!seq||typeof rtOpenSequence==='undefined'||seq===rtOpenSequence)){selectedRT=rt;setViewerFromRT(rt);let ds=document.getElementById('detailStatus');if(ds)ds.textContent=(val(rt,['ESTADO_RT','ESTADO'])||'DETALLE CARGADO')+' // PDF LISTO';}}return rt;}catch(e){return rt;}}
 function readSessionCache(){try{let raw=localStorage.getItem("ARMA_SESSION_CACHE")||"";if(!raw)return null;let s=JSON.parse(raw);if(!s||!s.token)return null;if(Date.now()-Number(s.ts||0)>8*60*60*1000)return null;return s;}catch(e){return null;}}
 function writeSessionCache(){try{if(!armaSession||!armaSession.token)return;localStorage.setItem("ARMA_SESSION_CACHE",JSON.stringify({user:armaSession.user||"",nombre:armaSession.nombre||"",nivel:armaSession.nivel||"",token:armaSession.token||"",permissions:armaSession.permissions||{},ts:Date.now(),source:"RT_"+PAGE_MODE}));}catch(e){}}
 function setSessionData(data,token){armaSession={user:data.user||"",nombre:data.nombre||data.user||"",nivel:data.nivel||"",permissions:data.permissions||{},token:token||data.token||armaSession.token||""};if(armaSession.token)localStorage.setItem("ARMA_TOKEN",armaSession.token);writeSessionCache();document.getElementById("userPill").textContent=(armaSession.nombre||armaSession.user)+" // "+armaSession.nivel;}
 function showLoginWall(msg){armaLoaderCount=0;hideArmaLoader();document.getElementById("loginWall").classList.remove("hidden");document.getElementById("appArea").classList.add("hidden");document.getElementById("userPill").textContent="SESION NO VALIDADA";if(msg)document.querySelector("#loginWall p").textContent=msg;}
-function startApp(boot){if(!canOpenPage()){showLoginWall("SU USUARIO NO TIENE PERMISO PARA ABRIR ESTE MODULO RT.");return;}document.getElementById("loginWall").classList.add("hidden");document.getElementById("appArea").classList.remove("hidden");configureMode();startSessionKeepAlive();if(PAGE_MODE==="REPORTAR"){loadCatalogos(boot&&boot.catalog?boot.catalog:null).then(function(){clearReportForm(false);});return;}if(boot&&boot.list)applyRTListData(boot.list);else loadRTList(1);setTimeout(function(){loadCatalogos(boot&&boot.catalog?boot.catalog:null);},80);let deep=new URLSearchParams(location.search).get('idRT');if(deep)setTimeout(function(){openRT(deep);},180);}
+function startApp(boot){if(!canOpenPage()){showLoginWall("SU USUARIO NO TIENE PERMISO PARA ABRIR ESTE MODULO RT.");return;}document.getElementById("loginWall").classList.add("hidden");document.getElementById("appArea").classList.remove("hidden");configureMode();startSessionKeepAlive();if(PAGE_MODE==="REPORTAR"){loadCatalogos(boot&&boot.catalog?boot.catalog:null).then(function(){clearReportForm(false);});return;}if(boot&&boot.list)applyRTListData(boot.list);else loadRTList(1);if(PAGE_MODE==='GESTION')setTimeout(function(){loadCatalogos(boot&&boot.catalog?boot.catalog:null);},1200);let deep=new URLSearchParams(location.search).get('idRT');if(deep)setTimeout(function(){openRT(deep);},180);}
 function apiErrorText(e){let t=String((e&&e.message)||e||'ERROR');return /ABORT|SIGNAL IS ABORTED/i.test(t)?'LA RESPUESTA DEL BACKEND TARDO MAS DE LO ESPERADO. A.R.M.A. VERIFICARA EL RESULTADO ANTES DE REPETIR.':t;}function startSessionKeepAlive(){if(window.ARMA_RT_KEEPALIVE)return;window.ARMA_RT_KEEPALIVE=setInterval(function(){api('validateSession',{},null,30000).catch(function(){});},600000);}async function validateSession(){let token=localStorage.getItem("ARMA_TOKEN")||"";if(!token){showLoginWall();return;}try{let data=await api("rtBootstrap",{token:token,pageMode:PAGE_MODE,filters:Object.assign(buildFilters(),{PAGE:1,PAGE_SIZE:RT_PAGE_SIZE})},"CARGANDO RT...");if(!data.ok){showLoginWall();return;}setSessionData(data.session||{},token);startApp(data);}catch(e){showLoginWall();}}
 function armaPersistToken(){try{if(armaSession&&armaSession.token)localStorage.setItem("ARMA_TOKEN",armaSession.token);}catch(e){}}
 function armaMainStorageIsFresh(maxAgeMs){try{var raw=localStorage.getItem("ARMA_MAIN_ACTIVE")||"";if(!raw)return false;var data=JSON.parse(raw);if(!data||!data.ts)return false;return (Date.now()-Number(data.ts)) <= (maxAgeMs||3500);}catch(err){return false;}}
@@ -291,7 +300,7 @@ function rtBtNumber(r){let v=val(r,['ID_RT','CONSECUTIVO_BT','BT','ID']);let m=S
 function sortRTNewest(rows){return asArr(rows).slice().sort((a,b)=>rtBtNumber(b)-rtBtNumber(a));}
 function applyRTListData(data){
   if(!data||!data.ok){document.getElementById('listStatus').textContent=(data&&data.error)||'ERROR';return;}
-  let rows=sortRTNewest(data.rows||data.rt||[]);renderRows(rows);
+  let rows=sortRTNewest(data.rows||data.rt||[]);renderRows(rows);if(rows.length){let rid=val(rows[0],['ID_INT','ID_RT','BT','ID']);setTimeout(function(){prefetchRT(rid);},120);}
   rtCurrentPage=Number(data.page||1);rtHasMore=data.hasMore===true;
   let extra=(data.partial&&PAGE_MODE==='BITACORA')?' - CONSULTA PAGINADA':'';
   document.getElementById('listStatus').textContent=rows.length+' REGISTROS EN ESTA PAGINA'+extra;
@@ -318,6 +327,7 @@ async function loadRTList(page=1){
   }catch(e){document.getElementById('listStatus').textContent='ERROR DE CONEXION';}
 }
 function renderRows(rows){rows=asArr(rows);let tb=document.getElementById("rtRows");if(!rows.length){tb.innerHTML='<tr><td colspan="6">SIN REGISTROS DISPONIBLES</td></tr>';return;}tb.innerHTML=rows.map(r=>{let id=val(r,["ID_INT","ID_RT","BT","ID"]);let estado=val(r,["ESTADO_RT","ESTADO"]);let cls=estado==="RTCT"?"green":(estado==="RTD"?"red":"gray");return '<tr data-id="'+esc(id)+'"><td><strong>'+esc(id)+'</strong></td><td>'+esc(val(r,["NUMERO_RT","NUM_REGISTRO_RT","NUM_REGISTRO","RT"]))+'</td><td>'+esc(val(r,["FECHA_HORA_REPORTE","FECHA_INTERVENCION","FECHA"]))+'</td><td>'+esc(val(r,["EQUIPO","EQUIPO_INTERVENIDO","NOMBRE_EQUIPO"]))+'</td><td>'+esc(val(r,["PRIORIDAD"]))+'</td><td><span class="badge '+cls+'">'+esc(estado)+'</span></td></tr>';}).join("");tb.querySelectorAll("tr[data-id]").forEach(tr=>tr.addEventListener("click",function(){tb.querySelectorAll("tr").forEach(x=>x.classList.remove("selected"));this.classList.add("selected");openRT(this.getAttribute("data-id"));}));}
+tb.querySelectorAll('tr[data-id]').forEach(function(tr){tr.addEventListener('mouseenter',function(){prefetchRT(this.getAttribute('data-id'));},{once:true});});
 function parseDateAny(v){v=String(v==null?'':v).trim();if(!v)return null;let m=v.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);if(m)return new Date(+m[1],+m[2]-1,+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0));m=v.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);if(m)return new Date(+m[3],+m[2]-1,+m[1],+(m[4]||0),+(m[5]||0),+(m[6]||0));let d=new Date(v);return isNaN(d.getTime())?null:d;}
 function closeResumen48(){let m=document.getElementById('resumen48Modal');if(m)m.classList.add('hidden');}
 function resumen48Row(r){return '<tr><td>'+esc(val(r,['EQUIPO','EQUIPO_INTERVENIDO','NOMBRE_EQUIPO']))+'</td><td>'+esc(val(r,['FECHA_HORA_REPORTE','FECHA_INTERVENCION','FECHA']))+'</td><td>'+esc(val(r,['PERSONAS_REPORTAN','QUIEN_REPORTA','REPORTA']))+'</td><td>'+esc(val(r,['DESCRIPCION_FALLA_NECESIDAD','FALLA_NECESIDAD','FALLA']))+'</td><td>'+esc(val(r,['INTERVENCION_REALIZADA','INTERVENCION']))+'</td><td>'+esc(val(r,['PENDIENTES']))+'</td></tr>'; }
@@ -329,7 +339,7 @@ function armaAlert(text,title){return armaDialogOpen(text,title||'A.R.M.A.',fals
 function armaConfirm(text,title){return armaDialogOpen(text,title||'A.R.M.A. | CONFIRMACION',true);}
 async function resolvePdfForRT(id,rt){
   try{
-    let res=await api("resolveRTPDF",{idRT:id,idInt:id,ID_RT:id,CONSECUTIVO_BT:id},"BUSCANDO PDF RT...");
+    let res=await apiSilent("resolveRTPDF",{idRT:id,idInt:id,ID_RT:id,CONSECUTIVO_BT:id},60000);
     if(res&&res.ok){
       rt.PDF_FILE_ID=res.fileId||rt.PDF_FILE_ID||"";
       rt.PDF_URL=res.url||rt.PDF_URL||"";
@@ -359,18 +369,15 @@ async function ensurePdfForRT(id,rt){
   }catch(e){document.getElementById("detailStatus").textContent="PDF NO GENERADO";return rt;}
 }
 async function openRT(id){
-  document.getElementById("detailStatus").textContent="CARGANDO DETALLE...";
+  document.getElementById('detailStatus').textContent='CARGANDO DETALLE...';
   try{
-    let data=await api("getRT",{idRT:id,idInt:id,ID_INT:id},"CARGANDO DETALLE RT...");
-    if(!data.ok){document.getElementById("detailStatus").textContent=data.error||"ERROR";return;}
+    let data=await getRTFast(id,'CARGANDO DETALLE RT...');
+    if(!data||!data.ok){document.getElementById('detailStatus').textContent=(data&&data.error)||'ERROR';return;}
     selectedRT=data.rt||data.row||data.data||data;
-    selectedRT=await resolvePdfForRT(id,selectedRT);
-    selectedRT=await ensurePdfForRT(id,selectedRT);
-    document.getElementById("detailTitle").textContent=(val(selectedRT,["ID_INT","ID_RT","BT","CONSECUTIVO_BT"])||id)+" // "+(val(selectedRT,["NUMERO_RT","NUM_REGISTRO","NUM_REGISTRO_RT","RT"])||"RT");
-    document.getElementById("detailStatus").textContent=val(selectedRT,["ESTADO_RT","ESTADO"])||"DETALLE CARGADO";
-    setViewerFromRT(selectedRT);
-    renderRTData(selectedRT);
-  }catch(e){document.getElementById("detailStatus").textContent="ERROR DE CONEXION";}
+    document.getElementById('detailTitle').textContent=(val(selectedRT,['ID_INT','ID_RT','BT','CONSECUTIVO_BT'])||id)+' // '+(val(selectedRT,['NUMERO_RT','NUM_REGISTRO','NUM_REGISTRO_RT','RT'])||'RT');
+    document.getElementById('detailStatus').textContent=val(selectedRT,['ESTADO_RT','ESTADO'])||'DETALLE CARGADO';
+    renderRTData(selectedRT);setViewerFromRT(selectedRT);hydratePdfLazy(id,selectedRT,0);
+  }catch(e){document.getElementById('detailStatus').textContent='ERROR DE CONEXION';}
 }
 function rtInfoBlock(label,value,full){
   return '<div class="rt-info-block '+(full?'full':'')+'"><label>'+esc(label)+'</label><strong>'+esc(value||'')+'</strong></div>';
@@ -430,8 +437,8 @@ async function closeSelectedRT(){
   if(!payload.data.ID_PERSONA_CIERRE){armaAlert('SELECCIONE UN PLANEADOR O JEFE DE MANTENIMIENTO.');return;}if(!payload.data.OBSERVACIONES_CIERRE.trim()){armaAlert('DILIGENCIE OBSERVACIONES FINALES.');return;}
   let question='A.R.M.A., confirma el cierre tecnico de la '+id+'.';
   if(!(await armaConfirm(question,'A.R.M.A. | CIERRE TECNICO')))return;document.getElementById('closeStatus').textContent='CERRANDO '+id+'...';
-  try{let res=await api('closeRT',payload,'REALIZANDO CIERRE TECNICO...',180000);if(!res.ok){document.getElementById('closeStatus').textContent=res.error||'NO FUE POSIBLE CERRAR';armaAlert(res.error||'NO FUE POSIBLE CERRAR LA RT.');return;}document.getElementById('closeStatus').textContent='CIERRE TECNICO COMPLETADO';await openRT(id);await loadRTList(rtCurrentPage);let msg='Cierre tecnico de la '+id+' fue completado.';if(res.otCreated)msg+='\nSe creo la '+res.otCreated+'.';if(res.srCreated)msg+='\nSe creo la '+res.srCreated+'.';armaAlert(msg,'A.R.M.A. | CIERRE COMPLETADO');}
-  catch(e){document.getElementById('closeStatus').textContent='VERIFICANDO EL RESULTADO...';for(let attempt=0;attempt<4;attempt++){if(attempt)await new Promise(function(resolve){setTimeout(resolve,1500*attempt);});try{let check=await api('getRT',{idRT:id,idInt:id},'VERIFICANDO CIERRE...',60000);let row=check.rt||check.row||check.data||{};if(String(val(row,['ESTADO_RT','ESTADO'])).toUpperCase()==='RTCT'){document.getElementById('closeStatus').textContent='CIERRE TECNICO COMPLETADO';await openRT(id);await loadRTList(rtCurrentPage);let done='Cierre tecnico de la '+id+' fue completado.';let ot=val(row,['OT_CREADA']);let sr=val(row,['REQUERIMIENTO_CREADO']);if(ot)done+='\nSe creo la '+ot+'.';if(sr)done+='\nSe creo la '+sr+'.';armaAlert(done,'A.R.M.A. | CIERRE COMPLETADO');return;}}catch(ignore){}}document.getElementById('closeStatus').textContent='NO FUE POSIBLE CONFIRMAR EL CIERRE';armaAlert(apiErrorText(e),'A.R.M.A. | ERROR DE CONEXION');}
+  try{let res=await api('closeRT',payload,'REALIZANDO CIERRE TECNICO...',180000);if(!res.ok){document.getElementById('closeStatus').textContent=res.error||'NO FUE POSIBLE CERRAR';armaAlert(res.error||'NO FUE POSIBLE CERRAR LA RT.');return;}document.getElementById('closeStatus').textContent='CIERRE TECNICO COMPLETADO';rtCacheDrop(id);await openRT(id);await loadRTList(rtCurrentPage);let msg='Cierre tecnico de la '+id+' fue completado.';if(res.otCreated)msg+='\nSe creo la '+res.otCreated+'.';if(res.srCreated)msg+='\nSe creo la '+res.srCreated+'.';armaAlert(msg,'A.R.M.A. | CIERRE COMPLETADO');}
+  catch(e){document.getElementById('closeStatus').textContent='VERIFICANDO EL RESULTADO...';for(let attempt=0;attempt<4;attempt++){if(attempt)await new Promise(function(resolve){setTimeout(resolve,1500*attempt);});try{let check=await api('getRT',{idRT:id,idInt:id},'VERIFICANDO CIERRE...',60000);let row=check.rt||check.row||check.data||{};if(String(val(row,['ESTADO_RT','ESTADO'])).toUpperCase()==='RTCT'){document.getElementById('closeStatus').textContent='CIERRE TECNICO COMPLETADO';rtCacheDrop(id);await openRT(id);await loadRTList(rtCurrentPage);let done='Cierre tecnico de la '+id+' fue completado.';let ot=val(row,['OT_CREADA']);let sr=val(row,['REQUERIMIENTO_CREADO']);if(ot)done+='\nSe creo la '+ot+'.';if(sr)done+='\nSe creo la '+sr+'.';armaAlert(done,'A.R.M.A. | CIERRE COMPLETADO');return;}}catch(ignore){}}document.getElementById('closeStatus').textContent='NO FUE POSIBLE CONFIRMAR EL CIERRE';armaAlert(apiErrorText(e),'A.R.M.A. | ERROR DE CONEXION');}
 }
 async function generateSelectedPdf(){
   if(!selectedRT){armaAlert("SELECCIONE UNA RT.");return;}
@@ -440,7 +447,7 @@ async function generateSelectedPdf(){
   try{
     let res=await api("generateRTPDF",{idRT:id,idInt:id},"GENERANDO PDF RT...");
     if(!res.ok){armaAlert(res.error||res.detail||"NO FUE POSIBLE GENERAR PDF");return;}
-    await openRT(id);
+    applyGeneratedPdf(id,res);
     document.getElementById("detailStatus").textContent="PDF ACTUALIZADO";
   }catch(e){armaAlert("ERROR DE CONEXION");}
 }
