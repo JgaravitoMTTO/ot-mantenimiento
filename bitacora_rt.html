@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V28.1_PLUS_RT_TURBO_HOTFIX_SESION_20260813 | BUILD: 2026-08-13 17:58:42 -->
+<!-- ARMA RT MODULE V28.2_PLUS_RT_TURBO_ADMIN_PERSONA_20260813 | BUILD: 2026-08-13 18:53:06 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -208,7 +208,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
         </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-13 17:58:42</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-13 18:53:06</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -269,7 +269,7 @@ function setSelectSmart(id,wanted){let el=document.getElementById(id);if(!el||!w
 function rebuildEquipoSelectByPlanta(){let pl=document.getElementById('rtPlanta');let eq=document.getElementById('rtEquipo');if(!eq)return;let p=pl?plantaDigit(pl.value||((pl.options[pl.selectedIndex]||{}).text)):'';let rows=asArr(rtEquiposAll).filter(e=>{let niv=equipoNivel(e);if(niv&&niv!=='EQUIPO')return false;let ep=plantaDigit(equipoPlanta(e));return !p||!ep||ep===p;});let html=`<option value="">SELECCIONE EQUIPO</option>`;html+=rows.map(e=>`<option value="${esc(equipoValue(e))}">${esc(equipoText(e))}</option>`).join('');eq.innerHTML=html;rebuildSubsistemaSelect();}
 function rebuildSubsistemaSelect(){let eq=document.getElementById('rtEquipo');let sub=document.getElementById('rtSubsistema');if(!sub)return;let selected=eq?eq.value:'';let selectedTxt=eq&&eq.options[eq.selectedIndex]?eq.options[eq.selectedIndex].text:'';let sNorm=normTxt(selected+'|'+selectedTxt);let rows=asArr(rtEquiposAll).filter(e=>{let niv=equipoNivel(e);if(['SUBEQUIPO','SUB_EQUIPO','COMPONENTE_MANTENIBLE'].indexOf(niv)<0)return false;let padre=normTxt(val(e,['padre','PADRE']));return selected&&((padre&&sNorm.indexOf(padre)>=0)||padre===normTxt(selected));});let html=`<option value="">NO APLICA / SELECCIONE</option>`;html+=rows.map(e=>`<option value="${esc(equipoValue(e))}">${esc(equipoText(e))}</option>`).join('');sub.innerHTML=html;}
 function setPlantaFromPersona(rows,id){if(PAGE_MODE!=='REPORTAR')return;rows=asArr(rows);let r=rows.find(x=>String(personaId(x))===String(id));if(!r)return;let planta=val(r,['PLANTA_ASIGNADA','planta','PLANTA','ALCANCE_PLANTAS','alcancePlantas']);if(setSelectSmart('rtPlanta',planta)){rebuildEquipoSelectByPlanta();}}
-function applyReportePersonaDefault(personas){let el=document.getElementById('rtPersona');if(!el||PAGE_MODE!=='REPORTAR')return;let rows=asArr(personas);let chosen='';let u=normTxt(armaSession.user||'');if(rows.length===1){chosen=personaId(rows[0]);}else{rows.forEach(r=>{if(!chosen&&u&&normTxt(val(r,['USER_ARMA','userArma','USUARIO_ARMA']))===u)chosen=personaId(r);});}if(chosen){el.value=chosen;el.disabled=true;el.title='PERSONA ASOCIADA AL USUARIO VALIDADO EN ARMA';setPlantaFromPersona(rows,chosen);}el.onchange=function(){setPlantaFromPersona(rows,el.value);};}
+function applyReportePersonaDefault(personas){let el=document.getElementById('rtPersona');if(!el||PAGE_MODE!=='REPORTAR')return;let rows=asArr(personas);let chosen='';let u=normTxt(armaSession.user||'');let admin=isSuperAdmin()||normTxt(armaSession.nivel||'')==='ADMIN';rows.forEach(r=>{if(!chosen&&u&&normTxt(val(r,['USER_ARMA','userArma','USUARIO_ARMA']))===u)chosen=personaId(r);});if(!chosen&&rows.length===1)chosen=personaId(rows[0]);if(admin){el.disabled=false;el.title='ADMIN: PUEDE SELECCIONAR LA PERSONA QUE REPORTA';if(chosen){el.value=chosen;setPlantaFromPersona(rows,chosen);}el.onchange=function(){setPlantaFromPersona(rows,el.value);};return;}if(chosen){el.value=chosen;el.disabled=true;el.title='PERSONA ASOCIADA AL USUARIO VALIDADO EN ARMA';setPlantaFromPersona(rows,chosen);}else{el.disabled=true;}el.onchange=function(){setPlantaFromPersona(rows,el.value);};}
 async function loadCatalogos(source){
   try{let data=source||await apiSilent('rtCatalogos',{});if(data.ok){catalogos=data.catalogos||data;}}catch(e){catalogos={};}
   let personas=getCat(['personasReporte','PERSONAS_REPORTE','PERSONASREPORTA','PERSONAL','personal','personas','tecnicos']);
