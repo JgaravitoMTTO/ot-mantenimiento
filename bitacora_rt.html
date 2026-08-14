@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V28.5A_PLUS_RT_REPORT_BITACORA_STABLE_20260814 | BUILD: 2026-08-14 13:22:48 -->
+<!-- ARMA RT MODULE V28.6_STABLE_SESSION_BITACORA_FAST_20260814 | BUILD: 2026-08-14 13:51:55 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -211,7 +211,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
         </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-14 13:22:48</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-14 13:51:55</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -295,10 +295,10 @@ function refreshAll(){if(PAGE_MODE==="REPORTAR"){clearReportForm(false);}else{lo
 function buildFilters(){return {BUSCAR:document.getElementById("fBuscar").value,FECHA_DESDE:document.getElementById("fDesde").value,FECHA_HASTA:document.getElementById("fHasta").value,ESTADO:document.getElementById("fEstado").value,EQUIPO:document.getElementById("fEquipo").value};}
 function hasActiveFilters(){let f=buildFilters();return !!(String(f.BUSCAR||'').trim()||String(f.FECHA_DESDE||'').trim()||String(f.FECHA_HASTA||'').trim()||String(f.ESTADO||'').trim()||String(f.EQUIPO||'').trim());}
 function armaCurrentToken(){return localStorage.getItem('ARMA_TOKEN')||'';}
-function rtListCacheKey(){const t=armaCurrentToken();return 'ARMA_RT_LIST_CACHE_V28_5_'+PAGE_MODE+'_'+t.slice(-12);}
-function clearLegacyRTCache(){try{sessionStorage.removeItem('ARMA_RT_LIST_CACHE_V26_9_'+PAGE_MODE);const t=armaCurrentToken();sessionStorage.removeItem('ARMA_RT_LIST_CACHE_V27_'+PAGE_MODE+'_'+t.slice(-12));}catch(e){}}
-function readRTListCache(){try{let raw=sessionStorage.getItem(rtListCacheKey())||'';if(!raw)return null;let c=JSON.parse(raw);if(!c||!c.rows||Date.now()-Number(c.ts||0)>300000)return null;return c;}catch(e){return null;}}
-function writeRTListCache(rows,count){try{sessionStorage.setItem(rtListCacheKey(),JSON.stringify({rows:rows||[],count:count||0,ts:Date.now()}));}catch(e){}}
+function rtListCacheKey(){const t=armaCurrentToken();return 'ARMA_RT_LIST_CACHE_V28_6_'+PAGE_MODE+'_'+t.slice(-16);}
+function clearLegacyRTCache(){try{sessionStorage.removeItem('ARMA_RT_LIST_CACHE_V26_9_'+PAGE_MODE);}catch(e){}try{sessionStorage.removeItem('ARMA_RT_LIST_CACHE_V27_'+PAGE_MODE+'_'+armaCurrentToken().slice(-12));}catch(e){}}
+function readRTListCache(){try{let raw=localStorage.getItem(rtListCacheKey())||'';if(!raw)return null;let c=JSON.parse(raw);if(!c||!c.rows||Date.now()-Number(c.ts||0)>600000)return null;return c;}catch(e){return null;}}
+function writeRTListCache(rows,count,recent48Rows){try{localStorage.setItem(rtListCacheKey(),JSON.stringify({rows:rows||[],count:count||0,recent48Rows:Array.isArray(recent48Rows)?recent48Rows:[],ts:Date.now()}));}catch(e){}}
 function rtBtNumber(r){let v=val(r,['ID_RT','CONSECUTIVO_BT','BT','ID']);let m=String(v||'').match(/(\d+)/);return m?Number(m[1]):0;}
 function sortRTNewest(rows){return asArr(rows).slice().sort((a,b)=>rtBtNumber(b)-rtBtNumber(a));}
 function applyRTListData(data){
@@ -309,13 +309,13 @@ function applyRTListData(data){
   document.getElementById('listStatus').textContent=rows.length+' REGISTROS EN ESTA PAGINA'+extra;
   let pt=document.getElementById('rtPageText'),pb=document.getElementById('rtPrev'),nb=document.getElementById('rtNext');
   if(pt)pt.textContent='PAGINA '+rtCurrentPage;if(pb)pb.disabled=rtCurrentPage<=1;if(nb)nb.disabled=!rtHasMore;
-  if(PAGE_MODE==='BITACORA'&&rtCurrentPage===1&&!hasActiveFilters())writeRTListCache(rows,rows.length);
+  if(PAGE_MODE==='BITACORA'&&rtCurrentPage===1&&!hasActiveFilters())writeRTListCache(rows,rows.length,data.recent48Rows);
   if(PAGE_MODE==='BITACORA'&&rtCurrentPage===1&&data.recent48Rows!==null)showResumen48FromRows(Array.isArray(data.recent48Rows)?data.recent48Rows:rows);
 }
 async function loadRTListFresh48(){
   try{
     let data=await apiSilent('listRT',{pageMode:PAGE_MODE,filters:Object.assign(buildFilters(),{PAGE:1,PAGE_SIZE:RT_PAGE_SIZE})});
-    resumen48Shown=false;applyRTListData(data);
+    applyRTListData(data);
   }catch(e){}
 }
 async function loadRTList(page=1){
@@ -323,7 +323,7 @@ async function loadRTList(page=1){
   try{
     if(page===1&&PAGE_MODE==='BITACORA'&&!hasActiveFilters()){
       let cached=readRTListCache();
-      if(cached){applyRTListData({ok:true,rows:cached.rows,page:1,hasMore:true,partial:true,recent48Rows:cached.rows});setTimeout(function(){loadRTListFresh48();},10);return;}
+      if(cached){applyRTListData({ok:true,rows:cached.rows,page:1,hasMore:true,partial:true,recent48Rows:Array.isArray(cached.recent48Rows)?cached.recent48Rows:null});setTimeout(function(){loadRTListFresh48();},10);return;}
     }
     let data=await api('listRT',{pageMode:PAGE_MODE,filters:Object.assign(buildFilters(),{PAGE:page,PAGE_SIZE:RT_PAGE_SIZE})},'CARGANDO RT...');
     applyRTListData(data);
