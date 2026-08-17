@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ARMA | PERSONAL V21</title>
+  <title>ARMA | PERSONAL V22</title>
   <style>
 /* ARMA_VISUAL_ZOOM_75 */ html{zoom:75%;}
 :root{--blue:#004b9b;--blue2:#0076d7;--navy:#002b66;--green:#55b52e;--green2:#00d65f;--cyan:#00bfd6;--line:#dbe5f0;--text:#0f172a;--muted:#64748b;--shadow:0 14px 28px rgba(0,43,102,.12);--soft:0 5px 14px rgba(15,23,42,.12);--bg:#eef3f9;--surface:#fff}
@@ -166,21 +166,21 @@ tr:hover{background:#d9ecff;cursor:pointer}
         <div class="photo-preview" id="photoPreview"><span>AR</span></div>
         <div>
           <div class="person-focus-name empty" id="personFocusName">NO_USER</div>
-          <div class="detail-create-row"><button class="create-person-small" id="btnNewCard" type="button" data-perm="BTN_PERSONAL_CREAR" data-arma-access="BTN_PERSONAL_CREAR" onclick="newPerson()">CREAR PERSONA</button></div>
+          <div class="detail-create-row" style="gap:8px;flex-wrap:wrap"><button class="create-person-small" id="btnRolesCard" type="button" onclick="openRoleManager()">ROLES Y CAPACIDADES</button><button class="create-person-small" id="btnNewCard" type="button" data-perm="BTN_PERSONAL_CREAR" data-arma-access="BTN_PERSONAL_CREAR" onclick="newPerson()">CREAR PERSONA</button></div>
           <div class="photo-actions">
             <input id="photoFile" type="file" accept="image/png,image/jpeg,image/webp">
             <button class="btn green" id="btnUploadPhoto" type="button" data-perm="BTN_PERSONAL_EDITAR" data-arma-access="BTN_PERSONAL_EDITAR" onclick="uploadPhoto()">SUBIR FOTO</button>
           </div>
         </div>
       </div>
-      <div class="turno-policy"><strong>POLITICA DE ROLES Y TURNOS:</strong> CARGO ES EL NOMBRE LIBRE DEL PUESTO. ROL FUNCIONAL CONTROLA PLANEACION Y PROGRAMABILIDAD. SOLO EJECUTOR DE MANTENIMIENTO GENERA COLUMNA VACIA EN TURNOS; PLANEADORES, JEFE, GERENTE, SUPERVISOR, COORDINADOR SG-SST Y ASISTENTE ADMINISTRATIVA NO GENERAN COLUMNA.</div><div id="personalForm" class="form-sections"></div>
+      <div class="turno-policy"><strong>POLITICA DE ROLES Y CAPACIDADES:</strong> CARGO ES EL NOMBRE LIBRE DEL PUESTO. EL ROL FUNCIONAL DEFINE CAPACIDADES POR DEFECTO Y CADA PERSONA PUEDE TENER SOBRESCRITURAS SI/NO. PROGRAMABILIDAD OT, TURNOS, REPORTE BT, EJECUCION, PLANEACION Y CIERRE SON ATRIBUTOS INDEPENDIENTES.</div><div id="personalForm" class="form-sections"></div>
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap">
         <button class="btn gray" type="button" onclick="clearForm()">LIMPIAR</button>
         <button class="btn green" id="btnSave" type="button" data-perm="BTN_PERSONAL_EDITAR" data-arma-access="BTN_PERSONAL_EDITAR" onclick="saveForm()">GUARDAR CAMBIOS</button>
       </div>
     </section>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-12 10:06:52</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>PERSONAL</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-17 01:33:32</span></div></footer>
 </main>
 <div class="arma-modal hidden" id="armaMsg"><div class="arma-modal-box"><div class="arma-modal-head" id="armaMsgTitle">A.R.M.A.</div><div class="arma-modal-body" id="armaMsgText"></div><div class="arma-modal-actions"><button type="button" onclick="armaCloseAlert()">ACEPTAR</button></div></div></div><script>function armaAlert(text,title="A.R.M.A."){document.getElementById("armaMsgTitle").textContent=title;document.getElementById("armaMsgText").textContent=String(text||"");document.getElementById("armaMsg").classList.remove("hidden")}function armaCloseAlert(){document.getElementById("armaMsg").classList.add("hidden")}
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -207,7 +207,8 @@ const SELECTS={
   TALLA_CAMISA:["","XS","S","M","L","XL","XXL","XXXL"],
   TALLA_CHAQUETA:["","36","38","40","42","44","46","48","50","52"],
   TALLA_PANTALON:["","28","30","32","34","36","38","40","42","44","46","48"],
-  TALLA_BOTAS:["","35","36","37","38","39","40","41","42","43","44","45"]
+  TALLA_BOTAS:["","35","36","37","38","39","40","41","42","43","44","45"],
+  PROGRAMABLE_OT:["","SI","NO"],PROGRAMABLE_TURNOS:["","SI","NO"],PUEDE_REPORTAR_BT:["","SI","NO"],PUEDE_EJECUTAR_OT:["","SI","NO"],PUEDE_PLANEAR:["","SI","NO"],PUEDE_CERRAR_TECNICAMENTE:["","SI","NO"]
 };
 const SECTIONS=[
   {id:"ID",title:"IDENTIFICACION Y ESTADO",fields:[
@@ -216,7 +217,9 @@ const SECTIONS=[
   ]},
   {id:"LAB",title:"INFORMACION LABORAL",fields:[
     ["CARGO","CARGO / DENOMINACION LIBRE","text"],["ROL_FUNCIONAL","ROL FUNCIONAL NORMALIZADO","select"],["TURNO_BASE","TURNO BASE (REFERENCIA, NO AUTOLLENA)","select"],["SALARIO","SALARIO","number"],
-    ["EMPRESA_ASIGNADA","EMPRESA DERIVADA","readonly"],["PLANTA_ASIGNADA","PLANTA BASE ASIGNADA","select"],["AREA_ASIGNADA","AREA ASIGNADA","select"],["PROGRAMABLE_MTTO","PROGRAMABLE EN OT / TURNOS","readonly"],
+    ["EMPRESA_ASIGNADA","EMPRESA DERIVADA","readonly"],["PLANTA_ASIGNADA","PLANTA BASE ASIGNADA","select"],["AREA_ASIGNADA","AREA ASIGNADA","select"],["PROGRAMABLE_MTTO","PROGRAMABLE LEGADO / DERIVADO","readonly"],
+    ["PROGRAMABLE_OT","PROGRAMABLE OT (VACIO = HEREDA ROL)","select"],["PROGRAMABLE_TURNOS","PROGRAMABLE TURNOS (VACIO = HEREDA ROL)","select"],["PUEDE_REPORTAR_BT","PUEDE REPORTAR BT (VACIO = HEREDA ROL)","select"],["PUEDE_EJECUTAR_OT","PUEDE EJECUTAR OT (VACIO = HEREDA ROL)","select"],
+    ["PUEDE_PLANEAR","PUEDE PLANEAR (VACIO = HEREDA ROL)","select"],["PUEDE_CERRAR_TECNICAMENTE","PUEDE CERRAR TECNICAMENTE (VACIO = HEREDA ROL)","select"],
     ["MAQUINAS_ASIGNADAS","MAQUINAS ASIGNADAS","readonly"],["TIPO_CONTRATO","TIPO CONTRATO","select"],["INICIO_CONTRATO","INICIO CONTRATO","date"],["ANTIGUEDAD_ANIOS","ANTIGUEDAD ANIOS","readonly"]
   ]},
   {id:"CONTACTO",title:"CONTACTO Y EMERGENCIA",fields:[
@@ -394,6 +397,18 @@ async function validateSession(){
     setSessionData(data.session||{},token);armaV12PersonalWrite(data);await startPersonalApp(data);
   }catch(e){if(!painted)showLoginWall();else setStatus('listStatus','DATOS EN CACHE // NO FUE POSIBLE ACTUALIZAR');}
 }
+// === ARMA PERSONAL V22 ROLES + CAPACIDADES ===
+const ARMA_CAP_FIELDS=['PROGRAMABLE_OT','PROGRAMABLE_TURNOS','PUEDE_REPORTAR_BT','PUEDE_EJECUTAR_OT','PUEDE_PLANEAR','PUEDE_CERRAR_TECNICAMENTE'];
+const ARMA_V22_isFieldEditable=isFieldEditable;isFieldEditable=function(k,typ){if(ARMA_CAP_FIELDS.indexOf(k)>=0)return isAdminLike()&&(currentMode==='CREATE'||currentCanEdit);return ARMA_V22_isFieldEditable(k,typ)};
+const ARMA_V22_applyPersonalPermissions=applyPersonalPermissions;applyPersonalPermissions=function(){ARMA_V22_applyPersonalPermissions();const b=document.getElementById('btnRolesCard');if(b)b.style.display=isAdminLike()?'inline-block':'none'};
+function ensureRoleModal(){let m=document.getElementById('roleManagerModal');if(m)return m;m=document.createElement('div');m.id='roleManagerModal';m.className='arma-modal hidden';m.innerHTML='<div class="arma-modal-box" style="width:min(1120px,96vw);max-height:90vh;overflow:auto"><div class="arma-modal-head">A.R.M.A. | ROLES FUNCIONALES Y CAPACIDADES</div><div class="arma-modal-body" id="roleManagerBody"></div><div class="arma-modal-actions"><button type="button" onclick="closeRoleManager()">CERRAR</button></div></div>';document.body.appendChild(m);return m}
+function closeRoleManager(){const m=document.getElementById('roleManagerModal');if(m)m.classList.add('hidden')}
+function roleBool(v){return String(v||'').toUpperCase()==='SI'}
+async function openRoleManager(){if(!isAdminLike())return armaAlert('SOLO ADMIN O SUPER_ADMIN PUEDE GESTIONAR ROLES.');const m=ensureRoleModal(),b=document.getElementById('roleManagerBody');m.classList.remove('hidden');b.innerHTML='<strong>CARGANDO ROLES...</strong>';try{const r=await api('listFunctionalRoles',{},'CARGANDO ROLES...');if(!r.ok)throw new Error(r.error||'ERROR');paintRoleManager(r.roles||[])}catch(e){b.textContent='ERROR: '+(e.message||e)}}
+function paintRoleManager(roles){const b=document.getElementById('roleManagerBody');b.innerHTML='<div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="btn green" type="button" onclick="editFunctionalRole(null)">+ NUEVO ROL</button></div><div class="table-wrap" style="height:auto;max-height:520px"><table><thead><tr><th>ROL</th><th>OT</th><th>TURNOS</th><th>BT</th><th>EJECUTA</th><th>PLANEA</th><th>CIERRA</th><th></th></tr></thead><tbody>'+roles.map((r,i)=>'<tr><td><strong>'+esc(r.label)+'</strong><br><small>'+esc(r.value)+'</small></td><td>'+esc(r.PROGRAMABLE_OT)+'</td><td>'+esc(r.PROGRAMABLE_TURNOS)+'</td><td>'+esc(r.PUEDE_REPORTAR_BT)+'</td><td>'+esc(r.PUEDE_EJECUTAR_OT)+'</td><td>'+esc(r.PUEDE_PLANEAR)+'</td><td>'+esc(r.PUEDE_CERRAR_TECNICAMENTE)+'</td><td><button class="btn" type="button" data-role-index="'+i+'">EDITAR</button></td></tr>').join('')+'</tbody></table></div>';b.querySelectorAll('[data-role-index]').forEach(btn=>btn.onclick=()=>editFunctionalRole(roles[Number(btn.dataset.roleIndex)]) )}
+function roleCheck(k,label,r){return '<label style="display:flex;gap:7px;align-items:center;border:1px solid #dbe5f0;border-radius:10px;padding:9px"><input id="role_'+k+'" type="checkbox" style="width:auto" '+(roleBool(r&&r[k])?'checked':'')+'><strong>'+label+'</strong></label>'}
+function editFunctionalRole(r){r=r||{};const b=document.getElementById('roleManagerBody');b.innerHTML='<div class="form-grid"><div class="field"><label>ID ROL</label><input id="role_id" value="'+esc(r.value||'')+'" '+(r.value?'readonly':'')+'></div><div class="field"><label>NOMBRE ROL</label><input id="role_name" value="'+esc(r.label||'')+'"></div><div class="field full" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">'+roleCheck('PROGRAMABLE_OT','PROGRAMABLE OT',r)+roleCheck('PROGRAMABLE_TURNOS','PROGRAMABLE TURNOS',r)+roleCheck('PUEDE_REPORTAR_BT','REPORTAR BT',r)+roleCheck('PUEDE_EJECUTAR_OT','EJECUTAR OT',r)+roleCheck('PUEDE_PLANEAR','PLANEAR',r)+roleCheck('PUEDE_CERRAR_TECNICAMENTE','CIERRE TECNICO',r)+'</div></div><div class="actions" style="margin-top:12px"><button class="btn gray" type="button" onclick="openRoleManager()">CANCELAR</button><button class="btn green" type="button" onclick="saveFunctionalRoleUI()">GUARDAR ROL</button></div>'}
+async function saveFunctionalRoleUI(){const id=document.getElementById('role_id').value.trim(),name=document.getElementById('role_name').value.trim();if(!id||!name)return armaAlert('ID Y NOMBRE DEL ROL SON OBLIGATORIOS.');const data={ROL_FUNCIONAL:id,NOMBRE_ROL:name,ACTIVO:'SI'};ARMA_CAP_FIELDS.forEach(k=>{const e=document.getElementById('role_'+k);data[k]=e&&e.checked?'SI':'NO'});try{const r=await api('saveFunctionalRole',{data:data},'GUARDANDO ROL...');if(!r.ok)throw new Error(r.error||'ERROR');await loadPersonalCatalogos();await openRoleManager();armaAlert('ROL FUNCIONAL GUARDADO CORRECTAMENTE.')}catch(e){armaAlert('NO FUE POSIBLE GUARDAR EL ROL: '+(e.message||e))}}
 document.addEventListener("DOMContentLoaded",validateSession);
 </script>
 </body>
