@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V31_0B_VBA_SYNTAX_FIX_FAST_READ_PRO_20260817 | BUILD: 2026-08-17 17:55:23 -->
+<!-- ARMA RT MODULE V31_0D_VALIDATOR_FIX_DATA_PANEL_20260817 | BUILD: 2026-08-17 18:15:17 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -249,7 +249,7 @@ tbody tr:hover{background:#f2f8ff;box-shadow:inset 4px 0 0 #1496df}
         </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-17 17:55:23</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-17 18:15:17</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -554,7 +554,7 @@ async function loadRTList(page=1){document.getElementById('listStatus').textCont
 painted=true;}}let delayed=null;if(!painted)delayed=setTimeout(function(){showArmaLoader('CARGANDO BITACORA...');},500);try{let data=await apiSilent('listRT',{pageMode:PAGE_MODE,filters:Object.assign(buildFilters(),{PAGE:page,PAGE_SIZE:RT_PAGE_SIZE})},30000);if(delayed)clearTimeout(delayed);while(armaLoaderCount>0)hideArmaLoader();applyRTListData(data);
 }catch(e){if(delayed)clearTimeout(delayed);while(armaLoaderCount>0)hideArmaLoader();document.getElementById('listStatus').textContent=painted?'DATOS PRECARGADOS // SIN ACTUALIZACION':'ERROR DE CONEXION';}}
 function rtDataSection(title,inner){return '<section class="rt-data-section"><div class="rt-data-section-title">'+esc(title)+'</div>'+inner+'</section>';}
-function renderRTData(rt){let box=document.getElementById('rtData');if(!box)return;if(!rt){box.className='rt-info';box.innerHTML='<div class="rt-info-block"><strong>SELECCIONE UNA RT PARA CONSULTAR SUS DATOS.</strong></div>';return;}let id=val(rt,['ID_INT','ID_RT','BT','CONSECUTIVO_BT']);let a='<div class="rt-info-grid">';a+=rtInfoBlock('BT',id,false)+rtInfoBlock('NUMERO RT',val(rt,['NUMERO_RT','NUM_REGISTRO_RT','NUM_REGISTRO','RT']),false)+rtInfoBlock('ESTADO',val(rt,['ESTADO_RT','ESTADO']),false)+rtInfoBlock('PRIORIDAD',val(rt,['PRIORIDAD']),false)+rtInfoBlock('FECHA REPORTE',formatDateTimeRT(val(rt,['FECHA_HORA_REPORTE',
+function renderRTData(rt){let box=document.getElementById('rtDataBox')||document.getElementById('rtData');let ds=document.getElementById('rtDataStatus');if(!box)return;if(!rt){box.className='rt-empty';box.textContent='SELECCIONE UNA RT PARA VER AQUI LA INFORMACION DE LA FILA ARMA_DATA.';if(ds)ds.textContent='SELECCIONE UNA RT';syncRtDetailHeights();return;}let id=val(rt,['ID_INT','ID_RT','BT','CONSECUTIVO_BT']);if(ds)ds.textContent=(val(rt,['ESTADO_RT','ESTADO'])||'DETALLE')+' // '+id;let a='<div class="rt-info-grid">';a+=rtInfoBlock('BT',id,false)+rtInfoBlock('NUMERO RT',val(rt,['NUMERO_RT','NUM_REGISTRO_RT','NUM_REGISTRO','RT']),false)+rtInfoBlock('ESTADO',val(rt,['ESTADO_RT','ESTADO']),false)+rtInfoBlock('PRIORIDAD',val(rt,['PRIORIDAD']),false)+rtInfoBlock('FECHA REPORTE',formatDateTimeRT(val(rt,['FECHA_HORA_REPORTE',
 'MARCA_TEMPORAL','FECHA'])),false)+rtInfoBlock('PLANTA',val(rt,['PLANTA']),false)+rtInfoBlock('REPORTA',val(rt,['PERSONAS_REPORTAN','QUIEN_REPORTA','REPORTA']),false)+rtInfoBlock('TIPO TRABAJO',val(rt,['TIPO_TRABAJO']),false);a+='</div>';let b='<div class="rt-info-grid">';b+=rtInfoBlock('EQUIPO',val(rt,['EQUIPO_INTERVENIDO','EQUIPO']),false)+rtInfoBlock('SUBSISTEMA',val(rt,['SUBSISTEMA_INTERVENIDO','SUBSISTEMA']),false)+rtInfoBlock('INICIO',formatDateTimeRT(val(rt,['FECHA_HORA_INICIO','INICIO_INTERVENCION'])),false)+rtInfoBlock('FIN',formatDateTimeRT(val(rt,['FECHA_HORA_FIN','FIN_INTERVENCION'])),false)+rtInfoBlock('DURACION',
 formatDurationRT(rt),false)+rtInfoBlock('ESTADO PDF',val(rt,['ESTADO_PDF'])||'SIN INFORMACION',false);b+='</div>';let c=rtInfoBlock('FALLA / NECESIDAD',val(rt,['DESCRIPCION_FALLA_NECESIDAD','FALLA_NECESIDAD','DESCRIPCION']),true)+rtInfoBlock('INTERVENCION REALIZADA',val(rt,['INTERVENCION_REALIZADA','INTERVENCION']),true)+rtInfoBlock('REPUESTOS USADOS',val(rt,['REPUESTOS_USADOS','REPUESTOS']),true)+rtInfoBlock('PENDIENTES',val(rt,['PENDIENTES']),true)+rtInfoBlock('CIERRE / OBSERVACIONES',val(rt,['OBSERVACIONES_CIERRE','OBSERVACIONES']),true);
 box.className='rt-info';box.innerHTML=rtDataSection('IDENTIFICACION DE LA RT',a)+rtDataSection('INTERVENCION Y TIEMPOS',b)+rtDataSection('RESULTADO TECNICO',c);syncRtDetailHeights();}
