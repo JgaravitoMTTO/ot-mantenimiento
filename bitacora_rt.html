@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V29.0_PLUS_FINAL_20260816 | BUILD: 2026-08-17 02:09:57 -->
+<!-- ARMA RT MODULE V29.0_PLUS_FINAL_20260816 | BUILD: 2026-08-17 06:07:55 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -211,7 +211,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
         </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-17 02:09:57</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-17 06:07:55</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -230,7 +230,7 @@ function canOpenPage(){return hasPerm(REQUIRED_PERM)||hasPerm(ALT_PERM);}
 function showArmaLoader(msg){armaLoaderCount++;let o=document.getElementById("armaLoader");let t=document.getElementById("armaLoaderText");if(t)t.textContent=msg||"CARGANDO...";if(o)o.classList.remove("hidden");}
 function hideArmaLoader(){armaLoaderCount=Math.max(0,armaLoaderCount-1);if(armaLoaderCount===0)document.getElementById("armaLoader").classList.add("hidden");}
 async function api(action,payload,msg,timeoutMs=40000){payload=payload||{};payload.action=action;payload.token=localStorage.getItem("ARMA_TOKEN")||armaSession.token||"";showArmaLoader(msg||"CONSULTANDO ARMA...");try{const res=await fetch(ARMA_API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});return await res.json();}finally{hideArmaLoader();}}
-async function apiSilent(action,payload,timeoutMs=40000){return api(action,payload||{},null,timeoutMs);}
+async function apiSilent(action,payload,timeoutMs=40000){payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';const ctl=new AbortController();const timer=setTimeout(function(){ctl.abort();},timeoutMs||40000);try{const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),signal:ctl.signal,cache:'no-store'});const raw=await res.text();let j;try{j=JSON.parse(raw)}catch(e){throw new Error('RESPUESTA_BACKEND_NO_JSON // HTTP '+res.status)}return j;}finally{clearTimeout(timer);}}
 function rtDetailKey(id){let t=String(armaSession.token||localStorage.getItem('ARMA_TOKEN')||'');return t.slice(-14)+'|'+String(id||'').trim().toUpperCase();}
 function rtCacheGet(id){let x=rtDetailCache.get(rtDetailKey(id));if(!x)return null;if(Date.now()-Number(x.at||0)>RT_DETAIL_TTL){rtDetailCache.delete(rtDetailKey(id));return null}return x.data||null;}
 function rtCachePut(id,data){if(!id||!data||!data.ok)return;rtDetailCache.set(rtDetailKey(id),{at:Date.now(),data:data});}
