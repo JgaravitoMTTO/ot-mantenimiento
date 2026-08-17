@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V31_0B_SCOPE_PRELOAD_VALIDATOR_FIX_20260817 | BUILD: 2026-08-17 13:03:25 -->
+<!-- ARMA RT MODULE V32_0B_MOBILE_UX_RELIABLE_SAVE_20260817 | BUILD: 2026-08-17 16:56:21 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -129,10 +129,35 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
 /* === RT V28.3 MOBILE TOUCH + RESUMEN 48H VERTICAL === */
 .resumen48-cards{display:grid;grid-template-columns:1fr;gap:14px}.resumen48-card{background:#fff;border:1px solid var(--line);border-left:6px solid var(--blue2);border-radius:16px;padding:14px 16px;box-shadow:0 7px 18px rgba(0,43,102,.10)}.resumen48-item{display:grid;grid-template-columns:minmax(150px,22%) 1fr;gap:12px;padding:9px 0;border-bottom:1px solid #e7eef7}.resumen48-item:last-child{border-bottom:0}.resumen48-item label{font-size:13px;font-weight:950;color:var(--muted)}.resumen48-item strong{font-size:15px;line-height:1.4;color:var(--navy);white-space:pre-wrap}
 @media(max-width:900px){html{zoom:100%!important}.top-global{position:relative}.top-white{padding:10px 12px;gap:10px}.brand-row{width:100%;justify-content:center;gap:12px}.brand-separator{height:52px}.logo-pelex{width:38%;height:auto;max-height:64px}.logo-arma{width:52%;height:auto;max-height:70px}.top-title{text-align:center}.top-title strong{font-size:21px;line-height:1.15}.top-title span{font-size:12px;line-height:1.35}.main{padding:10px}.hero{padding:15px;gap:12px}.hero h1{font-size:25px;line-height:1.15}.hero p{font-size:13px;line-height:1.42;white-space:normal}.panel{padding:12px}.filters,.grid-form,.rt-fields-grid,.rt-closed-grid{grid-template-columns:1fr!important}.field,.field.half,.field.full,.rt-field-card.half{grid-column:1/-1!important}input,select,textarea,.btn,button{font-size:16px!important;min-height:54px!important;padding:12px!important}textarea{min-height:118px}.table-wrap{max-height:none!important}.table-wrap table{min-width:860px}th,td{font-size:13px!important;padding:12px 10px!important}tbody tr{height:58px}.rt-pager{gap:12px!important}.rt-pager button{min-width:120px}.hero-toolbar{display:grid!important;grid-template-columns:1fr!important;width:100%}.hero-action{width:100%!important;min-height:66px!important}.viewer{min-height:65vh!important;height:auto!important}.resumen48-modal{padding:7px}.resumen48-box{width:100%;max-height:96vh;border-radius:14px}.resumen48-head{padding:16px}.resumen48-head h2{font-size:22px}.resumen48-head span{font-size:13px;line-height:1.35}.resumen48-body{padding:10px;max-height:72vh}.resumen48-card{padding:13px}.resumen48-item{grid-template-columns:1fr;gap:4px;padding:10px 0}.resumen48-item label{font-size:14px}.resumen48-item strong{font-size:17px;line-height:1.45}.resumen48-ok{width:100%;min-height:56px;font-size:16px!important}}
+/* === RT V32 UX / ACCESIBILIDAD / DESKTOP FILL === */
+.main{width:min(1760px,100%);margin:0 auto;padding:22px 30px 30px}
+#reportPanel{padding:22px 24px 24px;border-top:5px solid var(--blue2);box-shadow:0 14px 34px rgba(15,23,42,.10)}
+.panel-title h2{font-size:22px;letter-spacing:.2px}
+.status{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:8px 13px;border-radius:999px;background:#eef7ff;border:1px solid #cfe4f7;color:#0b4f7a;font-size:12px;line-height:1.25}
+.grid-form{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 18px;align-items:start}
+.field{min-width:0}
+.field label{font-size:13px;line-height:1.25;margin-bottom:7px;letter-spacing:.15px}
+input,select,textarea{min-height:56px;border-radius:14px;padding:14px 15px;font-size:16px;font-weight:800;line-height:1.25;border:1.5px solid #cbd9e8}
+select{cursor:pointer}
+textarea{min-height:128px;line-height:1.42;text-transform:none}
+input[type=file]{min-height:56px;padding:12px 14px;font-size:14px}
+.notice{font-size:13px;line-height:1.55;padding:14px 16px;margin-bottom:16px;background:linear-gradient(90deg,#f5fbff,#fbfdff)}
+.form-section-title{display:flex;align-items:center;gap:10px;margin:4px 0 -2px;padding:9px 2px 7px;border-bottom:1px solid #d9e6f3;color:var(--navy)}
+.form-section-title span{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:#e8f2ff;color:#0067b9;font-size:11px;font-weight:950}
+.form-section-title strong{font-size:13px;font-weight:950;letter-spacing:.45px}
+.form-actions-report{margin-top:22px;padding-top:18px;border-top:1px solid #dbe5f0;gap:14px}
+.form-actions-report .btn{min-width:190px;min-height:56px;padding:13px 20px;font-size:14px;border-radius:14px}
+#btnSaveRT{min-width:280px;font-size:15px}
+.arma-loader-box{width:min(430px,92vw);padding:28px 26px;border-radius:24px}
+.arma-spinner{width:62px;height:62px;border-width:7px;margin-bottom:16px}
+.arma-loader-box h2{font-size:19px;line-height:1.25}
+.arma-loader-box p{font-size:12px;line-height:1.5}
+@media(min-width:1400px){.hero{margin-bottom:18px}.hero-copy{max-width:1100px}#reportPanel{padding-left:28px;padding-right:28px}.grid-form{gap:18px 22px}}
+@media(max-width:900px){.main{padding:9px}.panel{border-radius:15px}#reportPanel{padding:14px 12px 18px}.panel-title{gap:8px;flex-direction:column}.panel-title h2{font-size:21px}.status{width:100%;font-size:12px;text-align:center}.grid-form{grid-template-columns:1fr!important;gap:15px}.field,.field.half,.field.full,.form-section-title{grid-column:1/-1!important}.field label{font-size:14px}input,select,textarea{font-size:17px!important;min-height:58px!important;padding:14px!important}textarea{min-height:132px!important}.form-section-title{margin-top:6px}.form-section-title strong{font-size:13px}.form-actions-report{display:grid!important;grid-template-columns:1fr!important}.form-actions-report .btn,#btnSaveRT{width:100%;min-width:0;min-height:58px;font-size:16px}.notice{font-size:14px}.arma-loader-box{width:min(94vw,430px)}}
 </style>
 </head>
 <body>
-<div id="armaLoader" class="arma-loader hidden"><div class="arma-loader-box"><div class="arma-spinner"></div><h2 id="armaLoaderText">CARGANDO...</h2><p>ARMA ESTA CONSULTANDO DATOS EN LINEA. ESPERE UN MOMENTO.</p></div></div>
+<div id="armaLoader" class="arma-loader hidden"><div class="arma-loader-box"><div class="arma-spinner"></div><h2 id="armaLoaderText">CARGANDO...</h2><p>A.R.M.A. ESTA PREPARANDO LOS CONTROLES. ESTA VENTANA DESAPARECE EN CUANTO LOS DATOS ESTEN LISTOS.</p></div></div>
 <div id="resumen48Modal" class="resumen48-modal hidden"><div class="resumen48-box"><div class="resumen48-head"><div><h2>RESUMEN ULTIMAS 48 HORAS</h2><span>MAQUINA, FECHA DE REPORTE, REPORTA, FALLA, INTERVENCION Y PENDIENTES</span></div></div><div class="resumen48-body" id="resumen48Body"></div><div class="resumen48-foot"><button class="resumen48-ok" type="button" onclick="closeResumen48()">ACEPTAR</button></div></div></div>
 <div id="armaMsgModal" class="arma-msg-modal hidden" aria-hidden="true"><div class="arma-msg-box" role="dialog" aria-modal="true"><div id="armaMsgTitle" class="arma-msg-head">A.R.M.A.</div><div id="armaMsgText" class="arma-msg-body"></div><div class="arma-msg-actions"><button id="armaMsgCancel" class="btn gray" type="button" onclick="armaDialogClose(false)">CANCELAR</button><button class="btn green" type="button" onclick="armaDialogClose(true)">ACEPTAR</button></div></div></div>
 <header class="top-global">
@@ -150,14 +175,17 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       <div class="panel-title"><h2>NUEVO REPORTE TECNICO</h2><div class="status" id="reportStatus">LISTO PARA DILIGENCIAR</div></div>
       <div class="notice">LA RT NACE EN ESTADO RTD. PRIORIDAD 1 ES ATENCION INMEDIATA. PRIORIDAD 2 DEBE ATENDERSE DENTRO DE LAS SIGUIENTES 8 HORAS. ARMA VALIDARA COHERENCIA DE TIEMPOS ANTES DE GUARDAR.</div>
       <div class="grid-form">
+        <div class="form-section-title full"><span>01</span><strong>IDENTIFICACION Y CLASIFICACION</strong></div>
         <div class="field"><label>QUIEN REPORTA</label><select id="rtPersona"></select></div>
         <div class="field"><label>PLANTA</label><select id="rtPlanta"></select></div>
         <div class="field"><label>PRIORIDAD</label><select id="rtPrioridad"><option value="P2_8_HORAS" selected>P2 8 HORAS</option><option value="P1_INMEDIATA">P1 INMEDIATA</option></select></div>
         <div class="field"><label>TIPO DE TRABAJO</label><select id="rtTipoTrabajo"></select></div>
+        <div class="form-section-title full"><span>02</span><strong>ACTIVO Y TIEMPOS DE INTERVENCION</strong></div>
         <div class="field half"><label>EQUIPO INTERVENIDO</label><select id="rtEquipo"></select></div>
         <div class="field half"><label>SUBSISTEMA / COMPONENTE</label><select id="rtSubsistema"></select></div>
-        <div class="field"><label>INICIO INTERVENCION</label><input id="rtInicio" type="datetime-local"></div>
-        <div class="field"><label>FIN INTERVENCION</label><input id="rtFin" type="datetime-local"></div>
+        <div class="field half"><label>INICIO INTERVENCION</label><input id="rtInicio" type="datetime-local"></div>
+        <div class="field half"><label>FIN INTERVENCION</label><input id="rtFin" type="datetime-local"></div>
+        <div class="form-section-title full"><span>03</span><strong>RESULTADO TECNICO Y SOPORTES</strong></div>
         <div class="field half"><label>FALLA / NECESIDAD</label><textarea id="rtFalla"></textarea></div>
         <div class="field half"><label>INTERVENCION REALIZADA</label><textarea id="rtIntervencion"></textarea></div>
         <div class="field half"><label>REPUESTOS USADOS</label><textarea id="rtRepuestos"></textarea></div>
@@ -165,7 +193,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
         <div class="field half"><label>FOTOS DE REFERENCIA</label><input id="rtFotos" type="file" accept="image/png,image/jpeg,image/webp" multiple></div>
         <div class="field half"><label>OBSERVACIONES</label><textarea id="rtObservaciones"></textarea></div>
       </div>
-      <div class="form-actions-report"><button class="btn gray" type="button" onclick="clearReportForm()">LIMPIAR</button><button class="btn green" type="button" onclick="createRT()">GUARDAR RT</button></div>
+      <div class="form-actions-report"><button class="btn gray" type="button" onclick="clearReportForm()">LIMPIAR</button><button id="btnSaveRT" class="btn green" type="button" onclick="createRT()">GUARDAR BITACORA TECNICA</button></div>
     </section>
     <div id="consultGrid" class="grid2">
       <section class="panel" id="listPanel">
@@ -199,7 +227,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-17 13:03:25</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-17 16:56:21</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -404,6 +432,18 @@ function apiErrorText(e){let t=String((e&&e.message)||e||'ERROR');return /ABORT|
 }
 document.getElementById('armaMsgModal').addEventListener('click',function(e){if(e.target===this)armaDialogClose(false);});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){let m=document.getElementById('armaMsgModal');if(m&&!m.classList.contains('hidden'))armaDialogClose(false);}});
+// === RT V32 CONDITIONAL BOOT LOADER + RELIABLE SAVE ===
+let ARMA_V32_BOOT_READY=false,ARMA_V32_BOOT_TIMER=null,ARMA_V32_SAVING=false;
+function armaV32BootLoaderStart(){clearTimeout(ARMA_V32_BOOT_TIMER);ARMA_V32_BOOT_TIMER=setTimeout(function(){if(!ARMA_V32_BOOT_READY)showArmaLoader('PREPARANDO QUIEN REPORTA, PLANTA Y EQUIPOS...');},450);}
+function armaV32BootLoaderDone(){ARMA_V32_BOOT_READY=true;clearTimeout(ARMA_V32_BOOT_TIMER);while(armaLoaderCount>0)hideArmaLoader();}
+function armaV32RequestId(){return 'RTREQ-'+normTxt(armaSession.user||'USR')+'-'+Date.now()+'-'+Math.random().toString(16).slice(2,10).toUpperCase();}
+function armaV32SaveBusy(on){ARMA_V32_SAVING=!!on;let b=document.getElementById('btnSaveRT');if(b){b.disabled=!!on;b.textContent=on?'GUARDANDO BITACORA...':'GUARDAR BITACORA TECNICA';}}
+async function startApp(boot){if(!canOpenPage()){showLoginWall('SU USUARIO NO TIENE PERMISO PARA ABRIR ESTE MODULO RT.');armaV32BootLoaderDone();return;}document.getElementById('loginWall').classList.add('hidden');document.getElementById('appArea').classList.remove('hidden');configureMode();startSessionKeepAlive();if(PAGE_MODE==='REPORTAR'){let p=(boot&&boot.preload)||null;if(p){await applyScopePreload(p,'BACKEND');armaV32BootLoaderDone();return;}let c=readScopePreload();if(c){await applyScopePreload(c,'LOCAL_CACHE');armaV32BootLoaderDone();return;}let cat=boot&&boot.catalog;if(cat&&cat.ok){await loadCatalogos(cat);clearReportForm(false);document.getElementById('reportStatus').textContent='LISTO PARA DILIGENCIAR';armaV32BootLoaderDone();return;}document.getElementById('reportStatus').textContent='CARGANDO CONTEXTO OPERATIVO...';}}
+async function validateSession(){const token=localStorage.getItem('ARMA_TOKEN')||'';if(!token){showLoginWall();return;}let painted=false;let cachedSession=null;try{const raw=localStorage.getItem('ARMA_SESSION_CACHE')||'';if(raw)cachedSession=JSON.parse(raw)||null;}catch(e){}try{if(cachedSession&&cachedSession.token){setSessionData(cachedSession,token);let cached=(window.ARMA_SCOPE_PRELOAD&&ARMA_SCOPE_PRELOAD.read)?ARMA_SCOPE_PRELOAD.read(cachedSession.user||''):null;if(cached){await startApp({preload:cached});painted=true;}}}catch(e){}if(!painted){document.getElementById('loginWall').classList.add('hidden');document.getElementById('appArea').classList.remove('hidden');configureMode();document.getElementById('reportStatus').textContent='CARGANDO CONTEXTO OPERATIVO...';armaV32BootLoaderStart();}try{const data=await apiSilent('rtBootstrap',{token:token,pageMode:'REPORTAR',filters:{}},30000);if(!data.ok){if(!painted)showLoginWall(data.error||'NO FUE POSIBLE VALIDAR SESION');armaV32BootLoaderDone();return;}setSessionData(data.session||{},token);if(data.preload)writeScopePreload(data.preload);await startApp(data);}catch(e){armaV32BootLoaderDone();if(!painted){document.getElementById('reportStatus').textContent='NO FUE POSIBLE CARGAR EL CONTEXTO';armaAlert('NO FUE POSIBLE CARGAR LOS DATOS DE REPORTAR BT.\n'+apiErrorText(e));}else{document.getElementById('reportStatus').textContent='DATOS PRECARGADOS // ACTUALIZACION PENDIENTE';}}}
+async function armaV32ResolveCreate(requestId){for(let i=0;i<5;i++){if(i)await new Promise(r=>setTimeout(r,1800+i*500));try{let r=await apiSilent('resolveRTCreateRequest',{requestId:requestId},12000);if(r&&r.ok&&r.found)return r;}catch(e){}}return null;}
+async function uploadFotosForRTBackground(id,files){files=Array.from(files||[]);if(!id||!files.length)return {ok:true,count:0};let ok=0,errors=[];for(let i=0;i<files.length;i++){let file=files[i];try{if(!/^image\/(jpeg|jpg|png|webp)$/i.test(file.type||'')){errors.push(file.name+': FORMATO NO VALIDO');continue;}if(file.size>2.5*1024*1024){errors.push(file.name+': MAYOR A 2.5 MB');continue;}let base64=await fileToBase64(file);let r=await apiSilent('uploadRTFoto',{idRT:id,idInt:id,fileName:file.name,mimeType:file.type,base64:base64},90000);if(r&&r.ok)ok++;else errors.push(file.name+': '+String((r&&r.error)||'ERROR'));}catch(e){errors.push(file.name+': '+apiErrorText(e));}}return {ok:errors.length===0,count:ok,errors:errors};}
+function armaV32AfterCreate(res,files){let id=res.idRT||res.consecutivoBT||res.ID_RT||'';let sec=(Number(res.performanceCreateRT&&res.performanceCreateRT.totalMs||0)/1000);document.getElementById('reportStatus').textContent='BT '+id+' CREADA'+(sec?(' EN '+sec.toFixed(1)+' S'):'')+' // PDF Y SOPORTES EN SEGUNDO PLANO';armaV32SaveBusy(false);while(armaLoaderCount>0)hideArmaLoader();let warnings=Array.isArray(res.warnings)?res.warnings:[];armaAlert('BT GUARDADA CORRECTAMENTE: '+id+'\\nDATOS: CONFIRMADOS'+(warnings.length?'\\nA.R.M.A. REVISARA TAREAS DERIVADAS.':'')+'\\nPDF: EN PROCESO.');clearReportForm(false);if(files&&files.length){uploadFotosForRTBackground(id,files).then(function(fr){if(fr&&fr.errors&&fr.errors.length){document.getElementById('reportStatus').textContent='BT '+id+' CREADA // REVISAR '+fr.errors.length+' SOPORTE(S)';}else{document.getElementById('reportStatus').textContent='BT '+id+' CREADA // SOPORTES CARGADOS // PDF EN PROCESO';}});}setTimeout(function(){apiSilent('pdfProcessQueued',{docType:'RT',docId:id},120000).then(function(pdf){if(pdf&&pdf.ok){document.getElementById('reportStatus').textContent='BT '+id+' GUARDADA // PDF GENERADO';}}).catch(function(){});},700);}
+async function createRT(){if(ARMA_V32_SAVING)return;if(!hasPerm('BTN_DILIGENCIAR_RT')&&!hasPerm('BTN_RT_CREAR')){armaAlert('NO TIENE PERMISO PARA CREAR RT.');return;}let data=collectRT();if(!data.ID_PERSONA_REPORTA||!data.PLANTA||!data.EQUIPO||!data.FALLA_NECESIDAD||!data.INTERVENCION_REALIZADA){armaAlert('COMPLETE PERSONA, PLANTA, EQUIPO, FALLA E INTERVENCION.');return;}if(!(await validateTimes()))return;let inp=document.getElementById('rtFotos');let files=inp&&inp.files?Array.from(inp.files):[];let requestId=armaV32RequestId();data.REQUEST_ID_CLIENTE=requestId;armaV32SaveBusy(true);document.getElementById('reportStatus').textContent='GUARDANDO DATOS DE LA BT...';showArmaLoader('GUARDANDO DATOS DE LA BITACORA TECNICA...');try{let res=await apiSilent('createRT',{data:data},65000);if(!res||!res.ok){while(armaLoaderCount>0)hideArmaLoader();armaV32SaveBusy(false);let msg=String((res&&(res.detail||res.error))||'NO FUE POSIBLE GUARDAR');document.getElementById('reportStatus').textContent='NO GUARDADA // '+msg;armaAlert('LA BT NO FUE CONFIRMADA.\\n'+msg+'\\nLOS DATOS DEL FORMULARIO SE CONSERVAN.');return;}armaV32AfterCreate(res,files);}catch(e){while(armaLoaderCount>0)hideArmaLoader();document.getElementById('reportStatus').textContent='VERIFICANDO SI LA BT ALCANZO A GUARDARSE...';let found=await armaV32ResolveCreate(requestId);if(found){armaV32AfterCreate(found,files);return;}armaV32SaveBusy(false);document.getElementById('reportStatus').textContent='GUARDADO NO CONFIRMADO // DATOS CONSERVADOS';armaAlert('A.R.M.A. NO PUDO CONFIRMAR EL GUARDADO.\\nNO SE BORRO EL FORMULARIO.\\nANTES DE REPETIR, ESPERE UN MOMENTO Y VUELVA A INTENTAR.\\nDETALLE: '+apiErrorText(e));}}
 document.addEventListener("DOMContentLoaded",validateSession);
 </script>
 </body>
