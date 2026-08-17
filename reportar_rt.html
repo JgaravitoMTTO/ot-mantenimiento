@@ -1,10 +1,11 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V30.0_SPLIT_REPORTAR_SCOPE_20260817 | BUILD: 2026-08-17 09:33:50 -->
+<!-- ARMA RT MODULE V31_0B_SCOPE_PRELOAD_VALIDATOR_FIX_20260817 | BUILD: 2026-08-17 12:38:12 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ARMA | REPORTAR RT</title>
+<script defer src="arma-scope-preload.js"></script>
 <style>
 html{zoom:75%;}
 :root{--blue:#004b9b;--blue2:#0076d7;--navy:#002b66;--green:#55b52e;--green2:#00d65f;--cyan:#00bfd6;--line:#dbe5f0;--text:#0f172a;--muted:#64748b;--bg:#eef3f9;--surface:#fff;--shadow:0 14px 28px rgba(0,43,102,.12);--soft:0 5px 14px rgba(15,23,42,.12);}
@@ -198,7 +199,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-17 09:33:50</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-17 12:38:12</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -231,12 +232,11 @@ function readSessionCache(){try{let raw=localStorage.getItem("ARMA_SESSION_CACHE
 function writeSessionCache(){try{if(!armaSession||!armaSession.token)return;localStorage.setItem("ARMA_SESSION_CACHE",JSON.stringify({user:armaSession.user||"",nombre:armaSession.nombre||"",nivel:armaSession.nivel||"",token:armaSession.token||"",permissions:armaSession.permissions||{},ts:Date.now(),source:"RT_"+PAGE_MODE}));}catch(e){}}
 function setSessionData(data,token){armaSession={user:data.user||"",nombre:data.nombre||data.user||"",nivel:data.nivel||"",permissions:data.permissions||{},token:token||data.token||armaSession.token||""};if(armaSession.token)localStorage.setItem("ARMA_TOKEN",armaSession.token);writeSessionCache();document.getElementById("userPill").textContent=(armaSession.nombre||armaSession.user)+" // "+armaSession.nivel;}
 function showLoginWall(msg){armaLoaderCount=0;hideArmaLoader();document.getElementById("loginWall").classList.remove("hidden");document.getElementById("appArea").classList.add("hidden");document.getElementById("userPill").textContent="SESION NO VALIDADA";if(msg)document.querySelector("#loginWall p").textContent=msg;}
-function reportCatalogCacheKey(){let t=String(armaSession.token||localStorage.getItem('ARMA_TOKEN')||'');return 'ARMA_RT_REPORT_CATALOG_V29_2_'+t.slice(-16);}
-function readReportCatalogCache(){try{let raw=localStorage.getItem(reportCatalogCacheKey())||'';if(!raw)return null;let c=JSON.parse(raw);if(!c||!c.data||Date.now()-Number(c.ts||0)>12*60*60*1000)return null;return c.data;}catch(e){return null;}}
-function writeReportCatalogCache(data){try{if(!data||!data.ok)return;localStorage.setItem(reportCatalogCacheKey(),JSON.stringify({data:data,ts:Date.now()}));}catch(e){}}
-async function refreshReportCatalogSilent(){try{let fresh=await apiSilent('rtCatalogos',{},60000);if(fresh&&fresh.ok){writeReportCatalogCache(fresh);await loadCatalogos(fresh);}}catch(e){}}
-async function prepareReportCatalogs(source){showArmaLoader('CARGANDO QUIEN REPORTA, PLANTA Y EQUIPOS...');let cached=source||readReportCatalogCache();try{if(cached){await loadCatalogos(cached);writeReportCatalogCache(cached);hideArmaLoader();if(!source)setTimeout(refreshReportCatalogSilent,80);return;}let fresh=await apiSilent('rtCatalogos',{},60000);if(fresh&&fresh.ok){writeReportCatalogCache(fresh);await loadCatalogos(fresh);}}catch(e){let st=document.getElementById('reportStatus');if(st)st.textContent='NO FUE POSIBLE CARGAR LOS CATALOGOS';}finally{hideArmaLoader();}}
-function startApp(boot){if(!canOpenPage()){showLoginWall("SU USUARIO NO TIENE PERMISO PARA ABRIR ESTE MODULO RT.");return;}document.getElementById("loginWall").classList.add("hidden");document.getElementById("appArea").classList.remove("hidden");configureMode();startSessionKeepAlive();if(PAGE_MODE==="REPORTAR"){let ready=function(){clearReportForm(false);let st=document.getElementById('reportStatus');if(st)st.textContent='LISTO PARA DILIGENCIAR';};if(boot&&boot.catalog&&boot.catalog.ok){writeReportCatalogCache(boot.catalog);loadCatalogos(boot.catalog).then(ready);setTimeout(refreshReportCatalogSilent,1200);}else{prepareReportCatalogs(null).then(ready);}return;}if(boot&&boot.list)applyRTListData(boot.list);else loadRTList(1);if(PAGE_MODE==='GESTION')setTimeout(function(){loadCatalogos(boot&&boot.catalog?boot.catalog:null);},1200);let deep=new URLSearchParams(location.search).get('idRT');if(deep)setTimeout(function(){openRT(deep);},180);}
+function scopePreloadToCatalog(p){if(window.ARMA_SCOPE_PRELOAD&&ARMA_SCOPE_PRELOAD.reportCatalog)return ARMA_SCOPE_PRELOAD.reportCatalog(p);p=p||{};return {ok:true,personasReporte:(p.selectors&&p.selectors.reportBTPeople)||[],equipos:p.nodes||[],plantasMel:p.plants||[],plantas:p.plants||[],tiposTrabajo:(p.staticCatalog&&p.staticCatalog.tiposTrabajo)||[],prioridades:(p.staticCatalog&&p.staticCatalog.prioridades)||[],estados:(p.staticCatalog&&p.staticCatalog.estados)||[]};}
+function writeScopePreload(p){try{if(window.ARMA_SCOPE_PRELOAD&&p)ARMA_SCOPE_PRELOAD.write(p);}catch(e){}}
+function readScopePreload(){try{if(window.ARMA_SCOPE_PRELOAD)return ARMA_SCOPE_PRELOAD.read(armaSession.user||'');}catch(e){}return null;}
+async function applyScopePreload(p,source){if(!p||p.ok===false)return false;writeScopePreload(p);await loadCatalogos(scopePreloadToCatalog(p));let st=document.getElementById('reportStatus');if(st)st.textContent='LISTO PARA DILIGENCIAR'+(source==='LOCAL_CACHE'?' // DATOS PRECARGADOS':'');clearReportForm(false);return true;}
+function startApp(boot){if(!canOpenPage()){showLoginWall('SU USUARIO NO TIENE PERMISO PARA ABRIR ESTE MODULO RT.');return;}document.getElementById('loginWall').classList.add('hidden');document.getElementById('appArea').classList.remove('hidden');configureMode();startSessionKeepAlive();if(PAGE_MODE==='REPORTAR'){let p=(boot&&boot.preload)||null;if(p){applyScopePreload(p,'BACKEND');return;}let c=readScopePreload();if(c){applyScopePreload(c,'LOCAL_CACHE');return;}let cat=boot&&boot.catalog;if(cat&&cat.ok){loadCatalogos(cat).then(function(){document.getElementById('reportStatus').textContent='LISTO PARA DILIGENCIAR';clearReportForm(false);});return;}document.getElementById('reportStatus').textContent='CARGANDO CONTEXTO OPERATIVO...';}}
 function apiErrorText(e){let t=String((e&&e.message)||e||'ERROR');return /ABORT|SIGNAL IS ABORTED/i.test(t)?'LA RESPUESTA DEL BACKEND TARDO MAS DE LO ESPERADO. A.R.M.A. VERIFICARA EL RESULTADO ANTES DE REPETIR.':t;}function startSessionKeepAlive(){if(window.ARMA_RT_KEEPALIVE)return;window.ARMA_RT_KEEPALIVE=setInterval(function(){api('validateSession',{},null,30000).catch(function(){});},600000);}async function validateSession(){let token=localStorage.getItem("ARMA_TOKEN")||"";if(!token){showLoginWall();return;}try{let data=await api("rtBootstrap",{token:token,pageMode:PAGE_MODE,filters:Object.assign(buildFilters(),{PAGE:1,PAGE_SIZE:RT_PAGE_SIZE})},"CARGANDO RT...");if(!data.ok){showLoginWall();return;}setSessionData(data.session||{},token);startApp(data);}catch(e){showLoginWall();}}
 function armaPersistToken(){try{if(armaSession&&armaSession.token)localStorage.setItem("ARMA_TOKEN",armaSession.token);}catch(e){}}
 function armaMainStorageIsFresh(maxAgeMs){try{var raw=localStorage.getItem("ARMA_MAIN_ACTIVE")||"";if(!raw)return false;var data=JSON.parse(raw);if(!data||!data.ts)return false;return (Date.now()-Number(data.ts)) <= (maxAgeMs||3500);}catch(err){return false;}}
@@ -263,25 +263,23 @@ function selectedSubsistemaObj(){let el=document.getElementById('rtSubsistema');
 function setSelectSmart(id,wanted){let el=document.getElementById(id);if(!el||!wanted)return false;let w=normTxt(wanted);let dig=plantaDigit(wanted);for(let i=0;i<el.options.length;i++){let o=el.options[i];let ov=normTxt(o.value),ot=normTxt(o.text);if(ov===w||ot===w||(dig&&(ov===dig||ov==='PL'+dig||ot.indexOf('PLANTA '+dig)>=0||ot.indexOf('PL '+dig)>=0))){el.value=o.value;return true;}}return false;}
 function rebuildEquipoSelectByPlanta(){let pl=document.getElementById('rtPlanta');let eq=document.getElementById('rtEquipo');if(!eq)return;let p=pl?plantaDigit(pl.value||((pl.options[pl.selectedIndex]||{}).text)):'';let rows=asArr(rtEquiposAll).filter(e=>{let niv=equipoNivel(e);if(niv&&niv!=='EQUIPO')return false;let ep=plantaDigit(equipoPlanta(e));return !p||!ep||ep===p;});let html=`<option value="">SELECCIONE EQUIPO</option>`;html+=rows.map(e=>`<option value="${esc(equipoValue(e))}">${esc(equipoText(e))}</option>`).join('');eq.innerHTML=html;rebuildSubsistemaSelect();}
 function rebuildSubsistemaSelect(){let eq=document.getElementById('rtEquipo');let sub=document.getElementById('rtSubsistema');if(!sub)return;let selected=eq?eq.value:'';let selectedTxt=eq&&eq.options[eq.selectedIndex]?eq.options[eq.selectedIndex].text:'';let sNorm=normTxt(selected+'|'+selectedTxt);let rows=asArr(rtEquiposAll).filter(e=>{let niv=equipoNivel(e);if(['SUBEQUIPO','SUB_EQUIPO','COMPONENTE_MANTENIBLE'].indexOf(niv)<0)return false;let padre=normTxt(val(e,['padre','PADRE']));return selected&&((padre&&sNorm.indexOf(padre)>=0)||padre===normTxt(selected));});let html=`<option value="">NO APLICA / SELECCIONE</option>`;html+=rows.map(e=>`<option value="${esc(equipoValue(e))}">${esc(equipoText(e))}</option>`).join('');sub.innerHTML=html;}
-function setPlantaFromPersona(rows,id){if(PAGE_MODE!=='REPORTAR')return;rows=asArr(rows);let r=rows.find(x=>String(personaId(x))===String(id));if(!r)return;let planta=val(r,['PLANTA_ASIGNADA','planta','PLANTA','ALCANCE_PLANTAS','alcancePlantas']);if(setSelectSmart('rtPlanta',planta)){rebuildEquipoSelectByPlanta();}}
-function applyReportePersonaDefault(personas){let el=document.getElementById('rtPersona');if(!el||PAGE_MODE!=='REPORTAR')return;let rows=asArr(personas);let chosen='';let u=normTxt(armaSession.user||'');let admin=isSuperAdmin()||normTxt(armaSession.nivel||'')==='ADMIN';rows.forEach(r=>{if(!chosen&&u&&normTxt(val(r,['USER_ARMA','userArma','USUARIO_ARMA']))===u)chosen=personaId(r);});if(!chosen&&rows.length===1)chosen=personaId(rows[0]);if(admin){el.disabled=false;el.title='ADMIN: PUEDE SELECCIONAR LA PERSONA QUE REPORTA';if(chosen){el.value=chosen;setPlantaFromPersona(rows,chosen);}el.onchange=function(){setPlantaFromPersona(rows,el.value);};return;}if(chosen){el.value=chosen;el.disabled=true;el.title='PERSONA ASOCIADA AL USUARIO VALIDADO EN ARMA';setPlantaFromPersona(rows,chosen);}else{el.disabled=true;}el.onchange=function(){setPlantaFromPersona(rows,el.value);};}
+function applyUserPlantDefault(){if(PAGE_MODE!=='REPORTAR')return;let pl=document.getElementById('rtPlanta');if(!pl)return;let real=[...pl.options].filter(o=>String(o.value||'').trim());if(real.length===1)pl.value=real[0].value;rebuildEquipoSelectByPlanta();}
+function applyReportePersonaDefault(personas){let el=document.getElementById('rtPersona');if(!el||PAGE_MODE!=='REPORTAR')return;let rows=asArr(personas);let chosen='';let u=normTxt(armaSession.user||'');let admin=isSuperAdmin()||normTxt(armaSession.nivel||'')==='ADMIN';rows.forEach(r=>{if(!chosen&&u&&normTxt(val(r,['USER_ARMA','userArma','USUARIO_ARMA']))===u)chosen=personaId(r);});if(!chosen&&rows.length===1)chosen=personaId(rows[0]);if(chosen)el.value=chosen;el.disabled=!admin;el.title=admin?'ADMIN: PERSONAS OPERATIVAS HABILITADAS PARA REPORTAR BT':'PERSONA ASOCIADA AL USUARIO VALIDADO EN ARMA';el.onchange=function(){};}
 async function loadCatalogos(source){
-  try{let data=source||await apiSilent('rtCatalogos',{});if(data.ok){catalogos=data.catalogos||data;}}catch(e){catalogos={};}
-  let personas=getCat(['personasReporte','PERSONAS_REPORTE','PERSONASREPORTA','PERSONAL','personal','personas','tecnicos']).filter(r=>normTxt(val(r,['programableMTTO','PROGRAMABLE_MTTO']))!=='NO');
+  try{let data=source||{};if(data.ok){catalogos=data.catalogos||data;}}catch(e){catalogos={};}
+  let personas=getCat(['personasReporte','PERSONAS_REPORTE','PERSONASREPORTA','PERSONAL','personal','personas','tecnicos']).filter(r=>normTxt(val(r,['PUEDE_REPORTAR_BT']))!=='NO'&&normTxt(val(r,['PUEDE_EJECUTAR_OT']))!=='NO');
   let equipos=getCat(['equipos','EQUIPOS','MEL_EQUIPOS','activos']);
   let tipos=getCat(['tiposTrabajo','TIPO_TRABAJO','TIPOS_TRABAJO','tiposTrabajo']);
   let plantas=getCat(['plantasMel','PLANTAS_MEL','plantas','PLANTAS','PLANTA']);
   rtPersonasAll=asArr(personas);rtEquiposAll=asArr(equipos);rtPlantasAll=asArr(plantas);
-  if(!plantas.length)plantas=[{valor:'1',descripcion:'PLANTA 1'},{valor:'2',descripcion:'PLANTA 2'},{valor:'3',descripcion:'PLANTA 3'}];
   if(!tipos.length)tipos=[{valor:'CORRECTIVO',descripcion:'CORRECTIVO'},{valor:'AJUSTE',descripcion:'AJUSTE'},{valor:'REVISION',descripcion:'REVISION'}];
   fillSelect('rtPersona',personas,['NOMBRE_COMPLETO','nombre','NOMBRE'],['ID_PERSONA','idPersona','IDENTIFICACION'],'SELECCIONE');
-  fillSelect('ctPersona',personas,['NOMBRE_COMPLETO','nombre','NOMBRE'],['ID_PERSONA','idPersona','IDENTIFICACION'],'SELECCIONE');
   fillSelect('rtTipoTrabajo',tipos,['descripcion','DESCRIPCION','valor','VALOR','CODIGO'],['valor','VALOR','CODIGO'],'SELECCIONE');
   fillSelect('rtPlanta',plantas,['descripcion','DESCRIPCION','nombre','NOMBRE','valor','VALOR','CODIGO'],['valor','VALOR','CODIGO','idActivo','ID_ACTIVO'],'SELECCIONE');
-  let pl=document.getElementById('rtPlanta');if(pl){pl.onchange=rebuildEquipoSelectByPlanta;}
-  let eq=document.getElementById('rtEquipo');if(eq){eq.onchange=rebuildSubsistemaSelect;}
-  rebuildEquipoSelectByPlanta();
+  let pl=document.getElementById('rtPlanta');if(pl)pl.onchange=rebuildEquipoSelectByPlanta;
+  let eq=document.getElementById('rtEquipo');if(eq)eq.onchange=rebuildSubsistemaSelect;
   applyReportePersonaDefault(personas);
+  applyUserPlantDefault();
 }
 function refreshAll(){if(PAGE_MODE==="REPORTAR"){clearReportForm(false);}else{loadRTList(1);}}
 function buildFilters(){return {BUSCAR:document.getElementById("fBuscar").value,FECHA_DESDE:document.getElementById("fDesde").value,FECHA_HASTA:document.getElementById("fHasta").value,ESTADO:document.getElementById("fEstado").value,EQUIPO:document.getElementById("fEquipo").value};}
@@ -401,15 +399,8 @@ async function api(action,payload,msg,timeoutMs=40000){
 function apiErrorText(e){let t=String((e&&e.message)||e||'ERROR');return /ABORT|SIGNAL IS ABORTED/i.test(t)?'LA RESPUESTA DEL BACKEND TARDO MAS DE LO ESPERADO. A.R.M.A. VERIFICARA EL RESULTADO ANTES DE REPETIR.':t;}function startSessionKeepAlive(){if(window.ARMA_RT_KEEPALIVE)return;window.ARMA_RT_KEEPALIVE=setInterval(function(){api('validateSession',{},null,30000).catch(function(){});},600000);}async function validateSession(){
   const token=localStorage.getItem('ARMA_TOKEN')||'';if(!token){showLoginWall();return;}
   let painted=false;
-  try{
-    const raw=localStorage.getItem('ARMA_SESSION_CACHE')||'';
-    if(raw){const cachedSession=JSON.parse(raw);if(cachedSession&&cachedSession.token){setSessionData(cachedSession,token);if(PAGE_MODE!=='REPORTAR'){const c=readRTListCache();if(c&&c.rows){startApp({list:{ok:true,rows:c.rows,page:1,hasMore:true,partial:true}});painted=true;}}}}
-  }catch(e){}
-  try{
-    const data=await api('rtBootstrap',{token:token,pageMode:PAGE_MODE,filters:Object.assign(buildFilters(),{PAGE:1,PAGE_SIZE:RT_PAGE_SIZE})},painted?'':'CARGANDO RT...');
-    if(!data.ok){if(!painted)showLoginWall();return;}
-    setSessionData(data.session||{},token);startApp(data);
-  }catch(e){if(!painted)showLoginWall();else document.getElementById('listStatus').textContent='DATOS EN CACHE // NO FUE POSIBLE ACTUALIZAR';}
+  try{const raw=localStorage.getItem('ARMA_SESSION_CACHE')||'';if(raw){const cs=JSON.parse(raw);if(cs&&cs.token){setSessionData(cs,token);let cached=(window.ARMA_SCOPE_PRELOAD&&ARMA_SCOPE_PRELOAD.read)?ARMA_SCOPE_PRELOAD.read(cs.user||''):null;if(cached){startApp({preload:cached});painted=true;}else{document.getElementById('loginWall').classList.add('hidden');document.getElementById('appArea').classList.remove('hidden');configureMode();document.getElementById('reportStatus').textContent='CARGANDO CONTEXTO OPERATIVO...';}}}}catch(e){}
+  try{const data=await api('rtBootstrap',{token:token,pageMode:'REPORTAR',filters:{}},null,20000);if(!data.ok){if(!painted)showLoginWall();return;}setSessionData(data.session||{},token);if(data.preload)writeScopePreload(data.preload);startApp(data);}catch(e){if(!painted){document.getElementById('reportStatus').textContent='NO FUE POSIBLE CARGAR EL CONTEXTO';}else{document.getElementById('reportStatus').textContent='DATOS PRECARGADOS // NO FUE POSIBLE ACTUALIZAR';}}
 }
 document.getElementById('armaMsgModal').addEventListener('click',function(e){if(e.target===this)armaDialogClose(false);});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){let m=document.getElementById('armaMsgModal');if(m&&!m.classList.contains('hidden'))armaDialogClose(false);}});
