@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V29.0_PLUS_FINAL_20260816 | BUILD: 2026-08-17 01:35:33 -->
+<!-- ARMA RT MODULE V29.0_PLUS_FINAL_20260816 | BUILD: 2026-08-17 02:09:57 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -256,7 +256,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-17 01:35:33</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-17 02:09:57</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -319,9 +319,10 @@ function rebuildSubsistemaSelect(){let eq=document.getElementById('rtEquipo');le
 function setPlantaFromPersona(rows,id){if(PAGE_MODE!=='REPORTAR')return;rows=asArr(rows);let r=rows.find(x=>String(personaId(x))===String(id));if(!r)return;let planta=val(r,['PLANTA_ASIGNADA','planta','PLANTA','ALCANCE_PLANTAS','alcancePlantas']);if(setSelectSmart('rtPlanta',planta)){rebuildEquipoSelectByPlanta();}}
 function applyReportePersonaDefault(personas){let el=document.getElementById('rtPersona');if(!el||PAGE_MODE!=='REPORTAR')return;let rows=asArr(personas);let chosen='';let u=normTxt(armaSession.user||'');let admin=isSuperAdmin()||normTxt(armaSession.nivel||'')==='ADMIN';rows.forEach(r=>{if(!chosen&&u&&normTxt(val(r,['USER_ARMA','userArma','USUARIO_ARMA']))===u)chosen=personaId(r);});if(!chosen&&rows.length===1)chosen=personaId(rows[0]);if(admin){el.disabled=false;el.title='ADMIN: PUEDE SELECCIONAR LA PERSONA QUE REPORTA';if(chosen){el.value=chosen;setPlantaFromPersona(rows,chosen);}el.onchange=function(){setPlantaFromPersona(rows,el.value);};return;}if(chosen){el.value=chosen;el.disabled=true;el.title='PERSONA ASOCIADA AL USUARIO VALIDADO EN ARMA';setPlantaFromPersona(rows,chosen);}else{el.disabled=true;}el.onchange=function(){setPlantaFromPersona(rows,el.value);};}
 async function loadCatalogos(source){
-  try{let data=source||await apiSilent('rtCatalogos',{});if(data.ok){catalogos=data.catalogos||data;}}catch(e){catalogos={};}
+  let data={};try{data=source||await apiSilent('rtCatalogos',{});if(data.ok){catalogos=data.catalogos||data;}}catch(e){catalogos={};data={};}
   let personas=getCat(['personasReporte','PERSONAS_REPORTE','PERSONASREPORTA','PERSONAL','personal','personas','tecnicos']).filter(r=>normTxt(val(r,['programableMTTO','PROGRAMABLE_MTTO']))!=='NO');
   let personasCierre=getCat(['personasCierre','PERSONAS_CIERRE']);
+  let defaultCloser=String(data.defaultClosurePersonId||data.DEFAULT_CLOSURE_PERSON_ID||'');
   let equipos=getCat(['equipos','EQUIPOS','MEL_EQUIPOS','activos']);
   let tipos=getCat(['tiposTrabajo','TIPO_TRABAJO','TIPOS_TRABAJO','tiposTrabajo']);
   let plantas=getCat(['plantasMel','PLANTAS_MEL','plantas','PLANTAS','PLANTA']);
@@ -329,7 +330,8 @@ async function loadCatalogos(source){
   if(!plantas.length)plantas=[{valor:'1',descripcion:'PLANTA 1'},{valor:'2',descripcion:'PLANTA 2'},{valor:'3',descripcion:'PLANTA 3'}];
   if(!tipos.length)tipos=[{valor:'CORRECTIVO',descripcion:'CORRECTIVO'},{valor:'AJUSTE',descripcion:'AJUSTE'},{valor:'REVISION',descripcion:'REVISION'}];
   fillSelect('rtPersona',personas,['NOMBRE_COMPLETO','nombre','NOMBRE'],['ID_PERSONA','idPersona','IDENTIFICACION'],'SELECCIONE');
-  fillSelect('ctPersona',personasCierre,['NOMBRE_COMPLETO','nombre','NOMBRE'],['ID_PERSONA','idPersona','IDENTIFICACION'],'SELECCIONE PLANEADOR O JEFE DE MANTENIMIENTO');if(PAGE_MODE==='GESTION'&&!personasCierre.length){let st=document.getElementById('closeStatus');if(st)st.textContent='NO HAY PLANEADORES O JEFES DE MANTENIMIENTO ACTIVOS EN PERSONAL';}
+  fillSelect('ctPersona',personasCierre,['NOMBRE_COMPLETO','nombre','NOMBRE'],['ID_PERSONA','idPersona','IDENTIFICACION'],'SELECCIONE PLANEADOR O JEFE DE MANTENIMIENTO');
+  if(PAGE_MODE==='GESTION'){let closer=document.getElementById('ctPersona');let chosen=defaultCloser;let u=normTxt(armaSession.user||'');if(!chosen){personasCierre.some(function(r){if(u&&normTxt(val(r,['USER_ARMA','userArma','USUARIO_ARMA']))===u){chosen=personaId(r);return true;}return false;});}if(chosen&&closer){setSelectSmart('ctPersona',chosen);}if(!personasCierre.length){let st=document.getElementById('closeStatus');if(st)st.textContent='NO HAY PERSONAS ACTIVAS CON CAPACIDAD DE CIERRE TECNICO';}else if(chosen&&closer&&closer.value){let st=document.getElementById('closeStatus');if(st&&st.textContent.indexOf('SELECCIONE')>=0)st.textContent='RESPONSABLE DE CIERRE ASOCIADO A LA CUENTA: '+selectedOptionText('ctPersona');}}
   fillSelect('rtTipoTrabajo',tipos,['descripcion','DESCRIPCION','valor','VALOR','CODIGO'],['valor','VALOR','CODIGO'],'SELECCIONE');
   fillSelect('rtPlanta',plantas,['descripcion','DESCRIPCION','nombre','NOMBRE','valor','VALOR','CODIGO'],['valor','VALOR','CODIGO','idActivo','ID_ACTIVO'],'SELECCIONE');
   let pl=document.getElementById('rtPlanta');if(pl){pl.onchange=rebuildEquipoSelectByPlanta;}
