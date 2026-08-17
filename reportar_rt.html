@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V32_0B_MOBILE_UX_RELIABLE_SAVE_20260817 | BUILD: 2026-08-17 16:56:21 -->
+<!-- ARMA RT MODULE V32_0B_MOBILE_UX_RELIABLE_SAVE_20260817 | BUILD: 2026-08-17 17:19:53 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -154,6 +154,26 @@ input[type=file]{min-height:56px;padding:12px 14px;font-size:14px}
 .arma-loader-box p{font-size:12px;line-height:1.5}
 @media(min-width:1400px){.hero{margin-bottom:18px}.hero-copy{max-width:1100px}#reportPanel{padding-left:28px;padding-right:28px}.grid-form{gap:18px 22px}}
 @media(max-width:900px){.main{padding:9px}.panel{border-radius:15px}#reportPanel{padding:14px 12px 18px}.panel-title{gap:8px;flex-direction:column}.panel-title h2{font-size:21px}.status{width:100%;font-size:12px;text-align:center}.grid-form{grid-template-columns:1fr!important;gap:15px}.field,.field.half,.field.full,.form-section-title{grid-column:1/-1!important}.field label{font-size:14px}input,select,textarea{font-size:17px!important;min-height:58px!important;padding:14px!important}textarea{min-height:132px!important}.form-section-title{margin-top:6px}.form-section-title strong{font-size:13px}.form-actions-report{display:grid!important;grid-template-columns:1fr!important}.form-actions-report .btn,#btnSaveRT{width:100%;min-width:0;min-height:58px;font-size:16px}.notice{font-size:14px}.arma-loader-box{width:min(94vw,430px)}}
+/* === RT V32.1 PROFESSIONAL GROUPED FORM === */
+.report-sections{display:flex;flex-direction:column;gap:18px;margin-top:4px}
+.report-form-section{padding:17px 18px 18px;border:1px solid #d8e4f0;border-radius:18px;background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%);box-shadow:0 5px 16px rgba(15,47,76,.055)}
+.report-form-section:hover{border-color:#c4d9ec}
+.form-section-title{display:flex;align-items:center;gap:12px;margin:0 0 15px;padding:0 0 11px;border-bottom:1px solid #dce8f3}
+.form-section-title span{flex:0 0 34px;width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#e5f2ff,#f2f8ff);color:#0067b9;font-size:12px;font-weight:950;box-shadow:inset 0 0 0 1px #d3e7f8}
+.form-section-title>div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.form-section-title strong{font-size:14px;font-weight:950;letter-spacing:.35px;color:#052b5c}
+.form-section-title small{font-size:10px;font-weight:800;letter-spacing:.22px;color:#6c8197}
+.section-grid{display:grid;gap:15px 18px;align-items:start}
+.section-grid-4,.classification-grid{grid-template-columns:1.35fr .9fr .85fr 1fr}
+.asset-time-grid{grid-template-columns:1.45fr 1.25fr 1fr 1fr}
+.result-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 20px}
+.result-grid textarea{min-height:136px}
+.support-field input[type=file]{min-height:62px;background:#fff}
+.report-form-section .field label{margin-left:2px}
+.report-form-section input,.report-form-section select,.report-form-section textarea{background:#fff;box-shadow:0 1px 2px rgba(15,47,76,.025)}
+.report-form-section input:focus,.report-form-section select:focus,.report-form-section textarea:focus{border-color:#1496df;box-shadow:0 0 0 3px rgba(20,150,223,.10);outline:none}
+@media(max-width:1180px) and (min-width:901px){.classification-grid,.asset-time-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.report-sections{gap:13px}.report-form-section{padding:14px 12px 15px;border-radius:15px}.form-section-title{margin-bottom:13px;padding-bottom:10px}.form-section-title span{width:32px;height:32px;flex-basis:32px}.form-section-title strong{font-size:13px}.form-section-title small{font-size:9px}.section-grid,.section-grid-4,.classification-grid,.asset-time-grid,.result-grid{grid-template-columns:1fr!important;gap:14px}.result-grid textarea{min-height:132px}}
 </style>
 </head>
 <body>
@@ -174,24 +194,36 @@ input[type=file]{min-height:56px;padding:12px 14px;font-size:14px}
     <section id="reportPanel" class="panel hidden">
       <div class="panel-title"><h2>NUEVO REPORTE TECNICO</h2><div class="status" id="reportStatus">LISTO PARA DILIGENCIAR</div></div>
       <div class="notice">LA RT NACE EN ESTADO RTD. PRIORIDAD 1 ES ATENCION INMEDIATA. PRIORIDAD 2 DEBE ATENDERSE DENTRO DE LAS SIGUIENTES 8 HORAS. ARMA VALIDARA COHERENCIA DE TIEMPOS ANTES DE GUARDAR.</div>
-      <div class="grid-form">
-        <div class="form-section-title full"><span>01</span><strong>IDENTIFICACION Y CLASIFICACION</strong></div>
-        <div class="field"><label>QUIEN REPORTA</label><select id="rtPersona"></select></div>
-        <div class="field"><label>PLANTA</label><select id="rtPlanta"></select></div>
-        <div class="field"><label>PRIORIDAD</label><select id="rtPrioridad"><option value="P2_8_HORAS" selected>P2 8 HORAS</option><option value="P1_INMEDIATA">P1 INMEDIATA</option></select></div>
-        <div class="field"><label>TIPO DE TRABAJO</label><select id="rtTipoTrabajo"></select></div>
-        <div class="form-section-title full"><span>02</span><strong>ACTIVO Y TIEMPOS DE INTERVENCION</strong></div>
-        <div class="field half"><label>EQUIPO INTERVENIDO</label><select id="rtEquipo"></select></div>
-        <div class="field half"><label>SUBSISTEMA / COMPONENTE</label><select id="rtSubsistema"></select></div>
-        <div class="field half"><label>INICIO INTERVENCION</label><input id="rtInicio" type="datetime-local"></div>
-        <div class="field half"><label>FIN INTERVENCION</label><input id="rtFin" type="datetime-local"></div>
-        <div class="form-section-title full"><span>03</span><strong>RESULTADO TECNICO Y SOPORTES</strong></div>
-        <div class="field half"><label>FALLA / NECESIDAD</label><textarea id="rtFalla"></textarea></div>
-        <div class="field half"><label>INTERVENCION REALIZADA</label><textarea id="rtIntervencion"></textarea></div>
-        <div class="field half"><label>REPUESTOS USADOS</label><textarea id="rtRepuestos"></textarea></div>
-        <div class="field half"><label>PENDIENTES</label><textarea id="rtPendientes"></textarea></div>
-        <div class="field half"><label>FOTOS DE REFERENCIA</label><input id="rtFotos" type="file" accept="image/png,image/jpeg,image/webp" multiple></div>
-        <div class="field half"><label>OBSERVACIONES</label><textarea id="rtObservaciones"></textarea></div>
+      <div class="report-sections">
+        <section class="report-form-section">
+          <div class="form-section-title"><span>01</span><div><strong>IDENTIFICACION Y CLASIFICACION</strong><small>DATOS BASE DEL REPORTE TECNICO</small></div></div>
+          <div class="section-grid section-grid-4 classification-grid">
+            <div class="field"><label>QUIEN REPORTA</label><select id="rtPersona"></select></div>
+            <div class="field"><label>PLANTA</label><select id="rtPlanta"></select></div>
+            <div class="field"><label>PRIORIDAD</label><select id="rtPrioridad"><option value="P2_8_HORAS" selected>P2 8 HORAS</option><option value="P1_INMEDIATA">P1 INMEDIATA</option></select></div>
+            <div class="field"><label>TIPO DE TRABAJO</label><select id="rtTipoTrabajo"></select></div>
+          </div>
+        </section>
+        <section class="report-form-section">
+          <div class="form-section-title"><span>02</span><div><strong>ACTIVO Y TIEMPOS DE INTERVENCION</strong><small>UBICACION DEL TRABAJO Y TRAZABILIDAD DE TIEMPO</small></div></div>
+          <div class="section-grid asset-time-grid">
+            <div class="field"><label>EQUIPO INTERVENIDO</label><select id="rtEquipo"></select></div>
+            <div class="field"><label>SUBSISTEMA / COMPONENTE</label><select id="rtSubsistema"></select></div>
+            <div class="field"><label>INICIO INTERVENCION</label><input id="rtInicio" type="datetime-local"></div>
+            <div class="field"><label>FIN INTERVENCION</label><input id="rtFin" type="datetime-local"></div>
+          </div>
+        </section>
+        <section class="report-form-section">
+          <div class="form-section-title"><span>03</span><div><strong>RESULTADO TECNICO Y SOPORTES</strong><small>DIAGNOSTICO, INTERVENCION, REPUESTOS Y EVIDENCIAS</small></div></div>
+          <div class="section-grid result-grid">
+            <div class="field"><label>FALLA / NECESIDAD</label><textarea id="rtFalla"></textarea></div>
+            <div class="field"><label>INTERVENCION REALIZADA</label><textarea id="rtIntervencion"></textarea></div>
+            <div class="field"><label>REPUESTOS USADOS</label><textarea id="rtRepuestos"></textarea></div>
+            <div class="field"><label>PENDIENTES</label><textarea id="rtPendientes"></textarea></div>
+            <div class="field support-field"><label>FOTOS DE REFERENCIA</label><input id="rtFotos" type="file" accept="image/png,image/jpeg,image/webp" multiple></div>
+            <div class="field"><label>OBSERVACIONES</label><textarea id="rtObservaciones"></textarea></div>
+          </div>
+        </section>
       </div>
       <div class="form-actions-report"><button class="btn gray" type="button" onclick="clearReportForm()">LIMPIAR</button><button id="btnSaveRT" class="btn green" type="button" onclick="createRT()">GUARDAR BITACORA TECNICA</button></div>
     </section>
@@ -227,7 +259,7 @@ input[type=file]{min-height:56px;padding:12px 14px;font-size:14px}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-17 16:56:21</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-17 17:19:53</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
