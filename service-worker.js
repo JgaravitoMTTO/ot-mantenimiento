@@ -159,3 +159,18 @@ self.addEventListener('message', event => {
     self.skipWaiting();
   }
 });
+
+/* ARMA_PENDING_NOTIFICATION_V14 */
+self.addEventListener('notificationclick',function(event){
+  event.notification.close();
+  var data=event.notification.data||{};
+  var target=data.url||'./main.html?armaPending=1';
+  var targetUrl=new URL(target,self.location.href).href;
+  event.waitUntil(self.clients.matchAll({type:'window',includeUncontrolled:true}).then(function(list){
+    for(var i=0;i<list.length;i++){
+      var client=list[i];
+      if(client&&'navigate' in client){return client.navigate(targetUrl).then(function(c){return c&&c.focus?c.focus():c;});}
+    }
+    return self.clients.openWindow?self.clients.openWindow(targetUrl):null;
+  }));
+});
