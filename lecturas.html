@@ -66,8 +66,8 @@ async function loadTrend(){if(!selectedId)return;try{const j=await api('lecturas
 // === ARMA LECTURAS V02 FAST CLIENT ===
 let lecV02LoaderTimer=null;
 function lecV02TokenKey(){const t=token();return t?String(t).slice(-18):'SIN_TOKEN';}
-function lecV02BootKey(){return 'ARMA_LEC_V02_BOOT_'+lecV02TokenKey();}
-function lecV02TrendKey(id,from,to){return 'ARMA_LEC_V02_TREND_'+lecV02TokenKey()+'_'+String(id||'')+'_'+String(from||'')+'_'+String(to||'');}
+function lecV02BootKey(){return 'ARMA_LEC_V021_BOOT_'+lecV02TokenKey();}
+function lecV02TrendKey(id,from,to){return 'ARMA_LEC_V021_TREND_'+lecV02TokenKey()+'_'+String(id||'')+'_'+String(from||'')+'_'+String(to||'');}
 function lecV02ReadCache(key,maxAge){try{const raw=localStorage.getItem(key)||'';if(!raw)return null;const x=JSON.parse(raw);if(!x||!x.data||Date.now()-Number(x.ts||0)>maxAge)return null;return x.data;}catch(e){return null;}}
 function lecV02WriteCache(key,data){try{localStorage.setItem(key,JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
 function lecV02DelayLoad(text){clearTimeout(lecV02LoaderTimer);lecV02LoaderTimer=setTimeout(function(){showLoad(text||'CARGANDO DATOS...');},450);}
