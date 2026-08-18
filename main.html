@@ -264,6 +264,27 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
 @media(max-width:760px){.sidebar,.menu,.side-status,.side-extra-actions{width:100%!important}.sidebar-form-link,.module-btn,.quick-btn,.action-card,.index-nav-card{white-space:normal!important;overflow-wrap:anywhere!important}.sidebar-form-link{font-size:17px!important;line-height:1.25!important}.module-btn strong,.quick-btn strong{font-size:18px!important;line-height:1.2!important}.module-btn span,.quick-btn span{font-size:13px!important;line-height:1.35!important}}
 @media(max-width:760px){button,input,select,textarea{font-size:17px!important;min-height:48px!important}.login-box,.login-box.wide{width:calc(100dvw - 20px)!important;max-width:calc(100dvw - 20px)!important;padding:16px!important}.login-box h2{font-size:22px!important}.login-box p,.login-box label,.login-msg{font-size:14px!important;line-height:1.4!important}.login-actions{grid-template-columns:1fr!important}}
 @media(max-width:760px){.arma-location-head{font-size:23px!important;line-height:1.2!important}.arma-location-body{font-size:18px!important;line-height:1.45!important}.arma-location-ok{font-size:18px!important;min-height:54px!important}}
+.workday-hidden{display:none!important}
+.workday-panel{margin:0 0 16px;border-radius:22px;border:1px solid #cfe0ef;background:linear-gradient(145deg,#ffffff 0%,#f4f9fd 100%);box-shadow:var(--shadow);padding:18px;overflow:hidden;position:relative}
+.workday-panel:before{content:'';position:absolute;left:0;top:0;bottom:0;width:7px;background:linear-gradient(180deg,var(--blue2),var(--green2))}
+.workday-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:0 4px 14px 8px;border-bottom:1px solid #dbe7f2}
+.workday-kicker{display:block;color:#0a7aa5;font-size:9px;font-weight:950;letter-spacing:1px;margin-bottom:4px}
+.workday-head h2{margin:0;color:var(--navy);font-size:22px;letter-spacing:.25px}
+.workday-statuses{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.workday-chip{display:inline-flex;align-items:center;min-height:34px;padding:7px 11px;border-radius:999px;font-size:10px;font-weight:950;border:1px solid #d6e3ef;background:#eef4fa;color:#5b6f84}
+.workday-chip.ok{background:#e9fff1;border-color:#9ee0b1;color:#147a35}.workday-chip.warn{background:#fff7e7;border-color:#f4cb78;color:#9a5a00}.workday-chip.off{background:#f1f4f7;border-color:#d4dde5;color:#64748b}.workday-chip.pending{background:#edf7ff;border-color:#b7dcf5;color:#0a6d9e}
+.workday-grid{display:grid;grid-template-columns:1.45fr .8fr 1fr 1fr;gap:12px;margin-top:14px}
+.workday-card{border:1px solid #d8e5f1;border-radius:17px;background:#fff;padding:14px;box-shadow:0 6px 18px rgba(0,43,102,.06);min-width:0}
+.workday-today{border-top:4px solid var(--blue2)}.workday-overdue{border-top:4px solid #f59e0b}.workday-performance{border-top:4px solid var(--green)}.workday-bt{border-top:4px solid #00bfd6}
+.workday-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}.workday-card-head span{display:block;color:#708399;font-size:9px;font-weight:950;letter-spacing:.6px}.workday-card-head h3{margin:3px 0 0;color:var(--navy);font-size:14px;line-height:1.2}.workday-card-head>strong{font-size:27px;color:var(--navy);line-height:1}
+.workday-ot-list{display:flex;flex-direction:column;gap:7px;max-height:162px;overflow:auto;padding-right:3px}.workday-ot-item{display:grid;grid-template-columns:82px 1fr;gap:8px;align-items:center;border:1px solid #dce8f3;background:#f7fbff;border-radius:11px;padding:8px 10px}.workday-ot-item strong{color:#0068bd;font-size:11px}.workday-ot-item span{color:#173b65;font-size:10px;font-weight:850;line-height:1.3}.workday-empty{padding:13px;border-radius:11px;background:#f5f8fb;color:#6b7e91;font-size:10px;font-weight:850}
+.workday-btn,.workday-notify-btn{border:0;border-radius:12px;min-height:42px;padding:10px 14px;font-family:inherit;font-weight:950;cursor:pointer}.workday-btn{margin-top:10px;background:linear-gradient(180deg,#168ee4,#005daf);color:#fff;display:inline-flex;align-items:center;justify-content:center}.workday-notify-btn{background:linear-gradient(180deg,#68c942,#42a927);color:#fff;display:none}
+.workday-overdue p,.workday-performance-copy p,.workday-bt p{margin:6px 0 12px;color:#566c83;font-size:10px;font-weight:800;line-height:1.45}.workday-mini{display:flex;align-items:center;gap:9px;padding:9px;border-radius:11px;background:#f5f9fd}.workday-mini b{font-size:20px;color:var(--navy)}.workday-mini span{font-size:9px;font-weight:900;color:#64748b}
+.workday-performance-body{display:flex;align-items:center;gap:12px}.workday-ring{--score:100;width:92px;height:92px;border-radius:50%;background:conic-gradient(var(--green) calc(var(--score)*1%),#e6eef5 0);display:grid;place-items:center;flex:0 0 92px;position:relative}.workday-ring:after{content:'';position:absolute;inset:10px;border-radius:50%;background:#fff}.workday-ring>div{position:relative;z-index:2;text-align:center}.workday-ring strong{display:block;color:var(--navy);font-size:19px}.workday-ring span{display:block;color:#678096;font-size:8px;font-weight:950}.workday-performance-copy{min-width:0}.workday-performance-copy>div{color:#0e4f82;font-size:9px;font-weight:900}.workday-performance-copy b{font-size:15px;color:var(--navy)}
+.workday-bt-days{padding:10px 11px;border-radius:11px;background:linear-gradient(90deg,#eaf8ff,#eefcf2);color:#0a557f;font-size:10px;font-weight:950;line-height:1.35}
+.workday-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 4px 0 8px;color:#72869a;font-size:9px;font-weight:850}
+@media(max-width:1450px){.workday-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:980px){.workday-panel{padding:14px 12px}.workday-head{flex-direction:column}.workday-statuses{justify-content:flex-start}.workday-grid{grid-template-columns:1fr}.workday-foot{flex-direction:column;align-items:stretch}.workday-notify-btn,.workday-btn{width:100%;min-height:52px;font-size:15px!important}.workday-head h2{font-size:20px}.workday-card-head h3{font-size:15px}.workday-ot-item{grid-template-columns:88px 1fr}.workday-ot-item strong,.workday-ot-item span{font-size:13px}.workday-overdue p,.workday-performance-copy p,.workday-bt p{font-size:13px}.workday-chip{font-size:12px;min-height:38px}}
 
   </style>
 </head>
@@ -341,6 +362,43 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
 <main class='main'>
   <section class='hero hero-image'>
     <img src='ARMA%20banner%20home.png' alt='BANNER ARMA' class='hero-banner-img'>
+  </section>
+  <section id='armaWorkdayPanel' class='workday-panel workday-hidden' aria-live='polite'>
+    <div class='workday-head'>
+      <div><span class='workday-kicker'>A.R.M.A. // CONTEXTO OPERATIVO PERSONAL</span><h2 id='armaWorkdayTitle'>MI JORNADA EN A.R.M.A.</h2></div>
+      <div class='workday-statuses'>
+        <span id='armaPlantChip' class='workday-chip pending'>UBICACION: VALIDANDO...</span>
+        <span id='armaShiftChip' class='workday-chip pending'>TURNO: VALIDANDO...</span>
+      </div>
+    </div>
+    <div class='workday-grid'>
+      <article class='workday-card workday-today'>
+        <div class='workday-card-head'><div><span>PLAN DEL DIA</span><h3 id='armaTodayTitle'>OT EN EJECUCION PARA HOY</h3></div><strong id='armaTodayCount'>0</strong></div>
+        <div id='armaTodayOTList' class='workday-ot-list'><div class='workday-empty'>CARGANDO ACTIVIDADES...</div></div>
+        <button type='button' id='armaGoDocument' class='workday-btn'>IR A DOCUMENTAR</button>
+      </article>
+      <article class='workday-card workday-overdue'>
+        <div class='workday-card-head'><div><span>CONTROL DOCUMENTAL</span><h3>OTE ANTERIORES A HOY</h3></div><strong id='armaOverdueCount'>0</strong></div>
+        <p id='armaOverdueText'>CARGANDO PENDIENTES...</p>
+        <div class='workday-mini'><b id='armaOpenCount'>0</b><span>OT ABIERTAS ASIGNADAS NO OTCT</span></div>
+      </article>
+      <article class='workday-card workday-performance'>
+        <div class='workday-card-head'><div><span>RENDIMIENTO ACTUAL</span><h3 id='armaPerformanceName'>TECNICO</h3></div></div>
+        <div class='workday-performance-body'>
+          <div id='armaPerformanceRing' class='workday-ring' style='--score:100'><div><strong id='armaPerformancePct'>100%</strong><span>AL DIA</span></div></div>
+          <div class='workday-performance-copy'><p>Compara sus OT abiertas asignadas contra las OTE de fechas anteriores pendientes de documentar.</p><div><b id='armaPerfOpen'>0</b> ABIERTAS &nbsp; // &nbsp; <b id='armaPerfLate'>0</b> OTE ATRASADAS</div></div>
+        </div>
+      </article>
+      <article class='workday-card workday-bt'>
+        <div class='workday-card-head'><div><span>ACTIVIDAD NO PLANEADA</span><h3>ULTIMA BITACORA TECNICA</h3></div><strong id='armaLastBTId'>--</strong></div>
+        <p id='armaLastBTText'>CARGANDO HISTORIAL BT...</p>
+        <div id='armaLastBTDays' class='workday-bt-days'>--</div>
+      </article>
+    </div>
+    <div class='workday-foot'>
+      <span id='armaWorkdayFreshness'>CONTEXTO PERSONAL EN PREPARACION...</span>
+      <button type='button' id='armaEnableNotifications' class='workday-notify-btn'>ACTIVAR AVISOS DE A.R.M.A.</button>
+    </div>
   </section>
   <section class='kpis'>
     <div class='kpi kpi-static'>
@@ -557,7 +615,7 @@ a.kpi:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(0,43,102,.16)
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-08-13 14:21:15</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-08-17 20:15:27</span></div>
   </footer>
 </main>
 </div>
@@ -1128,7 +1186,7 @@ function armaV12MainCacheRead(){try{const raw=sessionStorage.getItem('ARMA_V12_M
 function armaV12MainCacheWrite(data){try{sessionStorage.setItem('ARMA_V12_MAIN_BOOT',JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
 async function armaApi(action,payload){
   payload=payload||{};payload.action=action;
-  const read=/^(mainBootstrap|validateSession|ping)$/.test(action);
+  const read=/^(mainBootstrap|mainWorkday|validateSession|ping)$/.test(action);
   const key=read?action+'|'+JSON.stringify(payload):'';
   if(read&&ARMA_V12_MAIN_INFLIGHT.has(key))return ARMA_V12_MAIN_INFLIGHT.get(key);
   const job=(async function(){
@@ -1192,7 +1250,7 @@ function armaV13DashboardCacheRead(){const x=armaV13DashboardCacheEnvelope();ret
 function armaV13DashboardNeedsNetwork(){try{const ts=Number(localStorage.getItem('ARMA_V137_DASH_LAST_NET')||0);return !ts||Date.now()-ts>300000;}catch(e){return true;}}
 async function armaApi(action,payload){
   payload=payload||{};payload.action=action;
-  const read=/^(authBootstrap|mainDashboard|validateSession|mainBootstrap|ping)$/.test(action);
+  const read=/^(authBootstrap|mainDashboard|mainWorkday|validateSession|mainBootstrap|ping)$/.test(action);
   const key=read?action+'|'+JSON.stringify(payload):'';
   if(read&&ARMA_V12_MAIN_INFLIGHT.has(key))return ARMA_V12_MAIN_INFLIGHT.get(key);
   const job=(async function(){
@@ -1247,6 +1305,101 @@ async function armaCheckMobileLocationWelcome(){
   sessionStorage.setItem(key,'SI');
   navigator.geolocation.getCurrentPosition(function(pos){const accuracy=Math.round(Number(pos.coords.accuracy||0));if(accuracy>250)return;const matches=plants.map(function(p){const d=Math.round(armaGeoDistanceMeters(pos.coords.latitude,pos.coords.longitude,p.latitud,p.longitud));const r=Math.min(150,Math.max(10,Number(p.radioMetros||150)));return{plant:p,distance:d,radius:r};}).filter(function(x){return x.distance<=x.radius;});if(!matches.length)return;matches.sort(function(a,b){return a.distance-b.distance;});const selected=matches[0].plant;const plantName=String(selected.planta||'PLANTA').toUpperCase();const who=String(armaSession.nombre||armaSession.user||'USUARIO');armaShowLocationMessage('BIENVENIDO A '+plantName,'HOLA '+who+'. A.R.M.A. DETECTA QUE SE ENCUENTRA EN '+plantName+'.','');},function(){},{enableHighAccuracy:true,timeout:12000,maximumAge:60000});
 }
+/* === ARMA MAIN V14 JORNADA TECNICA === */
+let armaMainV14Data=null,armaMainV14Location={validated:false,inside:false,plant:''};
+let armaMainV14Promise=null,armaMainV14FrontShown=false,armaMainV14GeoBusy=false;
+function armaMainV14CacheKey(){return 'ARMA_MAINV14_WORKDAY_'+String(armaSession.user||'').toUpperCase();}
+function armaMainV14CacheRead(){try{const raw=localStorage.getItem(armaMainV14CacheKey())||'';if(!raw)return null;const x=JSON.parse(raw);if(!x||!x.data||Date.now()-Number(x.ts||0)>300000)return null;return x.data;}catch(e){return null;}}
+function armaMainV14CacheWrite(data){try{localStorage.setItem(armaMainV14CacheKey(),JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
+function armaMainV14Hide(){const p=document.getElementById('armaWorkdayPanel');if(p)p.classList.add('workday-hidden');armaMainV14Data=null;armaMainV14Location={validated:false,inside:false,plant:''};}
+function armaMainV14Esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];});}
+function armaMainV14SetChip(id,text,mode){const e=document.getElementById(id);if(!e)return;e.textContent=text;e.className='workday-chip '+(mode||'pending');}
+function armaMainV14FormatShift(s){if(!s)return 'TURNO: SIN DATOS';if(s.status==='NO_PROGRAMADO')return 'TURNO: NO PROGRAMADO';let x='TURNO: '+String(s.currentCode||s.todayCode||'SIN CODIGO');if(s.start&&s.end)x+=' // '+s.start+' - '+s.end;return x;}
+function armaMainV14Render(data){
+  if(!data||!data.ok||!data.available){armaMainV14Hide();return;}
+  armaMainV14Data=data;
+  const p=document.getElementById('armaWorkdayPanel');if(p)p.classList.remove('workday-hidden');
+  const name=(data.technician&&data.technician.nombre)||data.session.nombre||'TECNICO';
+  document.getElementById('armaWorkdayTitle').textContent='MI JORNADA // '+name;
+  const s=data.shift||{};
+  armaMainV14SetChip('armaShiftChip',armaMainV14FormatShift(s),s.inShift?'ok':(s.scheduled?'warn':'off'));
+  const ot=data.ot||{},today=Array.isArray(ot.today)?ot.today:[];
+  document.getElementById('armaTodayCount').textContent=String(today.length);
+  const list=document.getElementById('armaTodayOTList');
+  if(list){list.innerHTML=today.length?today.map(function(r){return '<div class="workday-ot-item"><strong>'+armaMainV14Esc(r.idOT)+'</strong><span>'+armaMainV14Esc(r.descripcion||'SIN DESCRIPCION')+'</span></div>';}).join(''):'<div class="workday-empty">NO TIENE OTE PROGRAMADAS PARA HOY.</div>';}
+  const late=Number(ot.overdueCount||0),open=Number(ot.openNonClosedCount||0);
+  document.getElementById('armaOverdueCount').textContent=String(late);
+  document.getElementById('armaOpenCount').textContent=String(open);
+  document.getElementById('armaOverdueText').textContent=late?'DEBE DOCUMENTAR O GESTIONAR '+late+' OTE DE FECHAS ANTERIORES.':'NO TIENE OTE ATRASADAS. SU DOCUMENTACION ESTA AL DIA.';
+  const score=Number(ot.performancePct==null?100:ot.performancePct);
+  document.getElementById('armaPerformanceName').textContent=name;
+  document.getElementById('armaPerformancePct').textContent=score.toFixed(1).replace('.',',')+'%';
+  document.getElementById('armaPerformanceRing').style.setProperty('--score',String(Math.max(0,Math.min(100,score))));
+  document.getElementById('armaPerfOpen').textContent=String(open);
+  document.getElementById('armaPerfLate').textContent=String(late);
+  const bt=data.lastBT||{};
+  document.getElementById('armaLastBTId').textContent=bt.exists?(bt.idBT||bt.idRT||'BT'):'SIN BT';
+  document.getElementById('armaLastBTText').textContent=bt.exists?'ULTIMO REPORTE: '+String(bt.reportAtDisplay||''):'AUN NO HAY UNA BITACORA TECNICA REGISTRADA PARA ESTE USUARIO.';
+  document.getElementById('armaLastBTDays').textContent=bt.exists?(Number(bt.daysWithout||0)+' DIA(S) SIN GENERAR UN REPORTE DE ACTIVIDAD NO PLANEADA'):'SIN HISTORIAL DE ACTIVIDAD NO PLANEADA';
+  const pending=today.length+late;
+  const go=document.getElementById('armaGoDocument');if(go)go.style.display=pending>0?'inline-flex':'none';
+  const badge=document.getElementById('notifyBadge');if(badge)badge.textContent=String(pending);
+  const fresh=document.getElementById('armaWorkdayFreshness');
+  if(fresh)fresh.textContent='ACTUALIZADO '+new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+  armaMainV14UpdateNotificationButton();
+  armaMainV14Evaluate();
+  armaMainV14MaybeShowFront();
+}
+function armaMainV14Distance(lat1,lon1,lat2,lon2){return armaGeoDistanceMeters(lat1,lon1,lat2,lon2);}
+function armaMainV14DetectPlant(plants){
+  plants=Array.isArray(plants)?plants:[];
+  if(armaMainV14GeoBusy)return;
+  armaMainV14SetChip('armaPlantChip','UBICACION: VALIDANDO...','pending');
+  if(!navigator.geolocation||!window.isSecureContext||!plants.length){
+    armaMainV14Location={validated:false,inside:false,plant:'',reason:'GPS_NO_DISPONIBLE'};
+    armaMainV14SetChip('armaPlantChip','UBICACION: NO VALIDADA','off');
+    armaMainV14Evaluate();return;
+  }
+  armaMainV14GeoBusy=true;
+  navigator.geolocation.getCurrentPosition(function(pos){
+    armaMainV14GeoBusy=false;
+    const acc=Math.round(Number(pos.coords.accuracy||0));
+    if(acc>250){
+      armaMainV14Location={validated:false,inside:false,plant:'',accuracy:acc,reason:'PRECISION_BAJA'};
+      armaMainV14SetChip('armaPlantChip','UBICACION: PRECISION GPS BAJA','warn');
+      armaMainV14Evaluate();return;
+    }
+    const matches=plants.map(function(p){
+      return {plant:p,distance:Math.round(armaMainV14Distance(pos.coords.latitude,pos.coords.longitude,p.latitud,p.longitud)),radius:Math.max(10,Number(p.radioMetros||150))};
+    }).filter(function(x){return x.distance<=x.radius;}).sort(function(a,b){return a.distance-b.distance;});
+    if(matches.length){
+      const x=matches[0];
+      armaMainV14Location={validated:true,inside:true,plant:String(x.plant.planta||'PLANTA'),distance:x.distance,accuracy:acc};
+      armaMainV14SetChip('armaPlantChip','UBICACION: '+armaMainV14Location.plant,'ok');
+    }else{
+      armaMainV14Location={validated:true,inside:false,plant:'FUERA DE PLANTA',accuracy:acc};
+      armaMainV14SetChip('armaPlantChip','UBICACION: FUERA DE PLANTA','off');
+    }
+    armaMainV14Evaluate();
+  },function(err){
+    armaMainV14GeoBusy=false;
+    armaMainV14Location={validated:false,inside:false,plant:'',reason:String(err&&err.code||'GPS')};
+    armaMainV14SetChip('armaPlantChip','UBICACION: NO AUTORIZADA / NO DISPONIBLE','off');
+    armaMainV14Evaluate();
+  },{enableHighAccuracy:true,timeout:12000,maximumAge:60000});
+}
+function armaMainV14Evaluate(){const d=armaMainV14Data;if(!d||!d.available)return;const inPlant=armaMainV14Location.validated&&armaMainV14Location.inside;const inShift=!!(d.shift&&d.shift.inShift);const ot=d.ot||{},today=Number(ot.todayCount||0),late=Number(ot.overdueCount||0),pending=today+late;const title=document.getElementById('armaTodayTitle');if(title)title.textContent=(inPlant&&inShift)?'LAS ACTIVIDADES PARA HOY SON:':'OT EN EJECUCION PARA HOY';if(inPlant&&inShift&&pending>0){armaMainV14MaybeNotify();}}
+function armaMainV14Standalone(){return armaPWAIsStandalone();}
+function armaMainV14UpdateNotificationButton(){const b=document.getElementById('armaEnableNotifications');if(!b)return;const supported='Notification' in window&&'serviceWorker' in navigator;const show=armaMainV14Standalone()&&supported&&Notification.permission!=='granted';b.style.display=show?'inline-flex':'none';if(show)b.textContent=Notification.permission==='denied'?'AVISOS BLOQUEADOS EN EL NAVEGADOR':'ACTIVAR AVISOS DE A.R.M.A.';}
+async function armaMainV14EnableNotifications(){if(!('Notification' in window)){armaShowLocationMessage('AVISOS A.R.M.A.','ESTE DISPOSITIVO NO SOPORTA NOTIFICACIONES WEB.','warn');return;}if(Notification.permission==='denied'){armaShowLocationMessage('AVISOS A.R.M.A.','LAS NOTIFICACIONES ESTAN BLOQUEADAS. HABILITELAS EN LOS PERMISOS DEL SITIO.','warn');return;}try{const p=await Notification.requestPermission();armaMainV14UpdateNotificationButton();if(p==='granted'){armaShowLocationMessage('AVISOS A.R.M.A.','AVISOS ACTIVADOS. A.R.M.A. PODRA MOSTRAR EL RECORDATORIO CUANDO LA APP ESTE ACTIVA, CONFIRME QUE ESTA EN PLANTA, ESTE EN TURNO Y TENGA PENDIENTES.','');armaMainV14Evaluate();}}catch(e){}}
+function armaMainV14NotifyKey(){const d=armaMainV14Data||{},s=d.shift||{};return 'ARMA_MAINV14_NOTIFY_'+String(armaSession.user||'USER').toUpperCase()+'_'+String(d.today||'')+'_'+String(s.currentCode||'SIN_TURNO');}
+async function armaMainV14MaybeNotify(){const d=armaMainV14Data;if(!d||!d.available||!armaMainV14Standalone()||!('Notification' in window)||Notification.permission!=='granted'||!armaMainV14Location.inside||!(d.shift&&d.shift.inShift))return;const ot=d.ot||{},pending=Number(ot.todayCount||0)+Number(ot.overdueCount||0);if(pending<=0)return;const k=armaMainV14NotifyKey();try{if(localStorage.getItem(k)==='SI')return;}catch(e){}try{const reg=await navigator.serviceWorker.ready;await reg.showNotification('A.R.M.A.',{body:'TIENE PENDIENTES EN A.R.M.A.',icon:'arma-avatar-192.png',badge:'arma-avatar-192.png',tag:'arma-pending-'+String(armaSession.user||'user'),renotify:false,data:{url:'./main.html?armaPending=1'}});try{localStorage.setItem(k,'SI');}catch(e2){}}catch(e3){}}
+function armaMainV14MaybeShowFront(){if(armaMainV14FrontShown||!armaMainV14Data)return;let requested=false;try{requested=new URL(location.href).searchParams.get('armaPending')==='1';}catch(e){}if(!requested)return;armaMainV14FrontShown=true;const ot=armaMainV14Data.ot||{},today=Number(ot.todayCount||0),late=Number(ot.overdueCount||0);let msg='TIENE '+today+' OTE PARA HOY Y '+late+' OTE DE FECHAS ANTERIORES PENDIENTES DE DOCUMENTAR O GESTIONAR.';if(today+late===0)msg='A.R.M.A. ACTUALIZO SUS PENDIENTES. ACTUALMENTE NO TIENE OTE POR DOCUMENTAR.';armaShowLocationMessage('TIENE PENDIENTES EN A.R.M.A.',msg,'warn');try{history.replaceState({},document.title,'main.html');}catch(e2){}}
+async function armaMainV14Load(force){if(!armaSession||!armaSession.token){armaMainV14Hide();return false;}if(armaMainV14Promise)return armaMainV14Promise;if(!force){const c=armaMainV14CacheRead();if(c){armaMainV14Render(c);armaMainV14DetectPlant(c.plants||[]);}}armaMainV14Promise=armaApi('mainWorkday',{token:armaSession.token}).then(function(data){if(data&&data.ok){armaMainV14CacheWrite(data);armaMainV14Render(data);armaMainV14DetectPlant(data.plants||[]);return true;}return false;}).catch(function(e){console.warn('ARMA mainWorkday',e);return false;}).finally(function(){armaMainV14Promise=null;});return armaMainV14Promise;}
+async function armaCheckMobileLocationWelcome(){return armaMainV14Load(false);}
+const armaMainV14BaseSetSession=armaSetSession;armaSetSession=function(data){const r=armaMainV14BaseSetSession(data);setTimeout(function(){armaMainV14Load(false);},30);return r;};
+const armaMainV14BaseSetVisitor=armaSetVisitor;armaSetVisitor=function(clearStored){const r=armaMainV14BaseSetVisitor(clearStored);armaMainV14Hide();return r;};
+function armaMainV14Init(){const go=document.getElementById('armaGoDocument');if(go)go.addEventListener('click',function(){armaOpenChildWindow('reportar_ot.html','ARMA_REPORTAR_OT');});const n=document.getElementById('armaEnableNotifications');if(n)n.addEventListener('click',armaMainV14EnableNotifications);if(armaSession&&armaSession.token)setTimeout(function(){armaMainV14Load(false);},120);setInterval(function(){if(!document.hidden&&armaSession&&armaSession.token)armaMainV14Load(true);},300000);window.addEventListener('focus',function(){if(armaSession&&armaSession.token)setTimeout(function(){armaMainV14Load(true);},180);});document.addEventListener('visibilitychange',function(){if(!document.hidden&&armaSession&&armaSession.token)setTimeout(function(){armaMainV14Load(true);},180);});}
 document.addEventListener('DOMContentLoaded',function(){
   const internalReturn=armaConsumeInternalReturn();
   const restored=armaRestoreSessionCache();if(!restored)armaRenderVisitor();
@@ -1269,6 +1422,7 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('loginCancel').addEventListener('click',armaCloseLogin);document.getElementById('loginDo').addEventListener('click',armaLogin);
   document.getElementById('loginPass').addEventListener('keydown',function(e){if(e.key==='Enter')armaLogin();});
   document.addEventListener('click',function(){const u=document.getElementById('userCard');if(u)u.classList.remove('open');});
+  armaMainV14Init();
 });
 </script>
 </body>
