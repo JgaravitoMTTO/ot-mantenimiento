@@ -5,9 +5,9 @@
 (function(global){
   'use strict';
 
-  const VERSION='ARMA_SCOPE_PRELOAD_CLIENT_V1_20260817';
+  const VERSION='ARMA_SCOPE_PRELOAD_CLIENT_V2_RECOVERY_20260820';
   const DEFAULT_API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
-  const TTL=24*60*60*1000;
+  const TTL=10*60*1000;
 
   function norm(v){
     return String(v==null?'':v).trim().toUpperCase();
@@ -29,7 +29,7 @@
   }
 
   function key(user){
-    return 'ARMA_SCOPE_PRELOAD_V1_'+userName(user);
+    return 'ARMA_SCOPE_PRELOAD_V2_'+userName(user);
   }
 
   function read(user){
