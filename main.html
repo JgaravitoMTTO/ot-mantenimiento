@@ -289,7 +289,7 @@ body.arma-summary-open{overflow:hidden}
 .workday-back{position:fixed;inset:0;z-index:1250;background:rgba(2,18,39,.64);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);display:grid;place-items:center;padding:24px}
 .workday-back.workday-hidden{display:none!important}
 .workday-panel{width:min(1320px,94vw)!important;max-height:88vh!important;margin:0!important;border-radius:24px!important;padding:18px 18px 15px!important;background:linear-gradient(145deg,#fff,#f4f9fd)!important;box-shadow:0 35px 95px rgba(0,25,62,.42)!important;overflow:hidden!important;position:relative!important}
-.workday-close-x{position:absolute;right:14px;top:12px;z-index:4;width:42px;height:42px;border:0;border-radius:50%;background:#edf4fa;color:#003c7a;font-size:27px;line-height:1;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(0,43,102,.12)}
+.workday-close-x{position:absolute;right:14px;top:12px;z-index:4;width:42px;height:42px;border:0;border-radius:50%;background:#edf4fa;color:#003c7a;font-size:20px;line-height:1;font-weight:950;cursor:pointer;box-shadow:0 4px 12px rgba(0,43,102,.12)}
 .workday-close-x:hover{background:#dfeefa}
 .workday-head{padding-right:52px!important}
 .workday-scope-text{margin:6px 0 0;color:#5f7489;font-size:10px;font-weight:850;line-height:1.35}
@@ -303,6 +303,7 @@ body.arma-summary-open{overflow:hidden}
 #notifyCard{cursor:pointer}
 @media(max-width:1450px){.workday-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:980px){.workday-back{padding:10px}.workday-panel{width:calc(100dvw - 20px)!important;max-height:calc(100dvh - 20px)!important;padding:14px 12px 12px!important}.workday-scroll{max-height:calc(100dvh - 220px)}.workday-grid{grid-template-columns:1fr!important}.workday-foot-actions{width:100%;display:grid;grid-template-columns:1fr}.workday-accept-btn,.workday-notify-btn{width:100%;min-height:52px;font-size:16px!important}.workday-scope-text{font-size:12px}.workday-close-x{width:44px;height:44px}}
+@media(max-width:980px){body.arma-summary-open{overflow:hidden!important}.workday-back{display:block!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;padding:10px 10px calc(22px + env(safe-area-inset-bottom))!important}.workday-back.workday-hidden{display:none!important}.workday-panel{display:block!important;max-height:none!important;min-height:0!important;overflow:visible!important;margin:0 auto!important}.workday-scroll{max-height:none!important;overflow:visible!important}.workday-foot{position:relative!important;background:#fff!important;padding-bottom:max(8px,env(safe-area-inset-bottom))!important}.workday-accept-btn{margin-bottom:4px!important}}
 body.arma-alarm-open{overflow:hidden}
 .alarm-center-card{display:none;position:relative;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;background:#f3f6f9!important;border:1px solid #d6e0e8!important}
 body.arma-logged .alarm-center-card{display:flex}
@@ -426,7 +427,7 @@ body.arma-logged .alarm-center-card{display:flex}
   </section>
   <div id='armaWorkdayBack' class='workday-back workday-hidden' aria-hidden='true'>
     <section id='armaWorkdayPanel' class='workday-panel' role='dialog' aria-modal='true' aria-labelledby='armaWorkdayTitle'>
-      <button type='button' id='armaWorkdayCloseX' class='workday-close-x' aria-label='CERRAR RESUMEN'>×</button>
+      <button type='button' id='armaWorkdayCloseX' class='workday-close-x' aria-label='CERRAR RESUMEN'>X</button>
       <div class='workday-head'>
         <div><span id='armaWorkdayKicker' class='workday-kicker'>A.R.M.A. // RESUMEN OPERATIVO</span><h2 id='armaWorkdayTitle'>RESUMEN A.R.M.A.</h2><p id='armaScopeText' class='workday-scope-text'>CARGANDO ALCANCE...</p></div>
         <div class='workday-statuses'>
@@ -686,7 +687,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-08-17 21:55:12</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-08-23 01:36:24</span></div>
   </footer>
 </main>
 </div>
@@ -1310,15 +1311,15 @@ function armaSetSession(data){
   armaUpdateUserCard();armaApplyPermissions();
 }
 function armaSetVisitor(clearStored){
-  armaV13AuthValidated=false;if(clearStored!==false){localStorage.removeItem('ARMA_TOKEN');localStorage.removeItem('ARMA_SESSION_CACHE');try{sessionStorage.removeItem('ARMA_V13_AUTH_BOOT');sessionStorage.removeItem('ARMA_V13_DASH_PHONE');sessionStorage.removeItem('ARMA_V13_DASH_PC');localStorage.removeItem('ARMA_V137_DASH_PHONE');localStorage.removeItem('ARMA_V137_DASH_PC');localStorage.removeItem('ARMA_V137_DASH_LAST_NET');Object.keys(sessionStorage).filter(function(k){return k.indexOf('ARMA_GEO_WELCOME_')===0;}).forEach(function(k){sessionStorage.removeItem(k);});}catch(e){}}armaRenderVisitor();
+  armaV13AuthValidated=false;if(clearStored!==false){localStorage.removeItem('ARMA_TOKEN');localStorage.removeItem('ARMA_SESSION_CACHE');try{sessionStorage.removeItem('ARMA_V13_AUTH_BOOT');sessionStorage.removeItem('ARMA_V13_DASH_PHONE');sessionStorage.removeItem('ARMA_V13_DASH_PC');localStorage.removeItem('ARMA_R17_DASH_PHONE');localStorage.removeItem('ARMA_R17_DASH_PC');localStorage.removeItem('ARMA_R17_DASH_LAST_NET');Object.keys(sessionStorage).filter(function(k){return k.indexOf('ARMA_GEO_WELCOME_')===0;}).forEach(function(k){sessionStorage.removeItem(k);});}catch(e){}}armaRenderVisitor();
 }
 function armaV13AuthCacheWrite(session){try{sessionStorage.setItem('ARMA_V13_AUTH_BOOT',JSON.stringify({ts:Date.now(),session:session}));}catch(e){}}
 function armaV13AuthCacheRead(){try{const raw=sessionStorage.getItem('ARMA_V13_AUTH_BOOT')||'';if(!raw)return null;const x=JSON.parse(raw);if(!x||Date.now()-Number(x.ts||0)>300000)return null;return x.session||null;}catch(e){return null;}}
-function armaV13DashboardCacheKey(){return armaIsPhoneDevice()?'ARMA_V137_DASH_PHONE':'ARMA_V137_DASH_PC';}
-function armaV13DashboardCacheWrite(data){try{localStorage.setItem(armaV13DashboardCacheKey(),JSON.stringify({ts:Date.now(),data:data}));localStorage.setItem('ARMA_V137_DASH_LAST_NET',String(Date.now()));}catch(e){}}
+function armaV13DashboardCacheKey(){return armaIsPhoneDevice()?'ARMA_R17_DASH_PHONE':'ARMA_R17_DASH_PC';}
+function armaV13DashboardCacheWrite(data){try{localStorage.setItem(armaV13DashboardCacheKey(),JSON.stringify({ts:Date.now(),data:data}));localStorage.setItem('ARMA_R17_DASH_LAST_NET',String(Date.now()));}catch(e){}}
 function armaV13DashboardCacheEnvelope(){try{const raw=localStorage.getItem(armaV13DashboardCacheKey())||'';if(!raw)return null;const x=JSON.parse(raw);if(!x||!x.data)return null;if(Date.now()-Number(x.ts||0)>3600000)return null;return x;}catch(e){return null;}}
 function armaV13DashboardCacheRead(){const x=armaV13DashboardCacheEnvelope();return x?x.data:null;}
-function armaV13DashboardNeedsNetwork(){try{const ts=Number(localStorage.getItem('ARMA_V137_DASH_LAST_NET')||0);return !ts||Date.now()-ts>300000;}catch(e){return true;}}
+function armaV13DashboardNeedsNetwork(){try{const ts=Number(localStorage.getItem('ARMA_R17_DASH_LAST_NET')||0);return !ts||Date.now()-ts>300000;}catch(e){return true;}}
 async function armaApi(action,payload){
   payload=payload||{};payload.action=action;
   const read=/^(authBootstrap|mainDashboard|mainWorkday|validateSession|mainBootstrap|ping)$/.test(action);
@@ -1522,7 +1523,7 @@ function armaMainV14Init(){
   window.addEventListener('focus',function(){if(armaSession&&armaSession.token)setTimeout(function(){armaMainV14Load(true);},180);});
   document.addEventListener('visibilitychange',function(){if(!document.hidden&&armaSession&&armaSession.token)setTimeout(function(){armaMainV14Load(true);},180);});
 }
-/* === ARMA MAIN V14.2 ALARM CENTER === */
+/* === ARMA MAIN V14.3 ALARM CENTER === */
 let armaAlarmData=null,armaAlarmPromise=null,armaAlarmTimer=null;
 function armaAlarmCacheKey(){const t=armaCurrentToken()||'';return 'ARMA_ALARM_V142_'+String(armaSession.user||'USER').toUpperCase()+'_'+String(t).slice(-12);}
 function armaAlarmCacheRead(){try{const raw=localStorage.getItem(armaAlarmCacheKey())||'';if(!raw)return null;const x=JSON.parse(raw);if(!x||!x.data||Date.now()-Number(x.ts||0)>60000)return null;return x.data;}catch(e){return null;}}
