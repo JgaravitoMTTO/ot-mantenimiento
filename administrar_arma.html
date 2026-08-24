@@ -26,7 +26,15 @@ main{max-width:1200px;margin:22px auto;padding:0 16px}.warn{background:#fff8df;b
 <script>
 const API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
 function token(){return localStorage.getItem('ARMA_TOKEN')||sessionStorage.getItem('ARMA_TOKEN')||(()=>{try{return JSON.parse(localStorage.getItem('ARMA_SESSION_CACHE')||'{}').token||''}catch(e){return''}})()}
-async function api(action,data){const c=new AbortController(),tm=setTimeout(()=>c.abort(),20000);try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,token:token()},data||{})),signal:c.signal});const j=await r.json();if(!j.ok)throw new Error(j.detail||j.error||'ERROR_BACKEND');return j}finally{clearTimeout(tm)}}
+async function api(action,data,timeoutMs){
+const c=new AbortController(),tm=setTimeout(()=>c.abort(),Number(timeoutMs||45000));
+try{
+const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,token:token()},data||{})),signal:c.signal});
+const j=await r.json();
+if(!j.ok)throw new Error(j.detail||j.error||'ERROR_BACKEND');
+return j;
+}finally{clearTimeout(tm)}
+}
 function paintJob(type,j){
 j=j||{};
 const low=type.toLowerCase(),total=Number(j.total||0),cursor=Number(j.cursor||0),pct=total?Math.min(100,Math.round(cursor*100/total)):0;
@@ -45,8 +53,38 @@ document.getElementById('btn'+type).disabled=!!j.running;
 document.getElementById('stop'+type).disabled=!j.running;
 }
 function paintDaily(d){const el=document.getElementById('dailyState');el.className=d&&d.installed?'ok':'bad';el.textContent=d&&d.installed?'ACTIVO // '+d.cadence:'NO HAY GUARD AUTOMATICO ACTIVO'}
-async function refresh(){try{const j=await api('armaAdminPdfStatus');paintJob('OT',j.jobs.OT);paintJob('BT',j.jobs.BT)}catch(e){console.warn(e)}}
-async function boot(){if(!token()){location.href='main.html';return}try{const j=await api('armaAdminBootstrap');document.getElementById('userPill').textContent=(j.user||'SUPER ADMIN')+' // '+(j.nivel||'');paintJob('OT',j.jobs.OT);paintJob('BT',j.jobs.BT);paintDaily(j.dailyAdvance);setInterval(refresh,5000)}catch(e){alert('ACCESO DENEGADO O BACKEND NO ACTUALIZADO: '+e.message);location.href='main.html'}}
+let refreshTimer=null,refreshBusy=false;
+function scheduleRefresh(ms){clearTimeout(refreshTimer);refreshTimer=setTimeout(refresh,Number(ms||5000))}
+async function refresh(){
+if(refreshBusy){scheduleRefresh(3000);return}
+refreshBusy=true;
+try{
+const j=await api('armaAdminPdfStatus',null,45000);
+paintJob('OT',j.jobs&&j.jobs.OT);
+paintJob('BT',j.jobs&&j.jobs.BT);
+const p=document.getElementById('userPill');if(p&&p.textContent.indexOf('BACKEND')>=0)p.textContent='ARMA // SUPER_ADMIN';
+}catch(e){
+console.warn('ADMIN_STATUS_RETRY',e);
+const p=document.getElementById('userPill');if(p)p.textContent='BACKEND OCUPADO // REINTENTANDO';
+}finally{
+refreshBusy=false;
+scheduleRefresh(5000);
+}
+}
+async function boot(){
+if(!token()){location.href='main.html';return}
+document.getElementById('userPill').textContent='CONECTANDO...';
+await refresh();
+try{
+const j=await api('armaAdminBootstrap',null,45000);
+document.getElementById('userPill').textContent=(j.user||'ARMA')+' // '+(j.nivel||'SUPER_ADMIN');
+if(j.dailyAdvance)paintDaily(j.dailyAdvance);
+}catch(e){
+console.warn('BOOTSTRAP_SECUNDARIO_NO_DISPONIBLE',e);
+const p=document.getElementById('userPill');if(p&&p.textContent==='CONECTANDO...')p.textContent='ARMA // SUPER_ADMIN';
+const d=document.getElementById('dailyState');if(d&&d.textContent==='CONSULTANDO...')d.textContent='GUARD ACTIVO EN BACKEND // ESTADO SE ACTUALIZARA AL DISPONER DEL SERVICIO';
+}
+}
 async function start(type){if(!confirm('SE REINICIARA DESDE CERO Y SE REGENERARAN TODOS LOS PDF DE '+type+' CON MOTOR FAST. CONTINUAR?'))return;try{const j=await api('armaAdminPdfStart',{type});paintJob(type,j.job)}catch(e){alert(e.message)}}
 async function stopJob(type){if(!confirm('DETENER EL JOB '+type+'? LOS PDF YA GENERADOS SE CONSERVAN.'))return;try{const j=await api('armaAdminPdfStop',{type});paintJob(type,j.job)}catch(e){alert(e.message)}}
 document.getElementById('btnOT').onclick=()=>start('OT');document.getElementById('btnBT').onclick=()=>start('BT');document.getElementById('stopOT').onclick=()=>stopJob('OT');document.getElementById('stopBT').onclick=()=>stopJob('BT');boot();
