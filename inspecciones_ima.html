@@ -36,8 +36,8 @@ label{display:block;font-size:9px;font-weight:900;color:#536a80;margin-bottom:4p
 <h2>DILIGENCIAR INSPECCION</h2>
 <div class="formgrid">
 <div><label>FECHA DE INSPECCION</label><input id="FECHA_INSPECCION" type="date"></div>
-<div><label>INSPECTOR</label><select id="INSPECTOR"><option>MARIO ANDRES AREVALO RICO</option><option>EDUARD</option></select></div>
-<div class="full"><label>AREA / DEPARTAMENTO INSPECCIONADO</label><input id="AREA" value="Planta 2"></div>
+<div><label>INSPECTOR</label><select id="INSPECTOR"><option value="">SELECCIONE...</option><option>MARIO ANDRES AREVALO RICO</option><option>EDUARD</option></select></div>
+<div class="full"><label>AREA / DEPARTAMENTO INSPECCIONADO</label><input id="AREA" placeholder="Ej. Planta 2, Almacen, Taller..."></div>
 </div>
 <div id="sections"></div>
 <div class="section"><h3>6. OTRAS OBSERVACIONES Y ACCIONES CORRECTIVAS</h3><label>OBSERVACIONES GENERALES</label><textarea id="OBSERVACIONES_GENERALES" placeholder="Registrar unicamente hechos observados durante la inspeccion."></textarea></div>
@@ -45,7 +45,7 @@ label{display:block;font-size:9px;font-weight:900;color:#536a80;margin-bottom:4p
 </article>
 <article class="card">
 <h2>HISTORIAL IMA</h2><div class="small" style="margin-bottom:8px">Use VER / IMPRIMIR para reconstruir visualmente el formato historico y guardarlo como PDF desde el navegador.</div>
-<div class="tablewrap"><table><thead><tr><th>ID</th><th>FECHA / LIMITE</th><th>INSPECTOR</th><th>ESTADO</th><th>ACCION</th></tr></thead><tbody id="hist"></tbody></table></div>
+<div class="tablewrap"><table><thead><tr><th>MES</th><th>ANIO</th><th>FECHA</th><th>INSPECTOR</th><th>ESTADO</th><th>ACCION</th></tr></thead><tbody id="hist"></tbody></table></div>
 </article>
 </section>
 </main>
@@ -61,34 +61,38 @@ const groups=[
  {title:'1. PISOS',p:'PISOS',state:'PISOS_ESTADO',stateOpts:['Buen Estado','Estado Regular','Mal Estado (Requiere Intervención)'],crack:'PISOS_GRIETAS',clean:'PISOS_LIMPIEZA'},
  {title:'2. PAREDES',p:'PAREDES',state:'PAREDES_ESTADO',stateOpts:['Buen Estado','Estado Regular','Mal Estado (Requiere Intervención)'],crack:'PAREDES_GRIETAS',clean:'PAREDES_LIMPIEZA'},
  {title:'3. TECHOS',p:'TECHOS',state:'TECHOS_ESTADO',stateOpts:['Buen Estado','Estado Regular','Mal Estado (Requiere Intervención)'],crack:'TECHOS_GRIETAS',clean:'TECHOS_LIMPIEZA'}];
-function opts(a){return a.map(x=>'<option>'+x+'</option>').join('')}
+function opts(a){return '<option value=">SELECCIONE...</option>'+a.map(x=>'<option>'+x+'</option>').join('')}
 function buildSections(){let h='';groups.forEach(g=>{h+=`<div class="section"><h3>${g.title}</h3><div class="formgrid">
 <div><label>ESTADO</label><select id="${g.state}">${opts(g.stateOpts)}</select></div>
-<div><label>OBSERVACIONES ESTADO</label><input id="${g.p}_OBS_ESTADO" value="Sin novedades significativas observadas."></div>
+<div><label>OBSERVACIONES ESTADO</label><input id="${g.p}_OBS_ESTADO" placeholder="Describa solo si aplica"></div>
 <div><label>SELLADO / GRIETAS</label><select id="${g.crack}">${opts(['Sin Grietas','Con Grietas','Grietas creciendo','En reparacion'])}</select></div>
-<div><label>OBSERVACIONES GRIETAS</label><input id="${g.p}_OBS_GRIETAS" value="Sin novedades significativas observadas."></div>
+<div><label>OBSERVACIONES GRIETAS</label><input id="${g.p}_OBS_GRIETAS" placeholder="Describa solo si aplica"></div>
 <div><label>LIMPIEZA</label><select id="${g.clean}">${opts(['Limpieza Satisfactoria','Limpieza No Satisfactoria','Suciedad de obra'])}</select></div>
-<div><label>OBSERVACIONES LIMPIEZA</label><input id="${g.p}_OBS_LIMPIEZA" value="Condicion satisfactoria al momento de la inspeccion."></div>
+<div><label>OBSERVACIONES LIMPIEZA</label><input id="${g.p}_OBS_LIMPIEZA" placeholder="Describa solo si aplica"></div>
 <div class="full"><label>OTRAS OBSERVACIONES</label><input id="${g.p}_OTRAS" value=""></div></div></div>`});
 h+=`<div class="section"><h3>4. EQUIPOS</h3><div class="formgrid">
 <div><label>ESTADO</label><select id="EQUIPOS_ESTADO">${opts(['Buen Estado','Estado Regular','Mal Estado (Requiere Intervención)'])}</select></div>
-<div><label>OBSERVACIONES ESTADO</label><input id="EQUIPOS_OBS_ESTADO" value="Equipos operativos y disponibles."></div>
+<div><label>OBSERVACIONES ESTADO</label><input id="EQUIPOS_OBS_ESTADO" placeholder="Describa lo observado"></div>
 <div class="full"><label>MANTENIMIENTO PREVENTIVO</label><select id="EQUIPOS_MANT_PREV">${opts(['Los equipos han recibido mantenimiento preventivo según lo programado','Se identifican mantenimientos pendientes'])}</select></div>
 <div class="full"><label>OBSERVACIONES MANTENIMIENTO</label><input id="EQUIPOS_OBS_MANT_PREV" value=""></div>
 <div><label>LIMPIEZA</label><select id="EQUIPOS_LIMPIEZA">${opts(['Limpieza Satisfactoria','Limpieza No Satisfactoria'])}</select></div>
-<div><label>OBSERVACIONES LIMPIEZA</label><input id="EQUIPOS_OBS_LIMPIEZA" value="Condicion satisfactoria al momento de la inspeccion."></div>
+<div><label>OBSERVACIONES LIMPIEZA</label><input id="EQUIPOS_OBS_LIMPIEZA" placeholder="Describa solo si aplica"></div>
 <div class="full"><label>OTRAS OBSERVACIONES</label><input id="EQUIPOS_OTRAS" value=""></div></div></div>`;
-h+=`<div class="section"><h3>5. CONTROL DE PLAGAS</h3><div class="formgrid"><div><label>RESULTADO</label><select id="PLAGAS_ESTADO">${opts(['Resultado Satisfactoria','Resultado No Satisfactorio'])}</select></div><div><label>ACCIONES CORRECTIVAS</label><input id="PLAGAS_ACCIONES" value="No se requieren acciones correctivas."></div></div></div>`;
+h+=`<div class="section"><h3>5. CONTROL DE PLAGAS</h3><div class="formgrid"><div><label>RESULTADO</label><select id="PLAGAS_ESTADO">${opts(['Resultado Satisfactoria','Resultado No Satisfactorio'])}</select></div><div><label>ACCIONES CORRECTIVAS</label><input id="PLAGAS_ACCIONES" placeholder="Registrar acciones solo si aplica"></div></div></div>`;
 document.getElementById('sections').innerHTML=h}
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function tag(s){s=String(s||'');const c=s==='EJECUTADA'?'ok':(s==='NO_EJECUTADA'?'gap':'pending');return `<span class="tag ${c}">${esc(s)}</span>`}
 function paint(j){DATA=j;document.getElementById('userPill').textContent=(j.session.user||'ARMA')+' // '+(j.session.nivel||'');
 const rows=j.rows||[],st=j.status||{};document.getElementById('kExec').textContent=rows.filter(r=>r.ESTADO_REGISTRO==='EJECUTADA').length;document.getElementById('kGap').textContent=rows.filter(r=>r.ESTADO_REGISTRO==='NO_EJECUTADA').length;document.getElementById('kDue').textContent=st.lastWednesday||'--';document.getElementById('kMonth').textContent=st.currentMonthExecuted?'EJECUTADA':(st.currentMonthDue?'VENCIDA / PENDIENTE':'PENDIENTE');
-document.getElementById('hist').innerHTML=rows.map(r=>`<tr><td><b>${esc(r.ID_IMA)}</b><br><span class="small">${esc(r.MES_CONTROL||'')}</span></td><td>${esc(r.FECHA_INSPECCION||r.FECHA_LIMITE||'')}</td><td>${esc(r.INSPECTOR||'')}</td><td>${tag(r.ESTADO_REGISTRO)}</td><td class="actions"><button class="mini primary" onclick="showReport('${esc(r.ID_IMA)}')">VER / IMPRIMIR</button></td></tr>`).join('')}
+const sorted=rows.slice().sort((a,b)=>String(b.MES_CONTROL||'').localeCompare(String(a.MES_CONTROL||''))||String(b.ID_IMA||'').localeCompare(String(a.ID_IMA||''),undefined,{numeric:true}));
+const meses={'01':'ENERO','02':'FEBRERO','03':'MARZO','04':'ABRIL','05':'MAYO','06':'JUNIO','07':'JULIO','08':'AGOSTO','09':'SEPTIEMBRE','10':'OCTUBRE','11':'NOVIEMBRE','12':'DICIEMBRE'};
+document.getElementById('hist').innerHTML=sorted.map(r=>{const mc=String(r.MES_CONTROL||'');const yy=mc.slice(0,4),mm=mc.slice(4,6);
+return `<tr><td><b>${esc(meses[mm]||mm||'--')}</b><br><span class="small">${esc(r.ID_IMA)}</span></td><td>${esc(yy||'--')}</td><td>${esc(r.FECHA_INSPECCION||r.FECHA_LIMITE||'')}</td><td>${esc(r.INSPECTOR||'')}</td>`+
+`<td>${tag(r.ESTADO_REGISTRO)}</td><td class="actions"><button class="mini primary" onclick="showReport('${esc(r.ID_IMA)}')">VER / IMPRIMIR</button></td></tr>`}).join('')}
 async function load(){paintCachedUser();const t=token();if(!t){location.href='main.html';return}const p=document.getElementById('userPill');try{const j=await api('imaBootstrap',{},20000);paint(j)}catch(e){const msg=(e&&e.name==='AbortError')?'TIEMPO_AGOTADO_BACKEND_IMA':String(e&&e.message?e.message:e);p.textContent='IMA // SIN RESPUESTA';document.getElementById('hist').innerHTML='<tr><td colspan=5 style="padding:18px;color:#a51d1d;font-weight:900">NO FUE POSIBLE CARGAR IMA: '+esc(msg)+'. VERIFIQUE QUE EL WEB APP R7.6.1 ESTE IMPLEMENTADO.</td></tr>';alert('A.R.M.A. IMA: '+msg+'\\n\\nPublique una NUEVA VERSION del Web App y recargue esta pagina.')}}
 function val(id){const e=document.getElementById(id);return e?e.value:''}
 function collect(){const ids=['FECHA_INSPECCION','INSPECTOR','AREA','OBSERVACIONES_GENERALES','PISOS_ESTADO','PISOS_OBS_ESTADO','PISOS_GRIETAS','PISOS_OBS_GRIETAS','PISOS_LIMPIEZA','PISOS_OBS_LIMPIEZA','PISOS_OTRAS','PAREDES_ESTADO','PAREDES_OBS_ESTADO','PAREDES_GRIETAS','PAREDES_OBS_GRIETAS','PAREDES_LIMPIEZA','PAREDES_OBS_LIMPIEZA','PAREDES_OTRAS','TECHOS_ESTADO','TECHOS_OBS_ESTADO','TECHOS_GRIETAS','TECHOS_OBS_GRIETAS','TECHOS_LIMPIEZA','TECHOS_OBS_LIMPIEZA','TECHOS_OTRAS','EQUIPOS_ESTADO','EQUIPOS_OBS_ESTADO','EQUIPOS_MANT_PREV','EQUIPOS_OBS_MANT_PREV','EQUIPOS_LIMPIEZA','EQUIPOS_OBS_LIMPIEZA','EQUIPOS_OTRAS','PLAGAS_ESTADO','PLAGAS_ACCIONES'];const o={};ids.forEach(id=>o[id]=val(id));return o}
-async function save(){const o=collect();if(!o.FECHA_INSPECCION||!o.INSPECTOR){alert('Fecha e inspector son obligatorios.');return}if(!confirm('CONFIRME: esta inspeccion fue realmente ejecutada y los datos corresponden a lo observado fisicamente.'))return;const b=document.getElementById('saveBtn');b.disabled=true;try{const j=await api('imaSave',{data:o});alert('Inspeccion guardada: '+j.id);await load()}catch(e){alert(e.message)}finally{b.disabled=false}}
+async function save(){const o=collect();if(!o.FECHA_INSPECCION||!o.INSPECTOR||!o.AREA){alert('Fecha, inspector y area son obligatorios.');return}const req=['PISOS_ESTADO','PISOS_GRIETAS','PISOS_LIMPIEZA','PAREDES_ESTADO','PAREDES_GRIETAS','PAREDES_LIMPIEZA','TECHOS_ESTADO','TECHOS_GRIETAS','TECHOS_LIMPIEZA','EQUIPOS_ESTADO','EQUIPOS_MANT_PREV','EQUIPOS_LIMPIEZA','PLAGAS_ESTADO'];if(req.some(k=>!o[k])){alert('Complete todas las selecciones de la inspeccion antes de guardar.');return}if(!confirm('CONFIRME: esta inspeccion fue realmente ejecutada y los datos corresponden a lo observado fisicamente.'))return;const b=document.getElementById('saveBtn');b.disabled=true;try{const j=await api('imaSave',{data:o});alert('Inspeccion guardada: '+j.id);await load()}catch(e){alert(e.message)}finally{b.disabled=false}}
 function sectionRows(r,p,title){return `<tr><th colspan="3">${title}</th></tr><tr><td>Estado</td><td>${esc(r[p+'_ESTADO']||'')}</td><td>${esc(r[p+'_OBS_ESTADO']||'')}</td></tr><tr><td>Sellado / Grietas</td><td>${esc(r[p+'_GRIETAS']||'')}</td><td>${esc(r[p+'_OBS_GRIETAS']||'')}</td></tr><tr><td>Limpieza</td><td>${esc(r[p+'_LIMPIEZA']||'')}</td><td>${esc(r[p+'_OBS_LIMPIEZA']||'')}</td></tr><tr><td>Otras observaciones</td><td colspan="2">${esc(r[p+'_OTRAS']||'')}</td></tr>`}
 function renderReport(r){const isExec=r.ESTADO_REGISTRO==='EJECUTADA';let body=`<div class="reporthead"><div><h1>INSPECCION DE INFRAESTRUCTURA Y MEDIO AMBIENTE PLANTA 2</h1><div>Objetivo: Evaluar el estado de la infraestructura y las condiciones ambientales.</div></div><div class="reportcode">PLX-I-F-203<br>Versión: 1.0<br><b>${esc(r.ID_IMA)}</b></div></div>`;
 body+=`<div class="reportmeta"><div class="box"><b>Fecha de Inspeccion:</b> ${esc(r.FECHA_INSPECCION||'NO EJECUTADA')}</div><div class="box"><b>Inspector:</b> ${esc(r.INSPECTOR||'')}</div><div class="box"><b>Área:</b> ${esc(r.AREA||'Planta 2')}</div><div class="box"><b>Estado documental:</b> ${esc(r.ESTADO_REGISTRO||'')}</div></div>`;
