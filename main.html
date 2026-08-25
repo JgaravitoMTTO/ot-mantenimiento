@@ -557,7 +557,7 @@ body.arma-logged .alarm-center-card{display:flex}
           <span class='btn-icon'>AM</span>
           <span class='btn-text'>ACTIVIDADES MTTO</span>
         </a>
-        <a class='arma-btn gray arma-secured arma-locked' data-perm='BTN_INSPECCION_IMA' href='#' title='GESTIONAR INSPECCIONES IMA'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_INSPECCION_IMA' href='inspecciones_ima.html' data-arma-window='ARMA_MODULO_INSPECCIONES_IMA_HTML' target='ARMA_MODULO_INSPECCIONES_IMA_HTML' title='GESTIONAR INSPECCIONES IMA'>
           <span class='btn-icon'>IMA</span>
           <span class='btn-text'>INSPECCIONES IMA</span>
         </a>
@@ -691,7 +691,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-08-23 22:33:24</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-08-24 23:17:33</span></div>
   </footer>
 </main>
 </div>
@@ -1541,14 +1541,22 @@ function armaAlarmCard(a){
   let h='<article class="alarm-event '+(high?'alarm-high':'alarm-low')+' '+(seen?'alarm-event-seen':'alarm-event-new')+'">';
   h+='<div class="alarm-event-top"><div><span>'+armaAlarmEsc(a.planta||'SIN PLANTA')+'</span>';
   h+='<strong>'+armaAlarmEsc(a.codigoVariable||a.idVariable||'VARIABLE')+' // '+armaAlarmEsc(a.nombreVariable||'')+'</strong></div>';
-  h+='<b>'+(seen?'VISTA':'NUEVA')+'</b></div><div class="alarm-event-grid">';
-  h+='<div><span>ESTADO</span><strong>'+armaAlarmEsc(a.estado)+'</strong></div>';
-  h+='<div><span>FECHA</span><strong>'+armaAlarmEsc(armaAlarmDate(a.fecha))+'</strong></div>';
-  h+='<div><span>VALOR</span><strong>'+armaAlarmEsc(a.valor)+' '+armaAlarmEsc(a.unidad||'')+'</strong></div>';
-  h+='<div><span>LIMITES</span><strong>'+armaAlarmEsc(a.limiteInferior)+' / '+armaAlarmEsc(a.limiteSuperior)+'</strong></div>';
-  h+='<div><span>PUNTO / EQUIPO</span><strong>'+armaAlarmEsc(a.punto||a.equipo||'—')+'</strong></div>';
-  h+='<div><span>OT</span><strong>'+armaAlarmEsc(a.idOT||'NO ASOCIADA')+'</strong></div></div></article>';
-  return h;
+  h+='<b>'+(seen?'VISTA':'NUEVA')+'</b></div>';
+  if(String(a.kind||'').toUpperCase()==='IMA'){
+    h+='<div class="alarm-event-grid"><div><span>ESTADO</span><strong>'+armaAlarmEsc(a.valor||'PENDIENTE')+'</strong></div>';
+    h+='<div><span>FECHA LIMITE</span><strong>'+armaAlarmEsc(a.limiteSuperior||armaAlarmDate(a.fecha))+'</strong></div>';
+    h+='<div><span>AREA</span><strong>'+armaAlarmEsc(a.punto||'PLANTA 2')+'</strong></div>';
+    h+='<div><span>CONTROL</span><strong>INSPECCION IMA MENSUAL</strong></div></div>';
+    h+='<div style="margin-top:9px;font-size:10px;font-weight:800;color:#475569">'+armaAlarmEsc(a.mensaje||'')+'</div>';
+  }else{
+    h+='<div class="alarm-event-grid"><div><span>ESTADO</span><strong>'+armaAlarmEsc(a.estado)+'</strong></div>';
+    h+='<div><span>FECHA</span><strong>'+armaAlarmEsc(armaAlarmDate(a.fecha))+'</strong></div>';
+    h+='<div><span>VALOR</span><strong>'+armaAlarmEsc(a.valor)+' '+armaAlarmEsc(a.unidad||'')+'</strong></div>';
+    h+='<div><span>LIMITES</span><strong>'+armaAlarmEsc(a.limiteInferior)+' / '+armaAlarmEsc(a.limiteSuperior)+'</strong></div>';
+    h+='<div><span>PUNTO / EQUIPO</span><strong>'+armaAlarmEsc(a.punto||a.equipo||'—')+'</strong></div>';
+    h+='<div><span>OT</span><strong>'+armaAlarmEsc(a.idOT||'NO ASOCIADA')+'</strong></div></div>';
+  }
+  h+='</article>';return h;
 }
 function armaAlarmRender(data){
   if(!data||!data.ok)return;
