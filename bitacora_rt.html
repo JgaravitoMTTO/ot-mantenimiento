@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V31_0D_VALIDATOR_FIX_DATA_PANEL_20260817 | BUILD: 2026-08-17 18:15:17 -->
+<!-- ARMA RT MODULE V31_1_TIME_TRUTH_MERGE_20260824 | BUILD: 2026-08-24 20:32:48 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -249,7 +249,7 @@ tbody tr:hover{background:#f2f8ff;box-shadow:inset 4px 0 0 #1496df}
         </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-17 18:15:17</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-24 20:32:48</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -532,9 +532,9 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){let m=docum
 window.addEventListener('storage',function(e){if(e.key==='ARMA_TOKEN'){armaResetRTIdentity();validateSession();}});
 window.addEventListener('pageshow',function(){armaEnsureCurrentToken();});
 window.addEventListener('focus',function(){const before=armaSession.token||'';const now=armaCurrentToken();if(before&&now&&before!==now){armaResetRTIdentity();validateSession();}});
-// === RT BITACORA V31 FAST CLIENT + PROFESSIONAL DETAIL ===
+// === RT BITACORA V31.1 FAST CLIENT + TIME TRUTH MERGE ===
 let ARMA_RTB31_ROWS=[],ARMA_RTB31_BOOT_TIMER=null,ARMA_RTB31_BOOT_READY=false;
-function rtb31CacheKey(){let u=normTxt(armaSession.user||'');let t=armaCurrentToken();return 'ARMA_RTB31_'+(u||t.slice(-12));}
+function rtb31CacheKey(){let u=normTxt(armaSession.user||'');let t=armaCurrentToken();return 'ARMA_RTB31_R17_'+(u||t.slice(-12));}
 function readRTListCache(){try{let raw=localStorage.getItem(rtb31CacheKey())||'';if(!raw)return null;let c=JSON.parse(raw);if(!c||!Array.isArray(c.rows)||Date.now()-Number(c.ts||0)>600000)return null;return c;}catch(e){return null;}}
 function writeRTListCacheData(data){try{if(!data||!data.ok)return;localStorage.setItem(rtb31CacheKey(),JSON.stringify({ts:Date.now(),rows:data.rows||[],recent48Rows:Array.isArray(data.recent48Rows)?data.recent48Rows:[],page:Number(data.page||1),hasMore:data.hasMore===true,total:Number(data.total||0)}));}catch(e){}}
 function rtb31BootStart(){clearTimeout(ARMA_RTB31_BOOT_TIMER);ARMA_RTB31_BOOT_TIMER=setTimeout(function(){if(!ARMA_RTB31_BOOT_READY)showArmaLoader('CARGANDO BITACORA Y RESUMEN DE 48 HORAS...');},500);}
@@ -542,6 +542,9 @@ function rtb31BootDone(){ARMA_RTB31_BOOT_READY=true;clearTimeout(ARMA_RTB31_BOOT
 function rtb31Pad(n){return String(n).padStart(2,'0');}
 function formatDateTimeRT(v){let d=parseDateAny(v);if(!d)return String(v||'');return rtb31Pad(d.getDate())+'/'+rtb31Pad(d.getMonth()+1)+'/'+d.getFullYear()+' '+rtb31Pad(d.getHours())+':'+rtb31Pad(d.getMinutes());}
 function formatDurationRT(rt){let mins=Number(val(rt,['DURACION_MIN','MINUTOS'])||0);if(!mins){let h=Number(val(rt,['DURACION_HORAS','HORAS'])||0);if(h>0)mins=Math.round(h*60);}if(!mins){let a=parseDateAny(val(rt,['FECHA_HORA_INICIO','INICIO_INTERVENCION'])),b=parseDateAny(val(rt,['FECHA_HORA_FIN','FIN_INTERVENCION']));if(a&&b&&b>a)mins=Math.round((b-a)/60000);}if(!mins||mins<0)return '';let h=Math.floor(mins/60),m=Math.round(mins%60),p=[];if(h)p.push(h+' '+(h===1?'HORA':'HORAS'));if(m||!h)p.push(m+' '+(m===1?'MINUTO':'MINUTOS'));return p.join(' ');}
+function rtb311HasTime(v){return /(?:T|\s)\d{1,2}:\d{2}/.test(String(v==null?'':v));}
+function rtb311LocalDateTime(d){if(!(d instanceof Date)||isNaN(d.getTime()))return '';return d.getFullYear()+'-'+rtb31Pad(d.getMonth()+1)+'-'+rtb31Pad(d.getDate())+' '+rtb31Pad(d.getHours())+':'+rtb31Pad(d.getMinutes())+':'+rtb31Pad(d.getSeconds());}
+function rtb311MergeTimeTruth(detail,preview){detail=Object.assign({},detail||{});preview=preview||{};['FECHA_HORA_REPORTE','FECHA_HORA_INICIO'].forEach(function(k){let dv=detail[k],pv=preview[k];if(!rtb311HasTime(dv)&&rtb311HasTime(pv))detail[k]=pv;});let fin=detail.FECHA_HORA_FIN;if(!rtb311HasTime(fin)){let pf=preview.FECHA_HORA_FIN;if(rtb311HasTime(pf)){detail.FECHA_HORA_FIN=pf;}else{let ini=parseDateAny(detail.FECHA_HORA_INICIO||preview.FECHA_HORA_INICIO);let mins=Number(detail.DURACION_MIN||detail.MINUTOS||0);if(!mins){let hrs=Number(detail.DURACION_HORAS||detail.HORAS||0);if(hrs>0)mins=Math.round(hrs*60);}if(ini&&mins>0){detail.FECHA_HORA_FIN=rtb311LocalDateTime(new Date(ini.getTime()+mins*60000));}}}return detail;}
 function applyRTListData(data){if(!data||!data.ok){document.getElementById('listStatus').textContent=(data&&data.error)||'ERROR';return;}let rows=sortRTNewest(data.rows||data.rt||[]);ARMA_RTB31_ROWS=rows;renderRows(rows);rtCurrentPage=Number(data.page||1);rtHasMore=data.hasMore===true;let source=(data.performance&&data.performance.source)||data.source||'';
 document.getElementById('listStatus').textContent=rows.length+' REGISTROS // PAGINA '+rtCurrentPage+(source.indexOf('CACHE')>=0?' // CACHE RAPIDO':'');let pt=document.getElementById('rtPageText'),pb=document.getElementById('rtPrev'),nb=document.getElementById('rtNext');if(pt)pt.textContent='PAGINA '+rtCurrentPage;if(pb)pb.disabled=rtCurrentPage<=1;
 if(nb)nb.disabled=!rtHasMore;if(PAGE_MODE==='BITACORA'&&rtCurrentPage===1&&!hasActiveFilters())writeRTListCacheData(data);if(PAGE_MODE==='BITACORA'&&rtCurrentPage===1&&Array.isArray(data.recent48Rows)){if(!resumen48Shown)showResumen48FromRows(data.recent48Rows);else rtb31RefreshResumenBody(data.recent48Rows);}if(rows.length){let rid=val(rows[0],['ID_INT','ID_RT','BT','ID']);
@@ -560,7 +563,7 @@ formatDurationRT(rt),false)+rtInfoBlock('ESTADO PDF',val(rt,['ESTADO_PDF'])||'SI
 box.className='rt-info';box.innerHTML=rtDataSection('IDENTIFICACION DE LA RT',a)+rtDataSection('INTERVENCION Y TIEMPOS',b)+rtDataSection('RESULTADO TECNICO',c);syncRtDetailHeights();}
 async function openRT(id){let st=document.getElementById('detailStatus');let preview=ARMA_RTB31_ROWS.find(r=>String(val(r,['ID_INT','ID_RT','BT','ID'])||'').toUpperCase()===String(id||'').toUpperCase())||null;if(preview){selectedRT=preview;document.getElementById('detailTitle').textContent=(val(preview,['ID_RT','BT'])||id)+' // '+(val(preview,['NUM_REGISTRO_RT','NUMERO_RT','RT'])||'RT');
 renderRTData(preview);setViewerFromRT(preview);}if(st){st.className='status detail-loading';st.textContent='CARGANDO DETALLE COMPLETO...';}try{let data=rtCacheGet(id)||await apiSilent('getRT',{idRT:id,idInt:id,ID_INT:id},30000);if(data&&data.ok)rtCachePut(id,data);if(!data||!data.ok){if(st){st.className='status';st.textContent=(data&&data.error)||'ERROR';
-}return;}selectedRT=data.rt||data.row||data.data||data;document.getElementById('detailTitle').textContent=(val(selectedRT,['ID_INT','ID_RT','BT','CONSECUTIVO_BT'])||id)+' // '+(val(selectedRT,['NUMERO_RT','NUM_REGISTRO','NUM_REGISTRO_RT','RT'])||'RT');if(st){st.className='status';st.textContent=(val(selectedRT,['ESTADO_RT','ESTADO'])||'DETALLE CARGADO')+' // DATOS LISTOS';
+}return;}selectedRT=rtb311MergeTimeTruth(data.rt||data.row||data.data||data,preview);document.getElementById('detailTitle').textContent=(val(selectedRT,['ID_INT','ID_RT','BT','CONSECUTIVO_BT'])||id)+' // '+(val(selectedRT,['NUMERO_RT','NUM_REGISTRO','NUM_REGISTRO_RT','RT'])||'RT');if(st){st.className='status';st.textContent=(val(selectedRT,['ESTADO_RT','ESTADO'])||'DETALLE CARGADO')+' // DATOS LISTOS';
 }renderRTData(selectedRT);setViewerFromRT(selectedRT);hydratePdfLazy(id,selectedRT,0);}catch(e){if(st){st.className='status';st.textContent='NO FUE POSIBLE CARGAR EL DETALLE';}}}
 async function validateSession(){clearLegacyRTCache();const token=armaEnsureCurrentToken();if(!token){showLoginWall('NO HAY TOKEN ACTIVO. INGRESE DESDE MAIN.');return;}let painted=false;try{const cachedSession=armaSessionCacheForToken(token);if(cachedSession){setSessionData(cachedSession,token);let c=readRTListCache();if(c){startApp({list:{ok:true,rows:c.rows,recent48Rows:c.recent48Rows,page:1,hasMore:c.hasMore,total:c.total,performance:{source:'CLIENT_CACHE'}}});
 painted=true;ARMA_RTB31_BOOT_READY=true;}}}catch(e){}if(!painted)rtb31BootStart();try{const data=await apiSilent('rtBootstrap',{token:token,pageMode:'BITACORA',filters:Object.assign(buildFilters(),{PAGE:1,PAGE_SIZE:RT_PAGE_SIZE})},30000);if(!data||data.ok===false){rtb31BootDone();if(!painted)showLoginWall([data&&data.error,data&&data.stage,data&&data.detail].filter(Boolean).join(' // ')||'BACKEND RECHAZO LA SESION RT');
