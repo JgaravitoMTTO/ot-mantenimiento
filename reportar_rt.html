@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V32_4_MULTI_TECH_UI_FIX_20260825 | BUILD: 2026-08-25 13:56:03 -->
+<!-- ARMA RT MODULE V32_5_TIME_SAFETY_MULTI_TECH_20260825 | BUILD: 2026-08-25 18:17:26 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -260,7 +260,7 @@ input[type=file]{min-height:56px;padding:12px 14px;font-size:14px}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-25 13:56:03</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-25 18:17:26</span></div></footer>
 </main>
 .tech-support-full{grid-column:1/-1}.support-card{margin-top:2px;padding:12px 14px;border:1px solid #dbe7f1;border-radius:12px;background:#f8fbfe}.support-head{display:flex;justify-content:space-between;align-items:center;gap:14px}.support-head>div{min-width:0}.helper{font-size:10px;line-height:1.35;color:#66798d;margin-top:4px}.support-techs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.support-row{display:flex;gap:8px;align-items:center}.support-row select{flex:1;min-width:0}.support-row button,.mini-btn{border:0;border-radius:9px;padding:9px 12px;font-weight:900;cursor:pointer;white-space:nowrap}.support-row button{background:#f6e9ea;color:#a61d24}.mini-btn{background:#e2f6e9;color:#087f36;margin:0}@media(max-width:900px){.support-head{align-items:flex-start;flex-direction:column}.support-techs{grid-template-columns:1fr}}
 <script>
@@ -418,7 +418,17 @@ function getPdfUrl(rt){let url=val(rt,["PDF_PREVIEW_URL","DRIVE_PREVIEW_URL","PR
 function setViewerFromRT(rt){let url=getPdfUrl(rt);let v=document.getElementById("viewer");if(!url){v.innerHTML='<div><h2>PDF NO DISPONIBLE</h2><p>LA RT SELECCIONADA AUN NO TIENE PDF ASOCIADO O EL BACKEND NO RETORNO URL.</p></div>';return;}v.innerHTML='<iframe src="'+esc(url)+'" title="VISOR PDF RT"></iframe>';}
 function clearViewer(){selectedRT=null;document.getElementById("detailTitle").textContent="VISOR PDF INTERNO";document.getElementById("detailStatus").textContent="SELECCIONE UNA RT";document.getElementById("viewer").innerHTML='<div><h2>VISOR LISTO</h2><p>SELECCIONE UNA RT PARA CARGAR EL PDF.</p></div>';}
 function parseDt(id){let v=document.getElementById(id).value;if(!v)return null;return new Date(v);}
-async function validateTimes(){let ini=parseDt("rtInicio"), fin=parseDt("rtFin");if(!ini||!fin){armaAlert("DILIGENCIE INICIO Y FIN DE INTERVENCION.");return false;}let rawIni=document.getElementById("rtInicio").value, rawFin=document.getElementById("rtFin").value;if(rawIni.indexOf("T24:")>0||rawFin.indexOf("T24:")>0){armaAlert("HORA 24:00 NO ES VALIDA. USE 00:00 DEL DIA SIGUIENTE.");return false;}let hrs=(fin-ini)/3600000;if(hrs<=0){armaAlert("LA FECHA/HORA FIN DEBE SER MAYOR QUE EL INICIO.");return false;}if(hrs>24){armaAlert("NO ES POSIBLE REPORTAR UNA RT MAYOR A 24 HORAS.");return false;}if(hrs>12){return await armaConfirm("LA RT SUPERA 12 HORAS. ESTO REQUIERE REVISION/APROBACION DEL JEFE. DESEA CONTINUAR?");}return true;}
+function armaTimeLocalText(d){if(!(d instanceof Date)||isNaN(d))return'';return d.toLocaleString('es-CO',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false})}
+function armaTimeInputMaxNow(){let d=new Date(),p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'T'+p(d.getHours())+':'+p(d.getMinutes())}
+function armaApplyRTTimeMax(){let mx=armaTimeInputMaxNow();['rtInicio','rtFin'].forEach(id=>{let e=document.getElementById(id);if(e)e.max=mx})}
+async function validateTimes(){let rawIni=document.getElementById('rtInicio').value,rawFin=document.getElementById('rtFin').value,ini=parseDt('rtInicio'),fin=parseDt('rtFin');
+if(!rawIni||!rawFin||!ini||!fin||isNaN(ini)||isNaN(fin)){armaAlert('ERROR DE TIEMPO: DILIGENCIE UNA FECHA Y HORA VALIDAS PARA INICIO Y FIN.');return false}
+if(rawIni.indexOf('T24:')>0||rawFin.indexOf('T24:')>0){armaAlert('ERROR DE HORA: 24:00 NO ES VALIDA. USE 00:00 DEL DIA SIGUIENTE.');return false}
+let now=Date.now(),iniMs=ini.getTime(),finMs=fin.getTime();if(iniMs>now){armaAlert('ERROR: EL INICIO DE LA INTERVENCION NO PUEDE ESTAR EN EL FUTURO.\n\nINICIO: '+armaTimeLocalText(ini)+'\nAHORA: '+armaTimeLocalText(new Date())+'\n\nCORRIJA LA FECHA/HORA ANTES DE GUARDAR.');return false}
+if(finMs>now){armaAlert('ERROR: EL FIN DE LA INTERVENCION NO PUEDE ESTAR EN EL FUTURO.\n\nFIN: '+armaTimeLocalText(fin)+'\nAHORA: '+armaTimeLocalText(new Date())+'\n\nCORRIJA LA FECHA/HORA ANTES DE GUARDAR.');return false}
+if(finMs<=iniMs){armaAlert('ERROR DE SECUENCIA: EL FIN DEBE SER POSTERIOR AL INICIO.\n\nINICIO: '+armaTimeLocalText(ini)+'\nFIN: '+armaTimeLocalText(fin)+'\n\nREVISE FECHA, HORA Y POSIBLE CONFUSION AM/PM.');return false}
+let min=Math.round((finMs-iniMs)/60000);if(min>720){armaAlert('REPORTE BLOQUEADO: LA INTERVENCION SUMA '+min+' MIN ('+(min/60).toFixed(1)+' H), SUPERANDO EL MAXIMO DE 12 HORAS.\n\nPOR SEGURIDAD Y TRAZABILIDAD NO PUEDE GUARDARSE EN UN SOLO REPORTE. REGISTRE EL TIEMPO ADICIONAL EN UN REPORTE SEPARADO PARA SU APROBACION.\n\nREVISE TAMBIEN FECHA Y POSIBLE ERROR AM/PM.');return false}
+let warnings=[];if(ini.toDateString()!==fin.toDateString())warnings.push('LA INTERVENCION CRUZA MEDIANOCHE.');if(min>=600)warnings.push('LA DURACION ES ALTA: '+min+' MIN ('+(min/60).toFixed(1)+' H).');if(warnings.length){return await armaConfirm('VALIDACION ESPECIAL DE TIEMPO\n\n'+warnings.join('\n')+'\n\nINICIO: '+armaTimeLocalText(ini)+'\nFIN: '+armaTimeLocalText(fin)+'\nDURACION: '+min+' MIN\n\nCONFIRME SOLO SI FECHA Y HORA SON CORRECTAS. SI HAY DUDA DE AM/PM O DEL DIA, CANCELE Y CORRIJA.')}return true}
 let rtSupportCount=0;
 function supportOptions(){let reporter=document.getElementById('rtPersona').value;let used=new Set(Array.from(document.querySelectorAll('.rtSupportTech')).map(x=>x.value).filter(Boolean));return '<option value="">SELECCIONE TECNICO</option>'+rtPersonasAll.map(p=>{let id=personaId(p),nm=personaNombre(p);if(!id||id===reporter)return'';let dis=used.has(id)?' disabled':'';return '<option value="'+esc(id)+'"'+dis+'>'+esc(nm)+'</option>';}).join('')}
 function refreshSupportOptions(){document.querySelectorAll('.rtSupportTech').forEach(sel=>{let keep=sel.value;sel.innerHTML=supportOptions();if(Array.from(sel.options).some(o=>o.value===keep))sel.value=keep;});}
@@ -696,6 +706,7 @@ createRT=async function(){
  }
 };
 document.addEventListener('DOMContentLoaded',()=>{setTimeout(()=>{let b=document.getElementById('addSupportTech');if(b)b.addEventListener('click',function(e){e.preventDefault();addSupportTech('');});let rp=document.getElementById('rtPersona');if(rp)rp.addEventListener('change',refreshSupportOptions);},800);});
+document.addEventListener('DOMContentLoaded',()=>{armaApplyRTTimeMax();setInterval(armaApplyRTTimeMax,60000);});
 document.addEventListener("DOMContentLoaded",validateSession);
 </script>
 </body>
