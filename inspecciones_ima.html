@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>A.R.M.A. | Inspecciones IMA</title>
+<link rel="manifest" href="manifest.webmanifest">
+<script src="arma-pwa-navigation.js" defer></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef4fa;color:#082f62;font-family:Arial,sans-serif}
+header{background:#075ba8;color:white;padding:15px 20px;display:flex;justify-content:space-between;gap:14px;align-items:center}
+header h1{margin:0;font-size:21px}.pill{background:#fff;color:#06457f;border-radius:999px;padding:8px 12px;font-size:11px;font-weight:900}
+main{max-width:1380px;margin:18px auto;padding:0 16px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+button,.btn{border:0;border-radius:11px;padding:11px 15px;font-weight:900;cursor:pointer;text-decoration:none}.primary{background:#0878d1;color:white}.green{background:#20a84b;color:white}.gray{background:#d9e3ec;color:#173b60}.danger{background:#c62828;color:white}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}.kpi{background:#fff;border:1px solid #d7e4ef;border-radius:16px;padding:14px;box-shadow:0 6px 20px rgba(0,47,98,.08)}.kpi span{font-size:9px;font-weight:900;color:#66798b}.kpi b{display:block;font-size:21px;margin-top:5px}.warn{background:#fff7df;border-left:5px solid #efaa00;padding:12px 14px;border-radius:12px;margin:12px 0;font-size:12px;line-height:1.45}
+.grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(380px,.9fr);gap:14px}.card{background:white;border:1px solid #d7e4ef;border-radius:18px;padding:16px;box-shadow:0 7px 24px rgba(0,47,98,.09)}
+.card h2{font-size:17px;margin:0 0 12px}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.full{grid-column:1/-1}
+label{display:block;font-size:9px;font-weight:900;color:#536a80;margin-bottom:4px}input,select,textarea{width:100%;border:1px solid #cbd9e6;border-radius:9px;padding:9px;font:inherit;color:#133b63;background:#fff}textarea{min-height:62px;resize:vertical}
+.section{margin-top:13px;border-top:1px solid #dce6ef;padding-top:12px}.section h3{font-size:13px;margin:0 0 9px;color:#075ba8}
+.tablewrap{overflow:auto;max-height:680px;border:1px solid #dce6ef;border-radius:12px}table{width:100%;border-collapse:collapse;font-size:11px}th{position:sticky;top:0;background:#075ba8;color:#fff;text-align:left;padding:9px}td{padding:8px;border-bottom:1px solid #e4edf4;vertical-align:top}.tag{display:inline-block;border-radius:999px;padding:4px 7px;font-size:9px;font-weight:900}.ok{background:#dcfce7;color:#15703a}.gap{background:#fee2e2;color:#a51d1d}.pending{background:#fef3c7;color:#9a6400}
+.small{font-size:10px;color:#64748b}.actions{display:flex;gap:6px;flex-wrap:wrap}.mini{padding:7px 9px;font-size:9px}
+.modalback{position:fixed;inset:0;background:rgba(2,20,40,.72);display:grid;place-items:center;padding:18px;z-index:1500}.hidden{display:none!important}.modal{width:min(1050px,96vw);max-height:94vh;overflow:auto;background:white;border-radius:18px;padding:18px;position:relative}.close{position:sticky;float:right;top:4px;border-radius:50%;width:38px;height:38px;padding:0;font-size:22px}
+.report{font-family:Arial,sans-serif;color:#111;background:#fff}.reporthead{display:grid;grid-template-columns:1fr auto;gap:14px;border-bottom:3px solid #075ba8;padding-bottom:10px}.report h1{font-size:20px;margin:0}.reportcode{font-size:11px;text-align:right}.reportmeta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.box{border:1px solid #9aa7b4;padding:8px}.reporttable{width:100%;border-collapse:collapse;font-size:10px;margin-top:8px}.reporttable th,.reporttable td{border:1px solid #8f9aa4;padding:6px}.reporttable th{background:#e7f1f9;color:#073a6d;position:static}.signature{margin-top:24px;border-top:1px solid #333;padding-top:5px;width:340px;font-size:10px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}}
+@media print{body>*:not(#printBack){display:none!important}#printBack{position:static!important;background:#fff!important;padding:0!important;display:block!important}.modal{width:100%!important;max-height:none!important;box-shadow:none!important;border-radius:0!important;padding:0!important}.close,.printControls{display:none!important}.report{padding:8mm}.reporttable{font-size:9pt}.report h1{font-size:15pt}@page{size:letter portrait;margin:8mm}}
+</style>
+</head>
+<body>
+<header><div><small>A.R.M.A. // PLAN MANTENIMIENTO</small><h1>INSPECCIONES IMA</h1></div><div class="pill" id="userPill">VALIDANDO...</div></header>
+<main>
+<div class="toolbar"><a class="btn gray" href="main.html">VOLVER A INICIO</a><button class="primary" id="reloadBtn">ACTUALIZAR</button></div>
+<div class="warn"><b>CONTROL DOCUMENTAL:</b> los meses sin evidencia se muestran como <b>NO EJECUTADA</b>. Esta pantalla no convierte ausencias históricas en inspecciones realizadas. Las nuevas inspecciones quedan trazadas con usuario y fecha de creación.</div>
+<section class="kpis"><div class="kpi"><span>REGISTROS EJECUTADOS</span><b id="kExec">--</b></div><div class="kpi"><span>MENSUALIDADES SIN EVIDENCIA</span><b id="kGap">--</b></div><div class="kpi"><span>PRÓXIMA / FECHA LÍMITE</span><b id="kDue">--</b></div><div class="kpi"><span>ESTADO MES ACTUAL</span><b id="kMonth">--</b></div></section>
+<section class="grid">
+<article class="card">
+<h2>DILIGENCIAR INSPECCIÓN</h2>
+<div class="formgrid">
+<div><label>FECHA DE INSPECCIÓN</label><input id="FECHA_INSPECCION" type="date"></div>
+<div><label>INSPECTOR</label><select id="INSPECTOR"><option>MARIO ANDRES AREVALO RICO</option><option>EDUARD</option></select></div>
+<div class="full"><label>ÁREA / DEPARTAMENTO INSPECCIONADO</label><input id="AREA" value="Planta 2"></div>
+</div>
+<div id="sections"></div>
+<div class="section"><h3>6. OTRAS OBSERVACIONES Y ACCIONES CORRECTIVAS</h3><label>OBSERVACIONES GENERALES</label><textarea id="OBSERVACIONES_GENERALES" placeholder="Registrar únicamente hechos observados durante la inspección."></textarea></div>
+<button class="green" id="saveBtn" style="width:100%;margin-top:14px">GUARDAR INSPECCIÓN EJECUTADA</button>
+</article>
+<article class="card">
+<h2>HISTORIAL IMA</h2><div class="small" style="margin-bottom:8px">Use VER / IMPRIMIR para reconstruir visualmente el formato histórico y guardarlo como PDF desde el navegador.</div>
+<div class="tablewrap"><table><thead><tr><th>ID</th><th>FECHA / LÍMITE</th><th>INSPECTOR</th><th>ESTADO</th><th>ACCIÓN</th></tr></thead><tbody id="hist"></tbody></table></div>
+</article>
+</section>
+</main>
+<div id="printBack" class="modalback hidden"><div class="modal"><button class="close gray" id="closePrint">×</button><div class="printControls toolbar"><button class="primary" onclick="window.print()">IMPRIMIR / GUARDAR PDF</button></div><div id="report" class="report"></div></div></div>
+<script>
+const API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
+let DATA=null;
+function token(){return localStorage.getItem('ARMA_TOKEN')||sessionStorage.getItem('ARMA_TOKEN')||(()=>{try{return JSON.parse(localStorage.getItem('ARMA_SESSION_CACHE')||'{}').token||''}catch(e){return''}})()}
+async function api(action,data){const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,token:token()},data||{}))});const j=await r.json();if(!j.ok)throw new Error(j.detail||j.error||'ERROR_BACKEND');return j}
+const groups=[
+ {title:'1. PISOS',p:'PISOS',state:'PISOS_ESTADO',stateOpts:['Buen Estado','Estado Regular','Mal Estado (Requiere Intervención)'],crack:'PISOS_GRIETAS',clean:'PISOS_LIMPIEZA'},
+ {title:'2. PAREDES',p:'PAREDES',state:'PAREDES_ESTADO',stateOpts:['Buen Estado','Estado Regular','Mal Estado (Requiere Intervención)'],crack:'PAREDES_GRIETAS',clean:'PAREDES_LIMPIEZA'},
+ {title:'3. TECHOS',p:'TECHOS',state:'TECHOS_ESTADO',stateOpts:['Buen Estado','Estado Regular','Mal Estado (Requiere Intervención)'],crack:'TECHOS_GRIETAS',clean:'TECHOS_LIMPIEZA'}];
+function opts(a){return a.map(x=>'<option>'+x+'</option>').join('')}
+function buildSections(){let h='';groups.forEach(g=>{h+=`<div class="section"><h3>${g.title}</h3><div class="formgrid">
+<div><label>ESTADO</label><select id="${g.state}">${opts(g.stateOpts)}</select></div>
+<div><label>OBSERVACIONES ESTADO</label><input id="${g.p}_OBS_ESTADO" value="Sin novedades significativas observadas."></div>
+<div><label>SELLADO / GRIETAS</label><select id="${g.crack}">${opts(['Sin Grietas','Con Grietas','Grietas creciendo','En reparación'])}</select></div>
+<div><label>OBSERVACIONES GRIETAS</label><input id="${g.p}_OBS_GRIETAS" value="Sin novedades significativas observadas."></div>
+<div><label>LIMPIEZA</label><select id="${g.clean}">${opts(['Limpieza Satisfactoria','Limpieza No Satisfactoria','Suciedad de obra'])}</select></div>
+<div><label>OBSERVACIONES LIMPIEZA</label><input id="${g.p}_OBS_LIMPIEZA" value="Condición satisfactoria al momento de la inspección."></div>
+<div class="full"><label>OTRAS OBSERVACIONES</label><input id="${g.p}_OTRAS" value=""></div></div></div>`});
+h+=`<div class="section"><h3>4. EQUIPOS</h3><div class="formgrid">
+<div><label>ESTADO</label><select id="EQUIPOS_ESTADO">${opts(['Buen Estado','Estado Regular','Mal Estado (Requiere Intervención)'])}</select></div>
+<div><label>OBSERVACIONES ESTADO</label><input id="EQUIPOS_OBS_ESTADO" value="Equipos operativos y disponibles."></div>
+<div class="full"><label>MANTENIMIENTO PREVENTIVO</label><select id="EQUIPOS_MANT_PREV">${opts(['Los equipos han recibido mantenimiento preventivo según lo programado','Se identifican mantenimientos pendientes'])}</select></div>
+<div class="full"><label>OBSERVACIONES MANTENIMIENTO</label><input id="EQUIPOS_OBS_MANT_PREV" value=""></div>
+<div><label>LIMPIEZA</label><select id="EQUIPOS_LIMPIEZA">${opts(['Limpieza Satisfactoria','Limpieza No Satisfactoria'])}</select></div>
+<div><label>OBSERVACIONES LIMPIEZA</label><input id="EQUIPOS_OBS_LIMPIEZA" value="Condición satisfactoria al momento de la inspección."></div>
+<div class="full"><label>OTRAS OBSERVACIONES</label><input id="EQUIPOS_OTRAS" value=""></div></div></div>`;
+h+=`<div class="section"><h3>5. CONTROL DE PLAGAS</h3><div class="formgrid"><div><label>RESULTADO</label><select id="PLAGAS_ESTADO">${opts(['Resultado Satisfactoria','Resultado No Satisfactorio'])}</select></div><div><label>ACCIONES CORRECTIVAS</label><input id="PLAGAS_ACCIONES" value="No se requieren acciones correctivas."></div></div></div>`;
+document.getElementById('sections').innerHTML=h}
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function tag(s){s=String(s||'');const c=s==='EJECUTADA'?'ok':(s==='NO_EJECUTADA'?'gap':'pending');return `<span class="tag ${c}">${esc(s)}</span>`}
+function paint(j){DATA=j;document.getElementById('userPill').textContent=(j.session.user||'ARMA')+' // '+(j.session.nivel||'');
+const rows=j.rows||[],st=j.status||{};document.getElementById('kExec').textContent=rows.filter(r=>r.ESTADO_REGISTRO==='EJECUTADA').length;document.getElementById('kGap').textContent=rows.filter(r=>r.ESTADO_REGISTRO==='NO_EJECUTADA').length;document.getElementById('kDue').textContent=st.lastWednesday||'--';document.getElementById('kMonth').textContent=st.currentMonthExecuted?'EJECUTADA':(st.currentMonthDue?'VENCIDA / PENDIENTE':'PENDIENTE');
+document.getElementById('hist').innerHTML=rows.map(r=>`<tr><td><b>${esc(r.ID_IMA)}</b><br><span class="small">${esc(r.MES_CONTROL||'')}</span></td><td>${esc(r.FECHA_INSPECCION||r.FECHA_LIMITE||'')}</td><td>${esc(r.INSPECTOR||'')}</td><td>${tag(r.ESTADO_REGISTRO)}</td><td class="actions"><button class="mini primary" onclick="showReport('${esc(r.ID_IMA)}')">VER / IMPRIMIR</button></td></tr>`).join('')}
+async function load(){if(!token()){location.href='main.html';return}try{paint(await api('imaBootstrap'))}catch(e){alert(e.message)}}
+function val(id){const e=document.getElementById(id);return e?e.value:''}
+function collect(){const ids=['FECHA_INSPECCION','INSPECTOR','AREA','OBSERVACIONES_GENERALES','PISOS_ESTADO','PISOS_OBS_ESTADO','PISOS_GRIETAS','PISOS_OBS_GRIETAS','PISOS_LIMPIEZA','PISOS_OBS_LIMPIEZA','PISOS_OTRAS','PAREDES_ESTADO','PAREDES_OBS_ESTADO','PAREDES_GRIETAS','PAREDES_OBS_GRIETAS','PAREDES_LIMPIEZA','PAREDES_OBS_LIMPIEZA','PAREDES_OTRAS','TECHOS_ESTADO','TECHOS_OBS_ESTADO','TECHOS_GRIETAS','TECHOS_OBS_GRIETAS','TECHOS_LIMPIEZA','TECHOS_OBS_LIMPIEZA','TECHOS_OTRAS','EQUIPOS_ESTADO','EQUIPOS_OBS_ESTADO','EQUIPOS_MANT_PREV','EQUIPOS_OBS_MANT_PREV','EQUIPOS_LIMPIEZA','EQUIPOS_OBS_LIMPIEZA','EQUIPOS_OTRAS','PLAGAS_ESTADO','PLAGAS_ACCIONES'];const o={};ids.forEach(id=>o[id]=val(id));return o}
+async function save(){const o=collect();if(!o.FECHA_INSPECCION||!o.INSPECTOR){alert('Fecha e inspector son obligatorios.');return}if(!confirm('CONFIRME: esta inspección fue realmente ejecutada y los datos corresponden a lo observado físicamente.'))return;const b=document.getElementById('saveBtn');b.disabled=true;try{const j=await api('imaSave',{data:o});alert('Inspección guardada: '+j.id);await load()}catch(e){alert(e.message)}finally{b.disabled=false}}
+function sectionRows(r,p,title){return `<tr><th colspan="3">${title}</th></tr><tr><td>Estado</td><td>${esc(r[p+'_ESTADO']||'')}</td><td>${esc(r[p+'_OBS_ESTADO']||'')}</td></tr><tr><td>Sellado / Grietas</td><td>${esc(r[p+'_GRIETAS']||'')}</td><td>${esc(r[p+'_OBS_GRIETAS']||'')}</td></tr><tr><td>Limpieza</td><td>${esc(r[p+'_LIMPIEZA']||'')}</td><td>${esc(r[p+'_OBS_LIMPIEZA']||'')}</td></tr><tr><td>Otras observaciones</td><td colspan="2">${esc(r[p+'_OTRAS']||'')}</td></tr>`}
+function renderReport(r){const isExec=r.ESTADO_REGISTRO==='EJECUTADA';let body=`<div class="reporthead"><div><h1>INSPECCIÓN DE INFRAESTRUCTURA Y MEDIO AMBIENTE PLANTA 2</h1><div>Objetivo: Evaluar el estado de la infraestructura y las condiciones ambientales.</div></div><div class="reportcode">PLX-I-F-203<br>Versión: 1.0<br><b>${esc(r.ID_IMA)}</b></div></div>`;
+body+=`<div class="reportmeta"><div class="box"><b>Fecha de Inspección:</b> ${esc(r.FECHA_INSPECCION||'NO EJECUTADA')}</div><div class="box"><b>Inspector:</b> ${esc(r.INSPECTOR||'')}</div><div class="box"><b>Área:</b> ${esc(r.AREA||'Planta 2')}</div><div class="box"><b>Estado documental:</b> ${esc(r.ESTADO_REGISTRO||'')}</div></div>`;
+if(!isExec){body+=`<div class="warn"><b>REGISTRO DE CONTROL - NO ES UNA INSPECCIÓN EJECUTADA.</b><br>${esc(r.OBSERVACIONES_GENERALES||'Sin evidencia documental de ejecución.')}</div>`}
+else{body+=`<table class="reporttable"><tbody>${sectionRows(r,'PISOS','1. PISOS')}${sectionRows(r,'PAREDES','2. PAREDES')}${sectionRows(r,'TECHOS','3. TECHOS')}<tr><th colspan="3">4. EQUIPOS</th></tr><tr><td>Estado</td><td>${esc(r.EQUIPOS_ESTADO)}</td><td>${esc(r.EQUIPOS_OBS_ESTADO)}</td></tr><tr><td>Mantenimiento preventivo</td><td>${esc(r.EQUIPOS_MANT_PREV)}</td><td>${esc(r.EQUIPOS_OBS_MANT_PREV)}</td></tr><tr><td>Limpieza</td><td>${esc(r.EQUIPOS_LIMPIEZA)}</td><td>${esc(r.EQUIPOS_OBS_LIMPIEZA)}</td></tr><tr><th colspan="3">5. CONTROL DE PLAGAS</th></tr><tr><td>Resultado</td><td>${esc(r.PLAGAS_ESTADO)}</td><td>${esc(r.PLAGAS_ACCIONES)}</td></tr><tr><th colspan="3">6. OTRAS OBSERVACIONES Y ACCIONES CORRECTIVAS</th></tr><tr><td colspan="3">${esc(r.OBSERVACIONES_GENERALES)}</td></tr></tbody></table><div class="signature">Inspector: ${esc(r.INSPECTOR)}</div>`}
+document.getElementById('report').innerHTML=body}
+function showReport(id){const r=(DATA.rows||[]).find(x=>x.ID_IMA===id);if(!r)return;renderReport(r);document.getElementById('printBack').classList.remove('hidden')}
+function closeReport(){document.getElementById('printBack').classList.add('hidden')}
+buildSections();document.getElementById('FECHA_INSPECCION').value=new Date().toISOString().slice(0,10);document.getElementById('saveBtn').onclick=save;document.getElementById('reloadBtn').onclick=load;document.getElementById('closePrint').onclick=closeReport;document.getElementById('printBack').onclick=e=>{if(e.target.id==='printBack')closeReport()};load();
+</script>
+</body></html>
