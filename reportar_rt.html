@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V32_0B_MOBILE_UX_RELIABLE_SAVE_20260817 | BUILD: 2026-08-17 17:19:53 -->
+<!-- ARMA RT MODULE V32_2_DRAFT_RECOVERY_IDEMPOTENT_CONFIRM_20260824 | BUILD: 2026-08-24 20:50:45 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -259,7 +259,7 @@ input[type=file]{min-height:56px;padding:12px 14px;font-size:14px}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-17 17:19:53</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-24 20:50:45</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -476,6 +476,216 @@ async function armaV32ResolveCreate(requestId){for(let i=0;i<5;i++){if(i)await n
 async function uploadFotosForRTBackground(id,files){files=Array.from(files||[]);if(!id||!files.length)return {ok:true,count:0};let ok=0,errors=[];for(let i=0;i<files.length;i++){let file=files[i];try{if(!/^image\/(jpeg|jpg|png|webp)$/i.test(file.type||'')){errors.push(file.name+': FORMATO NO VALIDO');continue;}if(file.size>2.5*1024*1024){errors.push(file.name+': MAYOR A 2.5 MB');continue;}let base64=await fileToBase64(file);let r=await apiSilent('uploadRTFoto',{idRT:id,idInt:id,fileName:file.name,mimeType:file.type,base64:base64},90000);if(r&&r.ok)ok++;else errors.push(file.name+': '+String((r&&r.error)||'ERROR'));}catch(e){errors.push(file.name+': '+apiErrorText(e));}}return {ok:errors.length===0,count:ok,errors:errors};}
 function armaV32AfterCreate(res,files){let id=res.idRT||res.consecutivoBT||res.ID_RT||'';let sec=(Number(res.performanceCreateRT&&res.performanceCreateRT.totalMs||0)/1000);document.getElementById('reportStatus').textContent='BT '+id+' CREADA'+(sec?(' EN '+sec.toFixed(1)+' S'):'')+' // PDF Y SOPORTES EN SEGUNDO PLANO';armaV32SaveBusy(false);while(armaLoaderCount>0)hideArmaLoader();let warnings=Array.isArray(res.warnings)?res.warnings:[];armaAlert('BT GUARDADA CORRECTAMENTE: '+id+'\\nDATOS: CONFIRMADOS'+(warnings.length?'\\nA.R.M.A. REVISARA TAREAS DERIVADAS.':'')+'\\nPDF: EN PROCESO.');clearReportForm(false);if(files&&files.length){uploadFotosForRTBackground(id,files).then(function(fr){if(fr&&fr.errors&&fr.errors.length){document.getElementById('reportStatus').textContent='BT '+id+' CREADA // REVISAR '+fr.errors.length+' SOPORTE(S)';}else{document.getElementById('reportStatus').textContent='BT '+id+' CREADA // SOPORTES CARGADOS // PDF EN PROCESO';}});}setTimeout(function(){apiSilent('pdfProcessQueued',{docType:'RT',docId:id},120000).then(function(pdf){if(pdf&&pdf.ok){document.getElementById('reportStatus').textContent='BT '+id+' GUARDADA // PDF GENERADO';}}).catch(function(){});},700);}
 async function createRT(){if(ARMA_V32_SAVING)return;if(!hasPerm('BTN_DILIGENCIAR_RT')&&!hasPerm('BTN_RT_CREAR')){armaAlert('NO TIENE PERMISO PARA CREAR RT.');return;}let data=collectRT();if(!data.ID_PERSONA_REPORTA||!data.PLANTA||!data.EQUIPO||!data.FALLA_NECESIDAD||!data.INTERVENCION_REALIZADA){armaAlert('COMPLETE PERSONA, PLANTA, EQUIPO, FALLA E INTERVENCION.');return;}if(!(await validateTimes()))return;let inp=document.getElementById('rtFotos');let files=inp&&inp.files?Array.from(inp.files):[];let requestId=armaV32RequestId();data.REQUEST_ID_CLIENTE=requestId;armaV32SaveBusy(true);document.getElementById('reportStatus').textContent='GUARDANDO DATOS DE LA BT...';showArmaLoader('GUARDANDO DATOS DE LA BITACORA TECNICA...');try{let res=await apiSilent('createRT',{data:data},65000);if(!res||!res.ok){while(armaLoaderCount>0)hideArmaLoader();armaV32SaveBusy(false);let msg=String((res&&(res.detail||res.error))||'NO FUE POSIBLE GUARDAR');document.getElementById('reportStatus').textContent='NO GUARDADA // '+msg;armaAlert('LA BT NO FUE CONFIRMADA.\\n'+msg+'\\nLOS DATOS DEL FORMULARIO SE CONSERVAN.');return;}armaV32AfterCreate(res,files);}catch(e){while(armaLoaderCount>0)hideArmaLoader();document.getElementById('reportStatus').textContent='VERIFICANDO SI LA BT ALCANZO A GUARDARSE...';let found=await armaV32ResolveCreate(requestId);if(found){armaV32AfterCreate(found,files);return;}armaV32SaveBusy(false);document.getElementById('reportStatus').textContent='GUARDADO NO CONFIRMADO // DATOS CONSERVADOS';armaAlert('A.R.M.A. NO PUDO CONFIRMAR EL GUARDADO.\\nNO SE BORRO EL FORMULARIO.\\nANTES DE REPETIR, ESPERE UN MOMENTO Y VUELVA A INTENTAR.\\nDETALLE: '+apiErrorText(e));}}
+// === RT V32.2 DRAFT RECOVERY + IDEMPOTENT CONFIRM ===
+const ARMA_V322_DRAFT_IDS=[
+ 'rtPersona','rtPlanta','rtPrioridad','rtTipoTrabajo','rtEquipo','rtSubsistema',
+ 'rtInicio','rtFin','rtFalla','rtIntervencion','rtRepuestos','rtPendientes','rtObservaciones'
+];
+let ARMA_V322_DRAFT_BOUND=false;
+function armaV322DraftKey(){
+ let u=normTxt((armaSession&&armaSession.user)||'ANON').replace(/[^A-Z0-9_-]/g,'_');
+ return 'ARMA_RT_DRAFT_V32_2_'+u;
+}
+function armaV322ReadDraft(){
+ try{
+  let raw=localStorage.getItem(armaV322DraftKey())||'';
+  if(!raw)return null;
+  let d=JSON.parse(raw);
+  return d&&d.values?d:null;
+ }catch(e){return null;}
+}
+function armaV322CaptureValues(){
+ let values={};
+ ARMA_V322_DRAFT_IDS.forEach(function(id){
+  let el=document.getElementById(id);
+  if(el)values[id]=String(el.value==null?'':el.value);
+ });
+ let f=document.getElementById('rtFotos');
+ let files=f&&f.files?Array.from(f.files).map(x=>x.name):[];
+ return {values:values,fileNames:files};
+}
+function armaV322SaveDraft(extra){
+ try{
+  let cap=armaV322CaptureValues();
+  let prev=armaV322ReadDraft()||{};
+  let d={
+   version:'V32.2',
+   savedAt:Date.now(),
+   values:cap.values,
+   fileNames:cap.fileNames,
+   requestId:String((extra&&extra.requestId)||prev.requestId||''),
+   state:String((extra&&extra.state)||prev.state||'DRAFT'),
+   lastMessage:String((extra&&extra.lastMessage)||prev.lastMessage||'')
+  };
+  localStorage.setItem(armaV322DraftKey(),JSON.stringify(d));
+  return d;
+ }catch(e){return null;}
+}
+function armaV322ClearDraft(){
+ try{localStorage.removeItem(armaV322DraftKey());}catch(e){}
+}
+function armaV322RestoreDraft(){
+ let d=armaV322ReadDraft();
+ if(!d||!d.values)return false;
+ let v=d.values||{};
+ function setv(id){
+  let el=document.getElementById(id);
+  if(el&&Object.prototype.hasOwnProperty.call(v,id))el.value=v[id]||'';
+ }
+ ['rtPersona','rtPrioridad','rtTipoTrabajo'].forEach(setv);
+ setv('rtPlanta');
+ rebuildEquipoSelectByPlanta();
+ setv('rtEquipo');
+ rebuildSubsistemaSelect();
+ setv('rtSubsistema');
+ ['rtInicio','rtFin','rtFalla','rtIntervencion','rtRepuestos','rtPendientes','rtObservaciones'].forEach(setv);
+ let st=document.getElementById('reportStatus');
+ let age=Math.max(0,Math.round((Date.now()-Number(d.savedAt||Date.now()))/60000));
+ if(st){
+  st.textContent=d.state==='PENDING_CONFIRMATION'
+   ?'FORMULARIO RECUPERADO // GUARDADO PENDIENTE DE CONFIRMACION'
+   :'BORRADOR RECUPERADO // '+age+' MIN';
+ }
+ if(Array.isArray(d.fileNames)&&d.fileNames.length){
+  armaAlert('A.R.M.A. RECUPERO LOS DATOS DEL FORMULARIO.\nPOR SEGURIDAD DEL NAVEGADOR, VUELVA A SELECCIONAR LAS FOTOS: '+d.fileNames.join(', '));
+ }
+ return true;
+}
+function armaV322BindDraft(){
+ if(ARMA_V322_DRAFT_BOUND)return;
+ ARMA_V322_DRAFT_BOUND=true;
+ let timer=null;
+ function queue(){
+  clearTimeout(timer);
+  timer=setTimeout(function(){
+   if(!ARMA_V32_SAVING)armaV322SaveDraft({state:'DRAFT'});
+  },250);
+ }
+ ARMA_V322_DRAFT_IDS.forEach(function(id){
+  let el=document.getElementById(id);
+  if(!el)return;
+  el.addEventListener('input',queue);
+  el.addEventListener('change',queue);
+ });
+ window.addEventListener('beforeunload',function(){
+  if(!ARMA_V32_SAVING)armaV322SaveDraft();
+ });
+}
+async function armaV322VerifyPending(d){
+ if(!d||!d.requestId)return null;
+ let st=document.getElementById('reportStatus');
+ if(st)st.textContent='VERIFICANDO GUARDADO ANTERIOR...';
+ try{
+  return await armaV32ResolveCreate(d.requestId);
+ }catch(e){
+  return null;
+ }
+}
+const ARMA_V322_AFTERCREATE_BASE=armaV32AfterCreate;
+armaV32AfterCreate=function(res,files){
+ armaV322ClearDraft();
+ return ARMA_V322_AFTERCREATE_BASE(res,files);
+};
+const ARMA_V322_STARTAPP_BASE=startApp;
+startApp=async function(boot){
+ let r=await ARMA_V322_STARTAPP_BASE(boot);
+ if(PAGE_MODE==='REPORTAR'){
+  armaV322BindDraft();
+  setTimeout(function(){armaV322RestoreDraft();},80);
+ }
+ return r;
+};
+createRT=async function(){
+ if(ARMA_V32_SAVING)return;
+ if(!hasPerm('BTN_DILIGENCIAR_RT')&&!hasPerm('BTN_RT_CREAR')){
+  armaAlert('NO TIENE PERMISO PARA CREAR RT.');
+  return;
+ }
+ let prior=armaV322ReadDraft();
+ if(prior&&prior.state==='PENDING_CONFIRMATION'&&prior.requestId){
+  armaV32SaveBusy(true);
+  let foundPrior=await armaV322VerifyPending(prior);
+  armaV32SaveBusy(false);
+  if(foundPrior){
+   armaV32AfterCreate(foundPrior,[]);
+   return;
+  }
+  let retry=await armaConfirm(
+   'A.R.M.A. NO ENCONTRO CONFIRMACION DEL ENVIO ANTERIOR.\n'+
+   'LOS DATOS SIGUEN GUARDADOS EN ESTE EQUIPO.\n\n'+
+   '¿DESEA INTENTAR GUARDAR NUEVAMENTE?'
+  );
+  if(!retry)return;
+ }
+ let data=collectRT();
+ if(!data.ID_PERSONA_REPORTA||!data.PLANTA||!data.EQUIPO||!data.FALLA_NECESIDAD||!data.INTERVENCION_REALIZADA){
+  armaAlert('COMPLETE PERSONA, PLANTA, EQUIPO, FALLA E INTERVENCION.');
+  armaV322SaveDraft({state:'DRAFT'});
+  return;
+ }
+ if(!(await validateTimes())){
+  armaV322SaveDraft({state:'DRAFT'});
+  return;
+ }
+ let inp=document.getElementById('rtFotos');
+ let files=inp&&inp.files?Array.from(inp.files):[];
+ let requestId=armaV32RequestId();
+ data.REQUEST_ID_CLIENTE=requestId;
+ armaV322SaveDraft({requestId:requestId,state:'PENDING_CONFIRMATION',lastMessage:'ENVIANDO'});
+ armaV32SaveBusy(true);
+ document.getElementById('reportStatus').textContent='GUARDANDO DATOS DE LA BT...';
+ showArmaLoader('GUARDANDO DATOS DE LA BITACORA TECNICA...');
+ try{
+  let res=await apiSilent('createRT',{data:data},65000);
+  if(res&&res.ok){
+   armaV32AfterCreate(res,files);
+   return;
+  }
+  while(armaLoaderCount>0)hideArmaLoader();
+  document.getElementById('reportStatus').textContent='RESPUESTA NO CONFIRMADA // VERIFICANDO SI LA BT SE CREO...';
+  armaV322SaveDraft({
+   requestId:requestId,
+   state:'PENDING_CONFIRMATION',
+   lastMessage:String((res&&(res.detail||res.error))||'RESPUESTA NO OK')
+  });
+  let found=await armaV32ResolveCreate(requestId);
+  if(found){
+   armaV32AfterCreate(found,files);
+   return;
+  }
+  armaV32SaveBusy(false);
+  let msg=String((res&&(res.detail||res.error))||'NO FUE POSIBLE CONFIRMAR');
+  document.getElementById('reportStatus').textContent='GUARDADO PENDIENTE DE CONFIRMACION // DATOS PROTEGIDOS';
+  armaAlert(
+   'A.R.M.A. NO PUDO CONFIRMAR SI LA BT FUE CREADA.\n'+
+   'LOS DATOS QUEDARON PROTEGIDOS EN ESTE EQUIPO.\n'+
+   'NO VUELVA A DILIGENCIAR EL FORMULARIO.\n'+
+   'AL PRESIONAR GUARDAR OTRA VEZ, A.R.M.A. VERIFICARA PRIMERO EL ENVIO ANTERIOR.\n'+
+   'DETALLE: '+msg
+  );
+ }catch(e){
+  while(armaLoaderCount>0)hideArmaLoader();
+  document.getElementById('reportStatus').textContent='CONEXION INTERRUMPIDA // VERIFICANDO SI LA BT SE CREO...';
+  armaV322SaveDraft({
+   requestId:requestId,
+   state:'PENDING_CONFIRMATION',
+   lastMessage:apiErrorText(e)
+  });
+  let found=await armaV32ResolveCreate(requestId);
+  if(found){
+   armaV32AfterCreate(found,files);
+   return;
+  }
+  armaV32SaveBusy(false);
+  document.getElementById('reportStatus').textContent='GUARDADO PENDIENTE DE CONFIRMACION // DATOS PROTEGIDOS';
+  armaAlert(
+   'NO SE PERDIERON LOS DATOS DEL FORMULARIO.\n'+
+   'EL ENVIO QUEDO PENDIENTE DE CONFIRMACION.\n'+
+   'ANTES DE CREAR OTRA BT, PRESIONE GUARDAR NUEVAMENTE PARA VERIFICAR EL ENVIO ANTERIOR.\n'+
+   'DETALLE: '+apiErrorText(e)
+  );
+ }
+};
 document.addEventListener("DOMContentLoaded",validateSession);
 </script>
 </body>
