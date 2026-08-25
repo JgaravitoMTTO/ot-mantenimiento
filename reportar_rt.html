@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V32_3_MULTI_TECH_DRAFT_RECOVERY_20260825 | BUILD: 2026-08-25 13:42:26 -->
+<!-- ARMA RT MODULE V32_4_MULTI_TECH_UI_FIX_20260825 | BUILD: 2026-08-25 13:56:03 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -199,10 +199,10 @@ input[type=file]{min-height:56px;padding:12px 14px;font-size:14px}
           <div class="form-section-title"><span>01</span><div><strong>IDENTIFICACION Y CLASIFICACION</strong><small>DATOS BASE DEL REPORTE TECNICO</small></div></div>
           <div class="section-grid section-grid-4 classification-grid">
             <div class="field"><label>QUIEN REPORTA</label><select id="rtPersona"></select></div>
-            <div class="field tech-support-full"><label>TECNICOS DE APOYO (0 A 5)</label><div id="rtSupportTechs" class="support-techs"></div><button type="button" id="addSupportTech" class="mini-btn">+ AGREGAR TECNICO</button><div class="helper">Registre aqui otros tecnicos que participaron en la misma intervencion. No cree otra BT por el mismo trabajo.</div></div>
             <div class="field"><label>PLANTA</label><select id="rtPlanta"></select></div>
             <div class="field"><label>PRIORIDAD</label><select id="rtPrioridad"><option value="P2_8_HORAS" selected>P2 8 HORAS</option><option value="P1_INMEDIATA">P1 INMEDIATA</option></select></div>
             <div class="field"><label>TIPO DE TRABAJO</label><select id="rtTipoTrabajo"></select></div>
+            <div class="field tech-support-full support-card"><div class="support-head"><div><label>TECNICOS DE APOYO (0 A 5)</label><div class="helper">Agregue aqui otros tecnicos que participaron en la misma intervencion. No cree otra BT por el mismo trabajo.</div></div><button type="button" id="addSupportTech" class="mini-btn">+ AGREGAR TECNICO</button></div><div id="rtSupportTechs" class="support-techs"></div></div>
           </div>
         </section>
         <section class="report-form-section">
@@ -260,9 +260,9 @@ input[type=file]{min-height:56px;padding:12px 14px;font-size:14px}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-25 13:42:26</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-25 13:56:03</span></div></footer>
 </main>
-.support-techs{display:grid;grid-template-columns:1fr;gap:7px}.support-row{display:flex;gap:8px;align-items:center}.support-row select{flex:1}.support-row button,.mini-btn{border:0;border-radius:8px;padding:8px 11px;font-weight:900;cursor:pointer}.support-row button{background:#edf3f8;color:#a61d24}.mini-btn{background:#e7f7ed;color:#087f36;margin-top:7px}.tech-support-full{grid-column:1/-1}.helper{font-size:10px;color:#66798d;margin-top:6px}
+.tech-support-full{grid-column:1/-1}.support-card{margin-top:2px;padding:12px 14px;border:1px solid #dbe7f1;border-radius:12px;background:#f8fbfe}.support-head{display:flex;justify-content:space-between;align-items:center;gap:14px}.support-head>div{min-width:0}.helper{font-size:10px;line-height:1.35;color:#66798d;margin-top:4px}.support-techs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.support-row{display:flex;gap:8px;align-items:center}.support-row select{flex:1;min-width:0}.support-row button,.mini-btn{border:0;border-radius:9px;padding:9px 12px;font-weight:900;cursor:pointer;white-space:nowrap}.support-row button{background:#f6e9ea;color:#a61d24}.mini-btn{background:#e2f6e9;color:#087f36;margin:0}@media(max-width:900px){.support-head{align-items:flex-start;flex-direction:column}.support-techs{grid-template-columns:1fr}}
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
 const PAGE_MODE="REPORTAR";
@@ -420,10 +420,12 @@ function clearViewer(){selectedRT=null;document.getElementById("detailTitle").te
 function parseDt(id){let v=document.getElementById(id).value;if(!v)return null;return new Date(v);}
 async function validateTimes(){let ini=parseDt("rtInicio"), fin=parseDt("rtFin");if(!ini||!fin){armaAlert("DILIGENCIE INICIO Y FIN DE INTERVENCION.");return false;}let rawIni=document.getElementById("rtInicio").value, rawFin=document.getElementById("rtFin").value;if(rawIni.indexOf("T24:")>0||rawFin.indexOf("T24:")>0){armaAlert("HORA 24:00 NO ES VALIDA. USE 00:00 DEL DIA SIGUIENTE.");return false;}let hrs=(fin-ini)/3600000;if(hrs<=0){armaAlert("LA FECHA/HORA FIN DEBE SER MAYOR QUE EL INICIO.");return false;}if(hrs>24){armaAlert("NO ES POSIBLE REPORTAR UNA RT MAYOR A 24 HORAS.");return false;}if(hrs>12){return await armaConfirm("LA RT SUPERA 12 HORAS. ESTO REQUIERE REVISION/APROBACION DEL JEFE. DESEA CONTINUAR?");}return true;}
 let rtSupportCount=0;
-function supportOptions(){let reporter=document.getElementById('rtPersona').value;let used=new Set(Array.from(document.querySelectorAll('.rtSupportTech')).map(x=>x.value).filter(Boolean));return '<option value="">SELECCIONE TECNICO</option>'+rtPersonasAll.map(p=>{let id=personaId(p),nm=personaName(p);if(!id||id===reporter)return'';return '<option value="'+esc(id)+'">'+esc(nm)+'</option>';}).join('')}
+function supportOptions(){let reporter=document.getElementById('rtPersona').value;let used=new Set(Array.from(document.querySelectorAll('.rtSupportTech')).map(x=>x.value).filter(Boolean));return '<option value="">SELECCIONE TECNICO</option>'+rtPersonasAll.map(p=>{let id=personaId(p),nm=personaNombre(p);if(!id||id===reporter)return'';let dis=used.has(id)?' disabled':'';return '<option value="'+esc(id)+'"'+dis+'>'+esc(nm)+'</option>';}).join('')}
 function refreshSupportOptions(){document.querySelectorAll('.rtSupportTech').forEach(sel=>{let keep=sel.value;sel.innerHTML=supportOptions();if(Array.from(sel.options).some(o=>o.value===keep))sel.value=keep;});}
-function addSupportTech(value){if(rtSupportCount>=5)return;rtSupportCount++;let row=document.createElement('div');row.className='support-row';row.innerHTML='<select class="rtSupportTech" data-slot="'+rtSupportCount+'">'+supportOptions()+'</select><button type="button" title="Quitar">QUITAR</button>';row.querySelector('button').onclick=()=>{row.remove();rtSupportCount=Math.max(0,rtSupportCount-1);refreshSupportOptions();armaV322SaveDraft({state:'DRAFT'});};row.querySelector('select').onchange=()=>{let vals=Array.from(document.querySelectorAll('.rtSupportTech')).map(x=>x.value).filter(Boolean);if(new Set(vals).size!==vals.length){armaAlert('NO PUEDE REPETIR EL MISMO TECNICO.');row.querySelector('select').value='';}refreshSupportOptions();armaV322SaveDraft({state:'DRAFT'});};document.getElementById('rtSupportTechs').appendChild(row);if(value)row.querySelector('select').value=value;refreshSupportOptions();}
-function collectSupportTechs(){return Array.from(document.querySelectorAll('.rtSupportTech')).map(x=>x.value).filter(Boolean).slice(0,5).map(id=>{let p=rtPersonasAll.find(r=>personaId(r)===id);return {ID_PERSONA:id,NOMBRE_COMPLETO:p?personaName(p):id};})}
+function addSupportTech(value){if(rtSupportCount>=5){armaAlert('MAXIMO 5 TECNICOS DE APOYO.');return;}rtSupportCount++;let box=document.getElementById('rtSupportTechs');if(!box)return;let row=document.createElement('div');row.className='support-row';
+row.innerHTML='<select class="rtSupportTech" data-slot="'+rtSupportCount+'">'+supportOptions()+'</select><button type="button" title="Quitar">QUITAR</button>';box.appendChild(row);let sel=row.querySelector('select');let del=row.querySelector('button');if(value)sel.value=value;
+del.onclick=function(){row.remove();rtSupportCount=document.querySelectorAll('.rtSupportTech').length;refreshSupportOptions();armaV322SaveDraft({state:'DRAFT'});};sel.onchange=function(){let vals=Array.from(document.querySelectorAll('.rtSupportTech')).map(x=>x.value).filter(Boolean);if(new Set(vals).size!==vals.length){armaAlert('NO PUEDE REPETIR EL MISMO TECNICO.');sel.value='';}refreshSupportOptions();armaV322SaveDraft({state:'DRAFT'});};refreshSupportOptions();}
+function collectSupportTechs(){return Array.from(document.querySelectorAll('.rtSupportTech')).map(x=>x.value).filter(Boolean).slice(0,5).map(id=>{let p=rtPersonasAll.find(r=>personaId(r)===id);return {ID_PERSONA:id,NOMBRE_COMPLETO:p?personaNombre(p):id};})}
 function collectRT(){let eqObj=selectedEquipoObj();let subObj=selectedSubsistemaObj();let equipoNombre=equipoText(eqObj)||selectedOptionText('rtEquipo')||document.getElementById('rtEquipo').value;let subNombre=equipoText(subObj)||selectedOptionText('rtSubsistema')||document.getElementById('rtSubsistema').value;return {
 ID_PERSONA_REPORTA:document.getElementById('rtPersona').value,PLANTA:document.getElementById('rtPlanta').value,PRIORIDAD:document.getElementById('rtPrioridad').value,TIPO_TRABAJO:document.getElementById('rtTipoTrabajo').value,
 EQUIPO_INTERVENIDO:equipoNombre,EQUIPO:equipoNombre,ID_ACTIVO_MEL:val(eqObj,['idActivo','ID_ACTIVO']),CODIGO_TAG_MEL:equipoCodigo(eqObj),NIVEL_JERARQUIA_MEL:equipoNivel(eqObj),ID_PADRE_MEL:val(eqObj,['padre','PADRE']),
@@ -693,7 +695,7 @@ createRT=async function(){
   );
  }
 };
-document.addEventListener('DOMContentLoaded',()=>{setTimeout(()=>{let b=document.getElementById('addSupportTech');if(b)b.onclick=()=>addSupportTech('');let rp=document.getElementById('rtPersona');if(rp)rp.addEventListener('change',refreshSupportOptions);},300);});
+document.addEventListener('DOMContentLoaded',()=>{setTimeout(()=>{let b=document.getElementById('addSupportTech');if(b)b.addEventListener('click',function(e){e.preventDefault();addSupportTech('');});let rp=document.getElementById('rtPersona');if(rp)rp.addEventListener('change',refreshSupportOptions);},800);});
 document.addEventListener("DOMContentLoaded",validateSession);
 </script>
 </body>
