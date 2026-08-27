@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <script src="arma-pwa-navigation.js" defer></script>
 <style>
-html{zoom:75%}
+html{zoom:100%}
 :root{--blue:#004b9b;--blue2:#0076d7;--navy:#002b66;--green:#55b52e;--line:#dbe5f0;--text:#0f172a;--muted:#64748b;--bg:#eef3f9;--shadow:0 14px 28px rgba(0,43,102,.12)}
 *{box-sizing:border-box}
 body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);text-transform:uppercase}
@@ -40,27 +40,28 @@ body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);
 .nav-text strong{font-size:17px;font-weight:950;color:#002b66}
 .nav-text span{font-size:10px;font-weight:900;color:#008c2e;margin-top:6px}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
-.kpi{min-height:104px;border-radius:18px;padding:17px 18px;background:linear-gradient(135deg,#004b9b 0%,#0076d7 52%,#55b52e 100%);color:#fff;box-shadow:var(--shadow)}
-.kpi span{display:block;font-size:10px;font-weight:950;opacity:.9}
-.kpi b{display:block;font-size:25px;margin-top:10px;line-height:1.1}
-.kpi small{display:block;font-size:9px;margin-top:7px;opacity:.88}
+.kpi{min-height:112px;border-radius:18px;padding:19px 20px;color:#fff;box-shadow:var(--shadow)}
+.kpi:nth-child(1){background:#004b9b}.kpi:nth-child(2){background:#0878d1}.kpi:nth-child(3){background:#00a7c4}.kpi:nth-child(4){background:#55b52e}
+.kpi span{display:block;font-size:13px;font-weight:950;opacity:.95}
+.kpi b{display:block;font-size:30px;margin-top:10px;line-height:1.1}
+.kpi small{display:block;font-size:11px;margin-top:7px;opacity:.92}
 .layout{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(430px,.82fr);gap:16px}
 .panel{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:16px}
 .panel-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}
-.panel-title h2{margin:0;color:var(--navy);font-size:18px}
-.status{border-radius:999px;background:#eef7ff;border:1px solid #cfe2f6;color:#075ba8;padding:7px 10px;font-size:10px;font-weight:950}
+.panel-title h2{margin:0;color:var(--navy);font-size:23px}
+.status{border-radius:999px;background:#eef7ff;border:1px solid #cfe2f6;color:#075ba8;padding:8px 12px;font-size:12px;font-weight:950}
 .base-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:15px}
-.field label{display:block;font-size:10px;font-weight:950;color:#173d72;margin:0 0 5px 2px}
-.field input,.field select,.field textarea{width:100%;min-height:48px;border:1px solid #cadceb;border-radius:12px;background:#fff;color:#123a62;padding:10px 12px;font:inherit;font-size:13px;text-transform:none}
+.field label{display:block;font-size:13px;font-weight:950;color:#173d72;margin:0 0 6px 2px}
+.field input,.field select,.field textarea{width:100%;min-height:54px;border:1px solid #cadceb;border-radius:12px;background:#fff;color:#123a62;padding:11px 13px;font:inherit;font-size:16px;text-transform:none}
 .field textarea{min-height:82px;resize:vertical}
 .ima-entry-section{margin-top:13px;border:1px solid #d7e4ef;border-radius:15px;overflow:hidden}
-.ima-entry-title{background:#d9d9d9;color:#0f315a;font-weight:950;padding:8px 11px;font-size:12px}
+.ima-entry-title{background:#d9d9d9;color:#0f315a;font-weight:950;padding:10px 12px;font-size:15px}
 .entry-table{width:100%;border-collapse:collapse;table-layout:fixed}
 .entry-table col.c1{width:22%}.entry-table col.c2{width:35%}.entry-table col.c3{width:43%}
-.entry-table th{background:#4f81bd;color:#fff;text-align:center;padding:8px;border:1px solid #b5c8db;font-size:10px}
+.entry-table th{background:#4f81bd;color:#fff;text-align:center;padding:9px;border:1px solid #b5c8db;font-size:13px}
 .entry-table td{border:1px solid #d3e0eb;padding:7px;vertical-align:middle}
-.entry-table td:first-child{background:#dbe8f4;color:#123a62;font-size:11px;font-weight:900}
-.entry-table select,.entry-table textarea{width:100%;min-height:42px;border:1px solid #cbd9e6;border-radius:8px;padding:8px;font:inherit;font-size:12px;text-transform:none;background:#fff}
+.entry-table td:first-child{background:#dbe8f4;color:#123a62;font-size:14px;font-weight:900}
+.entry-table select,.entry-table textarea{width:100%;min-height:48px;border:1px solid #cbd9e6;border-radius:8px;padding:9px;font:inherit;font-size:15px;text-transform:none;background:#fff}
 .entry-table textarea{min-height:66px;resize:vertical}
 .form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:15px;flex-wrap:wrap}
 .btn{border:0;border-radius:12px;min-height:46px;padding:11px 16px;font-weight:950;cursor:pointer;text-decoration:none}
@@ -68,14 +69,15 @@ body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);
 .btn.green{background:linear-gradient(135deg,#168f42,#55b52e);color:#fff}
 .btn.gray{background:#e3ebf2;color:#173b60}
 .btn:disabled{opacity:.55;cursor:not-allowed}
-.tablewrap{overflow:auto;max-height:790px;border:1px solid #dce6ef;border-radius:12px}
-table.hist{width:100%;border-collapse:collapse;font-size:11px}
-.hist th{position:sticky;top:0;background:#075ba8;color:#fff;text-align:left;padding:9px}
-.hist td{padding:8px;border-bottom:1px solid #e4edf4;vertical-align:top}
+.tablewrap{overflow-y:auto;overflow-x:auto;border:1px solid #dce6ef;border-radius:12px;min-height:0}
+#historyPanel{overflow:hidden}#historyPanel .tablewrap{height:calc(100% - 62px)}
+table.hist{width:100%;border-collapse:collapse;font-size:13px}
+.hist th{position:sticky;top:0;background:#075ba8;color:#fff;text-align:left;padding:11px;font-size:13px}
+.hist td{padding:10px;border-bottom:1px solid #e4edf4;vertical-align:top;font-size:13px}
 .tag{display:inline-block;border-radius:999px;padding:4px 7px;font-size:9px;font-weight:950}
 .ok{background:#dcfce7;color:#15703a}.gap{background:#fee2e2;color:#a51d1d}.pending{background:#fef3c7;color:#9a6400}
-.small{font-size:9px;color:#64748b}.actions{display:flex;gap:6px;flex-wrap:wrap}
-.mini{border:0;border-radius:9px;padding:7px 9px;background:#0878d1;color:#fff;font-size:9px;font-weight:950;cursor:pointer}
+.small{font-size:11px;color:#64748b}.actions{display:flex;gap:6px;flex-wrap:wrap}
+.mini{border:0;border-radius:9px;padding:9px 11px;background:#0878d1;color:#fff;font-size:11px;font-weight:950;cursor:pointer}
 .footer{text-align:center;margin-top:16px}
 .footer-card{display:flex;align-items:center;justify-content:center;gap:10px;min-height:38px;padding:9px 18px;border-radius:16px;background:linear-gradient(135deg,#001f4d,#003b86 54%,#004b9b);color:#eaf4ff;font-size:12px;font-weight:850;box-shadow:var(--shadow);flex-wrap:wrap}
 .footer-sep{color:#9dffbf;font-weight:950}
@@ -139,7 +141,7 @@ table.hist{width:100%;border-collapse:collapse;font-size:11px}
 <div class="kpi"><span>ESTADO MES ACTUAL</span><b id="kMonth">--</b><small>CONTROL MENSUAL IMA</small></div>
 </section>
 <section class="layout">
-<article class="panel">
+<article class="panel" id="formPanel">
 <div class="panel-title"><h2>DILIGENCIAR INSPECCION</h2><div class="status" id="formStatus">LISTO</div></div>
 <div class="base-grid">
 <div class="field"><label>FECHA DE INSPECCION</label><input id="FECHA_INSPECCION" type="date"></div>
@@ -156,7 +158,7 @@ table.hist{width:100%;border-collapse:collapse;font-size:11px}
 <button class="btn gray" id="clearBtn" type="button">LIMPIAR</button>
 <button class="btn green" id="saveBtn" type="button">GUARDAR INSPECCION EJECUTADA</button>
 </div></article>
-<article class="panel">
+<article class="panel" id="historyPanel">
 <div class="panel-title"><h2>HISTORIAL IMA</h2><button class="btn primary" id="reloadBtn" type="button">ACTUALIZAR</button></div>
 <div class="tablewrap"><table class="hist">
 <thead><tr><th>MES</th><th>ANIO</th><th>FECHA</th><th>INSPECTOR</th><th>PLANTA</th><th>ESTADO</th><th>ACCION</th></tr></thead>
@@ -290,19 +292,32 @@ function normalizePlant(v){
   if(s==='PLANTA3')return 'Planta 3';
   return '';
 }
+function plantOptionsForPerson(p){
+  const pl=document.getElementById('AREA');
+  const all=['Planta 1','Planta 2','Planta 3'];
+  if(!p){pl.innerHTML='<option value="">SELECCIONE INSPECTOR...</option>';pl.disabled=true;return;}
+  const allowed=(p.plantas||[]).length?(p.plantas||[]):all;
+  let h='<option value="">SELECCIONE...</option>';
+  allowed.forEach(function(x){h+='<option value="'+x+'">'+x+'</option>';});
+  pl.innerHTML=h;
+  if(p.todasPlantas){pl.disabled=false;return;}
+  if(allowed.length===1){pl.value=allowed[0];pl.disabled=true;}else{pl.disabled=false;}
+}
+function applyInspectorPlant(){
+  if(!DATA)return;
+  const name=document.getElementById('INSPECTOR').value;
+  const p=(DATA.inspectores||[]).find(function(x){return x.nombre===name;});
+  plantOptionsForPerson(p||null);
+}
 function fillCatalogs(j){
   const ins=document.getElementById('INSPECTOR');
-  const pl=document.getElementById('AREA');
-  const people=(j.inspectores||[]).slice();
+  const people=(j.inspectores||[]).filter(function(x){return String(x.estado||'ACTIVO').toUpperCase()==='ACTIVO';});
   people.sort(function(a,b){return String(a.nombre||'').localeCompare(String(b.nombre||''));});
   let hi='<option value="">SELECCIONE...</option>';
   people.forEach(function(x){hi+='<option value="'+esc(x.nombre)+'">'+esc(x.nombre)+'</option>';});
   ins.innerHTML=hi;
-  let hp='<option value="">SELECCIONE...</option>';
-  ['Planta 1','Planta 2','Planta 3'].forEach(function(x){hp+='<option value="'+x+'">'+x+'</option>';});
-  pl.innerHTML=hp;
-  const assigned=normalizePlant(j.assignedPlant||(j.session&&j.session.planta)||'');
-  if(assigned)pl.value=assigned;
+  ins.onchange=applyInspectorPlant;
+  plantOptionsForPerson(null);
 }
 function tag(s){
   s=String(s||'');
@@ -350,6 +365,14 @@ function paint(j){
   document.querySelectorAll('.mini[data-id]').forEach(function(b){
     b.onclick=function(){showReport(this.getAttribute('data-id'));};
   });
+  setTimeout(syncPanelHeights,0);
+}
+function syncPanelHeights(){
+  const left=document.getElementById('formPanel');
+  const right=document.getElementById('historyPanel');
+  if(!left||!right)return;
+  if(window.innerWidth<=1050){right.style.height='';return;}
+  right.style.height=left.offsetHeight+'px';
 }
 async function load(){
   paintCachedUser();
