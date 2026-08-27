@@ -476,7 +476,7 @@ textarea.mel-readonly-field[readonly]{resize:none!important}
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-08-12 10:07:18</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-08-27 18:54:24</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -579,43 +579,35 @@ function getCachedSession() {
     return obj;
   } catch(e) { return null; }
 }
-async function api(action, payload) {
+async function api(action, payload, signal) {
   payload = payload || {};
   payload.action = action;
   if (armaSession && armaSession.token && !payload.token) payload.token = armaSession.token;
-  const res = await fetch(ARMA_API_URL, {method:"POST", body:JSON.stringify(payload)});
+  const res = await fetch(ARMA_API_URL, {method:"POST", body:JSON.stringify(payload), signal:signal});
   return await res.json();
 }
-function apiWithTimeout(action,payload,timeoutMs){
+async function apiWithTimeout(action,payload,timeoutMs){
   const limit=Math.max(3000,Number(timeoutMs||12000));
-  return Promise.race([api(action,payload),new Promise(function(_,reject){setTimeout(function(){reject(new Error('TIEMPO_AGOTADO_'+action));},limit);})]);
+  const ctl=new AbortController();
+  const timer=setTimeout(function(){ctl.abort();},limit);
+  try{return await api(action,payload,ctl.signal);}
+  catch(e){if(e&&e.name==='AbortError')throw new Error('TIEMPO_AGOTADO_'+action);throw e;}
+  finally{clearTimeout(timer);}
 }
 function hasPerm(k) {
   const p = (armaSession && armaSession.permissions) || {};
   return p.ALL === true || p.__SUPER_ADMIN__ === true || p[k] === true || armaSession.nivel === "ADMIN" || armaSession.nivel === "SUPER_ADMIN";
 }
 async function init() {
-  showLoader("VALIDANDO SESION...");
+  showLoader('CARGANDO MEL...');
   armaSession = getCachedSession();
   if (!armaSession || !armaSession.token) {
     hideLoader();
-    document.getElementById("userPill").textContent = "SIN SESION // VUELVA A MAIN";
-    toast("NO HAY SESION ACTIVA. ABRA MAIN E INICIE SESION.");
+    document.getElementById('userPill').textContent = 'SIN SESION // VUELVA A MAIN';
+    toast('NO HAY SESION ACTIVA. ABRA MAIN E INICIE SESION.');
     return;
   }
-  const val = await api("validateSession", {token:armaSession.token});
-  if (!val.ok) {
-    hideLoader();
-    localStorage.removeItem(ARMA_SESSION_CACHE_KEY);
-    document.getElementById("userPill").textContent = "SESION NO VALIDA";
-    toast("SESION NO VALIDA. REGRESE A MAIN.");
-    return;
-  }
-  armaSession = Object.assign(armaSession, val);
-  localStorage.setItem(ARMA_SESSION_CACHE_KEY, JSON.stringify(armaSession));
-  document.getElementById("userPill").textContent = (val.nombre || val.user || "") + " // " + (val.nivel || "");
-  applyPermissions();
-  await loadMEL();
+  await loadMEL('', true, false);
 }
 function melCanModifyCurrent() {
   return creatingNew ? hasPerm('BTN_MEL_CREAR') : hasPerm('BTN_MEL_EDITAR');
@@ -1170,7 +1162,25 @@ function renderCatalogAdminList(){
     return '<div class="catalog-row"><strong>'+esc(type)+'</strong><span title="'+esc(code)+'">'+esc(code)+'</span><span title="'+esc(value)+'">'+esc(value)+'</span><div class="catalog-row-actions"><button type="button" class="btn" data-cat-edit="'+index+'">EDITAR</button><button type="button" class="btn red" data-cat-delete="'+index+'">ELIMINAR</button></div></div>';
   }).join('');
   host.querySelectorAll('[data-cat-edit]').forEach(function(btn){btn.addEventListener('click',function(){const row=rows[Number(this.getAttribute('data-cat-edit'))];melCatalogEditOriginal={tipo:type,codigo:String(row.codigo||row.CODIGO||'')};document.getElementById('catalogCode').value=String(row.codigo||row.CODIGO||'');document.getElementById('catalogValue').value=String(row.valor||row.VALOR||'');document.getElementById('catalogDescription').value=String(row.descripcion||row.DESCRIPCION||'');});});
-  host.querySelectorAll('[data-cat-delete]').forEach(function(btn){btn.addEventListener('click',async function(){const row=rows[Number(this.getAttribute('data-cat-delete'))];const code=String(row.codigo||row.CODIGO||'');if(!confirm('CONFIRMA DESACTIVAR '+code+'?'))return;showLoader('DESACTIVANDO CATALOGO...');try{const res=await apiWithTimeout('melDeleteCatalogItem',{tipo:type,codigo:code},15000);if(!res.ok)throw new Error(res.error||'NO_ELIMINADO');melCatalogos=res.catalogos||melCatalogos;seedCatalogAdminRowsFromLoadedCatalogs();renderCatalogos();melCatalogStatus('CATALOGO DESACTIVADO Y LISTAS ACTUALIZADAS.','ok');toast('CATALOGO DESACTIVADO.');}catch(err){melCatalogStatus('NO FUE POSIBLE DESACTIVAR: '+err.message,'warn');toast('ERROR CATALOGO: '+err.message);}finally{hideLoader();}});});
+  host.querySelectorAll('[data-cat-delete]').forEach(function(btn){
+    btn.addEventListener('click',async function(){
+      const row=rows[Number(this.getAttribute('data-cat-delete'))];
+      const code=String(row.codigo||row.CODIGO||'');
+      if(!confirm('CONFIRMA DESACTIVAR '+code+'?'))return;
+      showLoader('DESACTIVANDO CATALOGO...');
+      try{
+        const res=await apiWithTimeout('melDeleteCatalogItem',{tipo:type,codigo:code},15000);
+        if(!res.ok)throw new Error(res.error||'NO_ELIMINADO');
+        melCatalogos=res.catalogos||melCatalogos;
+        seedCatalogAdminRowsFromLoadedCatalogs();renderCatalogos();
+        melCatalogStatus('CATALOGO DESACTIVADO Y LISTAS ACTUALIZADAS.','ok');
+        toast('CATALOGO DESACTIVADO.');
+      }catch(err){
+        melCatalogStatus('NO FUE POSIBLE DESACTIVAR: '+err.message,'warn');
+        toast('ERROR CATALOGO: '+err.message);
+      }finally{hideLoader();}
+    });
+  });
 }
 async function refreshCatalogAdminRemote(){
   const res=await apiWithTimeout('melCatalogAdminList',{},12000);if(!res.ok)throw new Error(res.error||'NO_CATALOGOS');melCatalogAdminRows=res.rows||melCatalogAdminRows;melCatalogos=res.catalogos||melCatalogos;renderCatalogos();renderCatalogAdminList();return melCatalogAdminRows.length;
@@ -1424,12 +1434,18 @@ async function melExposeSelectedPath(path, current) {
     }
   }
 }
+const MEL_DETAIL_CACHE_PREFIX='ARMA_MEL_DETAIL_V137_';
+function melDetailCacheGet(id){try{const o=JSON.parse(sessionStorage.getItem(MEL_DETAIL_CACHE_PREFIX+id)||'null');return o&&o.activo?o:null;}catch(e){return null;}}
+function melDetailCachePut(id,res){try{if(id&&res&&res.activo)sessionStorage.setItem(MEL_DETAIL_CACHE_PREFIX+id,JSON.stringify({ts:Date.now(),activo:res.activo,path:res.path||[]}));}catch(e){}}
 async function selectAsset(rowOrId, silent) {
   const id = typeof rowOrId === 'string' ? rowOrId : melAssetKey(rowOrId);
   if (!id) return;
-  if (!silent) showLoader('CARGANDO DETALLE DEL ACTIVO...');
+  const cached=melDetailCacheGet(id);
+  if(cached){selectedAsset=cached.activo;melSelectedPath=cached.path||[];creatingNew=false;setForm(selectedAsset,melSelectedPath);renderTree();}
+  if (!silent&&!cached) showLoader('CARGANDO DETALLE DEL ACTIVO...');
   try {
-    const res = await api('getMELActivo', {idActivo:id});
+    const res = await apiWithTimeout('getMELActivo', {idActivo:id}, 12000);
+    melDetailCachePut(id,res);
     if (!res.ok) throw new Error(res.error || 'ERROR_DETALLE_MEL');
     selectedAsset = res.activo || null;
     melSelectedPath = res.path || [];
@@ -1444,44 +1460,30 @@ async function selectAsset(rowOrId, silent) {
     if (!silent) hideLoader();
   }
 }
-async function loadMEL(focusId) {
-  showLoader('CARGANDO INDICE MEL...');
+async function loadMEL(focusId,initialFast,silent) {
+  if(!silent)showLoader(initialFast?'CARGANDO MEL...':'ACTUALIZANDO INDICE MEL...');
   try {
-    const data = await api('melBootstrap', {});
+    const data = await apiWithTimeout('melBootstrap', {}, 18000);
     if (!data.ok) throw new Error(data.error || 'ERROR_BOOTSTRAP_MEL');
-    melCatalogos = data.catalogos || {};
-    melHierarchyNodes = data.nodes || data.roots || [];
-    melTreeRoots = data.roots || [];
-    melDefaultAssetId = data.defaultAssetId || '';
-    melDefaultPath = data.defaultPath || [];
-    melNodeMap = {};
-    melTreeOpen = new Set();
-    melRegisterNodes(melHierarchyNodes);
-    melRegisterNodes(melDefaultPath);
-    melBuildLocalHierarchyIndex();
-    melExpandTreeThroughEquipment();
-    renderCatalogos();
-    document.getElementById('countLabel').textContent =
-      Number(data.count || 0) + ' ACTIVOS';
+    armaSession=Object.assign(armaSession||{},{user:data.user,nombre:data.nombre||data.user,nivel:data.nivel,permissions:data.permissions||{}});
+    localStorage.setItem(ARMA_SESSION_CACHE_KEY,JSON.stringify(armaSession));
+    document.getElementById('userPill').textContent=(data.nombre||data.user||'')+' // '+(data.nivel||'');
+    applyPermissions();
+    melCatalogos=data.catalogos||{};
+    melHierarchyNodes=data.nodes||data.roots||[];
+    melTreeRoots=data.roots||[];
+    melDefaultAssetId=data.defaultAssetId||'';
+    melDefaultPath=data.defaultPath||[];
+    melNodeMap={};melTreeOpen=new Set();
+    melRegisterNodes(melHierarchyNodes);melRegisterNodes(melDefaultPath);
+    melBuildLocalHierarchyIndex();melExpandTreeThroughEquipment();renderCatalogos();
+    document.getElementById('countLabel').textContent=Number(data.count||0)+' ACTIVOS';
     renderTree();
-    hideLoader();
-    const target = focusId ||
-      (selectedAsset && selectedAsset.ID_ACTIVO) ||
-      melDefaultAssetId;
-    if (target) {
-      document.getElementById('editStatus').textContent = 'CARGANDO FICHA...';
-      await selectAsset(target, true);
-      document.getElementById('editStatus').textContent = '';
-    } else {
-      selectedAsset = null;
-      melSelectedPath = [];
-      setForm(null, []);
-    }
-  } catch(err) {
-    toast('ERROR CARGANDO MEL: ' + err.message);
-  } finally {
-    hideLoader();
-  }
+    if(initialFast&&data.defaultActivo){selectedAsset=data.defaultActivo;melSelectedPath=data.defaultPath||[];creatingNew=false;setForm(selectedAsset,melSelectedPath);renderTree();return;}
+    const target=focusId||(selectedAsset&&selectedAsset.ID_ACTIVO)||melDefaultAssetId;
+    if(target)await selectAsset(target,true);else{selectedAsset=null;melSelectedPath=[];setForm(null,[]);}
+  } catch(err) {toast('ERROR CARGANDO MEL: '+err.message);}
+  finally {if(!silent)hideLoader();}
 }
 function melParentLabel(row) {
   const parent = melSelectedPath.length
@@ -1724,50 +1726,88 @@ function newAsset() {
   document.getElementById('editStatus').textContent = '';
   renderTree();
 }
-async function saveAsset() {
-  const data = formData();
-  const targetIndex = melLevelIndex(data.NIVEL_DE_JERARQUIA);
-  const parent = melHierarchyDeepestSelection();
-  if (targetIndex > 0 && !parent) {
-    toast('SELECCIONE LA RUTA JERARQUICA Y EL PADRE FINAL.');
-    return;
-  }
-  if (creatingNew || !data.ID_ACTIVO) {
-    if (!hasPerm('BTN_MEL_CREAR')) {
-      toast('SIN PERMISO PARA CREAR.');
-      return;
+// === MEL V13.6: CREACION VERIFICABLE + BORRADOR LOCAL ===
+const MEL_V136_DRAFT_KEY='ARMA_MEL_CREATE_DRAFT_V13_6';
+function melV137NewKey(){try{return 'MELC-'+crypto.randomUUID();}catch(e){return 'MELC-'+Date.now()+'-'+Math.random().toString(36).slice(2);}}
+function melV137EnsureKey(d){return (d&&d.clientKey)||melV137NewKey();}
+let melV136Saving=false;
+function melV136Norm(v){return String(v==null?'':v).trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
+function melV136DraftRead(){try{const raw=localStorage.getItem(MEL_V136_DRAFT_KEY)||'';return raw?JSON.parse(raw):null;}catch(e){return null;}}
+function melV136DraftSave(data,state,existingIds,lastError,clientKey){try{const prev=melV136DraftRead();localStorage.setItem(MEL_V136_DRAFT_KEY,JSON.stringify({version:'V13.7',ts:Date.now(),state:state||'DRAFT',data:data||formData(),existingIds:existingIds||[],lastError:String(lastError||''),clientKey:clientKey||(prev&&prev.clientKey)||melV137NewKey()}));}catch(e){}}
+function melV136DraftClear(){try{localStorage.removeItem(MEL_V136_DRAFT_KEY);}catch(e){}}
+function melV136Match(row,data){if(!row||!data)return false;const tag=melV136Norm(data.CODIGO_TAG);const name=melV136Norm(data.NOMBRE);const level=melV136Norm(data.NIVEL_DE_JERARQUIA);const parent=melV136Norm(data.PADRE);if(tag&&melV136Norm(row.CODIGO_TAG)!==tag)return false;if(name&&melV136Norm(row.NOMBRE)!==name)return false;if(level&&melV136Norm(row.NIVEL_DE_JERARQUIA)!==level)return false;if(parent&&melV136Norm(row.PADRE)!==parent)return false;return !!(tag||name);}
+async function melV136VerifyCreated(data,existingIds,clientKey){
+  if(clientKey){
+    for(let n=1;n<=3;n++){
+      try{
+        document.getElementById('loaderText').textContent='VERIFICANDO CONFIRMACION... '+n+'/3';
+        const vr=await apiWithTimeout('verifyMELCreate',{clientKey:clientKey},6000);
+        if(vr&&vr.ok&&vr.confirmed&&vr.idActivo){
+          return {ID_ACTIVO:vr.idActivo,CODIGO_TAG:data.CODIGO_TAG||'',NOMBRE:data.NOMBRE||''};
+        }
+      }catch(e){}
+      await new Promise(function(r){setTimeout(r,1200);});
     }
-    showLoader('CREANDO ACTIVO...');
-    try {
-      const res = await api('createMELActivo', {data:data});
-      if (!res.ok) throw new Error(res.error || 'NO_GUARDADO');
-      toast('ACTIVO CREADO: ' + res.idActivo);
-      await loadMEL(res.idActivo);
-    } catch(err) {
-      toast('ERROR: ' + err.message);
-    } finally {
-      hideLoader();
+  }
+  const before=new Set((existingIds||[]).map(String));
+  try{const boot=await apiWithTimeout('melBootstrap',{},12000);if(boot&&boot.ok){const rows=(boot.nodes||boot.roots||[]);const matches=rows.filter(function(r){return melV136Match(r,data);});const fresh=matches.find(function(r){const id=melAssetKey(r);return id&&!before.has(id);});return fresh||matches[0]||null;}}catch(e){}
+  return null;
+}
+function melV136RestoreDraft(){const d=melV136DraftRead();if(!d||!d.data)return false;creatingNew=true;selectedAsset=null;document.querySelectorAll('[data-field]').forEach(function(el){const k=el.getAttribute('data-field');if(Object.prototype.hasOwnProperty.call(d.data,k))el.value=d.data[k]==null?'':d.data[k];});updateGeoPlantSection();melApplyFormAccess();toast(d.state==='PENDING_CONFIRMATION'?'CREACION PENDIENTE RECUPERADA. GUARDE PARA VERIFICAR ANTES DE REPETIR.':'BORRADOR DE ACTIVO RECUPERADO.');return true;}
+function melV136BindDraft(){let timer=null;document.querySelectorAll('#assetForm [data-field]').forEach(function(el){['input','change'].forEach(function(evt){el.addEventListener(evt,function(){if(!creatingNew||melV136Saving)return;clearTimeout(timer);timer=setTimeout(function(){melV136DraftSave(formData(),'DRAFT',[], '');},300);});});});window.addEventListener('beforeunload',function(){if(creatingNew&&!melV136Saving)melV136DraftSave(formData(),'DRAFT',[], '');});}
+const melV136InitBase=init;
+init=async function(){const r=await melV136InitBase();melV136BindDraft();const d=melV136DraftRead();if(d&&d.data)setTimeout(melV136RestoreDraft,120);return r;};
+async function saveAsset(){
+  if(melV136Saving)return;
+  const data=formData();
+  const targetIndex=melLevelIndex(data.NIVEL_DE_JERARQUIA);
+  const parent=melHierarchyDeepestSelection();
+  if(targetIndex>0&&!parent){toast('SELECCIONE LA RUTA JERARQUICA Y EL PADRE FINAL.');return;}
+  if(creatingNew||!data.ID_ACTIVO){
+    if(!hasPerm('BTN_MEL_CREAR')){toast('SIN PERMISO PARA CREAR.');return;}
+    const pending=melV136DraftRead();
+    if(pending&&pending.state==='PENDING_CONFIRMATION'&&pending.data){
+      melV136Saving=true;showLoader('VERIFICANDO CREACION ANTERIOR...');
+      try{const prev=await melV136VerifyCreated(pending.data,pending.existingIds||[],pending.clientKey||'');if(prev){melV136DraftClear();const pid=prev.ID_ACTIVO||melAssetKey(prev);toast('ACTIVO YA CREADO Y CONFIRMADO: '+pid);hideLoader();melV136Saving=false;loadMEL(pid,false,true);return;}}
+      finally{hideLoader();melV136Saving=false;}
+      if(!window.confirm('A.R.M.A. NO ENCONTRO CONFIRMACION DEL INTENTO ANTERIOR.\n\nLOS DATOS SIGUEN PROTEGIDOS.\n\n¿DESEA ENVIAR NUEVAMENTE LA CREACION?'))return;
     }
+    const existingIds=Object.keys(melNodeMap||{}).filter(Boolean);
+    const currentDraft=melV136DraftRead();
+    const clientKey=melV137EnsureKey(currentDraft);
+    melV136DraftSave(data,'PENDING_CONFIRMATION',existingIds,'',clientKey);
+    melV136Saving=true;showLoader('CREANDO ACTIVO...');
+    try{
+      let res=null;
+      try{res=await apiWithTimeout('createMELActivo',{data:data,clientKey:clientKey},18000);}catch(eCreate){res=null;}
+      if(res&&res.ok&&res.idActivo){
+        melV136DraftClear();creatingNew=false;
+        if(res.activo){selectedAsset=res.activo;melSelectedPath=[];setForm(selectedAsset,[]);}
+        hideLoader();melV136Saving=false;
+        toast('DATOS CONFIRMADOS // ACTIVO CREADO: '+res.idActivo);
+        loadMEL(res.idActivo,false,true);return;
+      }
+      document.getElementById('loaderText').textContent='RESPUESTA NO CONFIRMADA // VERIFICANDO ACTIVO...';
+      const found=await melV136VerifyCreated(data,existingIds,clientKey);
+      if(found){
+        melV136DraftClear();const id=found.ID_ACTIVO||melAssetKey(found);
+        hideLoader();melV136Saving=false;
+        toast('DATOS CONFIRMADOS // ACTIVO CREADO: '+id);
+        loadMEL(id,false,true);return;
+      }
+      melV136DraftSave(data,'PENDING_CONFIRMATION',existingIds,String((res&&(res.error||res.detail))||'SIN_CONFIRMACION'),clientKey);
+      toast('NO FUE POSIBLE CONFIRMAR LA CREACION. LOS DATOS QUEDARON PROTEGIDOS. NO REPITA EL FORMULARIO; PRESIONE GUARDAR PARA VERIFICAR PRIMERO.');
+    }catch(err){
+      melV136DraftSave(data,'PENDING_CONFIRMATION',existingIds,String(err&&err.message?err.message:err),clientKey);
+      toast('CONEXION INTERRUMPIDA. LOS DATOS QUEDARON PROTEGIDOS Y LA CREACION QUEDA PENDIENTE DE CONFIRMACION.');
+    }finally{hideLoader();melV136Saving=false;}
     return;
   }
-  if (!hasPerm('BTN_MEL_EDITAR')) {
-    toast('SIN PERMISO PARA EDITAR.');
-    return;
-  }
-  showLoader('GUARDANDO ACTIVO...');
-  try {
-    const res = await api('saveMELActivo', {
-      idActivo:data.ID_ACTIVO,
-      data:data
-    });
-    if (!res.ok) throw new Error(res.error || 'NO_GUARDADO');
-    toast('ACTIVO ACTUALIZADO.');
-    await loadMEL(data.ID_ACTIVO);
-  } catch(err) {
-    toast('ERROR: ' + err.message);
-  } finally {
-    hideLoader();
-  }
+  if(!hasPerm('BTN_MEL_EDITAR')){toast('SIN PERMISO PARA EDITAR.');return;}
+  melV136Saving=true;showLoader('GUARDANDO ACTIVO...');
+  try{const res=await apiWithTimeout('saveMELActivo',{idActivo:data.ID_ACTIVO,data:data},30000);if(!res.ok)throw new Error(res.error||'NO_GUARDADO');toast('ACTIVO ACTUALIZADO.');await loadMEL(data.ID_ACTIVO);}
+  catch(err){toast('ERROR: '+err.message);}
+  finally{hideLoader();melV136Saving=false;}
 }
 async function uploadPhoto() {
   const data = formData();
