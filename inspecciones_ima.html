@@ -7,111 +7,484 @@
 <link rel="manifest" href="manifest.webmanifest">
 <script src="arma-pwa-navigation.js" defer></script>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#eef4fa;color:#082f62;font-family:Arial,sans-serif}
-header{background:#075ba8;color:white;padding:15px 20px;display:flex;justify-content:space-between;gap:14px;align-items:center}
-header h1{margin:0;font-size:21px}.pill{background:#fff;color:#06457f;border-radius:999px;padding:8px 12px;font-size:11px;font-weight:900}
-main{max-width:1380px;margin:18px auto;padding:0 16px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-button,.btn{border:0;border-radius:11px;padding:11px 15px;font-weight:900;cursor:pointer;text-decoration:none}.primary{background:#0878d1;color:white}.green{background:#20a84b;color:white}.gray{background:#d9e3ec;color:#173b60}.danger{background:#c62828;color:white}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}.kpi{background:#fff;border:1px solid #d7e4ef;border-radius:16px;padding:14px;box-shadow:0 6px 20px rgba(0,47,98,.08)}.kpi span{font-size:9px;font-weight:900;color:#66798b}.kpi b{display:block;font-size:21px;margin-top:5px}.warn{background:#fff7df;border-left:5px solid #efaa00;padding:12px 14px;border-radius:12px;margin:12px 0;font-size:12px;line-height:1.45}
-.grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(380px,.9fr);gap:14px}.card{background:white;border:1px solid #d7e4ef;border-radius:18px;padding:16px;box-shadow:0 7px 24px rgba(0,47,98,.09)}
-.card h2{font-size:17px;margin:0 0 12px}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.full{grid-column:1/-1}
-label{display:block;font-size:9px;font-weight:900;color:#536a80;margin-bottom:4px}input,select,textarea{width:100%;border:1px solid #cbd9e6;border-radius:9px;padding:9px;font:inherit;color:#133b63;background:#fff}textarea{min-height:62px;resize:vertical}
-.section{margin-top:13px;border-top:1px solid #dce6ef;padding-top:12px}.section h3{font-size:13px;margin:0 0 9px;color:#075ba8}
-.tablewrap{overflow:auto;max-height:680px;border:1px solid #dce6ef;border-radius:12px}table{width:100%;border-collapse:collapse;font-size:11px}th{position:sticky;top:0;background:#075ba8;color:#fff;text-align:left;padding:9px}td{padding:8px;border-bottom:1px solid #e4edf4;vertical-align:top}.tag{display:inline-block;border-radius:999px;padding:4px 7px;font-size:9px;font-weight:900}.ok{background:#dcfce7;color:#15703a}.gap{background:#fee2e2;color:#a51d1d}.pending{background:#fef3c7;color:#9a6400}
-.small{font-size:10px;color:#64748b}.actions{display:flex;gap:6px;flex-wrap:wrap}.mini{padding:7px 9px;font-size:9px}
-.modalback{position:fixed;inset:0;background:rgba(2,20,40,.72);display:grid;place-items:center;padding:18px;z-index:1500}.hidden{display:none!important}.modal{width:min(1050px,96vw);max-height:94vh;overflow:auto;background:white;border-radius:18px;padding:18px;position:relative}.close{position:sticky;float:right;top:4px;border-radius:50%;width:38px;height:38px;padding:0;font-size:22px}
-.report{font-family:Arial,sans-serif;color:#111;background:#fff;width:100%;font-size:9.2pt;line-height:1.15}.ima-doc{width:100%;border-top:5px solid #1f4e79}.ima-header{width:100%;border-collapse:collapse;table-layout:fixed}.ima-header td{border:1px solid #111;height:42px;text-align:center;vertical-align:middle;padding:3px 5px}
-.ima-logo{width:21%}.ima-logo img{max-height:38px;max-width:145px}.ima-title{width:51%;font-size:12pt;font-weight:700;color:#17365d;line-height:1.25}.ima-code{width:28%;font-size:10.5pt;font-weight:700;color:#17365d;line-height:1.35}.ima-subhead{display:grid;grid-template-columns:21% 51% 28%;align-items:center;height:26px}.ima-annex{grid-column:2;text-align:center;font-weight:700;font-size:9.5pt}.ima-id{grid-column:3;text-align:center;font-weight:700;font-size:10pt}.ima-objective{font-size:7.8pt;margin:0 0 4px 2px}
-.ima-meta,.ima-grid{width:100%;border-collapse:collapse;table-layout:fixed}.ima-meta td,.ima-grid td,.ima-grid th{border:1px solid #111;padding:3px 4px;vertical-align:middle}.ima-meta td{height:20px}.ima-meta .lbl{width:21%;font-weight:700;white-space:nowrap}.ima-section{background:#d9d9d9;font-weight:700;padding:3px 2px;border-left:1px solid #111;border-right:1px solid #111;font-size:8.8pt}.ima-grid col.c1{width:21%}.ima-grid col.c2{width:51%}.ima-grid col.c3{width:28%}
-.ima-grid th{background:#4f81bd;color:#fff;text-align:center;font-weight:700;height:20px;position:static}.ima-grid td{height:24px}.ima-grid td:first-child{background:#dbe8f4;font-weight:700}.ima-grid .blank{font-style:italic}.ima-grid .action-label{background:#dbe8f4;font-weight:700}.ima-grid .action-text{height:42px;vertical-align:top}.ima-general{border:1px solid #111;min-height:260px;padding:4px;font-size:9pt}.ima-footer{display:grid;grid-template-columns:21% 79%;margin-top:5px;font-size:8.8pt}.ima-footer b{padding-left:2px}.ima-footer span{padding-left:4px}.ima-gap-doc{border:2px solid #b91c1c;padding:16px;margin:8px 0;background:#fff}.ima-gap-doc h2{color:#991b1b;margin-top:0}
-@media(max-width:900px){.grid{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}}
-@media print{body>*:not(#printBack){display:none!important}#printBack{position:static!important;background:#fff!important;padding:0!important;display:block!important}.modal{width:100%!important;max-height:none!important;overflow:visible!important;box-shadow:none!important;border-radius:0!important;padding:0!important}.close,.printControls{display:none!important}.report{padding:0!important}.ima-doc{break-inside:avoid}.ima-general{min-height:260px}@page{size:A4 portrait;margin:4mm}}
+html{zoom:75%}
+:root{--blue:#004b9b;--blue2:#0076d7;--navy:#002b66;--green:#55b52e;--line:#dbe5f0;--text:#0f172a;--muted:#64748b;--bg:#eef3f9;--shadow:0 14px 28px rgba(0,43,102,.12)}
+*{box-sizing:border-box}
+body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);text-transform:uppercase}
+.hidden{display:none!important}
+.top-global{position:sticky;top:0;z-index:50;background:#fff;box-shadow:0 10px 24px rgba(0,43,102,.14)}
+.top-white{min-height:110px;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.red-line{height:6px;background:linear-gradient(90deg,var(--blue),var(--blue2),var(--blue))}
+.brand-row{display:flex;align-items:center;gap:22px}
+.brand-separator{width:1px;height:68px;background:#d8e5f2}
+.logo-pelex{height:74px;max-width:260px;object-fit:contain}
+.logo-arma{height:82px;max-width:380px;object-fit:contain}
+.top-title{text-align:right}
+.top-title strong{display:block;color:var(--navy);font-size:24px;font-weight:950}
+.top-title span{display:block;color:var(--muted);font-size:12px;font-weight:900;margin-top:5px}
+.top-title-actions{margin-top:9px;display:flex;justify-content:flex-end}
+.user-pill{display:inline-flex;background:#f8fbff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--navy);font-size:12px;font-weight:900}
+.main{max-width:1500px;margin:0 auto;padding:18px 24px 22px}
+.hero{position:relative;overflow:hidden;border-radius:22px;background:linear-gradient(135deg,#002b66,#004b9b 55%,#0076d7);box-shadow:var(--shadow);color:#fff;padding:20px 28px;margin-bottom:16px;display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:18px;align-items:center}
+.hero:after{content:'IMA';position:absolute;right:28px;bottom:-18px;font-size:82px;font-weight:950;letter-spacing:6px;color:rgba(255,255,255,.055)}
+.hero-copy,.hero-home{position:relative;z-index:2}
+.hero-copy>span{display:inline-block;background:rgba(0,214,95,.15);border:1px solid rgba(0,214,95,.45);color:#b8ffd5;padding:6px 10px;border-radius:999px;font-weight:950;font-size:11px}
+.hero h1{margin:12px 0 5px;font-size:30px}
+.hero p{margin:0;color:#eaf4ff;font-size:11px;font-weight:850}
+.hero-home{justify-self:end;width:100%}
+.index-nav-card{position:relative;display:flex;align-items:center;gap:14px;min-height:82px;padding:14px 18px;border-radius:18px;background:linear-gradient(180deg,#fff,#eef7ff);border:1px solid #dbe5f0;box-shadow:0 10px 22px rgba(0,43,102,.10);text-decoration:none;color:#002b66}
+.index-nav-card:before{content:'';position:absolute;left:0;top:0;width:100%;height:5px;background:linear-gradient(90deg,#004b9b,#0076d7,#00bfd6,#55b52e)}
+.nav-icon{width:54px;height:54px;border-radius:16px;background:#e8f2ff;border:1px solid #dbe5f0;display:grid;place-items:center;flex:0 0 54px}
+.nav-icon img{width:38px;height:38px;object-fit:contain}
+.nav-text{display:flex;flex-direction:column;line-height:1.1}
+.nav-text strong{font-size:17px;font-weight:950;color:#002b66}
+.nav-text span{font-size:10px;font-weight:900;color:#008c2e;margin-top:6px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.kpi{min-height:104px;border-radius:18px;padding:17px 18px;background:linear-gradient(135deg,#004b9b 0%,#0076d7 52%,#55b52e 100%);color:#fff;box-shadow:var(--shadow)}
+.kpi span{display:block;font-size:10px;font-weight:950;opacity:.9}
+.kpi b{display:block;font-size:25px;margin-top:10px;line-height:1.1}
+.kpi small{display:block;font-size:9px;margin-top:7px;opacity:.88}
+.layout{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(430px,.82fr);gap:16px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:16px}
+.panel-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}
+.panel-title h2{margin:0;color:var(--navy);font-size:18px}
+.status{border-radius:999px;background:#eef7ff;border:1px solid #cfe2f6;color:#075ba8;padding:7px 10px;font-size:10px;font-weight:950}
+.base-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:15px}
+.field label{display:block;font-size:10px;font-weight:950;color:#173d72;margin:0 0 5px 2px}
+.field input,.field select,.field textarea{width:100%;min-height:48px;border:1px solid #cadceb;border-radius:12px;background:#fff;color:#123a62;padding:10px 12px;font:inherit;font-size:13px;text-transform:none}
+.field textarea{min-height:82px;resize:vertical}
+.ima-entry-section{margin-top:13px;border:1px solid #d7e4ef;border-radius:15px;overflow:hidden}
+.ima-entry-title{background:#d9d9d9;color:#0f315a;font-weight:950;padding:8px 11px;font-size:12px}
+.entry-table{width:100%;border-collapse:collapse;table-layout:fixed}
+.entry-table col.c1{width:22%}.entry-table col.c2{width:35%}.entry-table col.c3{width:43%}
+.entry-table th{background:#4f81bd;color:#fff;text-align:center;padding:8px;border:1px solid #b5c8db;font-size:10px}
+.entry-table td{border:1px solid #d3e0eb;padding:7px;vertical-align:middle}
+.entry-table td:first-child{background:#dbe8f4;color:#123a62;font-size:11px;font-weight:900}
+.entry-table select,.entry-table textarea{width:100%;min-height:42px;border:1px solid #cbd9e6;border-radius:8px;padding:8px;font:inherit;font-size:12px;text-transform:none;background:#fff}
+.entry-table textarea{min-height:66px;resize:vertical}
+.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:15px;flex-wrap:wrap}
+.btn{border:0;border-radius:12px;min-height:46px;padding:11px 16px;font-weight:950;cursor:pointer;text-decoration:none}
+.btn.primary{background:linear-gradient(135deg,#004b9b,#0076d7);color:#fff}
+.btn.green{background:linear-gradient(135deg,#168f42,#55b52e);color:#fff}
+.btn.gray{background:#e3ebf2;color:#173b60}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.tablewrap{overflow:auto;max-height:790px;border:1px solid #dce6ef;border-radius:12px}
+table.hist{width:100%;border-collapse:collapse;font-size:11px}
+.hist th{position:sticky;top:0;background:#075ba8;color:#fff;text-align:left;padding:9px}
+.hist td{padding:8px;border-bottom:1px solid #e4edf4;vertical-align:top}
+.tag{display:inline-block;border-radius:999px;padding:4px 7px;font-size:9px;font-weight:950}
+.ok{background:#dcfce7;color:#15703a}.gap{background:#fee2e2;color:#a51d1d}.pending{background:#fef3c7;color:#9a6400}
+.small{font-size:9px;color:#64748b}.actions{display:flex;gap:6px;flex-wrap:wrap}
+.mini{border:0;border-radius:9px;padding:7px 9px;background:#0878d1;color:#fff;font-size:9px;font-weight:950;cursor:pointer}
+.footer{text-align:center;margin-top:16px}
+.footer-card{display:flex;align-items:center;justify-content:center;gap:10px;min-height:38px;padding:9px 18px;border-radius:16px;background:linear-gradient(135deg,#001f4d,#003b86 54%,#004b9b);color:#eaf4ff;font-size:12px;font-weight:850;box-shadow:var(--shadow);flex-wrap:wrap}
+.footer-sep{color:#9dffbf;font-weight:950}
+.modalback{position:fixed;inset:0;background:rgba(2,20,40,.72);display:grid;place-items:center;padding:18px;z-index:1500}
+.modal{width:min(1050px,96vw);max-height:94vh;overflow:auto;background:#fff;border-radius:18px;padding:18px;position:relative}
+.close{position:sticky;float:right;top:4px;border-radius:50%;width:38px;height:38px;padding:0;font-size:22px}
+.report{font-family:Arial,sans-serif;color:#111;background:#fff;width:100%;font-size:9.2pt;line-height:1.15;text-transform:none}
+.ima-doc{width:100%;border-top:5px solid #1f4e79}
+.ima-header{width:100%;border-collapse:collapse;table-layout:fixed}
+.ima-header td{border:1px solid #111;height:42px;text-align:center;vertical-align:middle;padding:3px 5px}
+.ima-logo{width:21%}.ima-logo img{max-height:38px;max-width:145px}
+.ima-title{width:51%;font-size:12pt;font-weight:700;color:#17365d;line-height:1.25}
+.ima-code{width:28%;font-size:10.5pt;font-weight:700;color:#17365d;line-height:1.35}
+.ima-subhead{display:grid;grid-template-columns:21% 51% 28%;align-items:center;height:26px}
+.ima-annex{grid-column:2;text-align:center;font-weight:700}.ima-id{grid-column:3;text-align:center;font-weight:700}
+.ima-objective{font-size:7.8pt;margin:0 0 4px 2px}
+.ima-meta,.ima-grid{width:100%;border-collapse:collapse;table-layout:fixed}
+.ima-meta td,.ima-grid td,.ima-grid th{border:1px solid #111;padding:3px 4px;vertical-align:middle}
+.ima-meta .lbl{width:21%;font-weight:700;white-space:nowrap}
+.ima-section{background:#d9d9d9;font-weight:700;padding:3px 2px;border-left:1px solid #111;border-right:1px solid #111}
+.ima-grid col.c1{width:21%}.ima-grid col.c2{width:51%}.ima-grid col.c3{width:28%}
+.ima-grid th{background:#4f81bd;color:#fff;text-align:center;font-weight:700;position:static}
+.ima-grid td:first-child{background:#dbe8f4;font-weight:700}
+.blank{font-style:italic}.action-label{background:#dbe8f4;font-weight:700}.action-text{height:42px;vertical-align:top}
+.ima-general{border:1px solid #111;min-height:260px;padding:4px}
+.ima-footer{display:grid;grid-template-columns:21% 79%;margin-top:5px}
+.ima-gap-doc{border:2px solid #b91c1c;padding:16px;margin:8px 0;background:#fff}
+.ima-gap-doc h2{color:#991b1b;margin-top:0}
+@media(max-width:1050px){html{zoom:100%}.top-global{position:relative}.top-white{padding:10px 12px}.top-title strong{font-size:21px}.main{padding:10px}.hero{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.layout{grid-template-columns:1fr}.base-grid{grid-template-columns:1fr}}
+@media print{body>*:not(#printBack){display:none!important}#printBack{position:static!important;background:#fff!important;padding:0!important;display:block!important}.modal{width:100%!important;max-height:none!important;overflow:visible!important;border-radius:0!important;padding:0!important}.close,.printControls{display:none!important}@page{size:A4 portrait;margin:4mm}}
 </style>
 </head>
 <body>
-<header><div><small>A.R.M.A. // PLAN MANTENIMIENTO</small><h1>INSPECCIONES IMA</h1></div><div class="pill" id="userPill">VALIDANDO...</div></header>
-<main>
-<div class="toolbar"><a class="btn gray" href="main.html">VOLVER A INICIO</a><button class="primary" id="reloadBtn">ACTUALIZAR</button></div>
-<div class="warn"><b>CONTROL DOCUMENTAL:</b> los meses sin evidencia se muestran como <b>NO EJECUTADA</b>. Esta pantalla no convierte ausencias historicas en inspecciones realizadas. Las nuevas inspecciones quedan trazadas con usuario y fecha de creacion.</div>
-<section class="kpis"><div class="kpi"><span>REGISTROS EJECUTADOS</span><b id="kExec">--</b></div><div class="kpi"><span>MENSUALIDADES SIN EVIDENCIA</span><b id="kGap">--</b></div><div class="kpi"><span>PROXIMA / FECHA LIMITE</span><b id="kDue">--</b></div><div class="kpi"><span>ESTADO MES ACTUAL</span><b id="kMonth">--</b></div></section>
-<section class="grid">
-<article class="card">
-<h2>DILIGENCIAR INSPECCION</h2>
-<div class="formgrid">
-<div><label>FECHA DE INSPECCION</label><input id="FECHA_INSPECCION" type="date"></div>
-<div><label>INSPECTOR</label><select id="INSPECTOR"><option value="">SELECCIONE...</option><option>MARIO ANDRES AREVALO RICO</option><option>EDUARD</option></select></div>
-<div class="full"><label>AREA / DEPARTAMENTO INSPECCIONADO</label><input id="AREA" placeholder="Ej. Planta 2, Almacen, Taller..."></div>
+<header class="top-global">
+<div class="top-white">
+<div class="brand-row">
+<img src="logo_pelex.bmp" alt="PELEX" class="logo-pelex">
+<div class="brand-separator"></div>
+<img src="ARMA%20logo%202.png" alt="ARMA" class="logo-arma">
+</div>
+<div class="top-title">
+<strong>PLAN MANTENIMIENTO | INSPECCIONES IMA</strong>
+<span>CONTROL DE INFRAESTRUCTURA Y CONDICIONES AMBIENTALES</span>
+<div class="top-title-actions"><div class="user-pill" id="userPill">VALIDANDO SESION...</div></div>
+</div></div><div class="red-line"></div></header>
+<main class="main">
+<section class="hero">
+<div class="hero-copy">
+<span>ARMA DATA // IMA</span>
+<h1>INSPECCION DE INFRAESTRUCTURA Y MEDIO AMBIENTE</h1>
+<p>DILIGENCIAMIENTO MENSUAL TRAZABLE, HISTORIAL Y FORMATO PLX-I-F-203.</p>
+</div>
+<a class="index-nav-card hero-home" href="main.html">
+<div class="nav-icon"><img src="boton-de-inicio.png" alt="INICIO"></div>
+<div class="nav-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></div>
+</a></section>
+<section class="kpis">
+<div class="kpi"><span>REGISTROS EJECUTADOS</span><b id="kExec">--</b><small>INSPECCIONES CON EVIDENCIA</small></div>
+<div class="kpi"><span>MENSUALIDADES SIN EVIDENCIA</span><b id="kGap">--</b><small>CONTROL HISTORICO</small></div>
+<div class="kpi"><span>PROXIMA / FECHA LIMITE</span><b id="kDue">--</b><small>ULTIMO MIERCOLES DEL MES</small></div>
+<div class="kpi"><span>ESTADO MES ACTUAL</span><b id="kMonth">--</b><small>CONTROL MENSUAL IMA</small></div>
+</section>
+<section class="layout">
+<article class="panel">
+<div class="panel-title"><h2>DILIGENCIAR INSPECCION</h2><div class="status" id="formStatus">LISTO</div></div>
+<div class="base-grid">
+<div class="field"><label>FECHA DE INSPECCION</label><input id="FECHA_INSPECCION" type="date"></div>
+<div class="field"><label>INSPECTOR</label><select id="INSPECTOR"><option value="">CARGANDO...</option></select></div>
+<div class="field"><label>PLANTA / AREA INSPECCIONADA</label><select id="AREA"><option value="">CARGANDO...</option></select></div>
 </div>
 <div id="sections"></div>
-<div class="section"><h3>6. OTRAS OBSERVACIONES Y ACCIONES CORRECTIVAS</h3><label>OBSERVACIONES GENERALES</label><textarea id="OBSERVACIONES_GENERALES" placeholder="Registrar unicamente hechos observados durante la inspeccion."></textarea></div>
-<button class="green" id="saveBtn" style="width:100%;margin-top:14px">GUARDAR INSPECCION EJECUTADA</button>
-</article>
-<article class="card">
-<h2>HISTORIAL IMA</h2><div class="small" style="margin-bottom:8px">Use VER / IMPRIMIR para reconstruir visualmente el formato historico y guardarlo como PDF desde el navegador.</div>
-<div class="tablewrap"><table><thead><tr><th>MES</th><th>ANIO</th><th>FECHA</th><th>INSPECTOR</th><th>ESTADO</th><th>ACCION</th></tr></thead><tbody id="hist"></tbody></table></div>
-</article>
-</section>
-</main>
-<div id="printBack" class="modalback hidden"><div class="modal"><button class="close gray" id="closePrint">×</button><div class="printControls toolbar"><button class="primary" onclick="window.print()">IMPRIMIR / GUARDAR PDF</button></div><div id="report" class="report"></div></div></div>
+<div class="ima-entry-section">
+<div class="ima-entry-title">6. OTRAS OBSERVACIONES Y ACCIONES CORRECTIVAS</div>
+<div style="padding:9px"><div class="field">
+<textarea id="OBSERVACIONES_GENERALES" placeholder="OBSERVACIONES GENERALES"></textarea>
+</div></div></div>
+<div class="form-actions">
+<button class="btn gray" id="clearBtn" type="button">LIMPIAR</button>
+<button class="btn green" id="saveBtn" type="button">GUARDAR INSPECCION EJECUTADA</button>
+</div></article>
+<article class="panel">
+<div class="panel-title"><h2>HISTORIAL IMA</h2><button class="btn primary" id="reloadBtn" type="button">ACTUALIZAR</button></div>
+<div class="tablewrap"><table class="hist">
+<thead><tr><th>MES</th><th>ANIO</th><th>FECHA</th><th>INSPECTOR</th><th>PLANTA</th><th>ESTADO</th><th>ACCION</th></tr></thead>
+<tbody id="hist"></tbody></table></div>
+</article></section>
+<footer class="footer"><div class="footer-card">
+<span>ARMA&trade;</span><span class="footer-sep">//</span><span>INSPECCIONES IMA</span>
+<span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span>
+<span class="footer-sep">//</span><span>PLX-I-F-203</span>
+</div></footer></main>
+<div id="printBack" class="modalback hidden"><div class="modal">
+<button class="close btn gray" id="closePrint">x</button>
+<div class="printControls form-actions" style="justify-content:flex-start;margin:0 0 10px">
+<button class="btn primary" onclick="window.print()">IMPRIMIR / GUARDAR PDF</button>
+</div><div id="report" class="report"></div></div></div>
 <script>
 const API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
 let DATA=null;
-function sessionCache(){try{return JSON.parse(localStorage.getItem('ARMA_SESSION_CACHE')||'{}')}catch(e){return{}}}
-function token(){const c=sessionCache();return localStorage.getItem('ARMA_TOKEN')||sessionStorage.getItem('ARMA_TOKEN')||c.token||''}
-function paintCachedUser(){const c=sessionCache();const p=document.getElementById('userPill');if(c&&(c.nombre||c.user)){p.textContent=(c.nombre||c.user)+' // '+(c.nivel||'USUARIO')}else{p.textContent='USUARIO ARMA'}}
-async function api(action,data,timeoutMs){const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),timeoutMs||20000);try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,token:token()},data||{})),signal:ctl.signal});const text=await r.text();let j;try{j=JSON.parse(text)}catch(e){throw new Error('BACKEND_NO_DEVOLVIO_JSON')}if(!j.ok)throw new Error(j.detail||j.error||'ERROR_BACKEND');return j}finally{clearTimeout(tm)}}
-const groups=[
- {title:'1. PISOS',p:'PISOS',state:'PISOS_ESTADO',stateOpts:['Buen Estado','Estado Regular','Mal Estado (Requiere Intervención)'],crack:'PISOS_GRIETAS',clean:'PISOS_LIMPIEZA'},
- {title:'2. PAREDES',p:'PAREDES',state:'PAREDES_ESTADO',stateOpts:['Buen Estado','Estado Regular','Mal Estado (Requiere Intervención)'],crack:'PAREDES_GRIETAS',clean:'PAREDES_LIMPIEZA'},
- {title:'3. TECHOS',p:'TECHOS',state:'TECHOS_ESTADO',stateOpts:['Buen Estado','Estado Regular','Mal Estado (Requiere Intervención)'],crack:'TECHOS_GRIETAS',clean:'TECHOS_LIMPIEZA'}];
-function opts(a){return '<option value=">SELECCIONE...</option>'+a.map(x=>'<option>'+x+'</option>').join('')}
-function buildSections(){let h='';groups.forEach(g=>{h+=`<div class="section"><h3>${g.title}</h3><div class="formgrid">
-<div><label>ESTADO</label><select id="${g.state}">${opts(g.stateOpts)}</select></div>
-<div><label>OBSERVACIONES ESTADO</label><input id="${g.p}_OBS_ESTADO" placeholder="Describa solo si aplica"></div>
-<div><label>SELLADO / GRIETAS</label><select id="${g.crack}">${opts(['Sin Grietas','Con Grietas','Grietas creciendo','En reparacion'])}</select></div>
-<div><label>OBSERVACIONES GRIETAS</label><input id="${g.p}_OBS_GRIETAS" placeholder="Describa solo si aplica"></div>
-<div><label>LIMPIEZA</label><select id="${g.clean}">${opts(['Limpieza Satisfactoria','Limpieza No Satisfactoria','Suciedad de obra'])}</select></div>
-<div><label>OBSERVACIONES LIMPIEZA</label><input id="${g.p}_OBS_LIMPIEZA" placeholder="Describa solo si aplica"></div>
-<div class="full"><label>OTRAS OBSERVACIONES</label><input id="${g.p}_OTRAS" value=""></div></div></div>`});
-h+=`<div class="section"><h3>4. EQUIPOS</h3><div class="formgrid">
-<div><label>ESTADO</label><select id="EQUIPOS_ESTADO">${opts(['Buen Estado','Estado Regular','Mal Estado (Requiere Intervención)'])}</select></div>
-<div><label>OBSERVACIONES ESTADO</label><input id="EQUIPOS_OBS_ESTADO" placeholder="Describa lo observado"></div>
-<div class="full"><label>MANTENIMIENTO PREVENTIVO</label><select id="EQUIPOS_MANT_PREV">${opts(['Los equipos han recibido mantenimiento preventivo según lo programado','Se identifican mantenimientos pendientes'])}</select></div>
-<div class="full"><label>OBSERVACIONES MANTENIMIENTO</label><input id="EQUIPOS_OBS_MANT_PREV" value=""></div>
-<div><label>LIMPIEZA</label><select id="EQUIPOS_LIMPIEZA">${opts(['Limpieza Satisfactoria','Limpieza No Satisfactoria'])}</select></div>
-<div><label>OBSERVACIONES LIMPIEZA</label><input id="EQUIPOS_OBS_LIMPIEZA" placeholder="Describa solo si aplica"></div>
-<div class="full"><label>OTRAS OBSERVACIONES</label><input id="EQUIPOS_OTRAS" value=""></div></div></div>`;
-h+=`<div class="section"><h3>5. CONTROL DE PLAGAS</h3><div class="formgrid"><div><label>RESULTADO</label><select id="PLAGAS_ESTADO">${opts(['Resultado Satisfactoria','Resultado No Satisfactorio'])}</select></div><div><label>ACCIONES CORRECTIVAS</label><input id="PLAGAS_ACCIONES" placeholder="Registrar acciones solo si aplica"></div></div></div>`;
-document.getElementById('sections').innerHTML=h}
-function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function tag(s){s=String(s||'');const c=s==='EJECUTADA'?'ok':(s==='NO_EJECUTADA'?'gap':'pending');return `<span class="tag ${c}">${esc(s)}</span>`}
-function paint(j){DATA=j;document.getElementById('userPill').textContent=(j.session.user||'ARMA')+' // '+(j.session.nivel||'');
-const rows=j.rows||[],st=j.status||{};document.getElementById('kExec').textContent=rows.filter(r=>r.ESTADO_REGISTRO==='EJECUTADA').length;document.getElementById('kGap').textContent=rows.filter(r=>r.ESTADO_REGISTRO==='NO_EJECUTADA').length;document.getElementById('kDue').textContent=st.lastWednesday||'--';document.getElementById('kMonth').textContent=st.currentMonthExecuted?'EJECUTADA':(st.currentMonthDue?'VENCIDA / PENDIENTE':'PENDIENTE');
-const sorted=rows.slice().sort((a,b)=>String(b.MES_CONTROL||'').localeCompare(String(a.MES_CONTROL||''))||String(b.ID_IMA||'').localeCompare(String(a.ID_IMA||''),undefined,{numeric:true}));
-const meses={'01':'ENERO','02':'FEBRERO','03':'MARZO','04':'ABRIL','05':'MAYO','06':'JUNIO','07':'JULIO','08':'AGOSTO','09':'SEPTIEMBRE','10':'OCTUBRE','11':'NOVIEMBRE','12':'DICIEMBRE'};
-document.getElementById('hist').innerHTML=sorted.map(r=>{const mc=String(r.MES_CONTROL||'');const yy=mc.slice(0,4),mm=mc.slice(4,6);
-return `<tr><td><b>${esc(meses[mm]||mm||'--')}</b><br><span class="small">${esc(r.ID_IMA)}</span></td><td>${esc(yy||'--')}</td><td>${esc(r.FECHA_INSPECCION||r.FECHA_LIMITE||'')}</td><td>${esc(r.INSPECTOR||'')}</td>`+
-`<td>${tag(r.ESTADO_REGISTRO)}</td><td class="actions"><button class="mini primary" onclick="showReport('${esc(r.ID_IMA)}')">VER / IMPRIMIR</button></td></tr>`}).join('')}
-async function load(){paintCachedUser();const t=token();if(!t){location.href='main.html';return}const p=document.getElementById('userPill');try{const j=await api('imaBootstrap',{},20000);paint(j)}catch(e){const msg=(e&&e.name==='AbortError')?'TIEMPO_AGOTADO_BACKEND_IMA':String(e&&e.message?e.message:e);p.textContent='IMA // SIN RESPUESTA';document.getElementById('hist').innerHTML='<tr><td colspan=5 style="padding:18px;color:#a51d1d;font-weight:900">NO FUE POSIBLE CARGAR IMA: '+esc(msg)+'. VERIFIQUE QUE EL WEB APP R7.6.1 ESTE IMPLEMENTADO.</td></tr>';alert('A.R.M.A. IMA: '+msg+'\\n\\nPublique una NUEVA VERSION del Web App y recargue esta pagina.')}}
-function val(id){const e=document.getElementById(id);return e?e.value:''}
-function collect(){const ids=['FECHA_INSPECCION','INSPECTOR','AREA','OBSERVACIONES_GENERALES','PISOS_ESTADO','PISOS_OBS_ESTADO','PISOS_GRIETAS','PISOS_OBS_GRIETAS','PISOS_LIMPIEZA','PISOS_OBS_LIMPIEZA','PISOS_OTRAS','PAREDES_ESTADO','PAREDES_OBS_ESTADO','PAREDES_GRIETAS','PAREDES_OBS_GRIETAS','PAREDES_LIMPIEZA','PAREDES_OBS_LIMPIEZA','PAREDES_OTRAS','TECHOS_ESTADO','TECHOS_OBS_ESTADO','TECHOS_GRIETAS','TECHOS_OBS_GRIETAS','TECHOS_LIMPIEZA','TECHOS_OBS_LIMPIEZA','TECHOS_OTRAS','EQUIPOS_ESTADO','EQUIPOS_OBS_ESTADO','EQUIPOS_MANT_PREV','EQUIPOS_OBS_MANT_PREV','EQUIPOS_LIMPIEZA','EQUIPOS_OBS_LIMPIEZA','EQUIPOS_OTRAS','PLAGAS_ESTADO','PLAGAS_ACCIONES'];const o={};ids.forEach(id=>o[id]=val(id));return o}
-async function save(){const o=collect();if(!o.FECHA_INSPECCION||!o.INSPECTOR||!o.AREA){alert('Fecha, inspector y area son obligatorios.');return}const req=['PISOS_ESTADO','PISOS_GRIETAS','PISOS_LIMPIEZA','PAREDES_ESTADO','PAREDES_GRIETAS','PAREDES_LIMPIEZA','TECHOS_ESTADO','TECHOS_GRIETAS','TECHOS_LIMPIEZA','EQUIPOS_ESTADO','EQUIPOS_MANT_PREV','EQUIPOS_LIMPIEZA','PLAGAS_ESTADO'];if(req.some(k=>!o[k])){alert('Complete todas las selecciones de la inspeccion antes de guardar.');return}if(!confirm('CONFIRME: esta inspeccion fue realmente ejecutada y los datos corresponden a lo observado fisicamente.'))return;const b=document.getElementById('saveBtn');b.disabled=true;try{const j=await api('imaSave',{data:o});alert('Inspeccion guardada: '+j.id);await load()}catch(e){alert(e.message)}finally{b.disabled=false}}
-function fmtDateES(v){const s=String(v||'').slice(0,10);if(!/^\d{4}-\d{2}-\d{2}$/.test(s))return esc(v||'');return s.slice(8,10)+'/'+s.slice(5,7)+'/'+s.slice(0,4)}
-function xblank(v){const s=String(v==null?'':v).trim();return s?esc(s):'<span class="blank">ESPACIO EN BLANCO</span>'}
-function imaCols(){return '<col class="c1"><col class="c2"><col class="c3">'}
-function imaHead(){return '<tr><th>Elemento</th><th>Estado</th><th>Observaciones</th></tr>'}
-function sectionExcel(r,p,title,element){return `<div class="ima-section">${title}</div><table class="ima-grid">${imaCols()}${imaHead()}<tr><td>${element}</td><td>${esc(r[p+'_ESTADO']||'')}</td><td>${xblank(r[p+'_OBS_ESTADO'])}</td></tr><tr><td>Sellado de Grietas</td><td>${esc(r[p+'_GRIETAS']||'')}</td><td>${xblank(r[p+'_OBS_GRIETAS'])}</td></tr><tr><td>Limpieza</td><td>${esc(r[p+'_LIMPIEZA']||'')}</td><td>${xblank(r[p+'_OBS_LIMPIEZA'])}</td></tr><tr><td>Otras Observaciones</td><td></td><td>${xblank(r[p+'_OTRAS'])}</td></tr></table>`}
-function renderExecutedIMA(r){let b='<div class="ima-doc">';
-b+='<table class="ima-header"><tr><td class="ima-logo"><img src="logo_pelex.bmp" alt="PELEX"></td><td class="ima-title">INSPECCION DE INFRAESTRUCTURA Y<br>MEDIO AMBIENTE PLANTA 2</td><td class="ima-code">PLX-I-F-203<br>Versi&oacute;n: 1.0</td></tr></table>';
-b+=`<div class="ima-subhead"><div class="ima-annex">ANEXO No. 1</div><div class="ima-id">${esc(r.ID_IMA)}</div></div><div class="ima-objective">Objetivo: Evaluar el estado de la infraestructura y las condiciones ambientales.</div>`;
-b+=`<table class="ima-meta"><tr><td class="lbl">Fecha de Inspecci&oacute;n:</td><td>${fmtDateES(r.FECHA_INSPECCION)}</td></tr><tr><td class="lbl">Inspector:</td><td>${esc(r.INSPECTOR||'')}</td></tr><tr><td class="lbl">&Aacute;rea/Departamento Inspeccionado:</td><td>${esc(r.AREA||'Planta 2')}</td></tr></table>`;
-b+=sectionExcel(r,'PISOS','1. Pisos:','Pisos')+sectionExcel(r,'PAREDES','2. Paredes:','Paredes')+sectionExcel(r,'TECHOS','3. Techos:','Techos');
-b+=`<div class="ima-section">4. Equipos:</div><table class="ima-grid">${imaCols()}${imaHead()}<tr><td>Equipos</td><td>${esc(r.EQUIPOS_ESTADO||'')}</td><td>${xblank(r.EQUIPOS_OBS_ESTADO)}</td></tr><tr><td>Sellado de Grietas</td><td>${esc(r.EQUIPOS_MANT_PREV||'')}</td><td>${xblank(r.EQUIPOS_OBS_MANT_PREV)}</td></tr><tr><td>Limpieza</td><td>${esc(r.EQUIPOS_LIMPIEZA||'')}</td><td>${xblank(r.EQUIPOS_OBS_LIMPIEZA)}</td></tr><tr><td>Otras Observaciones</td><td></td><td>${xblank(r.EQUIPOS_OTRAS)}</td></tr></table>`;
-b+=`<div class="ima-section">5. Control de Plagas:</div><table class="ima-grid">${imaCols()}${imaHead()}<tr><td>Control de Plagas</td><td>${esc(r.PLAGAS_ESTADO||'')}</td><td></td></tr><tr><td class="action-label">Acciones Correctivas Tomadas</td><td colspan="2" class="action-text">${esc(r.PLAGAS_ACCIONES||'')}</td></tr></table>`;
-b+=`<div class="ima-section">6. Otras Observaciones y Acciones Correctivas:</div><div class="ima-general">${esc(r.OBSERVACIONES_GENERALES||'')}</div><div class="ima-footer"><b>Inspector:</b><span>${esc(r.INSPECTOR||'')}</span></div></div>`;return b}
-function renderReport(r){const isExec=r.ESTADO_REGISTRO==='EJECUTADA';let body='';if(isExec){body=renderExecutedIMA(r)}else{body=`<div class="ima-gap-doc"><h2>REGISTRO DE CONTROL - NO ES UNA INSPECCION EJECUTADA</h2><p><b>${esc(r.ID_IMA||'')}</b></p><p>Mes de control: ${esc(r.MES_CONTROL||'')}</p><p>Fecha limite: ${fmtDateES(r.FECHA_LIMITE)}</p><p>${esc(r.OBSERVACIONES_GENERALES||'Sin evidencia documental de ejecucion.')}</p></div>`}document.getElementById('report').innerHTML=body}
-function showReport(id){const r=(DATA.rows||[]).find(x=>x.ID_IMA===id);if(!r)return;renderReport(r);document.getElementById('printBack').classList.remove('hidden')}
-function closeReport(){document.getElementById('printBack').classList.add('hidden')}
-buildSections();document.getElementById('FECHA_INSPECCION').value=new Date().toISOString().slice(0,10);document.getElementById('saveBtn').onclick=save;document.getElementById('reloadBtn').onclick=load;document.getElementById('closePrint').onclick=closeReport;document.getElementById('printBack').onclick=e=>{if(e.target.id==='printBack')closeReport()};load();
+let IMA_ACTIVE_TOKEN='';
+
+function sessionCache(){
+  try{return JSON.parse(localStorage.getItem('ARMA_SESSION_CACHE')||'{}');}
+  catch(e){return {};}
+}
+function tokenCandidates(){
+  const c=sessionCache();
+  const a=[c.token||'',sessionStorage.getItem('ARMA_TOKEN')||'',localStorage.getItem('ARMA_TOKEN')||''];
+  return a.filter(function(v,i,x){return v&&x.indexOf(v)===i;});
+}
+function token(){return IMA_ACTIVE_TOKEN||tokenCandidates()[0]||'';}
+function paintCachedUser(){
+  const c=sessionCache();
+  const p=document.getElementById('userPill');
+  p.textContent=(c&&(c.nombre||c.user))?((c.nombre||c.user)+' // '+(c.nivel||'USUARIO')):'USUARIO ARMA';
+}
+async function apiOnce(action,data,timeoutMs,tok){
+  const ctl=new AbortController();
+  const tm=setTimeout(function(){ctl.abort();},timeoutMs||16000);
+  try{
+    const body=JSON.stringify(Object.assign({action:action,token:tok||token()},data||{}));
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:body,signal:ctl.signal});
+    const text=await r.text();
+    let j;
+    try{j=JSON.parse(text);}catch(e){throw new Error('BACKEND_NO_DEVOLVIO_JSON');}
+    if(!j.ok)throw new Error(j.detail||j.error||'ERROR_BACKEND');
+    return j;
+  }finally{clearTimeout(tm);}
+}
+async function api(action,data,timeoutMs){
+  const ts=tokenCandidates();
+  if(IMA_ACTIVE_TOKEN)return apiOnce(action,data,timeoutMs,IMA_ACTIVE_TOKEN);
+  let last=null;
+  for(const t of ts){
+    try{
+      const j=await apiOnce(action,data,timeoutMs,t);
+      IMA_ACTIVE_TOKEN=t;
+      localStorage.setItem('ARMA_TOKEN',t);
+      return j;
+    }catch(e){
+      last=e;
+      const m=String((e&&e.message)||e);
+      if(!/SESION_INACTIVA|SESION_EXPIRADA|TOKEN_NO_VALIDO|SESION_NO_VALIDA/.test(m))throw e;
+    }
+  }
+  throw last||new Error('SESION_NO_VALIDA');
+}
+function esc(v){
+  return String(v==null?'':v).replace(/[&<>"']/g,function(c){
+    const m={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+    return m[c];
+  });
+}
+function opts(a){
+  let h='<option value="">SELECCIONE...</option>';
+  a.forEach(function(x){
+    h+='<option value="'+esc(x)+'">'+esc(x)+'</option>';
+  });
+  return h;
+}
+const C={
+  state:['Buen Estado','Estado Regular','Mal Estado (Requiere Intervención)'],
+  crack:['Sin Grietas','Con Grietas','Grietas creciendo','Grietas y piso undido','Grietas por Sellar','En reparación'],
+  clean:['Limpieza Satisfactoria','Limpieza No Satisfactoria','Suciedad de obra'],
+  maint:['Los equipos han recibido mantenimiento preventivo según lo programado','Se identifican mantenimientos preventivos pendientes'],
+  pest:['Resultado Satisfactoria','Resultado No Satisfactorio']
+};
+function row(label,id,obsId,choices){
+  let h='<tr><td>'+label+'</td><td>';
+  h+='<select id="'+id+'">'+opts(choices)+'</select></td><td>';
+  h+='<textarea id="'+obsId+'" placeholder="OBSERVACIONES"></textarea>';
+  return h+'</td></tr>';
+}
+function otherRow(id){
+  return '<tr><td>Otras Observaciones</td><td></td><td><textarea id="'+id+'" placeholder="OBSERVACIONES"></textarea></td></tr>';
+}
+function block(title,p,element){
+  let h='<div class="ima-entry-section"><div class="ima-entry-title">'+title+'</div>';
+  h+='<table class="entry-table"><col class="c1"><col class="c2"><col class="c3">';
+  h+='<thead><tr><th>Elemento</th><th>Estado / Concepto</th><th>Observaciones</th></tr></thead><tbody>';
+  h+=row(element,p+'_ESTADO',p+'_OBS_ESTADO',C.state);
+  h+=row('Sellado de Grietas',p+'_GRIETAS',p+'_OBS_GRIETAS',C.crack);
+  h+=row('Limpieza',p+'_LIMPIEZA',p+'_OBS_LIMPIEZA',C.clean);
+  h+=otherRow(p+'_OTRAS');
+  return h+'</tbody></table></div>';
+}
+function buildSections(){
+  let h=block('1. PISOS','PISOS','Pisos');
+  h+=block('2. PAREDES','PAREDES','Paredes');
+  h+=block('3. TECHOS','TECHOS','Techos');
+  h+='<div class="ima-entry-section"><div class="ima-entry-title">4. EQUIPOS</div>';
+  h+='<table class="entry-table"><col class="c1"><col class="c2"><col class="c3">';
+  h+='<thead><tr><th>Elemento</th><th>Estado / Concepto</th><th>Observaciones</th></tr></thead><tbody>';
+  h+=row('Equipos','EQUIPOS_ESTADO','EQUIPOS_OBS_ESTADO',C.state);
+  h+=row('Mantenimiento Preventivo','EQUIPOS_MANT_PREV','EQUIPOS_OBS_MANT_PREV',C.maint);
+  h+=row('Limpieza','EQUIPOS_LIMPIEZA','EQUIPOS_OBS_LIMPIEZA',C.clean);
+  h+=otherRow('EQUIPOS_OTRAS');
+  h+='</tbody></table></div>';
+  h+='<div class="ima-entry-section"><div class="ima-entry-title">5. CONTROL DE PLAGAS</div>';
+  h+='<table class="entry-table"><col class="c1"><col class="c2"><col class="c3">';
+  h+='<thead><tr><th>Elemento</th><th>Estado / Concepto</th><th>Observaciones</th></tr></thead><tbody>';
+  h+=row('Control de Plagas','PLAGAS_ESTADO','PLAGAS_OBS',C.pest);
+  h+='<tr><td>Acciones Correctivas Tomadas</td><td colspan="2">';
+  h+='<textarea id="PLAGAS_ACCIONES" placeholder="ACCIONES CORRECTIVAS TOMADAS"></textarea>';
+  h+='</td></tr></tbody></table></div>';
+  document.getElementById('sections').innerHTML=h;
+}
+function normalizePlant(v){
+  const s=String(v||'').toUpperCase().replace(/\s+/g,'');
+  if(s==='PLANTA1')return 'Planta 1';
+  if(s==='PLANTA2')return 'Planta 2';
+  if(s==='PLANTA3')return 'Planta 3';
+  return '';
+}
+function fillCatalogs(j){
+  const ins=document.getElementById('INSPECTOR');
+  const pl=document.getElementById('AREA');
+  const people=(j.inspectores||[]).slice();
+  people.sort(function(a,b){return String(a.nombre||'').localeCompare(String(b.nombre||''));});
+  let hi='<option value="">SELECCIONE...</option>';
+  people.forEach(function(x){hi+='<option value="'+esc(x.nombre)+'">'+esc(x.nombre)+'</option>';});
+  ins.innerHTML=hi;
+  let hp='<option value="">SELECCIONE...</option>';
+  ['Planta 1','Planta 2','Planta 3'].forEach(function(x){hp+='<option value="'+x+'">'+x+'</option>';});
+  pl.innerHTML=hp;
+  const assigned=normalizePlant(j.assignedPlant||(j.session&&j.session.planta)||'');
+  if(assigned)pl.value=assigned;
+}
+function tag(s){
+  s=String(s||'');
+  const c=s==='EJECUTADA'?'ok':(s==='NO_EJECUTADA'?'gap':'pending');
+  return '<span class="tag '+c+'">'+esc(s)+'</span>';
+}
+function visibleHistory(rows){
+  const execMonths={};
+  rows.forEach(function(r){
+    if(r.ESTADO_REGISTRO==='EJECUTADA'&&r.MES_CONTROL)execMonths[r.MES_CONTROL]=true;
+  });
+  return rows.filter(function(r){
+    return !(execMonths[r.MES_CONTROL]&&r.ESTADO_REGISTRO!=='EJECUTADA');
+  });
+}
+function fmtDateES(v){
+  const s=String(v||'').slice(0,10);
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(s))return esc(v||'');
+  return s.slice(8,10)+'/'+s.slice(5,7)+'/'+s.slice(0,4);
+}
+function paint(j){
+  DATA=j;
+  const ses=j.session||{};
+  document.getElementById('userPill').textContent=(ses.nombre||ses.user||'ARMA')+' // '+(ses.nivel||'');
+  fillCatalogs(j);
+  const rows=j.rows||[];
+  const st=j.status||{};
+  document.getElementById('kExec').textContent=rows.filter(function(r){return r.ESTADO_REGISTRO==='EJECUTADA';}).length;
+  document.getElementById('kGap').textContent=rows.filter(function(r){return r.ESTADO_REGISTRO==='NO_EJECUTADA';}).length;
+  document.getElementById('kDue').textContent=fmtDateES(st.lastWednesday||'')||'--';
+  document.getElementById('kMonth').textContent=st.currentMonthExecuted?'EJECUTADA':(st.currentMonthDue?'VENCIDA / PENDIENTE':'PENDIENTE');
+  const meses={'01':'ENERO','02':'FEBRERO','03':'MARZO','04':'ABRIL','05':'MAYO','06':'JUNIO','07':'JULIO','08':'AGOSTO','09':'SEPTIEMBRE','10':'OCTUBRE','11':'NOVIEMBRE','12':'DICIEMBRE'};
+  const sorted=visibleHistory(rows).slice();
+  sorted.sort(function(a,b){return String(b.MES_CONTROL||'').localeCompare(String(a.MES_CONTROL||''));});
+  let h='';
+  sorted.forEach(function(r){
+    const mc=String(r.MES_CONTROL||'');
+    const yy=mc.slice(0,4),mm=mc.slice(4,6);
+    h+='<tr><td><b>'+esc(meses[mm]||mm||'--')+'</b><br><span class="small">'+esc(r.ID_IMA)+'</span></td>';
+    h+='<td>'+esc(yy||'--')+'</td><td>'+fmtDateES(r.FECHA_INSPECCION||r.FECHA_LIMITE||'')+'</td>';
+    h+='<td>'+esc(r.INSPECTOR||'')+'</td><td>'+esc(r.AREA||'')+'</td><td>'+tag(r.ESTADO_REGISTRO)+'</td>';
+    h+='<td class="actions"><button class="mini" data-id="'+esc(r.ID_IMA)+'">VER / IMPRIMIR</button></td></tr>';
+  });
+  document.getElementById('hist').innerHTML=h;
+  document.querySelectorAll('.mini[data-id]').forEach(function(b){
+    b.onclick=function(){showReport(this.getAttribute('data-id'));};
+  });
+}
+async function load(){
+  paintCachedUser();
+  if(!token()){location.href='main.html';return;}
+  document.getElementById('formStatus').textContent='CARGANDO...';
+  try{
+    const j=await api('imaBootstrap',{},16000);
+    paint(j);
+    document.getElementById('formStatus').textContent='LISTO PARA DILIGENCIAR';
+  }catch(e){
+    const msg=(e&&e.name==='AbortError')?'TIEMPO_AGOTADO_BACKEND_IMA':String((e&&e.message)||e);
+    if(/SESION_(INACTIVA|EXPIRADA|NO_VALIDA)|TOKEN_NO_VALIDO/.test(msg)){
+      localStorage.removeItem('ARMA_TOKEN');
+      localStorage.removeItem('ARMA_SESSION_CACHE');
+      sessionStorage.removeItem('ARMA_TOKEN');
+      alert('SU SESION DE A.R.M.A. YA NO ESTA ACTIVA. VUELVA A INICIAR SESION.');
+      location.href='main.html';
+      return;
+    }
+    document.getElementById('formStatus').textContent='ERROR DE CARGA';
+    document.getElementById('hist').innerHTML='<tr><td colspan="7">NO FUE POSIBLE CARGAR IMA: '+esc(msg)+'</td></tr>';
+  }
+}
+function val(id){const e=document.getElementById(id);return e?e.value:'';}
+function collect(){
+  const ids=['FECHA_INSPECCION','INSPECTOR','AREA','OBSERVACIONES_GENERALES','PISOS_ESTADO','PISOS_OBS_ESTADO','PISOS_GRIETAS','PISOS_OBS_GRIETAS','PISOS_LIMPIEZA','PISOS_OBS_LIMPIEZA','PISOS_OTRAS','PAREDES_ESTADO','PAREDES_OBS_ESTADO','PAREDES_GRIETAS','PAREDES_OBS_GRIETAS','PAREDES_LIMPIEZA','PAREDES_OBS_LIMPIEZA','PAREDES_OTRAS','TECHOS_ESTADO','TECHOS_OBS_ESTADO','TECHOS_GRIETAS','TECHOS_OBS_GRIETAS','TECHOS_LIMPIEZA','TECHOS_OBS_LIMPIEZA','TECHOS_OTRAS','EQUIPOS_ESTADO','EQUIPOS_OBS_ESTADO','EQUIPOS_MANT_PREV','EQUIPOS_OBS_MANT_PREV','EQUIPOS_LIMPIEZA','EQUIPOS_OBS_LIMPIEZA','EQUIPOS_OTRAS','PLAGAS_ESTADO','PLAGAS_ACCIONES'];
+  const o={};
+  ids.forEach(function(id){o[id]=val(id);});
+  return o;
+}
+function monthKey(v){
+  const s=String(v||'');
+  return /^\d{4}-\d{2}/.test(s)?s.slice(0,7).replace('-',''):'';
+}
+function validateForm(o){
+  if(!o.FECHA_INSPECCION||!o.INSPECTOR||!o.AREA)return 'FECHA, INSPECTOR Y PLANTA SON OBLIGATORIOS.';
+  const today=new Date().toISOString().slice(0,10);
+  if(o.FECHA_INSPECCION>today)return 'LA FECHA DE INSPECCION NO PUEDE ESTAR EN EL FUTURO.';
+  const req=['PISOS_ESTADO','PISOS_GRIETAS','PISOS_LIMPIEZA','PAREDES_ESTADO','PAREDES_GRIETAS','PAREDES_LIMPIEZA','TECHOS_ESTADO','TECHOS_GRIETAS','TECHOS_LIMPIEZA','EQUIPOS_ESTADO','EQUIPOS_MANT_PREV','EQUIPOS_LIMPIEZA','PLAGAS_ESTADO'];
+  if(req.some(function(k){return !o[k];}))return 'COMPLETE TODOS LOS CONCEPTOS DE LA INSPECCION.';
+  const mk=monthKey(o.FECHA_INSPECCION);
+  if(DATA&&(DATA.rows||[]).some(function(r){return r.ESTADO_REGISTRO==='EJECUTADA'&&String(r.MES_CONTROL||'')===mk;}))return 'YA EXISTE UNA INSPECCION EJECUTADA PARA EL MES SELECCIONADO.';
+  return '';
+}
+async function save(){
+  const o=collect(),err=validateForm(o);
+  if(err){alert(err);return;}
+  if(!confirm('CONFIRME QUE ESTA INSPECCION FUE REALMENTE EJECUTADA.'))return;
+  const b=document.getElementById('saveBtn');
+  b.disabled=true;
+  document.getElementById('formStatus').textContent='GUARDANDO...';
+  try{
+    const j=await api('imaSave',{data:o},16000);
+    alert('INSPECCION GUARDADA: '+j.id);
+    clearForm(false);
+    await load();
+  }catch(e){
+    alert(String((e&&e.message)||e));
+    document.getElementById('formStatus').textContent='ERROR AL GUARDAR';
+  }finally{b.disabled=false;}
+}
+function clearForm(keepBase){
+  document.querySelectorAll('#sections select,#sections textarea,#OBSERVACIONES_GENERALES').forEach(function(e){e.value='';});
+  if(!keepBase){
+    document.getElementById('FECHA_INSPECCION').value=new Date().toISOString().slice(0,10);
+    if(DATA)fillCatalogs(DATA);
+  }
+  document.getElementById('formStatus').textContent='LISTO PARA DILIGENCIAR';
+}
+function xblank(v){
+  const s=String(v==null?'':v).trim();
+  return s?esc(s):'<span class="blank">ESPACIO EN BLANCO</span>';
+}
+function imaCols(){return '<col class="c1"><col class="c2"><col class="c3">';}
+function imaHead(){return '<tr><th>Elemento</th><th>Estado</th><th>Observaciones</th></tr>';}
+function sectionExcel(r,p,title,element){
+  let b='<div class="ima-section">'+title+'</div><table class="ima-grid">'+imaCols()+imaHead();
+  b+='<tr><td>'+element+'</td><td>'+esc(r[p+'_ESTADO']||'')+'</td><td>'+xblank(r[p+'_OBS_ESTADO'])+'</td></tr>';
+  b+='<tr><td>Sellado de Grietas</td><td>'+esc(r[p+'_GRIETAS']||'')+'</td><td>'+xblank(r[p+'_OBS_GRIETAS'])+'</td></tr>';
+  b+='<tr><td>Limpieza</td><td>'+esc(r[p+'_LIMPIEZA']||'')+'</td><td>'+xblank(r[p+'_OBS_LIMPIEZA'])+'</td></tr>';
+  b+='<tr><td>Otras Observaciones</td><td></td><td>'+xblank(r[p+'_OTRAS'])+'</td></tr>';
+  return b+'</table>';
+}
+function renderExecutedIMA(r){
+  let b='<div class="ima-doc">';
+  b+='<table class="ima-header"><tr><td class="ima-logo"><img src="logo_pelex.bmp" alt="PELEX"></td>';
+  b+='<td class="ima-title">INSPECCION DE INFRAESTRUCTURA Y<br>MEDIO AMBIENTE '+esc(String(r.AREA||'').toUpperCase())+'</td>';
+  b+='<td class="ima-code">PLX-I-F-203<br>Version: 1.0</td></tr></table>';
+  b+='<div class="ima-subhead"><div class="ima-annex">ANEXO No. 1</div><div class="ima-id">'+esc(r.ID_IMA)+'</div></div>';
+  b+='<div class="ima-objective">Objetivo: Evaluar el estado de la infraestructura y las condiciones ambientales.</div>';
+  b+='<table class="ima-meta"><tr><td class="lbl">Fecha de Inspeccion:</td><td>'+fmtDateES(r.FECHA_INSPECCION)+'</td></tr>';
+  b+='<tr><td class="lbl">Inspector:</td><td>'+esc(r.INSPECTOR||'')+'</td></tr>';
+  b+='<tr><td class="lbl">Area/Departamento Inspeccionado:</td><td>'+esc(r.AREA||'')+'</td></tr></table>';
+  b+=sectionExcel(r,'PISOS','1. Pisos:','Pisos');
+  b+=sectionExcel(r,'PAREDES','2. Paredes:','Paredes');
+  b+=sectionExcel(r,'TECHOS','3. Techos:','Techos');
+  b+='<div class="ima-section">4. Equipos:</div><table class="ima-grid">'+imaCols()+imaHead();
+  b+='<tr><td>Equipos</td><td>'+esc(r.EQUIPOS_ESTADO||'')+'</td><td>'+xblank(r.EQUIPOS_OBS_ESTADO)+'</td></tr>';
+  b+='<tr><td>Sellado de Grietas</td><td>'+esc(r.EQUIPOS_MANT_PREV||'')+'</td><td>'+xblank(r.EQUIPOS_OBS_MANT_PREV)+'</td></tr>';
+  b+='<tr><td>Limpieza</td><td>'+esc(r.EQUIPOS_LIMPIEZA||'')+'</td><td>'+xblank(r.EQUIPOS_OBS_LIMPIEZA)+'</td></tr>';
+  b+='<tr><td>Otras Observaciones</td><td></td><td>'+xblank(r.EQUIPOS_OTRAS)+'</td></tr></table>';
+  b+='<div class="ima-section">5. Control de Plagas:</div><table class="ima-grid">'+imaCols()+imaHead();
+  b+='<tr><td>Control de Plagas</td><td>'+esc(r.PLAGAS_ESTADO||'')+'</td><td></td></tr>';
+  b+='<tr><td class="action-label">Acciones Correctivas Tomadas</td><td colspan="2" class="action-text">'+esc(r.PLAGAS_ACCIONES||'')+'</td></tr></table>';
+  b+='<div class="ima-section">6. Otras Observaciones y Acciones Correctivas:</div>';
+  b+='<div class="ima-general">'+esc(r.OBSERVACIONES_GENERALES||'')+'</div>';
+  b+='<div class="ima-footer"><b>Inspector:</b><span>'+esc(r.INSPECTOR||'')+'</span></div></div>';
+  return b;
+}
+function renderReport(r){
+  if(r.ESTADO_REGISTRO==='EJECUTADA'){
+    document.getElementById('report').innerHTML=renderExecutedIMA(r);
+  }else{
+    let b='<div class="ima-gap-doc"><h2>REGISTRO DE CONTROL - NO ES UNA INSPECCION EJECUTADA</h2>';
+    b+='<p><b>'+esc(r.ID_IMA||'')+'</b></p><p>Mes de control: '+esc(r.MES_CONTROL||'')+'</p>';
+    b+='<p>Fecha limite: '+fmtDateES(r.FECHA_LIMITE)+'</p></div>';
+    document.getElementById('report').innerHTML=b;
+  }
+}
+function showReport(id){
+  const r=DATA&&(DATA.rows||[]).find(function(x){return x.ID_IMA===id;});
+  if(!r)return;
+  renderReport(r);
+  document.getElementById('printBack').classList.remove('hidden');
+}
+function closeReport(){document.getElementById('printBack').classList.add('hidden');}
+
+buildSections();
+document.getElementById('FECHA_INSPECCION').value=new Date().toISOString().slice(0,10);
+document.getElementById('saveBtn').onclick=save;
+document.getElementById('clearBtn').onclick=function(){clearForm(true);};
+document.getElementById('reloadBtn').onclick=load;
+document.getElementById('closePrint').onclick=closeReport;
+document.getElementById('printBack').onclick=function(e){if(e.target.id==='printBack')closeReport();};
+load();
 </script>
-</body></html>
+</body>
+</html>
