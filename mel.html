@@ -247,10 +247,19 @@ body.modal-open{overflow:hidden}
 /* === MEL V13.4: inicio en banner y acciones profesionales junto al QR === */
 .hero{display:flex;align-items:center;justify-content:space-between;gap:22px;min-height:96px}
 .hero-copy{min-width:0;position:relative;z-index:1}
-.hero-home-btn{position:relative;z-index:2;display:flex;align-items:center;gap:11px;min-width:190px;border:1px solid rgba(255,255,255,.55);border-radius:14px;padding:10px 14px;background:rgba(255,255,255,.96);color:#003b7a;cursor:pointer;box-shadow:0 10px 24px rgba(0,31,79,.22);font-family:inherit;text-align:left;transition:transform .16s ease,box-shadow .16s ease}
-.hero-home-btn:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(0,31,79,.28)}
-.hero-home-icon{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:#eef7ff;border:1px solid #cfe0f2;flex:0 0 40px}
-.hero-home-icon img{width:28px;height:28px;object-fit:contain}
+.hero-copy,.hero-home{position:relative;z-index:2}
+.hero-home{justify-self:end;width:100%;min-width:0;min-height:74px;background:linear-gradient(180deg,#ffffff,#eef7ff)}
+.hero-home .nav-text strong{font-size:17px}.hero-home .nav-text span{font-size:10px}
+.index-nav-card{position:relative;display:flex;align-items:center;gap:14px;min-width:230px;min-height:82px;height:100%;padding:14px 18px;border-radius:18px;background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid #dbe5f0;box-shadow:0 10px 22px rgba(0,43,102,.10);text-decoration:none;color:#002b66;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.index-nav-card:before{content:'';position:absolute;left:0;top:0;width:100%;height:5px;background:linear-gradient(90deg,#004b9b,#0076d7,#00bfd6,#55b52e)}
+.index-nav-card:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(0,43,102,.16);border-color:#bcd7f5}
+.index-nav-card .nav-icon{width:54px;height:54px;border-radius:16px;background:#ffffff;border:1px solid #dbe5f0;display:grid;place-items:center;flex:0 0 54px;box-shadow:0 4px 10px rgba(15,23,42,.08)}
+.index-nav-card .nav-icon img{width:38px;height:38px;object-fit:contain;display:block}
+.index-nav-card .nav-text{display:flex;flex-direction:column;line-height:1.1}
+.index-nav-card .nav-text strong{font-size:18px;font-weight:900;color:#002b66;letter-spacing:.2px}
+.index-nav-card .nav-text span{font-size:11px;font-weight:900;color:#008c2e;letter-spacing:.45px;text-transform:uppercase;margin-top:6px}
+.index-nav-card.main-home{background:linear-gradient(180deg,#ffffff,#eef7ff)}
+.index-nav-card.main-home .nav-icon{background:#e8f2ff}
 .hero-home-copy{display:flex;flex-direction:column;gap:3px;line-height:1.05}
 .hero-home-copy strong{font-size:14px;font-weight:1000;color:#003b7a}
 .hero-home-copy span{font-size:9px;font-weight:900;color:#178b45}
@@ -298,9 +307,9 @@ textarea.mel-readonly-field[readonly]{resize:none!important}
       <h2>MAESTRO DE EQUIPOS Y ACTIVOS</h2>
       <p>CONSULTE, CREE Y ADMINISTRE ACTIVOS DESDE UNA INTERFAZ SEGURA // DATOS EN LINEA DESDE ARMA_DATA MEDIANTE BACKEND VALIDADO.</p>
     </div>
-    <button id="btnHome" type="button" class="hero-home-btn" data-arma-access="ACC_MEL_INICIO">
-      <span class="hero-home-icon"><img src="boton-de-inicio.png" alt="INICIO"></span>
-      <span class="hero-home-copy"><strong>INICIO</strong><span>VOLVER A ARMA</span></span>
+    <button id="btnHome" type="button" class="index-nav-card main-home hero-home" data-arma-access="ACC_MEL_INICIO">
+      <div class="nav-icon"><img src="boton-de-inicio.png" alt="INICIO"></div>
+      <div class="nav-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></div>
     </button>
   </section>
 
@@ -476,7 +485,7 @@ textarea.mel-readonly-field[readonly]{resize:none!important}
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-08-27 18:54:24</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-08-27 19:07:52</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -1738,19 +1747,24 @@ function melV136DraftClear(){try{localStorage.removeItem(MEL_V136_DRAFT_KEY);}ca
 function melV136Match(row,data){if(!row||!data)return false;const tag=melV136Norm(data.CODIGO_TAG);const name=melV136Norm(data.NOMBRE);const level=melV136Norm(data.NIVEL_DE_JERARQUIA);const parent=melV136Norm(data.PADRE);if(tag&&melV136Norm(row.CODIGO_TAG)!==tag)return false;if(name&&melV136Norm(row.NOMBRE)!==name)return false;if(level&&melV136Norm(row.NIVEL_DE_JERARQUIA)!==level)return false;if(parent&&melV136Norm(row.PADRE)!==parent)return false;return !!(tag||name);}
 async function melV136VerifyCreated(data,existingIds,clientKey){
   if(clientKey){
-    for(let n=1;n<=3;n++){
-      try{
-        document.getElementById('loaderText').textContent='VERIFICANDO CONFIRMACION... '+n+'/3';
-        const vr=await apiWithTimeout('verifyMELCreate',{clientKey:clientKey},6000);
-        if(vr&&vr.ok&&vr.confirmed&&vr.idActivo){
-          return {ID_ACTIVO:vr.idActivo,CODIGO_TAG:data.CODIGO_TAG||'',NOMBRE:data.NOMBRE||''};
-        }
-      }catch(e){}
-      await new Promise(function(r){setTimeout(r,1200);});
-    }
+    try{
+      document.getElementById('loaderText').textContent='VERIFICANDO CONFIRMACION...';
+      const vr=await apiWithTimeout('verifyMELCreate',{clientKey:clientKey},5000);
+      if(vr&&vr.ok&&vr.confirmed&&vr.idActivo){
+        return {ID_ACTIVO:vr.idActivo,CODIGO_TAG:data.CODIGO_TAG||'',NOMBRE:data.NOMBRE||''};
+      }
+    }catch(e){}
   }
   const before=new Set((existingIds||[]).map(String));
-  try{const boot=await apiWithTimeout('melBootstrap',{},12000);if(boot&&boot.ok){const rows=(boot.nodes||boot.roots||[]);const matches=rows.filter(function(r){return melV136Match(r,data);});const fresh=matches.find(function(r){const id=melAssetKey(r);return id&&!before.has(id);});return fresh||matches[0]||null;}}catch(e){}
+  try{
+    const boot=await apiWithTimeout('melBootstrap',{},10000);
+    if(boot&&boot.ok){
+      const rows=(boot.nodes||boot.roots||[]);
+      const matches=rows.filter(function(r){return melV136Match(r,data);});
+      const fresh=matches.find(function(r){const id=melAssetKey(r);return id&&!before.has(id);});
+      return fresh||matches[0]||null;
+    }
+  }catch(e){}
   return null;
 }
 function melV136RestoreDraft(){const d=melV136DraftRead();if(!d||!d.data)return false;creatingNew=true;selectedAsset=null;document.querySelectorAll('[data-field]').forEach(function(el){const k=el.getAttribute('data-field');if(Object.prototype.hasOwnProperty.call(d.data,k))el.value=d.data[k]==null?'':d.data[k];});updateGeoPlantSection();melApplyFormAccess();toast(d.state==='PENDING_CONFIRMATION'?'CREACION PENDIENTE RECUPERADA. GUARDE PARA VERIFICAR ANTES DE REPETIR.':'BORRADOR DE ACTIVO RECUPERADO.');return true;}
@@ -1779,7 +1793,7 @@ async function saveAsset(){
     melV136Saving=true;showLoader('CREANDO ACTIVO...');
     try{
       let res=null;
-      try{res=await apiWithTimeout('createMELActivo',{data:data,clientKey:clientKey},18000);}catch(eCreate){res=null;}
+      try{res=await apiWithTimeout('createMELActivo',{data:data,clientKey:clientKey},12000);}catch(eCreate){res=null;}
       if(res&&res.ok&&res.idActivo){
         melV136DraftClear();creatingNew=false;
         if(res.activo){selectedAsset=res.activo;melSelectedPath=[];setForm(selectedAsset,[]);}
