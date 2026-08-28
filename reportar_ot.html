@@ -15,6 +15,19 @@
 .wrap{width:min(1780px,100%);margin:0 auto;padding:18px 24px 28px}
 .hero{padding:20px 26px;border-radius:22px;margin-bottom:16px;background:linear-gradient(125deg,#00376f 0%,#006bb9 58%,#0094d5 100%)}
 .hero h2{font-size:30px;letter-spacing:.2px}.hero p{font-size:12px;line-height:1.5}
+.hero-copy,.hero-home{position:relative;z-index:2}
+.hero-home{justify-self:end;width:auto;min-width:205px;max-width:230px;min-height:74px;background:linear-gradient(180deg,#ffffff,#eef7ff)}
+.hero-home .nav-text strong{font-size:17px}.hero-home .nav-text span{font-size:10px}
+.index-nav-card{position:relative;display:inline-flex;align-items:center;gap:12px;min-width:205px;min-height:74px;height:auto;padding:14px 18px;border-radius:18px;background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid #dbe5f0;box-shadow:0 10px 22px rgba(0,43,102,.10);text-decoration:none;color:#002b66;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.index-nav-card:before{content:'';position:absolute;left:0;top:0;width:100%;height:5px;background:linear-gradient(90deg,#004b9b,#0076d7,#00bfd6,#55b52e)}
+.index-nav-card:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(0,43,102,.16);border-color:#bcd7f5}
+.index-nav-card .nav-icon{width:54px;height:54px;border-radius:16px;background:#ffffff;border:1px solid #dbe5f0;display:grid;place-items:center;flex:0 0 54px;box-shadow:0 4px 10px rgba(15,23,42,.08)}
+.index-nav-card .nav-icon img{width:38px;height:38px;object-fit:contain;display:block}
+.index-nav-card .nav-text{display:flex;flex-direction:column;line-height:1.1}
+.index-nav-card .nav-text strong{font-size:18px;font-weight:900;color:#002b66;letter-spacing:.2px}
+.index-nav-card .nav-text span{font-size:11px;font-weight:900;color:#008c2e;letter-spacing:.45px;text-transform:uppercase;margin-top:6px}
+.index-nav-card.main-home{background:linear-gradient(180deg,#ffffff,#eef7ff)}
+.index-nav-card.main-home .nav-icon{background:#e8f2ff}
 .metrics{grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin:0 0 16px}
 .metric{position:relative;overflow:hidden;min-height:92px;border:0;border-radius:18px;padding:15px 16px;color:#fff;box-shadow:0 10px 24px rgba(0,43,102,.16)}
 .metric:after{content:'';position:absolute;width:90px;height:90px;border-radius:50%;right:-28px;top:-35px;background:rgba(255,255,255,.13)}
@@ -58,7 +71,7 @@ textarea{min-height:112px;line-height:1.45}
 .transition-banner{border-left:5px solid #22a850;background:#effcf3;color:#176936;padding:12px 14px;border-radius:12px;font-size:11px;font-weight:900;margin-top:12px}
 @media(max-width:1250px){.metrics{grid-template-columns:repeat(3,1fr)}.layout{grid-template-columns:340px minmax(0,1fr)}.scope-stack{gap:12px}.reading-grid{grid-template-columns:1fr}}
 @media(max-width:850px){html{zoom:100%}.wrap{padding:9px}.layout{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}.panel{padding:13px}.list{max-height:420px}.detail-grid,.report-grid{grid-template-columns:1fr 1fr}.scope-stack{gap:12px}.top{position:relative}.metric{min-height:86px}}
-@media(max-width:600px){.metrics{grid-template-columns:1fr 1fr}.hero h2{font-size:24px}.detail-grid,.report-grid,.reading-inputs{grid-template-columns:1fr}.btn,input,select,textarea{min-height:56px;font-size:16px}.section{padding:14px 12px}.ot-head h2{font-size:21px}.segment-row{grid-template-columns:1fr!important}.reading-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.metrics{grid-template-columns:1fr 1fr}.hero h2{font-size:24px}.hero-home{min-width:205px;max-width:230px}.detail-grid,.report-grid,.reading-inputs{grid-template-columns:1fr}.btn,input,select,textarea{min-height:56px;font-size:16px}.section{padding:14px 12px}.ot-head h2{font-size:21px}.segment-row{grid-template-columns:1fr!important}.reading-grid{grid-template-columns:1fr}}
 .segment-help{margin-top:2px;padding:10px 12px;border-radius:11px;background:#f4f9ff;border-left:4px solid #1686d9;color:#486176;font-size:10px;font-weight:850;line-height:1.55}
 </style>
 </head>
@@ -67,7 +80,8 @@ textarea{min-height:112px;line-height:1.45}
 <div id="modal" class="modal hidden"><div class="box"><h3 id="modalTitle">A.R.M.A.</h3><div id="modalText"></div><div class="actions"><button class="btn" onclick="closeModal()">ACEPTAR</button></div></div></div>
 <header class="top"><div class="brand"><img src="logo_pelex.bmp" alt="PELEX"><img src="ARMA%20logo%202.png" alt="ARMA"></div><div class="title"><h1>REPORTAR OT'S | EJECUCIÓN TÉCNICA</h1><span id="userPill" class="pill">VALIDANDO SESIÓN...</span></div></header>
 <main class="wrap">
-<section class="hero"><div><h2>MIS ÓRDENES DE TRABAJO</h2><p>DOCUMENTACIÓN TÉCNICA, VARIABLES DE AM Y SOLICITUD DE REPROGRAMACIÓN.</p></div><a class="home" href="main.html"><img src="boton-de-inicio.png" alt="INICIO">INICIO</a></section>
+<section class="hero"><div class="hero-copy"><h2>MIS ÓRDENES DE TRABAJO</h2><p>DOCUMENTACIÓN TÉCNICA, VARIABLES DE AM Y SOLICITUD DE REPROGRAMACIÓN.</p></div><a class="index-nav-card main-home hero-home" href="main.html">
+<div class="nav-icon"><img src="boton-de-inicio.png" alt="INICIO"></div><div class="nav-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></div></a></section>
 <section id="metrics" class="metrics"></section>
 <div class="layout">
 <aside class="panel"><h3>BANDEJA ASIGNADA</h3><div id="actingWrap" class="field" style="display:none;margin-bottom:10px"><label>PERSONA A GESTIONAR</label><select id="actingPerson"></select></div><div class="filters"><select id="stateFilter"></select><input id="search" placeholder="BUSCAR OT, EQUIPO O PM"></div><button class="btn" style="width:100%" onclick="loadList(1)">BUSCAR</button><div id="otList" class="list"><div class="empty">CARGANDO...</div></div><div class="pager"><button id="prev" class="btn gray" onclick="loadList(page-1)">ANTERIOR</button><span id="pageText">PÁGINA 1</span><button id="next" class="btn gray" onclick="loadList(page+1)">SIGUIENTE</button></div></aside>
