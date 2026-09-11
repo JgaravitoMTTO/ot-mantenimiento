@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V32_9_MOBILE_FAST_COMMIT_FIRST_20260911 | BUILD: 2026-09-11 08:47:07 -->
+<!-- ARMA RT MODULE V32_9_MOBILE_FAST_COMMIT_FIRST_20260911 | BUILD: 2026-09-11 12:07:33 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -261,7 +261,7 @@ input[type=file]{min-height:56px;padding:12px 14px;font-size:14px}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-09-11 08:47:07</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-09-11 12:07:33</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -955,6 +955,39 @@ validateSession=async function(){
   }
 };
 /* === FIN RT V32.9 === */
+/* === RT V32.10 MAIN BOOT BRIDGE === */
+const ARMA_V3210_CACHE_MAX_AGE=15*60*1000;
+function armaV3210CacheEnvelope(user){try{let raw=localStorage.getItem(armaV328CacheKey(user))||'';if(!raw)return null;let box=JSON.parse(raw);if(!box||!box.data)return null;let age=Date.now()-Number(box.ts||0);if(age<0||age>ARMA_V3210_CACHE_MAX_AGE)return null;return {ts:Number(box.ts||0),age:age,data:box.data,source:String(box.source||'')};}catch(e){return null;}}
+armaV32BootLoaderStart=function(){clearTimeout(ARMA_V32_BOOT_TIMER);ARMA_V32_BOOT_TIMER=setTimeout(function(){if(!ARMA_V32_BOOT_READY)showArmaLoader('PREPARANDO QUIEN REPORTA, PLANTA Y EQUIPOS...');},1400);};
+async function armaV3210ValidateSessionBackground(token){try{let v=await apiSilent('validateSession',{token:token},12000);if(!v||!v.ok){try{localStorage.removeItem('ARMA_TOKEN');localStorage.removeItem('ARMA_SESSION_CACHE');}catch(e){}showLoginWall((v&&v.error)||'SESION NO VALIDA');return false;}setSessionData(v,token);return true;}catch(e){console.warn('ARMA V32.10 background session validation',e);return false;}}
+validateSession=async function(){
+  const token=localStorage.getItem('ARMA_TOKEN')||'';if(!token){showLoginWall();return;}
+  let cachedSession=null;try{const raw=localStorage.getItem('ARMA_SESSION_CACHE')||'';if(raw)cachedSession=JSON.parse(raw)||null;}catch(e){}
+  if(cachedSession&&cachedSession.token){
+    try{
+      setSessionData(cachedSession,token);
+      let box=armaV3210CacheEnvelope(cachedSession.user||'');
+      if(box&&box.data){
+        await startApp({preload:box.data});
+        armaV32BootLoaderDone();
+        document.getElementById('reportStatus').textContent='LISTO PARA DILIGENCIAR';
+        armaV3210ValidateSessionBackground(token);
+        try{console.info('ARMA RT V32.10 LOCAL BOOT',{ageMs:box.age,source:box.source||'CACHE'});}catch(e){}
+        return;
+      }
+    }catch(e){}
+  }
+  document.getElementById('loginWall').classList.add('hidden');document.getElementById('appArea').classList.remove('hidden');configureMode();document.getElementById('reportStatus').textContent='CARGANDO CONTEXTO OPERATIVO...';armaV32BootLoaderStart();
+  try{
+    const data=await armaV329FetchBootstrap(token);
+    if(!data||!data.ok){showLoginWall((data&&data.error)||'NO FUE POSIBLE VALIDAR SESION');armaV32BootLoaderDone();return;}
+    setSessionData(data.session||{},token);
+    if(data.preload){if(data.rtLite)armaV328CacheWrite(data.preload);else writeScopePreload(data.preload);}
+    await startApp(data);armaV32BootLoaderDone();
+    try{if(data.performance)console.info('ARMA RT V32.10 NETWORK BOOT',data.performance);}catch(e){}
+  }catch(e){armaV32BootLoaderDone();document.getElementById('reportStatus').textContent='NO FUE POSIBLE CARGAR EL CONTEXTO';armaAlert('NO FUE POSIBLE CARGAR LOS DATOS DE REPORTAR BT.\n'+apiErrorText(e));}
+};
+/* === FIN RT V32.10 === */
 document.addEventListener('DOMContentLoaded',()=>{setTimeout(()=>{let b=document.getElementById('addSupportTech');if(b)b.addEventListener('click',function(e){e.preventDefault();addSupportTech('');});let rp=document.getElementById('rtPersona');if(rp)rp.addEventListener('change',refreshSupportOptions);},800);});
 document.addEventListener('DOMContentLoaded',()=>{armaApplyRTTimeMax();setInterval(armaApplyRTTimeMax,60000);});
 document.addEventListener("DOMContentLoaded",validateSession);
