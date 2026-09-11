@@ -691,7 +691,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-08-24 23:31:38</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-11 11:41:04</span></div>
   </footer>
 </main>
 </div>
@@ -1291,9 +1291,11 @@ async function armaBootstrapMain(force){
   return armaMainRefreshPromise;
 }
 function armaV12PrefetchPages(){
+  const saveData=!!(navigator.connection&&navigator.connection.saveData);
+  if(armaIsPhoneDevice()||saveData)return;
   const pages=['personal.html','turnos.html','mel.html','perfiles.html','reportes_tecnicos_rt.html','usuarios_arma.html','niveles_arma.html'];
   const run=function(){pages.forEach(function(href){const l=document.createElement('link');l.rel='prefetch';l.href=href;document.head.appendChild(l);});};
-  if('requestIdleCallback' in window)requestIdleCallback(run,{timeout:2500});else setTimeout(run,1200);
+  if('requestIdleCallback' in window)requestIdleCallback(run,{timeout:3000});else setTimeout(run,1600);
 }
 /* === ARMA V13 AUTH RAPIDA + GEO SOLO CELULAR === */
 let armaV13AuthLastRefresh=0;let armaV13DashboardLastRefresh=0;let armaV13AuthPromise=null;let armaV13DashboardPromise=null;let armaV13AuthValidated=false;
@@ -1315,7 +1317,7 @@ function armaSetSession(data){
   armaUpdateUserCard();armaApplyPermissions();
 }
 function armaSetVisitor(clearStored){
-  armaV13AuthValidated=false;if(clearStored!==false){localStorage.removeItem('ARMA_TOKEN');localStorage.removeItem('ARMA_SESSION_CACHE');try{sessionStorage.removeItem('ARMA_V13_AUTH_BOOT');sessionStorage.removeItem('ARMA_V13_DASH_PHONE');sessionStorage.removeItem('ARMA_V13_DASH_PC');localStorage.removeItem('ARMA_R17_DASH_PHONE');localStorage.removeItem('ARMA_R17_DASH_PC');localStorage.removeItem('ARMA_R17_DASH_LAST_NET');Object.keys(sessionStorage).filter(function(k){return k.indexOf('ARMA_GEO_WELCOME_')===0;}).forEach(function(k){sessionStorage.removeItem(k);});}catch(e){}}armaRenderVisitor();
+  armaV13AuthValidated=false;if(clearStored!==false){localStorage.removeItem('ARMA_TOKEN');localStorage.removeItem('ARMA_SESSION_CACHE');try{sessionStorage.removeItem('ARMA_V13_AUTH_BOOT');sessionStorage.removeItem('ARMA_V13_DASH_PHONE');sessionStorage.removeItem('ARMA_V13_DASH_PC');localStorage.removeItem('ARMA_R17_DASH_PHONE');localStorage.removeItem('ARMA_R17_DASH_PC');localStorage.removeItem('ARMA_R17_DASH_LAST_NET');Object.keys(sessionStorage).filter(function(k){return k.indexOf('ARMA_GEO_WELCOME_')===0||k.indexOf('ARMA_SCOPE_WARM_R813_')===0;}).forEach(function(k){sessionStorage.removeItem(k);});}catch(e){}}armaRenderVisitor();
 }
 function armaV13AuthCacheWrite(session){try{sessionStorage.setItem('ARMA_V13_AUTH_BOOT',JSON.stringify({ts:Date.now(),session:session}));}catch(e){}}
 function armaV13AuthCacheRead(){try{const raw=sessionStorage.getItem('ARMA_V13_AUTH_BOOT')||'';if(!raw)return null;const x=JSON.parse(raw);if(!x||Date.now()-Number(x.ts||0)>300000)return null;return x.session||null;}catch(e){return null;}}
@@ -1330,15 +1332,33 @@ async function armaApi(action,payload){
   const key=read?action+'|'+JSON.stringify(payload):'';
   if(read&&ARMA_V12_MAIN_INFLIGHT.has(key))return ARMA_V12_MAIN_INFLIGHT.get(key);
   const job=(async function(){
-    const ctl=new AbortController();const timeout=(action==='authBootstrap'?12000:25000);const timer=setTimeout(function(){ctl.abort();},timeout);
+    const ctl=new AbortController();const timeout=(action==='authBootstrap'?12000:(action==='scopeWarmCurrentUser'?45000:25000));const timer=setTimeout(function(){ctl.abort();},timeout);
     try{const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),signal:ctl.signal});const txt=await res.text();let data=null;try{data=JSON.parse(txt);}catch(e){throw new Error('RESPUESTA_NO_JSON '+res.status);}return data;}finally{clearTimeout(timer);}
   })();
   if(read)ARMA_V12_MAIN_INFLIGHT.set(key,job);
   try{return await job;}finally{if(read)ARMA_V12_MAIN_INFLIGHT.delete(key);}
 }
+/* === ARMA MAIN V14.7 USER SCOPE WARM === */
+let armaV147WarmPromise=null,armaV147WarmTimer=null;
+function armaV147WarmKey(){return 'ARMA_SCOPE_WARM_R813_'+String((armaSession&&armaSession.user)||'').toUpperCase();}
+function armaV147WarmFresh(){try{const raw=sessionStorage.getItem(armaV147WarmKey())||'';if(!raw)return false;const x=JSON.parse(raw);return !!x.ready&&Date.now()-Number(x.ts||0)<1800000;}catch(e){return false;}}
+function armaV147WarmMark(data){try{sessionStorage.setItem(armaV147WarmKey(),JSON.stringify({ts:Date.now(),ready:true,version:String(data.preloadVersion||''),source:String(data.source||'')}));}catch(e){}}
+async function armaV147WarmScope(force){
+  if(!armaSession||!armaSession.token||!armaSession.user)return false;
+  if(navigator.onLine===false)return false;
+  if(!force&&armaV147WarmFresh())return true;
+  if(armaV147WarmPromise)return armaV147WarmPromise;
+  armaV147WarmPromise=armaApi('scopeWarmCurrentUser',{token:armaSession.token}).then(function(data){if(data&&data.ok&&data.ready){armaV147WarmMark(data);return true;}return false;}).catch(function(e){console.warn('ARMA scopeWarmCurrentUser',e);return false;}).finally(function(){armaV147WarmPromise=null;});
+  return armaV147WarmPromise;
+}
+function armaV147ScheduleScopeWarm(force){
+  if(armaV147WarmTimer){clearTimeout(armaV147WarmTimer);armaV147WarmTimer=null;}
+  const run=function(){armaV147WarmScope(force===true);};
+  armaV147WarmTimer=setTimeout(function(){armaV147WarmTimer=null;if('requestIdleCallback' in window)requestIdleCallback(run,{timeout:1800});else run();},650);
+}
 function armaApplyAuthBootstrap(data,token){
   if(!data||!data.ok)return false;const s=data.session||{};
-  if(s.authenticated){s.token=token||localStorage.getItem('ARMA_TOKEN')||'';armaV13AuthValidated=true;armaSetSession(s);armaV13AuthCacheWrite(s);if(armaIsPhoneDevice()&&armaBootstrapPlants.length)setTimeout(armaCheckMobileLocationWelcome,100);}else{armaV13AuthValidated=false;armaRenderVisitor();}
+  if(s.authenticated){s.token=token||localStorage.getItem('ARMA_TOKEN')||'';armaV13AuthValidated=true;armaSetSession(s);armaV13AuthCacheWrite(s);armaV147ScheduleScopeWarm(false);if(armaIsPhoneDevice()&&armaBootstrapPlants.length)setTimeout(armaCheckMobileLocationWelcome,100);}else{armaV13AuthValidated=false;armaRenderVisitor();}
   armaV13AuthLastRefresh=Date.now();return true;
 }
 function armaApplyDashboard(data){
@@ -1368,7 +1388,7 @@ async function armaLogin(){
   const u=document.getElementById('loginUser').value.trim();const p=document.getElementById('loginPass').value;const msg=document.getElementById('loginMsg');const btn=document.getElementById('loginDo');
   if(!u||!p){msg.textContent='DIGITE USUARIO Y CLAVE.';return;}
   if(btn&&btn.disabled)return;if(btn){btn.disabled=true;btn.textContent='VALIDANDO...';}msg.textContent='VALIDANDO USUARIO Y PERMISOS...';
-  try{const data=await armaApi('login',{user:u,password:p});if(data&&data.ok){armaV13AuthValidated=true;armaSetSession(data);armaV13AuthLastRefresh=Date.now();armaCloseLogin();document.getElementById('loginPass').value='';msg.textContent='';armaV13QueueLoginAudit(data.token);armaV13RefreshDashboard(true);}else{msg.textContent=(data&&data.error)||'LOGIN NO VALIDO';}}
+  try{const data=await armaApi('login',{user:u,password:p});if(data&&data.ok){armaV13AuthValidated=true;armaSetSession(data);armaV13AuthLastRefresh=Date.now();armaCloseLogin();document.getElementById('loginPass').value='';msg.textContent='';armaV13QueueLoginAudit(data.token);armaV147ScheduleScopeWarm(true);armaV13RefreshDashboard(true);}else{msg.textContent=(data&&data.error)||'LOGIN NO VALIDO';}}
   catch(e){msg.textContent='NO FUE POSIBLE CONECTAR CON ARMA_BACKEND.';}finally{if(btn){btn.disabled=false;btn.textContent='INGRESAR';}}
 }
 function armaV13QueueLoginAudit(token){
