@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V32_6_HIDE_RAW_SUPPORT_CSS_20260826 | BUILD: 2026-08-26 12:00:35 -->
+<!-- ARMA RT MODULE V32_7_FAST_MULTITECH_LEAN_BOOTSTRAP_20260910 | BUILD: 2026-09-10 19:21:31 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -261,7 +261,7 @@ input[type=file]{min-height:56px;padding:12px 14px;font-size:14px}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-08-26 12:00:35</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-09-10 19:21:31</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -705,6 +705,102 @@ createRT=async function(){
   );
  }
 };
+/* === RT V32.7 FAST MULTITECH + LEAN BOOTSTRAP === */
+let rtSupportPersonasAll=[];
+const ARMA_V327_SCOPE_BASE=scopePreloadToCatalog;
+scopePreloadToCatalog=function(p){
+  let c=ARMA_V327_SCOPE_BASE(p)||{};
+  p=p||{};
+  c.personasApoyo=(p.selectors&&p.selectors.executeOTPeople)||p.peopleWithinScope||c.personasReporte||[];
+  return c;
+};
+const ARMA_V327_LOADCAT_BASE=loadCatalogos;
+loadCatalogos=async function(source){
+  source=source||{};
+  let support=asArr(source.personasApoyo||source.PERSONAS_APOYO||source.executeOTPeople||source.personasReporte||[]);
+  rtSupportPersonasAll=support.filter(function(r){
+    return normTxt(val(r,['ESTADO_PERSONA','ESTADO']))!=='INACTIVO'&&normTxt(val(r,['PUEDE_EJECUTAR_OT']))!=='NO';
+  });
+  await ARMA_V327_LOADCAT_BASE(source);
+  if(!rtSupportPersonasAll.length)rtSupportPersonasAll=asArr(rtPersonasAll);
+  let pl=document.getElementById('rtPlanta');
+  if(pl)pl.onchange=function(){rebuildEquipoSelectByPlanta();refreshSupportOptions();};
+  refreshSupportOptions();
+};
+function armaV327PersonaPlanta(r){return val(r,['PLANTA_ASIGNADA','planta','PLANTA','plantaAsignada']);}
+function armaV327SupportSamePlant(p){
+  let pl=document.getElementById('rtPlanta');
+  if(!pl||!String(pl.value||'').trim())return true;
+  let selectedText=(pl.options&&pl.selectedIndex>=0)?String(pl.options[pl.selectedIndex].text||''):'';
+  let personPlant=String(armaV327PersonaPlanta(p)||'').trim();
+  if(!personPlant)return false;
+  let pd=plantaDigit(personPlant),vd=plantaDigit(pl.value),td=plantaDigit(selectedText);
+  if(pd&&(pd===vd||pd===td))return true;
+  let pn=normTxt(personPlant),vn=normTxt(pl.value),tn=normTxt(selectedText);
+  return !!pn&&(pn===vn||pn===tn||tn.indexOf(pn)>=0||pn.indexOf(tn)>=0);
+}
+supportOptions=function(){
+  let reporter=document.getElementById('rtPersona').value;
+  let used=new Set(Array.from(document.querySelectorAll('.rtSupportTech')).map(function(x){return x.value;}).filter(Boolean));
+  let rows=asArr(rtSupportPersonasAll).filter(function(p){return armaV327SupportSamePlant(p);});
+  let opts=rows.map(function(p){
+    let id=personaId(p),nm=personaNombre(p);
+    if(!id||id===reporter)return '';
+    let dis=used.has(id)?' disabled':'';
+    return '<option value="'+esc(id)+'"'+dis+'>'+esc(nm)+'</option>';
+  }).join('');
+  return '<option value="">SELECCIONE TECNICO</option>'+opts;
+};
+collectSupportTechs=function(){
+  return Array.from(document.querySelectorAll('.rtSupportTech')).map(function(x){return x.value;}).filter(Boolean).slice(0,5).map(function(id){
+    let p=asArr(rtSupportPersonasAll).find(function(r){return personaId(r)===id;});
+    return {ID_PERSONA:id,NOMBRE_COMPLETO:p?personaNombre(p):id};
+  });
+};
+const ARMA_V327_COLLECT_BASE=collectRT;
+collectRT=function(){
+  let data=ARMA_V327_COLLECT_BASE();
+  let support=collectSupportTechs();
+  data.TECNICOS_APOYO=support;
+  data.IDS_TECNICOS_APOYO=support.map(function(x){return x.ID_PERSONA;}).join('|');
+  return data;
+};
+validateSession=async function(){
+  const token=localStorage.getItem('ARMA_TOKEN')||'';
+  if(!token){showLoginWall();return;}
+  let painted=false;let cachedSession=null;
+  try{const raw=localStorage.getItem('ARMA_SESSION_CACHE')||'';if(raw)cachedSession=JSON.parse(raw)||null;}catch(e){}
+  try{
+    if(cachedSession&&cachedSession.token){
+      setSessionData(cachedSession,token);
+      let cached=(window.ARMA_SCOPE_PRELOAD&&ARMA_SCOPE_PRELOAD.read)?ARMA_SCOPE_PRELOAD.read(cachedSession.user||''):null;
+      if(cached){await startApp({preload:cached});painted=true;}
+    }
+  }catch(e){}
+  if(!painted){
+    document.getElementById('loginWall').classList.add('hidden');
+    document.getElementById('appArea').classList.remove('hidden');
+    configureMode();
+    document.getElementById('reportStatus').textContent='CARGANDO CONTEXTO OPERATIVO...';
+    armaV32BootLoaderStart();
+  }
+  try{
+    const data=await apiSilent('rtBootstrap',{token:token,pageMode:'REPORTAR',filters:{LEAN_BOOTSTRAP:true}},30000);
+    if(!data.ok){if(!painted)showLoginWall(data.error||'NO FUE POSIBLE VALIDAR SESION');armaV32BootLoaderDone();return;}
+    setSessionData(data.session||{},token);
+    if(data.preload)writeScopePreload(data.preload);
+    await startApp(data);
+  }catch(e){
+    armaV32BootLoaderDone();
+    if(!painted){
+      document.getElementById('reportStatus').textContent='NO FUE POSIBLE CARGAR EL CONTEXTO';
+      armaAlert('NO FUE POSIBLE CARGAR LOS DATOS DE REPORTAR BT.\n'+apiErrorText(e));
+    }else{
+      document.getElementById('reportStatus').textContent='DATOS PRECARGADOS // ACTUALIZACION PENDIENTE';
+    }
+  }
+};
+/* === FIN RT V32.7 === */
 document.addEventListener('DOMContentLoaded',()=>{setTimeout(()=>{let b=document.getElementById('addSupportTech');if(b)b.addEventListener('click',function(e){e.preventDefault();addSupportTech('');});let rp=document.getElementById('rtPersona');if(rp)rp.addEventListener('change',refreshSupportOptions);},800);});
 document.addEventListener('DOMContentLoaded',()=>{armaApplyRTTimeMax();setInterval(armaApplyRTTimeMax,60000);});
 document.addEventListener("DOMContentLoaded",validateSession);
