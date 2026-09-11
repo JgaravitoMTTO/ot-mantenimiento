@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V32_8_COLDSTART_FAST_MULTITECH_20260910 | BUILD: 2026-09-10 19:42:03 -->
+<!-- ARMA RT MODULE V32_9_MOBILE_FAST_COMMIT_FIRST_20260911 | BUILD: 2026-09-11 08:47:07 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -261,7 +261,7 @@ input[type=file]{min-height:56px;padding:12px 14px;font-size:14px}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-09-10 19:42:03</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-09-11 08:47:07</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -864,6 +864,97 @@ validateSession=async function(){
   }
 };
 /* === FIN RT V32.8 === */
+/* === RT V32.9 MOBILE FAST + COMMIT-FIRST === */
+const ARMA_V329_BOOT_ATTEMPTS=2;
+const ARMA_V329_API_BASE=apiSilent;
+let ARMA_V329_POST_PENDING=new Set();
+apiSilent=async function(action,payload,timeoutMs){
+  payload=payload||{};
+  if(action==='rtBootstrap'){
+    payload.filters=Object.assign({},payload.filters||{},{LEAN_BOOTSTRAP:true,FAST_REPORT_V2:true,FAST_REPORT_V3:true});
+  }
+  if(action==='createRT'){
+    payload=Object.assign({},payload,{FAST_SAVE_V3:true});
+    timeoutMs=Math.min(Number(timeoutMs||45000),45000);
+  }
+  if(action==='pdfProcessQueued'){
+    let id=String(payload.docId||payload.idRT||'').trim();
+    if(id&&ARMA_V329_POST_PENDING.has(id)){
+      try{
+        await ARMA_V329_API_BASE('rtFinalizePostCommit',{idRT:id},60000);
+        ARMA_V329_POST_PENDING.delete(id);
+      }catch(e){}
+    }
+  }
+  return ARMA_V329_API_BASE(action,payload,timeoutMs);
+};
+const ARMA_V329_AFTER_BASE=armaV32AfterCreate;
+armaV32AfterCreate=function(res,files){
+  let id=String(res&& (res.idRT||res.consecutivoBT||res.ID_RT)||'').trim();
+  if(id&&res&&res.postCommitQueued)ARMA_V329_POST_PENDING.add(id);
+  let out=ARMA_V329_AFTER_BASE(res,files);
+  try{
+    let p=res&&res.performanceCreateRT||{};
+    console.info('ARMA RT V32.9 SAVE',{idRT:id,visibleMs:p.visibleTotalMs||p.totalMs||0,route:p.route||'',postCommitQueued:!!(res&&res.postCommitQueued)});
+  }catch(e){}
+  return out;
+};
+async function armaV329FetchBootstrap(token){
+  let last=null;
+  for(let i=0;i<ARMA_V329_BOOT_ATTEMPTS;i++){
+    try{
+      let ms=i===0?16000:22000;
+      let d=await apiSilent('rtBootstrap',{token:token,pageMode:'REPORTAR',filters:{LEAN_BOOTSTRAP:true,FAST_REPORT_V2:true,FAST_REPORT_V3:true}},ms);
+      if(d&&d.ok)return d;
+      last=new Error(String((d&&(d.detail||d.error))||'BOOTSTRAP_NO_OK'));
+      if(d&&/SESION|PERMISO/i.test(String(d.error||'')))throw last;
+    }catch(e){last=e;}
+    if(i+1<ARMA_V329_BOOT_ATTEMPTS){
+      let st=document.getElementById('reportStatus');if(st)st.textContent='REINTENTANDO CARGA AUTOMATICAMENTE...';
+      await new Promise(function(resolve){setTimeout(resolve,650);});
+    }
+  }
+  throw last||new Error('NO_FUE_POSIBLE_CARGAR_CONTEXTO');
+}
+validateSession=async function(){
+  const token=localStorage.getItem('ARMA_TOKEN')||'';
+  if(!token){showLoginWall();return;}
+  let painted=false,cachedSession=null;
+  try{const raw=localStorage.getItem('ARMA_SESSION_CACHE')||'';if(raw)cachedSession=JSON.parse(raw)||null;}catch(e){}
+  try{
+    if(cachedSession&&cachedSession.token){
+      setSessionData(cachedSession,token);
+      let cached=armaV328CacheRead(cachedSession.user||'');
+      if(!cached&&window.ARMA_SCOPE_PRELOAD&&ARMA_SCOPE_PRELOAD.read)cached=ARMA_SCOPE_PRELOAD.read(cachedSession.user||'');
+      if(cached){await startApp({preload:cached});painted=true;}
+    }
+  }catch(e){}
+  if(!painted){
+    document.getElementById('loginWall').classList.add('hidden');
+    document.getElementById('appArea').classList.remove('hidden');
+    configureMode();
+    document.getElementById('reportStatus').textContent='CARGANDO CONTEXTO OPERATIVO...';
+    armaV32BootLoaderStart();
+  }
+  try{
+    const data=await armaV329FetchBootstrap(token);
+    if(!data.ok){if(!painted)showLoginWall(data.error||'NO FUE POSIBLE VALIDAR SESION');armaV32BootLoaderDone();return;}
+    setSessionData(data.session||{},token);
+    if(data.preload){if(data.rtLite)armaV328CacheWrite(data.preload);else writeScopePreload(data.preload);}
+    await startApp(data);
+    armaV32BootLoaderDone();
+    try{if(data.performance)console.info('ARMA RT V32.9 BOOT',data.performance);}catch(e){}
+  }catch(e){
+    armaV32BootLoaderDone();
+    if(!painted){
+      document.getElementById('reportStatus').textContent='NO FUE POSIBLE CARGAR EL CONTEXTO';
+      armaAlert('NO FUE POSIBLE CARGAR LOS DATOS DE REPORTAR BT DESPUES DEL REINTENTO AUTOMATICO.\n'+apiErrorText(e));
+    }else{
+      document.getElementById('reportStatus').textContent='DATOS PRECARGADOS // ACTUALIZACION PENDIENTE';
+    }
+  }
+};
+/* === FIN RT V32.9 === */
 document.addEventListener('DOMContentLoaded',()=>{setTimeout(()=>{let b=document.getElementById('addSupportTech');if(b)b.addEventListener('click',function(e){e.preventDefault();addSupportTech('');});let rp=document.getElementById('rtPersona');if(rp)rp.addEventListener('change',refreshSupportOptions);},800);});
 document.addEventListener('DOMContentLoaded',()=>{armaApplyRTTimeMax();setInterval(armaApplyRTTimeMax,60000);});
 document.addEventListener("DOMContentLoaded",validateSession);
