@@ -691,7 +691,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-11 12:06:05</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-11 22:03:08</span></div>
   </footer>
 </main>
 </div>
@@ -1338,20 +1338,22 @@ async function armaApi(action,payload){
   if(read)ARMA_V12_MAIN_INFLIGHT.set(key,job);
   try{return await job;}finally{if(read)ARMA_V12_MAIN_INFLIGHT.delete(key);}
 }
-/* === ARMA MAIN V14.8 RT BOOT BRIDGE === */
+/* === ARMA MAIN V14.9 RT + OT BOOT BRIDGE === */
 let armaV147WarmPromise=null,armaV147WarmTimer=null;
-function armaV147WarmKey(){return 'ARMA_SCOPE_WARM_R814_'+String((armaSession&&armaSession.user)||'').toUpperCase();}
+function armaV147WarmKey(){return 'ARMA_SCOPE_WARM_R815_'+String((armaSession&&armaSession.user)||'').toUpperCase();}
 function armaV147WarmFresh(){try{const raw=sessionStorage.getItem(armaV147WarmKey())||'';if(!raw)return false;const x=JSON.parse(raw);return !!x.ready&&Date.now()-Number(x.ts||0)<600000;}catch(e){return false;}}
 function armaV148NormUser(v){return String(v==null?'':v).toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();}
 function armaV148RTBootKey(user){return 'ARMA_RT_REPORT_BOOT_V328_'+armaV148NormUser(user||'').replace(/[^A-Z0-9_-]/g,'_');}
-function armaV148StoreReportPreload(data){try{const p=data&&data.reportPreload;if(!p||!p.rtReportLite)return false;const u=armaV148NormUser((p.context&&p.context.user)||(armaSession&&armaSession.user)||'');if(!u)return false;localStorage.setItem(armaV148RTBootKey(u),JSON.stringify({ts:Date.now(),data:p,source:'MAIN_V14_8'}));return true;}catch(e){console.warn('ARMA RT boot bridge cache',e);return false;}}
+function armaV148StoreReportPreload(data){try{const p=data&&data.reportPreload;if(!p||!p.rtReportLite)return false;const u=armaV148NormUser((p.context&&p.context.user)||(armaSession&&armaSession.user)||'');if(!u)return false;localStorage.setItem(armaV148RTBootKey(u),JSON.stringify({ts:Date.now(),data:p,source:'MAIN_V14_9'}));return true;}catch(e){console.warn('ARMA RT boot bridge cache',e);return false;}}
+function armaV149OTBootKey(user){return 'ARMA_ROT_R18_BOOT_'+String(user||'').toUpperCase()+'_SELF';}
+function armaV149StoreOTBoot(data){try{const b=data&&data.otReportBoot;if(!b||!b.ok)return false;const u=String((b.session&&b.session.user)||(armaSession&&armaSession.user)||'').toUpperCase();if(!u)return false;localStorage.setItem(armaV149OTBootKey(u),JSON.stringify({ts:Date.now(),data:b,source:'MAIN_V14_9'}));return true;}catch(e){console.warn('ARMA OT boot bridge cache',e);return false;}}
 function armaV147WarmMark(data){try{sessionStorage.setItem(armaV147WarmKey(),JSON.stringify({ts:Date.now(),ready:true,version:String(data.preloadVersion||''),source:String(data.source||'')}));}catch(e){}}
 async function armaV147WarmScope(force){
   if(!armaSession||!armaSession.token||!armaSession.user)return false;
   if(navigator.onLine===false)return false;
   if(!force&&armaV147WarmFresh())return true;
   if(armaV147WarmPromise)return armaV147WarmPromise;
-  armaV147WarmPromise=armaApi('scopeWarmCurrentUser',{token:armaSession.token}).then(function(data){if(data&&data.ok&&data.ready){armaV148StoreReportPreload(data);armaV147WarmMark(data);return true;}return false;}).catch(function(e){console.warn('ARMA scopeWarmCurrentUser',e);return false;}).finally(function(){armaV147WarmPromise=null;});
+  armaV147WarmPromise=armaApi('scopeWarmCurrentUser',{token:armaSession.token}).then(function(data){if(data&&data.ok&&data.ready){armaV148StoreReportPreload(data);armaV149StoreOTBoot(data);armaV147WarmMark(data);return true;}return false;}).catch(function(e){console.warn('ARMA scopeWarmCurrentUser',e);return false;}).finally(function(){armaV147WarmPromise=null;});
   return armaV147WarmPromise;
 }
 function armaV147ScheduleScopeWarm(force){
