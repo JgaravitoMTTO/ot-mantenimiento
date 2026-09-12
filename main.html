@@ -691,7 +691,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-11 22:03:08</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-12 00:03:43</span></div>
   </footer>
 </main>
 </div>
@@ -769,7 +769,7 @@ function armaMainHeartbeat(){
 }
 function armaStartMainPresence(){
   try{window.name='ARMA_MAIN';}catch(e){}
-  armaMainHeartbeat(); setInterval(armaMainHeartbeat,2000);
+  armaMainHeartbeat(); setInterval(armaMainHeartbeat,5000);
   try{
     if('BroadcastChannel' in window){
       armaMainChannel=new BroadcastChannel(ARMA_CHANNEL_NAME);
@@ -1292,7 +1292,8 @@ async function armaBootstrapMain(force){
 }
 function armaV12PrefetchPages(){
   const saveData=!!(navigator.connection&&navigator.connection.saveData);
-  if(armaIsPhoneDevice()||saveData)return;
+  const et=String(navigator.connection&&navigator.connection.effectiveType||'').toLowerCase();
+  if(armaIsPhoneDevice()||saveData||et==='slow-2g'||et==='2g'||et==='3g')return;
   const pages=['personal.html','turnos.html','mel.html','perfiles.html','reportes_tecnicos_rt.html','usuarios_arma.html','niveles_arma.html'];
   const run=function(){pages.forEach(function(href){const l=document.createElement('link');l.rel='prefetch';l.href=href;document.head.appendChild(l);});};
   if('requestIdleCallback' in window)requestIdleCallback(run,{timeout:3000});else setTimeout(run,1600);
@@ -1328,11 +1329,11 @@ function armaV13DashboardCacheRead(){const x=armaV13DashboardCacheEnvelope();ret
 function armaV13DashboardNeedsNetwork(){try{const ts=Number(localStorage.getItem('ARMA_R17_DASH_LAST_NET')||0);return !ts||Date.now()-ts>300000;}catch(e){return true;}}
 async function armaApi(action,payload){
   payload=payload||{};payload.action=action;
-  const read=/^(authBootstrap|mainDashboard|mainWorkday|validateSession|mainBootstrap|ping)$/.test(action);
+  const read=/^(authBootstrap|mainDashboard|mainWorkday|mainPulse|validateSession|mainBootstrap|ping)$/.test(action);
   const key=read?action+'|'+JSON.stringify(payload):'';
   if(read&&ARMA_V12_MAIN_INFLIGHT.has(key))return ARMA_V12_MAIN_INFLIGHT.get(key);
   const job=(async function(){
-    const ctl=new AbortController();const timeout=(action==='authBootstrap'?12000:(action==='scopeWarmCurrentUser'?45000:25000));const timer=setTimeout(function(){ctl.abort();},timeout);
+    const ctl=new AbortController();const timeout=(action==='mainPulse'?8000:(action==='authBootstrap'?12000:(action==='scopeWarmCurrentUser'?45000:25000)));const timer=setTimeout(function(){ctl.abort();},timeout);
     try{const res=await fetch(ARMA_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),signal:ctl.signal,keepalive:action==='scopeWarmCurrentUser',cache:'no-store'});const txt=await res.text();let data=null;try{data=JSON.parse(txt);}catch(e){throw new Error('RESPUESTA_NO_JSON '+res.status);}return data;}finally{clearTimeout(timer);}
   })();
   if(read)ARMA_V12_MAIN_INFLIGHT.set(key,job);
@@ -1358,7 +1359,7 @@ async function armaV147WarmScope(force){
 }
 function armaV147ScheduleScopeWarm(force){
   if(armaV147WarmTimer){clearTimeout(armaV147WarmTimer);armaV147WarmTimer=null;}
-  armaV147WarmTimer=setTimeout(function(){armaV147WarmTimer=null;armaV147WarmScope(force===true);},80);
+  armaV147WarmTimer=setTimeout(function(){armaV147WarmTimer=null;armaV147WarmScope(force===true);},300);
 }
 function armaApplyAuthBootstrap(data,token){
   if(!data||!data.ok)return false;const s=data.session||{};
@@ -1615,8 +1616,77 @@ function armaAlarmInit(){
   clearInterval(armaAlarmTimer);
   armaAlarmTimer=setInterval(function(){if(!document.hidden&&armaSession&&armaSession.token)armaAlarmLoad(true);},60000);
 }
-const armaAlarmBaseSetSession=armaSetSession;armaSetSession=function(data){const r=armaAlarmBaseSetSession(data);setTimeout(function(){armaAlarmLoad(false);},60);return r;};
+const armaAlarmBaseSetSession=armaSetSession;armaSetSession=function(data){const r=armaAlarmBaseSetSession(data);setTimeout(function(){const c=armaAlarmCacheRead();if(c)armaAlarmRender(c);},90);return r;};
 const armaAlarmBaseSetVisitor=armaSetVisitor;armaSetVisitor=function(clearStored){const r=armaAlarmBaseSetVisitor(clearStored);armaAlarmData=null;armaAlarmSetIcon({counts:{active:0,unseen:0}});armaAlarmClose();return r;};
+/* === ARMA MAIN V15.0 GENERATION-SAFE / LOW-DATA PULSE === */
+const ARMA_MAIN_V150_PULSE_MS=120000,ARMA_MAIN_V150_RESUME_STALE_MS=30000,ARMA_MAIN_V150_DASH_SAFETY_MS=900000,ARMA_MAIN_V150_WORKDAY_SAFETY_MS=300000,ARMA_MAIN_V150_ALARM_SAFETY_MS=1800000;
+let armaMainV150PulseTimer=null,armaMainV150PulsePromise=null,armaMainV150PulseState=null,armaMainV150LastPulseAt=0,armaMainV150HiddenAt=0,armaMainV150WorkdayNetAt=0,armaMainV150AlarmFullAt=0;
+function armaMainV150PulseKey(){return 'ARMA_MAIN_PULSE_V150_'+String((armaSession&&armaSession.user)||'VISITANTE').toUpperCase();}
+function armaMainV150ReadPulse(){try{const raw=sessionStorage.getItem(armaMainV150PulseKey())||'';if(!raw)return null;const x=JSON.parse(raw);return x&&x.data?x.data:null;}catch(e){return null;}}
+function armaMainV150WritePulse(data){try{sessionStorage.setItem(armaMainV150PulseKey(),JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
+function armaMainV150GenChanged(a,b,k){return String(a&&a[k]||'')!==String(b&&b[k]||'');}
+function armaMainV150WorkdayCacheTs(){try{const raw=localStorage.getItem(armaMainV14CacheKey())||'';if(!raw)return 0;const x=JSON.parse(raw);return Number(x&&x.ts||0);}catch(e){return 0;}}
+function armaMainV150AlarmCacheEnvelope(){try{const raw=localStorage.getItem(armaAlarmCacheKey())||'';if(!raw)return null;const x=JSON.parse(raw);if(!x||!x.data)return null;return x;}catch(e){return null;}}
+function armaMainV150AlarmMetaKey(){return 'ARMA_ALARM_FP_V150_'+String((armaSession&&armaSession.user)||'USER').toUpperCase();}
+function armaMainV150AlarmFingerprintStored(){try{return localStorage.getItem(armaMainV150AlarmMetaKey())||'';}catch(e){return '';}}
+function armaMainV150StoreAlarmFingerprint(fp){try{if(fp)localStorage.setItem(armaMainV150AlarmMetaKey(),String(fp));}catch(e){}}
+function armaMainV150DashboardLastNet(){try{return Number(localStorage.getItem('ARMA_R17_DASH_LAST_NET')||0);}catch(e){return 0;}}
+function armaMainV150ApplyPulse(data,reason){
+  if(!data||!data.ok||data.authenticated===false){if(data&&data.authenticated===false)armaSetVisitor(true);return false;}
+  const prev=armaMainV150PulseState||armaMainV150ReadPulse(),next={generations:data.generations||{},alarmFingerprint:String(data.alarmFingerprint||''),dayKey:String(data.dayKey||''),ts:Date.now()};
+  armaMainV150PulseState=next;armaMainV150WritePulse(next);armaMainV150LastPulseAt=Date.now();
+  if(prev){
+    const pg=prev.generations||{},ng=next.generations||{};
+    if(armaMainV150GenChanged(pg,ng,'auth'))setTimeout(function(){armaV13RefreshAuth(true);},60);
+    if(armaMainV150GenChanged(pg,ng,'main')||armaMainV150GenChanged(pg,ng,'ot')||armaMainV150GenChanged(pg,ng,'mel'))setTimeout(function(){armaV13RefreshDashboard(true);},180);
+    if(armaMainV150GenChanged(pg,ng,'ot')||armaMainV150GenChanged(pg,ng,'turnos'))setTimeout(function(){armaMainV14Load(true);},320);
+    if(armaMainV150GenChanged(pg,ng,'users')||armaMainV150GenChanged(pg,ng,'personal')||armaMainV150GenChanged(pg,ng,'mel'))setTimeout(function(){armaV147ScheduleScopeWarm(true);},460);
+    if(String(prev.alarmFingerprint||'')!==String(next.alarmFingerprint||''))setTimeout(function(){armaAlarmLoad(true,next.alarmFingerprint);},620);
+  }else{
+    const ac=armaMainV150AlarmCacheEnvelope();if(!ac)setTimeout(function(){armaAlarmLoad(true,next.alarmFingerprint);},500);
+  }
+  const now=Date.now();
+  if(now-armaMainV150DashboardLastNet()>ARMA_MAIN_V150_DASH_SAFETY_MS)setTimeout(function(){armaV13RefreshDashboard(false);},760);
+  const wt=armaMainV150WorkdayCacheTs();if(!wt||now-wt>ARMA_MAIN_V150_WORKDAY_SAFETY_MS)setTimeout(function(){armaMainV14Load(true);},900);
+  if(!armaMainV150AlarmFullAt){const ae=armaMainV150AlarmCacheEnvelope();armaMainV150AlarmFullAt=Number(ae&&ae.ts||0);}
+  if(!armaMainV150AlarmFullAt||now-armaMainV150AlarmFullAt>ARMA_MAIN_V150_ALARM_SAFETY_MS)setTimeout(function(){armaAlarmLoad(true,next.alarmFingerprint);},1040);
+  return true;
+}
+async function armaMainV150Pulse(reason,force){
+  if(!armaSession||!armaSession.token||document.hidden||navigator.onLine===false)return false;
+  if(!force&&Date.now()-armaMainV150LastPulseAt<30000)return true;if(armaMainV150PulsePromise)return armaMainV150PulsePromise;
+  armaMainV150PulsePromise=armaApi('mainPulse',{token:armaSession.token,reason:String(reason||'TIMER')}).then(function(d){return armaMainV150ApplyPulse(d,reason);}).catch(function(e){console.warn('ARMA mainPulse',e);return false;}).finally(function(){armaMainV150PulsePromise=null;});
+  return armaMainV150PulsePromise;
+}
+function armaMainV150PulseInit(){
+  if(armaMainV150PulseTimer)clearInterval(armaMainV150PulseTimer);
+  setTimeout(function(){armaMainV150Pulse('INIT',true);},650);
+  armaMainV150PulseTimer=setInterval(function(){armaMainV150Pulse('TIMER',false);},ARMA_MAIN_V150_PULSE_MS);
+  window.addEventListener('focus',function(){if(Date.now()-armaMainV150LastPulseAt>ARMA_MAIN_V150_RESUME_STALE_MS)armaMainV150Pulse('FOCUS',true);});
+  document.addEventListener('visibilitychange',function(){if(document.hidden){armaMainV150HiddenAt=Date.now();return;}const away=Date.now()-Number(armaMainV150HiddenAt||0);if(away>ARMA_MAIN_V150_RESUME_STALE_MS||Date.now()-armaMainV150LastPulseAt>ARMA_MAIN_V150_RESUME_STALE_MS)armaMainV150Pulse('VISIBLE',true);});
+  window.addEventListener('online',function(){armaMainV150Pulse('ONLINE',true);});
+}
+/* Cache-first real para jornada: si el cache de 5 min existe, no hace viaje de red. */
+armaMainV14Load=async function(force){if(!armaSession||!armaSession.token){armaMainV14Hide();return false;}if(armaMainV14Promise)return armaMainV14Promise;if(!force){const c=armaMainV14CacheRead();if(c){armaMainV14Render(c);armaMainV14DetectPlant(c.plants||[]);return true;}}armaMainV14Promise=armaApi('mainWorkday',{token:armaSession.token}).then(function(data){if(data&&data.ok){armaMainV150WorkdayNetAt=Date.now();armaMainV14CacheWrite(data);armaMainV14Render(data);armaMainV14DetectPlant(data.plants||[]);return true;}return false;}).catch(function(e){console.warn('ARMA mainWorkday',e);return false;}).finally(function(){armaMainV14Promise=null;});return armaMainV14Promise;};
+/* Jornada ya no crea su propio timer/focus. El pulso V15 decide cuando refrescar. */
+armaMainV14Init=function(){
+  const go=document.getElementById('armaGoDocument');if(go)go.addEventListener('click',function(){armaOpenChildWindow('reportar_ot.html','ARMA_REPORTAR_OT');});
+  const n=document.getElementById('armaEnableNotifications');if(n)n.addEventListener('click',armaMainV14EnableNotifications);
+  const x=document.getElementById('armaWorkdayCloseX');if(x)x.addEventListener('click',armaMainV141Close);const ok=document.getElementById('armaWorkdayAccept');if(ok)ok.addEventListener('click',armaMainV141Close);
+  const back=document.getElementById('armaWorkdayBack');if(back)back.addEventListener('click',function(e){if(e.target===back)armaMainV141Close();});
+  const bell=document.getElementById('notifyCard');if(bell)bell.addEventListener('click',function(e){e.stopPropagation();if(armaSession&&armaSession.token)armaMainV141Open();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')armaMainV141Close();});
+  if(armaSession&&armaSession.token)setTimeout(function(){armaMainV14Load(false);},120);
+};
+/* Alarmas: cache valido se pinta sin red; el payload completo baja solo cuando cambia fingerprint. */
+armaAlarmCacheRead=function(){try{const raw=localStorage.getItem(armaAlarmCacheKey())||'';if(!raw)return null;const x=JSON.parse(raw);if(!x||!x.data||Date.now()-Number(x.ts||0)>21600000)return null;armaMainV150AlarmFullAt=Math.max(armaMainV150AlarmFullAt,Number(x.ts||0));return x.data;}catch(e){return null;}};
+armaAlarmLoad=async function(force,fingerprint){if(!armaSession||!armaSession.token){armaAlarmData=null;armaAlarmSetIcon({counts:{active:0,unseen:0}});return false;}if(armaAlarmPromise)return armaAlarmPromise;if(!force){const c=armaAlarmCacheRead();if(c){armaAlarmRender(c);return true;}}armaAlarmPromise=armaApi('alarmCenterBootstrap',{token:armaSession.token}).then(function(data){if(data&&data.ok){armaMainV150AlarmFullAt=Date.now();armaAlarmCacheWrite(data);if(fingerprint)armaMainV150StoreAlarmFingerprint(fingerprint);else if(armaMainV150PulseState&&armaMainV150PulseState.alarmFingerprint)armaMainV150StoreAlarmFingerprint(armaMainV150PulseState.alarmFingerprint);armaAlarmRender(data);return true;}return false;}).catch(function(e){console.warn('ARMA alarmCenterBootstrap',e);return false;}).finally(function(){armaAlarmPromise=null;});return armaAlarmPromise;};
+armaAlarmOpen=function(){const back=document.getElementById('alarmCenterBack');if(!back)return;back.classList.remove('alarm-center-hidden');back.setAttribute('aria-hidden','false');document.body.classList.add('arma-alarm-open');const c=armaAlarmCacheRead();if(c)armaAlarmRender(c);if(!c)armaAlarmLoad(true);else if(Date.now()-armaMainV150LastPulseAt>30000)armaMainV150Pulse('ALARM_OPEN',true);};
+armaAlarmInit=function(){const card=document.getElementById('alarmCenterCard'),x=document.getElementById('alarmCenterCloseX'),close=document.getElementById('alarmCenterCloseBtn'),seen=document.getElementById('alarmCenterSeenBtn'),back=document.getElementById('alarmCenterBack');if(card)card.addEventListener('click',function(e){e.stopPropagation();armaAlarmOpen();});if(x)x.addEventListener('click',armaAlarmClose);if(close)close.addEventListener('click',armaAlarmClose);if(seen)seen.addEventListener('click',armaAlarmMarkSeen);if(back)back.addEventListener('click',function(e){if(e.target===back)armaAlarmClose();});document.addEventListener('keydown',function(e){if(e.key==='Escape')armaAlarmClose();});const c=armaAlarmCacheRead();if(c)armaAlarmRender(c);else if(armaSession&&armaSession.token)setTimeout(function(){armaAlarmLoad(true);},500);};
+/* Al cerrar sesion se descarta el estado pequeno del pulso; no toca caches funcionales compartidos. */
+const armaMainV150BaseSetVisitor=armaSetVisitor;armaSetVisitor=function(clearStored){const user=String((armaSession&&armaSession.user)||'').toUpperCase();const r=armaMainV150BaseSetVisitor(clearStored);try{if(user)sessionStorage.removeItem('ARMA_MAIN_PULSE_V150_'+user);}catch(e){}armaMainV150PulseState=null;armaMainV150LastPulseAt=0;return r;};
+const armaMainV150BaseSetSession=armaSetSession;armaSetSession=function(data){const r=armaMainV150BaseSetSession(data);if(armaSession&&armaSession.token&&Date.now()-armaMainV150LastPulseAt>30000)setTimeout(function(){armaMainV150Pulse('SESSION',true);},700);return r;} ;
+/* === FIN MAIN V15.0 === */
 document.addEventListener('DOMContentLoaded',function(){
   const internalReturn=armaConsumeInternalReturn();
   const restored=armaRestoreSessionCache();if(!restored)armaRenderVisitor();
@@ -1626,9 +1696,7 @@ document.addEventListener('DOMContentLoaded',function(){
   armaV12PrefetchPages();armaPWARegisterServiceWorker();armaPWAInit();armaStartMainPresence();updateDateCard();setInterval(updateDateCard,60000);
   armaV13RefreshAuth(true);
   if(!cachedDash){armaV13RefreshDashboard(false);}else if(armaV13DashboardNeedsNetwork()||!!((cachedDash.kpis||{}).snapshotStale)){setTimeout(function(){armaV13RefreshDashboard(true);},900);}
-  setInterval(function(){if(!document.hidden){armaV13RefreshAuth(false);if(armaV13DashboardNeedsNetwork())armaV13RefreshDashboard(true);}},300000);
-  window.addEventListener('focus',function(){armaV13RefreshAuth(false);if(armaV13DashboardNeedsNetwork())armaV13RefreshDashboard(true);});
-  document.addEventListener('visibilitychange',function(){if(!document.hidden){armaV13RefreshAuth(false);if(armaV13DashboardNeedsNetwork())armaV13RefreshDashboard(true);}});
+  armaMainV150PulseInit();
   document.body.addEventListener('click',function(e){const locked=e.target.closest('.arma-locked');if(locked){e.preventDefault();alert('DEBE INICIAR SESION PARA ACCEDER A ESTE MODULO.');}});
   document.body.addEventListener('click',function(e){const a=e.target.closest('a[data-arma-window]');if(a&&!a.classList.contains('arma-locked')){e.preventDefault();armaOpenChildWindow(a.getAttribute('href'),a.getAttribute('data-arma-window'));}});
   document.getElementById('userCard').addEventListener('click',function(e){e.stopPropagation();this.classList.toggle('open');});
