@@ -485,7 +485,7 @@ textarea.mel-readonly-field[readonly]{resize:none!important}
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-08-27 19:24:37</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-09-13 16:28:52</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -1857,6 +1857,217 @@ async function uploadPhoto() {
     } finally {
       hideLoader();
     }
+  };
+  reader.readAsDataURL(file);
+}
+/* === MEL V14.0 FAST / GENERATION SAFE / DELTA UI - 2026-09-13 === */
+const MEL_V140_BOOT_TTL=30*60*1000;
+const MEL_V140_DETAIL_TTL=10*60*1000;
+const MEL_V140_BOOT_PREFIX='ARMA_MEL_BOOT_V140_';
+const MEL_V140_DETAIL_PREFIX='ARMA_MEL_DETAIL_V140_';
+let melV140Generation='';
+let melV140BootSource='';
+
+function melV140User(){return String((armaSession&&(armaSession.user||armaSession.USER))||'').trim().toUpperCase();}
+function melV140BootKey(){return MEL_V140_BOOT_PREFIX+melV140User();}
+function melV140BootRead(){
+  try{
+    const raw=localStorage.getItem(melV140BootKey())||'';if(!raw)return null;
+    const o=JSON.parse(raw);if(!o||!o.data||!o.ts||Date.now()-Number(o.ts)>MEL_V140_BOOT_TTL)return null;
+    return o;
+  }catch(e){return null;}
+}
+function melV140BootWrite(data){
+  try{if(data&&data.ok)localStorage.setItem(melV140BootKey(),JSON.stringify({ts:Date.now(),generation:String(data.generation||''),data:data}));}catch(e){}
+}
+function melV140BootClear(){try{localStorage.removeItem(melV140BootKey());}catch(e){}}
+function melV140DetailKey(id){return MEL_V140_DETAIL_PREFIX+melV140User()+'_'+String(id||'').trim();}
+function melDetailCacheGet(id){
+  try{
+    const o=JSON.parse(sessionStorage.getItem(melV140DetailKey(id))||'null');
+    if(!o||!o.activo||!o.ts||Date.now()-Number(o.ts)>MEL_V140_DETAIL_TTL)return null;
+    if(melV140Generation&&o.generation&&String(o.generation)!==String(melV140Generation))return null;
+    return o;
+  }catch(e){return null;}
+}
+function melDetailCachePut(id,res){
+  try{
+    if(id&&res&&res.activo)sessionStorage.setItem(melV140DetailKey(id),JSON.stringify({ts:Date.now(),generation:String(res.generation||melV140Generation||''),activo:res.activo,path:res.path||[]}));
+  }catch(e){}
+}
+function melV140ApplyBoot(data,focusId,initialFast,fromCache){
+  if(!data||!data.ok)throw new Error((data&&data.error)||'ERROR_BOOTSTRAP_MEL');
+  if(!fromCache){
+    armaSession=Object.assign(armaSession||{},{user:data.user||((armaSession||{}).user),nombre:data.nombre||((armaSession||{}).nombre)||data.user,nivel:data.nivel||((armaSession||{}).nivel),permissions:data.permissions||((armaSession||{}).permissions)||{}});
+    try{localStorage.setItem(ARMA_SESSION_CACHE_KEY,JSON.stringify(armaSession));}catch(e){}
+  }
+  melV140Generation=String(data.generation||melV140Generation||'');
+  melCatalogos=data.catalogos||melCatalogos||{};
+  melHierarchyNodes=data.nodes||data.roots||[];
+  melTreeRoots=data.roots||[];
+  melDefaultAssetId=data.defaultAssetId||'';
+  melDefaultPath=data.defaultPath||[];
+  melNodeMap={};melTreeOpen=new Set();
+  melRegisterNodes(melHierarchyNodes);melRegisterNodes(melDefaultPath);
+  melBuildLocalHierarchyIndex();melExpandTreeThroughEquipment();renderCatalogos();
+  document.getElementById('userPill').textContent=((armaSession&&armaSession.nombre)||data.nombre||data.user||'')+' // '+((armaSession&&armaSession.nivel)||data.nivel||'');
+  applyPermissions();
+  document.getElementById('countLabel').textContent=Number(data.count||0)+' ACTIVOS';
+  renderTree();
+  if(initialFast&&data.defaultActivo){
+    selectedAsset=data.defaultActivo;melSelectedPath=data.defaultPath||[];creatingNew=false;
+    melDetailCachePut(melAssetKey(selectedAsset),{activo:selectedAsset,path:melSelectedPath,generation:melV140Generation});
+    setForm(selectedAsset,melSelectedPath);renderTree();return Promise.resolve();
+  }
+  const target=(typeof focusId==='string'&&focusId)?focusId:((selectedAsset&&selectedAsset.ID_ACTIVO)||melDefaultAssetId);
+  if(target)return selectAsset(target,true);
+  selectedAsset=null;melSelectedPath=[];setForm(null,[]);return Promise.resolve();
+}
+
+async function loadMEL(focusId,initialFast,silent){
+  const initial=initialFast===true;
+  const cached=initial?melV140BootRead():null;
+  if(cached&&cached.data){
+    try{
+      melV140BootSource='LOCAL_CACHE';
+      await melV140ApplyBoot(cached.data,focusId,true,true);
+      hideLoader();
+      const head=await apiWithTimeout('melGeneration',{},6000);
+      if(head&&head.ok&&String(head.generation||'')===String(cached.generation||cached.data.generation||'')){
+        melV140Generation=String(head.generation||melV140Generation||'');
+        return;
+      }
+    }catch(eCache){}
+  }
+  if(!silent&&!cached)showLoader(initial?'CARGANDO MEL...':'ACTUALIZANDO MEL...');
+  try{
+    const data=await apiWithTimeout('melBootstrap',{},15000);
+    melV140BootSource='BACKEND';
+    await melV140ApplyBoot(data,focusId,initial,false);
+    melV140BootWrite(data);
+  }catch(err){toast('ERROR CARGANDO MEL: '+err.message);}
+  finally{if(!silent)hideLoader();}
+}
+
+async function selectAsset(rowOrId,silent){
+  const id=typeof rowOrId==='string'?rowOrId:melAssetKey(rowOrId);if(!id)return;
+  const cached=melDetailCacheGet(id);
+  if(cached){
+    selectedAsset=cached.activo;melSelectedPath=cached.path||[];creatingNew=false;
+    setForm(selectedAsset,melSelectedPath);renderTree();document.getElementById('editStatus').textContent='';
+    return;
+  }
+  let timer=null;
+  if(!silent)timer=setTimeout(function(){showLoader('CARGANDO DETALLE DEL ACTIVO...');},220);
+  try{
+    const res=await apiWithTimeout('getMELActivo',{idActivo:id},10000);
+    if(!res.ok)throw new Error(res.error||'ERROR_DETALLE_MEL');
+    if(res.generation)melV140Generation=String(res.generation);
+    melDetailCachePut(id,res);
+    selectedAsset=res.activo||null;melSelectedPath=res.path||[];creatingNew=false;
+    await melExposeSelectedPath(melSelectedPath,selectedAsset);
+    setForm(selectedAsset,melSelectedPath);renderTree();document.getElementById('editStatus').textContent='';
+  }catch(err){toast('ERROR CARGANDO ACTIVO: '+err.message);}
+  finally{if(timer)clearTimeout(timer);if(!silent)hideLoader();}
+}
+
+function melV140CurrentPath(){
+  const out=[];
+  MEL_CASCADE_LEVELS.forEach(function(level){const n=melHierarchySelections[level];if(n)out.push(n);});
+  return out;
+}
+function melV140PublicNode(row){
+  if(!row)return null;
+  return {ID_ACTIVO:String(row.ID_ACTIVO||''),CODIGO_TAG:String(row.CODIGO_TAG||row['CODIGO/TAG']||''),NOMBRE:String(row.NOMBRE||''),NIVEL_DE_JERARQUIA:String(row.NIVEL_DE_JERARQUIA||''),PADRE:String(row.PADRE||''),ESTADO_ACTIVO:String(row.ESTADO_ACTIVO||''),PLANTA:String(row.PLANTA||''),AREA:String(row.AREA||''),LINEA_EQUIPO:String(row.LINEA_EQUIPO||''),SISTEMA:String(row.SISTEMA||''),SUBSISTEMA:String(row.SUBSISTEMA||''),SUBEQUIPO:String(row.SUBEQUIPO||''),COMPONENTE:String(row.COMPONENTE||''),RUTA_CODIGO:String(row.RUTA_CODIGO||''),RUTA_NOMBRE:String(row.RUTA_NOMBRE||''),ADMITE_OT:String(row.ADMITE_OT||''),HAS_CHILDREN:row.HAS_CHILDREN===true,CAN_OPEN:true};
+}
+function melV140PatchNode(row,oldParent){
+  const node=melV140PublicNode(row),id=melAssetKey(node);if(!id)return;
+  const prev=melNodeMap[id]||{},oldP=String(oldParent!=null?oldParent:(prev.PADRE||'')).trim(),newP=String(node.PADRE||'').trim();
+  melNodeMap[id]=Object.assign({},prev,node);melRows=Object.keys(melNodeMap).map(function(k){return melNodeMap[k];});
+  if(oldP&&melChildrenMap[oldP])melChildrenMap[oldP]=melChildrenMap[oldP].filter(function(x){return x!==id;});
+  melTreeRoots=melTreeRoots.filter(function(x){return melAssetKey(x)!==id;});
+  if(newP){if(!melChildrenMap[newP])melChildrenMap[newP]=[];if(melChildrenMap[newP].indexOf(id)<0)melChildrenMap[newP].push(id);melChildrenLoaded[newP]=true;if(melNodeMap[newP])melNodeMap[newP].HAS_CHILDREN=true;}
+  else melTreeRoots.push(melNodeMap[id]);
+  melHierarchyNodes=melRows.slice();
+}
+function melV140WriteBootFromState(){
+  try{
+    const data={ok:true,user:(armaSession&&armaSession.user)||'',nombre:(armaSession&&armaSession.nombre)||'',nivel:(armaSession&&armaSession.nivel)||'',permissions:(armaSession&&armaSession.permissions)||{},count:(function(){const m=String(document.getElementById('countLabel').textContent||'0').match(/\d+/);return Number(m?m[0]:0);})(),nodes:melRows,roots:melTreeRoots,defaultAssetId:melDefaultAssetId,defaultPath:melDefaultPath,defaultActivo:(melDefaultAssetId&&selectedAsset&&melAssetKey(selectedAsset)===melDefaultAssetId)?selectedAsset:null,catalogos:melCatalogos,generation:melV140Generation};
+    melV140BootWrite(data);
+  }catch(e){}
+}
+function melV140ApplySaved(res,oldParent){
+  if(!res||!res.activo)return;
+  if(res.generation)melV140Generation=String(res.generation);
+  const id=res.idActivo||res.activo.ID_ACTIVO||'';
+  melV140PatchNode(res.activo,oldParent);
+  selectedAsset=res.activo;melSelectedPath=res.path||melSelectedPath||[];creatingNew=false;
+  melDetailCachePut(id,{activo:selectedAsset,path:melSelectedPath,generation:melV140Generation});
+  setForm(selectedAsset,melSelectedPath);renderTree();melV140WriteBootFromState();
+}
+
+async function saveAsset(){
+  if(melV136Saving)return;
+  const data=formData(),targetIndex=melLevelIndex(data.NIVEL_DE_JERARQUIA),parent=melHierarchyDeepestSelection();
+  if(targetIndex>0&&!parent){toast('SELECCIONE LA RUTA JERARQUICA Y EL PADRE FINAL.');return;}
+  if(creatingNew||!data.ID_ACTIVO){
+    if(!hasPerm('BTN_MEL_CREAR')){toast('SIN PERMISO PARA CREAR.');return;}
+    const pending=melV136DraftRead();
+    if(pending&&pending.state==='PENDING_CONFIRMATION'&&pending.data){
+      melV136Saving=true;showLoader('VERIFICANDO CREACION ANTERIOR...');
+      try{
+        const prev=await melV136VerifyCreated(pending.data,pending.existingIds||[],pending.clientKey||'');
+        if(prev){const pid=prev.ID_ACTIVO||melAssetKey(prev);melV136DraftClear();toast('ACTIVO YA CREADO Y CONFIRMADO: '+pid);hideLoader();melV136Saving=false;await selectAsset(pid,false);return;}
+      }finally{hideLoader();melV136Saving=false;}
+      if(!window.confirm('A.R.M.A. NO ENCONTRO CONFIRMACION DEL INTENTO ANTERIOR.\n\nLOS DATOS SIGUEN PROTEGIDOS.\n\n¿DESEA ENVIAR NUEVAMENTE LA CREACION?'))return;
+    }
+    const existingIds=Object.keys(melNodeMap||{}).filter(Boolean),currentDraft=melV136DraftRead(),clientKey=melV137EnsureKey(currentDraft);
+    melV136DraftSave(data,'PENDING_CONFIRMATION',existingIds,'',clientKey);melV136Saving=true;showLoader('CREANDO ACTIVO...');
+    try{
+      let res=null;try{res=await apiWithTimeout('createMELActivo',{data:data,clientKey:clientKey},12000);}catch(eCreate){res=null;}
+      if(res&&res.ok&&res.idActivo){
+        melV136DraftClear();creatingNew=false;if(res.generation)melV140Generation=String(res.generation);
+        const created=res.activo||Object.assign({},data,{ID_ACTIVO:res.idActivo});
+        const path=melV140CurrentPath();created.PADRE=created.PADRE||(parent&&melAssetKey(parent))||'';
+        res.activo=created;res.path=path;melV140ApplySaved(res,'');
+        const cm=String(document.getElementById('countLabel').textContent||'0').match(/\d+/);const n=Number(cm?cm[0]:0)+1;document.getElementById('countLabel').textContent=n+' ACTIVOS';
+        melV140WriteBootFromState();toast('DATOS CONFIRMADOS // ACTIVO CREADO: '+res.idActivo);return;
+      }
+      document.getElementById('loaderText').textContent='RESPUESTA NO CONFIRMADA // VERIFICANDO ACTIVO...';
+      const found=await melV136VerifyCreated(data,existingIds,clientKey);
+      if(found){melV136DraftClear();const id=found.ID_ACTIVO||melAssetKey(found);toast('DATOS CONFIRMADOS // ACTIVO CREADO: '+id);await selectAsset(id,true);return;}
+      melV136DraftSave(data,'PENDING_CONFIRMATION',existingIds,String((res&&(res.error||res.detail))||'SIN_CONFIRMACION'),clientKey);
+      toast('NO FUE POSIBLE CONFIRMAR LA CREACION. LOS DATOS QUEDARON PROTEGIDOS. NO REPITA EL FORMULARIO; PRESIONE GUARDAR PARA VERIFICAR PRIMERO.');
+    }catch(err){melV136DraftSave(data,'PENDING_CONFIRMATION',existingIds,String(err&&err.message?err.message:err),clientKey);toast('CONEXION INTERRUMPIDA. LOS DATOS QUEDARON PROTEGIDOS Y LA CREACION QUEDA PENDIENTE DE CONFIRMACION.');}
+    finally{hideLoader();melV136Saving=false;}
+    return;
+  }
+  if(!hasPerm('BTN_MEL_EDITAR')){toast('SIN PERMISO PARA EDITAR.');return;}
+  const oldParent=selectedAsset?selectedAsset.PADRE:'';melV136Saving=true;showLoader('GUARDANDO ACTIVO...');
+  try{
+    const res=await apiWithTimeout('saveMELActivo',{idActivo:data.ID_ACTIVO,data:data},15000);
+    if(!res.ok)throw new Error(res.error||'NO_GUARDADO');
+    melV140ApplySaved(res,oldParent);toast('ACTIVO ACTUALIZADO.');
+  }catch(err){toast('ERROR: '+err.message);}
+  finally{hideLoader();melV136Saving=false;}
+}
+
+async function uploadPhoto(){
+  const data=formData(),file=document.getElementById('photoFile').files[0];
+  if(!data.ID_ACTIVO){toast('SELECCIONE O GUARDE PRIMERO EL ACTIVO.');return;}
+  if(!file){toast('SELECCIONE UNA IMAGEN.');return;}
+  if(!hasPerm('BTN_MEL_SUBIR_FOTO')){toast('SIN PERMISO PARA SUBIR FOTO.');return;}
+  const reader=new FileReader();
+  reader.onload=async function(){
+    showLoader('SUBIENDO FOTO...');
+    try{
+      const res=await apiWithTimeout('uploadMELFoto',{idActivo:data.ID_ACTIVO,fileName:file.name,mimeType:file.type,base64:reader.result},30000);
+      if(!res.ok)throw new Error(res.error||'NO_SUBIDA');
+      if(res.generation)melV140Generation=String(res.generation);
+      if(selectedAsset&&melAssetKey(selectedAsset)===data.ID_ACTIVO){selectedAsset.DIR_FOTOGRAFIA=res.fotoUrl||selectedAsset.DIR_FOTOGRAFIA;setForm(selectedAsset,melSelectedPath);melDetailCachePut(data.ID_ACTIVO,{activo:selectedAsset,path:melSelectedPath,generation:melV140Generation});}
+      document.getElementById('photoFileName').textContent=file.name;melV140BootClear();toast('FOTO ACTUALIZADA.');
+    }catch(err){toast('ERROR FOTO: '+err.message);}
+    finally{hideLoader();}
   };
   reader.readAsDataURL(file);
 }
