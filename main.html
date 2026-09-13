@@ -691,7 +691,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-12 00:29:16</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-13 14:52:12</span></div>
   </footer>
 </main>
 </div>
@@ -1687,7 +1687,7 @@ armaAlarmInit=function(){const card=document.getElementById('alarmCenterCard'),x
 const armaMainV150BaseSetVisitor=armaSetVisitor;armaSetVisitor=function(clearStored){const user=String((armaSession&&armaSession.user)||'').toUpperCase();const r=armaMainV150BaseSetVisitor(clearStored);try{if(user)sessionStorage.removeItem('ARMA_MAIN_PULSE_V150_'+user);}catch(e){}armaMainV150PulseState=null;armaMainV150LastPulseAt=0;return r;};
 const armaMainV150BaseSetSession=armaSetSession;armaSetSession=function(data){const r=armaMainV150BaseSetSession(data);if(armaSession&&armaSession.token&&Date.now()-armaMainV150LastPulseAt>30000)setTimeout(function(){armaMainV150Pulse('SESSION',true);},700);return r;} ;
 /* === FIN MAIN V15.0 === */
-/* === ARMA MAIN V15.1 SESSION-SAFE / INSTANT ALERTS / GEO DECOUPLED === */
+/* === ARMA MAIN V15.2 SESSION-SAFE / INSTANT ALERTS / GEO DECOUPLED === */
 const ARMA_MAIN_V151_GEO_TTL_MS=120000,ARMA_MAIN_V151_WORKDAY_FRESH_MS=300000,ARMA_MAIN_V151_WORKDAY_STALE_MS=86400000;
 let armaMainV151LogoutBusy=false,armaMainV151GeoPromise=null;
 function armaMainV151Norm(v){return String(v==null?'':v).toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();}
@@ -1721,6 +1721,86 @@ const armaMainV151BaseAlarmInit=armaAlarmInit;armaAlarmInit=function(){armaMainV
 const armaMainV151BaseSetVisitor=armaSetVisitor;armaSetVisitor=function(clearStored){const r=armaMainV151BaseSetVisitor(clearStored);armaMainV151ResetVisualState();return r;};
 const armaMainV151BaseSession2=armaSetSession;armaSetSession=function(data){const r=armaMainV151BaseSession2(data);if(r===false)return r;const c=armaAlarmCacheRead();if(c)armaAlarmRender(c);const w=armaMainV151WorkdayEnvelope(ARMA_MAIN_V151_WORKDAY_STALE_MS);if(w)armaMainV14Render(w.data);setTimeout(function(){armaMainV151GeoRefresh(false);},80);return r;};
 /* === FIN MAIN V15.1 === */
+/* === ARMA MAIN V15.2 AUTH + JORNADA CRITICAL PATH === */
+const ARMA_MAIN_V152_CRITICAL_MAX_MS=7000;
+let armaMainV152CriticalUntil=0,armaMainV152DeferredDash=null,armaMainV152DeferredWarm=null;
+function armaMainV152WaitCritical(){
+  return new Promise(function(resolve){
+    const start=Date.now();
+    (function step(){
+      if(!armaSession||!armaSession.token){resolve();return;}
+      if(armaMainV14Promise){Promise.resolve(armaMainV14Promise).finally(resolve);return;}
+      if(Date.now()-start>450||Date.now()>armaMainV152CriticalUntil){resolve();return;}
+      setTimeout(step,40);
+    })();
+  });
+}
+const armaMainV152BaseDash=armaV13RefreshDashboard;
+armaV13RefreshDashboard=async function(force){
+  if(armaSession&&armaSession.token&&Date.now()<armaMainV152CriticalUntil){
+    await Promise.race([armaMainV152WaitCritical(),new Promise(function(r){setTimeout(r,ARMA_MAIN_V152_CRITICAL_MAX_MS);})]);
+  }
+  return armaMainV152BaseDash(force);
+};
+const armaMainV152BaseWarmSchedule=armaV147ScheduleScopeWarm;
+armaV147ScheduleScopeWarm=function(force){
+  if(armaMainV152DeferredWarm){clearTimeout(armaMainV152DeferredWarm);armaMainV152DeferredWarm=null;}
+  armaMainV152DeferredWarm=setTimeout(async function(){
+    armaMainV152DeferredWarm=null;
+    if(!armaSession||!armaSession.token)return;
+    await armaMainV152WaitCritical();
+    setTimeout(function(){armaMainV152BaseWarmSchedule(force===true);},700);
+  },900);
+};
+const armaMainV152BasePulse=armaMainV150Pulse;
+armaMainV150Pulse=function(reason,force){
+  const r=String(reason||'').toUpperCase();
+  if(armaSession&&armaSession.token&&Date.now()<armaMainV152CriticalUntil&&(r==='SESSION'||r==='INIT'||r==='START'||r==='FOCUS')){
+    setTimeout(function(){if(armaSession&&armaSession.token)armaMainV152BasePulse(reason,force);},1800);
+    return Promise.resolve(false);
+  }
+  return armaMainV152BasePulse(reason,force);
+};
+const armaMainV152BaseSetSession=armaSetSession;
+armaSetSession=function(data){
+  armaMainV152CriticalUntil=Date.now()+ARMA_MAIN_V152_CRITICAL_MAX_MS;
+  return armaMainV152BaseSetSession(data);
+};
+armaLogin=async function(){
+  armaMainV151LogoutBusy=false;
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value;
+  const msg=document.getElementById('loginMsg');
+  const btn=document.getElementById('loginDo');
+  if(!u||!p){msg.textContent='DIGITE USUARIO Y CLAVE.';return;}
+  if(btn&&btn.disabled)return;
+  if(btn){btn.disabled=true;btn.textContent='VALIDANDO...';}
+  msg.textContent='VALIDANDO USUARIO Y PERMISOS...';
+  const t0=performance.now();
+  try{
+    const data=await armaApi('login',{user:u,password:p});
+    if(data&&data.ok){
+      armaV13AuthValidated=true;
+      armaSetSession(data);
+      armaV13AuthLastRefresh=Date.now();
+      armaCloseLogin();
+      document.getElementById('loginPass').value='';
+      msg.textContent='';
+      armaV13QueueLoginAudit(data.token);
+      setTimeout(function(){if(armaSession&&armaSession.token)armaMainV14Load(false);},20);
+      setTimeout(function(){if(armaSession&&armaSession.token)armaV13RefreshDashboard(true);},250);
+      armaV147ScheduleScopeWarm(true);
+      try{console.info('ARMA LOGIN V15.2',Math.round(performance.now()-t0),'ms',data.authPath||'',data.performance||{});}catch(eLog){}
+    }else{
+      msg.textContent=(data&&data.error)||'LOGIN NO VALIDO';
+    }
+  }catch(e){
+    msg.textContent='NO FUE POSIBLE CONECTAR CON ARMA_BACKEND.';
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='INGRESAR';}
+  }
+};
+/* === FIN MAIN V15.2 === */
 document.addEventListener('DOMContentLoaded',function(){
   const internalReturn=armaConsumeInternalReturn();
   const restored=armaRestoreSessionCache();if(!restored)armaRenderVisitor();
