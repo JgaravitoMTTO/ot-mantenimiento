@@ -146,7 +146,7 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
     <div class="panel-title"><h2>NIVELES</h2><span class="status" id="levelCount"></span></div>
     <input id="levelSearch" placeholder="BUSCAR NIVEL">
     <div id="levelList" class="level-list" style="margin-top:9px"></div>
-    <div class="toolbar" style="margin-top:10px"><button id="btnNew" class="btn green">NUEVO</button><button id="btnClone" class="btn">CLONAR</button><button id="btnSync" class="btn gray">SINCRONIZAR CATALOGO</button></div>
+    <div class="toolbar" style="margin-top:10px"><button id="btnNew" class="btn green">NUEVO</button><button id="btnClone" class="btn">CLONAR</button><button id="btnSync" class="btn gray">SINCRONIZAR CATALOGO ACTIVO</button></div>
   </aside>
   <section>
     <article class="panel">
@@ -158,7 +158,7 @@ tbody tr.selected{background:#dbeafe!important;outline:2px solid rgba(0,118,215,
     <div class="sticky-save"><button id="btnSave" class="btn green">GUARDAR NIVEL Y REGLAS</button></div>
   </section>
 </section>
-<footer class="footer">A.R.M.A. // NIVELES DE USUARIO // ARMA_DATABASE EN LINEA // 2026-08-12 10:07:04</footer>
+<footer class="footer">A.R.M.A. // NIVELES DE USUARIO // ARMA_DATABASE EN LINEA // 2026-09-14 10:23:29</footer>
 </main>
 <script>const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
 const ARMA_UI_MANIFEST={
@@ -208,6 +208,7 @@ async function loadBootstrap(selectName){
   let data=await api('adminLevelsBootstrap',{},'CARGANDO CATALOGO DE PERMISOS Y FILTROS...');
   if(!data.ok)throw new Error(data.error||'NO SE PUDO CARGAR');
   appData={levels:data.levels||[],permissionCatalog:data.permissionCatalog||[],filterCatalog:data.filterCatalog||[],pages:data.pages||[]};
+  document.getElementById('catalogStatus').textContent=appData.permissionCatalog.length+' PERMISOS ACTIVOS // '+appData.filterCatalog.length+' FILTROS';
   renderLevelList();
   if(selectName)selectLevel(selectName);else if(appData.levels.length)selectLevel(appData.levels[0].nivel);else beginNew();
   document.getElementById('catalogStatus').textContent=appData.permissionCatalog.length+' PERMISOS // '+appData.filterCatalog.length+' FILTROS';
@@ -336,7 +337,7 @@ async function saveLevel(){
 }
 
 async function syncCatalog(){
-  let ok=await dialog('SINCRONIZAR CATALOGO','ARMA REVISARA BOTONES, COLUMNAS DE PERMISOS, FILTROS Y HOJAS DE ARMA_DATABASE.','SINCRONIZAR','CANCELAR');if(!ok)return;
+  let ok=await dialog('SINCRONIZAR CATALOGO','ARMA ACTUALIZARA EL CATALOGO ACTIVO. LAS COLUMNAS HISTORICAS/OBSOLETAS SE CONSERVAN COMO TRAZABILIDAD PERO NO SE MOSTRARAN COMO PERMISOS ACTIVOS.','SINCRONIZAR','CANCELAR');if(!ok)return;
   let r=await api('adminAccessSetup',{force:true},'SINCRONIZANDO CATALOGO...');
   if(!r.ok){toast(r.error||'NO FUE POSIBLE SINCRONIZAR.');return;}
   armaV12LevelsClear();toast(r.message||'CATALOGO SINCRONIZADO');await loadBootstrap(currentLevel&&currentLevel.nivel);
@@ -354,8 +355,8 @@ function bind(){
 }
 /* === ARMA V12 FASTPATH NIVELES === */
 const ARMA_V12_LEVELS_INFLIGHT=new Map();
-function armaV12LevelsKey(){const t=localStorage.getItem('ARMA_TOKEN')||'';return 'ARMA_V031_LEVELS_BOOT_'+t.slice(-14);}
-function armaV12LevelsRead(){try{const x=JSON.parse(sessionStorage.getItem(armaV12LevelsKey())||'null');if(!x||Date.now()-Number(x.ts||0)>180000)return null;return x.data||null;}catch(e){return null;}}
+function armaV12LevelsKey(){const t=localStorage.getItem('ARMA_TOKEN')||'';return 'ARMA_V04_LEVELS_BOOT_R825_'+t.slice(-14);}
+function armaV12LevelsRead(){try{const x=JSON.parse(sessionStorage.getItem(armaV12LevelsKey())||'null');if(!x||Date.now()-Number(x.ts||0)>60000)return null;return x.data||null;}catch(e){return null;}}
 function armaV12LevelsWrite(data){try{sessionStorage.setItem(armaV12LevelsKey(),JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
 function armaV12LevelsClear(){try{sessionStorage.removeItem(armaV12LevelsKey());}catch(e){}}
 async function api(action,payload,msg){
