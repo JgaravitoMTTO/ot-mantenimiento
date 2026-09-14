@@ -14,8 +14,8 @@ No fue posible leer la salida del comando.
 ======================================================================
 GIT COMMIT
 CODIGO: 0
-[main 1e3ab5f] Publica planes_pmo.html V07 2026-08-12 10:07:32
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[main 3a8edf0] Publica planes_pmo.html V07 2026-09-13 20:49:53
+ 1 file changed, 82 insertions(+), 1 deletion(-)
 
 ======================================================================
 GIT PUSH
@@ -23,7 +23,7 @@ CODIGO: 0
 remote: This repository moved. Please use the new location:        
 remote:   https://github.com/JgaravitoMTTO/ot-mantenimiento.git        
 To https://github.com/jgaravitomtto/ot-mantenimiento.git
-   f15eb07..1e3ab5f  main -> main
+   1f13166..3a8edf0  main -> main
 
 ======================================================================
 CONFIRMAR ARCHIVO CONTROLADO

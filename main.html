@@ -695,7 +695,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-14 07:58:21</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-14 13:41:27</span></div>
   </footer>
 </main>
 </div>
@@ -1805,6 +1805,25 @@ armaLogin=async function(){
   }
 };
 /* === FIN MAIN V15.2 === */
+/* === ARMA MAIN V15.4 CLEAN SESSION + PERMISSIONS === */
+const armaMainV154BaseRefreshAuth=armaV13RefreshAuth;
+armaV13RefreshAuth=async function(force){
+  if(!force&&Date.now()-armaV13AuthLastRefresh<240000)return true;if(armaV13AuthPromise)return armaV13AuthPromise;
+  const token=localStorage.getItem('ARMA_TOKEN')||'';
+  armaV13AuthPromise=armaApi('authBootstrap',{token:token}).then(function(data){
+    if(data&&data.ok){armaV13AuthLastRefresh=Date.now();return armaApplyAuthBootstrap(data,token);}
+    if(token&&data&&(data.sessionInvalid===true||data.authenticated===false)){armaSetVisitor(true);return false;}
+    console.warn('ARMA authBootstrap transitorio conservando sesion',data||{});return false;
+  }).catch(function(e){console.warn('ARMA authBootstrap red transitoria conservando sesion',e);return false;}).finally(function(){armaV13AuthPromise=null;});
+  return armaV13AuthPromise;
+};
+const armaMainV154BaseApplyPulse=armaMainV150ApplyPulse;
+armaMainV150ApplyPulse=function(data,reason){
+  if(data&&data.ok)return armaMainV154BaseApplyPulse(data,reason);
+  if(data&&(data.sessionInvalid===true||data.authenticated===false)){armaSetVisitor(true);return false;}
+  console.warn('ARMA mainPulse transitorio conservando sesion',reason||'',data||{});return false;
+};
+/* === FIN MAIN V15.4 === */
 document.addEventListener('DOMContentLoaded',function(){
   const internalReturn=armaConsumeInternalReturn();
   const restored=armaRestoreSessionCache();if(!restored)armaRenderVisitor();
