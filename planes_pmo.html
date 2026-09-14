@@ -511,7 +511,7 @@ details.admin-box summary{cursor:pointer;color:var(--navy);font-weight:1000;font
       </div>
     </section>
   </div>
-  <div class="footer">ARMA // PLANES PMO // DETALLE PRIMERO // SELECTORES BAJO DEMANDA // GENERADO: 2026-08-12 10:07:32</div>
+  <div class="footer">ARMA // PLANES PMO // DETALLE PRIMERO // SELECTORES BAJO DEMANDA // GENERADO: 2026-09-13 20:49:52</div>
 </main>
 <script>
 "use strict";
@@ -2128,6 +2128,87 @@ bindEvents=function(){
   ui.pauseAutomationButton.addEventListener('click',pauseAutomation);
   ui.removeTriggerButton.addEventListener('click',removeWeeklyTrigger);
 };
+
+// === ARMA PMO V13.2 CLEAN // PERSISTENCIA VERIFICADA + PENDIENTES FISICOS + DURACION VISIBLE ===
+state.pendingApprovalRows=state.pendingApprovalRows||[];
+state.approvalCounts=state.approvalCounts||{};
+const PMO_V132_BASE_BOOT=bootFromData;
+bootFromData=function(boot){
+  state.pendingApprovalRows=(boot&&boot.pendingApprovalRows)||[];
+  state.approvalCounts=(boot&&boot.approvalCounts)||{};
+  PMO_V132_BASE_BOOT(boot);
+};
+filteredRows=function(){
+  const q=normalize(ui.filterText.value);
+  const approval=normalize(ui.filterApproval.value);
+  const priority=normalize(ui.filterPriority.value);
+  const source=approval==='PENDIENTE_APROBACION'?state.pendingApprovalRows:state.rows;
+  return (source||[]).filter(function(row){
+    if(q&&normalize([row.ID_PMO,row.CODIGO_PMO,row.DESCRIPCION_PMO,row.CREADO_POR,row.ACTUALIZADO_POR].join(' ')).indexOf(q)<0)return false;
+    if(approval&&normalize(row.ESTADO_APROBACION)!==approval)return false;
+    if(priority&&normalize(row.PRIORIDAD)!==priority)return false;
+    return true;
+  });
+};
+const PMO_V132_BASE_RENDER_LIST=renderList;
+renderList=function(){
+  PMO_V132_BASE_RENDER_LIST();
+  const c=state.approvalCounts||{};
+  if(ui.listCount&&Object.keys(c).length){
+    const shown=filteredRows().length;
+    ui.listCount.textContent=shown+' PLANES // PEND '+Number(c.PENDIENTE_APROBACION||0);
+    ui.listCount.title='BORRADORES '+Number(c.BORRADOR||0)+' // PENDIENTES '+Number(c.PENDIENTE_APROBACION||0)+' // APROBADOS '+Number(c.APROBADO||0)+' // RECHAZADOS '+Number(c.RECHAZADO||0);
+  }
+};
+const PMO_V132_BASE_RENDER_ASSIGNED=renderAssigned;
+renderAssigned=function(){
+  PMO_V132_BASE_RENDER_ASSIGNED();
+  const total=(state.assignedAM||[]).reduce(function(sum,row){return sum+Number(row.DURACION_MIN_SNAPSHOT||row.DURACION_MIN||row.duracion||0);},0);
+  if(ui.amCount)ui.amCount.textContent=(state.assignedAM||[]).length+' ASIGNADAS // '+total+' MIN';
+};
+async function pmoV132VerifyDetail(id,expected){
+  const detail=await callApi('pmoGetDetailFast',{idPMO:id},{loader:false,timeout:30000});
+  const p=(detail&&detail.pmo)||{};
+  if(normalize(p.ID_PMO)!==normalize(id))throw new Error('PMO_NO_CONFIRMADO_EN_ARMA_DATA');
+  if(expected&&normalize(p.ESTADO_APROBACION)!==normalize(expected))throw new Error('ESTADO_NO_CONFIRMADO_'+normalize(p.ESTADO_APROBACION||'VACIO'));
+  cachePut('DETAIL_'+id,detail);
+  return detail;
+}
+saveDraft=async function(){
+  clearErrorBanner();
+  try{
+    const result=await callApi('savePMODraft',{data:collectPMO()},{message:'GUARDANDO PMO'});
+    const id=String(result.idPMO||'').trim();
+    if(!id)throw new Error('BACKEND_NO_RETORNO_ID_PMO');
+    cacheRemove('BOOT');cacheRemove('DETAIL_'+id);
+    const detail=await pmoV132VerifyDetail(id,'BORRADOR');
+    await refreshBootstrap();
+    state.selectedId=id;applyDetail(detail);renderList();
+    showMessage((result.message||'PMO_BORRADOR_GUARDADO')+' // '+id+' // PERSISTENCIA VERIFICADA','PMO GUARDADO');
+  }catch(error){showErrorBanner('NO FUE POSIBLE GUARDAR Y VERIFICAR EL PMO: '+error.message);}
+};
+submitPMO=async function(){
+  if(!state.selectedId){showMessage('SELECCIONE Y GUARDE UN PMO.');return;}
+  const observation=requiredObservation('ENVIAR A APROBACION');if(!observation)return;
+  if(!(await askConfirmation('ENVIAR EL PMO A APROBACION?')))return;
+  const id=state.selectedId;
+  try{
+    const result=await callApi('submitPMOApproval',{idPMO:id,observacion:observation},{message:'ENVIANDO PMO A APROBACION'});
+    cacheRemove('BOOT');cacheRemove('DETAIL_'+id);
+    const detail=await pmoV132VerifyDetail(id,'PENDIENTE_APROBACION');
+    await refreshBootstrap();
+    state.selectedId=id;applyDetail(detail);renderList();
+    showMessage((result.message||'PMO_ENVIADO_A_APROBACION')+' // ESTADO VERIFICADO','PMO ENVIADO');
+  }catch(error){
+    try{
+      const detail=await pmoV132VerifyDetail(id,'PENDIENTE_APROBACION');
+      await refreshBootstrap();state.selectedId=id;applyDetail(detail);renderList();
+      showMessage('EL PMO QUEDO PENDIENTE DE APROBACION AUNQUE LA RESPUESTA ORIGINAL SE INTERRUMPIO. ESTADO VERIFICADO.','PMO ENVIADO');return;
+    }catch(verifyError){}
+    showErrorBanner('NO FUE POSIBLE ENVIAR O VERIFICAR EL PMO: '+error.message);
+  }
+};
+
   try{
     bindUI();
     bindEvents();
