@@ -695,7 +695,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-14 16:41:22</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-14 17:27:22</span></div>
   </footer>
 </main>
 </div>
@@ -1853,17 +1853,31 @@ armaRequireAdminPerm=function(perm){
   alert('NO TIENE PERMISO PARA ESTA ADMINISTRACION.');return false;
 };
 /* === FIN MAIN V15.5 === */
-/* === ARMA MAIN V15.6 RESTORE MI JORNADA AUTOOPEN === */
-let armaMainV156WorkdayOpenedThisPage=false;
+/* === ARMA MAIN V15.7 MI JORNADA LOGIN-ONLY === */
+let armaMainV157AutoOpenArmed=false;
 armaMainV141AutoOpen=function(){
-  if(armaMainV156WorkdayOpenedThisPage)return;
+  if(!armaMainV157AutoOpenArmed)return;
   if(!armaSession||!armaSession.token||!armaMainV14Data)return;
-  armaMainV156WorkdayOpenedThisPage=true;
-  setTimeout(function(){if(armaSession&&armaSession.token&&armaMainV14Data)armaMainV141Open();},120);
+  armaMainV157AutoOpenArmed=false;
+  setTimeout(function(){
+    if(armaSession&&armaSession.token&&armaMainV14Data)armaMainV141Open();
+  },120);
 };
-const armaMainV156BaseVisitor=armaSetVisitor;
-armaSetVisitor=function(clearStored){armaMainV156WorkdayOpenedThisPage=false;return armaMainV156BaseVisitor(clearStored);};
-/* === FIN MAIN V15.6 === */
+const armaMainV157BaseLogin=armaLogin;
+armaLogin=async function(){
+  armaMainV157AutoOpenArmed=true;
+  try{await armaMainV157BaseLogin();}
+  finally{
+    if(!armaSession||!armaSession.token)armaMainV157AutoOpenArmed=false;
+    setTimeout(function(){armaMainV157AutoOpenArmed=false;},15000);
+  }
+};
+const armaMainV157BaseVisitor=armaSetVisitor;
+armaSetVisitor=function(clearStored){
+  armaMainV157AutoOpenArmed=false;
+  return armaMainV157BaseVisitor(clearStored);
+};
+/* === FIN MAIN V15.7 === */
 document.addEventListener('DOMContentLoaded',function(){
   const internalReturn=armaConsumeInternalReturn();
   const restored=armaRestoreSessionCache();if(!restored)armaRenderVisitor();
