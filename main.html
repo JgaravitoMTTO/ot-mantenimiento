@@ -695,7 +695,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-14 13:41:27</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-14 14:06:45</span></div>
   </footer>
 </main>
 </div>
@@ -1824,6 +1824,35 @@ armaMainV150ApplyPulse=function(data,reason){
   console.warn('ARMA mainPulse transitorio conservando sesion',reason||'',data||{});return false;
 };
 /* === FIN MAIN V15.4 === */
+/* === ARMA MAIN V15.5 SUPERADMIN GUARD === */
+window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;
+const armaMainV155BaseApplyPermissions=armaApplyPermissions;
+armaApplyPermissions=function(){
+  armaMainV155BaseApplyPermissions();
+  document.querySelectorAll('[data-perm="BTN_ADMIN_ARMA"]').forEach(function(el){
+    const allowed=window.ARMA_MAIN_LIVE_AUTH_VERIFIED===true && armaIsSuperAdmin();
+    if(allowed){el.classList.remove('arma-locked');el.setAttribute('aria-disabled','false');}
+    else{el.classList.add('arma-locked');el.setAttribute('aria-disabled','true');}
+  });
+};
+const armaMainV155BaseApplyAuthBootstrap=armaApplyAuthBootstrap;
+armaApplyAuthBootstrap=function(data,token){
+  window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;
+  const ok=armaMainV155BaseApplyAuthBootstrap(data,token);
+  if(ok===true){window.ARMA_MAIN_LIVE_AUTH_VERIFIED=true;armaApplyPermissions();}
+  return ok;
+};
+const armaMainV155BaseSetVisitor=armaSetVisitor;
+armaSetVisitor=function(clearStored){window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;return armaMainV155BaseSetVisitor(clearStored);};
+const armaMainV155BaseSetSession=armaSetSession;
+armaSetSession=function(data){window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;const r=armaMainV155BaseSetSession(data);armaApplyPermissions();return r;};
+armaRequireAdminPerm=function(perm){
+  if(!armaRequireSession())return false;
+  const p=armaNormalizePerms(armaSession.permissions);
+  if(armaIsSuperAdmin() || p[String(perm||'').toUpperCase()]===true)return true;
+  alert('NO TIENE PERMISO PARA ESTA ADMINISTRACION.');return false;
+};
+/* === FIN MAIN V15.5 === */
 document.addEventListener('DOMContentLoaded',function(){
   const internalReturn=armaConsumeInternalReturn();
   const restored=armaRestoreSessionCache();if(!restored)armaRenderVisitor();
