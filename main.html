@@ -695,7 +695,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-14 17:27:22</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-15 08:33:48</span></div>
   </footer>
 </main>
 </div>
@@ -1878,6 +1878,29 @@ armaSetVisitor=function(clearStored){
   return armaMainV157BaseVisitor(clearStored);
 };
 /* === FIN MAIN V15.7 === */
+/* === ARMA MAIN V15.8 PERSISTENT SESSION + JORNADA RESUME 10M === */
+const ARMA_MAIN_V158_AWAY_JORNADA_MS=600000;
+let armaMainV158HiddenAt=0,armaMainV158ResumeBusy=false;
+async function armaMainV158ResumeAfterAway(away){
+  if(armaMainV158ResumeBusy||away<ARMA_MAIN_V158_AWAY_JORNADA_MS)return false;
+  if(!armaSession||!armaSession.token)return false;
+  armaMainV158ResumeBusy=true;
+  try{
+    await armaMainV150Pulse('RESUME_10M',true);
+    if(!armaSession||!armaSession.token)return false;
+    await armaMainV14Load(true);
+    if(armaSession&&armaSession.token&&armaMainV14Data)armaMainV141Open();
+    return true;
+  }catch(e){console.warn('ARMA resume 10m',e);return false;}
+  finally{armaMainV158ResumeBusy=false;}
+}
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden){armaMainV158HiddenAt=Date.now();return;}
+  const away=Date.now()-Number(armaMainV158HiddenAt||Date.now());armaMainV158HiddenAt=0;
+  if(away>=ARMA_MAIN_V158_AWAY_JORNADA_MS)setTimeout(function(){armaMainV158ResumeAfterAway(away);},220);
+});
+/* V15.8 no cambia timers: pulse 120 s, Jornada 5 min, Dashboard 15 min, Alarmas 30 min. */
+/* === FIN MAIN V15.8 === */
 document.addEventListener('DOMContentLoaded',function(){
   const internalReturn=armaConsumeInternalReturn();
   const restored=armaRestoreSessionCache();if(!restored)armaRenderVisitor();
