@@ -695,7 +695,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-17 14:26:53</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-17 15:08:15</span></div>
   </footer>
 </main>
 </div>
@@ -1930,7 +1930,7 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('userCard').addEventListener('click',function(e){e.stopPropagation();this.classList.toggle('open');});
   document.getElementById('btnOpenLogin').addEventListener('click',function(e){e.stopPropagation();armaOpenLogin();document.getElementById('userCard').classList.remove('open');});
   document.getElementById('btnLogout').addEventListener('click',function(e){e.stopPropagation();armaLogout();document.getElementById('userCard').classList.remove('open');});
-  const sideLogout=document.getElementById('btnSidebarLogout');if(sideLogout){sideLogout.addEventListener('click',function(e){e.preventDefault();if(!sideLogout.classList.contains('arma-locked'))armaLogout();});}
+  const sideLogout=document.getElementById('btnSidebarLogout');if(sideLogout){sideLogout.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(!sideLogout.classList.contains('arma-locked'))armaLogout();});}
   armaInitAdminUI();
   document.getElementById('loginCancel').addEventListener('click',armaCloseLogin);document.getElementById('loginDo').addEventListener('click',armaLogin);
   document.getElementById('loginPass').addEventListener('keydown',function(e){if(e.key==='Enter')armaLogin();});
