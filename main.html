@@ -695,7 +695,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-16 11:39:06</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-09-17 13:22:31</span></div>
   </footer>
 </main>
 </div>
@@ -1901,6 +1901,20 @@ document.addEventListener('visibilitychange',function(){
 });
 /* V15.8 no cambia timers: pulse 120 s, Jornada 5 min, Dashboard 15 min, Alarmas 30 min. */
 /* === FIN MAIN V15.8 === */
+/* === ARMA MAIN V16.1 SESSION BRIDGE PARA BIBLIOTECA === */
+function armaMainV161RefreshSharedSessionCache(){
+  try{
+    if(!armaSession||!armaSession.token)return false;
+    localStorage.setItem('ARMA_TOKEN',armaSession.token);
+    localStorage.setItem('ARMA_SESSION_CACHE',JSON.stringify({user:armaSession.user||'',nombre:armaSession.nombre||armaSession.user||'',nivel:armaSession.nivel||'',token:armaSession.token,permissions:armaSession.permissions||{},ts:Date.now(),source:'MAIN_V16_1_BRIDGE'}));
+    return true;
+  }catch(e){return false;}
+}
+const armaMainV161BaseOpenChildWindow=armaOpenChildWindow;
+armaOpenChildWindow=function(url,targetName){armaMainV161RefreshSharedSessionCache();return armaMainV161BaseOpenChildWindow(url,targetName);};
+window.addEventListener('focus',function(){armaMainV161RefreshSharedSessionCache();});
+document.addEventListener('visibilitychange',function(){if(!document.hidden)armaMainV161RefreshSharedSessionCache();});
+/* === FIN MAIN V16.1 === */
 document.addEventListener('DOMContentLoaded',function(){
   const internalReturn=armaConsumeInternalReturn();
   const restored=armaRestoreSessionCache();if(!restored)armaRenderVisitor();
