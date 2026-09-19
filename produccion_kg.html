@@ -8,102 +8,74 @@
 <link rel="manifest" href="manifest.webmanifest">
 <script src="arma-pwa-navigation.js" defer></script>
 <style>
-:root{--navy:#002b66;--blue:#004b9b;--blue2:#087fce;--cyan:#00a8bd;--green:#159447;--green2:#55b52e;--red:#c62828;--orange:#d97706;--purple:#6d28d9;--yellow:#d89b00;--line:#d8e3ef;--bg:#edf3f9;--muted:#64748b;--white:#fff;--shadow:0 12px 30px rgba(0,43,102,.10)}
+:root{--navy:#002b66;--blue:#004b9b;--blue2:#087fce;--cyan:#00a8bd;--green:#159447;--red:#c62828;--orange:#d97706;--yellow:#d89b00;--line:#d8e3ef;--bg:#edf3f9;--muted:#64748b;--white:#fff;--shadow:0 12px 30px rgba(0,43,102,.10)}
 *{box-sizing:border-box}
 html{zoom:90%}
 @media(max-width:900px){html{zoom:100%}}
 body{margin:0;background:var(--bg);font-family:Segoe UI,Arial,sans-serif;color:#0f172a;text-transform:uppercase}
-.hidden{display:none!important}
 .top-global{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 8px 20px rgba(0,43,102,.12)}
 .top-white{min-height:106px;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px}
 .blue-line{height:5px;background:linear-gradient(90deg,#00376f,#006bb9,#00a8bd)}
-.brand-row{display:flex;align-items:center;gap:20px}
-.brand-separator{width:1px;height:64px;background:#d8e5f2}
-.logo-pelex{height:70px;max-width:250px;object-fit:contain}
-.logo-arma{height:78px;max-width:350px;object-fit:contain}
-.top-title{text-align:right}
-.top-title strong{display:block;color:var(--navy);font-size:24px;font-weight:950}
+.brand-row{display:flex;align-items:center;gap:20px}.brand-separator{width:1px;height:64px;background:#d8e5f2}
+.logo-pelex{height:70px;max-width:250px;object-fit:contain}.logo-arma{height:78px;max-width:350px;object-fit:contain}
+.top-title{text-align:right}.top-title strong{display:block;color:var(--navy);font-size:24px;font-weight:950}
 .top-title span{display:block;color:var(--muted);font-size:11px;font-weight:900;margin-top:5px}
 .user-pill{display:inline-flex;margin-top:8px;background:#f8fbff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--navy);font-size:11px;font-weight:900}
-main{width:min(1780px,100%);margin:0 auto;padding:14px 24px 28px}
-.hero{position:relative;overflow:hidden;border-radius:22px;background:radial-gradient(circle at 74% 10%,#0076d7 0,#004b9b 42%,#002b66 100%);box-shadow:var(--shadow);color:#fff;padding:20px 28px;margin-bottom:16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,280px);gap:18px;align-items:center}
+main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
+.hero{position:relative;overflow:hidden;border-radius:22px;background:radial-gradient(circle at 74% 10%,#0076d7 0,#004b9b 42%,#002b66 100%);box-shadow:var(--shadow);color:#fff;padding:22px 28px;margin-bottom:14px;display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,280px);gap:18px;align-items:center}
 .hero:after{content:'PRODUCCION';position:absolute;right:20px;bottom:-14px;font-size:68px;font-weight:950;letter-spacing:4px;color:rgba(255,255,255,.055)}
-.hero-copy>span{display:inline-block;background:rgba(0,214,95,.15);border:1px solid rgba(0,214,95,.45);color:#b8ffd5;padding:6px 10px;border-radius:999px;font-weight:950;font-size:11px}
-.hero h1{margin:12px 0 5px;font-size:30px}
-.hero p{margin:0;max-width:1220px;color:#eaf4ff;font-size:11px;line-height:1.3;font-weight:850;position:relative;z-index:2}
-.hero-copy,.hero-home{position:relative;z-index:2}
-.hero-home{justify-self:end;width:100%;min-width:0;min-height:74px;background:linear-gradient(180deg,#ffffff,#eef7ff)}
-.index-nav-card{position:relative;display:flex;align-items:center;gap:14px;min-width:230px;min-height:82px;height:100%;padding:14px 18px;border-radius:18px;background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid #dbe5f0;box-shadow:0 10px 22px rgba(0,43,102,.10);text-decoration:none;color:#002b66;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.hero h1{margin:0 0 6px;font-size:31px}.hero p{margin:0;max-width:1250px;color:#eaf4ff;font-size:11px;line-height:1.35;font-weight:850;position:relative;z-index:2}
+.hero-copy,.hero-home{position:relative;z-index:2}.hero-home{justify-self:end;width:100%}
+.index-nav-card{position:relative;display:flex;align-items:center;gap:14px;min-height:82px;padding:14px 18px;border-radius:18px;background:linear-gradient(180deg,#fff,#f8fbff);border:1px solid #dbe5f0;box-shadow:0 10px 22px rgba(0,43,102,.10);text-decoration:none;color:#002b66;overflow:hidden}
 .index-nav-card:before{content:'';position:absolute;left:0;top:0;width:100%;height:5px;background:linear-gradient(90deg,#004b9b,#0076d7,#00bfd6,#55b52e)}
-.index-nav-card:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(0,43,102,.16);border-color:#bcd7f5}
-.index-nav-card .nav-icon{width:54px;height:54px;border-radius:16px;background:#e8f2ff;border:1px solid #dbe5f0;display:grid;place-items:center;flex:0 0 54px;box-shadow:0 4px 10px rgba(15,23,42,.08)}
-.index-nav-card .nav-icon img{width:38px;height:38px;object-fit:contain;display:block}
-.index-nav-card .nav-text{display:flex;flex-direction:column;line-height:1.1}
-.index-nav-card .nav-text strong{font-size:18px;font-weight:900;color:#002b66;letter-spacing:.2px}
-.index-nav-card .nav-text span{font-size:11px;font-weight:900;color:#008c2e;letter-spacing:.45px;margin-top:6px}
-.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:14px}
-.filters{display:grid;grid-template-columns:150px 150px 170px minmax(260px,1fr) 190px auto;gap:10px;align-items:end;margin-bottom:12px}
-.field{display:flex;flex-direction:column;gap:5px;min-width:0}
-.field label{font-size:9px;font-weight:950;color:#36536f}
-.field input,.field select{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:#fff;color:var(--navy);font-weight:850;text-transform:uppercase}
-.btn{border:0;border-radius:10px;padding:10px 16px;color:#fff;background:linear-gradient(#1688e8,#004b9b);font-weight:950;cursor:pointer;text-transform:uppercase}
-.btn.green{background:linear-gradient(#2bd36b,#159447)}
-.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px}
-.kpi{border-radius:15px;padding:12px 14px;color:#fff;min-height:126px;box-shadow:0 10px 20px rgba(15,23,42,.10)}
-.kpi>span{display:block;font-size:9px;font-weight:950;opacity:.95}
-.kpi>strong{display:block;font-size:24px;margin-top:4px}
-.kpi.green{background:linear-gradient(135deg,#08733f,#2bbf68)}
-.kpi.orange{background:linear-gradient(135deg,#a84e06,#ef8f13)}
-.kpi.blue{background:linear-gradient(135deg,#003b80,#087fce)}
-.kpi.red{background:linear-gradient(135deg,#8f1d2c,#dc3545)}
-.kpi.purple{background:linear-gradient(135deg,#5631a8,#8b5cf6)}
-.kpi.good{background:linear-gradient(135deg,#08733f,#2bbf68)}
-.kpi.warn{background:linear-gradient(135deg,#9b6a00,#e0a400)}
-.kpi.bad{background:linear-gradient(135deg,#8f1d2c,#dc3545)}
-.kpi.neutral{background:linear-gradient(135deg,#475569,#64748b)}
-.kpi-sub{margin-top:9px;padding-top:8px;border-top:1px solid rgba(255,255,255,.28);display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
-.kpi-sub div{min-width:0}
-.kpi-sub b{display:block;font-size:8px;opacity:.85}
-.kpi-sub em{display:block;font-style:normal;font-size:11px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kpi-note{display:block;margin-top:5px;font-size:8px;font-weight:850;opacity:.85}
-.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
-.section-title h2,.section-title h3{margin:0;color:var(--navy)}
-.pill{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:9px;font-weight:950;background:#e5eef8;color:#17436f}
-.pill.ok{background:#dcfce7;color:#08733f}
-.pill.pending{background:#fff4d6;color:#9a5a00}
-.notice{border-left:4px solid #0ea5e9;background:#eef8ff;padding:10px 12px;border-radius:10px;font-size:10px;font-weight:850;color:#17436f;margin-bottom:10px;line-height:1.45}
-.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}
-.table{width:100%;border-collapse:collapse;background:#fff;font-size:10px}
+.index-nav-card .nav-icon{width:54px;height:54px;border-radius:16px;background:#e8f2ff;border:1px solid #dbe5f0;display:grid;place-items:center;flex:0 0 54px}
+.index-nav-card .nav-icon img{width:38px;height:38px;object-fit:contain}.index-nav-card .nav-text{display:flex;flex-direction:column;line-height:1.1}
+.index-nav-card .nav-text strong{font-size:18px;font-weight:900}.index-nav-card .nav-text span{font-size:11px;font-weight:900;color:#008c2e;margin-top:6px}
+.workspace{display:grid;grid-template-columns:285px minmax(0,1fr);gap:14px;align-items:start}
+.sidebar{position:sticky;top:128px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:15px}
+.sidebar h3{margin:0 0 12px;color:var(--navy);font-size:16px}.field{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.field label{font-size:9px;font-weight:950;color:#36536f}.field input,.field select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff;color:var(--navy);font-weight:850;text-transform:uppercase}
+.btn{width:100%;border:0;border-radius:10px;padding:11px 16px;color:#fff;background:linear-gradient(#2bd36b,#159447);font-weight:950;cursor:pointer;text-transform:uppercase}
+.side-info{margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:10px;background:#f8fbff}.side-info span{display:block;font-size:8px;color:var(--muted);font-weight:900}.side-info strong{display:block;margin-top:3px;color:var(--navy);font-size:12px}
+.side-info.warn{background:#fff8dc;border-color:#f6d36c}.side-info.bad{background:#ffe7ea;border-color:#f3a5af}
+.dashboard{min-width:0}.kpi-priority{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:10px}
+.kpi-secondary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:10px}
+.kpi{border-radius:16px;padding:14px;color:#fff;min-height:134px;box-shadow:0 10px 20px rgba(15,23,42,.10)}
+.kpi.priority{min-height:158px}.kpi>span{display:block;font-size:9px;font-weight:950;opacity:.95}.kpi>strong{display:block;font-size:27px;margin-top:5px}
+.kpi.green{background:linear-gradient(135deg,#08733f,#2bbf68)}.kpi.orange{background:linear-gradient(135deg,#a84e06,#ef8f13)}
+.kpi.blue{background:linear-gradient(135deg,#003b80,#087fce)}.kpi.red{background:linear-gradient(135deg,#8f1d2c,#dc3545)}
+.kpi.good{background:linear-gradient(135deg,#08733f,#2bbf68)}.kpi.warn{background:linear-gradient(135deg,#9b6a00,#e0a400)}
+.kpi.bad{background:linear-gradient(135deg,#8f1d2c,#dc3545)}.kpi.neutral{background:linear-gradient(135deg,#475569,#64748b)}
+.kpi-sub{margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,.28);display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.kpi-sub b{display:block;font-size:8px;opacity:.85}.kpi-sub em{display:block;font-style:normal;font-size:11px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi-note{display:block;margin-top:6px;font-size:8px;font-weight:850;opacity:.9}
+.quality-banner{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid var(--line);border-left:5px solid #0ea5e9;background:#fff;border-radius:14px;padding:10px 13px;margin-bottom:10px;box-shadow:var(--shadow)}
+.quality-banner.bad{border-left-color:#c62828;background:#fff1f2}.quality-banner.warn{border-left-color:#d89b00;background:#fffbea}
+.quality-banner strong{color:var(--navy);font-size:11px}.quality-banner span{color:#475569;font-size:9px;font-weight:850}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:14px;margin-top:12px}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.section-title h2,.section-title h3{margin:0;color:var(--navy)}
+.pill{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:8px;font-weight:950;background:#e5eef8;color:#17436f}.pill.ok{background:#dcfce7;color:#08733f}.pill.pending{background:#fff4d6;color:#9a5a00}.pill.bad{background:#fee2e2;color:#b42332}
+.notice{border-left:4px solid #0ea5e9;background:#eef8ff;padding:10px 12px;border-radius:10px;font-size:9px;font-weight:850;color:#17436f;margin-bottom:10px;line-height:1.45}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}.table{width:100%;border-collapse:collapse;background:#fff;font-size:10px}
 .table th{position:sticky;top:0;z-index:2;background:#0d67a4;color:#fff;padding:9px;border-right:1px solid rgba(255,255,255,.2);text-align:left}
 .table td{padding:8px;border-right:1px solid #e4edf6;border-bottom:1px solid #e4edf6;vertical-align:top}
-.prod-matrix td:first-child,.prod-matrix th:first-child{position:sticky;left:0;z-index:3;background:#fff;min-width:275px}
-.prod-matrix th:first-child{background:#0d67a4}
-.kgcell{min-width:112px;text-align:center;cursor:pointer;font-weight:900}
-.kgcell .kg-main{font-size:11px}
-.kgcell .kg-waste{font-size:8px;margin-top:4px;opacity:.85}
+.prod-matrix td:first-child,.prod-matrix th:first-child{position:sticky;left:0;z-index:3;background:#fff;min-width:300px}.prod-matrix th:first-child{background:#0d67a4}
+.group-row td{position:relative!important;left:auto!important;background:#dcecff!important;color:#003b80!important;font-weight:950!important;padding:7px 10px!important;letter-spacing:.3px}
+.kgcell{min-width:128px;text-align:center;cursor:pointer;font-weight:900;position:relative}.kgcell .kg-main{font-size:11px}.kgcell .kg-waste,.kgcell .kg-stop{font-size:8px;margin-top:4px;opacity:.88}
 .kgcell .kg-pct{display:inline-flex;margin-top:5px;padding:3px 6px;border-radius:999px;font-size:8px;font-weight:950}
-.kgcell.good{background:#e8fff1;color:#08733f}.kgcell.good .kg-pct{background:#c9f7d9}
-.kgcell.warn{background:#fff8dc;color:#8a6200}.kgcell.warn .kg-pct{background:#ffeaa2}
-.kgcell.bad{background:#ffe7ea;color:#b42332}.kgcell.bad .kg-pct{background:#ffc7cf}
-.kgcell.na{background:#eef7ff;color:#0d67a4}.kgcell.na .kg-pct{background:#dbeafe}
-.kgcell.zero{background:#ffe7ea;color:#b42332}
-.kgcell.none{background:#f1f5f9;color:#94a3b8}
-.machine-title{font-weight:950;color:#002b66}
-.machine-sub{font-size:9px;color:#64748b;margin-top:4px}
-.machine-meta{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
-.machine-stat{margin-top:6px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
-.machine-stat div{background:#f8fbff;border:1px solid #dbe5f0;border-radius:7px;padding:5px}
-.machine-stat span{display:block;font-size:7px;color:#64748b;font-weight:900}
-.machine-stat strong{display:block;margin-top:2px;font-size:9px;color:#002b66}
-.detail-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
-.detail-grid div{background:#f8fbff;border:1px solid #dbe5f0;border-radius:10px;padding:9px}
-.detail-grid span{display:block;font-size:8px;color:#64748b;font-weight:900}
-.detail-grid strong{display:block;margin-top:3px;color:#002b66}
-.empty{padding:24px;text-align:center;color:var(--muted);font-weight:900}
+.kgcell.good{background:#e8fff1;color:#08733f}.kgcell.good .kg-pct{background:#c9f7d9}.kgcell.warn{background:#fff8dc;color:#8a6200}.kgcell.warn .kg-pct{background:#ffeaa2}
+.kgcell.bad{background:#ffe7ea;color:#b42332}.kgcell.bad .kg-pct{background:#ffc7cf}.kgcell.na{background:#eef7ff;color:#0d67a4}.kgcell.na .kg-pct{background:#dbeafe}
+.kgcell.zero{background:#ffe7ea;color:#b42332}.kgcell.none{background:#f1f5f9;color:#94a3b8}.kgcell.data-alert{outline:3px solid #c62828;outline-offset:-3px;background:#fff0f1;color:#991b1b}
+.alert-tag{display:block;margin:0 auto 5px;padding:3px 5px;border-radius:999px;background:#c62828;color:#fff;font-size:7px;font-weight:950;width:max-content}
+.machine-title{font-weight:950;color:#002b66}.machine-sub{font-size:9px;color:#64748b;margin-top:4px}.machine-meta{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.machine-stat{margin-top:6px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.machine-stat div{background:#f8fbff;border:1px solid #dbe5f0;border-radius:7px;padding:5px}
+.machine-stat span{display:block;font-size:7px;color:#64748b;font-weight:900}.machine-stat strong{display:block;margin-top:2px;font-size:9px;color:#002b66}
+.detail-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.detail-grid div{background:#f8fbff;border:1px solid #dbe5f0;border-radius:10px;padding:9px}
+.detail-grid span{display:block;font-size:8px;color:#64748b;font-weight:900}.detail-grid strong{display:block;margin-top:3px;color:#002b66}.empty{padding:24px;text-align:center;color:var(--muted);font-weight:900}
 .footer{margin-top:14px;background:#003b80;color:#fff;border-radius:14px;text-align:center;padding:10px 12px;font-size:9px;font-weight:900}
-@media(max-width:1200px){.filters{grid-template-columns:repeat(3,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}.top-global{position:relative}}
-@media(max-width:900px){.top-white{flex-direction:column}.brand-row{width:100%;justify-content:center}.top-title{text-align:center}.hero{grid-template-columns:1fr;padding:16px}.hero:after{font-size:46px}.hero-home{justify-self:stretch}.filters{grid-template-columns:1fr 1fr}.detail-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:700px){.logo-pelex{height:48px;max-width:42vw}.logo-arma{height:52px;max-width:46vw}.kpis{grid-template-columns:1fr}.filters{grid-template-columns:1fr}.kpi-sub{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:1250px){.workspace{grid-template-columns:240px minmax(0,1fr)}.kpi-secondary{grid-template-columns:repeat(2,1fr)}.top-global{position:relative}.sidebar{top:12px}}
+@media(max-width:950px){.workspace{grid-template-columns:1fr}.sidebar{position:relative;top:auto}.kpi-priority{grid-template-columns:1fr}.hero{grid-template-columns:1fr}.hero-home{justify-self:stretch}.detail-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.logo-pelex{height:48px;max-width:42vw}.logo-arma{height:52px;max-width:46vw}.kpi-secondary{grid-template-columns:1fr}.top-white{flex-direction:column}.top-title{text-align:center}}
 </style>
 </head>
 <body>
@@ -125,84 +97,75 @@ main{width:min(1780px,100%);margin:0 auto;padding:14px 24px 28px}
 <main>
   <section class="hero">
     <div class="hero-copy">
-      <span>ARMA DATA // DATAPEL</span>
       <h1>PRODUCCION KG</h1>
-      <p>HISTORICO PRODUCTIVO POR MAQUINA, PLANTA Y FECHA, CON KPI DE DESPERDICIO PARA TECNOLOGIAS BLOWN + CAST.</p>
+      <p>HISTORICO PRODUCTIVO POR MAQUINA, PLANTA Y FECHA. KPI DE DESPERDICIO PARA BLOWN + CAST, CONTROL DE CALIDAD DEL DATO Y TIEMPO DE PARO EQUIVALENTE IDP.</p>
     </div>
     <a class="index-nav-card hero-home" href="main.html" onclick="return goMain(event)">
-      <div class="nav-icon"><img src="boton-de-inicio.png" alt="INICIO"></div>
-      <div class="nav-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></div>
+      <span class="nav-icon"><img src="boton-de-inicio.png" alt=""></span>
+      <span class="nav-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></span>
     </a>
   </section>
 
-  <section class="card filters">
-    <div class="field"><label>DESDE</label><input id="desde" type="date"></div>
-    <div class="field"><label>HASTA</label><input id="hasta" type="date"></div>
-    <div class="field"><label>PLANTA</label><select id="plant"><option value="">TODAS</option></select></div>
-    <div class="field"><label>MAQUINA DATAPEL</label><select id="machine"><option value="">TODAS</option></select></div>
-    <div class="field"><label>ESTADO MEL</label><select id="mapState"><option value="">TODOS</option></select></div>
-    <button class="btn green" type="button" id="refreshBtn">ACTUALIZAR</button>
-  </section>
+  <section class="workspace">
+    <aside class="sidebar">
+      <h3>FILTROS</h3>
+      <div class="field"><label>DESDE</label><input id="desde" type="date"></div>
+      <div class="field"><label>HASTA</label><input id="hasta" type="date"></div>
+      <div class="field"><label>PLANTA</label><select id="plant"><option value="">TODAS</option></select></div>
+      <div class="field"><label>MAQUINA DATAPEL</label><select id="machine"><option value="">TODAS</option></select></div>
+      <div class="field"><label>ESTADO MEL</label><select id="mapState"><option value="">TODOS</option></select></div>
+      <button id="refreshBtn" class="btn" type="button">ACTUALIZAR</button>
+      <div id="freshCard" class="side-info"><span>ULTIMO DATO DISPONIBLE</span><strong id="freshDate">--</strong><span id="freshText">VALIDANDO...</span></div>
+      <div class="side-info"><span>VENTANA</span><strong id="rangePill">--</strong><span>LOS KPI RESPETAN LOS FILTROS.</span></div>
+    </aside>
 
-  <section class="kpis">
-    <div class="kpi green">
-      <span>KG PRODUCIDOS | PERIODO</span><strong id="kKg">0</strong>
-      <div class="kpi-sub"><div><b>PLANTA 1</b><em id="kKgP1">0</em></div><div><b>PLANTA 2</b><em id="kKgP2">0</em></div><div><b>PLANTA 3</b><em id="kKgP3">0</em></div></div>
-    </div>
-    <div class="kpi orange">
-      <span>KG DESPERDICIO | PERIODO</span><strong id="kWaste">0</strong>
-      <div class="kpi-sub"><div><b>PLANTA 1</b><em id="kWasteP1">0</em></div><div><b>PLANTA 2</b><em id="kWasteP2">0</em></div><div><b>PLANTA 3</b><em id="kWasteP3">0</em></div></div>
-    </div>
-    <div class="kpi blue">
-      <span>MAQUINAS | PERIODO</span><strong id="kMachines">0</strong>
-      <div class="kpi-sub"><div><b>PLANTA 1</b><em id="kMachinesP1">0</em></div><div><b>PLANTA 2</b><em id="kMachinesP2">0</em></div><div><b>PLANTA 3</b><em id="kMachinesP3">0</em></div></div>
-    </div>
-    <div class="kpi red">
-      <span>MAQUINA / DIA EN CERO</span><strong id="kZero">0</strong>
-      <div class="kpi-sub"><div><b>PLANTA 1</b><em id="kZeroP1">0</em></div><div><b>PLANTA 2</b><em id="kZeroP2">0</em></div><div><b>PLANTA 3</b><em id="kZeroP3">0</em></div></div>
-    </div>
+    <div class="dashboard">
+      <div class="kpi-priority">
+        <div id="kpiDayCard" class="kpi priority neutral"><span>KPI DESPERDICIO | DIA</span><strong id="kpiDay">N/D</strong><span id="kpiDayLabel" class="kpi-note">--</span><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiDayP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiDayP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiDayP3">N/D</em></div></div></div>
+        <div id="kpiMonthCard" class="kpi priority neutral"><span>KPI DESPERDICIO | MES</span><strong id="kpiMonth">N/D</strong><span id="kpiMonthLabel" class="kpi-note">--</span><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiMonthP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiMonthP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiMonthP3">N/D</em></div></div></div>
+        <div id="kpiYearCard" class="kpi priority neutral"><span>KPI DESPERDICIO | ANO</span><strong id="kpiYear">N/D</strong><span id="kpiYearLabel" class="kpi-note">--</span><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiYearP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiYearP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiYearP3">N/D</em></div></div></div>
+      </div>
 
-    <div class="kpi neutral" id="kpiDayCard">
-      <span>KPI DESPERDICIO | DIA</span><strong id="kpiDay">N/D</strong>
-      <small class="kpi-note" id="kpiDayLabel">--</small>
-      <div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiDayP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiDayP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiDayP3">N/D</em></div></div>
-    </div>
-    <div class="kpi neutral" id="kpiMonthCard">
-      <span>KPI DESPERDICIO | MES</span><strong id="kpiMonth">N/D</strong>
-      <small class="kpi-note" id="kpiMonthLabel">--</small>
-      <div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiMonthP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiMonthP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiMonthP3">N/D</em></div></div>
-    </div>
-    <div class="kpi neutral" id="kpiYearCard">
-      <span>KPI DESPERDICIO | ANO</span><strong id="kpiYear">N/D</strong>
-      <small class="kpi-note" id="kpiYearLabel">--</small>
-      <div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiYearP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiYearP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiYearP3">N/D</em></div></div>
+      <div class="kpi-secondary">
+        <div class="kpi green"><span>KG PRODUCIDOS | PERIODO</span><strong id="kKg">0</strong><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kKgP1">0</em></div><div><b>PLANTA 2</b><em id="kKgP2">0</em></div><div><b>PLANTA 3</b><em id="kKgP3">0</em></div></div></div>
+        <div class="kpi orange"><span>KG DESPERDICIO | PERIODO</span><strong id="kWaste">0</strong><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kWasteP1">0</em></div><div><b>PLANTA 2</b><em id="kWasteP2">0</em></div><div><b>PLANTA 3</b><em id="kWasteP3">0</em></div></div></div>
+        <div class="kpi blue"><span>MAQUINAS | PERIODO</span><strong id="kMachines">0</strong><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kMachinesP1">0</em></div><div><b>PLANTA 2</b><em id="kMachinesP2">0</em></div><div><b>PLANTA 3</b><em id="kMachinesP3">0</em></div></div></div>
+        <div class="kpi red"><span>MAQUINA / DIA EN CERO</span><strong id="kZero">0</strong><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kZeroP1">0</em></div><div><b>PLANTA 2</b><em id="kZeroP2">0</em></div><div><b>PLANTA 3</b><em id="kZeroP3">0</em></div></div></div>
+      </div>
+
+      <div id="qualityBanner" class="quality-banner">
+        <div><strong id="qualityTitle">CALIDAD DE DATO</strong><br><span id="qualityText">SIN ALERTAS ACTIVAS.</span></div>
+        <span id="qualityCount" class="pill ok">0 ALERTAS</span>
+      </div>
     </div>
   </section>
 
   <section class="card">
-    <div class="section-title"><h2>MATRIZ HISTORICA DE PRODUCCION KG</h2><span id="rangePill" class="pill"></span></div>
-    <div class="notice">KPI DESPERDICIO APLICA SOLO A BLOWN + CAST. VERDE &lt;= 3,3 %. AMARILLO &gt; 3,3 % Y &lt; 3,5 %. ROJO &gt;= 3,5 %. CORTE Y REPELETIZADO SE MUESTRAN COMO NO APLICA. 0 KG ES REGISTRO REAL EN CERO; SIN DATO ES AUSENCIA DE FILA.</div>
-    <div class="table-wrap"><table class="table prod-matrix" id="matrix"></table></div>
+    <div class="section-title"><h2>MATRIZ HISTORICA DE PRODUCCION KG</h2><span class="pill">ORDEN: EXTRUSION POR PLANTA / CORTE POR PLANTA / REPELETIZADO</span></div>
+    <div class="notice">KPI DESPERDICIO = DESPERDICIO / (PRODUCCION + DESPERDICIO). VERDE &lt;= 3,3 %. AMARILLO &gt; 3,3 % Y &lt; 3,5 %. ROJO &gt;= 3,5 %. SOLO BLOWN + CAST. PARO IDP EQUIV. = PARO REPORTADO + 480 MIN POR TURNO SIN REGISTRO. LOS DATOS ATIPICOS SE ALERTAN; NO SE CORRIGEN AUTOMATICAMENTE.</div>
+    <div class="table-wrap"><table id="matrix" class="table prod-matrix"></table></div>
   </section>
 
-  <section class="card" style="margin-top:12px">
+  <section class="card">
     <div class="section-title"><h3>DETALLE DEL DIA SELECCIONADO</h3><span class="pill">FUENTE: PRD_DIARIO</span></div>
-    <div id="detail" class="empty">SELECCIONE UNA CELDA DE LA MATRIZ</div>
+    <div id="detail" class="empty">SELECCIONE UNA CELDA DE LA MATRIZ.</div>
   </section>
-
-  <footer class="footer">ARMA // PRODUCCION KG // HTML V02.0 // DATAPEL VIA ARMA_DATAPEL_DATA // SOLO LECTURA</footer>
+  <div class="footer">A.R.M.A. // ASSET RELIABILITY &amp; MAINTENANCE ANALYTICS // PRODUCCION KG</div>
 </main>
-
 <script>
 const API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
 const $=id=>document.getElementById(id);
-const esc=v=>{const d=document.createElement('div');d.textContent=String(v==null?'':v);return d.innerHTML};
-const num=v=>{const n=Number(String(v==null?'':v).replace(',','.'));return Number.isFinite(n)?n:0};
-const fmtKg=v=>num(v).toLocaleString('es-CO',{maximumFractionDigits:1});
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=v=>{const n=Number(v);return Number.isFinite(n)?n:0};
+const fmtKg=v=>num(v).toLocaleString('es-CO',{minimumFractionDigits:0,maximumFractionDigits:1});
 const fmtInt=v=>Math.round(num(v)).toLocaleString('es-CO');
 const fmtPct=v=>(v==null||v===''||!Number.isFinite(Number(v)))?'N/D':Number(v).toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2})+' %';
 const token=()=>localStorage.getItem('ARMA_TOKEN')||sessionStorage.getItem('ARMA_TOKEN')||'';
-async function api(action,payload={}){const t=token();if(!t)throw new Error('SESION ARMA NO DISPONIBLE. INGRESE DESDE MAIN.');const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action:action,token:t},payload))});const j=await r.json();if(!j||j.ok!==true)throw new Error((j&&j.detail)||(j&&j.error)||'ERROR BACKEND ARMA');return j}
+async function api(action,payload={}){
+  const t=token();if(!t)throw new Error('SESION ARMA NO DISPONIBLE. INGRESE DESDE MAIN.');
+  const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action:action,token:t},payload))});
+  const j=await r.json();if(!j||j.ok!==true)throw new Error((j&&j.detail)||(j&&j.error)||'ERROR BACKEND ARMA');return j;
+}
 function armaPersistToken(){try{const t=token();if(t)localStorage.setItem('ARMA_TOKEN',t)}catch(e){}}
 function armaMainStorageIsFresh(maxAgeMs){try{const raw=localStorage.getItem('ARMA_MAIN_ACTIVE')||'';if(!raw)return false;const data=JSON.parse(raw);return !!(data&&data.ts&&(Date.now()-Number(data.ts))<=(maxAgeMs||3500))}catch(e){return false}}
 function armaAskMainIsActive(){return new Promise(resolve=>{let done=false,bc=null;const finish=v=>{if(done)return;done=true;try{if(bc)bc.close()}catch(e){}resolve(!!v)};try{if('BroadcastChannel'in window){bc=new BroadcastChannel('ARMA_CONTROL_CHANNEL');bc.onmessage=ev=>{const m=ev.data||{};if(m.type==='MAIN_ACTIVE')finish(true)};bc.postMessage({type:'FOCUS_MAIN',from:location.href,ts:Date.now()})}}catch(e){}try{localStorage.setItem('ARMA_REQUEST_MAIN_FOCUS',String(Date.now()))}catch(e){}if(armaMainStorageIsFresh(3500))setTimeout(()=>finish(true),120);setTimeout(()=>finish(false),650)})}
@@ -211,20 +174,107 @@ function showError(e){alert((e&&e.message)||String(e))}
 function isoDates(a,b){const out=[];if(!a||!b)return out;let d=new Date(a+'T00:00:00Z'),e=new Date(b+'T00:00:00Z');for(let n=0;d<=e&&n<370;n++,d.setUTCDate(d.getUTCDate()+1))out.push(d.toISOString().slice(0,10));return out}
 function kpiClass(p){if(p==null||!Number.isFinite(Number(p)))return 'neutral';p=Number(p);if(p<=3.3)return 'good';if(p>=3.5)return 'bad';return 'warn'}
 function isKpiTech(t){t=String(t||'').toUpperCase();return t==='BLOWN'||t==='CAST'}
-function plantBucket(obj,p){return (obj&&obj.byPlant&&obj.byPlant[p])||{}}
 function setText(id,v){const e=$(id);if(e)e.textContent=v}
-function setKpiCard(prefix,obj,label){obj=obj||{};const total=obj.total||{};const card=$(prefix+'Card');if(card)card.className='kpi '+kpiClass(total.pct);setText(prefix,fmtPct(total.pct));setText(prefix+'P1',fmtPct((obj.byPlant||{})['PLANTA 1']&&obj.byPlant['PLANTA 1'].pct));setText(prefix+'P2',fmtPct((obj.byPlant||{})['PLANTA 2']&&obj.byPlant['PLANTA 2'].pct));setText(prefix+'P3',fmtPct((obj.byPlant||{})['PLANTA 3']&&obj.byPlant['PLANTA 3'].pct));setText(prefix+'Label',label||'')}
-let state=null;
-let rowByKey={};
+function setKpiCard(prefix,obj,label){
+  obj=obj||{};const total=obj.total||{};const bad=total.quality&&total.quality.critical>0;
+  const card=$(prefix+'Card');if(card)card.className='kpi priority '+(bad?'bad':kpiClass(total.pct));
+  setText(prefix,bad?'REVISAR':fmtPct(total.pct));
+  const bp=obj.byPlant||{};
+  ['PLANTA 1','PLANTA 2','PLANTA 3'].forEach((p,i)=>{const x=bp[p]||{},q=x.quality||{};setText(prefix+'P'+(i+1),q.critical>0?'REVISAR':fmtPct(x.pct))});
+  let note=label||'';
+  if(bad)note+=' // DEPURADO '+fmtPct(total.pctDepurado)+' // RAW '+fmtPct(total.pctRaw);
+  setText(prefix+'Label',note);
+}
+function sectionRank(t){t=String(t||'').toUpperCase();if(t==='BLOWN'||t==='CAST')return 1;if(t==='CORTE')return 2;if(t==='REPELETIZADO')return 3;return 4}
+function plantRank(p){p=String(p||'').toUpperCase();if(p==='PLANTA 1')return 1;if(p==='PLANTA 2')return 2;if(p==='PLANTA 3')return 3;return 4}
+function techRank(t){t=String(t||'').toUpperCase();if(t==='BLOWN')return 1;if(t==='CAST')return 2;if(t==='CORTE')return 3;if(t==='REPELETIZADO')return 4;return 5}
+let state=null,rowByKey={};
 function mapByCode(){const m={};(state.maps||[]).forEach(x=>m[String(x.CDG_MQN_DATAPEL)]=x);return m}
-function fillFilters(){const keepM=$('machine').value,keepP=$('plant').value,keepS=$('mapState').value;const maps=state.maps||[];const plants=(state.filterOptions&&state.filterOptions.plants)||['PLANTA 1','PLANTA 2','PLANTA 3','SIN CLASIFICAR'];$('plant').innerHTML='<option value="">TODAS</option>'+plants.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');if([...$('plant').options].some(o=>o.value===keepP))$('plant').value=keepP;$('machine').innerHTML='<option value="">TODAS</option>'+maps.filter(x=>String(x.ESTADO_MAPEO||'')!=='IGNORAR').map(x=>`<option value="${esc(x.CDG_MQN_DATAPEL)}">${esc(x.CDG_MQN_DATAPEL)} // ${esc(x.NOMBRE_DATAPEL)} // ${esc(x.PLANTA||'')} // ${esc(x.TECNOLOGIA||'')}</option>`).join('');if([...$('machine').options].some(o=>o.value===keepM))$('machine').value=keepM;const statuses=[...new Set(maps.map(x=>String(x.ESTADO_MAPEO||'')).filter(Boolean))].sort();$('mapState').innerHTML='<option value="">TODOS</option>'+statuses.map(x=>`<option>${esc(x)}</option>`).join('');if([...$('mapState').options].some(o=>o.value===keepS))$('mapState').value=keepS}
-function renderSummary(){const s=state.summary||{},bp=s.byPlant||{};setText('kKg',fmtKg(s.kgProducidos));setText('kKgP1',fmtKg((bp['PLANTA 1']||{}).kgProducidos));setText('kKgP2',fmtKg((bp['PLANTA 2']||{}).kgProducidos));setText('kKgP3',fmtKg((bp['PLANTA 3']||{}).kgProducidos));setText('kWaste',fmtKg(s.kgDesperdicio));setText('kWasteP1',fmtKg((bp['PLANTA 1']||{}).kgDesperdicio));setText('kWasteP2',fmtKg((bp['PLANTA 2']||{}).kgDesperdicio));setText('kWasteP3',fmtKg((bp['PLANTA 3']||{}).kgDesperdicio));setText('kMachines',fmtInt(s.maquinas));setText('kMachinesP1',fmtInt((bp['PLANTA 1']||{}).maquinas));setText('kMachinesP2',fmtInt((bp['PLANTA 2']||{}).maquinas));setText('kMachinesP3',fmtInt((bp['PLANTA 3']||{}).maquinas));setText('kZero',fmtInt(s.celdasCero));setText('kZeroP1',fmtInt((bp['PLANTA 1']||{}).celdasCero));setText('kZeroP2',fmtInt((bp['PLANTA 2']||{}).celdasCero));setText('kZeroP3',fmtInt((bp['PLANTA 3']||{}).celdasCero));const w=state.wasteKpi||{};setKpiCard('kpiDay',w.diario,w.diario&&w.diario.fecha);setKpiCard('kpiMonth',w.mensual,w.mensual&&w.mensual.mes);setKpiCard('kpiYear',w.anual,w.anual&&w.anual.anio)}
+function metaForCode(c,rows,maps){const first=rows.find(r=>String(r.CDG_MQN_DATAPEL)===String(c))||{};return maps[String(c)]||first||{}}
+function fillFilters(){
+  const keepM=$('machine').value,keepP=$('plant').value,keepS=$('mapState').value;const maps=(state.maps||[]).slice();
+  const plants=(state.filterOptions&&state.filterOptions.plants)||['PLANTA 1','PLANTA 2','PLANTA 3','SIN CLASIFICAR'];
+  $('plant').innerHTML='<option value="">TODAS</option>'+plants.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+  if([...$('plant').options].some(o=>o.value===keepP))$('plant').value=keepP;
+  maps.sort((a,b)=>sectionRank(a.TECNOLOGIA)-sectionRank(b.TECNOLOGIA)||plantRank(a.PLANTA)-plantRank(b.PLANTA)||techRank(a.TECNOLOGIA)-techRank(b.TECNOLOGIA)||String(a.NOMBRE_ARMA||a.NOMBRE_DATAPEL).localeCompare(String(b.NOMBRE_ARMA||b.NOMBRE_DATAPEL)));
+  $('machine').innerHTML='<option value="">TODAS</option>'+maps.filter(x=>String(x.ESTADO_MAPEO||'')!=='IGNORAR').map(x=>`<option value="${esc(x.CDG_MQN_DATAPEL)}">${esc(x.PLANTA||'')} // ${esc(x.TECNOLOGIA||'')} // ${esc(x.NOMBRE_ARMA||x.NOMBRE_DATAPEL)}</option>`).join('');
+  if([...$('machine').options].some(o=>o.value===keepM))$('machine').value=keepM;
+  const statuses=[...new Set(maps.map(x=>String(x.ESTADO_MAPEO||'')).filter(Boolean))].sort();
+  $('mapState').innerHTML='<option value="">TODOS</option>'+statuses.map(x=>`<option>${esc(x)}</option>`).join('');
+  if([...$('mapState').options].some(o=>o.value===keepS))$('mapState').value=keepS;
+}
+function renderFreshness(){
+  const f=state.freshness||{},lag=f.lagDays,card=$('freshCard');
+  setText('freshDate',f.latestDate||'SIN DATOS');
+  if(lag===0){card.className='side-info';setText('freshText','ARMA AL DIA CON PRD_DIARIO.')}
+  else if(lag==null){card.className='side-info bad';setText('freshText','NO SE PUDO DETERMINAR COBERTURA.')}
+  else{card.className=lag>=2?'side-info bad':'side-info warn';setText('freshText','RETRASO APARENTE: '+lag+' DIA'+(lag===1?'':'S')+'. VERIFICAR IDP.DBf.')}
+}
+function renderQuality(){
+  const q=state.dataQuality||{},b=$('qualityBanner'),n=num(q.critical)+num(q.warnings);
+  b.className='quality-banner'+(q.critical?' bad':(q.warnings?' warn':''));
+  setText('qualityCount',q.critical?`${q.critical} CRITICAS / ${q.warnings} AVISOS`:(q.warnings?`${q.warnings} AVISOS`:'0 ALERTAS'));
+  $('qualityCount').className='pill '+(q.critical?'bad':(q.warnings?'pending':'ok'));
+  if(q.critical){setText('qualityTitle','ALERTA DE CALIDAD DE DATO');setText('qualityText','HAY PRODUCCIONES COMPATIBLES CON ERROR DE ESCALA. NO SE CORRIGEN AUTOMATICAMENTE. LOS KPI AFECTADOS SE MARCAN REVISAR.')}
+  else if(q.warnings){setText('qualityTitle','CALIDAD DE DATO | ADVERTENCIAS');setText('qualityText','EXISTEN VALORES ATIPICOS O DESPERDICIOS EXTREMOS PARA REVISAR.')}
+  else{setText('qualityTitle','CALIDAD DE DATO');setText('qualityText','SIN ALERTAS ACTIVAS EN EL PERIODO SELECCIONADO.')}
+}
+function renderSummary(){
+  const s=state.summary||{},bp=s.byPlant||{};
+  setText('kKg',fmtKg(s.kgProducidos));setText('kKgP1',fmtKg((bp['PLANTA 1']||{}).kgProducidos));setText('kKgP2',fmtKg((bp['PLANTA 2']||{}).kgProducidos));setText('kKgP3',fmtKg((bp['PLANTA 3']||{}).kgProducidos));
+  setText('kWaste',fmtKg(s.kgDesperdicio));setText('kWasteP1',fmtKg((bp['PLANTA 1']||{}).kgDesperdicio));setText('kWasteP2',fmtKg((bp['PLANTA 2']||{}).kgDesperdicio));setText('kWasteP3',fmtKg((bp['PLANTA 3']||{}).kgDesperdicio));
+  setText('kMachines',fmtInt(s.maquinas));setText('kMachinesP1',fmtInt((bp['PLANTA 1']||{}).maquinas));setText('kMachinesP2',fmtInt((bp['PLANTA 2']||{}).maquinas));setText('kMachinesP3',fmtInt((bp['PLANTA 3']||{}).maquinas));
+  setText('kZero',fmtInt(s.celdasCero));setText('kZeroP1',fmtInt((bp['PLANTA 1']||{}).celdasCero));setText('kZeroP2',fmtInt((bp['PLANTA 2']||{}).celdasCero));setText('kZeroP3',fmtInt((bp['PLANTA 3']||{}).celdasCero));
+  const w=state.wasteKpi||{};setKpiCard('kpiDay',w.diario,w.diario&&w.diario.fecha);setKpiCard('kpiMonth',w.mensual,w.mensual&&w.mensual.mes);setKpiCard('kpiYear',w.anual,w.anual&&w.anual.anio);
+}
 function machineBadge(m){const st=String(m.ESTADO_MAPEO||'').toUpperCase();return st==='CONFIRMADO'?'<span class="pill ok">MEL CONFIRMADO</span>':'<span class="pill pending">'+esc(st||'SIN MAPEO')+'</span>'}
-function cellHtml(r){if(!r)return '<td class="kgcell none">SIN DATO</td>';const kg=num(r.KG_PRODUCIDOS),w=num(r.KG_DESPERDICIO),tech=String(r.TECNOLOGIA||'').toUpperCase();if(kg===0)return `<td class="kgcell zero" data-k="${esc(String(r.CDG_MQN_DATAPEL)+'|'+String(r.FECHA).slice(0,10))}"><div class="kg-main">0 KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><span class="kg-pct">PROD. CERO</span></td>`;if(!isKpiTech(tech))return `<td class="kgcell na" data-k="${esc(String(r.CDG_MQN_DATAPEL)+'|'+String(r.FECHA).slice(0,10))}"><div class="kg-main">${fmtKg(kg)} KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><span class="kg-pct">KPI N/A</span></td>`;const pct=r.PCT_DESPERDICIO==null?null:Number(r.PCT_DESPERDICIO),cl=kpiClass(pct);return `<td class="kgcell ${cl}" data-k="${esc(String(r.CDG_MQN_DATAPEL)+'|'+String(r.FECHA).slice(0,10))}"><div class="kg-main">${fmtKg(kg)} KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><span class="kg-pct">${fmtPct(pct)}</span></td>`}
-function renderMatrix(){const dates=isoDates(state.range.desde,state.range.hasta),maps=mapByCode(),rows=state.rows||[];rowByKey={};rows.forEach(r=>rowByKey[String(r.CDG_MQN_DATAPEL)+'|'+String(r.FECHA).slice(0,10)]=r);const codes=[...new Set(rows.map(r=>String(r.CDG_MQN_DATAPEL)))].sort((a,b)=>Number(a)-Number(b));let h='<thead><tr><th>MAQUINA</th>'+dates.map(d=>'<th>'+esc(d.slice(5))+'</th>').join('')+'</tr></thead><tbody>';for(const c of codes){const first=rows.find(r=>String(r.CDG_MQN_DATAPEL)===c)||{},m=maps[c]||first||{},hist=(state.historicalStats||{})[c]||first.HISTORICO||{};h+='<tr><td><div class="machine-title">'+esc(m.NOMBRE_ARMA||m.NOMBRE_DATAPEL||('DATAPEL '+c))+'</div><div class="machine-sub">DATAPEL '+esc(c)+(m.TAG_ARMA?' // '+esc(m.TAG_ARMA):'')+'</div><div class="machine-meta"><span class="pill">'+esc(m.PLANTA||first.PLANTA||'SIN CLASIFICAR')+'</span><span class="pill">'+esc(m.TECNOLOGIA||first.TECNOLOGIA||'SIN CLASIFICAR')+'</span>'+machineBadge(m)+'</div><div class="machine-stat"><div><span>MAX KG/DIA</span><strong>'+fmtKg(hist.maxKgDia||0)+'</strong></div><div><span>PROM KG/DIA</span><strong>'+fmtKg(hist.promedioKgDia||0)+'</strong></div><div><span>PROM DESP KG</span><strong>'+fmtKg(hist.promedioDesperdicioKgDia||0)+'</strong></div></div></td>';for(const d of dates)h+=cellHtml(rowByKey[c+'|'+d]);h+='</tr>'}h+='</tbody>';$('matrix').innerHTML=h;$('matrix').querySelectorAll('[data-k]').forEach(td=>td.addEventListener('click',()=>showDetail(rowByKey[td.dataset.k])))}
-function showDetail(r){if(!r)return;const h=r.HISTORICO||{};$('detail').className='detail-grid';$('detail').innerHTML=`<div><span>FECHA</span><strong>${esc(r.FECHA)}</strong></div><div><span>MAQUINA</span><strong>${esc(r.NOMBRE_ARMA||r.NOMBRE_DATAPEL)}</strong></div><div><span>PLANTA</span><strong>${esc(r.PLANTA)}</strong></div><div><span>TECNOLOGIA</span><strong>${esc(r.TECNOLOGIA)}</strong></div><div><span>KG PRODUCIDOS</span><strong>${fmtKg(r.KG_PRODUCIDOS)}</strong></div><div><span>KG DESPERDICIO</span><strong>${fmtKg(r.KG_DESPERDICIO)}</strong></div><div><span>% DESPERDICIO</span><strong>${isKpiTech(r.TECNOLOGIA)?fmtPct(r.PCT_DESPERDICIO):'NO APLICA'}</strong></div><div><span>KG DES. CUADRE</span><strong>${fmtKg(r.KG_DES_CUADRE)}</strong></div><div><span>KG DES. OTROS</span><strong>${fmtKg(r.KG_DES_OTROS)}</strong></div><div><span>MAX HIST KG/DIA</span><strong>${fmtKg(h.maxKgDia||0)}</strong></div><div><span>PROM HIST KG/DIA</span><strong>${fmtKg(h.promedioKgDia||0)}</strong></div><div><span>PROM HIST DESP KG</span><strong>${fmtKg(h.promedioDesperdicioKgDia||0)}</strong></div>`}
-function render(){const s=state.session||{};$('userPill').textContent='ARMA // '+(s.user||'')+' // '+(s.nivel||'');$('rangePill').textContent=(state.range.desde||'')+' // '+(state.range.hasta||'');fillFilters();renderSummary();renderMatrix()}
-async function load(initial=false){try{const filters=initial?{}:{DESDE:$('desde').value,HASTA:$('hasta').value,PLANTA:$('plant').value,CDG_MQN_DATAPEL:$('machine').value,ESTADO_MAPEO:$('mapState').value};state=await api('prdKgBootstrap',{filters});if(initial){$('desde').value=state.range.desde||'';$('hasta').value=state.range.hasta||''}render()}catch(e){showError(e)}}
+function cellHtml(r){
+  if(!r)return '<td class="kgcell none">SIN DATO</td>';
+  const kg=num(r.KG_PRODUCIDOS),w=num(r.KG_DESPERDICIO),stop=num(r.MIN_PARADA_IDP_EQUIV),tech=String(r.TECNOLOGIA||'').toUpperCase(),q=r.CALIDAD_DATO||{};
+  const key=esc(String(r.CDG_MQN_DATAPEL)+'|'+String(r.FECHA).slice(0,10));
+  const alert=q.level==='CRITICA',walert=!!q.wasteAlert;
+  const head=alert?'<span class="alert-tag">ALERTA ESCALA</span>':(walert?'<span class="alert-tag">DESP. EXTREMO</span>':'');
+  if(alert)return `<td class="kgcell data-alert" data-k="${key}">${head}<div class="kg-main">${fmtKg(kg)} KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><div class="kg-stop">PARO ${fmtInt(stop)} MIN</div><span class="kg-pct">REVISAR DATO</span></td>`;
+  if(kg===0)return `<td class="kgcell zero" data-k="${key}">${head}<div class="kg-main">0 KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><div class="kg-stop">PARO ${fmtInt(stop)} MIN</div><span class="kg-pct">PROD. CERO</span></td>`;
+  if(!isKpiTech(tech))return `<td class="kgcell na" data-k="${key}">${head}<div class="kg-main">${fmtKg(kg)} KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><div class="kg-stop">PARO ${fmtInt(stop)} MIN</div><span class="kg-pct">KPI N/A</span></td>`;
+  const pct=r.PCT_DESPERDICIO==null?null:Number(r.PCT_DESPERDICIO),cl=kpiClass(pct);
+  return `<td class="kgcell ${walert?'bad':cl}" data-k="${key}">${head}<div class="kg-main">${fmtKg(kg)} KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><div class="kg-stop">PARO ${fmtInt(stop)} MIN</div><span class="kg-pct">${fmtPct(pct)}</span></td>`;
+}
+function groupLabel(m){const t=String(m.TECNOLOGIA||'SIN CLASIFICAR').toUpperCase(),p=String(m.PLANTA||'SIN CLASIFICAR').toUpperCase();const s=(t==='BLOWN'||t==='CAST')?'EXTRUSION':t;return s+' // '+p+' // '+t}
+function renderMatrix(){
+  const dates=isoDates(state.range.desde,state.range.hasta),maps=mapByCode(),rows=state.rows||[];rowByKey={};rows.forEach(r=>rowByKey[String(r.CDG_MQN_DATAPEL)+'|'+String(r.FECHA).slice(0,10)]=r);
+  const codes=[...new Set(rows.map(r=>String(r.CDG_MQN_DATAPEL)))];
+  codes.sort((a,b)=>{const A=metaForCode(a,rows,maps),B=metaForCode(b,rows,maps);return sectionRank(A.TECNOLOGIA)-sectionRank(B.TECNOLOGIA)||plantRank(A.PLANTA)-plantRank(B.PLANTA)||techRank(A.TECNOLOGIA)-techRank(B.TECNOLOGIA)||String(A.NOMBRE_ARMA||A.NOMBRE_DATAPEL).localeCompare(String(B.NOMBRE_ARMA||B.NOMBRE_DATAPEL))});
+  let h='<thead><tr><th>MAQUINA</th>'+dates.map(d=>'<th>'+esc(d.slice(5))+'</th>').join('')+'</tr></thead><tbody>',lastGroup='';
+  for(const c of codes){
+    const first=rows.find(r=>String(r.CDG_MQN_DATAPEL)===c)||{},m=maps[c]||first||{},hist=(state.historicalStats||{})[c]||first.HISTORICO||{},g=groupLabel(m);
+    if(g!==lastGroup){h+=`<tr class="group-row"><td colspan="${dates.length+1}">${esc(g)}</td></tr>`;lastGroup=g}
+    const excluded=num(hist.registrosCriticosExcluidos);
+    h+='<tr><td><div class="machine-title">'+esc(m.NOMBRE_ARMA||m.NOMBRE_DATAPEL||('DATAPEL '+c))+'</div>';
+    h+='<div class="machine-sub">DATAPEL '+esc(c)+(m.TAG_ARMA?' // '+esc(m.TAG_ARMA):'')+'</div><div class="machine-meta"><span class="pill">'+esc(m.PLANTA||first.PLANTA||'SIN CLASIFICAR')+'</span><span class="pill">'+esc(m.TECNOLOGIA||first.TECNOLOGIA||'SIN CLASIFICAR')+'</span>'+machineBadge(m)+(excluded?'<span class="pill bad">'+excluded+' DATO(S) EXCLUIDO(S)</span>':'')+'</div>';
+    h+='<div class="machine-stat"><div><span>MAX KG/DIA VALID.</span><strong>'+fmtKg(hist.maxKgDia||0)+'</strong></div><div><span>PROM KG/DIA</span><strong>'+fmtKg(hist.promedioKgDia||0)+'</strong></div><div><span>PROM DESP KG</span><strong>'+fmtKg(hist.promedioDesperdicioKgDia||0)+'</strong></div></div></td>';
+    for(const d of dates)h+=cellHtml(rowByKey[c+'|'+d]);h+='</tr>';
+  }
+  h+='</tbody>';$('matrix').innerHTML=h||'<tbody><tr><td class="empty">SIN DATOS</td></tr></tbody>';
+  $('matrix').querySelectorAll('[data-k]').forEach(td=>td.addEventListener('click',()=>showDetail(rowByKey[td.dataset.k])));
+}
+function showDetail(r){
+  if(!r)return;const h=r.HISTORICO||{},q=r.CALIDAD_DATO||{};
+  $('detail').className='detail-grid';
+  $('detail').innerHTML=`<div><span>FECHA</span><strong>${esc(r.FECHA)}</strong></div><div><span>MAQUINA</span><strong>${esc(r.NOMBRE_ARMA||r.NOMBRE_DATAPEL)}</strong></div><div><span>PLANTA</span><strong>${esc(r.PLANTA)}</strong></div><div><span>TECNOLOGIA</span><strong>${esc(r.TECNOLOGIA)}</strong></div><div><span>KG PRODUCIDOS</span><strong>${fmtKg(r.KG_PRODUCIDOS)}</strong></div><div><span>KG DESPERDICIO</span><strong>${fmtKg(r.KG_DESPERDICIO)}</strong></div><div><span>% DESPERDICIO</span><strong>${isKpiTech(r.TECNOLOGIA)?fmtPct(r.PCT_DESPERDICIO):'NO APLICA'}</strong></div><div><span>PARO REPORTADO</span><strong>${fmtInt(r.MIN_PARADA_REPORTADA)} MIN</strong></div><div><span>PARO SIN REGISTRO</span><strong>${fmtInt(r.MIN_PARADA_SIN_REGISTRO)} MIN</strong></div><div><span>PARO IDP EQUIV.</span><strong>${fmtInt(r.MIN_PARADA_IDP_EQUIV)} MIN</strong></div><div><span>MAX HIST VALID.</span><strong>${fmtKg(h.maxKgDia||0)}</strong></div><div><span>PROM HIST KG/DIA</span><strong>${fmtKg(h.promedioKgDia||0)}</strong></div><div><span>CALIDAD DATO</span><strong>${esc(q.level||'OK')} ${esc(q.code||'')}</strong></div><div><span>REFERENCIA MEDIANA</span><strong>${fmtKg(q.baselineMedian||0)}</strong></div><div><span>VALOR / 10</span><strong>${fmtKg(q.valueDiv10||0)}</strong></div><div><span>TURNOS SIN REGISTRO</span><strong>${fmtInt(r.TURNOS_SIN_REGISTRO)}</strong></div>`;
+}
+function render(){
+  const s=state.session||{};$('userPill').textContent='ARMA // '+(s.user||'')+' // '+(s.nivel||'');$('rangePill').textContent=(state.range.desde||'')+' // '+(state.range.hasta||'');
+  fillFilters();renderFreshness();renderSummary();renderQuality();renderMatrix();
+}
+async function load(initial=false){
+  try{
+    const filters=initial?{}:{DESDE:$('desde').value,HASTA:$('hasta').value,PLANTA:$('plant').value,CDG_MQN_DATAPEL:$('machine').value,ESTADO_MAPEO:$('mapState').value};
+    state=await api('prdKgBootstrap',{filters});
+    if(initial){$('desde').value=state.range.desde||'';$('hasta').value=state.range.hasta||''}
+    render();
+  }catch(e){showError(e)}
+}
 $('refreshBtn').addEventListener('click',()=>load(false));
 load(true);
 </script>
