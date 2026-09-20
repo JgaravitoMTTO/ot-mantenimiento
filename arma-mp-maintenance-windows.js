@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 
-const MPW_VERSION='MP_WINDOWS_UI_V1_3C_KPI_CONTAINER_20260919';
+const MPW_VERSION='MP_WINDOWS_UI_V1_3D_KPI_DETECTOR_20260919';
 let MPW_DATA=null;
 let MPW_YEAR=0;
 let MPW_BUSY=false;
@@ -59,6 +59,37 @@ function cardFromLabel(label){
   return e.parentElement;
 }
 
+function findVisualKpiCard(label){
+  const target=norm(label);
+  const all=qa('div,section,article');
+  let best=null;
+  let bestArea=Infinity;
+
+  for(const e of all){
+    if(e.id==='mpwTopTools'||e.id==='mpwKpiBox')continue;
+    if(e.closest&&e.closest('#mpwTopTools'))continue;
+
+    const text=norm(e.textContent);
+    if(!text.includes(target))continue;
+
+    const otherLabels=['PROYECTOS AÑO','P4 PENDIENTES','P5 PENDIENTES','P4 VENCIDAS']
+      .map(norm)
+      .filter(x=>x!==target);
+
+    if(otherLabels.some(x=>text.includes(x)))continue;
+
+    const r=e.getBoundingClientRect();
+    if(r.width<70||r.width>500||r.height<45||r.height>160)continue;
+
+    const area=r.width*r.height;
+    if(area<bestArea){
+      best=e;
+      bestArea=area;
+    }
+  }
+
+  return best||cardFromLabel(label);
+}
 function commonParent(nodes){
   const valid=nodes.filter(Boolean);
   if(valid.length<2)return valid[0]?valid[0].parentElement:null;
@@ -126,7 +157,7 @@ function ensureTopControls(){
   if(old)old.remove();
 
   const labels=['PROYECTOS AÑO','P4 PENDIENTES','P5 PENDIENTES','P4 VENCIDAS'];
-  const cards=labels.map(cardFromLabel);
+  const cards=labels.map(findVisualKpiCard);
 
   let kpiBox=document.getElementById('mpwKpiBox');
   let parent=(kpiBox&&kpiBox.parentElement)?kpiBox.parentElement:commonParent(cards);
@@ -176,7 +207,7 @@ function ensureTopControls(){
     card.style.setProperty('min-height','50px','important');
     card.style.setProperty('margin','0','important');
     card.style.setProperty('box-sizing','border-box','important');
-    if(card.parentElement!==kpiBox)kpiBox.appendChild(card);
+    kpiBox.appendChild(card);
   });
 
   updateToggleButton();
