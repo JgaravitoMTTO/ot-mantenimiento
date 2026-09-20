@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 
-const MPW_VERSION='MP_WINDOWS_UI_V1_3B_EQUAL_KPI_20260919';
+const MPW_VERSION='MP_WINDOWS_UI_V1_3C_KPI_CONTAINER_20260919';
 let MPW_DATA=null;
 let MPW_YEAR=0;
 let MPW_BUSY=false;
@@ -82,8 +82,9 @@ function ensureStyle(){
   .mpw-action.print{background:#344f6f;flex:0 0 88px}.mpw-action.pdf{background:#c82d3d;flex:0 0 112px}
   .mpw-action.toggle{flex:0 0 128px;min-width:128px}.mpw-action.toggle.on{background:#16a34a}.mpw-action.toggle.off{background:#64748b}
   .mpw-action:hover{filter:brightness(1.05)}.mpw-action:disabled{opacity:.6;cursor:wait}
-  .mpw-kpi-parent{display:flex!important;align-items:stretch!important;justify-content:flex-end!important;gap:10px!important;flex-wrap:nowrap!important}
-  .mpw-kpi-card{flex:1 1 0!important;width:0!important;min-width:0!important;max-width:none!important;box-sizing:border-box!important}
+  .mpw-kpi-parent{display:flex!important;align-items:stretch!important;justify-content:flex-start!important;gap:10px!important;flex-wrap:nowrap!important}
+  .mpw-kpi-box{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px!important;align-items:stretch!important;flex:1 1 0!important;min-width:0!important;min-height:68px;padding:9px 12px;background:#fff;border:1px solid #d7e2ee;border-radius:14px;box-shadow:0 4px 13px rgba(0,52,110,.08);box-sizing:border-box!important}
+  .mpw-kpi-card{display:block!important;flex:none!important;width:100%!important;height:100%!important;min-width:0!important;max-width:none!important;min-height:50px!important;margin:0!important;box-sizing:border-box!important}
   .mpw-row-badge{display:inline-flex;margin-left:8px;padding:3px 7px;border-radius:999px;font-size:9px;font-weight:950;vertical-align:middle;cursor:pointer}
   .mpw-row-badge.ok{background:#dcfce7;color:#166534;border:1px solid #86efac}
   .mpw-row-badge.none{background:#eef2f7;color:#64748b;border:1px solid #d8e2ee}
@@ -103,8 +104,8 @@ function ensureStyle(){
   .mpw-table{width:100%;border-collapse:collapse;font-size:11px}.mpw-table th{position:sticky;top:0;background:#075f9d;color:#fff;text-align:left;padding:9px;white-space:nowrap}.mpw-table td{padding:9px;border-bottom:1px solid #e6edf5;vertical-align:top}.mpw-table tr:last-child td{border-bottom:0}
   .mpw-pill{display:inline-flex;padding:3px 7px;border-radius:999px;font-size:9px;font-weight:950}.mpw-pill.match{background:#dcfce7;color:#166534}.mpw-pill.hist{background:#e0f2fe;color:#075985}
   .mpw-list{display:flex;gap:7px;flex-wrap:wrap}.mpw-chip{padding:6px 9px;border-radius:999px;background:#f1f5f9;border:1px solid #d8e2ee;font-size:10px;font-weight:850;color:#475569}.mpw-empty{padding:22px;text-align:center;color:#64748b;font-weight:850}
-  @media(max-width:1250px){.mpw-kpi-parent{flex-wrap:wrap!important}.mpw-top-tools{flex:1 1 100%;min-width:100%;order:-1}.mpw-kpi-card{flex:1 1 calc(25% - 10px)!important;min-width:145px!important}}
-  @media(max-width:800px){.mpw-stats{grid-template-columns:repeat(2,1fr)}.mpw-head h2{font-size:18px}.mpw-top-tools{flex-wrap:wrap;min-height:auto}.mpw-action.primary,.mpw-action.toggle,.mpw-action.print,.mpw-action.pdf{flex:1 1 46%;min-width:130px}.mpw-kpi-card{flex:1 1 calc(50% - 10px)!important}}
+  @media(max-width:1250px){.mpw-kpi-parent{flex-wrap:wrap!important}.mpw-top-tools{flex:1 1 100%;min-width:100%;order:-1}.mpw-kpi-box{flex:1 1 100%!important}}
+  @media(max-width:800px){.mpw-stats{grid-template-columns:repeat(2,1fr)}.mpw-head h2{font-size:18px}.mpw-top-tools{flex-wrap:wrap;min-height:auto}.mpw-action.primary,.mpw-action.toggle,.mpw-action.print,.mpw-action.pdf{flex:1 1 46%;min-width:130px}.mpw-kpi-box{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
   `;
   document.head.appendChild(s);
 }
@@ -126,40 +127,13 @@ function ensureTopControls(){
 
   const labels=['PROYECTOS AÑO','P4 PENDIENTES','P5 PENDIENTES','P4 VENCIDAS'];
   const cards=labels.map(cardFromLabel);
-  const parent=commonParent(cards);
+
+  let kpiBox=document.getElementById('mpwKpiBox');
+  let parent=(kpiBox&&kpiBox.parentElement)?kpiBox.parentElement:commonParent(cards);
+
   if(!parent)return false;
 
   parent.classList.add('mpw-kpi-parent');
-
-  const layoutCards=cards.map(function(card){
-    if(!card)return null;
-    let box=card;
-    while(box.parentElement&&box.parentElement!==parent)box=box.parentElement;
-    return box.parentElement===parent?box:null;
-  });
-
-  const uniqueLayoutCards=[...new Set(layoutCards.filter(Boolean))];
-
-  if(uniqueLayoutCards.length===4){
-    layoutCards.forEach(function(box,i){
-      if(!box)return;
-      box.classList.add('mpw-kpi-card');
-      box.style.setProperty('flex','1 1 0','important');
-      box.style.setProperty('width','0','important');
-      box.style.setProperty('min-width','0','important');
-      box.style.setProperty('max-width','none','important');
-      box.style.setProperty('box-sizing','border-box','important');
-
-      const card=cards[i];
-      if(card&&card!==box){
-        card.style.setProperty('width','100%','important');
-        card.style.setProperty('max-width','none','important');
-        card.style.setProperty('box-sizing','border-box','important');
-      }
-    });
-  }else{
-    cards.filter(Boolean).forEach(c=>c.classList.add('mpw-kpi-card'));
-  }
 
   let tools=document.getElementById('mpwTopTools');
   if(!tools){
@@ -167,9 +141,9 @@ function ensureTopControls(){
     tools.id='mpwTopTools';
     tools.className='mpw-top-tools';
     tools.innerHTML=
-      '<button id="mpwButton" class="mpw-action primary" type="button">VENTANAS MTTO</button>'+ 
-      '<button id="mpwToggle" class="mpw-action toggle" type="button"></button>'+ 
-      '<button id="mpwPrint" class="mpw-action print" type="button">IMPRIMIR</button>'+ 
+      '<button id="mpwButton" class="mpw-action primary" type="button">VENTANAS MTTO</button>'+
+      '<button id="mpwToggle" class="mpw-action toggle" type="button"></button>'+
+      '<button id="mpwPrint" class="mpw-action print" type="button">IMPRIMIR</button>'+
       '<button id="mpwPdf" class="mpw-action pdf" type="button">EXPORTAR PDF</button>';
     parent.insertBefore(tools,parent.firstChild);
     q('#mpwButton').addEventListener('click',()=>loadWindows(true));
@@ -179,10 +153,35 @@ function ensureTopControls(){
   }else if(tools.parentElement!==parent){
     parent.insertBefore(tools,parent.firstChild);
   }
+
+  if(!kpiBox){
+    kpiBox=document.createElement('div');
+    kpiBox.id='mpwKpiBox';
+    kpiBox.className='mpw-kpi-box';
+    if(tools.nextSibling)parent.insertBefore(kpiBox,tools.nextSibling);
+    else parent.appendChild(kpiBox);
+  }else if(kpiBox.parentElement!==parent){
+    parent.appendChild(kpiBox);
+  }
+
+  cards.forEach(function(card){
+    if(!card)return;
+    card.classList.add('mpw-kpi-card');
+    card.style.setProperty('display','block','important');
+    card.style.setProperty('flex','none','important');
+    card.style.setProperty('width','100%','important');
+    card.style.setProperty('height','100%','important');
+    card.style.setProperty('min-width','0','important');
+    card.style.setProperty('max-width','none','important');
+    card.style.setProperty('min-height','50px','important');
+    card.style.setProperty('margin','0','important');
+    card.style.setProperty('box-sizing','border-box','important');
+    if(card.parentElement!==kpiBox)kpiBox.appendChild(card);
+  });
+
   updateToggleButton();
   return true;
 }
-
 function updateToggleButton(){
   const b=q('#mpwToggle');
   if(!b)return;
