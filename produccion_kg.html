@@ -39,14 +39,14 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
 .mini-info{border:1px solid var(--line);border-radius:12px;padding:9px 10px;background:#f8fbff;min-height:62px}.mini-info span{display:block;font-size:7px;color:var(--muted);font-weight:900}.mini-info strong{display:block;margin-top:3px;color:var(--navy);font-size:11px}.mini-info.warn{background:#fff8dc;border-color:#f6d36c}.mini-info.bad{background:#ffe7ea;border-color:#f3a5af}
 .dashboard{min-width:0}.kpi-priority{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:10px}
 .kpi-secondary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:10px}
-.kpi{border-radius:16px;padding:14px;color:#fff;min-height:134px;box-shadow:0 10px 20px rgba(15,23,42,.10)}
-.kpi.priority{min-height:158px}.kpi>span{display:block;font-size:9px;font-weight:950;opacity:.95}.kpi>strong{display:block;font-size:27px;margin-top:5px}
+.kpi{position:relative;border-radius:16px;padding:14px;color:#fff;min-height:134px;box-shadow:0 10px 20px rgba(15,23,42,.10);overflow:hidden}
+.kpi.priority{min-height:158px}.kpi>span{display:block;font-size:9px;font-weight:950;opacity:.95}.kpi>strong{display:block;font-size:27px;margin-top:5px;max-width:58%}.kpi-formula{position:absolute;right:14px;top:13px;max-width:42%;text-align:right;font-size:8px;line-height:1.3;font-weight:900;opacity:.82;letter-spacing:.1px}.kpi-formula small{display:block;font-size:7px;opacity:.9;margin-top:2px}
 .kpi.green{background:linear-gradient(135deg,#08733f,#2bbf68)}.kpi.orange{background:linear-gradient(135deg,#a84e06,#ef8f13)}
 .kpi.blue{background:linear-gradient(135deg,#003b80,#087fce)}.kpi.red{background:linear-gradient(135deg,#8f1d2c,#dc3545)}
 .kpi.good{background:linear-gradient(135deg,#08733f,#2bbf68)}.kpi.warn{background:linear-gradient(135deg,#9b6a00,#e0a400)}
 .kpi.bad{background:linear-gradient(135deg,#8f1d2c,#dc3545)}.kpi.neutral{background:linear-gradient(135deg,#475569,#64748b)}
-.kpi-sub{margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,.28);display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
-.kpi-sub b{display:block;font-size:8px;opacity:.85}.kpi-sub em{display:block;font-style:normal;font-size:11px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi-sub{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.28);display:grid;grid-template-columns:repeat(3,1fr);gap:5px;align-items:center;text-align:center}
+.kpi-sub b{display:block;font-size:9px;opacity:.9;text-align:center}.kpi-sub em{display:block;font-style:normal;font-size:13px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;margin-top:2px}
 .kpi-note{display:block;margin-top:6px;font-size:8px;font-weight:850;opacity:.9}
 .info-quality-row{display:grid;grid-template-columns:minmax(280px,.38fr) minmax(0,1fr);gap:10px;margin-bottom:10px}.info-stack{display:grid;grid-template-columns:1fr 1fr;gap:10px}.quality-banner{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid var(--line);border-left:5px solid #0ea5e9;background:#fff;border-radius:14px;padding:9px 12px;box-shadow:var(--shadow);min-height:62px}
 .quality-banner.bad{border-left-color:#c62828;background:#fff1f2}.quality-banner.warn{border-left-color:#d89b00;background:#fffbea}
@@ -64,13 +64,13 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
 .kgcell .kg-pct{display:inline-flex;margin-top:5px;padding:3px 6px;border-radius:999px;font-size:8px;font-weight:950}
 .kgcell.good{background:#e8fff1;color:#08733f}.kgcell.good .kg-pct{background:#c9f7d9}.kgcell.warn{background:#fff8dc;color:#8a6200}.kgcell.warn .kg-pct{background:#ffeaa2}
 .kgcell.bad{background:#ffe7ea;color:#b42332}.kgcell.bad .kg-pct{background:#ffc7cf}.kgcell.na{background:#eef7ff;color:#0d67a4}.kgcell.na .kg-pct{background:#dbeafe}
-.kgcell.zero{background:#ffe7ea;color:#b42332}.kgcell.none{background:#f1f5f9;color:#94a3b8}.kgcell.data-alert{outline:3px solid #c62828;outline-offset:-3px;background:#fff0f1;color:#991b1b}
+.kgcell.zero{background:#f8fafc;color:#475569}.kgcell.none{background:#f1f5f9;color:#94a3b8}.kgcell.data-alert{outline:3px solid #c62828;outline-offset:-3px;background:#fff0f1;color:#991b1b}
 .alert-tag{display:block;margin:0 auto 5px;padding:3px 5px;border-radius:999px;background:#c62828;color:#fff;font-size:7px;font-weight:950;width:max-content}
 .machine-title{font-weight:950;color:#002b66}.machine-sub{font-size:9px;color:#64748b;margin-top:4px}.machine-meta{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
 .machine-stat{margin-top:6px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.machine-stat div{background:#f8fbff;border:1px solid #dbe5f0;border-radius:7px;padding:5px}
 .machine-stat span{display:block;font-size:7px;color:#64748b;font-weight:900}.machine-stat strong{display:block;margin-top:2px;font-size:9px;color:#002b66}
 .detail-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.detail-grid div{background:#f8fbff;border:1px solid #dbe5f0;border-radius:10px;padding:9px}
-.detail-grid span{display:block;font-size:8px;color:#64748b;font-weight:900}.detail-grid strong{display:block;margin-top:3px;color:#002b66}.empty{padding:24px;text-align:center;color:var(--muted);font-weight:900}
+.detail-grid span{display:block;font-size:8px;color:#64748b;font-weight:900}.detail-grid strong{display:block;margin-top:3px;color:#002b66}.detail-ops{margin-top:12px}.detail-ops-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0 7px;color:#002b66;font-size:11px;font-weight:950}.detail-note{font-size:8px;color:#64748b;font-weight:850}.detail-table-wrap{overflow:auto;border:1px solid #dbe5f0;border-radius:10px;background:#fff}.detail-table{width:100%;border-collapse:collapse;font-size:9px}.detail-table th{background:#eaf4ff;color:#003b80;text-align:left;padding:7px;border-bottom:1px solid #dbe5f0;white-space:nowrap}.detail-table td{padding:7px;border-bottom:1px solid #edf2f7;vertical-align:top}.detail-table tr:last-child td{border-bottom:0}.empty{padding:24px;text-align:center;color:var(--muted);font-weight:900}
 .footer{margin-top:14px;background:#003b80;color:#fff;border-radius:14px;text-align:center;padding:10px 12px;font-size:9px;font-weight:900}
 .loading-overlay{position:fixed;inset:0;z-index:1000;background:rgba(237,243,249,.88);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center}
 .loading-overlay.show{display:flex}.loading-box{min-width:300px;max-width:480px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 45px rgba(0,43,102,.18);padding:22px;text-align:center}
@@ -102,7 +102,7 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
   <section class="hero">
     <div class="hero-copy">
       <h1>PRODUCCION KG</h1>
-      <p>HISTORICO PRODUCTIVO POR MAQUINA, PLANTA Y FECHA. KPI DE DESPERDICIO PARA BLOWN + CAST, CONTROL DE CALIDAD DEL DATO Y TIEMPO DE PARO EQUIVALENTE IDP.</p>
+      <p>HISTORICO PRODUCTIVO POR MAQUINA, PLANTA Y FECHA. KPI DE DESPERDICIO PARA BLOWN + CAST, CONTROL DE CALIDAD DEL DATO Y TIEMPO DE PARO REPORTADO POR DATAPEL.</p>
     </div>
     <a class="index-nav-card hero-home" href="main.html" onclick="return goMain(event)">
       <span class="nav-icon"><img src="boton-de-inicio.png" alt=""></span>
@@ -122,16 +122,16 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
 
     <div class="dashboard">
       <div class="kpi-priority">
-        <div id="kpiDayCard" class="kpi priority neutral"><span>KPI DESPERDICIO | DIA</span><strong id="kpiDay">N/D</strong><span id="kpiDayLabel" class="kpi-note">--</span><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiDayP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiDayP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiDayP3">N/D</em></div></div></div>
-        <div id="kpiMonthCard" class="kpi priority neutral"><span>KPI DESPERDICIO | MES</span><strong id="kpiMonth">N/D</strong><span id="kpiMonthLabel" class="kpi-note">--</span><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiMonthP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiMonthP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiMonthP3">N/D</em></div></div></div>
-        <div id="kpiYearCard" class="kpi priority neutral"><span>KPI DESPERDICIO | ANO</span><strong id="kpiYear">N/D</strong><span id="kpiYearLabel" class="kpi-note">--</span><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiYearP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiYearP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiYearP3">N/D</em></div></div></div>
+        <div id="kpiDayCard" class="kpi priority neutral"><span>KPI DESPERDICIO | DIA</span><strong id="kpiDay">N/D</strong><div class="kpi-formula">DESP / (PROD + DESP) X 100<small>SOLO BLOWN + CAST</small></div><span id="kpiDayLabel" class="kpi-note">--</span><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiDayP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiDayP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiDayP3">N/D</em></div></div></div>
+        <div id="kpiMonthCard" class="kpi priority neutral"><span>KPI DESPERDICIO | MES</span><strong id="kpiMonth">N/D</strong><div class="kpi-formula">DESP / (PROD + DESP) X 100<small>SOLO BLOWN + CAST</small></div><span id="kpiMonthLabel" class="kpi-note">--</span><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiMonthP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiMonthP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiMonthP3">N/D</em></div></div></div>
+        <div id="kpiYearCard" class="kpi priority neutral"><span>KPI DESPERDICIO | ANO</span><strong id="kpiYear">N/D</strong><div class="kpi-formula">DESP / (PROD + DESP) X 100<small>SOLO BLOWN + CAST</small></div><span id="kpiYearLabel" class="kpi-note">--</span><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiYearP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiYearP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiYearP3">N/D</em></div></div></div>
       </div>
 
       <div class="kpi-secondary">
-        <div class="kpi green"><span>KG PRODUCIDOS | PERIODO</span><strong id="kKg">0</strong><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kKgP1">0</em></div><div><b>PLANTA 2</b><em id="kKgP2">0</em></div><div><b>PLANTA 3</b><em id="kKgP3">0</em></div></div></div>
-        <div class="kpi orange"><span>KG DESPERDICIO | PERIODO</span><strong id="kWaste">0</strong><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kWasteP1">0</em></div><div><b>PLANTA 2</b><em id="kWasteP2">0</em></div><div><b>PLANTA 3</b><em id="kWasteP3">0</em></div></div></div>
-        <div id="kProdPctCard" class="kpi blue"><span>PORCENTAJE TOTAL DE PRODUCCION</span><strong id="kProdPct">N/D</strong><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kProdPctP1">N/D</em></div><div><b>PLANTA 2</b><em id="kProdPctP2">N/D</em></div><div><b>PLANTA 3</b><em id="kProdPctP3">N/D</em></div></div></div>
-        <div id="kWastePctCard" class="kpi red"><span>PORCENTAJE TOTAL DE DESPERDICIO</span><strong id="kWastePct">N/D</strong><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kWastePctP1">N/D</em></div><div><b>PLANTA 2</b><em id="kWastePctP2">N/D</em></div><div><b>PLANTA 3</b><em id="kWastePctP3">N/D</em></div></div></div>
+        <div class="kpi green"><span>KG PRODUCIDOS | PERIODO</span><strong id="kKg">0</strong><div class="kpi-formula">SUMA KG PRODUCIDOS<small>PERIODO Y FILTROS ACTIVOS</small></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kKgP1">0</em></div><div><b>PLANTA 2</b><em id="kKgP2">0</em></div><div><b>PLANTA 3</b><em id="kKgP3">0</em></div></div></div>
+        <div class="kpi orange"><span>KG DESPERDICIO | PERIODO</span><strong id="kWaste">0</strong><div class="kpi-formula">SUMA KG DESPERDICIO<small>PERIODO Y FILTROS ACTIVOS</small></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kWasteP1">0</em></div><div><b>PLANTA 2</b><em id="kWasteP2">0</em></div><div><b>PLANTA 3</b><em id="kWasteP3">0</em></div></div></div>
+        <div id="kProdPctCard" class="kpi blue"><span>PORCENTAJE TOTAL DE PRODUCCION</span><strong id="kProdPct">N/D</strong><div class="kpi-formula">PROD / (PROD + DESP) X 100<small>TODAS LAS TECNOLOGIAS</small></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kProdPctP1">N/D</em></div><div><b>PLANTA 2</b><em id="kProdPctP2">N/D</em></div><div><b>PLANTA 3</b><em id="kProdPctP3">N/D</em></div></div></div>
+        <div id="kWastePctCard" class="kpi red"><span>PORCENTAJE TOTAL DE DESPERDICIO</span><strong id="kWastePct">N/D</strong><div class="kpi-formula">DESP / (PROD + DESP) X 100<small>TODAS LAS TECNOLOGIAS</small></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kWastePctP1">N/D</em></div><div><b>PLANTA 2</b><em id="kWastePctP2">N/D</em></div><div><b>PLANTA 3</b><em id="kWastePctP3">N/D</em></div></div></div>
       </div>
 
       <div class="info-quality-row">
@@ -149,13 +149,14 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
 
   <section class="card">
     <div class="section-title"><h2>MATRIZ HISTORICA DE PRODUCCION KG</h2><span class="pill">ORDEN: EXTRUSION POR PLANTA / CORTE POR PLANTA / REPELETIZADO POR PLANTA</span></div>
-    <div class="notice">KPI DESPERDICIO = DESPERDICIO / (PRODUCCION + DESPERDICIO). VERDE &lt;= 3,3 %. AMARILLO &gt; 3,3 % Y &lt; 3,5 %. ROJO &gt;= 3,5 %. SOLO BLOWN + CAST. PARO IDP EQUIV. = PARO REPORTADO + 480 MIN POR TURNO SIN REGISTRO. LOS DATOS ATIPICOS SE ALERTAN; EL KPI DEPURADO LOS EXCLUYE Y EL VALOR ORIGINAL SE CONSERVA.</div>
+    <div class="notice">KPI DESPERDICIO = DESPERDICIO / (PRODUCCION + DESPERDICIO). VERDE &lt;= 3,3 %. AMARILLO &gt; 3,3 % Y &lt; 3,5 %. ROJO &gt;= 3,5 %. SOLO BLOWN + CAST. PARO = EXCLUSIVAMENTE MINUTOS REPORTADOS POR DATAPEL. 0 KG O AUSENCIA DE PRODUCCION NO GENERAN PARO. LOS DATOS ATIPICOS SE ALERTAN; EL KPI DEPURADO LOS EXCLUYE.</div>
     <div class="table-wrap"><table id="matrix" class="table prod-matrix"></table></div>
   </section>
 
   <section class="card">
-    <div class="section-title"><h3>DETALLE DEL DIA SELECCIONADO</h3><span class="pill">FUENTE: PRD_DIARIO</span></div>
+    <div class="section-title"><h3>DETALLE DEL DIA SELECCIONADO</h3><span class="pill">FUENTE: PRD_DIARIO + PRD_TURNO + PRD_PARADAS</span></div>
     <div id="detail" class="empty">SELECCIONE UNA CELDA DE LA MATRIZ.</div>
+    <div id="detailOps" class="detail-ops"></div>
   </section>
   <div class="footer">A.R.M.A. // ASSET RELIABILITY &amp; MAINTENANCE ANALYTICS // PRODUCCION KG</div>
 </main>
@@ -227,15 +228,15 @@ function renderSummary(){
 function machineBadge(m){const st=String(m.ESTADO_MAPEO||'').toUpperCase();return st==='CONFIRMADO'?'<span class="pill ok">MEL CONFIRMADO</span>':'<span class="pill pending">'+esc(st||'SIN MAPEO')+'</span>'}
 function cellHtml(r){
   if(!r)return '<td class="kgcell none">SIN DATO</td>';
-  const kg=num(r.KG_PRODUCIDOS),w=num(r.KG_DESPERDICIO),stop=num(r.MIN_PARADA_IDP_EQUIV),tech=String(r.TECNOLOGIA||'').toUpperCase(),q=r.CALIDAD_DATO||{};
+  const kg=num(r.KG_PRODUCIDOS),w=num(r.KG_DESPERDICIO),stop=num(r.MIN_PARADA_REPORTADA),tech=String(r.TECNOLOGIA||'').toUpperCase(),q=r.CALIDAD_DATO||{};
   const key=esc(String(r.CDG_MQN_DATAPEL)+'|'+String(r.FECHA).slice(0,10));
   const alert=q.level==='CRITICA',walert=!!q.wasteAlert;
   const head=alert?'<span class="alert-tag">ALERTA ESCALA</span>':(walert?'<span class="alert-tag">DESP. EXTREMO</span>':'');
-  if(alert)return `<td class="kgcell data-alert" data-k="${key}">${head}<div class="kg-main">${fmtKg(kg)} KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><div class="kg-stop">PARO ${fmtInt(stop)} MIN</div><span class="kg-pct">REVISAR DATO</span></td>`;
-  if(kg===0)return `<td class="kgcell zero" data-k="${key}">${head}<div class="kg-main">0 KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><div class="kg-stop">PARO ${fmtInt(stop)} MIN</div><span class="kg-pct">PROD. CERO</span></td>`;
-  if(!isKpiTech(tech))return `<td class="kgcell na" data-k="${key}">${head}<div class="kg-main">${fmtKg(kg)} KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><div class="kg-stop">PARO ${fmtInt(stop)} MIN</div><span class="kg-pct">KPI N/A</span></td>`;
+  if(alert)return `<td class="kgcell data-alert" data-k="${key}">${head}<div class="kg-main">${fmtKg(kg)} KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><div class="kg-stop">PARO REPORTADO ${fmtInt(stop)} MIN</div><span class="kg-pct">REVISAR DATO</span></td>`;
+  if(kg===0)return `<td class="kgcell zero" data-k="${key}">${head}<div class="kg-main">0 KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><div class="kg-stop">PARO REPORTADO ${fmtInt(stop)} MIN</div><span class="kg-pct">REGISTRO 0 KG</span></td>`;
+  if(!isKpiTech(tech))return `<td class="kgcell na" data-k="${key}">${head}<div class="kg-main">${fmtKg(kg)} KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><div class="kg-stop">PARO REPORTADO ${fmtInt(stop)} MIN</div><span class="kg-pct">KPI N/A</span></td>`;
   const pct=r.PCT_DESPERDICIO==null?null:Number(r.PCT_DESPERDICIO),cl=kpiClass(pct);
-  return `<td class="kgcell ${walert?'bad':cl}" data-k="${key}">${head}<div class="kg-main">${fmtKg(kg)} KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><div class="kg-stop">PARO ${fmtInt(stop)} MIN</div><span class="kg-pct">${fmtPct(pct)}</span></td>`;
+  return `<td class="kgcell ${walert?'bad':cl}" data-k="${key}">${head}<div class="kg-main">${fmtKg(kg)} KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><div class="kg-stop">PARO REPORTADO ${fmtInt(stop)} MIN</div><span class="kg-pct">${fmtPct(pct)}</span></td>`;
 }
 function groupLabel(m){const t=String(m.TECNOLOGIA||'SIN CLASIFICAR').toUpperCase(),p=String(m.PLANTA||'SIN CLASIFICAR').toUpperCase();const sec=(t==='BLOWN'||t==='CAST')?'EXTRUSION':t;return sec+' // '+p}
 function renderMatrix(){
@@ -255,10 +256,31 @@ function renderMatrix(){
   h+='</tbody>';$('matrix').innerHTML=h||'<tbody><tr><td class="empty">SIN DATOS</td></tr></tbody>';
   $('matrix').querySelectorAll('[data-k]').forEach(td=>td.addEventListener('click',()=>showDetail(rowByKey[td.dataset.k])));
 }
-function showDetail(r){
+function detailTable(title,rows,kind,coverage){
+  if(!rows||!rows.length)return `<div class="detail-ops-title">${esc(title)}<span class="detail-note">${coverage?('COBERTURA HASTA '+esc(coverage)):''}</span></div><div class="empty">SIN REGISTROS REPORTADOS PARA ESTA MAQUINA/FECHA.</div>`;
+  if(kind==='stops'){
+  let h=`<div class="detail-ops-title">${esc(title)}<span class="detail-note">${coverage?('COBERTURA HASTA '+esc(coverage)):''}</span></div>`;
+  h+=`<div class="detail-table-wrap"><table class="detail-table"><thead><tr><th>TURNO</th><th>HORARIO</th><th>KG PROD.</th><th>KG DESP.</th><th>PARO REPORTADO</th></tr></thead><tbody>`;
+  for(const x of rows)h+=`<tr><td>${esc(x.TURNO_DATAPEL||'--')}</td><td>${esc(x.TURNO_HORARIO||'--')}</td><td>${fmtKg(x.KG_PRODUCIDOS)}</td><td>${fmtKg(x.KG_DESPERDICIO)}</td><td><strong>${fmtInt(x.MIN_PARADA_REPORTADA)} MIN</strong></td></tr>`;
+  return h+'</tbody></table></div>';
+    h+=`<div class="detail-table-wrap"><table class="detail-table"><thead><tr><th>TURNO</th><th>HORARIO</th><th>CAUSA</th><th>MINUTOS</th><th>INICIO</th><th>FIN</th></tr></thead><tbody>`;
+    for(const x of rows)h+=`<tr><td>${esc(x.TURNO_DATAPEL||'--')}</td><td>${esc(x.TURNO_HORARIO||'--')}</td><td>${esc(x.CAUSA||'SIN CAUSA')}</td><td><strong>${fmtInt(x.MINUTOS)} MIN</strong></td><td>${esc(String(x.HORA_INICIO||'').slice(11,16)||'--')}</td><td>${esc(String(x.HORA_FIN||'').slice(11,16)||'--')}</td></tr>`;
+    return h+'</tbody></table></div>'
+  }
+  let h=`<div class="detail-ops-title">${esc(title)}<span class="detail-note">${coverage?('COBERTURA HASTA '+esc(coverage)):''}</span></div><div class="detail-table-wrap"><table class="detail-table"><thead><tr><th>TURNO</th><th>HORARIO</th><th>KG PROD.</th><th>KG DESP.</th><th>PARO REPORTADO</th></tr></thead><tbody>`;for(const x of rows)h+=`<tr><td>${esc(x.TURNO_DATAPEL||'--')}</td><td>${esc(x.TURNO_HORARIO||'--')}</td><td>${fmtKg(x.KG_PRODUCIDOS)}</td><td>${fmtKg(x.KG_DESPERDICIO)}</td><td><strong>${fmtInt(x.MIN_PARADA_REPORTADA)} MIN</strong></td></tr>`;return h+'</tbody></table></div>';
+}
+async function showDetail(r){
   if(!r)return;const h=r.HISTORICO||{},q=r.CALIDAD_DATO||{};
   $('detail').className='detail-grid';
-  $('detail').innerHTML=`<div><span>FECHA</span><strong>${esc(r.FECHA)}</strong></div><div><span>MAQUINA</span><strong>${esc(r.NOMBRE_ARMA||r.NOMBRE_DATAPEL)}</strong></div><div><span>PLANTA</span><strong>${esc(r.PLANTA)}</strong></div><div><span>TECNOLOGIA</span><strong>${esc(r.TECNOLOGIA)}</strong></div><div><span>KG PRODUCIDOS</span><strong>${fmtKg(r.KG_PRODUCIDOS)}</strong></div><div><span>KG DESPERDICIO</span><strong>${fmtKg(r.KG_DESPERDICIO)}</strong></div><div><span>% DESPERDICIO</span><strong>${isKpiTech(r.TECNOLOGIA)?fmtPct(r.PCT_DESPERDICIO):'NO APLICA'}</strong></div><div><span>PARO REPORTADO</span><strong>${fmtInt(r.MIN_PARADA_REPORTADA)} MIN</strong></div><div><span>PARO SIN REGISTRO</span><strong>${fmtInt(r.MIN_PARADA_SIN_REGISTRO)} MIN</strong></div><div><span>PARO IDP EQUIV.</span><strong>${fmtInt(r.MIN_PARADA_IDP_EQUIV)} MIN</strong></div><div><span>MAX HIST VALID.</span><strong>${fmtKg(h.maxKgDia||0)}</strong></div><div><span>PROM HIST KG/DIA</span><strong>${fmtKg(h.promedioKgDia||0)}</strong></div><div><span>CALIDAD DATO</span><strong>${esc(q.level||'OK')} ${esc(q.code||'')}</strong></div><div><span>REFERENCIA MEDIANA</span><strong>${fmtKg(q.baselineMedian||0)}</strong></div><div><span>VALOR / 10</span><strong>${fmtKg(q.valueDiv10||0)}</strong></div><div><span>TURNOS SIN REGISTRO</span><strong>${fmtInt(r.TURNOS_SIN_REGISTRO)}</strong></div>`;
+  let detailHtml='';
+  detailHtml+=`<div><span>FECHA</span><strong>${esc(r.FECHA)}</strong></div><div><span>MAQUINA</span><strong>${esc(r.NOMBRE_ARMA||r.NOMBRE_DATAPEL)}</strong></div><div><span>PLANTA</span><strong>${esc(r.PLANTA)}</strong></div>`;
+  detailHtml+=`<div><span>TECNOLOGIA</span><strong>${esc(r.TECNOLOGIA)}</strong></div><div><span>KG PRODUCIDOS</span><strong>${fmtKg(r.KG_PRODUCIDOS)}</strong></div><div><span>KG DESPERDICIO</span><strong>${fmtKg(r.KG_DESPERDICIO)}</strong></div>`;
+  detailHtml+=`<div><span>% DESPERDICIO</span><strong>${isKpiTech(r.TECNOLOGIA)?fmtPct(r.PCT_DESPERDICIO):'NO APLICA'}</strong></div><div><span>PARO REPORTADO</span><strong>${fmtInt(r.MIN_PARADA_REPORTADA)} MIN</strong></div>`;
+  detailHtml+=`<div><span>MAX HIST VALID.</span><strong>${fmtKg(h.maxKgDia||0)}</strong></div><div><span>PROM HIST KG/DIA</span><strong>${fmtKg(h.promedioKgDia||0)}</strong></div>`;
+  detailHtml+=`<div><span>CALIDAD DATO</span><strong>${esc(q.level||'OK')} ${esc(q.code||'')}</strong></div><div><span>REFERENCIA MEDIANA</span><strong>${fmtKg(q.baselineMedian||0)}</strong></div>`;
+  $('detail').innerHTML=detailHtml;
+  $('detailOps').innerHTML='<div class="empty">CONSULTANDO TURNOS Y PARADAS REPORTADAS...</div>';
+  try{const d=await api('prdKgDayDetail',{FECHA:r.FECHA,CDG_MQN_DATAPEL:r.CDG_MQN_DATAPEL});const c=d.coverage||{};$('detailOps').innerHTML=detailTable('TURNOS DEL DIA',d.turnos||[],'turns',c.prdTurnoMaxDate)+detailTable('CAUSAS Y MINUTOS DE PARADA REPORTADOS',d.paradas||[],'stops',c.prdParadasMaxDate)}catch(e){$('detailOps').innerHTML='<div class="empty">NO FUE POSIBLE CARGAR EL DETALLE OPERACIONAL: '+esc(e.message||e)+'</div>'}
 }
 function render(){
   const s=state.session||{};$('userPill').textContent='ARMA // '+(s.user||'')+' // '+(s.nivel||'');$('rangePill').textContent=(state.range.desde||'')+' // '+(state.range.hasta||'');
