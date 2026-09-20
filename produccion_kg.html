@@ -31,13 +31,12 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
 .index-nav-card .nav-icon{width:54px;height:54px;border-radius:16px;background:#e8f2ff;border:1px solid #dbe5f0;display:grid;place-items:center;flex:0 0 54px}
 .index-nav-card .nav-icon img{width:38px;height:38px;object-fit:contain}.index-nav-card .nav-text{display:flex;flex-direction:column;line-height:1.1}
 .index-nav-card .nav-text strong{font-size:18px;font-weight:900}.index-nav-card .nav-text span{font-size:11px;font-weight:900;color:#008c2e;margin-top:6px}
-.workspace{display:grid;grid-template-columns:285px minmax(0,1fr);gap:14px;align-items:start}
-.sidebar{position:sticky;top:128px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:15px}
+.workspace{display:grid;grid-template-columns:245px minmax(0,1fr);gap:12px;align-items:start}
+.sidebar{position:sticky;top:128px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:14px}
 .sidebar h3{margin:0 0 12px;color:var(--navy);font-size:16px}.field{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
 .field label{font-size:9px;font-weight:950;color:#36536f}.field input,.field select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff;color:var(--navy);font-weight:850;text-transform:uppercase}
 .btn{width:100%;border:0;border-radius:10px;padding:11px 16px;color:#fff;background:linear-gradient(#2bd36b,#159447);font-weight:950;cursor:pointer;text-transform:uppercase}
-.side-info{margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:10px;background:#f8fbff}.side-info span{display:block;font-size:8px;color:var(--muted);font-weight:900}.side-info strong{display:block;margin-top:3px;color:var(--navy);font-size:12px}
-.side-info.warn{background:#fff8dc;border-color:#f6d36c}.side-info.bad{background:#ffe7ea;border-color:#f3a5af}
+.mini-info{border:1px solid var(--line);border-radius:12px;padding:9px 10px;background:#f8fbff;min-height:62px}.mini-info span{display:block;font-size:7px;color:var(--muted);font-weight:900}.mini-info strong{display:block;margin-top:3px;color:var(--navy);font-size:11px}.mini-info.warn{background:#fff8dc;border-color:#f6d36c}.mini-info.bad{background:#ffe7ea;border-color:#f3a5af}
 .dashboard{min-width:0}.kpi-priority{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:10px}
 .kpi-secondary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:10px}
 .kpi{border-radius:16px;padding:14px;color:#fff;min-height:134px;box-shadow:0 10px 20px rgba(15,23,42,.10)}
@@ -49,18 +48,18 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
 .kpi-sub{margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,.28);display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
 .kpi-sub b{display:block;font-size:8px;opacity:.85}.kpi-sub em{display:block;font-style:normal;font-size:11px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .kpi-note{display:block;margin-top:6px;font-size:8px;font-weight:850;opacity:.9}
-.quality-banner{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid var(--line);border-left:5px solid #0ea5e9;background:#fff;border-radius:14px;padding:10px 13px;margin-bottom:10px;box-shadow:var(--shadow)}
+.info-quality-row{display:grid;grid-template-columns:minmax(280px,.38fr) minmax(0,1fr);gap:10px;margin-bottom:10px}.info-stack{display:grid;grid-template-columns:1fr 1fr;gap:10px}.quality-banner{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid var(--line);border-left:5px solid #0ea5e9;background:#fff;border-radius:14px;padding:9px 12px;box-shadow:var(--shadow);min-height:62px}
 .quality-banner.bad{border-left-color:#c62828;background:#fff1f2}.quality-banner.warn{border-left-color:#d89b00;background:#fffbea}
 .quality-banner strong{color:var(--navy);font-size:11px}.quality-banner span{color:#475569;font-size:9px;font-weight:850}
 .card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:14px;margin-top:12px}
 .section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.section-title h2,.section-title h3{margin:0;color:var(--navy)}
 .pill{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:8px;font-weight:950;background:#e5eef8;color:#17436f}.pill.ok{background:#dcfce7;color:#08733f}.pill.pending{background:#fff4d6;color:#9a5a00}.pill.bad{background:#fee2e2;color:#b42332}
 .notice{border-left:4px solid #0ea5e9;background:#eef8ff;padding:10px 12px;border-radius:10px;font-size:9px;font-weight:850;color:#17436f;margin-bottom:10px;line-height:1.45}
-.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}.table{width:100%;border-collapse:collapse;background:#fff;font-size:10px}
-.table th{position:sticky;top:0;z-index:2;background:#0d67a4;color:#fff;padding:9px;border-right:1px solid rgba(255,255,255,.2);text-align:left}
+.table-wrap{position:relative;overflow:auto;max-height:68vh;border:1px solid var(--line);border-radius:12px;scrollbar-gutter:stable both-edges;background:#fff}.table{width:max-content;min-width:100%;border-collapse:separate;border-spacing:0;background:#fff;font-size:10px}
+.table th{position:sticky;top:0;z-index:6;background:#0d67a4;color:#fff;padding:9px;border-right:1px solid rgba(255,255,255,.2);text-align:left;box-shadow:0 1px 0 #d8e3ef}
 .table td{padding:8px;border-right:1px solid #e4edf6;border-bottom:1px solid #e4edf6;vertical-align:top}
-.prod-matrix td:first-child,.prod-matrix th:first-child{position:sticky;left:0;z-index:3;background:#fff;min-width:300px}.prod-matrix th:first-child{background:#0d67a4}
-.group-row td{position:relative!important;left:auto!important;background:#dcecff!important;color:#003b80!important;font-weight:950!important;padding:7px 10px!important;letter-spacing:.3px}
+.prod-matrix td:first-child,.prod-matrix th:first-child{position:sticky;left:0;z-index:5;background:#fff;min-width:300px;max-width:300px}.prod-matrix th:first-child{z-index:9;background:#0d67a4}.prod-matrix tbody tr:not(.group-row) td:first-child{box-shadow:2px 0 4px rgba(0,43,102,.08)}
+.group-row td{position:sticky!important;left:0!important;background:#dcecff!important;color:#003b80!important;font-weight:950!important;padding:7px 10px!important;letter-spacing:.3px;z-index:4}
 .kgcell{min-width:128px;text-align:center;cursor:pointer;font-weight:900;position:relative}.kgcell .kg-main{font-size:11px}.kgcell .kg-waste,.kgcell .kg-stop{font-size:8px;margin-top:4px;opacity:.88}
 .kgcell .kg-pct{display:inline-flex;margin-top:5px;padding:3px 6px;border-radius:999px;font-size:8px;font-weight:950}
 .kgcell.good{background:#e8fff1;color:#08733f}.kgcell.good .kg-pct{background:#c9f7d9}.kgcell.warn{background:#fff8dc;color:#8a6200}.kgcell.warn .kg-pct{background:#ffeaa2}
@@ -73,7 +72,12 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
 .detail-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.detail-grid div{background:#f8fbff;border:1px solid #dbe5f0;border-radius:10px;padding:9px}
 .detail-grid span{display:block;font-size:8px;color:#64748b;font-weight:900}.detail-grid strong{display:block;margin-top:3px;color:#002b66}.empty{padding:24px;text-align:center;color:var(--muted);font-weight:900}
 .footer{margin-top:14px;background:#003b80;color:#fff;border-radius:14px;text-align:center;padding:10px 12px;font-size:9px;font-weight:900}
-@media(max-width:1250px){.workspace{grid-template-columns:240px minmax(0,1fr)}.kpi-secondary{grid-template-columns:repeat(2,1fr)}.top-global{position:relative}.sidebar{top:12px}}
+.loading-overlay{position:fixed;inset:0;z-index:1000;background:rgba(237,243,249,.88);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center}
+.loading-overlay.show{display:flex}.loading-box{min-width:300px;max-width:480px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 45px rgba(0,43,102,.18);padding:22px;text-align:center}
+.spinner{width:44px;height:44px;border:5px solid #dbeafe;border-top-color:#087fce;border-radius:50%;margin:0 auto 12px;animation:spin .85s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.loading-box strong{display:block;color:var(--navy);font-size:15px}.loading-box span{display:block;color:var(--muted);font-size:10px;font-weight:800;margin-top:6px}
+.perf-note{font-size:7px;color:#64748b;font-weight:850;margin-top:4px}
+@media(max-width:1250px){.workspace{grid-template-columns:220px minmax(0,1fr)}.kpi-secondary{grid-template-columns:repeat(2,1fr)}.top-global{position:relative}.sidebar{top:12px}.info-quality-row{grid-template-columns:1fr}}
 @media(max-width:950px){.workspace{grid-template-columns:1fr}.sidebar{position:relative;top:auto}.kpi-priority{grid-template-columns:1fr}.hero{grid-template-columns:1fr}.hero-home{justify-self:stretch}.detail-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:700px){.logo-pelex{height:48px;max-width:42vw}.logo-arma{height:52px;max-width:46vw}.kpi-secondary{grid-template-columns:1fr}.top-white{flex-direction:column}.top-title{text-align:center}}
 </style>
@@ -113,10 +117,7 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
       <div class="field"><label>HASTA</label><input id="hasta" type="date"></div>
       <div class="field"><label>PLANTA</label><select id="plant"><option value="">TODAS</option></select></div>
       <div class="field"><label>MAQUINA DATAPEL</label><select id="machine"><option value="">TODAS</option></select></div>
-      <div class="field"><label>ESTADO MEL</label><select id="mapState"><option value="">TODOS</option></select></div>
       <button id="refreshBtn" class="btn" type="button">ACTUALIZAR</button>
-      <div id="freshCard" class="side-info"><span>ULTIMO DATO DISPONIBLE</span><strong id="freshDate">--</strong><span id="freshText">VALIDANDO...</span></div>
-      <div class="side-info"><span>VENTANA</span><strong id="rangePill">--</strong><span>LOS KPI RESPETAN LOS FILTROS.</span></div>
     </aside>
 
     <div class="dashboard">
@@ -129,20 +130,26 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
       <div class="kpi-secondary">
         <div class="kpi green"><span>KG PRODUCIDOS | PERIODO</span><strong id="kKg">0</strong><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kKgP1">0</em></div><div><b>PLANTA 2</b><em id="kKgP2">0</em></div><div><b>PLANTA 3</b><em id="kKgP3">0</em></div></div></div>
         <div class="kpi orange"><span>KG DESPERDICIO | PERIODO</span><strong id="kWaste">0</strong><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kWasteP1">0</em></div><div><b>PLANTA 2</b><em id="kWasteP2">0</em></div><div><b>PLANTA 3</b><em id="kWasteP3">0</em></div></div></div>
-        <div class="kpi blue"><span>MAQUINAS | PERIODO</span><strong id="kMachines">0</strong><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kMachinesP1">0</em></div><div><b>PLANTA 2</b><em id="kMachinesP2">0</em></div><div><b>PLANTA 3</b><em id="kMachinesP3">0</em></div></div></div>
-        <div class="kpi red"><span>MAQUINA / DIA EN CERO</span><strong id="kZero">0</strong><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kZeroP1">0</em></div><div><b>PLANTA 2</b><em id="kZeroP2">0</em></div><div><b>PLANTA 3</b><em id="kZeroP3">0</em></div></div></div>
+        <div id="kProdPctCard" class="kpi blue"><span>PORCENTAJE TOTAL DE PRODUCCION</span><strong id="kProdPct">N/D</strong><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kProdPctP1">N/D</em></div><div><b>PLANTA 2</b><em id="kProdPctP2">N/D</em></div><div><b>PLANTA 3</b><em id="kProdPctP3">N/D</em></div></div></div>
+        <div id="kWastePctCard" class="kpi red"><span>PORCENTAJE TOTAL DE DESPERDICIO</span><strong id="kWastePct">N/D</strong><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kWastePctP1">N/D</em></div><div><b>PLANTA 2</b><em id="kWastePctP2">N/D</em></div><div><b>PLANTA 3</b><em id="kWastePctP3">N/D</em></div></div></div>
       </div>
 
-      <div id="qualityBanner" class="quality-banner">
-        <div><strong id="qualityTitle">CALIDAD DE DATO</strong><br><span id="qualityText">SIN ALERTAS ACTIVAS.</span></div>
-        <span id="qualityCount" class="pill ok">0 ALERTAS</span>
+      <div class="info-quality-row">
+        <div class="info-stack">
+          <div id="freshCard" class="mini-info"><span>ULTIMO DATO DISPONIBLE</span><strong id="freshDate">--</strong><span id="freshText">VALIDANDO...</span></div>
+          <div class="mini-info"><span>VENTANA</span><strong id="rangePill">--</strong><span id="backendPerf" class="perf-note">CARGANDO...</span></div>
+        </div>
+        <div id="qualityBanner" class="quality-banner">
+          <div><strong id="qualityTitle">CALIDAD DE DATO</strong><br><span id="qualityText">SIN ALERTAS ACTIVAS.</span></div>
+          <span id="qualityCount" class="pill ok">0 ALERTAS</span>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="card">
-    <div class="section-title"><h2>MATRIZ HISTORICA DE PRODUCCION KG</h2><span class="pill">ORDEN: EXTRUSION POR PLANTA / CORTE POR PLANTA / REPELETIZADO</span></div>
-    <div class="notice">KPI DESPERDICIO = DESPERDICIO / (PRODUCCION + DESPERDICIO). VERDE &lt;= 3,3 %. AMARILLO &gt; 3,3 % Y &lt; 3,5 %. ROJO &gt;= 3,5 %. SOLO BLOWN + CAST. PARO IDP EQUIV. = PARO REPORTADO + 480 MIN POR TURNO SIN REGISTRO. LOS DATOS ATIPICOS SE ALERTAN; NO SE CORRIGEN AUTOMATICAMENTE.</div>
+    <div class="section-title"><h2>MATRIZ HISTORICA DE PRODUCCION KG</h2><span class="pill">ORDEN: EXTRUSION POR PLANTA / CORTE POR PLANTA / REPELETIZADO POR PLANTA</span></div>
+    <div class="notice">KPI DESPERDICIO = DESPERDICIO / (PRODUCCION + DESPERDICIO). VERDE &lt;= 3,3 %. AMARILLO &gt; 3,3 % Y &lt; 3,5 %. ROJO &gt;= 3,5 %. SOLO BLOWN + CAST. PARO IDP EQUIV. = PARO REPORTADO + 480 MIN POR TURNO SIN REGISTRO. LOS DATOS ATIPICOS SE ALERTAN; EL KPI DEPURADO LOS EXCLUYE Y EL VALOR ORIGINAL SE CONSERVA.</div>
     <div class="table-wrap"><table id="matrix" class="table prod-matrix"></table></div>
   </section>
 
@@ -152,6 +159,7 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
   </section>
   <div class="footer">A.R.M.A. // ASSET RELIABILITY &amp; MAINTENANCE ANALYTICS // PRODUCCION KG</div>
 </main>
+<div id="loadingOverlay" class="loading-overlay"><div class="loading-box"><div class="spinner"></div><strong id="loadingTitle">CARGANDO PRODUCCION KG</strong><span id="loadingDetail">CONSULTANDO ARMA...</span></div></div>
 <script>
 const API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
 const $=id=>document.getElementById(id);
@@ -163,8 +171,10 @@ const fmtPct=v=>(v==null||v===''||!Number.isFinite(Number(v)))?'N/D':Number(v).t
 const token=()=>localStorage.getItem('ARMA_TOKEN')||sessionStorage.getItem('ARMA_TOKEN')||'';
 async function api(action,payload={}){
   const t=token();if(!t)throw new Error('SESION ARMA NO DISPONIBLE. INGRESE DESDE MAIN.');
-  const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action:action,token:t},payload))});
-  const j=await r.json();if(!j||j.ok!==true)throw new Error((j&&j.detail)||(j&&j.error)||'ERROR BACKEND ARMA');return j;
+  const ctrl=new AbortController(),tm=setTimeout(()=>ctrl.abort(),120000);
+  try{const r=await fetch(API+'?ts='+Date.now(),{method:'POST',cache:'no-store',signal:ctrl.signal,headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action:action,token:t,_ts:Date.now()},payload))});const j=await r.json();if(!j||j.ok!==true)throw new Error((j&&j.detail)||(j&&j.error)||'ERROR BACKEND ARMA');return j}
+  catch(e){if(e&&e.name==='AbortError')throw new Error('ARMA TARDO MAS DE 120 SEGUNDOS EN RESPONDER. REINTENTE.');throw e}
+  finally{clearTimeout(tm)}
 }
 function armaPersistToken(){try{const t=token();if(t)localStorage.setItem('ARMA_TOKEN',t)}catch(e){}}
 function armaMainStorageIsFresh(maxAgeMs){try{const raw=localStorage.getItem('ARMA_MAIN_ACTIVE')||'';if(!raw)return false;const data=JSON.parse(raw);return !!(data&&data.ts&&(Date.now()-Number(data.ts))<=(maxAgeMs||3500))}catch(e){return false}}
@@ -176,56 +186,43 @@ function kpiClass(p){if(p==null||!Number.isFinite(Number(p)))return 'neutral';p=
 function isKpiTech(t){t=String(t||'').toUpperCase();return t==='BLOWN'||t==='CAST'}
 function setText(id,v){const e=$(id);if(e)e.textContent=v}
 function setKpiCard(prefix,obj,label){
-  obj=obj||{};const total=obj.total||{};const bad=total.quality&&total.quality.critical>0;
-  const card=$(prefix+'Card');if(card)card.className='kpi priority '+(bad?'bad':kpiClass(total.pct));
-  setText(prefix,bad?'REVISAR':fmtPct(total.pct));
-  const bp=obj.byPlant||{};
-  ['PLANTA 1','PLANTA 2','PLANTA 3'].forEach((p,i)=>{const x=bp[p]||{},q=x.quality||{};setText(prefix+'P'+(i+1),q.critical>0?'REVISAR':fmtPct(x.pct))});
-  let note=label||'';
-  if(bad)note+=' // DEPURADO '+fmtPct(total.pctDepurado)+' // RAW '+fmtPct(total.pctRaw);
-  setText(prefix+'Label',note);
+  obj=obj||{};const total=obj.total||{},q=total.quality||{};const card=$(prefix+'Card');if(card)card.className='kpi priority '+kpiClass(total.pct);
+  setText(prefix,fmtPct(total.pct));
+  const bp=obj.byPlant||{};['PLANTA 1','PLANTA 2','PLANTA 3'].forEach((p,i)=>{const x=bp[p]||{};setText(prefix+'P'+(i+1),fmtPct(x.pct))});
+  let note=label||'';if(q.critical)note+=' // '+q.critical+' DATO(S) EXCL. // RAW '+fmtPct(total.rawPct);else if(q.warnings)note+=' // '+q.warnings+' AVISO(S)';setText(prefix+'Label',note);
 }
 function sectionRank(t){t=String(t||'').toUpperCase();if(t==='BLOWN'||t==='CAST')return 1;if(t==='CORTE')return 2;if(t==='REPELETIZADO')return 3;return 4}
 function plantRank(p){p=String(p||'').toUpperCase();if(p==='PLANTA 1')return 1;if(p==='PLANTA 2')return 2;if(p==='PLANTA 3')return 3;return 4}
 function techRank(t){t=String(t||'').toUpperCase();if(t==='BLOWN')return 1;if(t==='CAST')return 2;if(t==='CORTE')return 3;if(t==='REPELETIZADO')return 4;return 5}
-let state=null,rowByKey={};
+let state=null,rowByKey={},loadingTimer=null,loadingStarted=0;
+function setLoading(on,msg){const o=$('loadingOverlay');if(!o)return;if(on){loadingStarted=Date.now();o.classList.add('show');setText('loadingDetail',msg||'CONSULTANDO ARMA...');clearInterval(loadingTimer);loadingTimer=setInterval(()=>{const sec=Math.round((Date.now()-loadingStarted)/1000);setText('loadingDetail',(msg||'CONSULTANDO ARMA...')+' // '+sec+' S')},1000)}else{clearInterval(loadingTimer);o.classList.remove('show')}}
 function mapByCode(){const m={};(state.maps||[]).forEach(x=>m[String(x.CDG_MQN_DATAPEL)]=x);return m}
 function metaForCode(c,rows,maps){const first=rows.find(r=>String(r.CDG_MQN_DATAPEL)===String(c))||{};return maps[String(c)]||first||{}}
 function fillFilters(){
-  const keepM=$('machine').value,keepP=$('plant').value,keepS=$('mapState').value;const maps=(state.maps||[]).slice();
+  const keepM=$('machine').value,keepP=$('plant').value;const maps=(state.maps||[]).slice();
   const plants=(state.filterOptions&&state.filterOptions.plants)||['PLANTA 1','PLANTA 2','PLANTA 3','SIN CLASIFICAR'];
   $('plant').innerHTML='<option value="">TODAS</option>'+plants.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
   if([...$('plant').options].some(o=>o.value===keepP))$('plant').value=keepP;
   maps.sort((a,b)=>sectionRank(a.TECNOLOGIA)-sectionRank(b.TECNOLOGIA)||plantRank(a.PLANTA)-plantRank(b.PLANTA)||techRank(a.TECNOLOGIA)-techRank(b.TECNOLOGIA)||String(a.NOMBRE_ARMA||a.NOMBRE_DATAPEL).localeCompare(String(b.NOMBRE_ARMA||b.NOMBRE_DATAPEL)));
   $('machine').innerHTML='<option value="">TODAS</option>'+maps.filter(x=>String(x.ESTADO_MAPEO||'')!=='IGNORAR').map(x=>`<option value="${esc(x.CDG_MQN_DATAPEL)}">${esc(x.PLANTA||'')} // ${esc(x.TECNOLOGIA||'')} // ${esc(x.NOMBRE_ARMA||x.NOMBRE_DATAPEL)}</option>`).join('');
   if([...$('machine').options].some(o=>o.value===keepM))$('machine').value=keepM;
-  const statuses=[...new Set(maps.map(x=>String(x.ESTADO_MAPEO||'')).filter(Boolean))].sort();
-  $('mapState').innerHTML='<option value="">TODOS</option>'+statuses.map(x=>`<option>${esc(x)}</option>`).join('');
-  if([...$('mapState').options].some(o=>o.value===keepS))$('mapState').value=keepS;
 }
 function renderFreshness(){
-  const f=state.freshness||{},lag=f.lagDays,card=$('freshCard');
-  setText('freshDate',f.latestDate||'SIN DATOS');
-  if(lag===0){card.className='side-info';setText('freshText','ARMA AL DIA CON PRD_DIARIO.')}
-  else if(lag==null){card.className='side-info bad';setText('freshText','NO SE PUDO DETERMINAR COBERTURA.')}
-  else{card.className=lag>=2?'side-info bad':'side-info warn';setText('freshText','RETRASO APARENTE: '+lag+' DIA'+(lag===1?'':'S')+'. VERIFICAR IDP.DBf.')}
+  const f=state.freshness||{},lag=f.lagDays,card=$('freshCard');setText('freshDate',f.latestDate||'SIN DATOS');
+  if(lag===0){card.className='mini-info';setText('freshText','ARMA AL DIA CON PRD_DIARIO.')}else if(lag==null){card.className='mini-info bad';setText('freshText','NO SE PUDO DETERMINAR COBERTURA.')}else{card.className=lag>=2?'mini-info bad':'mini-info warn';setText('freshText','RETRASO: '+lag+' DIA'+(lag===1?'':'S')+'. VERIFICAR IDP.DBF.')} 
 }
 function renderQuality(){
-  const q=state.dataQuality||{},b=$('qualityBanner'),n=num(q.critical)+num(q.warnings);
-  b.className='quality-banner'+(q.critical?' bad':(q.warnings?' warn':''));
-  setText('qualityCount',q.critical?`${q.critical} CRITICAS / ${q.warnings} AVISOS`:(q.warnings?`${q.warnings} AVISOS`:'0 ALERTAS'));
-  $('qualityCount').className='pill '+(q.critical?'bad':(q.warnings?'pending':'ok'));
-  if(q.critical){setText('qualityTitle','ALERTA DE CALIDAD DE DATO');setText('qualityText','HAY PRODUCCIONES COMPATIBLES CON ERROR DE ESCALA. NO SE CORRIGEN AUTOMATICAMENTE. LOS KPI AFECTADOS SE MARCAN REVISAR.')}
-  else if(q.warnings){setText('qualityTitle','CALIDAD DE DATO | ADVERTENCIAS');setText('qualityText','EXISTEN VALORES ATIPICOS O DESPERDICIOS EXTREMOS PARA REVISAR.')}
-  else{setText('qualityTitle','CALIDAD DE DATO');setText('qualityText','SIN ALERTAS ACTIVAS EN EL PERIODO SELECCIONADO.')}
+  const q=state.dataQuality||{},b=$('qualityBanner');b.className='quality-banner'+(q.critical?' bad':(q.warnings?' warn':''));
+  setText('qualityCount',q.critical?`${q.critical} CRITICAS / ${q.warnings} AVISOS`:(q.warnings?`${q.warnings} AVISOS`:'0 ALERTAS'));$('qualityCount').className='pill '+(q.critical?'bad':(q.warnings?'pending':'ok'));
+  if(q.critical){setText('qualityTitle','CALIDAD DE DATO | REVISAR');setText('qualityText','SE DETECTARON POSIBLES ERRORES DE ESCALA. EL KPI DEPURADO LOS EXCLUYE; EL VALOR ORIGINAL SE CONSERVA PARA AUDITORIA.')}else if(q.warnings){setText('qualityTitle','CALIDAD DE DATO | ADVERTENCIAS');setText('qualityText','EXISTEN DESPERDICIOS O VALORES ATIPICOS PARA REVISAR.')}else{setText('qualityTitle','CALIDAD DE DATO');setText('qualityText','SIN ALERTAS ACTIVAS EN EL PERIODO SELECCIONADO.')} 
 }
 function renderSummary(){
   const s=state.summary||{},bp=s.byPlant||{};
   setText('kKg',fmtKg(s.kgProducidos));setText('kKgP1',fmtKg((bp['PLANTA 1']||{}).kgProducidos));setText('kKgP2',fmtKg((bp['PLANTA 2']||{}).kgProducidos));setText('kKgP3',fmtKg((bp['PLANTA 3']||{}).kgProducidos));
   setText('kWaste',fmtKg(s.kgDesperdicio));setText('kWasteP1',fmtKg((bp['PLANTA 1']||{}).kgDesperdicio));setText('kWasteP2',fmtKg((bp['PLANTA 2']||{}).kgDesperdicio));setText('kWasteP3',fmtKg((bp['PLANTA 3']||{}).kgDesperdicio));
-  setText('kMachines',fmtInt(s.maquinas));setText('kMachinesP1',fmtInt((bp['PLANTA 1']||{}).maquinas));setText('kMachinesP2',fmtInt((bp['PLANTA 2']||{}).maquinas));setText('kMachinesP3',fmtInt((bp['PLANTA 3']||{}).maquinas));
-  setText('kZero',fmtInt(s.celdasCero));setText('kZeroP1',fmtInt((bp['PLANTA 1']||{}).celdasCero));setText('kZeroP2',fmtInt((bp['PLANTA 2']||{}).celdasCero));setText('kZeroP3',fmtInt((bp['PLANTA 3']||{}).celdasCero));
-  const w=state.wasteKpi||{};setKpiCard('kpiDay',w.diario,w.diario&&w.diario.fecha);setKpiCard('kpiMonth',w.mensual,w.mensual&&w.mensual.mes);setKpiCard('kpiYear',w.anual,w.anual&&w.anual.anio);
+  setText('kProdPct',fmtPct(s.pctProduccion));setText('kProdPctP1',fmtPct((bp['PLANTA 1']||{}).pctProduccion));setText('kProdPctP2',fmtPct((bp['PLANTA 2']||{}).pctProduccion));setText('kProdPctP3',fmtPct((bp['PLANTA 3']||{}).pctProduccion));
+  setText('kWastePct',fmtPct(s.pctDesperdicio));setText('kWastePctP1',fmtPct((bp['PLANTA 1']||{}).pctDesperdicio));setText('kWastePctP2',fmtPct((bp['PLANTA 2']||{}).pctDesperdicio));setText('kWastePctP3',fmtPct((bp['PLANTA 3']||{}).pctDesperdicio));
+  const w=state.wasteKpi||{};setKpiCard('kpiDay',w.diario,(w.diario&&w.diario.fecha)?'ULTIMO DIA BLOWN+CAST '+w.diario.fecha:'SIN DATO BLOWN+CAST');setKpiCard('kpiMonth',w.mensual,w.mensual&&w.mensual.mes);setKpiCard('kpiYear',w.anual,w.anual&&w.anual.anio);
 }
 function machineBadge(m){const st=String(m.ESTADO_MAPEO||'').toUpperCase();return st==='CONFIRMADO'?'<span class="pill ok">MEL CONFIRMADO</span>':'<span class="pill pending">'+esc(st||'SIN MAPEO')+'</span>'}
 function cellHtml(r){
@@ -240,7 +237,7 @@ function cellHtml(r){
   const pct=r.PCT_DESPERDICIO==null?null:Number(r.PCT_DESPERDICIO),cl=kpiClass(pct);
   return `<td class="kgcell ${walert?'bad':cl}" data-k="${key}">${head}<div class="kg-main">${fmtKg(kg)} KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><div class="kg-stop">PARO ${fmtInt(stop)} MIN</div><span class="kg-pct">${fmtPct(pct)}</span></td>`;
 }
-function groupLabel(m){const t=String(m.TECNOLOGIA||'SIN CLASIFICAR').toUpperCase(),p=String(m.PLANTA||'SIN CLASIFICAR').toUpperCase();const s=(t==='BLOWN'||t==='CAST')?'EXTRUSION':t;return s+' // '+p+' // '+t}
+function groupLabel(m){const t=String(m.TECNOLOGIA||'SIN CLASIFICAR').toUpperCase(),p=String(m.PLANTA||'SIN CLASIFICAR').toUpperCase();const sec=(t==='BLOWN'||t==='CAST')?'EXTRUSION':t;return sec+' // '+p}
 function renderMatrix(){
   const dates=isoDates(state.range.desde,state.range.hasta),maps=mapByCode(),rows=state.rows||[];rowByKey={};rows.forEach(r=>rowByKey[String(r.CDG_MQN_DATAPEL)+'|'+String(r.FECHA).slice(0,10)]=r);
   const codes=[...new Set(rows.map(r=>String(r.CDG_MQN_DATAPEL)))];
@@ -265,15 +262,17 @@ function showDetail(r){
 }
 function render(){
   const s=state.session||{};$('userPill').textContent='ARMA // '+(s.user||'')+' // '+(s.nivel||'');$('rangePill').textContent=(state.range.desde||'')+' // '+(state.range.hasta||'');
+  const p=state.performance||{};setText('backendPerf',p.serverMs!=null?('BACKEND '+(Number(p.serverMs)/1000).toFixed(1)+' S // LECTURA '+(Number(p.sheetReadMs||0)/1000).toFixed(1)+' S // '+fmtInt(p.rowsScanned||0)+' FILAS'):'');
   fillFilters();renderFreshness();renderSummary();renderQuality();renderMatrix();
 }
 async function load(initial=false){
+  setLoading(true,initial?'CARGANDO PRODUCCION KG...':'ACTUALIZANDO DATOS...');
   try{
-    const filters=initial?{}:{DESDE:$('desde').value,HASTA:$('hasta').value,PLANTA:$('plant').value,CDG_MQN_DATAPEL:$('machine').value,ESTADO_MAPEO:$('mapState').value};
+    const filters=initial?{}:{DESDE:$('desde').value,HASTA:$('hasta').value,PLANTA:$('plant').value,CDG_MQN_DATAPEL:$('machine').value};
     state=await api('prdKgBootstrap',{filters});
     if(initial){$('desde').value=state.range.desde||'';$('hasta').value=state.range.hasta||''}
     render();
-  }catch(e){showError(e)}
+  }catch(e){showError(e)}finally{setLoading(false)}
 }
 $('refreshBtn').addEventListener('click',()=>load(false));
 load(true);
