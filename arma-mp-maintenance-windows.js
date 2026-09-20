@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 
-const MPW_VERSION='MP_WINDOWS_UI_V1_4_EQUAL_KPI_20260919';
+const MPW_VERSION='MP_WINDOWS_UI_V1_3B_EQUAL_KPI_20260919';
 let MPW_DATA=null;
 let MPW_YEAR=0;
 let MPW_BUSY=false;
@@ -125,28 +125,41 @@ function ensureTopControls(){
   if(old)old.remove();
 
   const labels=['PROYECTOS AÑO','P4 PENDIENTES','P5 PENDIENTES','P4 VENCIDAS'];
-  const labelEls=labels.map(exactTextElement);
-  const parent=commonParent(labelEls);
+  const cards=labels.map(cardFromLabel);
+  const parent=commonParent(cards);
   if(!parent)return false;
 
-  const cards=labelEls.map(function(el){
-    if(!el)return null;
-    let c=el;
-    while(c&&c.parentElement&&c.parentElement!==parent)c=c.parentElement;
-    return c&&c.parentElement===parent?c:null;
-  });
-
-  if(cards.filter(Boolean).length!==4)return false;
-
   parent.classList.add('mpw-kpi-parent');
-  cards.forEach(function(c){
-    c.classList.add('mpw-kpi-card');
-    c.style.setProperty('flex','1 1 0','important');
-    c.style.setProperty('width','0','important');
-    c.style.setProperty('min-width','0','important');
-    c.style.setProperty('max-width','none','important');
-    c.style.setProperty('box-sizing','border-box','important');
+
+  const layoutCards=cards.map(function(card){
+    if(!card)return null;
+    let box=card;
+    while(box.parentElement&&box.parentElement!==parent)box=box.parentElement;
+    return box.parentElement===parent?box:null;
   });
+
+  const uniqueLayoutCards=[...new Set(layoutCards.filter(Boolean))];
+
+  if(uniqueLayoutCards.length===4){
+    layoutCards.forEach(function(box,i){
+      if(!box)return;
+      box.classList.add('mpw-kpi-card');
+      box.style.setProperty('flex','1 1 0','important');
+      box.style.setProperty('width','0','important');
+      box.style.setProperty('min-width','0','important');
+      box.style.setProperty('max-width','none','important');
+      box.style.setProperty('box-sizing','border-box','important');
+
+      const card=cards[i];
+      if(card&&card!==box){
+        card.style.setProperty('width','100%','important');
+        card.style.setProperty('max-width','none','important');
+        card.style.setProperty('box-sizing','border-box','important');
+      }
+    });
+  }else{
+    cards.filter(Boolean).forEach(c=>c.classList.add('mpw-kpi-card'));
+  }
 
   let tools=document.getElementById('mpwTopTools');
   if(!tools){
