@@ -186,4 +186,7 @@ function paintHistory(){const rows=current.history||[];$('historyTable').innerHT
 function bindTabs(){document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.tab-page').forEach(x=>x.classList.remove('on'));b.classList.add('on');$('tab-'+b.dataset.tab).classList.add('on');if(b.dataset.tab==='gantt')setTimeout(()=>paintGantt(),0)}))}
 init();
 </script>
+<!-- ARMA_MP_WINDOWS_V1_START -->
+<script src="arma-mp-maintenance-windows.js?v=20260920"></script>
+<!-- ARMA_MP_WINDOWS_V1_END -->
 </body></html>
