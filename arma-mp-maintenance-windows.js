@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 
-const MPW_VERSION='MP_WINDOWS_UI_V1_3_LAYOUT_POLISH_20260919';
+const MPW_VERSION='MP_WINDOWS_UI_V1_4_EQUAL_KPI_20260919';
 let MPW_DATA=null;
 let MPW_YEAR=0;
 let MPW_BUSY=false;
@@ -83,7 +83,7 @@ function ensureStyle(){
   .mpw-action.toggle{flex:0 0 128px;min-width:128px}.mpw-action.toggle.on{background:#16a34a}.mpw-action.toggle.off{background:#64748b}
   .mpw-action:hover{filter:brightness(1.05)}.mpw-action:disabled{opacity:.6;cursor:wait}
   .mpw-kpi-parent{display:flex!important;align-items:stretch!important;justify-content:flex-end!important;gap:10px!important;flex-wrap:nowrap!important}
-  .mpw-kpi-card{flex:1 1 0!important;min-width:0!important;max-width:none!important}
+  .mpw-kpi-card{flex:1 1 0!important;width:0!important;min-width:0!important;max-width:none!important;box-sizing:border-box!important}
   .mpw-row-badge{display:inline-flex;margin-left:8px;padding:3px 7px;border-radius:999px;font-size:9px;font-weight:950;vertical-align:middle;cursor:pointer}
   .mpw-row-badge.ok{background:#dcfce7;color:#166534;border:1px solid #86efac}
   .mpw-row-badge.none{background:#eef2f7;color:#64748b;border:1px solid #d8e2ee}
@@ -125,12 +125,28 @@ function ensureTopControls(){
   if(old)old.remove();
 
   const labels=['PROYECTOS AÑO','P4 PENDIENTES','P5 PENDIENTES','P4 VENCIDAS'];
-  const cards=labels.map(cardFromLabel);
-  const parent=commonParent(cards);
+  const labelEls=labels.map(exactTextElement);
+  const parent=commonParent(labelEls);
   if(!parent)return false;
 
+  const cards=labelEls.map(function(el){
+    if(!el)return null;
+    let c=el;
+    while(c&&c.parentElement&&c.parentElement!==parent)c=c.parentElement;
+    return c&&c.parentElement===parent?c:null;
+  });
+
+  if(cards.filter(Boolean).length!==4)return false;
+
   parent.classList.add('mpw-kpi-parent');
-  cards.filter(Boolean).forEach(c=>c.classList.add('mpw-kpi-card'));
+  cards.forEach(function(c){
+    c.classList.add('mpw-kpi-card');
+    c.style.setProperty('flex','1 1 0','important');
+    c.style.setProperty('width','0','important');
+    c.style.setProperty('min-width','0','important');
+    c.style.setProperty('max-width','none','important');
+    c.style.setProperty('box-sizing','border-box','important');
+  });
 
   let tools=document.getElementById('mpwTopTools');
   if(!tools){
