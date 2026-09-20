@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 
-const MPW_VERSION='MP_WINDOWS_UI_V1_3D_KPI_DETECTOR_20260919';
+const MPW_VERSION='MP_WINDOWS_UI_V1_3E_KPI_ID_ANCHORED_20260920';
 let MPW_DATA=null;
 let MPW_YEAR=0;
 let MPW_BUSY=false;
@@ -90,6 +90,24 @@ function findVisualKpiCard(label){
 
   return best||cardFromLabel(label);
 }
+
+function kpiCardById(id,label){
+  const value=document.getElementById(id);
+  if(value){
+    if(value.closest){
+      const native=value.closest('.kpi');
+      if(native)return native;
+    }
+    let p=value.parentElement;
+    while(p&&p!==document.body){
+      const t=norm(p.textContent);
+      const r=p.getBoundingClientRect();
+      if(t.includes(norm(label))&&r.width>=70&&r.height>=45&&r.height<=180)return p;
+      p=p.parentElement;
+    }
+  }
+  return findVisualKpiCard(label);
+}
 function commonParent(nodes){
   const valid=nodes.filter(Boolean);
   if(valid.length<2)return valid[0]?valid[0].parentElement:null;
@@ -156,8 +174,9 @@ function ensureTopControls(){
   const old=document.getElementById('mpwToolbar');
   if(old)old.remove();
 
-  const labels=['PROYECTOS AÑO','P4 PENDIENTES','P5 PENDIENTES','P4 VENCIDAS'];
-  const cards=labels.map(findVisualKpiCard);
+  const specs=[['kProjects','PROYECTOS AÑO'],['kP4','P4 PENDIENTES'],['kP5','P5 PENDIENTES'],['kP4Over','P4 VENCIDAS']];
+  const cards=specs.map(x=>kpiCardById(x[0],x[1]));
+  if(cards.some(c=>!c))return false;
 
   let kpiBox=document.getElementById('mpwKpiBox');
   let parent=(kpiBox&&kpiBox.parentElement)?kpiBox.parentElement:commonParent(cards);
