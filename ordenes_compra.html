@@ -1,0 +1,334 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#004b9b">
+<title>ARMA | Órdenes de Compra</title>
+<link rel="manifest" href="manifest.webmanifest">
+<script src="arma-pwa-navigation.js" defer></script>
+<style>
+:root{--navy:#002b66;--blue:#004b9b;--blue2:#087fce;--cyan:#00a8bd;--green:#159447;--green2:#55b52e;--red:#c62828;--orange:#d97706;--purple:#6d28d9;--line:#d8e3ef;--bg:#edf3f9;--muted:#64748b;--white:#fff;--shadow:0 12px 30px rgba(0,43,102,.10)}
+*{box-sizing:border-box}
+html{zoom:90%}
+@media(max-width:900px){html{zoom:100%}}
+body{margin:0;background:var(--bg);font-family:Segoe UI,Arial,sans-serif;color:#0f172a;text-transform:uppercase}
+.hidden{display:none!important}
+.top-global{position:sticky;top:0;z-index:40;background:#fff;box-shadow:0 8px 20px rgba(0,43,102,.12)}
+.top-white{min-height:106px;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.blue-line{height:5px;background:linear-gradient(90deg,#00376f,#006bb9,#00a8bd)}
+.brand-row{display:flex;align-items:center;gap:20px}
+.brand-separator{width:1px;height:64px;background:#d8e5f2}
+.logo-pelex{height:70px;max-width:250px;object-fit:contain}
+.logo-arma{height:78px;max-width:350px;object-fit:contain}
+.top-title{text-align:right}
+.top-title strong{display:block;color:var(--navy);font-size:24px;font-weight:950}
+.top-title span{display:block;color:var(--muted);font-size:11px;font-weight:900;margin-top:5px}
+.user-pill{display:inline-flex;margin-top:8px;background:#f8fbff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--navy);font-size:11px;font-weight:900}
+main{width:min(1780px,100%);margin:0 auto;padding:14px 24px 28px}
+.hero{position:relative;overflow:hidden;padding:14px 20px;border-radius:18px;margin-bottom:12px;color:#fff;display:grid;grid-template-columns:minmax(0,1fr) minmax(195px,220px);gap:14px;align-items:center;box-shadow:0 14px 28px rgba(0,43,102,.14);background:linear-gradient(125deg,#00376f,#006bb9 58%,#0094d5)}
+.hero h1{margin:0 0 4px;font-size:28px}
+.hero p{margin:0;font-size:11px;font-weight:850;line-height:1.45}
+.index-nav-card{position:relative;display:inline-flex;align-items:center;gap:10px;min-width:195px;min-height:64px;padding:10px 14px;border-radius:16px;background:linear-gradient(180deg,#fff,#f8fbff);border:1px solid #dbe5f0;text-decoration:none;color:#002b66;box-shadow:0 10px 22px rgba(0,43,102,.10)}
+.nav-icon{width:46px;height:46px;border-radius:14px;background:#e8f2ff;border:1px solid #dbe5f0;display:grid;place-items:center}
+.nav-icon img{width:34px;height:34px;object-fit:contain}
+.nav-text{display:flex;flex-direction:column}
+.nav-text strong{font-size:16px;font-weight:950}
+.nav-text span{font-size:9px;font-weight:900;color:#008c2e;margin-top:5px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:14px}
+.filters{display:grid;grid-template-columns:140px 140px minmax(180px,1fr) minmax(180px,1fr) 160px 120px;gap:9px;align-items:end;margin-bottom:12px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:9px;font-weight:950;color:#36536f}
+.field input,.field select{border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:#fff;color:var(--navy);font-weight:850;text-transform:uppercase;min-height:39px}
+.btn{border:0;border-radius:10px;padding:10px 14px;color:#fff;background:linear-gradient(#1688e8,#004b9b);font-weight:950;cursor:pointer;text-transform:uppercase;min-height:39px}
+.btn.green{background:linear-gradient(#2bd36b,#159447)}
+.btn.gray{background:linear-gradient(#94a3b8,#64748b)}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.kpi{border-radius:15px;padding:11px 14px;color:#fff;min-height:72px}
+.kpi span{display:block;font-size:9px;font-weight:950}
+.kpi strong{display:block;font-size:25px;margin-top:4px}
+.kpi.blue{background:linear-gradient(135deg,#003b80,#087fce)}
+.kpi.green{background:linear-gradient(135deg,#08733f,#2bbf68)}
+.kpi.orange{background:linear-gradient(135deg,#a84e06,#ef8f13)}
+.kpi.purple{background:linear-gradient(135deg,#5631a8,#8b5cf6)}
+.kpi.red{background:linear-gradient(135deg,#8f1d2c,#dc3545)}
+.notice{border-left:4px solid #0ea5e9;background:#eef8ff;padding:10px 12px;border-radius:10px;font-size:10px;font-weight:850;color:#17436f;margin-bottom:10px}
+.notice.orange{border-left-color:#f59e0b;background:#fff7ed;color:#9a4d00}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}
+.table{width:100%;border-collapse:collapse;background:#fff;font-size:10px}
+.table th{position:sticky;top:0;z-index:2;background:#0d67a4;color:#fff;padding:9px;border-right:1px solid rgba(255,255,255,.2);text-align:left;white-space:nowrap}
+.table td{padding:8px;border-right:1px solid #e4edf6;border-bottom:1px solid #e4edf6;vertical-align:top}
+.table tr:hover td{background:#f4faff;cursor:pointer}
+.pill{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:9px;font-weight:950}
+.pill.pending{background:#fff4d6;color:#9a5a00}
+.pill.ok{background:#dcfce7;color:#08733f}
+.pill.info{background:#dbeafe;color:#004b9b}
+.muted{color:var(--muted)}
+.money{text-align:right;font-variant-numeric:tabular-nums}
+.footer{margin-top:14px;background:#003b80;color:#fff;border-radius:14px;text-align:center;padding:10px 12px;font-size:9px;font-weight:900}
+.drawer-back{position:fixed;inset:0;background:rgba(0,25,60,.46);display:none;z-index:90}
+.drawer-back.show{display:block}
+.drawer{position:fixed;right:0;top:0;height:100%;width:min(690px,96vw);background:#fff;box-shadow:-12px 0 35px rgba(0,0,0,.28);transform:translateX(102%);transition:.2s;z-index:100;padding:20px;overflow:auto}
+.drawer.open{transform:translateX(0)}
+.drawer-head{display:flex;justify-content:space-between;gap:12px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
+.drawer h2{margin:0;color:var(--navy)}
+.route{display:grid;gap:8px;margin:14px 0}
+.step{padding:11px 12px;border-left:5px solid #cbd5e1;background:#f8fafc;border-radius:9px}
+.step.done{border-color:#22a45a}
+.step.pending{border-color:#d99a00}
+.step b{display:block;color:var(--navy);margin-bottom:4px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.detail-box{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fbfdff}
+.detail-box span{display:block;font-size:8px;color:var(--muted);font-weight:900}
+.detail-box strong{display:block;color:var(--navy);margin-top:4px}
+.arma-loader{position:fixed;inset:0;background:rgba(2,6,23,.48);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.arma-loader.hidden{display:none!important}
+.arma-loader-box{width:min(390px,92vw);background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 28px 70px rgba(0,0,0,.32);padding:24px;text-align:center;color:var(--navy)}
+.arma-spinner{width:54px;height:54px;border:6px solid #dbeafe;border-top-color:var(--blue2);border-radius:50%;margin:0 auto 14px;animation:armaSpin .8s linear infinite}
+@keyframes armaSpin{to{transform:rotate(360deg)}}
+@media(max-width:1100px){.filters{grid-template-columns:1fr 1fr 1fr}.kpis{grid-template-columns:repeat(2,1fr)}.top-global{position:relative}}
+@media(max-width:700px){.top-white{flex-direction:column}.brand-row{width:100%;justify-content:center}.logo-pelex{height:48px;max-width:42vw}.logo-arma{height:52px;max-width:46vw}.top-title{text-align:center}.hero{grid-template-columns:1fr}.filters{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.detail-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="armaLoader" class="arma-loader">
+  <div class="arma-loader-box">
+    <div class="arma-spinner"></div>
+    <h2 id="armaLoaderText">CARGANDO COMPRAS...</h2>
+    <p>ARMA ESTÁ CONSULTANDO LOS DATASETS SINCRONIZADOS DESDE DATAPEL.</p>
+  </div>
+</div>
+
+<header class="top-global">
+  <div class="top-white">
+    <div class="brand-row">
+      <img src="logo_pelex.bmp" alt="PELEX" class="logo-pelex">
+      <div class="brand-separator"></div>
+      <img src="ARMA%20logo%202.png" alt="ARMA" class="logo-arma">
+    </div>
+    <div class="top-title">
+      <strong>SOPORTE Y CONTROL EXTERNO | ÓRDENES DE COMPRA</strong>
+      <span>TRAZABILIDAD SR / OC / REMISIÓN / ENTRADA / FACTURA / PAGO</span>
+      <div id="userPill" class="user-pill">ARMA // VALIDANDO SESIÓN</div>
+    </div>
+  </div>
+  <div class="blue-line"></div>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <h1>ÓRDENES DE COMPRA</h1>
+      <p>CONTROL AUDITABLE DE LA RUTA DE COMPRA. ARMA SOLO MARCA COMO CONFIRMADA UNA ETAPA CUANDO EXISTE EVIDENCIA EN LOS DATASETS SINCRONIZADOS.</p>
+    </div>
+    <a class="index-nav-card" href="main.html" onclick="return goMain(event)">
+      <div class="nav-icon"><img src="boton-de-inicio.png" alt="INICIO"></div>
+      <div class="nav-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></div>
+    </a>
+  </section>
+
+  <div id="freshness" class="notice orange">FUENTE DATAPEL: VALIDANDO FRESCURA...</div>
+
+  <section class="kpis">
+    <div class="kpi blue"><span>ÓRDENES EN FILTRO</span><strong id="kOrders">0</strong></div>
+    <div class="kpi green"><span>CON ENTRADA</span><strong id="kEntry">0</strong></div>
+    <div class="kpi purple"><span>CON FACTURA</span><strong id="kInvoice">0</strong></div>
+    <div class="kpi orange"><span>SIN ENTRADA</span><strong id="kNoEntry">0</strong></div>
+    <div class="kpi red"><span>VALOR BASE OC</span><strong id="kValue">$0</strong></div>
+  </section>
+
+  <section class="card">
+    <div class="filters">
+      <div class="field"><label>DESDE</label><input id="from" type="date"></div>
+      <div class="field"><label>HASTA</label><input id="to" type="date"></div>
+      <div class="field"><label>DEPARTAMENTO</label><select id="department"><option value="">TODOS</option></select></div>
+      <div class="field"><label>PROVEEDOR</label><input id="provider" placeholder="NOMBRE O NIT"></div>
+      <div class="field"><label>ESTADO ENTRADA</label><select id="entryState"><option value="">TODAS</option><option value="CON_ENTRADA">CON ENTRADA</option><option value="SIN_ENTRADA">SIN ENTRADA</option></select></div>
+      <button id="refreshBtn" class="btn" type="button">ACTUALIZAR</button>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>OC</th>
+            <th>FECHA</th>
+            <th>DEPARTAMENTO</th>
+            <th>PROVEEDOR</th>
+            <th>USUARIO</th>
+            <th>ÍTEMS</th>
+            <th>VALOR BASE</th>
+            <th>ENTRADAS</th>
+            <th>FACTURA / REMISIÓN</th>
+            <th>RUTA</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="footer">ARMA // COMPRAS V01.0 // DATAPEL VIA ARMA_DATAPEL_DATA // TRAZABILIDAD AUDITABLE</footer>
+</main>
+
+<div id="drawerBack" class="drawer-back" onclick="closeDrawer()"></div>
+<aside id="drawer" class="drawer">
+  <div class="drawer-head">
+    <div><h2 id="drawerTitle">OC</h2><div id="drawerSub" class="muted"></div></div>
+    <button class="btn gray" onclick="closeDrawer()">CERRAR</button>
+  </div>
+  <div id="drawerBody"></div>
+</aside>
+
+<script>
+const API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
+const $=id=>document.getElementById(id);
+const token=()=>localStorage.getItem('ARMA_TOKEN')||sessionStorage.getItem('ARMA_TOKEN')||'';
+const esc=v=>{const d=document.createElement('div');d.textContent=String(v==null?'':v);return d.innerHTML};
+const num=v=>{const n=Number(String(v==null?'':v).replace(',','.'));return Number.isFinite(n)?n:0};
+const money=v=>num(v).toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
+
+async function api(action,payload={}){
+  const t=token();
+  if(!t)throw new Error('SESIÓN ARMA NO DISPONIBLE. INGRESE DESDE MAIN.');
+  const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action:action,token:t},payload))});
+  const j=await r.json();
+  if(!j||j.ok!==true)throw new Error((j&&j.detail)||(j&&j.error)||'ERROR BACKEND ARMA');
+  return j;
+}
+
+function setLoading(on,text){
+  $('armaLoader').classList.toggle('hidden',!on);
+  if(text)$('armaLoaderText').textContent=text;
+}
+
+function armaPersistToken(){try{const t=token();if(t)localStorage.setItem('ARMA_TOKEN',t)}catch(e){}}
+function armaMainStorageIsFresh(maxAgeMs){try{const raw=localStorage.getItem('ARMA_MAIN_ACTIVE')||'';if(!raw)return false;const data=JSON.parse(raw);return !!(data&&data.ts&&(Date.now()-Number(data.ts))<=(maxAgeMs||3500))}catch(e){return false}}
+function armaAskMainIsActive(){return new Promise(resolve=>{let done=false,bc=null;const finish=v=>{if(done)return;done=true;try{if(bc)bc.close()}catch(e){}resolve(!!v)};try{if('BroadcastChannel'in window){bc=new BroadcastChannel('ARMA_CONTROL_CHANNEL');bc.onmessage=ev=>{const m=ev.data||{};if(m.type==='MAIN_ACTIVE')finish(true)};bc.postMessage({type:'FOCUS_MAIN',from:location.href,ts:Date.now()})}}catch(e){}try{localStorage.setItem('ARMA_REQUEST_MAIN_FOCUS',String(Date.now()))}catch(e){}if(armaMainStorageIsFresh(3500))setTimeout(()=>finish(true),120);setTimeout(()=>finish(false),650)})}
+function goMain(e){if(e&&e.preventDefault)e.preventDefault();armaPersistToken();armaAskMainIsActive().then(active=>{if(active){try{if(window.opener&&!window.opener.closed)window.opener.focus()}catch(err){}try{window.close()}catch(err){}}else window.location.href='main.html'});return false}
+
+let state=null;
+
+function fillFilters(){
+  const current=$('department').value;
+  $('department').innerHTML='<option value="">TODOS</option>'+(state.filters.departments||[]).map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+  if([...$('department').options].some(o=>o.value===current))$('department').value=current;
+}
+
+function render(){
+  const s=state.summary||{};
+  $('userPill').textContent='ARMA // '+(state.session.user||'')+' // '+(state.session.nivel||'');
+  $('freshness').textContent='DATAPEL SINCRONIZADO HASTA: '+(state.freshness||'SIN FECHA')+' // VENTANA '+(state.range.desde||'')+' A '+(state.range.hasta||'');
+  $('kOrders').textContent=s.ordenes||0;
+  $('kEntry').textContent=s.conEntrada||0;
+  $('kInvoice').textContent=s.conFactura||0;
+  $('kNoEntry').textContent=s.sinEntrada||0;
+  $('kValue').textContent=money(s.valorBase||0);
+  fillFilters();
+
+  const rows=state.rows||[];
+  $('rows').innerHTML=rows.length?rows.map(r=>{
+    const evidence=r.FACTURAS||r.REMISIONES||r.DOCUMENTOS||'—';
+    const entryChip=r.ENTRADAS>0?'<span class="pill ok">ENTRADA ?</span>':'<span class="pill pending">ENTRADA ?</span>';
+    const invoiceChip=r.FACTURAS?'<span class="pill ok">FACTURA ?</span>':'';
+    return `<tr data-oc="${esc(r.NRO_OC)}">
+      <td><strong>${esc(r.NRO_OC)}</strong></td>
+      <td>${esc(r.FECHA_OC)}</td>
+      <td>${esc(r.DEPARTAMENTO||r.CDG_DPRTMN)}</td>
+      <td><strong>${esc(r.PROVEEDOR||r.NIT_PROV)}</strong><br><span class="muted">${esc(r.NIT_PROV)}</span></td>
+      <td>${esc(r.USUARIO||r.CDG_USR)}</td>
+      <td>${esc(r.ITEMS)}</td>
+      <td class="money">${money(r.VALOR_BASE_OC)}</td>
+      <td>${esc(r.ENTRADAS)}</td>
+      <td>${esc(evidence)}</td>
+      <td><span class="pill info">OC ?</span> ${entryChip} ${invoiceChip}</td>
+    </tr>`;
+  }).join(''):'<tr><td colspan="10" style="text-align:center;padding:24px" class="muted">SIN ÓRDENES PARA EL FILTRO</td></tr>';
+
+  [...document.querySelectorAll('#rows tr[data-oc]')].forEach(tr=>{
+    tr.addEventListener('click',()=>openOc(tr.dataset.oc));
+  });
+}
+
+async function load(initial){
+  try{
+    setLoading(true,'CARGANDO ÓRDENES DE COMPRA...');
+    const filters={
+      DESDE:initial?'':$('from').value,
+      HASTA:initial?'':$('to').value,
+      DEPARTAMENTO:initial?'':$('department').value,
+      PROVEEDOR:initial?'':$('provider').value,
+      ESTADO_ENTRADA:initial?'':$('entryState').value
+    };
+    state=await api('comprasBootstrap',{filters:filters});
+    if(initial){
+      $('from').value=state.range.desde||'';
+      $('to').value=state.range.hasta||'';
+    }
+    render();
+  }catch(e){
+    alert((e&&e.message)||String(e));
+  }finally{
+    setLoading(false);
+  }
+}
+
+async function openOc(nro){
+  try{
+    setLoading(true,'CARGANDO TRAZABILIDAD OC '+nro+'...');
+    const d=await api('comprasDetalle',{nroOc:nro});
+    const oc=d.oc||{};
+    const items=d.items||[];
+    const entries=d.entries||[];
+    const hasEntry=entries.length>0;
+    const invoices=[...new Set(entries.map(x=>String(x.NMR_FCTR||'').trim()).filter(Boolean))];
+    const rems=[...new Set(entries.map(x=>String(x.RMS||'').trim()).filter(Boolean))];
+
+    $('drawerTitle').textContent='OC '+nro;
+    $('drawerSub').textContent=(oc.PROVEEDOR||oc.NIT_PROV||'')+' // '+(oc.DEPARTAMENTO||oc.CDG_DPRTMN||'');
+
+    const itemsHtml=items.length?items.map(i=>`<tr><td>${esc(i.NMR_ITM)}</td><td>${esc(i.COD_MP)}</td><td>${esc(i.ESPCFCCN)}</td><td class="money">${esc(i.CTD_MP)}</td><td class="money">${money(i.VLR_OC)}</td><td class="money">${money(num(i.CTD_MP)*num(i.VLR_OC))}</td></tr>`).join(''):'<tr><td colspan="6">SIN ÍTEMS</td></tr>';
+    const entriesHtml=entries.length?entries.map(e=>`<tr><td>${esc(e.NRO_ENT)}</td><td>${esc(e.FCH_ENT)}</td><td>${esc(e.NRO_DOC)}</td><td>${esc(e.RMS)}</td><td>${esc(e.NMR_FCTR)}</td><td>${esc(e.PRVDR||e.NIT_PROV)}</td></tr>`).join(''):'<tr><td colspan="6">SIN ENTRADAS</td></tr>';
+
+    $('drawerBody').innerHTML=`
+      <div class="detail-grid">
+        <div class="detail-box"><span>FECHA OC</span><strong>${esc(oc.FECHA_OC)}</strong></div>
+        <div class="detail-box"><span>ENTREGA PREVISTA</span><strong>${esc(oc.FECHA_ENTR_PREV)}</strong></div>
+        <div class="detail-box"><span>PROVEEDOR</span><strong>${esc(oc.PROVEEDOR||oc.NIT_PROV)}</strong></div>
+        <div class="detail-box"><span>USUARIO DATAPEL</span><strong>${esc(oc.USUARIO||oc.CDG_USR)}</strong></div>
+      </div>
+
+      <div class="route">
+        <div class="step pending"><b>1. OT / SR / REQUISICIÓN</b>PENDIENTE VALIDAR LA CLAVE EXACTA ENTRE ARMA Y DATAPEL.</div>
+        <div class="step done"><b>2. ORDEN DE COMPRA</b>CONFIRMADA EN DATAPEL.</div>
+        <div class="step ${hasEntry?'done':'pending'}"><b>3. REMISIÓN / ENTRADA ALMACÉN</b>${hasEntry?'EVIDENCIA EN ENT_ALM.DBF. REMISIÓN: '+esc(rems.join(' | ')||'SIN RMS'):'SIN ENTRADA VINCULADA EN LA VENTANA.'}</div>
+        <div class="step ${invoices.length?'done':'pending'}"><b>4. FACTURA</b>${invoices.length?'FACTURA(S): '+esc(invoices.join(' | ')):'SIN FACTURA VINCULADA.'}</div>
+        <div class="step pending"><b>5. VALIDACIÓN / PAGO</b>SIN FUENTE CONTABLE DE PAGO VALIDADA. ARMA NO INFIERE ESTE ESTADO.</div>
+      </div>
+
+      <h3 style="color:#002b66">ÍTEMS DE LA OC</h3>
+      <div class="table-wrap"><table class="table"><thead><tr><th>ÍTEM</th><th>CÓDIGO</th><th>ESPECIFICACIÓN</th><th>CANTIDAD</th><th>VALOR UNIT.</th><th>BASE</th></tr></thead><tbody>${itemsHtml}</tbody></table></div>
+
+      <h3 style="color:#002b66;margin-top:16px">ENTRADAS / DOCUMENTOS</h3>
+      <div class="table-wrap"><table class="table"><thead><tr><th>ENTRADA</th><th>FECHA</th><th>DOCUMENTO</th><th>REMISIÓN</th><th>FACTURA</th><th>PROVEEDOR</th></tr></thead><tbody>${entriesHtml}</tbody></table></div>
+    `;
+
+    $('drawer').classList.add('open');
+    $('drawerBack').classList.add('show');
+  }catch(e){
+    alert((e&&e.message)||String(e));
+  }finally{
+    setLoading(false);
+  }
+}
+
+function closeDrawer(){
+  $('drawer').classList.remove('open');
+  $('drawerBack').classList.remove('show');
+}
+
+$('refreshBtn').addEventListener('click',()=>load(false));
+load(true);
+</script>
+</body>
+</html>
