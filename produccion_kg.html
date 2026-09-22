@@ -40,7 +40,7 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
 .dashboard{min-width:0}.kpi-priority{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:10px}
 .kpi-secondary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:10px}
 .kpi{position:relative;border-radius:16px;padding:14px;color:#fff;min-height:134px;box-shadow:0 10px 20px rgba(15,23,42,.10);overflow:hidden}
-.kpi.priority{min-height:158px}.kpi>span{display:block;font-size:9px;font-weight:950;opacity:.95}.kpi>strong{display:block;font-size:27px;margin-top:5px;max-width:58%}.kpi-formula{position:absolute;right:14px;top:13px;max-width:42%;text-align:right;font-size:8px;line-height:1.3;font-weight:900;opacity:.82;letter-spacing:.1px}.kpi-formula small{display:block;font-size:7px;opacity:.9;margin-top:2px}
+.kpi.priority{min-height:206px}.kpi>span{display:block;font-size:9px;font-weight:950;opacity:.95}.kpi>strong{display:block;font-size:27px;margin-top:5px;max-width:58%}.kpi-formula{position:absolute;right:14px;top:13px;max-width:42%;text-align:right;font-size:8px;line-height:1.3;font-weight:900;opacity:.82;letter-spacing:.1px}.kpi-formula small{display:block;font-size:7px;opacity:.9;margin-top:2px}
 .kpi.green{background:linear-gradient(135deg,#08733f,#2bbf68)}.kpi.orange{background:linear-gradient(135deg,#a84e06,#ef8f13)}
 .kpi.blue{background:linear-gradient(135deg,#003b80,#087fce)}.kpi.red{background:linear-gradient(135deg,#8f1d2c,#dc3545)}
 .kpi.good{background:linear-gradient(135deg,#08733f,#2bbf68)}.kpi.warn{background:linear-gradient(135deg,#9b6a00,#e0a400)}
@@ -48,6 +48,9 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
 .kpi-sub{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.28);display:grid;grid-template-columns:repeat(3,1fr);gap:5px;align-items:center;text-align:center}
 .kpi-sub b{display:block;font-size:9px;opacity:.9;text-align:center}.kpi-sub em{display:block;font-style:normal;font-size:13px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;margin-top:2px}
 .kpi-note{display:block;margin-top:6px;font-size:8px;font-weight:850;opacity:.9}
+.kpi-tech{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:8px}
+.tech-kpi{border:1px solid rgba(255,255,255,.36);border-radius:9px;padding:6px 8px;text-align:center;background:rgba(15,23,42,.18)}.tech-kpi b{display:block;font-size:8px;letter-spacing:.3px}.tech-kpi em{display:block;font-style:normal;font-size:14px;font-weight:950;margin-top:2px}
+.tech-kpi.good{background:linear-gradient(135deg,#08733f,#2bbf68)}.tech-kpi.warn{background:linear-gradient(135deg,#9b6a00,#e0a400)}.tech-kpi.bad{background:linear-gradient(135deg,#8f1d2c,#dc3545)}.tech-kpi.neutral{background:linear-gradient(135deg,#475569,#64748b)}
 .info-quality-row{display:grid;grid-template-columns:minmax(280px,.38fr) minmax(0,1fr);gap:10px;margin-bottom:10px}.info-stack{display:grid;grid-template-columns:1fr 1fr;gap:10px}.quality-banner{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid var(--line);border-left:5px solid #0ea5e9;background:#fff;border-radius:14px;padding:9px 12px;box-shadow:var(--shadow);min-height:62px}
 .quality-banner.bad{border-left-color:#c62828;background:#fff1f2}.quality-banner.warn{border-left-color:#d89b00;background:#fffbea}
 .quality-banner strong{color:var(--navy);font-size:11px}.quality-banner span{color:#475569;font-size:9px;font-weight:850}
@@ -122,9 +125,9 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
 
     <div class="dashboard">
       <div class="kpi-priority">
-        <div id="kpiDayCard" class="kpi priority neutral"><span>KPI DESPERDICIO | DIA</span><strong id="kpiDay">N/D</strong><div class="kpi-formula">DESP / (PROD + DESP) X 100<small>SOLO BLOWN + CAST</small></div><span id="kpiDayLabel" class="kpi-note">--</span><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiDayP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiDayP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiDayP3">N/D</em></div></div></div>
-        <div id="kpiMonthCard" class="kpi priority neutral"><span>KPI DESPERDICIO | MES</span><strong id="kpiMonth">N/D</strong><div class="kpi-formula">DESP / (PROD + DESP) X 100<small>SOLO BLOWN + CAST</small></div><span id="kpiMonthLabel" class="kpi-note">--</span><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiMonthP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiMonthP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiMonthP3">N/D</em></div></div></div>
-        <div id="kpiYearCard" class="kpi priority neutral"><span>KPI DESPERDICIO | ANO</span><strong id="kpiYear">N/D</strong><div class="kpi-formula">DESP / (PROD + DESP) X 100<small>SOLO BLOWN + CAST</small></div><span id="kpiYearLabel" class="kpi-note">--</span><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiYearP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiYearP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiYearP3">N/D</em></div></div></div>
+        <div id="kpiDayCard" class="kpi priority neutral"><span>% DESPERDICIO TOTAL EXTRUSIÓN | DIA</span><strong id="kpiDay">N/D</strong><div class="kpi-formula">DESP / (PROD + DESP) X 100<small>CAST + BLOWN</small></div><span id="kpiDayLabel" class="kpi-note">--</span><div class="kpi-tech"><div id="kpiDayCastBox" class="tech-kpi neutral"><b>CAST</b><em id="kpiDayCast">N/D</em></div><div id="kpiDayBlownBox" class="tech-kpi neutral"><b>BLOWN</b><em id="kpiDayBlown">N/D</em></div></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiDayP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiDayP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiDayP3">N/D</em></div></div></div>
+        <div id="kpiMonthCard" class="kpi priority neutral"><span>% DESPERDICIO TOTAL EXTRUSIÓN | MES</span><strong id="kpiMonth">N/D</strong><div class="kpi-formula">DESP / (PROD + DESP) X 100<small>CAST + BLOWN</small></div><span id="kpiMonthLabel" class="kpi-note">--</span><div class="kpi-tech"><div id="kpiMonthCastBox" class="tech-kpi neutral"><b>CAST</b><em id="kpiMonthCast">N/D</em></div><div id="kpiMonthBlownBox" class="tech-kpi neutral"><b>BLOWN</b><em id="kpiMonthBlown">N/D</em></div></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiMonthP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiMonthP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiMonthP3">N/D</em></div></div></div>
+        <div id="kpiYearCard" class="kpi priority neutral"><span>% DESPERDICIO TOTAL EXTRUSIÓN | ANO</span><strong id="kpiYear">N/D</strong><div class="kpi-formula">DESP / (PROD + DESP) X 100<small>CAST + BLOWN</small></div><span id="kpiYearLabel" class="kpi-note">--</span><div class="kpi-tech"><div id="kpiYearCastBox" class="tech-kpi neutral"><b>CAST</b><em id="kpiYearCast">N/D</em></div><div id="kpiYearBlownBox" class="tech-kpi neutral"><b>BLOWN</b><em id="kpiYearBlown">N/D</em></div></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kpiYearP1">N/D</em></div><div><b>PLANTA 2</b><em id="kpiYearP2">N/D</em></div><div><b>PLANTA 3</b><em id="kpiYearP3">N/D</em></div></div></div>
       </div>
 
       <div class="kpi-secondary">
@@ -190,11 +193,13 @@ function setKpiCard(prefix,obj,label){
   obj=obj||{};const total=obj.total||{},q=total.quality||{};const card=$(prefix+'Card');if(card)card.className='kpi priority '+kpiClass(total.pct);
   setText(prefix,fmtPct(total.pct));
   const bp=obj.byPlant||{};['PLANTA 1','PLANTA 2','PLANTA 3'].forEach((p,i)=>{const x=bp[p]||{};setText(prefix+'P'+(i+1),fmtPct(x.pct))});
+  const bt=obj.byTech||{};['CAST','BLOWN'].forEach(t=>{const x=bt[t]||{},id=prefix+(t==='CAST'?'Cast':'Blown'),box=$(id+'Box');setText(id,fmtPct(x.pct));if(box)box.className='tech-kpi '+kpiClass(x.pct)});
   let note=label||'';if(q.critical)note+=' // '+q.critical+' DATO(S) EXCL. // RAW '+fmtPct(total.rawPct);else if(q.warnings)note+=' // '+q.warnings+' AVISO(S)';setText(prefix+'Label',note);
 }
-function sectionRank(t){t=String(t||'').toUpperCase();if(t==='BLOWN'||t==='CAST')return 1;if(t==='CORTE')return 2;if(t==='REPELETIZADO')return 3;return 4}
+function sectionRank(t){t=String(t||'').toUpperCase();if(t==='CAST')return 1;if(t==='BLOWN')return 2;if(t==='REPELETIZADO')return 3;if(t==='CORTE')return 4;return 5}
 function plantRank(p){p=String(p||'').toUpperCase();if(p==='PLANTA 1')return 1;if(p==='PLANTA 2')return 2;if(p==='PLANTA 3')return 3;return 4}
-function techRank(t){t=String(t||'').toUpperCase();if(t==='BLOWN')return 1;if(t==='CAST')return 2;if(t==='CORTE')return 3;if(t==='REPELETIZADO')return 4;return 5}
+function techRank(t){return sectionRank(t)}
+function machineRank(m){const t=String((m&&m.TECNOLOGIA)||'').toUpperCase(),s=String((m&&m.SIIGO_DATAPEL)||'').toUpperCase().replace(/\s+/g,'');if(t==='CAST'){const o={L1:1,L2:2,L3:3,L4:4,L5:5,L6:6,L7:7,L9:8,L10:9,L11:10};return o[s]||90}if(t==='BLOWN'){const o={E4:1,E5:2,E6:3,E7:4};return o[s]||90}return 90}
 let state=null,rowByKey={},loadingTimer=null,loadingStarted=0;
 function setLoading(on,msg){const o=$('loadingOverlay');if(!o)return;if(on){loadingStarted=Date.now();o.classList.add('show');setText('loadingDetail',msg||'CONSULTANDO ARMA...');clearInterval(loadingTimer);loadingTimer=setInterval(()=>{const sec=Math.round((Date.now()-loadingStarted)/1000);setText('loadingDetail',(msg||'CONSULTANDO ARMA...')+' // '+sec+' S')},1000)}else{clearInterval(loadingTimer);o.classList.remove('show')}}
 function mapByCode(){const m={};(state.maps||[]).forEach(x=>m[String(x.CDG_MQN_DATAPEL)]=x);return m}
@@ -204,8 +209,8 @@ function fillFilters(){
   const plants=(state.filterOptions&&state.filterOptions.plants)||['PLANTA 1','PLANTA 2','PLANTA 3','SIN CLASIFICAR'];
   $('plant').innerHTML='<option value="">TODAS</option>'+plants.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
   if([...$('plant').options].some(o=>o.value===keepP))$('plant').value=keepP;
-  maps.sort((a,b)=>sectionRank(a.TECNOLOGIA)-sectionRank(b.TECNOLOGIA)||plantRank(a.PLANTA)-plantRank(b.PLANTA)||techRank(a.TECNOLOGIA)-techRank(b.TECNOLOGIA)||String(a.NOMBRE_ARMA||a.NOMBRE_DATAPEL).localeCompare(String(b.NOMBRE_ARMA||b.NOMBRE_DATAPEL)));
-  $('machine').innerHTML='<option value="">TODAS</option>'+maps.filter(x=>String(x.ESTADO_MAPEO||'')!=='IGNORAR').map(x=>`<option value="${esc(x.CDG_MQN_DATAPEL)}">${esc(x.PLANTA||'')} // ${esc(x.TECNOLOGIA||'')} // ${esc(x.NOMBRE_ARMA||x.NOMBRE_DATAPEL)}</option>`).join('');
+  maps.sort((a,b)=>sectionRank(a.TECNOLOGIA)-sectionRank(b.TECNOLOGIA)||machineRank(a)-machineRank(b)||plantRank(a.PLANTA)-plantRank(b.PLANTA)||String(a.NOMBRE_ARMA||a.NOMBRE_DATAPEL).localeCompare(String(b.NOMBRE_ARMA||b.NOMBRE_DATAPEL)));
+  $('machine').innerHTML='<option value="">TODAS</option>'+maps.filter(x=>!['IGNORAR','BAJA_NO_MAPEAR'].includes(String(x.ESTADO_MAPEO||'').toUpperCase())).map(x=>`<option value="${esc(x.CDG_MQN_DATAPEL)}">${esc(x.PLANTA||'')} // ${esc(x.TECNOLOGIA||'')} // ${esc(x.NOMBRE_ARMA||x.NOMBRE_DATAPEL)}</option>`).join('');
   if([...$('machine').options].some(o=>o.value===keepM))$('machine').value=keepM;
 }
 function renderFreshness(){
@@ -223,7 +228,7 @@ function renderSummary(){
   setText('kWaste',fmtKg(s.kgDesperdicio));setText('kWasteP1',fmtKg((bp['PLANTA 1']||{}).kgDesperdicio));setText('kWasteP2',fmtKg((bp['PLANTA 2']||{}).kgDesperdicio));setText('kWasteP3',fmtKg((bp['PLANTA 3']||{}).kgDesperdicio));
   setText('kProdPct',fmtPct(s.pctProduccion));setText('kProdPctP1',fmtPct((bp['PLANTA 1']||{}).pctProduccion));setText('kProdPctP2',fmtPct((bp['PLANTA 2']||{}).pctProduccion));setText('kProdPctP3',fmtPct((bp['PLANTA 3']||{}).pctProduccion));
   setText('kWastePct',fmtPct(s.pctDesperdicio));setText('kWastePctP1',fmtPct((bp['PLANTA 1']||{}).pctDesperdicio));setText('kWastePctP2',fmtPct((bp['PLANTA 2']||{}).pctDesperdicio));setText('kWastePctP3',fmtPct((bp['PLANTA 3']||{}).pctDesperdicio));
-  const w=state.wasteKpi||{};setKpiCard('kpiDay',w.diario,(w.diario&&w.diario.fecha)?'ULTIMO DIA BLOWN+CAST '+w.diario.fecha:'SIN DATO BLOWN+CAST');setKpiCard('kpiMonth',w.mensual,w.mensual&&w.mensual.mes);setKpiCard('kpiYear',w.anual,w.anual&&w.anual.anio);
+  const w=state.wasteKpi||{};setKpiCard('kpiDay',w.diario,(w.diario&&w.diario.fecha)?w.diario.fecha:'SIN DATO');setKpiCard('kpiMonth',w.mensual,w.mensual&&w.mensual.mes);setKpiCard('kpiYear',w.anual,w.anual&&w.anual.anio);
 }
 function machineBadge(m){const st=String(m.ESTADO_MAPEO||'').toUpperCase();return st==='CONFIRMADO'?'<span class="pill ok">MEL CONFIRMADO</span>':'<span class="pill pending">'+esc(st||'SIN MAPEO')+'</span>'}
 function cellHtml(r){
@@ -238,11 +243,11 @@ function cellHtml(r){
   const pct=r.PCT_DESPERDICIO==null?null:Number(r.PCT_DESPERDICIO),cl=kpiClass(pct);
   return `<td class="kgcell ${walert?'bad':cl}" data-k="${key}">${head}<div class="kg-main">${fmtKg(kg)} KG</div><div class="kg-waste">DESP ${fmtKg(w)} KG</div><div class="kg-stop">PARO REPORTADO ${fmtInt(stop)} MIN</div><span class="kg-pct">${fmtPct(pct)}</span></td>`;
 }
-function groupLabel(m){const t=String(m.TECNOLOGIA||'SIN CLASIFICAR').toUpperCase(),p=String(m.PLANTA||'SIN CLASIFICAR').toUpperCase();const sec=(t==='BLOWN'||t==='CAST')?'EXTRUSION':t;return sec+' // '+p}
+function groupLabel(m){const t=String(m.TECNOLOGIA||'SIN CLASIFICAR').toUpperCase(),p=String(m.PLANTA||'SIN CLASIFICAR').toUpperCase();return t+' // '+p}
 function renderMatrix(){
   const dates=isoDates(state.range.desde,state.range.hasta),maps=mapByCode(),rows=state.rows||[];rowByKey={};rows.forEach(r=>rowByKey[String(r.CDG_MQN_DATAPEL)+'|'+String(r.FECHA).slice(0,10)]=r);
-  const codes=[...new Set(rows.map(r=>String(r.CDG_MQN_DATAPEL)))];
-  codes.sort((a,b)=>{const A=metaForCode(a,rows,maps),B=metaForCode(b,rows,maps);return sectionRank(A.TECNOLOGIA)-sectionRank(B.TECNOLOGIA)||plantRank(A.PLANTA)-plantRank(B.PLANTA)||techRank(A.TECNOLOGIA)-techRank(B.TECNOLOGIA)||String(A.NOMBRE_ARMA||A.NOMBRE_DATAPEL).localeCompare(String(B.NOMBRE_ARMA||B.NOMBRE_DATAPEL))});
+  const codes=[...new Set(rows.map(r=>String(r.CDG_MQN_DATAPEL)))].filter(c=>{const m=maps[c]||{};const st=String(m.ESTADO_MAPEO||'').toUpperCase();return st!=='IGNORAR'&&st!=='BAJA_NO_MAPEAR'});
+  codes.sort((a,b)=>{const A=metaForCode(a,rows,maps),B=metaForCode(b,rows,maps);return sectionRank(A.TECNOLOGIA)-sectionRank(B.TECNOLOGIA)||machineRank(A)-machineRank(B)||plantRank(A.PLANTA)-plantRank(B.PLANTA)||String(A.NOMBRE_ARMA||A.NOMBRE_DATAPEL).localeCompare(String(B.NOMBRE_ARMA||B.NOMBRE_DATAPEL))});
   let h='<thead><tr><th>MAQUINA</th>'+dates.map(d=>'<th>'+esc(d.slice(5))+'</th>').join('')+'</tr></thead><tbody>',lastGroup='';
   for(const c of codes){
     const first=rows.find(r=>String(r.CDG_MQN_DATAPEL)===c)||{},m=maps[c]||first||{},hist=(state.historicalStats||{})[c]||first.HISTORICO||{},g=groupLabel(m);
@@ -257,17 +262,10 @@ function renderMatrix(){
   $('matrix').querySelectorAll('[data-k]').forEach(td=>td.addEventListener('click',()=>showDetail(rowByKey[td.dataset.k])));
 }
 function detailTable(title,rows,kind,coverage){
-  if(!rows||!rows.length)return `<div class="detail-ops-title">${esc(title)}<span class="detail-note">${coverage?('COBERTURA HASTA '+esc(coverage)):''}</span></div><div class="empty">SIN REGISTROS REPORTADOS PARA ESTA MAQUINA/FECHA.</div>`;
-  if(kind==='stops'){
-  let h=`<div class="detail-ops-title">${esc(title)}<span class="detail-note">${coverage?('COBERTURA HASTA '+esc(coverage)):''}</span></div>`;
-  h+=`<div class="detail-table-wrap"><table class="detail-table"><thead><tr><th>TURNO</th><th>HORARIO</th><th>KG PROD.</th><th>KG DESP.</th><th>PARO REPORTADO</th></tr></thead><tbody>`;
-  for(const x of rows)h+=`<tr><td>${esc(x.TURNO_DATAPEL||'--')}</td><td>${esc(x.TURNO_HORARIO||'--')}</td><td>${fmtKg(x.KG_PRODUCIDOS)}</td><td>${fmtKg(x.KG_DESPERDICIO)}</td><td><strong>${fmtInt(x.MIN_PARADA_REPORTADA)} MIN</strong></td></tr>`;
-  return h+'</tbody></table></div>';
-    h+=`<div class="detail-table-wrap"><table class="detail-table"><thead><tr><th>TURNO</th><th>HORARIO</th><th>CAUSA</th><th>MINUTOS</th><th>INICIO</th><th>FIN</th></tr></thead><tbody>`;
-    for(const x of rows)h+=`<tr><td>${esc(x.TURNO_DATAPEL||'--')}</td><td>${esc(x.TURNO_HORARIO||'--')}</td><td>${esc(x.CAUSA||'SIN CAUSA')}</td><td><strong>${fmtInt(x.MINUTOS)} MIN</strong></td><td>${esc(String(x.HORA_INICIO||'').slice(11,16)||'--')}</td><td>${esc(String(x.HORA_FIN||'').slice(11,16)||'--')}</td></tr>`;
-    return h+'</tbody></table></div>'
-  }
-  let h=`<div class="detail-ops-title">${esc(title)}<span class="detail-note">${coverage?('COBERTURA HASTA '+esc(coverage)):''}</span></div><div class="detail-table-wrap"><table class="detail-table"><thead><tr><th>TURNO</th><th>HORARIO</th><th>KG PROD.</th><th>KG DESP.</th><th>PARO REPORTADO</th></tr></thead><tbody>`;for(const x of rows)h+=`<tr><td>${esc(x.TURNO_DATAPEL||'--')}</td><td>${esc(x.TURNO_HORARIO||'--')}</td><td>${fmtKg(x.KG_PRODUCIDOS)}</td><td>${fmtKg(x.KG_DESPERDICIO)}</td><td><strong>${fmtInt(x.MIN_PARADA_REPORTADA)} MIN</strong></td></tr>`;return h+'</tbody></table></div>';
+  const cov=coverage?('COBERTURA HASTA '+esc(coverage)):'';let h=`<div class="detail-ops-title">${esc(title)}<span class="detail-note">${cov}</span></div>`;
+  if(!rows||!rows.length)return h+'<div class="empty">SIN REGISTROS REPORTADOS PARA ESTA MAQUINA/FECHA.</div>';
+  if(kind==='stops'){h+=`<div class="detail-table-wrap"><table class="detail-table"><thead><tr><th>TURNO</th><th>HORARIO</th><th>CAUSA</th><th>MINUTOS</th><th>INICIO</th><th>FIN</th></tr></thead><tbody>`;for(const x of rows)h+=`<tr><td>${esc(x.TURNO_DATAPEL||'--')}</td><td>${esc(x.TURNO_HORARIO||'--')}</td><td>${esc(x.CAUSA||'SIN CAUSA')}</td><td><strong>${fmtInt(x.MINUTOS)} MIN</strong></td><td>${esc(String(x.HORA_INICIO||'').slice(11,16)||'--')}</td><td>${esc(String(x.HORA_FIN||'').slice(11,16)||'--')}</td></tr>`;return h+'</tbody></table></div>'}
+  h+=`<div class="detail-table-wrap"><table class="detail-table"><thead><tr><th>TURNO</th><th>HORARIO</th><th>KG PROD.</th><th>KG DESP.</th><th>PARO REPORTADO</th></tr></thead><tbody>`;for(const x of rows)h+=`<tr><td>${esc(x.TURNO_DATAPEL||'--')}</td><td>${esc(x.TURNO_HORARIO||'--')}</td><td>${fmtKg(x.KG_PRODUCIDOS)}</td><td>${fmtKg(x.KG_DESPERDICIO)}</td><td><strong>${fmtInt(x.MIN_PARADA_REPORTADA)} MIN</strong></td></tr>`;return h+'</tbody></table></div>';
 }
 async function showDetail(r){
   if(!r)return;const h=r.HISTORICO||{},q=r.CALIDAD_DATO||{};
