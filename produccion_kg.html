@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#004b9b">
-<title>ARMA | Produccion KG</title>
+<title>ARMA | IDP - Producción</title>
 <link rel="manifest" href="manifest.webmanifest">
 <script src="arma-pwa-navigation.js" defer></script>
 <style>
@@ -23,7 +23,7 @@ body{margin:0;background:var(--bg);font-family:Segoe UI,Arial,sans-serif;color:#
 .user-pill{display:inline-flex;margin-top:8px;background:#f8fbff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--navy);font-size:11px;font-weight:900}
 main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
 .hero{position:relative;overflow:hidden;border-radius:22px;background:radial-gradient(circle at 74% 10%,#0076d7 0,#004b9b 42%,#002b66 100%);box-shadow:var(--shadow);color:#fff;padding:22px 28px;margin-bottom:14px;display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,280px);gap:18px;align-items:center}
-.hero:after{content:'PRODUCCION';position:absolute;right:20px;bottom:-14px;font-size:68px;font-weight:950;letter-spacing:4px;color:rgba(255,255,255,.055)}
+.hero:after{content:'IDP';position:absolute;right:20px;bottom:-14px;font-size:68px;font-weight:950;letter-spacing:4px;color:rgba(255,255,255,.055)}
 .hero h1{margin:0 0 6px;font-size:31px}.hero p{margin:0;max-width:1250px;color:#eaf4ff;font-size:11px;line-height:1.35;font-weight:850;position:relative;z-index:2}
 .hero-copy,.hero-home{position:relative;z-index:2}.hero-home{justify-self:end;width:100%}
 .index-nav-card{position:relative;display:flex;align-items:center;gap:14px;min-height:82px;padding:14px 18px;border-radius:18px;background:linear-gradient(180deg,#fff,#f8fbff);border:1px solid #dbe5f0;box-shadow:0 10px 22px rgba(0,43,102,.10);text-decoration:none;color:#002b66;overflow:hidden}
@@ -38,7 +38,7 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
 .btn{width:100%;border:0;border-radius:10px;padding:11px 16px;color:#fff;background:linear-gradient(#2bd36b,#159447);font-weight:950;cursor:pointer;text-transform:uppercase}
 .mini-info{border:1px solid var(--line);border-radius:12px;padding:9px 10px;background:#f8fbff;min-height:62px}.mini-info span{display:block;font-size:7px;color:var(--muted);font-weight:900}.mini-info strong{display:block;margin-top:3px;color:var(--navy);font-size:11px}.mini-info.warn{background:#fff8dc;border-color:#f6d36c}.mini-info.bad{background:#ffe7ea;border-color:#f3a5af}
 .dashboard{min-width:0}.kpi-priority{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:10px}
-.kpi-secondary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:10px}
+.kpi-secondary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:10px}
 .kpi{position:relative;border-radius:16px;padding:14px;color:#fff;min-height:134px;box-shadow:0 10px 20px rgba(15,23,42,.10);overflow:hidden}
 .kpi.priority{min-height:206px}.kpi>span{display:block;font-size:9px;font-weight:950;opacity:.95}.kpi>strong{display:block;font-size:27px;margin-top:5px;max-width:58%}.kpi-formula{position:absolute;right:14px;top:13px;max-width:42%;text-align:right;font-size:8px;line-height:1.3;font-weight:900;opacity:.82;letter-spacing:.1px}.kpi-formula small{display:block;font-size:7px;opacity:.9;margin-top:2px}
 .kpi.green{background:linear-gradient(135deg,#08733f,#2bbf68)}.kpi.orange{background:linear-gradient(135deg,#a84e06,#ef8f13)}
@@ -94,7 +94,7 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
       <img src="ARMA%20logo%202.png" alt="ARMA" class="logo-arma">
     </div>
     <div class="top-title">
-      <strong>RIESGO Y DESEMPENO | PRODUCCION KG</strong>
+      <strong>RIESGO Y DESEMPEÑO | IDP - PRODUCCIÓN</strong>
       <span>DATAPEL / ARMA_DATAPEL_DATA / TRAZABILIDAD OPERACIONAL</span>
       <div id="userPill" class="user-pill">ARMA // VALIDANDO SESION</div>
     </div>
@@ -104,7 +104,7 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
 <main>
   <section class="hero">
     <div class="hero-copy">
-      <h1>PRODUCCION KG</h1>
+      <h1>IDP - PRODUCCIÓN</h1>
       <p>HISTORICO PRODUCTIVO POR MAQUINA, PLANTA Y FECHA. KPI DE DESPERDICIO PARA BLOWN + CAST, CONTROL DE CALIDAD DEL DATO Y TIEMPO DE PARO REPORTADO POR DATAPEL.</p>
     </div>
     <a class="index-nav-card hero-home" href="main.html" onclick="return goMain(event)">
@@ -131,10 +131,8 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
       </div>
 
       <div class="kpi-secondary">
-        <div class="kpi green"><span>KG PRODUCIDOS | PERIODO</span><strong id="kKg">0</strong><div class="kpi-formula">SUMA KG PRODUCIDOS<small>PERIODO Y FILTROS ACTIVOS</small></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kKgP1">0</em></div><div><b>PLANTA 2</b><em id="kKgP2">0</em></div><div><b>PLANTA 3</b><em id="kKgP3">0</em></div></div></div>
-        <div class="kpi orange"><span>KG DESPERDICIO | PERIODO</span><strong id="kWaste">0</strong><div class="kpi-formula">SUMA KG DESPERDICIO<small>PERIODO Y FILTROS ACTIVOS</small></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kWasteP1">0</em></div><div><b>PLANTA 2</b><em id="kWasteP2">0</em></div><div><b>PLANTA 3</b><em id="kWasteP3">0</em></div></div></div>
-        <div id="kProdPctCard" class="kpi blue"><span>PORCENTAJE TOTAL DE PRODUCCION</span><strong id="kProdPct">N/D</strong><div class="kpi-formula">PROD / (PROD + DESP) X 100<small>TODAS LAS TECNOLOGIAS</small></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kProdPctP1">N/D</em></div><div><b>PLANTA 2</b><em id="kProdPctP2">N/D</em></div><div><b>PLANTA 3</b><em id="kProdPctP3">N/D</em></div></div></div>
-        <div id="kWastePctCard" class="kpi red"><span>PORCENTAJE TOTAL DE DESPERDICIO</span><strong id="kWastePct">N/D</strong><div class="kpi-formula">DESP / (PROD + DESP) X 100<small>TODAS LAS TECNOLOGIAS</small></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kWastePctP1">N/D</em></div><div><b>PLANTA 2</b><em id="kWastePctP2">N/D</em></div><div><b>PLANTA 3</b><em id="kWastePctP3">N/D</em></div></div></div>
+        <div class="kpi green"><span>KG PRODUCIDOS | PERIODO</span><strong id="kKg">0</strong><div class="kpi-formula">SUMA KG PRODUCIDOS<small>PERIODO Y FILTROS ACTIVOS</small></div><div class="kpi-tech"><div class="tech-kpi"><b>CAST</b><em id="kKgCast">0</em></div><div class="tech-kpi"><b>BLOWN</b><em id="kKgBlown">0</em></div></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kKgP1">0</em></div><div><b>PLANTA 2</b><em id="kKgP2">0</em></div><div><b>PLANTA 3</b><em id="kKgP3">0</em></div></div></div>
+        <div class="kpi orange"><span>KG DESPERDICIO | PERIODO</span><strong id="kWaste">0</strong><div class="kpi-formula">SUMA KG DESPERDICIO<small>PERIODO Y FILTROS ACTIVOS</small></div><div class="kpi-tech"><div class="tech-kpi"><b>CAST</b><em id="kWasteCast">0</em></div><div class="tech-kpi"><b>BLOWN</b><em id="kWasteBlown">0</em></div></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kWasteP1">0</em></div><div><b>PLANTA 2</b><em id="kWasteP2">0</em></div><div><b>PLANTA 3</b><em id="kWasteP3">0</em></div></div></div>
       </div>
 
       <div class="info-quality-row">
@@ -151,7 +149,7 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
   </section>
 
   <section class="card">
-    <div class="section-title"><h2>MATRIZ HISTORICA DE PRODUCCION KG</h2><span class="pill">ORDEN: EXTRUSION POR PLANTA / CORTE POR PLANTA / REPELETIZADO POR PLANTA</span></div>
+    <div class="section-title"><h2>MATRIZ HISTÓRICA | IDP - PRODUCCIÓN</h2><span class="pill">ORDEN: EXTRUSION POR PLANTA / CORTE POR PLANTA / REPELETIZADO POR PLANTA</span></div>
     <div class="notice">KPI DESPERDICIO = DESPERDICIO / (PRODUCCION + DESPERDICIO). VERDE &lt;= 3,3 %. AMARILLO &gt; 3,3 % Y &lt; 3,5 %. ROJO &gt;= 3,5 %. SOLO BLOWN + CAST. PARO = EXCLUSIVAMENTE MINUTOS REPORTADOS POR DATAPEL. 0 KG O AUSENCIA DE PRODUCCION NO GENERAN PARO. LOS DATOS ATIPICOS SE ALERTAN; EL KPI DEPURADO LOS EXCLUYE.</div>
     <div class="table-wrap"><table id="matrix" class="table prod-matrix"></table></div>
   </section>
@@ -161,9 +159,9 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
     <div id="detail" class="empty">SELECCIONE UNA CELDA DE LA MATRIZ.</div>
     <div id="detailOps" class="detail-ops"></div>
   </section>
-  <div class="footer">A.R.M.A. // ASSET RELIABILITY &amp; MAINTENANCE ANALYTICS // PRODUCCION KG</div>
+  <div class="footer">A.R.M.A. // ASSET RELIABILITY &amp; MAINTENANCE ANALYTICS // IDP - PRODUCCIÓN</div>
 </main>
-<div id="loadingOverlay" class="loading-overlay"><div class="loading-box"><div class="spinner"></div><strong id="loadingTitle">CARGANDO PRODUCCION KG</strong><span id="loadingDetail">CONSULTANDO ARMA...</span></div></div>
+<div id="loadingOverlay" class="loading-overlay"><div class="loading-box"><div class="spinner"></div><strong id="loadingTitle">CARGANDO IDP - PRODUCCIÓN</strong><span id="loadingDetail">CONSULTANDO ARMA...</span></div></div>
 <script>
 const API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
 const $=id=>document.getElementById(id);
@@ -226,8 +224,7 @@ function renderSummary(){
   const s=state.summary||{},bp=s.byPlant||{};
   setText('kKg',fmtKg(s.kgProducidos));setText('kKgP1',fmtKg((bp['PLANTA 1']||{}).kgProducidos));setText('kKgP2',fmtKg((bp['PLANTA 2']||{}).kgProducidos));setText('kKgP3',fmtKg((bp['PLANTA 3']||{}).kgProducidos));
   setText('kWaste',fmtKg(s.kgDesperdicio));setText('kWasteP1',fmtKg((bp['PLANTA 1']||{}).kgDesperdicio));setText('kWasteP2',fmtKg((bp['PLANTA 2']||{}).kgDesperdicio));setText('kWasteP3',fmtKg((bp['PLANTA 3']||{}).kgDesperdicio));
-  setText('kProdPct',fmtPct(s.pctProduccion));setText('kProdPctP1',fmtPct((bp['PLANTA 1']||{}).pctProduccion));setText('kProdPctP2',fmtPct((bp['PLANTA 2']||{}).pctProduccion));setText('kProdPctP3',fmtPct((bp['PLANTA 3']||{}).pctProduccion));
-  setText('kWastePct',fmtPct(s.pctDesperdicio));setText('kWastePctP1',fmtPct((bp['PLANTA 1']||{}).pctDesperdicio));setText('kWastePctP2',fmtPct((bp['PLANTA 2']||{}).pctDesperdicio));setText('kWastePctP3',fmtPct((bp['PLANTA 3']||{}).pctDesperdicio));
+  const vt={CAST:{kg:0,w:0},BLOWN:{kg:0,w:0}};(state.rows||[]).forEach(r=>{const t=String(r.TECNOLOGIA||'').toUpperCase();if(vt[t]){vt[t].kg+=num(r.KG_PRODUCIDOS);vt[t].w+=num(r.KG_DESPERDICIO)}});setText('kKgCast',fmtKg(vt.CAST.kg));setText('kKgBlown',fmtKg(vt.BLOWN.kg));setText('kWasteCast',fmtKg(vt.CAST.w));setText('kWasteBlown',fmtKg(vt.BLOWN.w));
   const w=state.wasteKpi||{};setKpiCard('kpiDay',w.diario,(w.diario&&w.diario.fecha)?w.diario.fecha:'SIN DATO');setKpiCard('kpiMonth',w.mensual,w.mensual&&w.mensual.mes);setKpiCard('kpiYear',w.anual,w.anual&&w.anual.anio);
 }
 function machineBadge(m){const st=String(m.ESTADO_MAPEO||'').toUpperCase();return st==='CONFIRMADO'?'<span class="pill ok">MEL CONFIRMADO</span>':'<span class="pill pending">'+esc(st||'SIN MAPEO')+'</span>'}
@@ -286,7 +283,7 @@ function render(){
   fillFilters();renderFreshness();renderSummary();renderQuality();renderMatrix();
 }
 async function load(initial=false){
-  setLoading(true,initial?'CARGANDO PRODUCCION KG...':'ACTUALIZANDO DATOS...');
+  setLoading(true,initial?'CARGANDO IDP - PRODUCCIÓN...':'ACTUALIZANDO DATOS...');
   try{
     const filters=initial?{}:{DESDE:$('desde').value,HASTA:$('hasta').value,PLANTA:$('plant').value,CDG_MQN_DATAPEL:$('machine').value};
     state=await api('prdKgBootstrap',{filters});
