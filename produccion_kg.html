@@ -36,22 +36,22 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
 .sidebar h3{margin:0 0 12px;color:var(--navy);font-size:16px}.field{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
 .field label{font-size:9px;font-weight:950;color:#36536f}.field input,.field select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff;color:var(--navy);font-weight:850;text-transform:uppercase}
 .btn{width:100%;border:0;border-radius:10px;padding:11px 16px;color:#fff;background:linear-gradient(#2bd36b,#159447);font-weight:950;cursor:pointer;text-transform:uppercase}
-.mini-info{border:1px solid var(--line);border-radius:12px;padding:9px 10px;background:#f8fbff;min-height:62px}.mini-info span{display:block;font-size:7px;color:var(--muted);font-weight:900}.mini-info strong{display:block;margin-top:3px;color:var(--navy);font-size:11px}.mini-info.warn{background:#fff8dc;border-color:#f6d36c}.mini-info.bad{background:#ffe7ea;border-color:#f3a5af}
-.dashboard{min-width:0}.kpi-priority{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:10px}
-.kpi-secondary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:10px}
-.kpi{position:relative;border-radius:16px;padding:14px;color:#fff;min-height:134px;box-shadow:0 10px 20px rgba(15,23,42,.10);overflow:hidden}
-.kpi.priority{min-height:206px}.kpi>span{display:block;font-size:9px;font-weight:950;opacity:.95}.kpi>strong{display:block;font-size:27px;margin-top:5px;max-width:58%}.kpi-formula{position:absolute;right:14px;top:13px;max-width:42%;text-align:right;font-size:8px;line-height:1.3;font-weight:900;opacity:.82;letter-spacing:.1px}.kpi-formula small{display:block;font-size:7px;opacity:.9;margin-top:2px}
+.mini-info{border:1px solid var(--line);border-radius:12px;padding:7px 10px;background:#f8fbff;min-height:56px}.mini-info span{display:block;font-size:7px;color:var(--muted);font-weight:900}.mini-info strong{display:block;margin-top:3px;color:var(--navy);font-size:11px}.mini-info.warn{background:#fff8dc;border-color:#f6d36c}.mini-info.bad{background:#ffe7ea;border-color:#f3a5af}
+.dashboard{min-width:0}.kpi-priority{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:8px}
+.kpi-secondary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:8px}
+.kpi{position:relative;border-radius:16px;padding:10px 14px;color:#fff;min-height:120px;box-shadow:0 10px 20px rgba(15,23,42,.10);overflow:hidden}
+.kpi.priority{min-height:168px}.kpi-secondary .kpi{min-height:144px}.kpi>span{display:block;font-size:9px;font-weight:950;opacity:.95}.kpi>strong{display:block;font-size:26px;line-height:1;margin-top:2px;max-width:58%}.kpi-formula{position:absolute;right:13px;top:9px;max-width:42%;text-align:right;font-size:8px;line-height:1.2;font-weight:900;opacity:.82;letter-spacing:.1px}.kpi-formula small{display:block;font-size:7px;opacity:.9;margin-top:1px}
 .kpi.green{background:linear-gradient(135deg,#08733f,#2bbf68)}.kpi.orange{background:linear-gradient(135deg,#a84e06,#ef8f13)}
 .kpi.blue{background:linear-gradient(135deg,#003b80,#087fce)}.kpi.red{background:linear-gradient(135deg,#8f1d2c,#dc3545)}
 .kpi.good{background:linear-gradient(135deg,#08733f,#2bbf68)}.kpi.warn{background:linear-gradient(135deg,#9b6a00,#e0a400)}
 .kpi.bad{background:linear-gradient(135deg,#8f1d2c,#dc3545)}.kpi.neutral{background:linear-gradient(135deg,#475569,#64748b)}
-.kpi-sub{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.28);display:grid;grid-template-columns:repeat(3,1fr);gap:5px;align-items:center;text-align:center}
-.kpi-sub b{display:block;font-size:9px;opacity:.9;text-align:center}.kpi-sub em{display:block;font-style:normal;font-size:13px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;margin-top:2px}
-.kpi-note{display:block;margin-top:6px;font-size:8px;font-weight:850;opacity:.9}
-.kpi-tech{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:8px}
-.tech-kpi{border:1px solid rgba(255,255,255,.36);border-radius:9px;padding:6px 8px;text-align:center;background:rgba(15,23,42,.18)}.tech-kpi b{display:block;font-size:8px;letter-spacing:.3px}.tech-kpi em{display:block;font-style:normal;font-size:14px;font-weight:950;margin-top:2px}
+.kpi-sub{margin-top:5px;padding-top:5px;border-top:1px solid rgba(255,255,255,.28);display:grid;grid-template-columns:repeat(3,1fr);gap:5px;align-items:center;text-align:center}
+.kpi-sub b{display:block;font-size:8px;opacity:.9;text-align:center}.kpi-sub em{display:block;font-style:normal;font-size:12px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;margin-top:1px}
+.kpi-note{display:block;margin-top:2px;font-size:8px;font-weight:850;opacity:.9}
+.kpi-tech{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:4px}
+.tech-kpi{border:1px solid rgba(255,255,255,.36);border-radius:9px;padding:4px 8px;text-align:center;background:rgba(15,23,42,.18)}.tech-kpi b{display:block;font-size:8px;letter-spacing:.3px}.tech-kpi em{display:block;font-style:normal;font-size:13px;font-weight:950;margin-top:1px}
 .tech-kpi.good{background:linear-gradient(135deg,#08733f,#2bbf68)}.tech-kpi.warn{background:linear-gradient(135deg,#9b6a00,#e0a400)}.tech-kpi.bad{background:linear-gradient(135deg,#8f1d2c,#dc3545)}.tech-kpi.neutral{background:linear-gradient(135deg,#475569,#64748b)}
-.info-quality-row{display:grid;grid-template-columns:minmax(280px,.38fr) minmax(0,1fr);gap:10px;margin-bottom:10px}.info-stack{display:grid;grid-template-columns:1fr 1fr;gap:10px}.quality-banner{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid var(--line);border-left:5px solid #0ea5e9;background:#fff;border-radius:14px;padding:9px 12px;box-shadow:var(--shadow);min-height:62px}
+.info-quality-row{display:grid;grid-template-columns:minmax(280px,.38fr) minmax(0,1fr);gap:10px;margin-bottom:10px}.info-stack{display:grid;grid-template-columns:1fr 1fr;gap:10px}.quality-banner{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid var(--line);border-left:5px solid #0ea5e9;background:#fff;border-radius:14px;padding:7px 12px;box-shadow:var(--shadow);min-height:56px}
 .quality-banner.bad{border-left-color:#c62828;background:#fff1f2}.quality-banner.warn{border-left-color:#d89b00;background:#fffbea}
 .quality-banner strong{color:var(--navy);font-size:11px}.quality-banner span{color:#475569;font-size:9px;font-weight:850}
 .card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:14px;margin-top:12px}
@@ -94,7 +94,7 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
       <img src="ARMA%20logo%202.png" alt="ARMA" class="logo-arma">
     </div>
     <div class="top-title">
-      <strong>RIESGO Y DESEMPEÑO | IDP - PRODUCCIÓN</strong>
+      <strong>RIESGO Y DESEMPEÑO | IDP - PRODUCCION</strong>
       <span>DATAPEL / ARMA_DATAPEL_DATA / TRAZABILIDAD OPERACIONAL</span>
       <div id="userPill" class="user-pill">ARMA // VALIDANDO SESION</div>
     </div>
@@ -104,7 +104,7 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
 <main>
   <section class="hero">
     <div class="hero-copy">
-      <h1>IDP - PRODUCCIÓN</h1>
+      <h1>IDP - PRODUCCION</h1>
       <p>HISTORICO PRODUCTIVO POR MAQUINA, PLANTA Y FECHA. KPI DE DESPERDICIO PARA BLOWN + CAST, CONTROL DE CALIDAD DEL DATO Y TIEMPO DE PARO REPORTADO POR DATAPEL.</p>
     </div>
     <a class="index-nav-card hero-home" href="main.html" onclick="return goMain(event)">
@@ -149,7 +149,7 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
   </section>
 
   <section class="card">
-    <div class="section-title"><h2>MATRIZ HISTÓRICA | IDP - PRODUCCIÓN</h2><span class="pill">ORDEN: EXTRUSION POR PLANTA / CORTE POR PLANTA / REPELETIZADO POR PLANTA</span></div>
+    <div class="section-title"><h2>MATRIZ HISTÓRICA | IDP - PRODUCCION</h2><span class="pill">ORDEN: EXTRUSION POR PLANTA / CORTE POR PLANTA / REPELETIZADO POR PLANTA</span></div>
     <div class="notice">KPI DESPERDICIO = DESPERDICIO / (PRODUCCION + DESPERDICIO). VERDE &lt;= 3,3 %. AMARILLO &gt; 3,3 % Y &lt; 3,5 %. ROJO &gt;= 3,5 %. SOLO BLOWN + CAST. PARO = EXCLUSIVAMENTE MINUTOS REPORTADOS POR DATAPEL. 0 KG O AUSENCIA DE PRODUCCION NO GENERAN PARO. LOS DATOS ATIPICOS SE ALERTAN; EL KPI DEPURADO LOS EXCLUYE.</div>
     <div class="table-wrap"><table id="matrix" class="table prod-matrix"></table></div>
   </section>
@@ -159,9 +159,9 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
     <div id="detail" class="empty">SELECCIONE UNA CELDA DE LA MATRIZ.</div>
     <div id="detailOps" class="detail-ops"></div>
   </section>
-  <div class="footer">A.R.M.A. // ASSET RELIABILITY &amp; MAINTENANCE ANALYTICS // IDP - PRODUCCIÓN</div>
+  <div class="footer">A.R.M.A. // ASSET RELIABILITY &amp; MAINTENANCE ANALYTICS // IDP - PRODUCCION</div>
 </main>
-<div id="loadingOverlay" class="loading-overlay"><div class="loading-box"><div class="spinner"></div><strong id="loadingTitle">CARGANDO IDP - PRODUCCIÓN</strong><span id="loadingDetail">CONSULTANDO ARMA...</span></div></div>
+<div id="loadingOverlay" class="loading-overlay"><div class="loading-box"><div class="spinner"></div><strong id="loadingTitle">CARGANDO IDP - PRODUCCION</strong><span id="loadingDetail">CONSULTANDO ARMA...</span></div></div>
 <script>
 const API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
 const $=id=>document.getElementById(id);
@@ -283,7 +283,7 @@ function render(){
   fillFilters();renderFreshness();renderSummary();renderQuality();renderMatrix();
 }
 async function load(initial=false){
-  setLoading(true,initial?'CARGANDO IDP - PRODUCCIÓN...':'ACTUALIZANDO DATOS...');
+  setLoading(true,initial?'CARGANDO IDP - PRODUCCION...':'ACTUALIZANDO DATOS...');
   try{
     const filters=initial?{}:{DESDE:$('desde').value,HASTA:$('hasta').value,PLANTA:$('plant').value,CDG_MQN_DATAPEL:$('machine').value};
     state=await api('prdKgBootstrap',{filters});
