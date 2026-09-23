@@ -41,7 +41,7 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
 .kpi-secondary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:8px}
 .kpi{position:relative;border-radius:16px;padding:10px 14px;color:#fff;min-height:120px;box-shadow:0 10px 20px rgba(15,23,42,.10);overflow:hidden}
 .kpi.priority{min-height:168px}.kpi-secondary .kpi{min-height:144px}.kpi>span{display:block;font-size:9px;font-weight:950;opacity:.95}.kpi>strong{display:block;font-size:26px;line-height:1;margin-top:2px;max-width:58%}.kpi-formula{position:absolute;right:13px;top:9px;max-width:42%;text-align:right;font-size:8px;line-height:1.2;font-weight:900;opacity:.82;letter-spacing:.1px}.kpi-formula small{display:block;font-size:7px;opacity:.9;margin-top:1px}
-.kpi.green{background:linear-gradient(135deg,#08733f,#2bbf68)}.kpi.orange{background:linear-gradient(135deg,#a84e06,#ef8f13)}
+.kpi.green{background:linear-gradient(135deg,#08733f,#2bbf68)}.kpi.orange{background:linear-gradient(135deg,#a84e06,#ef8f13)}.kpi.volume-prod{background:linear-gradient(135deg,#064b83,#1386c8)}.kpi.volume-waste{background:linear-gradient(135deg,#33499a,#625fc7)}
 .kpi.blue{background:linear-gradient(135deg,#003b80,#087fce)}.kpi.red{background:linear-gradient(135deg,#8f1d2c,#dc3545)}
 .kpi.good{background:linear-gradient(135deg,#08733f,#2bbf68)}.kpi.warn{background:linear-gradient(135deg,#9b6a00,#e0a400)}
 .kpi.bad{background:linear-gradient(135deg,#8f1d2c,#dc3545)}.kpi.neutral{background:linear-gradient(135deg,#475569,#64748b)}
@@ -131,8 +131,8 @@ main{width:min(1860px,100%);margin:0 auto;padding:14px 24px 28px}
       </div>
 
       <div class="kpi-secondary">
-        <div class="kpi green"><span>KG PRODUCIDOS | PERIODO</span><strong id="kKg">0</strong><div class="kpi-formula">SUMA KG PRODUCIDOS<small>PERIODO Y FILTROS ACTIVOS</small></div><div class="kpi-tech"><div class="tech-kpi"><b>CAST</b><em id="kKgCast">0</em></div><div class="tech-kpi"><b>BLOWN</b><em id="kKgBlown">0</em></div></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kKgP1">0</em></div><div><b>PLANTA 2</b><em id="kKgP2">0</em></div><div><b>PLANTA 3</b><em id="kKgP3">0</em></div></div></div>
-        <div class="kpi orange"><span>KG DESPERDICIO | PERIODO</span><strong id="kWaste">0</strong><div class="kpi-formula">SUMA KG DESPERDICIO<small>PERIODO Y FILTROS ACTIVOS</small></div><div class="kpi-tech"><div class="tech-kpi"><b>CAST</b><em id="kWasteCast">0</em></div><div class="tech-kpi"><b>BLOWN</b><em id="kWasteBlown">0</em></div></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kWasteP1">0</em></div><div><b>PLANTA 2</b><em id="kWasteP2">0</em></div><div><b>PLANTA 3</b><em id="kWasteP3">0</em></div></div></div>
+        <div class="kpi volume-prod"><span>KG PRODUCIDOS | PERIODO</span><strong id="kKg">0</strong><div class="kpi-formula">SUMA KG PRODUCIDOS<small>PERIODO Y FILTROS ACTIVOS</small></div><div class="kpi-tech"><div class="tech-kpi"><b>CAST</b><em id="kKgCast">0</em></div><div class="tech-kpi"><b>BLOWN</b><em id="kKgBlown">0</em></div></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kKgP1">0</em></div><div><b>PLANTA 2</b><em id="kKgP2">0</em></div><div><b>PLANTA 3</b><em id="kKgP3">0</em></div></div></div>
+        <div class="kpi volume-waste"><span>KG DESPERDICIO | PERIODO</span><strong id="kWaste">0</strong><div class="kpi-formula">SUMA KG DESPERDICIO<small>PERIODO Y FILTROS ACTIVOS</small></div><div class="kpi-tech"><div class="tech-kpi"><b>CAST</b><em id="kWasteCast">0</em></div><div class="tech-kpi"><b>BLOWN</b><em id="kWasteBlown">0</em></div></div><div class="kpi-sub"><div><b>PLANTA 1</b><em id="kWasteP1">0</em></div><div><b>PLANTA 2</b><em id="kWasteP2">0</em></div><div><b>PLANTA 3</b><em id="kWasteP3">0</em></div></div></div>
       </div>
 
       <div class="info-quality-row">
