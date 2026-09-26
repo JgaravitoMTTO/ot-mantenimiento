@@ -6,49 +6,93 @@
 <title>ARMA | Órdenes de Compra</title>
 <script src="arma-pwa-navigation.js" defer></script>
 <style>
-:root{--navy:#06366d;--blue:#0b72b9;--cyan:#00a8bd;--green:#21a75b;--red:#c72b38;--amber:#d97706;--line:#ccd9e6;--bg:#edf3f8;--ink:#14243b;--muted:#64748b}
-*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}button,input,select,textarea{font:inherit}
-.hidden{display:none!important}.top{position:sticky;top:0;z-index:20;background:#fff;border-bottom:4px solid var(--cyan);padding:13px 22px;display:flex;justify-content:space-between;align-items:center}.top h1{font-size:22px;margin:0;color:var(--navy)}.top small{font-weight:700;color:var(--muted)}
-main{max-width:1780px;margin:auto;padding:16px}.hero{background:linear-gradient(120deg,#003b78,#098cca);color:#fff;border-radius:18px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 10px 28px #002b6618}.hero h2{margin:0;font-size:28px}.hero p{margin:5px 0 0;font-weight:700}.hero a{background:#fff;color:var(--navy);text-decoration:none;font-weight:900;padding:13px 18px;border-radius:12px}
-.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 22px #002b6610}.filters{margin-top:12px;padding:14px;display:grid;grid-template-columns:135px 135px 150px 1fr 1fr 180px 160px 120px;gap:9px;align-items:end}.f{display:flex;flex-direction:column;gap:5px}.f label{font-size:10px;font-weight:900;color:#314a65;text-transform:uppercase}.f input,.f select,.f textarea{min-height:40px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:#fff}.btn{min-height:40px;border:0;border-radius:9px;color:#fff;background:linear-gradient(#1687e6,#07569f);font-weight:900;padding:9px 14px;cursor:pointer}.btn.green{background:linear-gradient(#37cf70,#15934a)}.btn.red{background:linear-gradient(#e44e55,#b01e2b)}.btn.gray{background:#66788c}.btn.amber{background:#d97706}.btn.sm{min-height:32px;padding:5px 9px;font-size:11px}
-.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:12px 0}.k{padding:13px 15px;color:white;border-radius:14px;background:#0d76c2}.k:nth-child(2){background:#168d55}.k:nth-child(3){background:#6d4bd2}.k:nth-child(4){background:#d97706}.k:nth-child(5){background:#b72c42}.k:nth-child(6){background:#087f8c}.k span{font-size:9px;font-weight:900;text-transform:uppercase}.k strong{display:block;font-size:23px;margin-top:4px}
-.table-wrap{overflow:auto}.tbl{width:100%;border-collapse:collapse;font-size:12px}.tbl th{position:sticky;top:0;background:#0c5f98;color:white;text-align:left;padding:10px;white-space:nowrap}.tbl td{padding:9px 10px;border-bottom:1px solid #e7edf4;vertical-align:middle}.tbl tr:hover td{background:#f4f9fd}.pill{display:inline-block;padding:5px 8px;border-radius:999px;font-size:10px;font-weight:900}.pill.nac{background:#e0f2fe;color:#075985}.pill.int{background:#ede9fe;color:#5b21b6}.pill.ok{background:#dcfce7;color:#166534}.pill.wait{background:#fef3c7;color:#92400e}
-.loader{position:fixed;inset:0;background:#001f4380;z-index:999;display:grid;place-items:center}.loader>div{background:white;border-radius:18px;padding:26px 30px;text-align:center;color:var(--navy);font-weight:900}.spin{width:48px;height:48px;border:6px solid #d7e9f7;border-top-color:#087fce;border-radius:50%;margin:0 auto 12px;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+
+:root{
+ --navy:#082f5f;--navy2:#0b3f78;--blue:#0b6fb8;--cyan:#00a7bd;--teal:#087f8c;
+ --green:#1d9b59;--lime:#45bd76;--amber:#d68518;--red:#bf3142;--purple:#6252b8;
+ --line:#d8e2ec;--bg:#eef3f7;--panel:#ffffff;--ink:#17283d;--muted:#6a7c90;--soft:#f7fafc;
+ --shadow:0 10px 28px rgba(15,47,84,.10)
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select,textarea{font:inherit}.hidden{display:none!important}
+.brandbar{height:70px;background:#fff;border-bottom:1px solid #d9e3ec;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:30}
+.brand-left{display:flex;align-items:center;gap:20px}.brand-pelex{font-size:30px;font-weight:1000;letter-spacing:2px;color:#355675;line-height:1}.brand-divider{height:34px;width:1px;background:#cfd9e2}.brand-arma{font-weight:1000;color:var(--navy);font-size:18px;letter-spacing:.6px}.brand-arma span{display:block;color:#6c8195;font-size:9px;letter-spacing:1.6px;margin-top:3px}.sessionbox{text-align:right}.sessionbox b{display:block;color:var(--navy);font-size:12px}.sessionbox span{font-size:10px;color:var(--muted);font-weight:700}
+.modulebar{background:linear-gradient(105deg,#072e5a 0%,#0c4d88 62%,#087da2 100%);border-bottom:5px solid var(--cyan);color:#fff}.modulebar-inner{max-width:1700px;margin:auto;padding:21px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}.modulebar h1{font-size:27px;margin:0;letter-spacing:.2px}.modulebar p{margin:6px 0 0;color:#d8ecf8;font-size:12px;font-weight:800;letter-spacing:.4px}.homebtn{display:inline-flex;align-items:center;gap:7px;background:#fff;color:var(--navy);border-radius:9px;padding:11px 16px;text-decoration:none;font-weight:900;font-size:12px;box-shadow:0 4px 14px #001d3d33}
+main{max-width:1700px;margin:auto;padding:18px 22px 34px}.section-title{display:flex;justify-content:space-between;gap:14px;align-items:end;margin-bottom:10px}.section-title h2{margin:0;color:var(--navy);font-size:17px}.section-title p{margin:4px 0 0;color:var(--muted);font-size:11px;font-weight:650}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.search-card{padding:16px;margin-bottom:13px}.search-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}.search-head strong{color:var(--navy);font-size:14px;letter-spacing:.3px}.search-head span{color:var(--muted);font-size:10px;font-weight:800}
+.filters{display:grid;grid-template-columns:150px 135px 135px 130px 150px 1.1fr 1fr 180px 165px 120px;gap:9px;align-items:end}.f{display:flex;flex-direction:column;gap:5px}.f label{font-size:9px;font-weight:950;color:#41566f;text-transform:uppercase;letter-spacing:.65px}.f input,.f select,.f textarea{min-height:39px;padding:8px 10px;border:1px solid #cbd8e4;border-radius:8px;background:#fff;color:#1a2d43;outline:none}.f input:focus,.f select:focus,.f textarea:focus{border-color:#5aa5dd;box-shadow:0 0 0 3px #0b72b915}.btn{min-height:39px;border:0;border-radius:8px;color:#fff;background:linear-gradient(#1687e6,#07569f);font-weight:900;padding:9px 14px;cursor:pointer;box-shadow:0 3px 8px #0c5d9c22}.btn:hover{filter:brightness(1.04)}.btn.green{background:linear-gradient(#35c66c,#168d4c)}.btn.red{background:linear-gradient(#e04b55,#ad2633)}.btn.gray{background:#66788c}.btn.amber{background:#d97706}.btn.sm{min-height:31px;padding:5px 9px;font-size:10px}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:13px 0}.k{position:relative;overflow:hidden;padding:14px 16px;border-radius:12px;background:#fff;border:1px solid var(--line);box-shadow:0 7px 18px #0e355b0b}.k:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--blue)}.k:nth-child(2):before{background:var(--green)}.k:nth-child(3):before{background:var(--purple)}.k:nth-child(4):before{background:var(--amber)}.k:nth-child(5):before{background:var(--red)}.k:nth-child(6):before{background:var(--teal)}.k span{font-size:9px;font-weight:950;text-transform:uppercase;color:#607389;letter-spacing:.65px}.k strong{display:block;font-size:22px;margin-top:5px;color:var(--navy)}
+.analytics{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(360px,.8fr);gap:12px;margin:0 0 13px}.analytics-main,.analytics-side{padding:16px}.analytics-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-bottom:12px}.analytics-head h3{margin:0;color:var(--navy);font-size:15px}.analytics-head p{margin:4px 0 0;color:var(--muted);font-size:10px;line-height:1.45}.currency-picker{display:flex;align-items:center;gap:7px}.currency-picker label{font-size:9px;font-weight:900;color:#51677d}.currency-picker select{height:34px;border:1px solid #cbd8e4;border-radius:7px;padding:0 8px;background:#fff}.chart-wrap{height:300px;position:relative}.chart-wrap canvas{width:100%;height:100%;display:block}.chart-empty{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:12px;font-weight:800;background:linear-gradient(180deg,#fff0,#f8fbfd)}
+.currency-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.money-card{background:linear-gradient(145deg,#f8fbfe,#edf5fb);border:1px solid #d7e4ef;border-radius:11px;padding:12px}.money-card span{font-size:9px;color:#61778c;font-weight:900;letter-spacing:.5px}.money-card strong{display:block;color:var(--navy);font-size:19px;margin-top:5px}.money-card small{display:block;color:var(--muted);font-size:9px;margin-top:3px}.report-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.meta-box{border:1px solid #e0e8f0;border-radius:9px;padding:10px}.meta-box span{display:block;font-size:8px;font-weight:900;color:#718398;text-transform:uppercase}.meta-box strong{display:block;color:#203a57;margin-top:4px;font-size:15px}.redteam-note{margin-top:10px;border-left:4px solid var(--amber);background:#fff8e9;color:#72520d;padding:9px 10px;border-radius:7px;font-size:9px;line-height:1.45;font-weight:700}
+.table-card{overflow:hidden}.table-head{padding:13px 15px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.table-head strong{color:var(--navy);font-size:13px}.table-head span{font-size:10px;color:var(--muted);font-weight:800}.table-wrap{overflow:auto;max-height:620px}.tbl{width:100%;border-collapse:collapse;font-size:11px}.tbl th{position:sticky;top:0;z-index:2;background:#0a4f85;color:white;text-align:left;padding:10px;white-space:nowrap;font-size:9px;letter-spacing:.4px}.tbl td{padding:9px 10px;border-bottom:1px solid #e8eef4;vertical-align:middle}.tbl tr:nth-child(even) td{background:#fbfdff}.tbl tr:hover td{background:#eef7fd}.pill{display:inline-block;padding:5px 8px;border-radius:999px;font-size:9px;font-weight:950}.pill.nac{background:#e0f2fe;color:#075985}.pill.int{background:#ede9fe;color:#5b21b6}.pill.ok{background:#dcfce7;color:#166534}.pill.wait{background:#fef3c7;color:#92400e}
+.loader{position:fixed;inset:0;background:#001f4380;z-index:999;display:grid;place-items:center}.loader>div{background:white;border-radius:15px;padding:24px 30px;text-align:center;color:var(--navy);font-weight:900;box-shadow:0 20px 60px #001d3d55}.spin{width:44px;height:44px;border:5px solid #d7e9f7;border-top-color:#087fce;border-radius:50%;margin:0 auto 12px;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 .overlay{position:fixed;inset:0;background:#001a3cb0;z-index:80;display:none;overflow:auto;padding:18px}.overlay.open{display:block}.panel{max-width:1260px;margin:auto}.panel-tools{display:flex;justify-content:flex-end;gap:8px;margin-bottom:8px}
 .oc-document{background:white;border:1px solid #9aa9b6;color:#111;box-shadow:0 20px 60px #0005}.oc-head{display:grid;grid-template-columns:280px 1fr 220px;border-bottom:1px solid #9099a1}.oc-logo{font-weight:1000;font-size:46px;color:#123e72;padding:12px 22px;border-right:1px solid #9099a1;letter-spacing:2px;display:flex;align-items:center;justify-content:center}.oc-title{text-align:center;padding:20px;font-size:27px;font-weight:900}.oc-number{padding:18px;font-size:18px;font-weight:900;border-left:1px solid #9099a1;text-align:center}.oc-number strong{display:block;font-size:28px;margin-top:5px}
 .oc-info{display:grid;grid-template-columns:42% 58%;border-bottom:1px solid #9099a1}.oc-info>div{padding:10px 14px}.oc-info>div:first-child{border-right:1px solid #9099a1}.line{display:grid;grid-template-columns:125px 1fr;gap:6px;margin:4px 0;font-size:13px}.line b{font-weight:800}.doc-table{width:100%;border-collapse:collapse}.doc-table th{border-bottom:1px solid #777;border-right:1px solid #999;padding:6px;background:#f2f5f7;font-size:12px}.doc-table td{padding:8px 7px;border-right:1px solid #d0d6da;vertical-align:top;font-size:13px}.doc-table td.num{text-align:right;font-variant-numeric:tabular-nums}.doc-body{min-height:260px}.oc-bottom{display:grid;grid-template-columns:1fr 330px;border-top:1px solid #9099a1;min-height:130px}.notes{padding:10px 13px;border-right:1px solid #9099a1;white-space:pre-wrap}.totals{padding:10px 14px}.totals .r{display:flex;justify-content:space-between;border-bottom:1px solid #aaa;padding:5px 0}.totals .r.total{font-weight:900;font-size:17px}.oc-foot{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid #9099a1}.oc-foot>div{padding:10px 14px;min-height:68px;border-right:1px solid #9099a1}.oc-foot>div:last-child{border-right:0}.oc-foot strong{display:block;margin-top:8px}
-.trace{margin-top:14px;background:white;border-radius:15px;padding:15px;border:1px solid var(--line)}.trace h3{color:var(--navy);margin:4px 0 10px}.trace-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.box{border:1px solid var(--line);border-radius:11px;padding:10px;margin:7px 0}.assign{border-left:5px solid var(--green);background:#f0fbf5}.entry{border-left:5px solid #0d76c2;background:#f5faff}.muted{color:var(--muted);font-size:11px}.raw{font-size:10px;color:#7c5c19}
+.trace{margin-top:14px;background:white;border-radius:15px;padding:15px;border:1px solid var(--line)}.trace h3{color:var(--navy);margin:4px 0 10px}.trace-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.box{border:1px solid var(--line);border-radius:11px;padding:10px;margin:7px 0}.assign{border-left:5px solid var(--green);background:#f0fbf5}.entry{border-left:5px solid #0d76c2;background:#f5faff}.muted{color:var(--muted);font-size:10px}.raw{font-size:10px;color:#7c5c19}
 dialog{border:0;border-radius:16px;width:min(700px,96vw);box-shadow:0 25px 70px #0006}dialog::backdrop{background:#001a3c99}.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.wide{grid-column:1/-1}textarea{min-height:90px}
-@media(max-width:1050px){.filters{grid-template-columns:1fr 1fr 1fr}.kpis{grid-template-columns:1fr 1fr 1fr}.oc-head{grid-template-columns:180px 1fr 160px}.oc-logo{font-size:32px}.trace-grid{grid-template-columns:1fr}}
+@media(max-width:1280px){.filters{grid-template-columns:repeat(5,1fr)}.analytics{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.brandbar{padding:0 14px}.brand-pelex{font-size:22px}.brand-divider{display:none}.brand-arma span{display:none}.sessionbox{display:none}.modulebar-inner{padding:17px 14px}.modulebar h1{font-size:20px}.modulebar p{font-size:10px}.filters{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:1fr 1fr}.analytics{display:block}.analytics-side{margin-top:10px}.currency-cards{grid-template-columns:1fr 1fr}.oc-head{grid-template-columns:150px 1fr 135px}.oc-logo{font-size:26px}.trace-grid{grid-template-columns:1fr}}
 @media print{.no-print{display:none!important}body *{visibility:hidden!important}.oc-document,.oc-document *{visibility:visible!important}.oc-document{position:absolute;left:0;top:0;width:100%;box-shadow:none;border:1px solid #555}.overlay{display:block!important;padding:0;background:white}.panel-tools,.trace{display:none!important}}
+
 </style>
 </head>
+
 <body>
 <div id="loader" class="loader"><div><div class="spin"></div><div id="loadText">CARGANDO ÓRDENES...</div></div></div>
-<header class="top"><div><h1>SOPORTE Y CONTROL EXTERNO | ÓRDENES DE COMPRA</h1><small>DOCUMENTO REAL DATAPEL + TRAZABILIDAD ARMA</small></div><b id="user">VALIDANDO SESIÓN</b></header>
+<header class="brandbar">
+  <div class="brand-left"><div class="brand-pelex">PELEX</div><div class="brand-divider"></div><div class="brand-arma">A.R.M.A.<span>ASSET RELIABILITY &amp; MAINTENANCE ANALYTICS</span></div></div>
+  <div class="sessionbox"><b id="user">VALIDANDO SESIÓN...</b><span>DATAPEL + ARMA // TRAZABILIDAD DE COMPRAS</span></div>
+</header>
+<section class="modulebar"><div class="modulebar-inner"><div><h1>ÓRDENES DE COMPRA | CONTROL Y ANALÍTICA</h1><p>DOCUMENTO REAL · COSTOS DE MANTENIMIENTO · RECEPCIÓN · ASIGNACIÓN A ACTIVOS</p></div><a class="homebtn" href="main.html">INICIO · VOLVER A ARMA</a></div></section>
 <main>
-<section class="hero"><div><h2>ÓRDENES DE COMPRA V03.1</h2><p>NACIONALES + INTERNACIONALES | DOCUMENTO ? RECEPCIÓN ? ACTIVO / MÁQUINA</p></div><a href="main.html">INICIO</a></section>
-<section class="card filters">
-<div class="f"><label>Desde</label><input id="from" type="date"></div>
-<div class="f"><label>Hasta</label><input id="to" type="date"></div>
-<div class="f"><label>Tipo</label><select id="type"><option value="">TODAS</option></select></div>
-<div class="f"><label>OC</label><input id="nro" placeholder="NÚMERO OC"></div>
-<div class="f"><label>Proveedor</label><input id="prov" placeholder="NOMBRE O NIT"></div>
-<div class="f"><label>Departamento</label><select id="dep"><option value="">TODOS</option></select></div>
-<div class="f"><label>Asignación</label><select id="asig"><option value="">TODAS</option><option value="PENDIENTE_ASIGNAR">PENDIENTE</option><option value="CON_ASIGNACION">CON ASIGNACIÓN</option></select></div>
-<button class="btn" id="refresh">ACTUALIZAR</button>
-</section>
-<section class="kpis">
-<div class="k"><span>OC EN FILTRO</span><strong id="k1">0</strong></div>
-<div class="k"><span>NACIONALES</span><strong id="k2">0</strong></div>
-<div class="k"><span>INTERNACIONALES</span><strong id="k3">0</strong></div>
-<div class="k"><span>PENDIENTE ASIGNAR</span><strong id="k4">0</strong></div>
-<div class="k"><span>ASIGNACIONES</span><strong id="k5">0</strong></div>
-<div class="k"><span>VALOR ASIGNADO COP</span><strong id="k6">$0</strong></div>
-</section>
-<section class="card"><div class="table-wrap"><table class="tbl"><thead><tr><th>TIPO</th><th>OC</th><th>FECHA</th><th>DEPARTAMENTO / USUARIO</th><th>PROVEEDOR</th><th>ÍTEMS</th><th>TOTAL OC</th><th>RECEPCIONES</th><th>ASIGNACIÓN</th><th>ACCIÓN</th></tr></thead><tbody id="rows"></tbody></table></div></section>
-</main>
+  <div class="section-title"><div><h2>CONSULTA DOCUMENTAL</h2><p>Filtre por año, rango de fechas, usuario, proveedor y demás criterios operativos.</p></div><div id="periodLabel" class="muted"></div></div>
+  <section class="card search-card">
+    <div class="search-head"><strong>BANDEJA DE ÓRDENES DE COMPRA</strong><span>FUENTE: DATAPEL · DOCUMENTO + TRAZABILIDAD ARMA</span></div>
+    <div class="filters">
+      <div class="f"><label>Periodo</label><select id="period"><option value="CUSTOM">RANGO MANUAL</option></select></div>
+      <div class="f"><label>Desde</label><input id="from" type="date"></div>
+      <div class="f"><label>Hasta</label><input id="to" type="date"></div>
+      <div class="f"><label>Tipo</label><select id="type"><option value="">TODAS</option></select></div>
+      <div class="f"><label>OC</label><input id="nro" placeholder="NÚMERO OC"></div>
+      <div class="f"><label>Proveedor</label><input id="prov" placeholder="NOMBRE O NIT"></div>
+      <div class="f"><label>Departamento</label><select id="dep"><option value="">TODOS</option></select></div>
+      <div class="f"><label>Usuario solicitante</label><select id="usr"><option value="">TODOS</option></select></div>
+      <div class="f"><label>Asignación</label><select id="asig"><option value="">TODAS</option><option value="PENDIENTE_ASIGNAR">PENDIENTE</option><option value="CON_ASIGNACION">CON ASIGNACIÓN</option></select></div>
+      <button class="btn" id="refresh">BUSCAR</button>
+    </div>
+  </section>
 
+  <section class="kpis">
+    <div class="k"><span>OC EN FILTRO</span><strong id="k1">0</strong></div>
+    <div class="k"><span>NACIONALES</span><strong id="k2">0</strong></div>
+    <div class="k"><span>INTERNACIONALES</span><strong id="k3">0</strong></div>
+    <div class="k"><span>PENDIENTE ASIGNAR</span><strong id="k4">0</strong></div>
+    <div class="k"><span>ASIGNACIONES</span><strong id="k5">0</strong></div>
+    <div class="k"><span>VALOR ASIGNADO COP</span><strong id="k6">$0</strong></div>
+  </section>
+
+  <section class="analytics">
+    <div class="card analytics-main">
+      <div class="analytics-head"><div><h3>VALOR DE OC DE MANTENIMIENTO POR USUARIO</h3><p>Suma de TOTAL_OC para órdenes cuyo departamento es MANTENIMIENTO, dentro del periodo y filtros activos. Las monedas nunca se mezclan.</p></div><div class="currency-picker"><label>MONEDA</label><select id="chartCurrency"></select></div></div>
+      <div class="chart-wrap"><canvas id="costChart"></canvas><div id="chartEmpty" class="chart-empty hidden">SIN DATOS DE MANTENIMIENTO PARA ESTA MONEDA / FILTRO</div></div>
+    </div>
+    <div class="card analytics-side">
+      <div class="analytics-head"><div><h3>RESUMEN DEL PERIODO</h3><p>Valor documental de las OC de mantenimiento. No representa todavía costo realizado ni pagado.</p></div></div>
+      <div id="currencyCards" class="currency-cards"></div>
+      <div class="report-meta"><div class="meta-box"><span>OC MANTENIMIENTO</span><strong id="mttoOrders">0</strong></div><div class="meta-box"><span>USUARIOS</span><strong id="mttoUsers">0</strong></div></div>
+      <div class="redteam-note"><b>REDTEAM:</b> este informe mide valor comprometido/documental en órdenes de compra, no gasto contable realizado. Para costo real se requerirá integrar factura/recepción y la asignación al activo. Monedas extranjeras se reportan separadas hasta contar con una TRM/fuente FX validada.</div>
+    </div>
+  </section>
+
+  <section class="card table-card">
+    <div class="table-head"><strong>ÓRDENES EN EL FILTRO</strong><span id="rowCount">0 REGISTROS</span></div>
+    <div class="table-wrap"><table class="tbl"><thead><tr><th>TIPO</th><th>OC</th><th>FECHA</th><th>DEPARTAMENTO / USUARIO</th><th>PROVEEDOR</th><th>ÍTEMS</th><th>TOTAL OC</th><th>RECEPCIONES</th><th>ASIGNACIÓN</th><th>ACCIÓN</th></tr></thead><tbody id="rows"></tbody></table></div>
+  </section>
+</main>
 <div id="ocOverlay" class="overlay"><div class="panel"><div class="panel-tools"><button class="btn gray" onclick="closeOc()">CERRAR</button><button class="btn green" onclick="window.print()">IMPRIMIR / PDF</button></div><div id="ocDoc"></div><div id="trace" class="trace"></div></div></div>
 
 <dialog id="assignDlg">
@@ -69,7 +113,7 @@ dialog{border:0;border-radius:16px;width:min(700px,96vw);box-shadow:0 25px 70px 
 
 <script>
 const API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
-let state=null,detail=null,currentItem=null;
+let state=null,detail=null,currentItem=null,initialPeriodReady=false;
 const $=id=>document.getElementById(id);
 const esc=x=>String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function token(){return localStorage.getItem('ARMA_TOKEN')||sessionStorage.getItem('ARMA_TOKEN')||''}
@@ -79,26 +123,42 @@ function money(n,c){const v=Number(n||0),m=String(c||'COP').trim();if(norm(m)===
 function ocLabel(o){const tipo=norm(o&&o.TIPO_OC),n=String(o&&o.NRO_OC||'').trim(),a=String(o&&o.ANO_OC||'').trim();return tipo==='INTERNACIONAL'?('I-'+n+(a?'/'+a:'')):n}
 function load(on,t){$('loader').classList.toggle('hidden',!on);if(t)$('loadText').textContent=t}
 async function api(action,p={}){const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,token:token()},p))});let j;try{j=await r.json()}catch(e){throw new Error('RESPUESTA BACKEND NO JSON')}if(!j||j.ok!==true)throw new Error((j&&j.detail)||(j&&j.error)||'ERROR BACKEND');return j}
+function uniq(a){return [...new Set((a||[]).map(x=>String(x||'').trim()).filter(Boolean))]}
 function filters(){return{DESDE:$('from').value,HASTA:$('to').value,TIPO_OC:$('type').value,NRO_OC:$('nro').value,PROVEEDOR:$('prov').value,DEPARTAMENTO:$('dep').value,ASIGNACION:$('asig').value}}
+function yearsFromBounds(minDate,maxDate){const a=Number(String(minDate||'').slice(0,4)),b=Number(String(maxDate||'').slice(0,4)),out=[];if(!a||!b)return out;for(let y=b;y>=a;y--)out.push(y);return out}
+function setPeriodOptions(){const old=$('period').value||'CUSTOM',ys=yearsFromBounds(state&&state.minDate,state&&state.maxDate);$('period').innerHTML='<option value="CUSTOM">RANGO MANUAL</option>'+ys.map(y=>`<option value="Y${y}">AÑO ${y}</option>`).join('');if([...$('period').options].some(o=>o.value===old))$('period').value=old}
+function applyPeriod(value){if(!value||value==='CUSTOM')return;const y=Number(value.slice(1));if(!y)return;const max=state&&state.maxDate&&String(state.maxDate).startsWith(String(y))?state.maxDate:`${y}-12-31`;$('from').value=`${y}-01-01`;$('to').value=max}
+function viewRows(){const u=norm($('usr').value);return (state&&state.rows||[]).filter(r=>!u||norm(r.USUARIO)===u)}
+function maintenanceRows(){return viewRows().filter(r=>norm(r.DEPARTAMENTO)==='MANTENIMIENTO')}
+function maintenanceAnalytics(){const rows=maintenanceRows(),byCurrency={},byUser={};rows.forEach(r=>{const c=norm(r.MONEDA||'COP')||'COP',u=String(r.USUARIO||'SIN USUARIO').trim()||'SIN USUARIO',v=Number(r.TOTAL_OC||0);byCurrency[c]=(byCurrency[c]||0)+v;if(!byUser[c])byUser[c]={};byUser[c][u]=(byUser[c][u]||0)+v});return{rows,byCurrency,byUser,users:uniq(rows.map(r=>r.USUARIO))}}
+function renderCurrencyCards(a){const cs=Object.keys(a.byCurrency).sort((x,y)=>(x==='COP'?-1:y==='COP'?1:x.localeCompare(y)));$('currencyCards').innerHTML=cs.length?cs.map(c=>`<div class="money-card"><span>${esc(c)} · VALOR OC MTTO</span><strong>${money(a.byCurrency[c],c)}</strong><small>${a.rows.filter(r=>norm(r.MONEDA||'COP')===c).length} órdenes</small></div>`).join(''):'<div class="money-card"><span>SIN DATOS</span><strong>0</strong><small>No hay OC de mantenimiento en el filtro.</small></div>';$('mttoOrders').textContent=a.rows.length;$('mttoUsers').textContent=a.users.length}
+function syncChartCurrency(a){const cs=Object.keys(a.byCurrency).sort((x,y)=>(x==='COP'?-1:y==='COP'?1:x.localeCompare(y))),old=$('chartCurrency').value;$('chartCurrency').innerHTML=cs.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');if(cs.includes(old))$('chartCurrency').value=old;else if(cs.includes('COP'))$('chartCurrency').value='COP';else if(cs.length)$('chartCurrency').value=cs[0]}
+function drawCostChart(a){const canvas=$('costChart'),box=canvas.parentElement,currency=$('chartCurrency').value,series=Object.entries((a.byUser&&a.byUser[currency])||{}).sort((x,y)=>y[1]-x[1]).slice(0,12),empty=$('chartEmpty');empty.classList.toggle('hidden',series.length>0);const dpr=window.devicePixelRatio||1,w=Math.max(320,box.clientWidth),h=Math.max(260,box.clientHeight);canvas.width=Math.floor(w*dpr);canvas.height=Math.floor(h*dpr);const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);ctx.clearRect(0,0,w,h);if(!series.length)return;const left=Math.min(230,Math.max(130,w*.27)),right=90,top=18,bottom=24,rowH=(h-top-bottom)/series.length,max=Math.max(...series.map(x=>x[1]),1);ctx.font='11px Segoe UI';ctx.textBaseline='middle';series.forEach((it,i)=>{const y=top+i*rowH+rowH*.5,val=it[1],barW=(w-left-right)*(val/max);ctx.fillStyle='#e8f1f7';ctx.fillRect(left,y-rowH*.23,w-left-right,rowH*.46);ctx.fillStyle=i===0?'#0b6fb8':'#2d8bc4';ctx.fillRect(left,y-rowH*.23,barW,rowH*.46);ctx.fillStyle='#304a64';ctx.textAlign='right';ctx.fillText(it[0].length>26?it[0].slice(0,25)+'…':it[0],left-10,y);ctx.textAlign='left';ctx.fillStyle='#173a5c';ctx.font='10px Segoe UI';ctx.fillText(money(val,currency),Math.min(w-right+6,left+barW+7),y);ctx.font='11px Segoe UI'});ctx.strokeStyle='#b8cad9';ctx.beginPath();ctx.moveTo(left,top-4);ctx.lineTo(left,h-bottom+3);ctx.stroke()}
+function renderAnalytics(){const a=maintenanceAnalytics();renderCurrencyCards(a);syncChartCurrency(a);requestAnimationFrame(()=>drawCostChart(a))}
 async function refresh(){
  try{
   load(true,'CARGANDO ÓRDENES REALES...');
+  const userVal=$('usr').value;
   state=await api('comprasBootstrap',{filters:filters()});
   $('user').textContent=(state.session&&state.session.user?state.session.user:'ARMA')+' // '+(state.session&&state.session.nivel?state.session.nivel:'');
   if(!$('from').value&&state.maxDate){const d=new Date(state.maxDate+'T00:00:00');d.setDate(d.getDate()-120);$('from').value=d.toISOString().slice(0,10)}
   if(!$('to').value&&state.maxDate)$('to').value=state.maxDate;
+  setPeriodOptions();
   const typeVal=$('type').value,depVal=$('dep').value;
   $('type').innerHTML='<option value="">TODAS</option>'+((state.filters&&state.filters.types)||[]).map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
   $('dep').innerHTML='<option value="">TODOS</option>'+((state.filters&&state.filters.departments)||[]).map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
-  $('type').value=typeVal;$('dep').value=depVal;render();
+  $('type').value=typeVal;$('dep').value=depVal;
+  const users=uniq((state.rows||[]).map(r=>r.USUARIO)).sort((a,b)=>a.localeCompare(b,'es'));
+  $('usr').innerHTML='<option value="">TODOS</option>'+users.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');if(users.some(x=>x===userVal))$('usr').value=userVal;
+  render();
  }catch(e){alert(e.message)}finally{load(false)}
 }
 function render(){
- const k=state.kpi||{};$('k1').textContent=k.ordenes||0;$('k2').textContent=k.nacionales||0;$('k3').textContent=k.internacionales||0;$('k4').textContent=k.pendienteAsignar||0;$('k5').textContent=k.asignaciones||0;$('k6').textContent=money(k.valorAsignadoCOP||0,'COP');
- $('rows').innerHTML=(state.rows||[]).map(r=>{
-  const cls=norm(r.TIPO_OC)==='INTERNACIONAL'?'int':'nac',a=r.ASIGNACIONES?`<span class="pill ok">${r.ASIGNACIONES} ASIGN.</span>`:'<span class="pill wait">PENDIENTE</span>';
-  return `<tr><td><span class="pill ${cls}">${esc(r.TIPO_OC)}</span></td><td><b>${esc(ocLabel(r))}</b></td><td>${esc(r.FECHA_OC)}</td><td>${esc(r.DEPARTAMENTO)}<br><span class="muted">${esc(r.USUARIO)}</span></td><td>${esc(r.PROVEEDOR)}<br><span class="muted">${esc(r.NIT_PROV)}</span></td><td>${esc(r.ITEMS)}</td><td><b>${money(r.TOTAL_OC,r.MONEDA)}</b></td><td>${esc(r.ENTRADAS)}</td><td>${a}</td><td><button class="btn sm" onclick="openOc('${esc(r.TIPO_OC)}','${esc(r.ANO_OC)}','${esc(r.NRO_OC)}')">VER OC</button></td></tr>`
- }).join('')||'<tr><td colspan="10">SIN DATOS PARA EL FILTRO. VERIFIQUE QUE CMP_OC_DOC Y CMP_OC_DOC_ITEM ESTÉN SINCRONIZADAS.</td></tr>';
+ const rows=viewRows(),k={ordenes:rows.length,nacionales:rows.filter(r=>norm(r.TIPO_OC)==='NACIONAL').length,internacionales:rows.filter(r=>norm(r.TIPO_OC)==='INTERNACIONAL').length,pendienteAsignar:rows.filter(r=>!Number(r.ASIGNACIONES||0)).length,asignaciones:rows.reduce((a,r)=>a+Number(r.ASIGNACIONES||0),0),valorAsignadoCOP:rows.filter(r=>norm(r.MONEDA||'COP')==='COP').reduce((a,r)=>a+Number(r.VALOR_ASIGNADO||0),0)};
+ $('k1').textContent=k.ordenes;$('k2').textContent=k.nacionales;$('k3').textContent=k.internacionales;$('k4').textContent=k.pendienteAsignar;$('k5').textContent=k.asignaciones;$('k6').textContent=money(k.valorAsignadoCOP,'COP');
+ $('rowCount').textContent=rows.length+' REGISTROS';$('periodLabel').textContent=($('from').value||'—')+' ? '+($('to').value||'—')+($('usr').value?' · '+$('usr').value:'');
+ $('rows').innerHTML=rows.map(r=>{const cls=norm(r.TIPO_OC)==='INTERNACIONAL'?'int':'nac',a=r.ASIGNACIONES?`<span class="pill ok">${r.ASIGNACIONES} ASIGN.</span>`:'<span class="pill wait">PENDIENTE</span>';return `<tr><td><span class="pill ${cls}">${esc(r.TIPO_OC)}</span></td><td><b>${esc(ocLabel(r))}</b></td><td>${esc(r.FECHA_OC)}</td><td>${esc(r.DEPARTAMENTO)}<br><span class="muted">${esc(r.USUARIO)}</span></td><td>${esc(r.PROVEEDOR)}<br><span class="muted">${esc(r.NIT_PROV)}</span></td><td>${esc(r.ITEMS)}</td><td><b>${money(r.TOTAL_OC,r.MONEDA)}</b></td><td>${esc(r.ENTRADAS)}</td><td>${a}</td><td><button class="btn sm" onclick="openOc('${esc(r.TIPO_OC)}','${esc(r.ANO_OC)}','${esc(r.NRO_OC)}')">VER OC</button></td></tr>`}).join('')||'<tr><td colspan="10">SIN DATOS PARA EL FILTRO.</td></tr>';
+ renderAnalytics();
 }
 function infoLine(label,value){return `<div class="line"><b>${esc(label)}</b><span>${esc(value||'—')}</span></div>`}
 function docHtml(d){
@@ -126,7 +186,15 @@ function startAssign(n){const i=findCurrentItem(n);if(!i)return;currentItem=i;$(
 $('mQty').addEventListener('input',()=>{if($('mMethod').value==='OC_UNITARIO')$('mVal').value=Number($('mQty').value||0)*Number($('mUnitPrice').value||0)});
 $('mMethod').addEventListener('change',()=>{if($('mMethod').value==='OC_UNITARIO')$('mVal').value=Number($('mQty').value||0)*Number($('mUnitPrice').value||0)});
 async function saveAssign(){if(!currentItem||!detail)return;const why=$('mWhy').value.trim();if(!why){alert('LA JUSTIFICACIÓN ES OBLIGATORIA.');return}try{load(true,'GUARDANDO ASIGNACIÓN...');await api('comprasGuardarAsignacion',{TIPO_OC:detail.doc.TIPO_OC,ANO_OC:detail.doc.ANO_OC,NRO_OC:detail.doc.NRO_OC,NMR_ITM_OC:currentItem.NMR_ITM,COD_MP:currentItem.COD_MP,ID_ACTIVO_ARMA:$('mAsset').value,ID_OT_ARMA:$('mOt').value,CANTIDAD_ASIGNADA:$('mQty').value,UNIDAD:$('mUnit').value,VALOR_ASIGNADO:$('mVal').value,METODO_VALOR:$('mMethod').value,JUSTIFICACION:why});assignDlg.close();await openOc(detail.doc.TIPO_OC,detail.doc.ANO_OC,detail.doc.NRO_OC);await refresh()}catch(e){alert(e.message)}finally{load(false)}}
+
+const assignDlg=$('assignDlg');
 $('refresh').onclick=refresh;
+$('usr').addEventListener('change',render);
+$('chartCurrency').addEventListener('change',()=>drawCostChart(maintenanceAnalytics()));
+$('period').addEventListener('change',async()=>{if($('period').value!=='CUSTOM'){applyPeriod($('period').value);await refresh()}});
+$('from').addEventListener('change',()=>{$('period').value='CUSTOM'});
+$('to').addEventListener('change',()=>{$('period').value='CUSTOM'});
+window.addEventListener('resize',()=>{if(state)drawCostChart(maintenanceAnalytics())});
 refresh();
 </script>
 </body></html>
