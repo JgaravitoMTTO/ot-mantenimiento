@@ -46,7 +46,7 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
 .arma-dialog-icon.warning{background:linear-gradient(145deg,#fff8e7,#ffedbd);border-color:#f6cf70;color:#8a5200}.arma-dialog-icon.danger{background:linear-gradient(145deg,#fff0f0,#ffdcdc);border-color:#f3aaaa;color:#9f1c1c}.arma-dialog-icon.success{background:linear-gradient(145deg,#effff4,#d8f8e3);border-color:#a7e2b9;color:#087a36}.arma-dialog-title{margin:0;color:var(--navy);font-size:19px;font-weight:950;line-height:1.15;letter-spacing:.15px}.arma-dialog-kicker{display:block;margin-top:4px;color:var(--muted);font-size:10px;font-weight:900;letter-spacing:.7px}
 .arma-dialog-message{min-height:56px;padding:14px 15px;border:1px solid #dbe8f5;border-radius:14px;background:#f8fbff;color:#17345d;font-size:13px;font-weight:850;line-height:1.52;white-space:pre-line;text-transform:uppercase}.arma-dialog-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:18px}.arma-dialog-actions .btn{min-width:118px}.arma-dialog-cancel{background:linear-gradient(180deg,#8b98aa,#667386)}.arma-dialog-accept{background:linear-gradient(180deg,#0076d7,#004b9b)}.arma-dialog-accept.danger{background:linear-gradient(180deg,#ef4444,#b91c1c)}
 @media(max-width:700px){.arma-dialog-back{padding:12px}.arma-dialog{width:96vw;border-radius:18px}.arma-dialog-body{padding:18px 16px 16px}.arma-dialog-title{font-size:18px}.arma-dialog-message{font-size:14px}.arma-dialog-actions{display:grid;grid-template-columns:1fr 1fr}.arma-dialog-actions .btn{width:100%;min-width:0}}
-/* === ARMA TURNOS V03.0 CLOCK LIVE / PRELIQ === */
+/* === ARMA TURNOS V03.1 DATAPEL CLOCK FIX / PRELIQ === */
 .preliq-modal{width:min(1550px,98vw)}.preliq-toolbar{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin:10px 0 12px}.preliq-toolbar .field{min-width:190px;flex:1}.preliq-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;max-height:58vh}.preliq-table{width:100%;border-collapse:collapse;min-width:1450px}
 .preliq-table th{position:sticky;top:0;z-index:3;background:#0d638a;color:#fff;padding:9px 8px;font-size:10px}.preliq-table td{padding:7px 8px;border-bottom:1px solid #dbe5f0;font-size:10px;vertical-align:middle}.preliq-table input,.preliq-table select{min-height:36px;padding:6px 7px;font-size:11px}
 .preliq-net{font-weight:950;color:#087a36}.preliq-warn{color:#9a3412;font-weight:950}.preliq-stale{background:#fff7ed}.preliq-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:10px 0}.preliq-kpi{border:1px solid var(--line);border-radius:13px;background:#f8fbff;padding:10px}.preliq-kpi span{display:block;font-size:9px;color:#64748b;font-weight:950}.preliq-kpi strong{display:block;font-size:18px;color:#003b80;margin-top:4px}
@@ -135,7 +135,7 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
       <div id="novedadesList" class="novedad-list"><div class="novedad-card">SIN NOVEDADES CARGADAS.</div></div>
     </section>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>TURNOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-09-26 21:59:05</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>TURNOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-09-26 22:33:20</span></div></footer>
 </main>
 
 <div id="armaDialog" class="arma-dialog-back" role="dialog" aria-modal="true" aria-labelledby="armaDialogTitle" aria-describedby="armaDialogMessage">
@@ -187,18 +187,18 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
 <div id="preliqModal" class="modal-back">
   <div class="modal preliq-modal">
     <h2>PRELIQUIDAR NOVEDADES DESDE TIMBRADAS</h2>
-    <div class="preliq-help">ARMA V03.0: LAS TIMBRADAS SE SINCRONIZAN DESDE SERVIDOR03 / RELOJ.MDB EN MODO SOLO LECTURA. ESTA PANTALLA NO ACCEDE DIRECTAMENTE AL MDB: CONSULTA LA ULTIMA SINCRONIZACION SEGURA EN ARMA. EXTRA NETA = MAX(0, EXTRA BRUTA - RETARDO) ES UN BALANCE OPERATIVO Y REQUIERE VALIDACION DE TALENTO HUMANO.</div>
+    <div class="preliq-help">ARMA V03.1: LOS DATOS PROVIENEN DE DATAPEL / RELOJ.MDB MEDIANTE EL READER CLOCK SOLO LECTURA DE SERVIDOR03. EL BOTON CARGA LA ULTIMA SINCRONIZACION DATAPEL DISPONIBLE EN ARMA; EL NAVEGADOR NO ABRE DIRECTAMENTE EL MDB. EXTRA NETA = MAX(0, EXTRA BRUTA - RETARDO) ES UN BALANCE OPERATIVO Y REQUIERE VALIDACION DE TALENTO HUMANO.</div>
     <div class="preliq-toolbar">
       <div class="field"><label>DESDE</label><input id="preliqDesde" type="date"></div>
       <div class="field"><label>HASTA</label><input id="preliqHasta" type="date"></div>
-      <button class="btn" type="button" onclick="preliqLoadBackend()">CARGAR DESDE ARMA</button>
+      <button class="btn" type="button" onclick="preliqLoadBackend()">CARGAR DATOS DATAPEL</button>
       <button class="btn orange" type="button" onclick="preliqSaveAll()">GUARDAR VALIDACION</button>
       <button class="btn green" type="button" onclick="preliqGenerateExcel()">GENERAR EXCEL NOMINA</button>
       <button class="btn gray" type="button" onclick="closePreliq()">CERRAR</button>
     </div>
-    <div id="preliqSourceStatus" class="preliq-source">SIN DATOS CLOCK CARGADOS.</div>
+    <div id="preliqSourceStatus" class="preliq-source">SIN DATOS DATAPEL/CLOCK CARGADOS.</div>
     <div class="preliq-summary"><div class="preliq-kpi"><span>REGISTROS</span><strong id="preliqKpiRows">0</strong></div><div class="preliq-kpi"><span>APROBADOS</span><strong id="preliqKpiOk">0</strong></div><div class="preliq-kpi"><span>HORAS NETAS APROBADAS</span><strong id="preliqKpiHours">0,00</strong></div><div class="preliq-kpi"><span>PENDIENTES / REVALIDAR</span><strong id="preliqKpiPending">0</strong></div></div>
-    <div class="preliq-wrap"><table class="preliq-table"><thead><tr><th>FECHA</th><th>PERSONA</th><th>TURNO</th><th>PRIMERA</th><th>ULTIMA</th><th>RETARDO MIN</th><th>BRUTO OPERATIVO MIN</th><th>EXTRA NETA H</th><th>DECISION</th><th>TIPO NOMINA</th><th>AJUSTE H</th><th>OBSERVACION</th></tr></thead><tbody id="preliqRows"><tr><td colspan="12">PULSE CARGAR DESDE ARMA PARA INICIAR.</td></tr></tbody></table></div>
+    <div class="preliq-wrap"><table class="preliq-table"><thead><tr><th>FECHA</th><th>PERSONA</th><th>TURNO</th><th>PRIMERA</th><th>ULTIMA</th><th>RETARDO MIN</th><th>BRUTO OPERATIVO MIN</th><th>EXTRA NETA H</th><th>DECISION</th><th>TIPO NOMINA</th><th>AJUSTE H</th><th>OBSERVACION</th></tr></thead><tbody id="preliqRows"><tr><td colspan="12">PULSE CARGAR DATOS DATAPEL PARA INICIAR.</td></tr></tbody></table></div>
   </div>
 </div>
 <div id="newTurnoModal" class="modal-back">
@@ -507,11 +507,11 @@ function preliqTimeOnly(v){let s=String(v||'').trim();return s.length>=19?s.slic
 function preliqDefaultPeriod(){let a=document.getElementById('preliqDesde'),b=document.getElementById('preliqHasta');if(!a||!b||a.value||b.value)return;let n=new Date(),y=n.getFullYear(),m=n.getMonth(),d=n.getDate(),x,z;if(d>15){x=new Date(y,m,1);z=new Date(y,m,15);}else{x=new Date(y,m-1,16);z=new Date(y,m,0);}a.value=toISO(x);b.value=toISO(z);}
 async function openPreliq(){if(!hasPerm('BTN_TURNOS_APROBAR_NOVEDADES')){armaAlert('NO TIENE PERMISO PARA PRELIQUIDAR O APROBAR NOVEDADES.','ACCESO NO AUTORIZADO','DANGER');return;}preliqDefaultPeriod();document.getElementById('preliqModal').classList.add('show');preliqUpdateKpis();await preliqLoadBackend();}
 function closePreliq(){if(preliqDirty){armaAlert('HAY CAMBIOS DE VALIDACION SIN GUARDAR. GUARDE O RECARGUE ANTES DE CERRAR.','CAMBIOS PENDIENTES','WARNING');return;}document.getElementById('preliqModal').classList.remove('show');}
-function preliqSourceLabel(data){let s=data&&data.source?data.source:{},u=s.usuariosSync||{},t=s.timbradasSync||{},last=s.ultimaMarcaPeriodo||'SIN MARCA EN PERIODO';let a='CLOCK USUARIOS: '+(u.fechaHora||'SIN SYNC')+' / '+(u.estado||'SIN ESTADO');let b='TIMBRADAS: '+(t.fechaHora||'SIN SYNC')+' / '+(t.estado||'SIN ESTADO');return a+'   //   '+b+'   //   ULTIMA MARCA DEL PERIODO: '+last;}
+function preliqSourceLabel(data){let s=data&&data.source?data.source:{},u=s.usuariosSync||{},t=s.timbradasSync||{},last=s.ultimaMarcaPeriodo||'SIN MARCA EN PERIODO';let a='DATAPEL USUARIOS: '+(u.fechaHora||'SIN SYNC')+' / '+(u.estado||'SIN ESTADO');let b='DATAPEL TIMBRADAS: '+(t.fechaHora||'SIN SYNC')+' / '+(t.estado||'SIN ESTADO');let c='MARCAS VENTANA: '+String(s.marcasVentana||0)+' / USERID CON MARCAS: '+String(s.useridsConMarcas||0);return a+'   //   '+b+'   //   '+c+'   //   ULTIMA MARCA DEL PERIODO: '+last;}
 async function preliqLoadBackend(){let desde=(document.getElementById('preliqDesde')||{}).value||'',hasta=(document.getElementById('preliqHasta')||{}).value||'';if(!desde||!hasta){armaAlert('SELECCIONE EL PERIODO DESDE Y HASTA.','PERIODO REQUERIDO','WARNING');return;}
-if(preliqDirty){let ok=await armaConfirm('HAY CAMBIOS SIN GUARDAR. ¿DESEA DESCARTARLOS Y RECARGAR DESDE ARMA?','RECARGAR PRELIQ','RECARGAR','CANCELAR','WARNING');if(!ok)return;}
-try{let data=await api('clockPreliqBootstrap',{desde:desde,hasta:hasta},'CARGANDO TIMBRADAS DESDE ARMA...');if(!data||!data.ok)throw new Error((data&&data.detail)||(data&&data.error)||'CLOCK_PRELIQ_NO_DISPONIBLE');
-preliqRows=Array.isArray(data.rows)?data.rows:[];preliqSource=data.source||{};preliqDirty=false;let st=document.getElementById('preliqSourceStatus');if(st)st.textContent=preliqSourceLabel(data);renderPreliq();}catch(e){armaAlert('NO FUE POSIBLE CARGAR LA PRELIQUIDACION DESDE ARMA: '+e.message,'CLOCK / PRELIQ','DANGER');}}
+if(preliqDirty){let ok=await armaConfirm('HAY CAMBIOS SIN GUARDAR. ¿DESEA DESCARTARLOS Y RECARGAR LOS DATOS DATAPEL?','RECARGAR PRELIQ','RECARGAR','CANCELAR','WARNING');if(!ok)return;}
+try{let data=await api('clockPreliqBootstrap',{desde:desde,hasta:hasta},'CARGANDO DATOS DATAPEL SINCRONIZADOS...');if(!data||!data.ok)throw new Error((data&&data.detail)||(data&&data.error)||'CLOCK_PRELIQ_NO_DISPONIBLE');
+preliqRows=Array.isArray(data.rows)?data.rows:[];preliqSource=data.source||{};preliqDirty=false;let st=document.getElementById('preliqSourceStatus');if(st)st.textContent=preliqSourceLabel(data);renderPreliq();}catch(e){armaAlert('NO FUE POSIBLE CARGAR LOS DATOS DATAPEL PARA PRELIQUIDACION: '+e.message,'CLOCK / PRELIQ','DANGER');}}
 function preliqNetHours(r){return preliqNum(r.EXTRA_NETA_H);}
 function preliqHoursToReport(r){let raw=String(r._ajuste==null?'':r._ajuste).trim();return raw===''?preliqNetHours(r):preliqNum(raw);}
 function preliqSet(i,k,v){let r=preliqRows[i];if(!r)return;r[k]=v;preliqDirty=true;preliqUpdateKpis();}
