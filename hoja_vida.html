@@ -7,6 +7,7 @@
 <title>ARMA | HOJA DE VIDA DE EQUIPOS</title>
 <link rel="manifest" href="manifest.webmanifest">
 <script data-arma-pwa-navigation="1" defer src="arma-pwa-navigation.js"></script>
+<!-- ARMA HOJA DE VIDA V03.3 FRONTEND FAST SAFE 2026-10-03 -->
 <style>
 :root{
   --navy:#002b66;--navy2:#073b72;--blue:#0067bd;--blue2:#0a8ae8;
@@ -720,32 +721,122 @@ function toast(text){
   setTimeout(()=>el.classList.remove('show'),4700)
 }
 
-async function request(action,data){
-  let last=null;
-  for(let n=0;n<2;n++){
-    try{
-      const t=token();
-      if(!t)throw new Error('SIN_SESION_ACTIVA');
-      const r=await fetch(API,{
-        method:'POST',
-        headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body:JSON.stringify(Object.assign({action,token:t},data||{})),
-        cache:'no-store'
-      });
-      const raw=await r.text();
-      let j;
-      try{j=JSON.parse(raw)}
-      catch(e){throw new Error('RESPUESTA_BACKEND_NO_VALIDA // HTTP '+r.status)}
-      if(!j.ok)throw new Error((j.error||'ERROR')+(j.detail?' // '+j.detail:''));
-      return j
-    }catch(e){
-      last=e;
-      if(n===0)await new Promise(r=>setTimeout(r,500))
-    }
+const HV_BOOT_CACHE_KEY='ARMA_HV_BOOT_V03_3';
+const HV_BOOT_CACHE_MAX_AGE_MS=15*60*1000;
+const HV_DETAIL_CACHE_PREFIX='ARMA_HV_DETAIL_V03_3_';
+const HV_DETAIL_CACHE_MAX_AGE_MS=5*60*1000;
+const hvInFlight=new Map();
+
+function tokenTag(){
+  const s=token();
+  let h=2166136261;
+  for(let i=0;i<s.length;i++){
+    h^=s.charCodeAt(i);
+    h=Math.imul(h,16777619)
   }
-  throw last
+  return (h>>>0).toString(16)
 }
 
+function hvBootCacheLoad(){
+  try{
+    const raw=localStorage.getItem(HV_BOOT_CACHE_KEY);
+    if(!raw)return null;
+    const box=JSON.parse(raw);
+    if(!box||!box.ts||!box.data)return null;
+    if(box.tokenTag!==tokenTag()){localStorage.removeItem(HV_BOOT_CACHE_KEY);return null}
+    if(Date.now()-Number(box.ts)>HV_BOOT_CACHE_MAX_AGE_MS){localStorage.removeItem(HV_BOOT_CACHE_KEY);return null}
+    return {data:box.data,ageMs:Date.now()-Number(box.ts)}
+  }catch(e){return null}
+}
+
+function hvBootCacheSave(data){
+  try{
+    const safe=JSON.parse(JSON.stringify(data||{}));
+    if(safe.session)delete safe.session.token;
+    localStorage.setItem(HV_BOOT_CACHE_KEY,JSON.stringify({ts:Date.now(),tokenTag:tokenTag(),data:safe}))
+  }catch(e){}
+}
+
+function hvBootCacheClear(){try{localStorage.removeItem(HV_BOOT_CACHE_KEY)}catch(e){}}
+
+function hvDetailCacheKey(id){return HV_DETAIL_CACHE_PREFIX+tokenTag()+'_'+String(id||'')}
+function hvDetailCacheLoad(id){
+  try{
+    const o=JSON.parse(sessionStorage.getItem(hvDetailCacheKey(id))||'null');
+    if(!o||!o.ts||!o.data)return null;
+    if(Date.now()-Number(o.ts)>HV_DETAIL_CACHE_MAX_AGE_MS){sessionStorage.removeItem(hvDetailCacheKey(id));return null}
+    return o.data
+  }catch(e){return null}
+}
+function hvDetailCacheSave(id,data){
+  try{if(id&&data&&data.ok)sessionStorage.setItem(hvDetailCacheKey(id),JSON.stringify({ts:Date.now(),data:data}))}catch(e){}
+}
+function hvDetailCacheClear(id){try{sessionStorage.removeItem(hvDetailCacheKey(id))}catch(e){}}
+
+function isAccessDeniedError(err){
+  const m=String(err&&err.message||err||'').toUpperCase();
+  return /SIN_PERMISO|SESION_NO_VALIDA|SIN_SESION|USUARIO_INACTIVO|ACTIVO_FUERA_DE_ALCANCE|ACTIVO_NO_EXISTE|HOJA_VIDA_SOLO_PERMITE/.test(m)
+}
+function isTransientAccessError(err){
+  const m=String(err&&err.message||err||'').toUpperCase();
+  if(isAccessDeniedError(err))return false;
+  return /ABORT|TIMEOUT|TIEMPO_AGOTADO|TEMPOR|TIMED OUT|INTERNAL|NETWORK|FAILED TO FETCH|LOAD FAILED|HTTP 408|HTTP 425|HTTP 429|HTTP 5\d\d|RESPUESTA_BACKEND_NO_VALIDA|SERVICE/.test(m)
+}
+function waitMs(ms){return new Promise(r=>setTimeout(r,ms))}
+
+async function requestOnce(action,data,timeoutMs){
+  const t=token();
+  if(!t)throw new Error('SIN_SESION_ACTIVA');
+  const controller=('AbortController' in window)?new AbortController():null;
+  const timer=controller?setTimeout(()=>controller.abort(),timeoutMs):0;
+  try{
+    const r=await fetch(API,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify(Object.assign({action,token:t},data||{})),
+      cache:'no-store',
+      signal:controller?controller.signal:undefined
+    });
+    const raw=await r.text();
+    if(!r.ok)throw new Error('HTTP '+r.status+' // '+raw.slice(0,120));
+    let j;
+    try{j=JSON.parse(raw)}
+    catch(e){throw new Error('RESPUESTA_BACKEND_NO_VALIDA // HTTP '+r.status)}
+    if(!j.ok)throw new Error((j.error||'ERROR')+(j.detail?' // '+j.detail:''));
+    return j
+  }catch(e){
+    if(e&&e.name==='AbortError')throw new Error('TIEMPO_AGOTADO_'+action);
+    throw e
+  }finally{
+    if(timer)clearTimeout(timer)
+  }
+}
+
+async function request(action,data,options){
+  options=options||{};
+  const key=tokenTag()+'|'+action+'|'+JSON.stringify(data||{});
+  if(options.dedupe!==false&&hvInFlight.has(key))return hvInFlight.get(key);
+  const job=(async()=>{
+    let last=null;
+    const attempts=Math.max(1,Math.min(2,Number(options.attempts||2)));
+    for(let n=0;n<attempts;n++){
+      if(n)await waitMs(700);
+      try{
+        const t0=performance.now();
+        const timeoutMs=n===0?Number(options.timeoutMs||25000):Number(options.retryTimeoutMs||35000);
+        const j=await requestOnce(action,data,timeoutMs);
+        console.info('ARMA_HV_ACCESS',{action,attempt:n+1,clientMs:Math.round(performance.now()-t0),serverMs:j.diagnostics&&j.diagnostics.totalMs||'',contextMs:j.diagnostics&&j.diagnostics.contextMs||'',hierarchyMs:j.diagnostics&&j.diagnostics.hierarchyMs||''});
+        return j
+      }catch(e){
+        last=e;
+        if(!isTransientAccessError(e)||n===attempts-1)throw e
+      }
+    }
+    throw last
+  })();
+  if(options.dedupe!==false)hvInFlight.set(key,job);
+  try{return await job}finally{if(options.dedupe!==false)hvInFlight.delete(key)}
+}
 function nodeKey(r){return String(r&&r.ID_ACTIVO||'').trim()}
 function isEquipment(r){return level(r&&r.NIVEL_DE_JERARQUIA)==='EQUIPO'}
 
@@ -758,7 +849,8 @@ function sortNodes(list){
   )
 }
 
-function buildTreeIndex(){
+function buildTreeIndex(preserveOpen){
+  const prior=preserveOpen?new Set(treeOpen):null;
   nodeMap={};childrenMap={};
   nodes.forEach(r=>{const id=nodeKey(r);if(id)nodeMap[id]=r});
   nodes.forEach(r=>{
@@ -775,12 +867,12 @@ function buildTreeIndex(){
   }
   sortNodes(roots);
   treeOpen=new Set();
-  nodes.forEach(r=>{
-    const i=LEVELS.indexOf(level(r.NIVEL_DE_JERARQUIA));
-    if(i>=0&&i<LEVELS.indexOf('EQUIPO'))treeOpen.add(nodeKey(r))
-  })
+  roots.forEach(r=>{
+    const rid=nodeKey(r);if(rid)treeOpen.add(rid);
+    (childrenMap[rid]||[]).forEach(ch=>{const cid=nodeKey(ch);if(cid)treeOpen.add(cid)})
+  });
+  if(prior)prior.forEach(id=>{if(nodeMap[id])treeOpen.add(id)})
 }
-
 function searchKeep(){
   const q=norm(byId('treeQ').value);
   if(!q)return null;
@@ -823,33 +915,36 @@ function treeHtml(row,depth,keep){
 }
 
 function renderTree(){
+  const t0=performance.now();
   const keep=searchKeep();
   const html=roots.map(r=>treeHtml(r,0,keep)).join('');
   byId('treeBox').innerHTML=html||'<div class="no-rows">SIN COINCIDENCIAS.</div>';
-  byId('treeBox').querySelectorAll('[data-toggle]').forEach(btn=>
-    btn.addEventListener('click',e=>{
-      e.stopPropagation();
-      const id=btn.dataset.toggle;
-      if(treeOpen.has(id))treeOpen.delete(id);else treeOpen.add(id);
-      renderTree()
-    })
-  );
-  byId('treeBox').querySelectorAll('[data-id]').forEach(el=>
-    el.addEventListener('click',()=>{
-      const id=el.dataset.id,row=nodeMap[id];
-      if(!row)return;
-      if(!isEquipment(row)||row.CAN_OPEN===false){
-        if((childrenMap[id]||[]).length){
-          if(treeOpen.has(id))treeOpen.delete(id);else treeOpen.add(id);
-          renderTree()
-        }
-        return
-      }
-      selectAsset(id)
-    })
-  )
+  const dt=Math.round(performance.now()-t0);
+  if(dt>40)console.info('ARMA_HV_TREE_RENDER',{ms:dt,nodes:nodes.length,search:!!keep})
 }
 
+function handleTreeClick(e){
+  const toggle=e.target.closest('[data-toggle]');
+  if(toggle&&byId('treeBox').contains(toggle)){
+    e.preventDefault();e.stopPropagation();
+    const id=toggle.dataset.toggle;
+    if(treeOpen.has(id))treeOpen.delete(id);else treeOpen.add(id);
+    renderTree();
+    return
+  }
+  const el=e.target.closest('[data-id]');
+  if(!el||!byId('treeBox').contains(el))return;
+  const id=el.dataset.id,row=nodeMap[id];
+  if(!row)return;
+  if(!isEquipment(row)||row.CAN_OPEN===false){
+    if((childrenMap[id]||[]).length){
+      if(treeOpen.has(id))treeOpen.delete(id);else treeOpen.add(id);
+      renderTree()
+    }
+    return
+  }
+  selectAsset(id)
+}
 function melPhotoUrl(v,size){
   const s=String(v||'').trim();
   if(!s)return DEFAULT_PHOTO;
@@ -965,6 +1060,19 @@ function showEmpty(){
   renderTree()
 }
 
+function applyDetail(j,id,fromCache){
+  if(selectedId!==id)return false;
+  interventions=j.interventions||[];
+  renderAsset(j);
+  renderStats(j);
+  renderInterventions();
+  byId('emptyState').classList.add('hidden');
+  byId('assetContent').classList.remove('hidden');
+  if(j.diagnostics)console.info('ARMA_HV_V03_DIAGNOSTICS',j.diagnostics);
+  console.info('ARMA_HV_DETAIL_SOURCE',{id:id,source:fromCache?'SESSION_CACHE':'BACKEND_LIVE'});
+  return true
+}
+
 async function selectAsset(id){
   const row=nodeMap[id];
   if(!row||!isEquipment(row)||row.CAN_OPEN===false){
@@ -973,24 +1081,31 @@ async function selectAsset(id){
   }
   selectedId=id;
   renderTree();
-  showLoad('CARGANDO HOJA DE VIDA DEL EQUIPO...');
+  const cached=hvDetailCacheLoad(id);
+  let loaderTimer=0;
+  if(cached){
+    applyDetail(cached,id,true)
+  }else{
+    loaderTimer=setTimeout(()=>{if(selectedId===id)showLoad('CARGANDO HOJA DE VIDA DEL EQUIPO...')},180)
+  }
   try{
-    const j=await request('assetLifeDetail',{idActivo:id});
-    interventions=j.interventions||[];
-    renderAsset(j);
-    renderStats(j);
-    renderInterventions();
-    byId('emptyState').classList.add('hidden');
-    byId('assetContent').classList.remove('hidden');
-    if(j.diagnostics)console.info('ARMA_HV_V03_DIAGNOSTICS',j.diagnostics)
+    const j=await request('assetLifeDetail',{idActivo:id},{timeoutMs:25000,retryTimeoutMs:35000,dedupe:true});
+    if(loaderTimer)clearTimeout(loaderTimer);
+    hvDetailCacheSave(id,j);
+    applyDetail(j,id,false)
   }catch(e){
-    toast(e.message);
-    showEmpty()
+    if(loaderTimer)clearTimeout(loaderTimer);
+    if(cached&&isTransientAccessError(e)){
+      console.warn('ARMA_HV_DETAIL_REFRESH_FAILED',{id:id,error:String(e&&e.message||e)});
+      if(selectedId===id)toast('MOSTRANDO ULTIMA CONSULTA DE ESTA SESION // ACTUALIZACION PENDIENTE.')
+    }else{
+      hvDetailCacheClear(id);
+      if(selectedId===id){toast(e.message);showEmpty()}
+    }
   }finally{
-    hideLoad()
+    if(selectedId===id)hideLoad()
   }
 }
-
 function updateModalLock(){
   const interventionOpen=!byId('viewer').classList.contains('hidden');
   const photoOpen=!byId('photoViewer').classList.contains('hidden');
@@ -1056,32 +1171,74 @@ async function togglePhotoFullscreen(){
   }
 }
 
+function clearAccessUi(){
+  boot=null;session=null;nodes=[];nodeMap={};childrenMap={};roots=[];treeOpen=new Set();
+  selectedId='';interventions=[];
+  byId('assetContent').classList.add('hidden');
+  byId('emptyState').classList.remove('hidden');
+  byId('treeBox').innerHTML='<div class="no-rows">SIN ACCESO A HOJA DE VIDA.</div>';
+  byId('treeCount').textContent='0 EQUIPOS AUTORIZADOS';
+  byId('userPill').textContent='SIN ACCESO A HOJA DE VIDA'
+}
+
+function applyBootstrap(j,fromCache,preserveUi){
+  const t0=performance.now();
+  const previousSelected=preserveUi?selectedId:'';
+  boot=j||{};
+  session=boot.session||session||{};
+  syncSessionHandoff();
+  byId('userPill').textContent=(session.nombre||session.user||'')+' // '+(session.nivel||'');
+  nodes=boot.nodes||[];
+  buildTreeIndex(!!preserveUi);
+  byId('treeCount').textContent=Number(boot.count||0)+' EQUIPOS AUTORIZADOS';
+  if(previousSelected&&nodeMap[previousSelected]&&isEquipment(nodeMap[previousSelected])&&nodeMap[previousSelected].CAN_OPEN!==false){
+    selectedId=previousSelected;
+    renderTree()
+  }else{
+    showEmpty()
+  }
+  if(boot.indexState)console.info('ARMA_HV_BOOT_INDEX_STATE',boot.indexState);
+  console.info('ARMA_HV_BOOT_SOURCE',{source:fromCache?'CLIENT_CACHE':'BACKEND_LIVE',applyMs:Math.round(performance.now()-t0),nodes:nodes.length})
+}
+
 async function init(){
   if(!token()){
     location.href='main.html';
     return
   }
-  showLoad('VALIDANDO HOJA DE VIDA...');
+  const cachedBox=hvBootCacheLoad();
+  const cached=cachedBox&&cachedBox.data;
+  let loaderTimer=0;
+  if(cached){
+    applyBootstrap(cached,true,false)
+  }else{
+    loaderTimer=setTimeout(()=>showLoad('VALIDANDO HOJA DE VIDA...'),180)
+  }
   try{
-    boot=await request('assetLifeBootstrap',{});
-    session=boot.session||{};
-    syncSessionHandoff();
-    byId('userPill').textContent=(session.nombre||session.user||'')+' // '+(session.nivel||'');
-    nodes=boot.nodes||[];
-    buildTreeIndex();
-    byId('treeCount').textContent=Number(boot.count||0)+' EQUIPOS AUTORIZADOS';
-    renderTree();
-    showEmpty();
-    if(boot.indexState)console.info('ARMA_HV_BOOT_INDEX_STATE',boot.indexState)
+    const live=await request('assetLifeBootstrap',{}, {timeoutMs:25000,retryTimeoutMs:35000,dedupe:true});
+    if(loaderTimer)clearTimeout(loaderTimer);
+    hvBootCacheSave(live);
+    applyBootstrap(live,false,!!cached)
   }catch(e){
-    toast(e.message);
-    byId('userPill').textContent='SIN ACCESO A HOJA DE VIDA'
+    if(loaderTimer)clearTimeout(loaderTimer);
+    if(cached&&isTransientAccessError(e)){
+      toast('HOJA DE VIDA DISPONIBLE DESDE CACHE // ACTUALIZACION PENDIENTE.');
+      console.warn('ARMA_HV_BACKGROUND_REFRESH_FAILED',e)
+    }else{
+      hvBootCacheClear();
+      clearAccessUi();
+      toast(e.message)
+    }
   }finally{
     hideLoad()
   }
 }
-
-byId('treeQ').addEventListener('input',renderTree);
+let treeSearchTimer=0;
+byId('treeBox').addEventListener('click',handleTreeClick);
+byId('treeQ').addEventListener('input',()=>{
+  clearTimeout(treeSearchTimer);
+  treeSearchTimer=setTimeout(renderTree,90)
+});
 byId('clearTreeQ').addEventListener('click',()=>{
   byId('treeQ').value='';
   renderTree();
