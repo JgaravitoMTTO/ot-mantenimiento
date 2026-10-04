@@ -285,6 +285,16 @@ details.admin-box summary{cursor:pointer;color:var(--navy);font-weight:1000;font
   .actions{display:grid;grid-template-columns:1fr}
   .actions .btn{width:100%}
 }
+/* === ARMA HOME CARD R005 // UI ONLY === */
+.arma-home-card{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;min-width:250px;min-height:82px;padding:14px 18px;border-radius:18px;background:linear-gradient(180deg,#fff,#f4f9ff);border:1px solid #dbe5f0;box-shadow:0 10px 24px rgba(0,43,102,.16);text-decoration:none;color:#002b66;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.arma-home-card:before{content:'';position:absolute;left:0;top:0;width:100%;height:5px;background:linear-gradient(90deg,#004b9b,#0076d7,#00bfd6,#55b52e)}
+.arma-home-card:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(0,43,102,.20);border-color:#bcd7f5}
+.arma-home-icon{width:54px;height:54px;border-radius:16px;background:#e8f2ff;border:1px solid #dbe5f0;display:grid;place-items:center;flex:0 0 54px;box-shadow:0 4px 10px rgba(15,23,42,.07)}
+.arma-home-icon img{width:38px;height:38px;object-fit:contain;display:block}
+.arma-home-text{display:flex;flex-direction:column;line-height:1.08;min-width:0}
+.arma-home-text strong{font-size:17px;font-weight:1000;color:#002b66;letter-spacing:.2px}
+.arma-home-text span{font-size:10px;font-weight:950;color:#008c2e;letter-spacing:.45px;margin-top:6px;white-space:nowrap}
+@media(max-width:700px){.arma-home-card{width:100%;min-width:0}.arma-home-text strong{font-size:16px}.arma-home-text span{font-size:9.5px}}
 </style>
 </head>
 <body>
@@ -361,9 +371,9 @@ details.admin-box summary{cursor:pointer;color:var(--navy);font-weight:1000;font
       <h2>PLANES DE MANTENIMIENTO OPTIMIZADO</h2>
       <p>CONSULTE EL CONTENIDO REAL DE CADA PLAN. LAS ACTIVIDADES Y LOS ACTIVOS COMPLETOS SOLO SE CARGAN CUANDO SE SOLICITA MODIFICAR.</p>
     </div>
-    <a href="main.html" class="home" data-smart-home="1">
-      <img src="boton-de-inicio.png" alt="INICIO">
-      INICIO
+    <a href="main.html" class="arma-home-card" data-smart-home="1" aria-label="VOLVER A ARMA">
+      <div class="arma-home-icon"><img src="boton-de-inicio.png" alt="INICIO"></div>
+      <div class="arma-home-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></div>
     </a>
   </section>
   <div id="errorBanner" class="notice hidden"></div>
@@ -511,7 +521,7 @@ details.admin-box summary{cursor:pointer;color:var(--navy);font-weight:1000;font
       </div>
     </section>
   </div>
-  <div class="footer">ARMA // PLANES PMO // DETALLE PRIMERO // SELECTORES BAJO DEMANDA // GENERADO: 2026-09-13 20:49:52</div>
+  <div class="footer">ARMA // PLANES PMO // DETALLE PRIMERO // SELECTORES BAJO DEMANDA // GENERADO: 2026-10-03 22:19:44</div>
 </main>
 <script>
 "use strict";
