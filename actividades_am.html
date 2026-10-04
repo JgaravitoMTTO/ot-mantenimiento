@@ -130,6 +130,16 @@ textarea{min-height:78px;resize:vertical}
   .wrap{padding:8px}
   .hero{flex-direction:column;gap:10px;align-items:flex-start}
 }
+/* === ARMA HOME CARD R005 // UI ONLY === */
+.arma-home-card{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;min-width:250px;min-height:82px;padding:14px 18px;border-radius:18px;background:linear-gradient(180deg,#fff,#f4f9ff);border:1px solid #dbe5f0;box-shadow:0 10px 24px rgba(0,43,102,.16);text-decoration:none;color:#002b66;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.arma-home-card:before{content:'';position:absolute;left:0;top:0;width:100%;height:5px;background:linear-gradient(90deg,#004b9b,#0076d7,#00bfd6,#55b52e)}
+.arma-home-card:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(0,43,102,.20);border-color:#bcd7f5}
+.arma-home-icon{width:54px;height:54px;border-radius:16px;background:#e8f2ff;border:1px solid #dbe5f0;display:grid;place-items:center;flex:0 0 54px;box-shadow:0 4px 10px rgba(15,23,42,.07)}
+.arma-home-icon img{width:38px;height:38px;object-fit:contain;display:block}
+.arma-home-text{display:flex;flex-direction:column;line-height:1.08;min-width:0}
+.arma-home-text strong{font-size:17px;font-weight:1000;color:#002b66;letter-spacing:.2px}
+.arma-home-text span{font-size:10px;font-weight:950;color:#008c2e;letter-spacing:.45px;margin-top:6px;white-space:nowrap}
+@media(max-width:700px){.arma-home-card{width:100%;min-width:0}.arma-home-text strong{font-size:16px}.arma-home-text span{font-size:9.5px}}
 </style>
 </head>
 <body>
@@ -175,8 +185,9 @@ textarea{min-height:78px;resize:vertical}
       <h2>ACTIVIDADES DE MANTENIMIENTO</h2>
       <p>CREACION Y CONTROL DE ACTIVIDADES LILA, DURACION, UBICACION Y RECURSOS ESPECIFICOS.</p>
     </div>
-    <a href="main.html" class="home" onclick="return goHome()">
-      <img src="boton-de-inicio.png" alt="">INICIO
+    <a href="main.html" class="arma-home-card" onclick="return goHome()" aria-label="VOLVER A ARMA">
+      <div class="arma-home-icon"><img src="boton-de-inicio.png" alt="INICIO"></div>
+      <div class="arma-home-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></div>
     </a>
   </section>
   <div class="grid">
@@ -275,7 +286,7 @@ textarea{min-height:78px;resize:vertical}
       </div>
     </section>
   </div>
-  <div class="footer">ARMA // ACTIVIDADES AM // VARIABLES Y LECTURAS // DATOS EN LINEA // GENERADO: 2026-08-12 10:07:28</div>
+  <div class="footer">ARMA // ACTIVIDADES AM // VARIABLES Y LECTURAS // DATOS EN LINEA // GENERADO: 2026-10-03 22:21:06</div>
 </main>
 <script>
 const API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
