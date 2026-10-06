@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V30.1_CIERRE_ACCION_OBS_RT_20260914 | BUILD: 2026-09-14 18:36:30 -->
+<!-- ARMA RT MODULE V30.2_RESET_CIERRE_ENTRE_BT_20261006 | BUILD: 2026-10-06 14:26:36 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -257,7 +257,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-09-14 18:36:30</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-10-06 14:26:36</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -266,7 +266,7 @@ const REQUIRED_PERM="BTN_REPORTES_TECNICOS";
 const ALT_PERM="BTN_RT_CERRAR";
 let armaSession={user:"",nombre:"",nivel:"",permissions:{},token:""};
 let selectedRT=null;let rtOpenSequence=0;let rtDetailCache=new Map();const RT_DETAIL_TTL=300000;
-let catalogos={};let rtEquiposAll=[];let rtPersonasAll=[];let rtPlantasAll=[];
+let catalogos={};let rtEquiposAll=[];let rtPersonasAll=[];let rtPlantasAll=[];let rtDefaultCloserId='';
 let armaLoaderCount=0;let resumen48Shown=false;let rtCurrentPage=1;let rtHasMore=false;const RT_PAGE_SIZE=25;
 function esc(v){let d=document.createElement("div");d.textContent=String(v==null?"":v);return d.innerHTML;}
 function normalizePerms(p){let out={};p=p||{};Object.keys(p).forEach(k=>out[String(k).toUpperCase()]=p[k]===true||String(p[k]).toUpperCase()==="SI"||String(p[k]).toUpperCase()==="TRUE");return out;}
@@ -332,7 +332,7 @@ async function loadCatalogos(source){
   if(!tipos.length)tipos=[{valor:'CORRECTIVO',descripcion:'CORRECTIVO'},{valor:'AJUSTE',descripcion:'AJUSTE'},{valor:'REVISION',descripcion:'REVISION'}];
   fillSelect('rtPersona',personas,['NOMBRE_COMPLETO','nombre','NOMBRE'],['ID_PERSONA','idPersona','IDENTIFICACION'],'SELECCIONE');
   fillSelect('ctPersona',personasCierre,['NOMBRE_COMPLETO','nombre','NOMBRE'],['ID_PERSONA','idPersona','IDENTIFICACION'],'SELECCIONE PLANEADOR O JEFE DE MANTENIMIENTO');
-  if(PAGE_MODE==='GESTION'){let closer=document.getElementById('ctPersona');let chosen=defaultCloser;let u=normTxt(armaSession.user||'');if(!chosen){personasCierre.some(function(r){if(u&&normTxt(val(r,['USER_ARMA','userArma','USUARIO_ARMA']))===u){chosen=personaId(r);return true;}return false;});}if(chosen&&closer){setSelectSmart('ctPersona',chosen);}if(!personasCierre.length){let st=document.getElementById('closeStatus');if(st)st.textContent='NO HAY PERSONAS ACTIVAS CON CAPACIDAD DE CIERRE TECNICO';}else if(chosen&&closer&&closer.value){let st=document.getElementById('closeStatus');if(st&&st.textContent.indexOf('SELECCIONE')>=0)st.textContent='RESPONSABLE DE CIERRE ASOCIADO A LA CUENTA: '+selectedOptionText('ctPersona');}}
+  if(PAGE_MODE==='GESTION'){let closer=document.getElementById('ctPersona');let chosen=defaultCloser;let u=normTxt(armaSession.user||'');if(!chosen){personasCierre.some(function(r){if(u&&normTxt(val(r,['USER_ARMA','userArma','USUARIO_ARMA']))===u){chosen=personaId(r);return true;}return false;});}rtDefaultCloserId=chosen||defaultCloser||'';if(chosen&&closer){setSelectSmart('ctPersona',chosen);}if(!personasCierre.length){let st=document.getElementById('closeStatus');if(st)st.textContent='NO HAY PERSONAS ACTIVAS CON CAPACIDAD DE CIERRE TECNICO';}else if(chosen&&closer&&closer.value){let st=document.getElementById('closeStatus');if(st&&st.textContent.indexOf('SELECCIONE')>=0)st.textContent='RESPONSABLE DE CIERRE ASOCIADO A LA CUENTA: '+selectedOptionText('ctPersona');}}
   fillSelect('rtTipoTrabajo',tipos,['descripcion','DESCRIPCION','valor','VALOR','CODIGO'],['valor','VALOR','CODIGO'],'SELECCIONE');
   fillSelect('rtPlanta',plantas,['descripcion','DESCRIPCION','nombre','NOMBRE','valor','VALOR','CODIGO'],['valor','VALOR','CODIGO','idActivo','ID_ACTIVO'],'SELECCIONE');
   let pl=document.getElementById('rtPlanta');if(pl){pl.onchange=rebuildEquipoSelectByPlanta;}
@@ -485,7 +485,15 @@ function renderClosedDecision(rt){
   host.innerHTML=keys.length?keys.map(function(k){return rtCardHtml(k,rt[k]);}).join(''):'<div class="rt-empty">NO HAY DECISIONES DE CIERRE REGISTRADAS.</div>';
 }
 function setClosePerson(value,label){const el=document.getElementById('ctPersona');if(!el)return;const wanted=normTxt(value||label);if(!wanted)return;for(let i=0;i<el.options.length;i++){const o=el.options[i];if(normTxt(o.value)===wanted||normTxt(o.text)===wanted){el.value=o.value;return;}}}
+function resetCloseDecisionFields(){
+  ['ctPrioridad','ctObservaciones','ctMotivo','ctNuevaOT','ctSR','ctActionDesc'].forEach(function(id){const el=document.getElementById(id);if(el)el.value='';});
+  const p=document.getElementById('ctNuevaOTPrioridad');if(p)p.value='P3';
+  ['ctCreateOT','ctCreateSR','ctCreateAction'].forEach(function(id){const el=document.getElementById(id);if(el)el.checked=false;});
+  const closer=document.getElementById('ctPersona');if(closer){closer.value='';if(rtDefaultCloserId)setSelectSmart('ctPersona',rtDefaultCloserId);}
+  toggleCloseCreationFields();
+}
 function populateCloseForm(rt,meta){
+  resetCloseDecisionFields();
   document.getElementById('ctPrioridad').value='';
   document.getElementById('ctObservaciones').value=val(rt,['OBSERVACIONES_CIERRE']);
   document.getElementById('ctMotivo').value=val(rt,['MOTIVO_EDICION_ADMIN']);
@@ -493,7 +501,7 @@ function populateCloseForm(rt,meta){
   document.getElementById('ctSR').value=val(rt,['DESCRIPCION_SR_COMPRA','REQUIERE_SR_DESC']);
   document.getElementById('ctCreateOT').checked=String(val(rt,['REQUIERE_NUEVA_OT'])).toUpperCase()==='SI';
   document.getElementById('ctCreateSR').checked=String(val(rt,['REQUIERE_SR_COMPRA'])).toUpperCase()==='SI';toggleCloseCreationFields();
-  setClosePerson(val(rt,['ID_PERSONA_CIERRE']),val(rt,['QUIEN_CIERRA']));
+  setClosePerson(val(rt,['ID_PERSONA_CIERRE'])||rtDefaultCloserId,val(rt,['QUIEN_CIERRA']));
   const estado=normTxt(val(rt,['ESTADO_RT','ESTADO']));
   const isOpen=estado==='RTD';
   const isClosed=estado==='RTCT';
@@ -509,8 +517,7 @@ function populateCloseForm(rt,meta){
 function resetCloseWorkbench(){
   renderRTFullDetail(null);
   renderRTSupports(null);
-  ['ctPrioridad','ctPersona','ctObservaciones','ctMotivo','ctNuevaOT','ctSR','ctActionDesc'].forEach(function(id){const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('ctNuevaOTPrioridad').value='P3';document.getElementById('ctCreateOT').checked=false;document.getElementById('ctCreateSR').checked=false;document.getElementById('ctCreateAction').checked=false;toggleCloseCreationFields();
+  resetCloseDecisionFields();
   const btn=document.getElementById('btnCloseRT');
   if(btn){btn.disabled=true;btn.textContent='REALIZAR CIERRE TECNICO';}
   document.getElementById('decisionOpenBlock').classList.add('hidden');
@@ -521,6 +528,7 @@ function resetCloseWorkbench(){
 }
 async function openRT(id){
   const requestSequence=++rtOpenSequence;
+  resetCloseDecisionFields();document.getElementById('decisionOpenBlock').classList.add('hidden');document.getElementById('decisionClosedBlock').classList.add('hidden');
   document.getElementById('detailStatus').textContent='CARGANDO DETALLE...';
   document.getElementById('closeStatus').textContent='CARGANDO INFORMACION COMPLETA...';
   document.getElementById('btnSupportAudit').disabled=true;
