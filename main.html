@@ -695,7 +695,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-10-10 07:36:39</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-10-10 07:42:30</span></div>
   </footer>
 </main>
 </div>
@@ -1915,20 +1915,10 @@ armaOpenChildWindow=function(url,targetName){armaMainV161RefreshSharedSessionCac
 window.addEventListener('focus',function(){armaMainV161RefreshSharedSessionCache();});
 document.addEventListener('visibilitychange',function(){if(!document.hidden)armaMainV161RefreshSharedSessionCache();});
 /* === FIN MAIN V16.2 SHARED SESSION BRIDGE === */
-/* === ARMA MAIN V17.4 DATAPEL PWA NATIVE R020.13 === */
-const ARMA_DATAPEL_WINDOWS_READY='ARMA_DATAPEL_WINDOWS_READY_R020_13';
-const ARMA_DATAPEL_MOBILE_READY='ARMA_DATAPEL_MOBILE_READY_R020_13';
-function armaDatapelDevice(){const ua=navigator.userAgent||'',p=navigator.platform||'';if(/Windows NT/i.test(ua))return'windows';if(/Android/i.test(ua))return'android';if(/iPhone|iPad|iPod/i.test(ua)||(p==='MacIntel'&&navigator.maxTouchPoints>1))return'ios';return'other';}
-function armaDatapelPrivileged(){const n=String((armaSession&&armaSession.nivel)||'').trim().toUpperCase();return n==='ADMIN'||n==='SUPER_ADMIN';}
-function armaDatapelAllowed(){const s=armaSession||{},n=String(s.nivel||'').trim().toUpperCase(),p=s.permissions||{};return !!s.token&&(n==='ADMIN'||n==='SUPER_ADMIN'||p.BTN_DATAPEL===true||p.__SUPER_ADMIN__===true||p.ALL===true);}
-function armaDatapelSetupUrl(mode){const u=new URL('datapel_acceso.html',location.href);u.searchParams.set('v','R02013');if(mode)u.searchParams.set('mode',mode);return u.href;}
-function armaDatapelOpenSetup(mode){const u=armaDatapelSetupUrl(mode);try{if(window.ARMA_PWA_NAV&&window.ARMA_PWA_NAV.navigateInternal(u))return false;}catch(e){}location.assign(u);return false;}
-function armaDatapelWindowsProtocol(){return armaDatapelPrivileged()?'arma-datapel-admin://open':'arma-datapel-user://open';}
-function armaDatapelOpenMobileApp(){let left=false;const vis=function(){if(document.hidden)left=true;};document.addEventListener('visibilitychange',vis,{once:true});location.href='rdp://';setTimeout(function(){if(!left&&!document.hidden)armaDatapelOpenSetup('mobile-ready');},1200);return false;}
-function armaDatapelOpenFromMain(){if(!armaDatapelAllowed()){alert('NO TIENE PERMISO PARA ACCEDER A DATAPEL.');return false;}const d=armaDatapelDevice();if(d==='windows'){let ready=false;try{ready=localStorage.getItem(ARMA_DATAPEL_WINDOWS_READY)==='1';}catch(e){}if(!ready)return armaDatapelOpenSetup('windows');location.href=armaDatapelWindowsProtocol();return false;}if(d==='android'||d==='ios'){let ready=false;try{ready=localStorage.getItem(ARMA_DATAPEL_MOBILE_READY)==='1';}catch(e){}if(!ready)return armaDatapelOpenSetup('mobile');return armaDatapelOpenMobileApp();}return armaDatapelOpenSetup('other');}
-const armaMainV174BaseOpenChildWindow=armaOpenChildWindow;
-armaOpenChildWindow=function(url,targetName){if(String(url||'').toLowerCase().indexOf('datapel_acceso.html')<0)return armaMainV174BaseOpenChildWindow(url,targetName);armaMainV161RefreshSharedSessionCache();return armaDatapelOpenFromMain();};
-/* === FIN DATAPEL PWA NATIVE R020.13 === */
+/* === ARMA MAIN V17.5 DATAPEL STATEFUL HTML R020.14 === */
+const armaMainV175BaseOpenChildWindow=armaOpenChildWindow;
+armaOpenChildWindow=function(url,targetName){if(String(url||'').toLowerCase().indexOf('datapel_acceso.html')<0)return armaMainV175BaseOpenChildWindow(url,targetName);armaMainV161RefreshSharedSessionCache();location.assign('datapel_acceso.html?v=R02014');return false;};
+/* === FIN DATAPEL STATEFUL HTML R020.14 === */
 document.addEventListener('DOMContentLoaded',function(){
   const internalReturn=armaConsumeInternalReturn();
   const restored=armaRestoreSessionCache();if(!restored)armaRenderVisitor();
