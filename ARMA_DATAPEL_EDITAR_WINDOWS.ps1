@@ -1,93 +1,82 @@
-﻿$ErrorActionPreference='Stop'
-$root = Join-Path $env:LOCALAPPDATA 'ARMA\RDP'
-$adminRdp = Join-Path $root 'DATAPEL_ADMIN.rdp'
-$userRdp  = Join-Path $root 'DATAPEL_USUARIO.rdp'
+﻿param([string]$Uri)
+$ErrorActionPreference='Stop'
 
-if (!(Test-Path $adminRdp) -or !(Test-Path $userRdp)) {
-    Write-Host 'ARMA DATAPEL NO ESTA INSTALADO EN ESTE USUARIO WINDOWS.' -ForegroundColor Red
-    Write-Host 'Vuelva a ARMA > DATAPEL y ejecute la configuracion inicial.' -ForegroundColor Yellow
-    pause
+$Root = Join-Path $env:LOCALAPPDATA 'ARMA\RDP'
+$AdminRdp = Join-Path $Root 'DATAPEL_ADMIN.rdp'
+$UserRdp  = Join-Path $Root 'DATAPEL_USUARIO.rdp'
+
+Add-Type -AssemblyName PresentationFramework
+
+function Fail([string]$Message) {
+    [System.Windows.MessageBox]::Show($Message,'ARMA DATAPEL','OK','Error') | Out-Null
     exit 2
 }
-
-function Read-RdpLines([string]$Path) {
-    return [IO.File]::ReadAllLines($Path,[Text.Encoding]::Unicode)
+function Ok([string]$Message) {
+    [System.Windows.MessageBox]::Show($Message,'ARMA DATAPEL','OK','Information') | Out-Null
 }
-function Set-RdpValue([string[]]$Lines,[string]$Prefix,[string]$Value) {
-    $found=$false
-    for($i=0;$i -lt $Lines.Count;$i++){
-        if($Lines[$i].StartsWith($Prefix,[StringComparison]::OrdinalIgnoreCase)){
-            $Lines[$i]=$Value;$found=$true
-        }
-    }
-    if(!$found){ $Lines += $Value }
-    return ,$Lines
-}
-function Get-RdpValue([string[]]$Lines,[string]$Prefix) {
-    foreach($line in $Lines){
-        if($line.StartsWith($Prefix,[StringComparison]::OrdinalIgnoreCase)){
-            return $line.Substring($Prefix.Length)
+function QueryValue([string]$Raw,[string]$Name) {
+    if([string]::IsNullOrWhiteSpace($Raw)){ return '' }
+    $q = $Raw.IndexOf('?')
+    if($q -lt 0){ return '' }
+    foreach($pair in ($Raw.Substring($q+1) -split '&')){
+        $p = $pair -split '=',2
+        if($p.Count -eq 2 -and $p[0] -eq $Name){
+            return [Uri]::UnescapeDataString($p[1])
         }
     }
     return ''
 }
-
-$admin = Read-RdpLines $adminRdp
-$user  = Read-RdpLines $userRdp
-$currentAddress = Get-RdpValue $admin 'full address:s:'
-$currentUser = Get-RdpValue $admin 'username:s:'
-
-Clear-Host
-Write-Host '============================================================' -ForegroundColor Cyan
-Write-Host '        ARMA DATAPEL - MODIFICAR CONEXION' -ForegroundColor Cyan
-Write-Host '============================================================' -ForegroundColor Cyan
-Write-Host ''
-Write-Host ('Direccion actual: ' + $currentAddress)
-if($currentUser){ Write-Host ('Usuario actual:   ' + $currentUser) }
-Write-Host ''
-
-$newAddress = Read-Host ('Nueva direccion [ENTER conserva ' + $currentAddress + ']')
-if([string]::IsNullOrWhiteSpace($newAddress)){ $newAddress=$currentAddress }
-$newAddress=$newAddress.Trim()
-
-$newUser = Read-Host ('Usuario RDP ADMIN [ENTER conserva ' + ($(if($currentUser){$currentUser}else{'SIN USUARIO FIJO'})) + ']')
-if([string]::IsNullOrWhiteSpace($newUser)){ $newUser=$currentUser } else { $newUser=$newUser.Trim() }
-
-$admin = Set-RdpValue $admin 'full address:s:' ('full address:s:'+$newAddress)
-$user  = Set-RdpValue $user  'full address:s:' ('full address:s:'+$newAddress)
-
-if($newUser){
-    $admin = Set-RdpValue $admin 'username:s:' ('username:s:'+$newUser)
-    $admin = Set-RdpValue $admin 'prompt for credentials:i:' 'prompt for credentials:i:0'
+function ReadLines([string]$Path) {
+    return [IO.File]::ReadAllLines($Path,[Text.Encoding]::Unicode)
 }
-
-[IO.File]::WriteAllLines($adminRdp,$admin,[Text.Encoding]::Unicode)
-[IO.File]::WriteAllLines($userRdp,$user,[Text.Encoding]::Unicode)
-
-$save = Read-Host 'Desea guardar/reemplazar la contrasena RDP ADMIN en Credenciales de Windows? (S/N)'
-if($save -match '^[sS]$'){
-    if(!$newUser){
-        $newUser = Read-Host 'Usuario RDP ADMIN'
-    }
-    if($newUser){
-        $cred = Get-Credential -UserName $newUser -Message 'ARMA DATAPEL - Credencial RDP ADMIN'
-        $bstr=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($cred.Password)
-        try{
-            $plain=[Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr)
-            $hostOnly=$newAddress
-            if($newAddress -match '^(.*):(\d+)$'){ $hostOnly=$matches[1] }
-            & cmdkey.exe /generic:("TERMSRV/"+$hostOnly) /user:$cred.UserName /pass:$plain | Out-Null
-            & cmdkey.exe /generic:("TERMSRV/"+$newAddress) /user:$cred.UserName /pass:$plain | Out-Null
-            Write-Host 'Credencial actualizada en Windows Credential Manager.' -ForegroundColor Green
-        } finally {
-            if($bstr -ne [IntPtr]::Zero){[Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)}
-            $plain=$null
+function SetLine([string[]]$Lines,[string]$Prefix,[string]$Value) {
+    $done=$false
+    for($i=0;$i -lt $Lines.Count;$i++){
+        if($Lines[$i].StartsWith($Prefix,[StringComparison]::OrdinalIgnoreCase)){
+            $Lines[$i]=$Value
+            $done=$true
         }
     }
+    if(!$done){ $Lines += $Value }
+    return ,$Lines
 }
 
-Write-Host ''
-Write-Host 'CONEXION DATAPEL ACTUALIZADA.' -ForegroundColor Green
-Write-Host 'Cierre esta ventana y pulse ABRIR DATAPEL en ARMA.' -ForegroundColor Yellow
-Write-Host ''
-pause
+if(!(Test-Path $AdminRdp) -or !(Test-Path $UserRdp)){
+    Fail 'ARMA DATAPEL no esta configurado en este usuario Windows. Ejecute primero CONFIGURAR ESTE PC desde ARMA.'
+}
+
+$Address = (QueryValue $Uri 'address').Trim()
+$User    = (QueryValue $Uri 'user').Trim()
+$Password= QueryValue $Uri 'password'
+
+if([string]::IsNullOrWhiteSpace($Address)){ Fail 'La direccion RDP esta vacia.' }
+if($Address -notmatch '^[A-Za-z0-9\.\-]+:\d{1,5}$'){ Fail 'Use el formato HOST:PUERTO. Ejemplo: 200.119.112.115:5890' }
+
+$PortText = ($Address -split ':')[-1]
+$Port = 0
+if(![int]::TryParse($PortText,[ref]$Port) -or $Port -lt 1 -or $Port -gt 65535){ Fail 'Puerto RDP invalido.' }
+
+$Admin = ReadLines $AdminRdp
+$Normal = ReadLines $UserRdp
+
+$Admin = SetLine $Admin 'full address:s:' ('full address:s:'+$Address)
+$Normal = SetLine $Normal 'full address:s:' ('full address:s:'+$Address)
+
+if(-not [string]::IsNullOrWhiteSpace($User)){
+    $Admin = SetLine $Admin 'username:s:' ('username:s:'+$User)
+    $Admin = SetLine $Admin 'prompt for credentials:i:' 'prompt for credentials:i:0'
+}
+
+[IO.File]::WriteAllLines($AdminRdp,$Admin,[Text.Encoding]::Unicode)
+[IO.File]::WriteAllLines($UserRdp,$Normal,[Text.Encoding]::Unicode)
+
+if(-not [string]::IsNullOrEmpty($Password)){
+    if([string]::IsNullOrWhiteSpace($User)){ Fail 'Para guardar una nueva contrasena tambien debe indicar el usuario RDP.' }
+    $HostOnly = $Address
+    if($Address -match '^(.*):(\d+)$'){ $HostOnly=$matches[1] }
+
+    & cmdkey.exe /generic:("TERMSRV/"+$HostOnly) /user:$User /pass:$Password | Out-Null
+    & cmdkey.exe /generic:("TERMSRV/"+$Address) /user:$User /pass:$Password | Out-Null
+}
+
+Ok ('Conexion DATAPEL actualizada.'+"`n`n"+'Direccion: '+$Address+"`n"+$(if($User){'Usuario: '+$User}else{'Usuario: sin cambio'})+"`n"+$(if($Password){'Credencial: actualizada'}else{'Credencial: sin cambio'}))
