@@ -1,94 +1,74 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b5ca8">
-<link rel="manifest" href="manifest.webmanifest">
-<script data-arma-pwa-navigation="1" defer src="arma-pwa-navigation.js"></script>
-<title>ARMA | DATAPEL</title>
+<title>ARMA | Configurar DATAPEL</title>
 <style>
-:root{--navy:#0b315d;--blue:#0b69b7;--blue2:#148bd1;--bg:#f4f7fa;--panel:#fff;--line:#d9e4ed;--text:#173653;--muted:#6b8195;--green:#17834c;--amber:#b97800;--red:#b63a34;--shadow:0 14px 38px rgba(18,62,101,.10)}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text)}body{min-height:100vh}
-.header{height:76px;background:#fff;border-bottom:1px solid #dce6ee;display:flex;align-items:center;justify-content:space-between;padding:0 28px;box-shadow:0 3px 14px rgba(19,53,83,.04)}
-.brand{display:flex;align-items:center;gap:16px}.brand img{height:43px;max-width:148px;object-fit:contain}.head-right{text-align:right}.head-title{font-size:16px;font-weight:800;letter-spacing:.055em;color:var(--navy)}.session{margin-top:5px;font-size:10px;color:var(--muted);font-weight:700}
-.shell{width:min(1020px,calc(100% - 32px));margin:22px auto 38px}.hero{display:grid;grid-template-columns:1.5fr .5fr;gap:15px;align-items:stretch}
-.hero-main{background:linear-gradient(125deg,#092f59 0%,#0b5ea7 57%,#178ed0 100%);color:#fff;border-radius:17px;padding:26px 28px;box-shadow:var(--shadow)}.eyebrow{font-size:10px;font-weight:800;letter-spacing:.15em;opacity:.76}.hero h1{font-size:30px;line-height:1.08;margin:8px 0 9px;letter-spacing:-.02em}.hero p{margin:0;max-width:670px;font-size:12px;line-height:1.55;opacity:.9}
-.hero-state{background:#fff;border:1px solid var(--line);border-radius:17px;padding:20px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 10px 28px rgba(18,62,101,.07)}.state-label{font-size:9px;color:var(--muted);font-weight:800;letter-spacing:.11em}.state-value{font-size:20px;font-weight:850;color:var(--green);margin-top:5px}.state-sub{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.45}
-.panel{margin-top:15px;background:#fff;border:1px solid var(--line);border-radius:17px;box-shadow:0 10px 28px rgba(18,62,101,.07);overflow:hidden}.panel-head{padding:18px 22px;border-bottom:1px solid #e6edf3;display:flex;align-items:center;justify-content:space-between;gap:14px}.panel-title{font-size:14px;font-weight:800;color:var(--navy)}.badge{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:7px 11px;background:#eef7f2;color:var(--green);font-size:9px;font-weight:800}.dot{width:7px;height:7px;border-radius:50%;background:currentColor}
-.content{padding:20px 22px}.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:17px}.fact{padding:13px 14px;border:1px solid var(--line);border-radius:11px;background:#fbfdff}.fact small{display:block;font-size:8px;color:var(--muted);font-weight:800;letter-spacing:.09em}.fact strong{display:block;margin-top:5px;font-size:13px;color:var(--navy)}
-.credential{display:none;margin:0 0 17px;padding:15px;border-radius:12px;background:#f6f9fc;border:1px solid var(--line)}.credential.show{display:block}.field label{display:block;font-size:9px;font-weight:800;color:var(--muted);margin-bottom:7px}.field input{width:100%;height:43px;border:1px solid #bfd0df;border-radius:9px;padding:0 12px;font-size:14px;color:#173653;background:#fff;outline:none}.field input:focus{border-color:#4a91c9;box-shadow:0 0 0 3px rgba(74,145,201,.12)}
-.device{display:none}.device.show{display:block}.device-copy{font-size:11px;line-height:1.55;color:#536f88;margin-bottom:14px}.actions{display:flex;gap:9px;flex-wrap:wrap}.btn{min-height:45px;border:0;border-radius:10px;padding:0 17px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:10px;font-weight:850;letter-spacing:.035em;cursor:pointer;transition:.15s ease;background:linear-gradient(135deg,var(--blue2),#07599e);color:#fff}.btn:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(11,105,183,.18)}.btn.primary{background:linear-gradient(135deg,#20a963,#147841)}.btn.secondary{background:#eef3f7;color:#38546d;border:1px solid #d5e0e9}.btn.ghost{background:#fff;color:#567087;border:1px solid #d5e0e9}.btn.amber{background:linear-gradient(135deg,#d9a52c,#ae7300)}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
-.setup{margin-top:17px;border-top:1px solid #e5edf4;padding-top:15px;display:flex;align-items:flex-start;gap:10px}.setup-icon{width:31px;height:31px;border-radius:9px;background:#eaf3fb;color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:900;flex:0 0 auto}.setup b{display:block;font-size:10px;color:var(--navy)}.setup span{display:block;margin-top:3px;font-size:9px;color:var(--muted);line-height:1.45}
-.note{margin-top:17px;padding:11px 13px;border-radius:10px;background:#f5f8fb;border:1px solid #dce6ef;color:#577189;font-size:9px;font-weight:700;line-height:1.5}.note.ok{background:#edf8f2;border-color:#cfe8d9;color:#286847}.note.warn{background:#fff8e9;border-color:#ead9ae;color:#765914}.note.bad{background:#fff0ef;border-color:#efcfcc;color:#943f39}
-.footer{text-align:center;color:#7e91a4;font-size:8px;padding:19px 0 4px;font-weight:700;letter-spacing:.06em}
-@media(max-width:760px){.header{height:65px;padding:0 13px}.brand{gap:8px}.brand img{height:32px;max-width:106px}.head-title{font-size:12px}.session{font-size:8px}.shell{width:min(100% - 18px,1020px);margin-top:11px}.hero{grid-template-columns:1fr;gap:9px}.hero-main{padding:20px;border-radius:14px}.hero h1{font-size:23px}.hero-state{padding:14px;border-radius:14px}.panel{border-radius:14px;margin-top:10px}.panel-head,.content{padding:15px}.facts{grid-template-columns:1fr 1fr}.fact:last-child{grid-column:1/-1}.actions{flex-direction:column}.btn{width:100%}}
+:root{--navy:#0b315d;--blue:#0b69b7;--blue2:#178ed0;--bg:#f3f7fa;--panel:#fff;--line:#d8e4ed;--text:#173653;--muted:#6c8295;--green:#18834d;--amber:#b87900;--red:#af4039;--shadow:0 14px 40px rgba(18,62,101,.10)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text)}
+.header{height:74px;background:#fff;border-bottom:1px solid #dce6ee;display:flex;align-items:center;justify-content:space-between;padding:0 28px;box-shadow:0 3px 14px rgba(19,53,83,.04)}
+.brand{display:flex;align-items:center;gap:15px}.brand img{height:42px;max-width:145px;object-fit:contain}.head{text-align:right}.head strong{display:block;color:var(--navy);font-size:15px;letter-spacing:.06em}.head span{display:block;margin-top:5px;font-size:9px;color:var(--muted);font-weight:800}
+.shell{width:min(920px,calc(100% - 28px));margin:22px auto 36px}.hero{background:linear-gradient(125deg,#092f59,#0b5ea7 58%,#168fd0);color:#fff;border-radius:18px;padding:27px 29px;box-shadow:var(--shadow)}.hero .eyebrow{font-size:9px;font-weight:850;letter-spacing:.16em;opacity:.78}.hero h1{font-size:29px;margin:8px 0 9px}.hero p{max-width:700px;margin:0;font-size:12px;line-height:1.55;opacity:.9}
+.panel{margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:17px;box-shadow:0 10px 28px rgba(18,62,101,.07);overflow:hidden}.panel-head{padding:18px 22px;border-bottom:1px solid #e5edf3;display:flex;justify-content:space-between;gap:12px;align-items:center}.panel-head strong{color:var(--navy);font-size:14px}.pill{padding:7px 11px;border-radius:999px;background:#edf8f2;color:var(--green);font-size:9px;font-weight:850}.content{padding:21px 22px}.device{display:none}.device.show{display:block}.lead{font-size:12px;line-height:1.6;color:#526f88;margin:0 0 17px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:17px}.card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fbfdff}.card small{display:block;font-size:8px;letter-spacing:.09em;color:var(--muted);font-weight:850}.card strong{display:block;margin-top:5px;color:var(--navy);font-size:13px}
+.field{margin:0 0 14px}.field label{display:block;font-size:9px;color:var(--muted);font-weight:850;margin-bottom:7px}.field input{width:100%;height:44px;border:1px solid #bdd0df;border-radius:9px;padding:0 12px;font-size:14px;color:var(--text);outline:none}.field input:focus{border-color:#438fc8;box-shadow:0 0 0 3px rgba(67,143,200,.12)}
+.actions{display:flex;gap:9px;flex-wrap:wrap}.btn{min-height:45px;border:0;border-radius:10px;padding:0 17px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:10px;font-weight:850;letter-spacing:.035em;cursor:pointer;background:linear-gradient(135deg,var(--blue2),#07599e);color:#fff}.btn.primary{background:linear-gradient(135deg,#20aa64,#137742)}.btn.secondary{background:#eef3f7;color:#39556e;border:1px solid #d4e0e9}.btn.amber{background:linear-gradient(135deg,#dda933,#aa7000)}.note{margin-top:16px;border:1px solid #dce6ef;background:#f6f9fb;border-radius:10px;padding:11px 13px;font-size:9px;line-height:1.55;color:#587189;font-weight:700}.note.ok{background:#edf8f2;border-color:#cfe8d9;color:#286847}.note.warn{background:#fff8e9;border-color:#ead9ae;color:#765914}.footer{text-align:center;color:#8395a7;font-size:8px;padding:18px 0;font-weight:750}
+@media(max-width:700px){.header{height:64px;padding:0 12px}.brand{gap:8px}.brand img{height:31px;max-width:105px}.head strong{font-size:11px}.shell{width:calc(100% - 18px);margin-top:10px}.hero{padding:20px;border-radius:14px}.hero h1{font-size:23px}.panel{border-radius:14px}.panel-head,.content{padding:15px}.grid{grid-template-columns:1fr}.actions{flex-direction:column}.btn{width:100%;font-size:12px}}
 </style>
 </head>
 <body>
-<header class="header"><div class="brand"><img src="logo_pelex.bmp" alt="PELEX"><img src="ARMA%20logo%202.png" alt="ARMA"></div><div class="head-right"><div class="head-title">ACCESO DATAPEL</div><div id="user" class="session">ARMA // SESIÓN ACTIVA</div></div></header>
+<header class="header"><div class="brand"><img src="logo_pelex.bmp" alt="PELEX"><img src="ARMA%20logo%202.png" alt="ARMA"></div><div class="head"><strong>CONFIGURAR DATAPEL</strong><span id="who">ARMA // SESION</span></div></header>
 <main class="shell">
-<section class="hero"><div class="hero-main"><div class="eyebrow">ARMA // ACCESO OPERATIVO</div><h1>DATAPEL</h1><p>Conexión directa al escritorio remoto de DATAPEL utilizando el cliente nativo del dispositivo.</p></div><div class="hero-state"><div class="state-label">ESTADO</div><div id="heroState" class="state-value">PREPARANDO</div><div id="heroSub" class="state-sub">Recuperando autorización transferida por MAIN.</div></div></section>
-<section class="panel"><div class="panel-head"><div class="panel-title">ESCRITORIO REMOTO</div><div class="badge"><span class="dot"></span><span id="badgeText">SESIÓN ARMA</span></div></div><div class="content">
-<div class="facts"><div class="fact"><small>ACCESO</small><strong id="stMode">—</strong></div><div class="fact"><small>DISPOSITIVO</small><strong id="stDevice">—</strong></div><div class="fact"><small>DESTINO</small><strong>DATAPEL</strong></div></div>
-<div id="credentialBox" class="credential"><div class="field"><label for="rdpUser">USUARIO DE ESCRITORIO REMOTO</label><input id="rdpUser" type="text" autocomplete="username" maxlength="128" placeholder="USUARIO O DOMINIO\USUARIO"></div></div>
-<div id="windowsBox" class="device">
-  <div class="device-copy">Este PC usa la Conexión a Escritorio remoto incluida en Windows. La configuración local se realiza una sola vez desde esta misma página.</div>
-  <div class="actions">
-    <a id="winOpen" class="btn primary" href="#">ABRIR DATAPEL</a>
-    <a id="winSetup" class="btn secondary" href="arma_datapel_configurar.cmd" download="ARMA_DATAPEL_CONFIGURAR.cmd">CONFIGURAR ESTE PC · UNA VEZ</a>
-    <button id="winFallback" class="btn secondary">DESCARGAR .RDP DE RESPALDO</button>
-    <a class="btn ghost" href="main.html">VOLVER A ARMA</a>
-  </div>
-  <div class="setup"><div class="setup-icon">1×</div><div><b>SOLO LA PRIMERA VEZ EN ESTE USUARIO WINDOWS</b><span>Pulse CONFIGURAR ESTE PC, abra el archivo descargado y confirme. No requiere Administrador ni instala software adicional. Después use únicamente ABRIR DATAPEL.</span></div></div>
+<section class="hero"><div class="eyebrow">ARMA // ACCESO NATIVO</div><h1>DATAPEL</h1><p>Esta pagina solo se usa para preparar el dispositivo. Una vez configurado, MAIN abre DATAPEL directamente con el cliente de Escritorio remoto del equipo.</p></section>
+<section class="panel"><div class="panel-head"><strong>CONFIGURACION DEL DISPOSITIVO</strong><span class="pill" id="devicePill">DETECTANDO</span></div><div class="content">
+<div class="grid"><div class="card"><small>SESION ARMA</small><strong id="sessionState">VALIDANDO</strong></div><div class="card"><small>TIPO DE ACCESO</small><strong id="accessType">—</strong></div></div>
+
+<div id="winBox" class="device">
+<p class="lead">Windows ya incluye <b>Conexion a Escritorio remoto (mstsc.exe)</b>. Solo debe preparar este usuario Windows una vez. El instalador guarda dos conexiones RDP en una carpeta local oculta y registra el acceso directo de ARMA.</p>
+<div class="actions">
+<a class="btn primary" href="ARMA_DATAPEL_CONFIGURAR_WINDOWS.cmd" download="ARMA_DATAPEL_CONFIGURAR_WINDOWS.cmd">CONFIGURAR ESTE PC · UNA VEZ</a>
+<a class="btn secondary" href="main.html">VOLVER A MAIN</a>
 </div>
+<div class="note">No requiere Administrador. Debido a que no tenemos privilegios elevados, los archivos se guardan en <b>%LOCALAPPDATA%\ARMA\RDP</b>, no en C:\Windows. Despues de ejecutar el configurador, este abre MAIN y deja este navegador marcado como configurado.</div>
+</div>
+
 <div id="mobileBox" class="device">
-  <div class="device-copy">Windows App recibe directamente el servidor y usuario desde ARMA. Si ya importó la conexión de respaldo, su contraseña guardada puede reutilizarse.</div>
-  <div class="actions">
-    <a id="mobileOpen" class="btn primary" href="#">ABRIR DATAPEL EN WINDOWS APP</a>
-    <a id="mobileInstall" class="btn amber" target="_blank" rel="noopener">INSTALAR / VER WINDOWS APP</a>
-    <button id="mobileFallback" class="btn secondary">IMPORTAR .RDP · SOLO RESPALDO</button>
-    <a class="btn ghost" href="main.html">VOLVER A ARMA</a>
-  </div>
+<p class="lead">En Android/iOS se usa Windows App. La primera vez puede importar la conexion RDP de respaldo y guardar sus credenciales dentro de Windows App. Despues MAIN intenta abrir Windows App directamente.</p>
+<div id="mobileUserBox" class="field" style="display:none"><label for="rdpUser">USUARIO DE ESCRITORIO REMOTO</label><input id="rdpUser" maxlength="128" autocomplete="username" placeholder="USUARIO O DOMINIO\USUARIO"></div>
+<div class="actions">
+<a id="appStore" class="btn amber" target="_blank" rel="noopener">INSTALAR / VER WINDOWS APP</a>
+<button id="activateMobile" class="btn primary">ACTIVAR Y ABRIR WINDOWS APP</button>
+<a id="fallbackRdp" class="btn secondary" href="#">IMPORTAR CONEXION .RDP · UNA VEZ</a>
+<a class="btn secondary" href="main.html">VOLVER A MAIN</a>
 </div>
-<div id="otherBox" class="device"><div class="device-copy">Dispositivo no identificado. Use un cliente RDP compatible.</div><div class="actions"><button id="otherDownload" class="btn secondary">DESCARGAR CONEXIÓN .RDP</button><a class="btn ghost" href="main.html">VOLVER A ARMA</a></div></div>
-<div id="note" class="note">PREPARANDO ACCESO…</div>
-</div></section><div class="footer">ARMA™ // DATAPEL // R020.11 DIRECT ACCESS</div></main>
+<div class="note">La clave no se envia por la HTML. Windows App la solicita y puede guardarla localmente. En Android, ARMA usa un Intent dirigido especificamente al paquete oficial <b>com.microsoft.rdc.androidx</b> para evitar que el navegador trate el enlace como una pagina web.</div>
+</div>
+
+<div id="otherBox" class="device">
+<p class="lead">Este dispositivo no se identifico como Windows, Android o iOS.</p>
+<div class="actions"><a id="otherRdp" class="btn secondary" href="DATAPEL_USUARIO.rdp" download>DESCARGAR RDP</a><a class="btn secondary" href="main.html">VOLVER A MAIN</a></div>
+</div>
+<div id="note" class="note">PREPARANDO...</div>
+</div></section>
+<div class="footer">ARMA // DATAPEL // R020.12 NATIVE DIRECT</div>
+</main>
 <script>
-const API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
-const CACHE_KEY='ARMA_DATAPEL_BOOTSTRAP_CACHE_R020_10';
-const CACHE_MS=900000;
-const $=id=>document.getElementById(id);let CFG=null,DEVICE='other';
-function token(){return localStorage.getItem('ARMA_TOKEN')||sessionStorage.getItem('ARMA_TOKEN')||(()=>{try{return JSON.parse(localStorage.getItem('ARMA_SESSION_CACHE')||'{}').token||''}catch(e){return''}})()}
-function clean(v){return String(v||'').trim()}
-function detectDevice(){const ua=navigator.userAgent||'';const plat=navigator.platform||'';if(/Windows NT/i.test(ua))return'windows';if(/Android/i.test(ua))return'android';if(/iPhone|iPad|iPod/i.test(ua)||(plat==='MacIntel'&&navigator.maxTouchPoints>1))return'ios';return'other'}
-async function api(action,p={}){const t=token();if(!t)throw new Error('SIN_SESION');const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,token:t},p)),cache:'no-store'});const j=await r.json();if(!j||j.ok!==true)throw new Error((j&&j.error)||'ERROR_BACKEND');return j}
-function readHandoff(){try{const x=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');const t=token();if(!x||!x.cfg||!t||x.token!==t||Date.now()-Number(x.ts||0)>CACHE_MS)return null;return x.cfg}catch(e){return null}}
-function saveHandoff(cfg){try{localStorage.setItem(CACHE_KEY,JSON.stringify({token:token(),ts:Date.now(),cfg}))}catch(e){}}
-function effectiveUser(){if(!CFG)return'';return CFG.requiresRdpUser?clean($('rdpUser').value):clean(CFG.rdpUser)}
-function ready(){return !!CFG&&!!CFG.address&&!!effectiveUser()}
-function mobileUri(){
-  const address=clean(CFG.address);
-  const u=encodeURIComponent(effectiveUser());
-  return 'rdp://full%20address=s:'+address+'&username=s:'+u;
-}
-function windowsUri(){return 'arma-datapel://open?u='+encodeURIComponent(effectiveUser())}
-function rdpText(){const u=effectiveUser();return ['screen mode id:i:2','use multimon:i:0','session bpp:i:32','compression:i:1','keyboardhook:i:2','audiomode:i:2','networkautodetect:i:1','bandwidthautodetect:i:1','displayconnectionbar:i:1','disable wallpaper:i:1','allow font smoothing:i:1','allow desktop composition:i:1','full address:s:'+CFG.address,'username:s:'+u,'prompt for credentials:i:0','authentication level:i:2','enablecredsspsupport:i:1','remoteapplicationmode:i:0','redirectclipboard:i:1','redirectprinters:i:0','redirectcomports:i:0','redirectsmartcards:i:0','redirectwebauthn:i:0','drivestoredirect:s:'].join('\r\n')+'\r\n'}
-function utf16File(){const text=rdpText();const bytes=new Uint8Array(2+text.length*2);bytes[0]=255;bytes[1]=254;for(let i=0;i<text.length;i++){const c=text.charCodeAt(i);bytes[2+i*2]=c&255;bytes[3+i*2]=c>>8}return new File([bytes],'ARMA_DATAPEL.rdp',{type:'application/rdp'})}
-function downloadRdp(){if(!ready())return warn('INGRESE EL USUARIO DE ESCRITORIO REMOTO.');const f=utf16File();const u=URL.createObjectURL(f);const a=document.createElement('a');a.href=u;a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),5000);ok('CONEXIÓN .RDP GENERADA COMO RESPALDO.')}
-function ok(t){$('note').textContent=t;$('note').className='note ok'}function warn(t){$('note').textContent=t;$('note').className='note warn'}function bad(t){$('note').textContent=t;$('note').className='note bad'}
-function showDevice(){['windowsBox','mobileBox','otherBox'].forEach(id=>$(id).classList.remove('show'));if(DEVICE==='windows')$('windowsBox').classList.add('show');else if(DEVICE==='android'||DEVICE==='ios')$('mobileBox').classList.add('show');else $('otherBox').classList.add('show');if(DEVICE==='android')$('mobileInstall').href='https://play.google.com/store/apps/details?id=com.microsoft.rdc.androidx';else $('mobileInstall').href='https://apps.apple.com/co/app/windows-app-mobile/id714464092'}
-function refreshLinks(){const r=ready();$('winOpen').style.pointerEvents=r?'auto':'none';$('winOpen').style.opacity=r?'1':'.45';$('mobileOpen').style.pointerEvents=r?'auto':'none';$('mobileOpen').style.opacity=r?'1':'.45';if(r){$('winOpen').setAttribute('href',windowsUri());$('mobileOpen').setAttribute('href',mobileUri())}else{$('winOpen').setAttribute('href','#');$('mobileOpen').setAttribute('href','#')}}
-function render(cfg,source){CFG=cfg;DEVICE=detectDevice();showDevice();$('user').textContent=(cfg.user||'ARMA')+' // '+(cfg.nivel||'');$('stMode').textContent=cfg.privileged?'PRIVILEGIADO':'CREDENCIAL PROPIA';$('stDevice').textContent=DEVICE==='windows'?'WINDOWS':DEVICE==='android'?'ANDROID':DEVICE==='ios'?'IOS / IPADOS':'OTRO';if(cfg.requiresRdpUser)$('credentialBox').classList.add('show');else $('credentialBox').classList.remove('show');$('heroState').textContent='LISTO';$('heroSub').textContent=source==='MAIN'?'Autorización recibida desde MAIN.':'Autorización recuperada directamente.';$('badgeText').textContent='ACCESO AUTORIZADO';refreshLinks();ok(DEVICE==='windows'?'LISTO. ABRIR DATAPEL USA MSTSC NATIVO.':(DEVICE==='android'||DEVICE==='ios')?'LISTO. ABRIR DATAPEL ENVÍA LA CONEXIÓN A WINDOWS APP.':'LISTO.')}
-async function load(){DEVICE=detectDevice();showDevice();const cached=readHandoff();if(cached){render(cached,'MAIN');return}try{const cfg=await api('datapelAccessBootstrap');saveHandoff(cfg);render(cfg,'BACKEND')}catch(e){$('heroState').textContent='DENEGADO';$('heroState').style.color='var(--red)';$('badgeText').textContent='SIN ACCESO';bad('NO FUE POSIBLE VALIDAR DATAPEL: '+e.message)}}
-$('rdpUser').addEventListener('input',refreshLinks);
-$('winFallback').addEventListener('click',downloadRdp);
-$('mobileFallback').addEventListener('click',downloadRdp);
-$('otherDownload').addEventListener('click',downloadRdp);
-$('winSetup').addEventListener('click',()=>ok('CONFIGURADOR DESCARGADO. EJECÚTELO UNA SOLA VEZ Y REGRESE A ESTA PÁGINA.'));
-$('winOpen').addEventListener('click',function(e){if(!ready()){e.preventDefault();warn('INGRESE EL USUARIO DE ESCRITORIO REMOTO.')}else ok('ABRIENDO CONEXIÓN NATIVA DE WINDOWS…')});
-$('mobileOpen').addEventListener('click',function(e){if(!ready()){e.preventDefault();warn('INGRESE EL USUARIO DE ESCRITORIO REMOTO.')}else ok('ABRIENDO WINDOWS APP CON EL DESTINO RDP…')});
-load();
+const WIN_READY='ARMA_DATAPEL_WINDOWS_READY_R020_12';
+const MOBILE_READY='ARMA_DATAPEL_MOBILE_READY_R020_12';
+const $=id=>document.getElementById(id);
+let SESSION=null,DEVICE='other',PRIV=false;
+function session(){try{return JSON.parse(localStorage.getItem('ARMA_SESSION_CACHE')||'null')}catch(e){return null}}
+function device(){const ua=navigator.userAgent||'',p=navigator.platform||'';if(/Windows NT/i.test(ua))return'windows';if(/Android/i.test(ua))return'android';if(/iPhone|iPad|iPod/i.test(ua)||(p==='MacIntel'&&navigator.maxTouchPoints>1))return'ios';return'other'}
+function allowed(s){if(!s||!s.token)return false;const n=String(s.nivel||'').toUpperCase(),p=s.permissions||{};return n==='ADMIN'||n==='SUPER_ADMIN'||p.BTN_DATAPEL===true||p.__SUPER_ADMIN__===true||p.ALL===true}
+function mobileUserKey(){return'ARMA_DATAPEL_MOBILE_USER_R020_12_'+String((SESSION&&SESSION.user)||'').toUpperCase()}
+function rdpUri(user){let x='rdp://full%20address=s%3A200.119.112.115%3A5890';if(user)x+='&username=s%3A'+encodeURIComponent(user);return x}
+function androidIntent(user){let x='full%20address=s%3A200.119.112.115%3A5890';if(user)x+='&username=s%3A'+encodeURIComponent(user);const fb=encodeURIComponent(location.href);return'intent://'+x+'#Intent;scheme=rdp;package=com.microsoft.rdc.androidx;S.browser_fallback_url='+fb+';end'}
+function show(id){['winBox','mobileBox','otherBox'].forEach(x=>$(x).classList.remove('show'));$(id).classList.add('show')}
+function note(t,c=''){ $('note').textContent=t;$('note').className='note'+(c?' '+c:'') }
+function init(){SESSION=session();DEVICE=device();if(!allowed(SESSION)){location.replace('main.html');return}const n=String(SESSION.nivel||'').toUpperCase();PRIV=n==='ADMIN'||n==='SUPER_ADMIN';$('who').textContent=(SESSION.user||'ARMA')+' // '+(SESSION.nivel||'');$('sessionState').textContent='VALIDA';$('accessType').textContent=PRIV?'PRIVILEGIADO':'USUARIO AUTORIZADO';$('devicePill').textContent=DEVICE.toUpperCase();if(DEVICE==='windows'){show('winBox');note('CONFIGURE ESTE USUARIO WINDOWS UNA SOLA VEZ.','ok');return}if(DEVICE==='android'||DEVICE==='ios'){show('mobileBox');$('appStore').href=DEVICE==='android'?'https://play.google.com/store/apps/details?id=com.microsoft.rdc.androidx':'https://apps.apple.com/co/app/windows-app-mobile/id714464092';$('fallbackRdp').href=PRIV?'DATAPEL_ADMIN.rdp':'DATAPEL_USUARIO.rdp';if(!PRIV){$('mobileUserBox').style.display='block';try{$('rdpUser').value=localStorage.getItem(mobileUserKey())||''}catch(e){}}note('WINDOWS APP DEBE ESTAR INSTALADA. PUEDE IMPORTAR EL RDP UNA SOLA VEZ Y GUARDAR SUS CREDENCIALES.','ok');return}show('otherBox')}
+$('activateMobile').addEventListener('click',function(){let u='';if(!PRIV){u=$('rdpUser').value.trim();if(!u){note('INGRESE EL USUARIO DE ESCRITORIO REMOTO.','warn');return}try{localStorage.setItem(mobileUserKey(),u)}catch(e){}}try{localStorage.setItem(MOBILE_READY,'1')}catch(e){}location.href=DEVICE==='android'?androidIntent(u):rdpUri(u)});
+init();
 </script>
 </body>
 </html>
