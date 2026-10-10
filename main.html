@@ -617,9 +617,9 @@ body.arma-logged .alarm-center-card{display:flex}
           <span class='btn-icon btn-icon-img'><img src='consumidor.png' alt='PERFILES DEL PERSONAL'></span>
           <span class='btn-text'>PERFILES DEL PERSONAL</span>
         </a>
-        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_EVALUA_PERSONAL' href='evaluacion_personal.html' data-arma-window='ARMA_EVALUACION_PERSONAL' target='ARMA_EVALUACION_PERSONAL' title='ECOSISTEMA DE DESEMPEÑO TÉCNICO: CUMPLIMIENTO, EVALUACION, TURNOS Y FUTURA CAPACITACION'>
-          <span class='btn-icon btn-icon-img'><img src='marcador-de-decision.png' alt='ECOSISTEMA DE DESEMPEÑO TÉCNICO'></span>
-          <span class='btn-text'>ECOSISTEMA DE DESEMPEÑO TÉCNICO</span>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_EVALUA_PERSONAL' href='evaluacion_personal.html' data-arma-window='ARMA_EVALUACION_PERSONAL' target='ARMA_EVALUACION_PERSONAL' title='TECH PERFORMANCE CENTER: CUMPLIMIENTO, EVALUACION, TURNOS Y CAPACITACION'>
+          <span class='btn-icon btn-icon-img'><img src='marcador-de-decision.png' alt='TECH PERFORMANCE CENTER'></span>
+          <span class='btn-text'>TECH PERFORMANCE CENTER</span>
         </a>
         <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_TURNOS_MTTO' href='turnos.html' data-arma-window='ARMA_TURNOS' target='ARMA_TURNOS' title='VERIFICAR, PROGRAMAR Y GESTIONAR LOS TURNOS DEL PERSONAL'>
           <span class='btn-icon btn-icon-img'><img src='gestion-del-tiempo.png' alt='TURNOS'></span>
@@ -681,7 +681,7 @@ body.arma-logged .alarm-center-card{display:flex}
           <span class='btn-icon'>AC</span>
           <span class='btn-text'>ACCIONES Y COMPROMISOS</span>
         </a>
-        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_DATAPEL' href='datapel_acceso.html' data-arma-window='ARMA_DATAPEL' target='ARMA_DATAPEL' title='ACCESO DATAPEL // HANDOFF RAPIDO DESDE MAIN // WINDOWS Y MOVIL'>
+        <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_DATAPEL' href='datapel_acceso.html' data-arma-window='ARMA_DATAPEL' target='ARMA_DATAPEL' title='ACCESO DATAPEL // APERTURA NATIVA DIRECTA DESDE MAIN'>
           <span class='btn-icon'>DP</span>
           <span class='btn-text'>DATAPEL</span>
         </a>
@@ -695,7 +695,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-10-10 00:56:49</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-10-10 06:43:32</span></div>
   </footer>
 </main>
 </div>
@@ -1915,17 +1915,23 @@ armaOpenChildWindow=function(url,targetName){armaMainV161RefreshSharedSessionCac
 window.addEventListener('focus',function(){armaMainV161RefreshSharedSessionCache();});
 document.addEventListener('visibilitychange',function(){if(!document.hidden)armaMainV161RefreshSharedSessionCache();});
 /* === FIN MAIN V16.2 SHARED SESSION BRIDGE === */
-/* === ARMA MAIN V17.2 DATAPEL FAST HANDOFF R020.10 === */
-const ARMA_DATAPEL_FAST_CACHE='ARMA_DATAPEL_BOOTSTRAP_CACHE_R020_10';
-const ARMA_DATAPEL_FAST_MS=900000;let armaDatapelFastPromise=null;
-function armaDatapelFastAllowed(){const s=armaSession||{};const n=String(s.nivel||'').toUpperCase();const u=String(s.user||'').toUpperCase();const p=s.permissions||{};return !!s.token&&(n==='ADMIN'||n==='SUPER_ADMIN'||u==='ADMIN'||u==='ARDAN'||u==='ARMA'||p.BTN_DATAPEL===true||p.__SUPER_ADMIN__===true||p.ALL===true);}
-function armaDatapelFastRead(){try{const x=JSON.parse(localStorage.getItem(ARMA_DATAPEL_FAST_CACHE)||'null');const t=String((armaSession&&armaSession.token)||localStorage.getItem('ARMA_TOKEN')||'');if(!x||!x.cfg||x.token!==t||Date.now()-Number(x.ts||0)>ARMA_DATAPEL_FAST_MS)return null;return x.cfg;}catch(e){return null;}}
-function armaDatapelFastClear(){try{localStorage.removeItem(ARMA_DATAPEL_FAST_CACHE);}catch(e){}}
-async function armaDatapelFastPrefetch(force){if(!armaDatapelFastAllowed()){armaDatapelFastClear();return null;}if(!force){const c=armaDatapelFastRead();if(c)return c;}if(armaDatapelFastPromise)return armaDatapelFastPromise;const t=String(armaSession.token||localStorage.getItem('ARMA_TOKEN')||'');armaDatapelFastPromise=armaApi('datapelAccessBootstrap',{token:t}).then(function(d){if(!d||d.ok!==true)throw new Error((d&&d.error)||'DATAPEL_BOOTSTRAP_FAIL');localStorage.setItem(ARMA_DATAPEL_FAST_CACHE,JSON.stringify({token:t,ts:Date.now(),cfg:d,source:'MAIN_V17_2'}));return d;}).catch(function(e){console.warn('ARMA DATAPEL prefetch',e);return null;}).finally(function(){armaDatapelFastPromise=null;});return armaDatapelFastPromise;}
-const armaMainV172BaseSetSession=armaSetSession;armaSetSession=function(s){const r=armaMainV172BaseSetSession(s);setTimeout(function(){armaDatapelFastPrefetch(false);},30);return r;};
-const armaMainV172BaseSetVisitor=armaSetVisitor;armaSetVisitor=function(clearStored){armaDatapelFastClear();return armaMainV172BaseSetVisitor(clearStored);};
-const armaMainV172BaseOpenChildWindow=armaOpenChildWindow;armaOpenChildWindow=function(url,targetName){if(String(url||'').toLowerCase().indexOf('datapel_acceso.html')<0)return armaMainV172BaseOpenChildWindow(url,targetName);armaMainV161RefreshSharedSessionCache();const cached=armaDatapelFastRead();if(cached)return armaMainV172BaseOpenChildWindow(url,targetName);armaDatapelFastPrefetch(true).then(function(){armaMainV172BaseOpenChildWindow(url,targetName);});return false;};
-/* === FIN DATAPEL FAST HANDOFF R020.10 === */
+/* === ARMA MAIN V17.3 DATAPEL NATIVE DIRECT R020.12 === */
+const ARMA_DATAPEL_WINDOWS_READY='ARMA_DATAPEL_WINDOWS_READY_R020_12';
+const ARMA_DATAPEL_MOBILE_READY='ARMA_DATAPEL_MOBILE_READY_R020_12';
+function armaDatapelDevice(){const ua=navigator.userAgent||'';const p=navigator.platform||'';if(/Windows NT/i.test(ua))return'windows';if(/Android/i.test(ua))return'android';if(/iPhone|iPad|iPod/i.test(ua)||(p==='MacIntel'&&navigator.maxTouchPoints>1))return'ios';return'other';}
+function armaDatapelPrivileged(){const n=String((armaSession&&armaSession.nivel)||'').trim().toUpperCase();return n==='ADMIN'||n==='SUPER_ADMIN';}
+function armaDatapelAllowed(){const s=armaSession||{};const n=String(s.nivel||'').trim().toUpperCase();const p=s.permissions||{};return !!s.token&&(n==='ADMIN'||n==='SUPER_ADMIN'||p.BTN_DATAPEL===true||p.__SUPER_ADMIN__===true||p.ALL===true);}
+function armaDatapelSetupUrl(mode){const u=new URL('datapel_acceso.html',location.href);if(mode)u.searchParams.set('mode',mode);return u.href;}
+function armaDatapelMobileUserKey(){return 'ARMA_DATAPEL_MOBILE_USER_R020_12_'+String((armaSession&&armaSession.user)||'').toUpperCase();}
+function armaDatapelMobileUser(){try{return String(localStorage.getItem(armaDatapelMobileUserKey())||'').trim();}catch(e){return'';}}
+function armaDatapelRdpUri(user){let uri='rdp://full%20address=s%3A200.119.112.115%3A5890';if(user)uri+='&username=s%3A'+encodeURIComponent(user);return uri;}
+function armaDatapelAndroidIntent(user){let tail='full%20address=s%3A200.119.112.115%3A5890';if(user)tail+='&username=s%3A'+encodeURIComponent(user);const fb=encodeURIComponent(armaDatapelSetupUrl('mobile'));return'intent://'+tail+'#Intent;scheme=rdp;package=com.microsoft.rdc.androidx;S.browser_fallback_url='+fb+';end';}
+function armaDatapelConsumeSetupCallback(){try{const u=new URL(location.href);if(u.searchParams.get('datapel_setup')==='1'){localStorage.setItem(ARMA_DATAPEL_WINDOWS_READY,'1');u.searchParams.delete('datapel_setup');history.replaceState(null,'',u.pathname+(u.search||'')+(u.hash||''));}}catch(e){}}
+function armaDatapelOpenFromMain(){if(!armaDatapelAllowed()){alert('NO TIENE PERMISO PARA ACCEDER A DATAPEL.');return false;}const d=armaDatapelDevice();if(d==='windows'){let ready=false;try{ready=localStorage.getItem(ARMA_DATAPEL_WINDOWS_READY)==='1';}catch(e){}if(!ready)return armaMainV173BaseOpenChildWindow(armaDatapelSetupUrl('windows'),'ARMA_DATAPEL_SETUP');location.href=armaDatapelPrivileged()?'arma-datapel-admin://open':'arma-datapel-user://open';return false;}if(d==='android'||d==='ios'){let ready=false;try{ready=localStorage.getItem(ARMA_DATAPEL_MOBILE_READY)==='1';}catch(e){}const ru=armaDatapelPrivileged()?'':armaDatapelMobileUser();if(!ready||(!armaDatapelPrivileged()&&!ru))return armaMainV173BaseOpenChildWindow(armaDatapelSetupUrl('mobile'),'ARMA_DATAPEL_SETUP');location.href=d==='android'?armaDatapelAndroidIntent(ru):armaDatapelRdpUri(ru);return false;}return armaMainV173BaseOpenChildWindow(armaDatapelSetupUrl('other'),'ARMA_DATAPEL_SETUP');}
+armaDatapelConsumeSetupCallback();
+const armaMainV173BaseOpenChildWindow=armaOpenChildWindow;
+armaOpenChildWindow=function(url,targetName){if(String(url||'').toLowerCase().indexOf('datapel_acceso.html')<0)return armaMainV173BaseOpenChildWindow(url,targetName);armaMainV161RefreshSharedSessionCache();return armaDatapelOpenFromMain();};
+/* === FIN DATAPEL NATIVE DIRECT R020.12 === */
 document.addEventListener('DOMContentLoaded',function(){
   const internalReturn=armaConsumeInternalReturn();
   const restored=armaRestoreSessionCache();if(!restored)armaRenderVisitor();
