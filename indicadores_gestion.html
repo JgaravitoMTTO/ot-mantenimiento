@@ -1,0 +1,181 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#004b9b">
+<title>ARMA | INDICADORES DE GESTIÓN</title>
+<link rel="manifest" href="manifest.webmanifest">
+<script data-arma-pwa-navigation="1" defer src="arma-pwa-navigation.js"></script>
+<style>
+:root{--navy:#002b66;--blue:#0069c9;--blue2:#0796e6;--green:#18a94f;--red:#be123c;--orange:#c56705;--line:#d4e3f1;--bg:#eef4fa;--muted:#64748b;--shadow:0 14px 34px rgba(0,43,102,.13)}
+*{box-sizing:border-box}
+html{zoom:80%}
+@media(max-width:900px){html{zoom:100%}}
+body{margin:0;background:var(--bg);font-family:Segoe UI,Arial,sans-serif;color:#0f2f5a;text-transform:uppercase}
+.top{position:sticky;top:0;z-index:30;background:#fff;border-bottom:6px solid var(--blue);padding:12px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:16px}
+.brand img{height:58px;object-fit:contain}
+.title{text-align:right}
+.title h1{margin:0;color:var(--navy);font-size:25px}
+.pill{display:inline-flex;margin-top:5px;border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:11px;font-weight:950}
+.wrap{width:min(1880px,100%);margin:0 auto;padding:18px 24px 28px}
+.hero{padding:20px 26px;border-radius:22px;margin-bottom:16px;background:linear-gradient(125deg,#00376f 0%,#006bb9 58%,#0094d5 100%);color:#fff;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;gap:14px}
+.hero h2{margin:0;font-size:30px;letter-spacing:.2px}
+.hero p{margin:5px 0 0;font-size:12px;line-height:1.5;font-weight:800}
+.index-nav-card{position:relative;display:inline-flex;align-items:center;gap:12px;min-width:205px;min-height:74px;padding:14px 18px;border-radius:18px;background:linear-gradient(180deg,#fff,#eef7ff);border:1px solid #dbe5f0;box-shadow:0 10px 22px rgba(0,43,102,.10);text-decoration:none;color:#002b66;overflow:hidden}
+.index-nav-card:before{content:'';position:absolute;left:0;top:0;width:100%;height:5px;background:linear-gradient(90deg,#004b9b,#0076d7,#00bfd6,#55b52e)}
+.nav-icon{width:54px;height:54px;border-radius:16px;background:#e8f2ff;border:1px solid #dbe5f0;display:grid;place-items:center;flex:0 0 54px}
+.nav-icon img{width:38px;height:38px;object-fit:contain}
+.nav-text{display:flex;flex-direction:column;line-height:1.1}
+.nav-text strong{font-size:18px;font-weight:900;color:#002b66}
+.nav-text span{font-size:10px;font-weight:900;color:#008c2e;letter-spacing:.45px;margin-top:6px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:17px;margin-bottom:14px}
+.breadcrumb{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;font-size:10px;font-weight:950;color:#60738a}
+.breadcrumb b{color:#003c80}
+.levels{display:grid;grid-template-columns:220px 1fr;gap:14px;align-items:start}
+.level-menu{display:flex;flex-direction:column;gap:8px}
+.level-btn{border:1px solid var(--line);border-radius:13px;padding:12px 14px;background:#f7fbff;color:#315d82;text-align:left;font-weight:950;cursor:pointer;text-transform:uppercase}
+.level-btn.active{background:linear-gradient(135deg,#003b80,#087fce);color:#fff;border-color:transparent}
+.level-content{min-width:0}
+.process-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.process-card{border:1px solid var(--line);border-radius:16px;padding:14px;background:linear-gradient(180deg,#fff,#f6fbff);cursor:pointer;box-shadow:0 6px 15px rgba(0,43,102,.05)}
+.process-card.active{border:2px solid #0788d1;background:#eaf6ff}
+.process-card span{display:block;font-size:9px;color:#64748b;font-weight:950}
+.process-card strong{display:block;font-size:22px;color:#003c80;margin-top:4px}
+.process-card small{display:block;font-size:9px;color:#168a42;font-weight:900;margin-top:4px}
+.metrics{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.metric{position:relative;overflow:hidden;min-height:96px;border-radius:18px;padding:15px 16px;color:#fff;box-shadow:0 10px 24px rgba(0,43,102,.16)}
+.metric:after{content:'';position:absolute;width:90px;height:90px;border-radius:50%;right:-28px;top:-35px;background:rgba(255,255,255,.13)}
+.metric span,.metric strong,.metric small{position:relative;z-index:1;color:#fff}
+.metric span{display:block;font-size:9px;font-weight:950;letter-spacing:.35px}
+.metric strong{display:block;font-size:26px;margin-top:5px}
+.metric small{display:block;margin-top:4px;font-size:8px;font-weight:900;opacity:.82}
+.m1{background:linear-gradient(135deg,#003b80,#087fce)} .m2{background:linear-gradient(135deg,#00698f,#00a8bd)} .m3{background:linear-gradient(135deg,#12823a,#72bf2b)} .m4{background:linear-gradient(135deg,#5c3d92,#8b5ec5)} .m5{background:linear-gradient(135deg,#a84e06,#ef8f13)} .m6{background:linear-gradient(135deg,#7f1d1d,#dc2626)}
+.indicator-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
+.indicator-head h3{margin:0;color:#003c80;font-size:20px}
+.indicator-head p{margin:4px 0 0;color:#64748b;font-size:10px;font-weight:850;line-height:1.5}
+.year{display:flex;gap:8px;align-items:center}
+select,.btn{min-height:46px;border-radius:12px;font:inherit;text-transform:uppercase}
+select{border:1px solid var(--line);padding:10px 12px;color:#003c80;font-weight:900;background:#fff}
+.btn{border:0;padding:10px 14px;background:linear-gradient(135deg,#0b80dc,#0050a4);color:#fff;font-weight:950;cursor:pointer}
+.btn.green{background:linear-gradient(135deg,#21c05b,#148a40)} .btn.gray{background:linear-gradient(135deg,#94a3b8,#64748b)}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}
+.table{width:100%;border-collapse:collapse;min-width:1550px}
+.table th{position:sticky;top:0;background:#0d638a;color:#fff;padding:9px 8px;text-align:center;font-size:9px;white-space:nowrap}
+.table td{padding:8px;border-bottom:1px solid var(--line);font-size:10px;text-align:center;font-weight:800;white-space:nowrap}
+.table td.left{text-align:left;font-weight:950;color:#003c80}
+.table tbody tr:hover{background:#f1f8ff}
+.cell-btn{border:0;background:transparent;color:#003c80;font-weight:950;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.status-ok{color:#15803d} .status-warn{color:#b45309} .status-bad{color:#b91c1c}
+.progress{height:7px;border-radius:999px;background:#e2e8f0;overflow:hidden;min-width:90px;margin:5px auto 0}
+.progress i{display:block;height:100%;background:#0788d1}
+.family-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+.family-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.family{border:1px solid var(--line);border-radius:13px;padding:11px;background:#f8fbff;cursor:pointer}
+.family span{display:block;font-size:9px;color:#64748b;font-weight:950}
+.family strong{display:block;color:#003c80;font-size:17px;margin-top:4px}
+.family small{font-size:9px;font-weight:900;color:#168a42}
+.definition{border-left:5px solid #1686d9;background:#f4f9ff;border-radius:12px;padding:12px 14px;font-size:10px;font-weight:850;line-height:1.6;color:#486176}
+.footer{margin-top:14px;background:#003b80;color:#fff;border-radius:14px;text-align:center;padding:11px;font-size:10px;font-weight:900}
+.modal,.loader{position:fixed;inset:0;background:rgba(2,12,30,.62);z-index:100;display:flex;align-items:center;justify-content:center;padding:18px}
+.hidden{display:none!important}
+.box{width:min(1500px,97vw);max-height:92vh;overflow:auto;background:#fff;border-radius:20px;padding:20px;box-shadow:0 26px 70px rgba(0,0,0,.35)}
+.box-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
+.box h3{margin:0;color:#003c80}
+.detail-table{width:100%;border-collapse:collapse;min-width:1500px}
+.detail-table th{background:#0d638a;color:#fff;padding:8px;font-size:8px;white-space:nowrap}
+.detail-table td{border-bottom:1px solid var(--line);padding:8px;font-size:9px;vertical-align:top;white-space:nowrap}
+.spin{width:45px;height:45px;border:5px solid #dbeafe;border-top-color:#087fd0;border-radius:50%;animation:s .8s linear infinite;margin:auto}
+@keyframes s{to{transform:rotate(360deg)}}
+@media(max-width:1250px){.metrics{grid-template-columns:repeat(3,1fr)}.family-grid{grid-template-columns:1fr}}
+@media(max-width:850px){.top{position:relative;align-items:flex-start;flex-direction:column}.title{text-align:left}.wrap{padding:9px}.hero{align-items:flex-start;flex-direction:column}.levels{grid-template-columns:1fr}.level-menu{flex-direction:row;overflow:auto}.process-grid{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.family-list{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="loader" class="loader hidden"><div class="box" style="width:min(520px,96vw);text-align:center"><div class="spin"></div><h3 id="loaderText">CARGANDO INDICADORES</h3></div></div>
+<div id="detailModal" class="modal hidden">
+  <div class="box">
+    <div class="box-head"><div><h3 id="detailTitle">DATA DE SOPORTE</h3><div id="detailSub" class="breadcrumb"></div></div><div style="display:flex;gap:8px"><button id="downloadBtn" class="btn green" onclick="downloadCurrent()">DESCARGAR DATA</button><button class="btn gray" onclick="closeDetail()">CERRAR</button></div></div>
+    <div class="table-wrap"><table class="detail-table"><thead id="detailHead"></thead><tbody id="detailBody"></tbody></table></div>
+  </div>
+</div>
+<header class="top">
+  <div class="brand"><img src="logo_pelex.bmp" alt="PELEX"><img src="ARMA%20logo%202.png" alt="ARMA"></div>
+  <div class="title"><h1>INDICADORES DE GESTIÓN</h1><span id="userPill" class="pill">VALIDANDO SESIÓN...</span></div>
+</header>
+<main class="wrap">
+<section class="hero">
+  <div><h2>CENTRO DE INDICADORES A.R.M.A.</h2><p>TRAZABILIDAD DESDE EL EVENTO DATAPEL HASTA EL RESULTADO DE GESTIÓN. CADA CIFRA PUEDE SER AUDITADA.</p></div>
+  <a class="index-nav-card" href="main.html"><div class="nav-icon"><img src="boton-de-inicio.png" alt="INICIO"></div><div class="nav-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></div></a>
+</section>
+<section class="panel">
+  <div class="breadcrumb"><b>NIVEL 1</b> TODAS LAS PLANTAS <span>›</span><b>NIVEL 2</b> PROCESO <span>›</span><b>NIVEL 3</b> INDICADOR <span>›</span><b>NIVEL 4</b> MÁQUINA / MES / DATA</div>
+  <div class="levels">
+    <div class="level-menu"><button class="level-btn active">TIEMPOS DE PARADA</button><button class="level-btn" disabled>PRÓXIMO INDICADOR</button><button class="level-btn" disabled>PRÓXIMO INDICADOR</button></div>
+    <div class="level-content"><div id="processGrid" class="process-grid"></div></div>
+  </div>
+</section>
+<section class="metrics">
+  <article class="metric m1"><span>TIEMPO DE PARADA TOTAL</span><strong id="kTotal">0.0 H</strong><small>TODAS LAS FAMILIAS</small></article>
+  <article class="metric m2"><span>PARADA POR MANTENIMIENTO</span><strong id="kMtto">0.0 H</strong><small>CONFIRMADO + PROVISIONAL</small></article>
+  <article class="metric m3"><span>MTTO CONFIRMADO</span><strong id="kConfirmed">0.0 H</strong><small>ACEPTADO POR MANTENIMIENTO</small></article>
+  <article class="metric m4"><span>MTTO PROVISIONAL</span><strong id="kProvisional">0.0 H</strong><small>PENDIENTE / DEVUELTO</small></article>
+  <article class="metric m5"><span>PRODUCCIÓN</span><strong id="kProd">0.0 H</strong><small>AUTO + RECHAZADO POR MTTO</small></article>
+  <article class="metric m6"><span>PENDIENTES DE FLUJO</span><strong id="kPending">0</strong><small>MTTO + PRODUCCIÓN</small></article>
+</section>
+<section class="panel">
+  <div class="indicator-head">
+    <div><h3>TIEMPOS DE PARADA POR MANTENIMIENTO</h3><p id="indicatorDesc">CARGANDO DEFINICIÓN...</p></div>
+    <div class="year"><label>AÑO</label><select id="year"><option value="2026">2026</option></select><button class="btn" onclick="loadIndicators()">ACTUALIZAR</button></div>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>PROCESO</th><th>MÁQUINA</th><th>META ANUAL H</th><th>ENE</th><th>FEB</th><th>MAR</th><th>ABR</th><th>MAY</th><th>JUN</th><th>JUL</th><th>AGO</th><th>SEP</th><th>OCT</th><th>NOV</th><th>DIC</th><th>GENERAL</th><th>CONF.</th><th>PROV.</th><th>% META</th><th>DATA</th></tr></thead>
+      <tbody id="machineBody"></tbody>
+    </table>
+  </div>
+</section>
+<section class="panel">
+  <div class="indicator-head"><div><h3>TIEMPOS DE PARADA POR FAMILIA</h3><p>TODOS LOS PAROS PERMANECEN VISIBLES. LA CLASIFICACIÓN DE RESPONSABILIDAD NO BORRA NI ALTERA EL TIEMPO DE ORIGEN.</p></div><button class="btn" onclick="openDetail({METRICA:'TOTAL'})">VER DATA TOTAL</button></div>
+  <div class="family-grid"><div id="familyList" class="family-list"></div><div id="definition" class="definition"></div></div>
+</section>
+<div class="footer">ARMA™ // INDICADORES DE GESTIÓN // FUENTE TRAZABLE // CALIDAD PUEDE VERIFICAR Y DESCARGAR EL DETALLE</div>
+</main>
+<script>
+const API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
+let boot=null,selectedProcess='TODOS',detailRows=[],detailFilter={};
+const MONTHS=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+function token(){try{const c=JSON.parse(localStorage.getItem('ARMA_SESSION_CACHE')||'{}');return localStorage.getItem('ARMA_TOKEN')||sessionStorage.getItem('ARMA_TOKEN')||c.token||''}catch(e){return localStorage.getItem('ARMA_TOKEN')||sessionStorage.getItem('ARMA_TOKEN')||''}}
+function byId(id){return document.getElementById(id)}
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function norm(v){return String(v||'').trim().toUpperCase()}
+function showLoad(t){byId('loaderText').textContent=t||'CARGANDO';byId('loader').classList.remove('hidden')}
+function hideLoad(){byId('loader').classList.add('hidden')}
+async function api(action,data={}){showLoad(action.replaceAll('_',' '));try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,token:token()},data)),cache:'no-store'});const txt=await r.text();let j;try{j=JSON.parse(txt)}catch(e){throw new Error('RESPUESTA_NO_JSON')}if(!j||j.ok===false)throw new Error((j&&j.error)||'ERROR_BACKEND');return j}finally{hideLoad()}}
+function h(min){return (Number(min||0)/60).toFixed(2)}
+function processMachines(){const all=boot&&boot.machines||[];return selectedProcess==='TODOS'?all:all.filter(m=>norm(m.PROCESO)===selectedProcess)}
+function aggregateSelected(){const ms=processMachines(),o={total:0,mtto:0,confirmed:0,provisional:0,prod:0,other:0,pending:0};ms.forEach(m=>{o.total+=Number(m.totalMinutes||0);o.mtto+=Number(m.maintenanceMinutes||0);o.confirmed+=Number(m.maintenanceConfirmedMinutes||0);o.provisional+=Number(m.maintenanceProvisionalMinutes||0);o.prod+=Number(m.productionMinutes||0);o.other+=Number(m.noMttoOtherMinutes||0);o.pending+=Number(m.pendingMttoEvents||0)+Number(m.pendingProdEvents||0)});return o}
+function renderProcesses(){const groups=[{name:'TODOS',label:'TODAS LAS PLANTAS',minutes:(boot.summary||{}).maintenanceMinutes||0}].concat((boot.processes||[]).map(p=>({name:norm(p.PROCESO),label:'PROCESO '+p.PROCESO,minutes:p.TOTAL_MTTO_MIN||0})));byId('processGrid').innerHTML=groups.map(g=>`<article class="process-card ${selectedProcess===g.name?'active':''}" onclick="selectProcess('${esc(g.name)}')"><span>NIVEL DE PROCESO</span><strong>${esc(g.label)}</strong><small>${h(g.minutes)} H MTTO</small></article>`).join('')}
+function selectProcess(p){selectedProcess=p;renderAll()}
+function renderMetrics(){const a=aggregateSelected();byId('kTotal').textContent=h(a.total)+' H';byId('kMtto').textContent=h(a.mtto)+' H';byId('kConfirmed').textContent=h(a.confirmed)+' H';byId('kProvisional').textContent=h(a.provisional)+' H';byId('kProd').textContent=h(a.prod)+' H';byId('kPending').textContent=Number(a.pending||0)}
+function monthKey(i){return String(boot.year)+'-'+String(i+1).padStart(2,'0')}
+function statusClass(pct){return pct>100?'status-bad':pct>80?'status-warn':'status-ok'}
+function monthCell(m,i){const key=monthKey(i),min=Number((m.months||{})[key]||0),v=h(min),ref=Number(m.META_ANUAL_H||0)/12,cls=ref>0&&Number(v)>ref?'status-bad':'';return `<td class="${cls}" title="${ref>0?'REFERENCIA MENSUAL '+ref.toFixed(2)+' H':''}"><button class="cell-btn" onclick="openDetail({PROCESO:'${esc(m.PROCESO)}',CDG_MQN_DATAPEL:'${esc(m.CDG_MQN_DATAPEL)}',MES:'${key}',METRICA:'MANTENIMIENTO'})">${v}</button></td>`}
+function renderMachines(){const ms=processMachines();byId('machineBody').innerHTML=ms.length?ms.map(m=>{const meta=Number(m.META_ANUAL_H||0),hours=Number(m.maintenanceMinutes||0)/60,pct=meta>0?hours/meta*100:0;return `<tr><td>${esc(m.PROCESO)}</td><td class="left">${esc(m.ETIQUETA_MAQUINA)}<br><small>DATAPEL ${esc(m.CDG_MQN_DATAPEL)}</small></td><td>${meta?meta.toFixed(1):'—'}</td>${MONTHS.map((_,i)=>monthCell(m,i)).join('')}<td><button class="cell-btn" onclick="openDetail({PROCESO:'${esc(m.PROCESO)}',CDG_MQN_DATAPEL:'${esc(m.CDG_MQN_DATAPEL)}',METRICA:'MANTENIMIENTO'})">${hours.toFixed(2)}</button></td><td>${h(m.maintenanceConfirmedMinutes)}</td><td>${h(m.maintenanceProvisionalMinutes)}</td><td class="${statusClass(pct)}">${meta?pct.toFixed(1)+'%':'—'}${meta?`<div class="progress"><i style="width:${Math.min(100,pct)}%"></i></div>`:''}</td><td><button class="btn" onclick="openDetail({PROCESO:'${esc(m.PROCESO)}',CDG_MQN_DATAPEL:'${esc(m.CDG_MQN_DATAPEL)}',METRICA:'MANTENIMIENTO'})">VER DATA</button></td></tr>`}).join(''):'<tr><td colspan="20">SIN MÁQUINAS EN ESTE NIVEL.</td></tr>'}
+function openFamilyDetail(fam){const q={FAMILIA:String(fam||''),METRICA:'TOTAL'};if(selectedProcess!=='TODOS')q.PROCESO=selectedProcess;openDetail(q)}
+function renderFamilies(){const xs=selectedProcess==='TODOS'?(boot.families||[]):(((boot.familiesByProcess||{})[selectedProcess])||[]);byId('familyList').innerHTML=xs.length?xs.map(f=>`<article class="family" data-family="${esc(f.FAMILIA)}" onclick="openFamilyDetail(this.dataset.family)"><span>${esc(f.FAMILIA)}</span><strong>${h(f.MINUTOS)} H</strong><small>${Number(f.EVENTOS||0)} EVENTOS // VER DATA</small></article>`).join(''):'<div>SIN FAMILIAS.</div>';const d=boot.definition||{};byId('definition').innerHTML='<strong>REGLA DEL INDICADOR</strong><br>'+esc(d.maintenanceRule||'')+'<br><br><strong>FUENTE</strong><br>'+esc(d.source||'')+'<br><br><strong>META</strong><br>CONFIGURABLE EN DT_INDICADORES_CONFIG. EL ARCHIVO 2026 ENTREGADO SE SIEMBRA CON 275 H/AÑO POR MÁQUINA PRINCIPAL.'}
+function renderAll(){renderProcesses();renderMetrics();renderMachines();renderFamilies()}
+async function loadIndicators(){try{const j=await api('dtIndicatorsBootstrap',{ANIO:Number(byId('year').value||2026)});boot=j;const who=(j.session&&j.session.nombre)||(j.session&&j.session.user)||'USUARIO';byId('userPill').textContent=who+' // '+((j.session&&j.session.nivel)||'');byId('indicatorDesc').textContent=(j.definition&&j.definition.maintenanceRule)||'';if(!['TODOS','CAST','BLOWN','OTROS'].includes(selectedProcess))selectedProcess='TODOS';renderAll()}catch(e){alert('NO FUE POSIBLE CARGAR INDICADORES\n\n'+e.message)}}
+function closeDetail(){byId('detailModal').classList.add('hidden');detailRows=[]}
+function detailTitle(f){let p=['DATA DE SOPORTE'];if(f.PROCESO)p.push(f.PROCESO);if(f.CDG_MQN_DATAPEL)p.push('MÁQUINA '+f.CDG_MQN_DATAPEL);if(f.MES)p.push(f.MES);if(f.FAMILIA)p.push(f.FAMILIA);p.push(f.METRICA||'MANTENIMIENTO');return p.join(' // ')}
+async function openDetail(f){try{detailFilter=Object.assign({ANIO:Number(byId('year').value||2026)},f||{});const j=await api('dtIndicatorsDetail',detailFilter);detailRows=Array.isArray(j.rows)?j.rows:[];byId('detailTitle').textContent=detailTitle(detailFilter);byId('detailSub').textContent=detailRows.length+' REGISTROS // '+h(detailRows.reduce((t,r)=>t+Number(r.MINUTOS||0),0))+' H';byId('downloadBtn').style.display=(boot.access&&boot.access.canExport)?'inline-flex':'none';renderDetailTable();byId('detailModal').classList.remove('hidden')}catch(e){alert('NO FUE POSIBLE ABRIR LA DATA\n\n'+e.message)}}
+const DETAIL_COLS=['ID_EVENTO','FECHA','PROCESO','CDG_MQN_DATAPEL','MAQUINA','HORA_INICIO','HORA_FIN','MINUTOS','HORAS','CDG_CAUSA_ORIG','CDG_CAUSA_EFECTIVA','CAUSA','FAMILIA','MTTO_ESTADO','MTTO_USUARIO','MTTO_FECHA','MTTO_JUSTIFICACION','PROD_ESTADO','PROD_USUARIO','PROD_FECHA','PROD_JUSTIFICACION','ESTADO_CONCILIACION','RESPONSABILIDAD_INDICADOR','ESTADO_DATO','CICLO','REGLA'];
+function renderDetailTable(){byId('detailHead').innerHTML='<tr>'+DETAIL_COLS.map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr>';byId('detailBody').innerHTML=detailRows.length?detailRows.map(r=>'<tr>'+DETAIL_COLS.map(c=>'<td>'+esc(r[c])+'</td>').join('')+'</tr>').join(''):'<tr><td colspan="'+DETAIL_COLS.length+'">SIN REGISTROS.</td></tr>'}
+function csvCell(v){let s=String(v==null?'':v).replaceAll('"','""');return '"'+s+'"'}
+async function downloadCurrent(){try{const j=await api('dtIndicatorsExport',detailFilter);const rs=Array.isArray(j.rows)?j.rows:[];const lines=[DETAIL_COLS.map(csvCell).join(';')].concat(rs.map(r=>DETAIL_COLS.map(c=>csvCell(r[c])).join(';')));const blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='ARMA_INDICADOR_DT_'+String(detailFilter.ANIO||2026)+'_'+Date.now()+'.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}catch(e){alert('NO FUE POSIBLE DESCARGAR\n\n'+e.message)}}
+async function init(){if(!token()){location.href='main.html';return}await loadIndicators()}
+init();
+</script>
+</body>
+</html>
