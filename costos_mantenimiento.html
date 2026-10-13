@@ -61,7 +61,7 @@ const API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KH
 let state=null,selectedNode='',openNodes=new Set(),detailCache={},projects=[],projectTargets=[],pendingClassify=null,queryProjectsOpened=false;
 const $=id=>document.getElementById(id);
 const esc=x=>String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const norm=x=>String(x||'').trim().toUpperCase();
+const norm=x=>{let n=String(x||'').trim().toUpperCase();try{n=n.normalize('NFD').replace(/[\u0300-\u036f]/g,'')}catch(e){}n=n.replace(/[\s\/\-]+/g,'_').replace(/_+/g,'_');if(n==='SUB_SISTEMA')return 'SUBSISTEMA';return n};
 function token(){return localStorage.getItem('ARMA_TOKEN')||sessionStorage.getItem('ARMA_TOKEN')||(()=>{try{return JSON.parse(localStorage.getItem('ARMA_SESSION_CACHE')||'{}').token||''}catch(e){return''}})()}
 function fmt(n,d=0){return Number(n||0).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d})}
 function money(n,c){const v=Number(n||0),m=String(c||'COP').trim().toUpperCase();if(m==='COP')return v.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});return fmt(v,2)+' '+m}
