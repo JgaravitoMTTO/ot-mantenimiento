@@ -14,12 +14,40 @@ main{max-width:1200px;margin:22px auto;padding:0 16px}.warn{background:#fff8df;b
 .daily{margin-top:18px;background:white;border-radius:18px;padding:18px;border:1px solid #d7e5f3}.ok{color:#11864f;font-weight:900}.bad{color:#c62828;font-weight:900}.live{margin-top:7px;font-size:11px;font-weight:800;color:#11864f}.live.off{color:#64748b}
 .back{display:inline-block;margin-top:18px;padding:10px 16px;border-radius:10px;background:#0a4f8f;color:#fff;text-decoration:none;font-weight:900}
 @media(max-width:760px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}header{align-items:flex-start;gap:10px}header h1{font-size:17px}.pill{font-size:10px}main{margin-top:12px}}
+/* CONTROL DATAPEL R035 - SOLO LECTURA */
+.dp-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.dp-head h2{margin:0;font-size:22px}.dp-actions{display:flex;gap:8px;flex-wrap:wrap}
+.dp-action{width:auto;margin:0;padding:11px 16px}.dp-action.secondary{background:#e7f0fc;color:#074780}
+.dp-status{margin:10px 0;padding:11px 13px;border-radius:12px;background:#eef5ff;border:1px solid #ccdcf2;font-size:12px;font-weight:800}
+.dp-groups{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}
+.dp-group{border:1px solid #d7e5f3;border-left:6px solid #64748b;border-radius:14px;background:#f8fbff;padding:13px}
+.dp-group.good{border-left-color:#0c9b62}.dp-group.warn{border-left-color:#e28b06}.dp-group.bad{border-left-color:#ce3030}
+.dp-group b{display:block;font-size:12px}.dp-group strong{display:block;margin:9px 0;font-size:12px}.dp-group small{display:block;color:#64748b;font-size:10px;line-height:1.6}
+.dp-table-wrap{overflow:auto;border:1px solid #dbe6f3;border-radius:12px;margin-top:12px}
+.dp-table{border-collapse:collapse;width:100%;min-width:940px;font-size:11px}
+.dp-table th{background:#096297;color:#fff;text-align:left;padding:10px;position:sticky;top:0}
+.dp-table td{padding:9px;border-top:1px solid #e1eaf6;vertical-align:top;line-height:1.4}
+.dp-table tr:nth-child(even){background:#f3f8ff}.dp-pill{display:inline-block;border-radius:99px;padding:5px 8px;font-size:10px;font-weight:900;background:#edf2f8;color:#315072}
+.dp-pill.good{background:#d5f7e5;color:#07643a}.dp-pill.warn{background:#fff0cf;color:#8d4b02}.dp-pill.bad{background:#fee2e2;color:#9d1515}
+.dp-note{margin-top:12px;border-left:4px solid #e49c0b;background:#fff8e9;padding:12px;border-radius:9px;font-size:12px;line-height:1.55}
+.dp-kpis{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;margin-top:9px}.dp-kpis span{background:#f2f7fc;border:1px solid #deebf8;padding:8px 11px;border-radius:9px}
+@media(max-width:1100px){.dp-groups{grid-template-columns:1fr 1fr}}@media(max-width:660px){.dp-groups{grid-template-columns:1fr}}
 </style></head><body>
 <header><div><small>A.R.M.A. // SISTEMA</small><h1>ADMINISTRAR ARMA</h1></div><div class='pill' id='userPill'>VALIDANDO...</div></header>
 <main><div class='warn'><b>REDTEAM:</b> estas operaciones son masivas. Se ejecutan en lotes con cursor persistente. Puede cerrar esta pantalla y volver mas tarde; el proceso continua en Backend. No pulse dos veces el mismo inicio.</div>
 <section class='grid'>
 <article class='card'><h2>PDF DE ORDENES DE TRABAJO</h2><div class='muted'>Motor R7 OT unificado. Primero ejecutar profiling de 5 OT antes del masivo.</div><div class='actions'><button class='btn' id='btnOT'>REGENERAR TODOS LOS PDF DE OT</button><button class='btn stop' id='stopOT'>DETENER</button></div><div class='bar'><div id='fillOT' class='fill'></div></div><div id='stateOT' class='muted'>SIN INICIAR</div><div id='liveOT' class='live off'>CURSOR EN VIVO: --</div><div class='stats'><div class='stat'><b id='otCursor'>0</b><span>PROCESADOS / CURSOR REAL</span></div><div class='stat'><b id='otTotal'>0</b><span>TOTAL</span></div><div class='stat'><b id='otOk'>0</b><span>GENERADOS CONFIRMADOS</span></div><div class='stat'><b id='otErr'>0</b><span>ERRORES</span></div></div></article>
 <article class='card'><h2>PDF DE BITACORAS TECNICAS</h2><div class='muted'>Motor R7 BT: una pagina + preload + cursor vivo + guardado seguro.</div><div class='actions'><button class='btn' id='btnBT'>REGENERAR TODOS LOS PDF DE BT</button><button class='btn stop' id='stopBT'>DETENER</button></div><div class='bar'><div id='fillBT' class='fill'></div></div><div id='stateBT' class='muted'>SIN INICIAR</div><div id='liveBT' class='live off'>CURSOR EN VIVO: --</div><div class='stats'><div class='stat'><b id='btCursor'>0</b><span>PROCESADOS / CURSOR REAL</span></div><div class='stat'><b id='btTotal'>0</b><span>TOTAL</span></div><div class='stat'><b id='btOk'>0</b><span>GENERADOS CONFIRMADOS</span></div><div class='stat'><b id='btErr'>0</b><span>ERRORES</span></div></div></article>
+</section>
+<section class='daily' id='datapelPanel'>
+ <div class='dp-head'><div><h2>CONTROL DE RECEPCION DATAPEL</h2><div class='muted'>PRODUCCION / COMPRAS / CLOCK / CAPACITACIONES - EVIDENCIA REAL DE INGESTA EN ARMA</div></div>
+ <div class='dp-actions'><button class='btn dp-action' id='dpRefresh' type='button'>VERIFICAR AHORA</button><button class='btn dp-action secondary' id='dpExport' type='button' disabled>EXPORTAR DIAGNOSTICO CSV</button></div></div>
+ <div id='dpStatus' class='dp-status'>PREPARANDO CONSULTA DEL RECEPTOR DATAPEL...</div>
+ <div id='dpKpis' class='dp-kpis'></div><div id='dpGroups' class='dp-groups'></div>
+ <h3 style='margin:18px 0 6px'>ESTADO POR TABLA / DATASET</h3>
+ <div class='dp-table-wrap'><table class='dp-table'><thead><tr><th>FLUJO / TABLA</th><th>ULTIMO LOTE</th><th>ULTIMO EXITO</th><th>REGISTROS</th><th>LEIDOS / NUEVOS / CAMBIOS</th><th>ESTADO</th></tr></thead><tbody id='dpRows'><tr><td colspan='6'>SIN CONSULTAR</td></tr></tbody></table></div>
+ <h3 style='margin:18px 0 6px'>ULTIMAS RECEPCIONES Y ERRORES</h3><div class='dp-table-wrap'><table class='dp-table'><thead><tr><th>FECHA HORA</th><th>DATASET</th><th>ESTADO</th><th>LEIDOS</th><th>INSERTADOS</th><th>ACTUALIZADOS</th><th>ERRORES</th></tr></thead><tbody id='dpHistory'><tr><td colspan='7'>SIN CONSULTAR</td></tr></tbody></table></div>
+ <div class='dp-note'><b>CRITERIO DE INGENIERIA:</b> este panel monitorea lo que llego al receptor ARMA; no consulta directamente los DBF ni demuestra por si solo que el Watcher este encendido. Si el Reader recibe ALREADY_APPLIED, puede no agregarse otra fila al historico. La ausencia de cambios es una SEÑAL PARA VERIFICAR, no prueba automatica de falla. El control definitivo de actividad requiere un heartbeat explicito del Collector.</div>
 </section>
 <section class='daily'><h2>AVANCE AUTOMATICO OTPR ? OTE</h2><div id='dailyState'>CONSULTANDO...</div><div class='muted' style='margin-top:7px'>Regla: solo OTPR cuya fecha programada ya llego y que tengan asignacion activa. El guard horario es idempotente.</div></section>
 <a class='back' href='main.html'>VOLVER A INICIO</a></main>
@@ -87,5 +115,43 @@ const d=document.getElementById('dailyState');if(d&&d.textContent==='CONSULTANDO
 }
 async function start(type){if(!confirm('SE REINICIARA DESDE CERO Y SE REGENERARAN TODOS LOS PDF DE '+type+' CON MOTOR FAST. CONTINUAR?'))return;try{const j=await api('armaAdminPdfStart',{type});paintJob(type,j.job)}catch(e){alert(e.message)}}
 async function stopJob(type){if(!confirm('DETENER EL JOB '+type+'? LOS PDF YA GENERADOS SE CONSERVAN.'))return;try{const j=await api('armaAdminPdfStop',{type});paintJob(type,j.job)}catch(e){alert(e.message)}}
-document.getElementById('btnOT').onclick=()=>start('OT');document.getElementById('btnBT').onclick=()=>start('BT');document.getElementById('stopOT').onclick=()=>stopJob('OT');document.getElementById('stopBT').onclick=()=>stopJob('BT');boot();
+// ARMA R035 - DATAPEL RECEPTION MONITOR (read-only)
+let dpLast=null,dpTimer=null,dpBusy=false;
+const dpEl=id=>document.getElementById(id);
+const dpEsc=v=>{const e=document.createElement('span');e.textContent=String(v==null?'':v);return e.innerHTML};
+const dpFmt=x=>x?dpEsc(x):'--';
+function dpClass(level){return level==='PUBLICACION_REGISTRADA'?'good':level==='REVISAR'?'bad':'warn'}
+function dpText(level){return {'PUBLICACION_REGISTRADA':'RECEPCION RECIENTE REGISTRADA','SIN_CONFIRMACION_RECIENTE':'SIN CONFIRMACION RECIENTE','SIN_EVIDENCIA':'SIN LOTES EN MUESTRA','REVISAR':'REVISAR ERRORES / TABLAS'}[level]||level}
+function dpRender(j){
+ dpLast=j;
+ dpEl('dpStatus').textContent='CONSULTADO '+j.generatedAt+' (BOGOTA) | MONITOR SOLO LECTURA | MUESTRA '+j.analyzedSyncRows+' / '+j.syncLogRows+' LOTES HISTORICOS';
+ dpEl('dpKpis').innerHTML='<span>DATASETS: <b>'+j.datasets.length+'</b></span><span>EVENTOS RECIENTES: <b>'+j.recent.length+'</b></span><span>ERRORES DETECTADOS EN LA MUESTRA: <b>'+j.errors.length+'</b></span><span>ULTIMA REFRESCADA: <b>'+dpFmt(j.generatedAt)+'</b></span>';
+ dpEl('dpGroups').innerHTML=(j.groups||[]).map(g=>'<div class="dp-group '+dpClass(g.level)+'"><b>'+dpEsc(g.label)+'</b><strong>'+dpEsc(dpText(g.level))+'</strong><small>ULTIMO LOTE: '+dpFmt(g.last&&g.last.at)+'<br>EDAD: '+(g.ageHours==null?'--':dpEsc(g.ageHours)+' H')+' | UMBRAL ORIENTATIVO: '+(g.maxHours?g.maxHours+' H':'NO DEFINIDO')+'<br>TABLAS SIN ACCESO: '+g.missingSheets+' | CON ERROR ULTIMO: '+g.erroredDatasets+'</small></div>').join('');
+ dpEl('dpRows').innerHTML=(j.datasets||[]).map(x=>{
+   const cls=!x.exists||x.status==='ULTIMO_LOTE_CON_ERROR'?'bad':(x.last?'good':'warn');
+   const info=x.last?x.last.read+' / '+x.last.inserted+' / '+x.last.updated:'--';
+   return '<tr><td><b>'+dpEsc(x.group)+'</b><br>'+dpEsc(x.dataset)+'<br><small>'+dpEsc(x.sheet)+'</small></td><td>'+dpFmt(x.last&&x.last.at)+'</td><td>'+dpFmt(x.lastOk&&x.lastOk.at)+'</td><td>'+x.physicalRows+'<br><small>ULT. MARCA EN MUESTRA: '+dpFmt(x.latestWrittenSample)+'</small>'+(x.latestSourceDateSample?'<br><small>FECHA ORIGEN (MUESTRA): '+dpFmt(x.latestSourceDateSample)+'</small>':'')+'</td><td>'+dpEsc(info)+'</td><td><span class="dp-pill '+cls+'">'+dpEsc(x.status)+'</span></td></tr>';
+ }).join('')||'<tr><td colspan="6">SIN INFORMACION</td></tr>';
+ dpEl('dpHistory').innerHTML=(j.recent||[]).map(x=>'<tr><td>'+dpFmt(x.at)+'</td><td>'+dpEsc(x.dataset)+'</td><td><span class="dp-pill '+((x.errors||x.status==='FAILED'||x.status==='PARTIAL')?'bad':'good')+'">'+dpEsc(x.status)+'</span></td><td>'+x.read+'</td><td>'+x.inserted+'</td><td>'+x.updated+'</td><td>'+x.errors+'</td></tr>').join('')||'<tr><td colspan="7">SIN RECEPCIONES EN LA MUESTRA</td></tr>';
+ dpEl('dpExport').disabled=false;
+}
+async function dpRefresh(){
+ if(dpBusy)return;dpBusy=true;dpEl('dpRefresh').disabled=true;
+ dpEl('dpStatus').textContent='CONSULTANDO REGISTRO DE RECEPCIONES Y TABLAS...';
+ try{const j=await api('armaAdminDatapelHealth',{force:force===true},45000);dpRender(j)}
+ catch(e){dpEl('dpStatus').textContent='NO FUE POSIBLE COMPROBAR EL RECEPTOR DATAPEL: '+(e&&e.message||String(e))+' - CONSERVANDO ULTIMA LECTURA';}
+ finally{dpBusy=false;dpEl('dpRefresh').disabled=false;clearTimeout(dpTimer);dpTimer=setTimeout(dpRefresh,120000)}
+}
+function dpExport(){
+ if(!dpLast)return;
+ const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+ const head=['GRUPO','DATASET','TABLA','ESTADO','ULTIMO_LOTE','ULTIMO_EXITO','REGISTROS_FISICOS','LEIDOS','NUEVOS','CAMBIOS','ERRORES','ULTIMO_FECHA_SYNC_MUESTRA','ULTIMA_FECHA_ORIGEN_MUESTRA'];
+ const rows=(dpLast.datasets||[]).map(x=>[x.group,x.dataset,x.sheet,x.status,x.last&&x.last.at,x.lastOk&&x.lastOk.at,x.physicalRows,x.last&&x.last.read,x.last&&x.last.inserted,x.last&&x.last.updated,x.last&&x.last.errors,x.latestWrittenSample,x.latestSourceDateSample]);
+ const csv='\ufeff'+[head,...rows].map(r=>r.map(q).join(';')).join('\r\n');
+ const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='ARMA_DATAPEL_RECEPCION_'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+dpEl('dpRefresh').onclick=()=>dpRefresh(true);dpEl('dpExport').onclick=dpExport;
+function dpInit(){if(token())dpRefresh();else dpEl('dpStatus').textContent='INICIE SESION ARMA PARA CONSULTAR';}
+document.getElementById('btnOT').onclick=()=>start('OT');document.getElementById('btnBT').onclick=()=>start('BT');document.getElementById('stopOT').onclick=()=>stopJob('OT');document.getElementById('stopBT').onclick=()=>stopJob('BT');boot().finally(dpInit);
 </script></body></html>
