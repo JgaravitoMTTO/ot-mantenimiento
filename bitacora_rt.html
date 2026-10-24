@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V31_3_RTD_SELF_EDIT_AUDIT_20261013 | BUILD: 2026-10-13 17:43:52 -->
+<!-- ARMA RT MODULE V31_3_RTD_SELF_EDIT_AUDIT_20261013_R038_FOTOS_SOLO_LECTURA_CANDIDATO | BUILD: 2026-10-24 11:08:24 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -170,6 +170,19 @@ tbody tr:hover{background:#f2f8ff;box-shadow:inset 4px 0 0 #1496df}
 .viewer{min-height:820px;background:linear-gradient(180deg,#f8fbff,#f3f8fc)}
 @media(max-width:1200px){.detail-grid{grid-template-columns:1fr}.filters{grid-template-columns:repeat(3,1fr)}#detailPanel{position:static;order:2}#rtDataPanel{order:1}}
 @media(max-width:760px){html{zoom:100%}.main{padding:8px}.filters{grid-template-columns:1fr}.filters input,.filters select,.filters .btn{min-height:54px;font-size:16px}.detail-grid{gap:10px}.rt-info-grid{grid-template-columns:1fr}.rt-info-block{min-height:64px}.rt-info-block strong{font-size:15px}.rt-info-block.full strong{font-size:14px}.resumen48-item{grid-template-columns:1fr;gap:4px}.resumen48-item strong{font-size:16px}.viewer{min-height:62vh}}
+.ardan-photo-strip{margin:12px 0;border:1px solid #bad8ee;border-left:5px solid #008acb;border-radius:13px;background:#f3faff;padding:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.ardan-photo-strip .ardan-photo-info{font-size:12px;font-weight:900;color:#003b79;flex:1;min-width:180px}
+.ardan-photo-strip button{min-width:190px}
+.ardan-photo-modal{position:fixed;inset:0;z-index:10200;background:rgba(1,14,34,.84);display:flex;align-items:center;justify-content:center;padding:10px}
+.ardan-photo-modal.hidden{display:none!important}
+.ardan-photo-card{width:min(1100px,97vw);height:min(850px,95vh);background:#fff;border-radius:17px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.5)}
+.ardan-photo-head{padding:12px 15px;background:#003b79;color:#fff;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.ardan-photo-head strong{font-size:15px}
+.ardan-photo-body{flex:1;min-height:0;overflow:auto;background:#14243c;display:flex;justify-content:center;align-items:center;padding:15px}
+.ardan-photo-body img{max-width:95%;max-height:100%;object-fit:contain;transform-origin:center;transition:transform .12s}
+.ardan-photo-foot{padding:11px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.ardan-photo-state{font-size:12px;color:#354866;font-weight:800;text-align:center;padding:6px}
+@media(max-width:760px){.ardan-photo-card{height:94vh}.ardan-photo-head{padding:8px}.ardan-photo-foot .btn{min-width:70px}.ardan-photo-strip button{width:100%}}
 </style>
 </head>
 <body>
@@ -232,7 +245,9 @@ tbody tr:hover{background:#f2f8ff;box-shadow:inset 4px 0 0 #1496df}
         </section>
         <section class="panel" id="rtDataPanel">
           <div class="panel-title"><h2>DATOS DE LA RT</h2><div class="status" id="rtDataStatus">SELECCIONE UNA RT</div></div>
-          <div id="rtDataBox" class="rt-empty">SELECCIONE UNA RT PARA VER AQUI LA INFORMACION DE LA FILA ARMA_DATA.</div>
+          <div class="ardan-photo-strip" id="ardanPhotoPanel"><span class="ardan-photo-info" id="ardanPhotoInfo">SELECCIONE UNA RT/BT</span><button id="ardanPhotoBtn" class="btn" type="button" onclick="ARDAN_PH_OPEN()" disabled>VER FOTOGRAFÍAS</button></div>
+
+<div id="rtDataBox" class="rt-empty">SELECCIONE UNA RT PARA VER AQUI LA INFORMACION DE LA FILA ARMA_DATA.</div>
         </section>
       </div>
       <section id="closePanel" class="panel hidden" style="margin-top:14px;box-shadow:none">
@@ -249,7 +264,7 @@ tbody tr:hover{background:#f2f8ff;box-shadow:inset 4px 0 0 #1496df}
         </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-10-13 17:43:52</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-10-24 11:08:24</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -639,6 +654,146 @@ async function rtb313ShowHistory(){
 const ARMA_RTB313_BaseRenderRTData=renderRTData;
 renderRTData=function(rt){ARMA_RTB313_BaseRenderRTData(rt);if(!rt)return;rtb313EnsureUI();let box=document.getElementById('rtDataBox')||document.getElementById('rtData');if(!box)return;let can=rtb313CanEdit(rt),state=normTxt(val(rt,['ESTADO_RT','ESTADO'])),owner=String(val(rt,['USUARIO_ARMA_REPORTA'])||'').trim();let policy=can?'RTD // USTED ES EL AUTOR ORIGINAL. PUEDE CORREGIR ESTA RT CON CAUSA Y AUDITORÍA.':(state==='RTCT'?'RTCT // INFORMACIÓN CONGELADA. NO ADMITE CORRECCIONES.':'RTD // SOLO EL USUARIO ARMA QUE REPORTÓ ESTA RT PUEDE CORREGIRLA'+(owner?' ('+owner+')':'')+'.');let el=document.createElement('section');el.className='rt-data-section';
 el.innerHTML='<div class="rt-data-section-title">CONTROL DE EDICIÓN Y TRAZABILIDAD</div><div class="rt-edit-policy '+(can?'':'locked')+'">'+esc(policy)+'</div><div class="rt-edit-actions">'+(can?'<button class="btn green" type="button" onclick="rtb313OpenEdit()">EDITAR MI RT</button>':'')+'<button class="btn" type="button" onclick="rtb313ShowHistory()">HISTORIAL DE CAMBIOS</button></div>';box.appendChild(el);syncRtDetailHeights();};
+/* A.R.D.A.N. RT/BT R038 PHOTO VIEWER - lectura bajo demanda, sin URLs Drive */
+let ARDAN_PH_RT = '';
+let ARDAN_PH_COUNT = 0;
+let ARDAN_PH_INDEX = 0;
+let ARDAN_PH_SEQUENCE = 0;
+let ARDAN_PH_ZOOM = 1;
+function ARDAN_PH_BY_ID(id) { return document.getElementById(id); }
+function ARDAN_PH_RESET() {
+  ARDAN_PH_SEQUENCE++;
+  ARDAN_PH_RT = '';
+  ARDAN_PH_COUNT = 0;
+  ARDAN_PH_INDEX = 0;
+  ARDAN_PH_ZOOM = 1;
+  const b = ARDAN_PH_BY_ID('ardanPhotoBtn');
+  const s = ARDAN_PH_BY_ID('ardanPhotoInfo');
+  if (b) { b.disabled = true; b.textContent = 'VER FOTOGRAFÍAS'; }
+  if (s) s.textContent = 'SELECCIONE UNA RT/BT';
+  ARDAN_PH_CLOSE();
+  return ARDAN_PH_SEQUENCE;
+}
+async function ARDAN_PH_SYNC(id, sequence) {
+  id = String(id || '').trim();
+  if (!id || sequence !== ARDAN_PH_SEQUENCE) return;
+  const s = ARDAN_PH_BY_ID('ardanPhotoInfo');
+  if (s) s.textContent = 'VERIFICANDO FOTOGRAFÍAS...';
+  try {
+    const data = await apiSilent('rtPhotoManifest', {idRT:id}, 45000);
+    if (sequence !== ARDAN_PH_SEQUENCE) return;
+    if (!data || data.ok !== true) {
+      if (s) s.textContent = 'FOTOS NO DISPONIBLES: ' + String((data && data.error) || 'CONSULTA RECHAZADA');
+      return;
+    }
+    ARDAN_PH_RT = id;
+    ARDAN_PH_COUNT = Math.max(0, Number(data.count) || 0);
+    if (ARDAN_PH_COUNT === 0) {
+      if (s) s.textContent = 'ESTA RT/BT NO TIENE FOTOGRAFÍAS REGISTRADAS';
+      return;
+    }
+    const b = ARDAN_PH_BY_ID('ardanPhotoBtn');
+    if (b) { b.disabled = false; b.textContent = 'VER FOTOGRAFÍAS (' + ARDAN_PH_COUNT + ')'; }
+    if (s) s.textContent = ARDAN_PH_COUNT + ' FOTOGRAFÍA(S) REGISTRADA(S) // SOLO LECTURA' + (data.truncated ? ' // LISTA LIMITADA' : '');
+  } catch(e) {
+    if (sequence === ARDAN_PH_SEQUENCE && s) s.textContent = 'ERROR DE CONEXIÓN AL VERIFICAR FOTOGRAFÍAS';
+  }
+}
+function ARDAN_PH_OPEN() {
+  if (!ARDAN_PH_RT || ARDAN_PH_COUNT < 1) return;
+  const m = ARDAN_PH_BY_ID('ardanPhotoModal');
+  if (!m) return;
+  m.classList.remove('hidden');
+  m.setAttribute('aria-hidden', 'false');
+  ARDAN_PH_LOAD(0);
+}
+function ARDAN_PH_CLOSE() {
+  ARDAN_PH_SEQUENCE++;
+  const m = ARDAN_PH_BY_ID('ardanPhotoModal');
+  if (m) { m.classList.add('hidden'); m.setAttribute('aria-hidden', 'true'); }
+  const img = ARDAN_PH_BY_ID('ardanPhotoImage');
+  if (img) { img.removeAttribute('src'); img.classList.add('hidden'); }
+}
+function ARDAN_PH_MOVE(d) {
+  if (!ARDAN_PH_RT || !ARDAN_PH_COUNT) return;
+  ARDAN_PH_LOAD((ARDAN_PH_INDEX + d + ARDAN_PH_COUNT) % ARDAN_PH_COUNT);
+}
+function ARDAN_PH_ZOOM_BY(d) {
+  ARDAN_PH_ZOOM = Math.max(0.5, Math.min(3, Math.round((ARDAN_PH_ZOOM + d) * 10) / 10));
+  const img = ARDAN_PH_BY_ID('ardanPhotoImage');
+  if (img) img.style.transform = 'scale(' + ARDAN_PH_ZOOM + ')';
+  const t = ARDAN_PH_BY_ID('ardanPhotoZoom');
+  if (t) t.textContent = Math.round(ARDAN_PH_ZOOM * 100) + '%';
+}
+async function ARDAN_PH_LOAD(index) {
+  if (!ARDAN_PH_RT || index < 0 || index >= ARDAN_PH_COUNT) return;
+  const seq = ++ARDAN_PH_SEQUENCE;
+  const rtId = ARDAN_PH_RT;
+  ARDAN_PH_INDEX = index;
+  const state = ARDAN_PH_BY_ID('ardanPhotoState');
+  const num = ARDAN_PH_BY_ID('ardanPhotoNumber');
+  const img = ARDAN_PH_BY_ID('ardanPhotoImage');
+  if (num) num.textContent = 'BT ' + rtId + ' // FOTO ' + (index + 1) + ' DE ' + ARDAN_PH_COUNT;
+  if (state) state.textContent = 'CARGANDO IMAGEN AUTORIZADA...';
+  if (img) { img.removeAttribute('src'); img.classList.add('hidden'); }
+  ARDAN_PH_ZOOM = 1;
+  ARDAN_PH_ZOOM_BY(0);
+  try {
+    const res = await apiSilent('rtPhotoView', {idRT:rtId, index:index}, 85000);
+    if (seq !== ARDAN_PH_SEQUENCE || rtId !== ARDAN_PH_RT) return;
+    if (!res || res.ok !== true) {
+      if (state) state.textContent = 'FOTO NO DISPONIBLE (' + String((res && res.error) || 'ERROR') + '). PUEDE INTENTAR OTRA.';
+      return;
+    }
+    const mime = String(res.mimeType || '').toLowerCase();
+    if (!['image/jpeg','image/png','image/webp'].includes(mime) || !res.base64) {
+      if (state) state.textContent = 'FORMATO NO ADMITIDO O IMAGEN VACÍA';
+      return;
+    }
+    if (img) {
+      img.onload = function(){ if (seq === ARDAN_PH_SEQUENCE && state) state.textContent = 'IMAGEN CARGADA // SOLO LECTURA'; };
+      img.onerror = function(){ if (seq === ARDAN_PH_SEQUENCE && state) state.textContent = 'NO FUE POSIBLE DECODIFICAR LA IMAGEN'; };
+      img.src = 'data:' + mime + ';base64,' + res.base64;
+      img.classList.remove('hidden');
+    }
+  } catch(e) {
+    if (seq === ARDAN_PH_SEQUENCE && state) state.textContent = 'FALLÓ LA LECTURA DE ESTA FOTO. INTENTE OTRA.';
+  }
+}
+document.addEventListener('keydown', function(e) {
+  const m = ARDAN_PH_BY_ID('ardanPhotoModal');
+  if (!m || m.classList.contains('hidden')) return;
+  if (e.key === 'Escape') ARDAN_PH_CLOSE();
+  if (e.key === 'ArrowLeft') ARDAN_PH_MOVE(-1);
+  if (e.key === 'ArrowRight') ARDAN_PH_MOVE(1);
+});
+/* Acoplamiento posterior a TODAS las definiciones/overrides openRT. */
+const ARDAN_PH_BASE_OPEN = openRT;
+openRT = async function(id) {
+  const sequence = ARDAN_PH_RESET();
+  try { await ARDAN_PH_BASE_OPEN(id); } catch(e) { return; }
+  if (sequence !== ARDAN_PH_SEQUENCE) return;
+  /* rtPhotoManifest comprueba NUEVAMENTE sesión, permiso y fila fuente en Backend. */
+  ARDAN_PH_SYNC(id, sequence);
+};
+const ARDAN_PH_BASE_CLEAR = clearViewer;
+clearViewer = function() { ARDAN_PH_RESET(); return ARDAN_PH_BASE_CLEAR.apply(this, arguments); };
+
 </script>
+<div id="ardanPhotoModal" class="ardan-photo-modal hidden" aria-hidden="true">
+  <div class="ardan-photo-card" role="dialog" aria-modal="true" aria-label="FOTOGRAFÍAS DE LA RT O BT">
+    <div class="ardan-photo-head"><strong id="ardanPhotoNumber">FOTOGRAFÍAS</strong><button class="btn gray" type="button" onclick="ARDAN_PH_CLOSE()">CERRAR</button></div>
+    <div id="ardanPhotoState" class="ardan-photo-state" aria-live="polite"></div>
+    <div class="ardan-photo-body"><img id="ardanPhotoImage" class="hidden" alt="FOTOGRAFÍA TÉCNICA RT/BT"></div>
+    <div class="ardan-photo-foot">
+      <button class="btn" type="button" onclick="ARDAN_PH_MOVE(-1)">ANTERIOR</button>
+      <button class="btn" type="button" onclick="ARDAN_PH_MOVE(1)">SIGUIENTE</button>
+      <button class="btn gray" type="button" onclick="ARDAN_PH_ZOOM_BY(-0.25)">-</button>
+      <span id="ardanPhotoZoom">100%</span>
+      <button class="btn gray" type="button" onclick="ARDAN_PH_ZOOM_BY(0.25)">+</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
