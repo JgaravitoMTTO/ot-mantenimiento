@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V31_3_RTD_SELF_EDIT_AUDIT_20261013_R038_FOTOS_SOLO_LECTURA_CANDIDATO | BUILD: 2026-10-24 11:08:24 -->
+<!-- ARMA RT MODULE V31_3_RTD_SELF_EDIT_AUDIT_20261013_R040_INDICADOR_FOTOS_INMEDIATO_CANDIDATO | BUILD: 2026-10-24 11:42:14 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -183,6 +183,7 @@ tbody tr:hover{background:#f2f8ff;box-shadow:inset 4px 0 0 #1496df}
 .ardan-photo-foot{padding:11px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
 .ardan-photo-state{font-size:12px;color:#354866;font-weight:800;text-align:center;padding:6px}
 @media(max-width:760px){.ardan-photo-card{height:94vh}.ardan-photo-head{padding:8px}.ardan-photo-foot .btn{min-width:70px}.ardan-photo-strip button{width:100%}}
+.ardan-photo-fast{display:block;margin-top:5px;border-radius:7px;padding:3px 6px;width:max-content;max-width:100%;font-size:10px;font-weight:950;letter-spacing:.1px;white-space:normal}.ardan-photo-fast.has-photo{background:#d9fce4;color:#085b2a;border:1px solid #65c989}.ardan-photo-fast.no-photo{color:#667487;background:#f1f5f9}.ardan-photo-fast.unknown{color:#856b16;background:#fff6d7}.ardan-photo-strip .ardan-photo-info{font-size:14px!important}.ardan-photo-strip:has(#ardanPhotoBtn:not(:disabled)){border-left-color:#17a957;background:#edfff4}
 </style>
 </head>
 <body>
@@ -264,7 +265,7 @@ tbody tr:hover{background:#f2f8ff;box-shadow:inset 4px 0 0 #1496df}
         </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-10-24 11:08:24</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-10-24 11:42:14</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -678,17 +679,21 @@ async function ARDAN_PH_SYNC(id, sequence) {
   id = String(id || '').trim();
   if (!id || sequence !== ARDAN_PH_SEQUENCE) return;
   const s = ARDAN_PH_BY_ID('ardanPhotoInfo');
-  if (s) s.textContent = 'VERIFICANDO FOTOGRAFÍAS...';
+  if (s && ARDAN_PH_COUNT < 1) s.textContent = 'VERIFICANDO FOTOGRAFÍAS...';
   try {
     const data = await apiSilent('rtPhotoManifest', {idRT:id}, 45000);
     if (sequence !== ARDAN_PH_SEQUENCE) return;
     if (!data || data.ok !== true) {
+      const bDenied = ARDAN_PH_BY_ID('ardanPhotoBtn');
+      if (bDenied) bDenied.disabled = true;
       if (s) s.textContent = 'FOTOS NO DISPONIBLES: ' + String((data && data.error) || 'CONSULTA RECHAZADA');
       return;
     }
     ARDAN_PH_RT = id;
     ARDAN_PH_COUNT = Math.max(0, Number(data.count) || 0);
     if (ARDAN_PH_COUNT === 0) {
+      const b0 = ARDAN_PH_BY_ID('ardanPhotoBtn');
+      if (b0) { b0.disabled = true; b0.textContent = 'VER FOTOGRAFÍAS'; }
       if (s) s.textContent = 'ESTA RT/BT NO TIENE FOTOGRAFÍAS REGISTRADAS';
       return;
     }
@@ -771,13 +776,64 @@ document.addEventListener('keydown', function(e) {
 const ARDAN_PH_BASE_OPEN = openRT;
 openRT = async function(id) {
   const sequence = ARDAN_PH_RESET();
-  try { await ARDAN_PH_BASE_OPEN(id); } catch(e) { return; }
-  if (sequence !== ARDAN_PH_SEQUENCE) return;
-  /* rtPhotoManifest comprueba NUEVAMENTE sesión, permiso y fila fuente en Backend. */
+  ARDAN_PH_PREPAINT(id);
+  /* Verificacion paralela, NO bloquea render de BT ni habilitacion del boton. */
   ARDAN_PH_SYNC(id, sequence);
+  try { await ARDAN_PH_BASE_OPEN(id); } catch(e) { return; }
 };
 const ARDAN_PH_BASE_CLEAR = clearViewer;
 clearViewer = function() { ARDAN_PH_RESET(); return ARDAN_PH_BASE_CLEAR.apply(this, arguments); };
+/* === A.R.D.A.N. R040: aviso en lista y habilitacion inmediata === */
+let ARDAN_PH_FAST_BY_BT = Object.create(null);
+function ARDAN_PH_KEY(value) { return String(value || '').trim().toUpperCase(); }
+function ARDAN_PH_HAS_FAST(row) {
+  return !!row && Object.prototype.hasOwnProperty.call(row, 'CANT_FOTOS') &&
+    row.CANT_FOTOS !== null && row.CANT_FOTOS !== '' && Number.isFinite(Number(row.CANT_FOTOS));
+}
+function ARDAN_PH_FAST_COUNT(row) {
+  return ARDAN_PH_HAS_FAST(row) ? Math.max(0, Math.trunc(Number(row.CANT_FOTOS))) : null;
+}
+function ARDAN_PH_PREPAINT(id) {
+  const key = ARDAN_PH_KEY(id);
+  const n = Object.prototype.hasOwnProperty.call(ARDAN_PH_FAST_BY_BT, key)
+    ? ARDAN_PH_FAST_BY_BT[key] : null;
+  const s = ARDAN_PH_BY_ID('ardanPhotoInfo');
+  const b = ARDAN_PH_BY_ID('ardanPhotoBtn');
+  ARDAN_PH_RT = String(id || '').trim();
+  if (n === null) {
+    if (s) s.textContent = 'VERIFICANDO SI HAY EVIDENCIA FOTOGRÁFICA...';
+    return;
+  }
+  ARDAN_PH_COUNT = n;
+  if (n > 0) {
+    if (s) s.textContent = '?? EVIDENCIA FOTOGRÁFICA REGISTRADA (' + n + ') // VALIDANDO...';
+    if (b) { b.disabled = false; b.textContent = 'VER FOTOGRAFÍAS (' + n + ')'; }
+  } else {
+    if (s) s.textContent = 'SIN FOTOGRAFÍAS REGISTRADAS // COMPROBANDO...';
+  }
+}
+const ARDAN_PH_R040_RENDER_ORIGINAL = renderRows;
+renderRows = function(rows) {
+  const safeRows = asArr(rows);
+  ARDAN_PH_FAST_BY_BT = Object.create(null);
+  ARDAN_PH_R040_RENDER_ORIGINAL.apply(this, arguments);
+  const tbody = ARDAN_PH_BY_ID('rtRows');
+  if (!tbody) return;
+  const trs = Array.from(tbody.querySelectorAll('tr[data-id]'));
+  trs.forEach(function(tr, i) {
+    const row = safeRows[i] || {};
+    const id = ARDAN_PH_KEY(tr.getAttribute('data-id') || row.ID_RT || row.CONSECUTIVO_BT);
+    const n = ARDAN_PH_FAST_COUNT(row);
+    if (id) ARDAN_PH_FAST_BY_BT[id] = n;
+    const cell = tr.cells && tr.cells[0];
+    if (!cell) return;
+    const badge = document.createElement('span');
+    badge.className = 'ardan-photo-fast ' + (n === null ? 'unknown' : (n > 0 ? 'has-photo' : 'no-photo'));
+    badge.textContent = n === null ? '?? VERIFICANDO' : (n > 0 ? '?? ' + n + (n === 1 ? ' FOTO' : ' FOTOS') : 'SIN FOTO');
+    badge.title = n === null ? 'Pendiente verificar fotos' : (n > 0 ? 'Contiene evidencia fotografica registrada' : 'Sin fotografias registradas');
+    cell.appendChild(badge);
+  });
+};
 
 </script>
 <div id="ardanPhotoModal" class="ardan-photo-modal hidden" aria-hidden="true">
