@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<!-- ARMA RT MODULE V30_2_RESET_CIERRE_ENTRE_BT_20261006_R040_INDICADOR_FOTOS_INMEDIATO_CANDIDATO | BUILD: 2026-10-24 11:45:03 -->
+<!-- ARMA RT MODULE V30_2_RESET_CIERRE_ENTRE_BT_20261006_R040_1_FIX_GESTION_FOTOS_CANDIDATO | BUILD: 2026-10-24 19:51:42 -->
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -273,7 +273,7 @@ tr.selected{outline:3px solid rgba(0,118,215,.25);background:#d9ecff!important}
       </section>
     </div>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-10-24 11:45:03</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>REPORTES TECNICOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-10-24 19:51:42</span></div></footer>
 </main>
 <script>
 const ARMA_API_URL="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec";
@@ -662,6 +662,7 @@ async function ARDAN_PH_SYNC(id, sequence) {
     }
     ARDAN_PH_RT = id;
     ARDAN_PH_COUNT = Math.max(0, Number(data.count) || 0);
+    ARDAN_PH_BADGE_RESOLVE(id, ARDAN_PH_COUNT);
     if (ARDAN_PH_COUNT === 0) {
       const b0 = ARDAN_PH_BY_ID('ardanPhotoBtn');
       if (b0) { b0.disabled = true; b0.textContent = 'VER FOTOGRAFÍAS'; }
@@ -804,6 +805,35 @@ renderRows = function(rows) {
     badge.title = n === null ? 'Pendiente verificar fotos' : (n > 0 ? 'Contiene evidencia fotografica registrada' : 'Sin fotografias registradas');
     cell.appendChild(badge);
   });
+};
+/* R040.1: Resolver indicador puntual tras manifiesto y fallback de bootstrap GESTION. */
+function ARDAN_PH_BADGE_RESOLVE(id,n){
+  const key=ARDAN_PH_KEY(id);n=Math.max(0,Math.trunc(Number(n)||0));
+  if(!key)return; ARDAN_PH_FAST_BY_BT[key]=n;
+  const body=ARDAN_PH_BY_ID('rtRows');if(!body)return;
+  Array.from(body.querySelectorAll('tr[data-id]')).forEach(function(tr){
+    if(ARDAN_PH_KEY(tr.getAttribute('data-id'))!==key)return;
+    const cell=tr.cells&&tr.cells[0];if(!cell)return;
+    let badge=cell.querySelector('.ardan-photo-fast');if(!badge){badge=document.createElement('span');cell.appendChild(badge);}
+    badge.className='ardan-photo-fast '+(n>0?'has-photo':'no-photo');
+    badge.textContent=n>0?'?? '+n+(n===1?' FOTO':' FOTOS'):'SIN FOTO';
+    badge.title=n>0?'Contiene evidencia fotografica registrada':'Sin fotografias registradas';
+  });
+}
+let ARDAN_PH_R0401_GESTION_RETRY=0;
+const ARDAN_PH_R0401_APPLY_ORIGINAL=applyRTListData;
+applyRTListData=function(data){
+  const answer=ARDAN_PH_R0401_APPLY_ORIGINAL.apply(this,arguments);
+  if(PAGE_MODE==='GESTION' && data && data.ok && Array.isArray(data.rows) && data.rows.length &&
+     data.rows.some(function(row){return !ARDAN_PH_HAS_FAST(row);})){
+    if(ARDAN_PH_R0401_GESTION_RETRY===0){
+      ARDAN_PH_R0401_GESTION_RETRY=1;
+      setTimeout(function(){loadRTList(rtCurrentPage||1);},180);
+    }else{
+      const body=ARDAN_PH_BY_ID('rtRows');if(body)body.querySelectorAll('.ardan-photo-fast.unknown').forEach(function(b){b.textContent='FOTOS POR CONFIRMAR';b.title='Seleccione BT para verificar fotos en linea';});
+    }
+  }
+  return answer;
 };
 
 </script>
