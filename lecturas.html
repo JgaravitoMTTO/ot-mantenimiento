@@ -49,7 +49,6 @@
 .arma-home-text strong{font-size:17px;font-weight:1000;color:#002b66;letter-spacing:.2px}
 .arma-home-text span{font-size:10px;font-weight:950;color:#008c2e;letter-spacing:.45px;margin-top:6px;white-space:nowrap}
 @media(max-width:700px){.arma-home-card{width:100%;min-width:0}.arma-home-text strong{font-size:16px}.arma-home-text span{font-size:9.5px}}
-.arma-nav-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex:0 0 auto}.arma-nav-actions .arma-home-card{min-width:245px;max-width:290px}.hero>.arma-lead{flex:1;min-width:190px}@media(max-width:850px){.hero{flex-wrap:wrap}.arma-nav-actions{width:100%;justify-content:flex-end;flex-wrap:wrap}}@media(max-width:550px){.arma-nav-actions .arma-home-card{width:100%;max-width:none}}
 </style>
 </head>
 <body>
@@ -62,15 +61,13 @@
 <header class="top"><div class="brand"><img src="logo_pelex.bmp" alt="PELEX"><img src="ARMA%20logo%202.png" alt="ARMA"></div><div class="title"><h1>VARIABLES Y LECTURAS</h1><span id="userPill" class="pill">VALIDANDO SESIÓN...</span></div></header>
 <main class="wrap">
 <section class="hero">
-<div class="arma-lead"><h2>ANÁLISIS DE LECTURAS</h2><p>HISTÓRICO, TENDENCIA, LÍMITES Y ALARMAS DE VARIABLES DE MANTENIMIENTO.</p></div>
-<div class="arma-nav-actions">
+<div><h2>ANÁLISIS DE LECTURAS</h2><p>HISTÓRICO, TENDENCIA, LÍMITES Y ALARMAS DE VARIABLES DE MANTENIMIENTO.</p></div>
 <a class="arma-home-card" href="main.html" aria-label="VOLVER A ARMA">
 <div class="arma-home-icon"><img src="boton-de-inicio.png" alt="INICIO"></div>
 <div class="arma-home-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></div>
 </a>
 <button type="button" class="arma-home-card" style="cursor:pointer;text-align:left;font-family:inherit" onclick="ARMA_ENEL_R052_Update()" aria-label="ACTUALIZAR DESCARGA Y DATOS ENEL EN WINDOWS">
-<div class="arma-home-icon">&#9889;</div><div class="arma-home-text"><strong>ACTUALIZAR MATRIZ ENERGIA</strong><span>DESCARGAR Y SUBIR DATOS (PC WINDOWS)</span></div></button>
-</div></section>
+<div class="arma-home-icon">&#9889;</div><div class="arma-home-text"><strong>ACTUALIZAR ENEL</strong><span>DESCARGAR Y SUBIR DATOS (PC WINDOWS)</span></div></button></section>
 <section id="summary" class="summary"></section>
 <div class="layout">
 <aside class="panel"><h3>VARIABLES AUTORIZADAS</h3><input id="varSearch" placeholder="BUSCAR VARIABLE, AM O PUNTO"><div id="variableList" class="variable-list"><div class="empty">CARGANDO...</div></div></aside>
@@ -86,7 +83,7 @@ function byId(id){return document.getElementById(id)}function showLoad(t){byId('
 async function api(action,data={}){showLoad(action.replaceAll('_',' '));try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,token:token()},data)),cache:'no-store'});const j=await r.json();if(!j.ok)throw new Error((j.error||'ERROR')+(j.detail?' // '+j.detail:''));return j}finally{hideLoad()}}
 function norm(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toUpperCase()}function fmt(v,d=2){const n=Number(v);return Number.isFinite(n)?n.toFixed(d):'SIN DATO'}function date(v){if(!v)return'—';const d=new Date(v);return isNaN(d)?String(v):d.toLocaleString('es-CO')}
 function paintSummary(stats){byId('summary').innerHTML=`<div class="metric"><span>VARIABLES</span><strong>${Number(stats.variables||0)}</strong></div><div class="metric"><span>LECTURAS</span><strong>${Number(stats.lecturas||0)}</strong></div><div class="metric alarm"><span>ALARMAS ABIERTAS</span><strong>${Number(stats.alarmasAbiertas||0)}</strong></div><div class="metric"><span>VARIABLE SELECCIONADA</span><strong>${selectedId||'—'}</strong></div><div class="metric"><span>BASE DE ALARMA</span><strong>${trend&&trend.variable?esc(trend.variable.BASE_ALARMA):'—'}</strong></div><div class="metric"><span>UNIDAD</span><strong>${trend&&trend.variable?esc(trend.variable.UNIDAD):'—'}</strong></div>`}
-function renderList(){const q=norm(byId('varSearch').value);const rows=variables.filter(v=>!q||norm([v.ID_VARIABLE,v.CODIGO_VARIABLE,v.NOMBRE_VARIABLE,v.ID_AM,v.AM_DESCRIPCION,v.PUNTO_UBICACION].join(' ')).includes(q));byId('variableList').innerHTML=rows.map(v=>`<div class="var-item ${selectedId===v.ID_VARIABLE?'sel':''}" onclick="selectVariable('${esc(v.ID_VARIABLE)}')"><strong>${esc(v.CODIGO_VARIABLE||v.ID_VARIABLE)} // ${esc(v.NOMBRE_VARIABLE)}</strong><small>${esc(v.ID_AM)} // ${esc(v.AM_DESCRIPCION||'')} // ${esc(v.PUNTO_UBICACION||'')}<br><span class="badge ${['ALTO','BAJO'].includes(v.ESTADO_ALARMA)?'red':'green'}">${esc(v.ESTADO_ALARMA||'SIN DATO')}</span>${v.FUENTE_DATOS==='ENERGIA'&&v.LECTURAS===''?'PENDIENTE DE DATOS':Number(v.LECTURAS||0)+' LECTURAS'}</small></div>`).join('')||'<div class="empty">SIN VARIABLES.</div>'}
+function renderList(){const q=norm(byId('varSearch').value);const rows=variables.filter(v=>!q||norm([v.ID_VARIABLE,v.CODIGO_VARIABLE,v.NOMBRE_VARIABLE,v.ID_AM,v.AM_DESCRIPCION,v.PUNTO_UBICACION].join(' ')).includes(q));byId('variableList').innerHTML=rows.map(v=>`<div class="var-item ${selectedId===v.ID_VARIABLE?'sel':''}" onclick="selectVariable('${esc(v.ID_VARIABLE)}')"><strong>${esc(v.CODIGO_VARIABLE||v.ID_VARIABLE)} // ${esc(v.NOMBRE_VARIABLE)}</strong><small>${esc(v.ID_AM)} // ${esc(v.AM_DESCRIPCION||'')} // ${esc(v.PUNTO_UBICACION||'')}<br><span class="badge ${['ALTO','BAJO'].includes(v.ESTADO_ALARMA)?'red':'green'}">${esc(v.ESTADO_ALARMA||'SIN DATO')}</span>${Number(v.LECTURAS||0)} LECTURAS</small></div>`).join('')||'<div class="empty">SIN VARIABLES.</div>'}
 function rangeDates(days){const to=new Date(),from=new Date();from.setDate(to.getDate()-days);const f=d=>d.toISOString().slice(0,10);return{desde:f(from),hasta:f(to)}}
 function detailShell(v){const r=rangeDates();return`<div class="var-head"><h2>${esc(v.CODIGO_VARIABLE||v.ID_VARIABLE)} // ${esc(v.NOMBRE_VARIABLE)}</h2><div class="meta">${esc(v.ID_AM)} // ${esc(v.AM_DESCRIPCION||'')} // ${esc(v.TIPO_VARIABLE)} // BASE: ${esc(v.BASE_ALARMA)} // ${esc(v.UNIDAD)}</div><div class="cards"><div class="card"><span>ÚLTIMO</span><strong>${fmt(v.ULTIMO_VALOR,v.DECIMALES)}</strong></div><div class="card"><span>ANTERIOR</span><strong>${fmt(v.VALOR_ANTERIOR,v.DECIMALES)}</strong></div><div class="card"><span>DIFERENCIA</span><strong>${fmt(v.DIFERENCIA,v.DECIMALES)}</strong></div><div class="card"><span>PROM. DIARIO</span><strong>${fmt(v.PROMEDIO_DIARIO,v.DECIMALES)}</strong></div><div class="card"><span>LÍMITES</span><strong>${esc(v.LIMITE_INFERIOR)} / ${esc(v.LIMITE_SUPERIOR)}</strong></div><div class="card"><span>ALARMA</span><strong>${esc(v.ESTADO_ALARMA||'SIN DATO')}</strong></div></div></div><div class="section selector"><div><label>DESDE</label><input id="from" type="date" value="${r.desde}"></div><div><label>HASTA</label><input id="to" type="date" value="${r.hasta}"></div><button class="btn" onclick="loadTrend({force:true,show:true})">ACTUALIZAR PERÍODO</button><button class="btn gray" onclick="allHistory()">TODO EL HISTÓRICO</button></div><div class="chart-panel"><div class="chart-head"><h3>TENDENCIA VS FECHA</h3><div class="legend"><span><i class="dot"></i>VALOR ANALIZADO</span><span><i class="dot red"></i>SOBRE LÍMITE</span><span><i class="dot orange"></i>BAJO LÍMITE / CÁLCULO INVÁLIDO</span><span><i class="dot avg"></i>DATO PROMEDIO</span></div></div><div id="chart" class="chart"><div class="empty">CARGANDO GRÁFICA...</div></div></div><div class="section"><h3>HISTÓRICO DE LECTURAS</h3><div id="history" class="table-wrap"></div></div><div class="section"><h3>ALARMAS GENERADAS</h3><div id="alarms" class="table-wrap"></div></div>`}
 async function selectVariable(id){selectedId=id;trend=null;renderList();const v=variables.find(x=>x.ID_VARIABLE===id);if(!v)return;byId('detail').innerHTML=detailShell(v);paintSummary(window.bootStats||{});await loadTrend()}
@@ -141,9 +138,9 @@ return `<tr class="${cls}"><td>${esc(date(p.fechaDia||p.fecha))}</td><td>${raw}<
 function renderAlarms(j){const rows=(j.calculatedAlarms||j.alarms||[]);byId('alarms').innerHTML=rows.length?`<table class="table"><thead><tr><th>ALARMA</th><th>FECHA</th><th>ESTADO</th><th>VALOR</th><th>LÍMITES</th><th>OT</th><th>GESTIÓN</th></tr></thead><tbody>${rows.map(a=>`<tr class="alarm-row"><td>${esc(a.idAlarma)}</td><td>${esc(date(a.fecha))}</td><td>${esc(a.estado)}</td><td>${esc(a.valor)}</td><td>${esc(a.limiteInferior)} / ${esc(a.limiteSuperior)}</td><td>${esc(a.idOT||'—')}</td><td>${esc(a.estadoGestion)}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">SIN ALARMAS CALCULADAS PARA ESTA VARIABLE EN EL PERÍODO.</div>';}
 // === ARMA LECTURAS V02.3 CALIDAD DE DATOS + AJUSTE AUDITADO ===
 let lecV023AdjustId='';
-function lecV02BootKey(){return 'ARMA_LEC_R055_BOOT_'+lecV02TokenKey();}
+function lecV02BootKey(){return 'ARMA_LEC_V023_R052_BOOT_'+lecV02TokenKey();}
 function lecV02TrendKey(id,from,to){
-  return 'ARMA_LEC_R055_TREND_'+lecV02TokenKey()+'_'+String(id||'')+'_'+String(from||'')+'_'+String(to||'');
+  return 'ARMA_LEC_V023_R052_TREND_'+lecV02TokenKey()+'_'+String(id||'')+'_'+String(from||'')+'_'+String(to||'');
 }
 function lecV023Today(){return lecV022IsoLocal(new Date());}
 function rangeDates(){
@@ -317,10 +314,10 @@ async function lecV023SaveAdjustment(decision){
   }catch(e){msg(e.message,'NO FUE POSIBLE GUARDAR AJUSTE')}finally{hideLoad();}
 }
 function ARMA_ENEL_R052_Update(){
-if(!confirm('ACTUALIZAR MATRIZ ENERGIA: LA DESCARGA Y SUBIDA SE EJECUTAN EN EL PC DE MANTENIMIENTO QUE TENGA INSTALADO EL AGENTE. CONTINUAR?'))return;
-if(!/Win/i.test(navigator.platform||'')){msg('ESTA FUNCION SOLO ESTA DISPONIBLE EN WINDOWS CON EL AGENTE LOCAL.','MATRIZ ENERGIA');return;}
+if(!confirm('ACTUALIZAR ENEL: LA DESCARGA Y SUBIDA SE EJECUTAN EN EL PC DE MANTENIMIENTO QUE TENGA INSTALADO EL AGENTE. CONTINUAR?'))return;
+if(!/Win/i.test(navigator.platform||'')){msg('ESTA FUNCION SOLO ESTA DISPONIBLE EN WINDOWS CON EL AGENTE LOCAL.','ACTUALIZACION ENEL');return;}
 location.href='arma-enel-r052://actualizar';
-setTimeout(()=>msg('SI WINDOWS NO OFRECIO ABRIR ARMA ENEL, INSTALE EL PROTOCOLO DEL PAQUETE R052. LOS DATOS SIGUEN SIENDO SOLO DE LECTURA EN ARMA.','AGENTE MATRIZ ENERGIA'),4500);
+setTimeout(()=>msg('SI WINDOWS NO OFRECIO ABRIR ARMA ENEL, INSTALE EL PROTOCOLO DEL PAQUETE R052. LOS DATOS SIGUEN SIENDO SOLO DE LECTURA EN ARMA.','AGENTE ENEL'),4500);
 }
 document.addEventListener('DOMContentLoaded',init);
 </script>
