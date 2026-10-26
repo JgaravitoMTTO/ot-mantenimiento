@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ARMA | ENERGÍA ENEL R050</title>
+<title>ARMA | ENERGÍA ENEL R051 (CONEXIÓN)</title>
 <link rel="manifest" href="manifest.webmanifest">
 <script data-arma-pwa-navigation="1" defer src="arma-pwa-navigation.js"></script>
 <style>
@@ -29,14 +29,16 @@ footer{text-align:center;background:#003b80;color:#fff;border-radius:14px;paddin
 @media(max-width:1100px){.filters{grid-template-columns:1fr 1fr}.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:800px){.top{position:relative}.hero{flex-direction:column;align-items:flex-start}.hero-actions{width:100%}.arma-home-card{flex:1}.filters{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.top{flex-direction:column;align-items:flex-start}.title{text-align:left}.brand img{height:44px}.filters{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.arma-home-card{width:100%}.hero-actions{flex-direction:column}input,select,.btn{min-height:48px;font-size:15px}}
 
+.diagtools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0 14px}.diaglink{display:inline-flex;align-items:center;text-decoration:none;background:#e7f3fd;color:#003f80;border:1px solid #b6d9f4}.diagmsg{font-weight:800;color:#526781;font-size:11px}.diagtools .btn{font-size:11px;min-height:40px}
 </style>
 </head>
 <body>
-<header class="top"><div class="brand"><img src="logo_pelex.bmp" alt="PELEX"><img src="ARMA%20logo%202.png" alt="ARMA"></div><div class="title"><h1>ENERGÍA | A.R.M.A.</h1><span id="userPill" class="pill">SESIÓN EN VALIDACIÓN</span></div></header>
+<header class="top"><div class="brand"><img src="logo_pelex.bmp" alt="PELEX"><img src="ARMA%20logo%202.png" alt="ARMA"></div><div class="title"><h1>ENERGÍA | A.R.M.A.</h1><span id="userPill" class="pill">VALIDANDO CONEXIÓN</span></div></header>
 <main class="wrap">
 <section class="hero"><div><h2>ANÁLISIS DE ENERGÍA</h2><p>HISTÓRICO ENEL · POTENCIA HORARIA · CONTROL Y CALIDAD · ACCESO AUTORIZADO.</p></div><nav class="hero-actions" aria-label="NAVEGACIÓN ARMA"><a class="arma-home-card" href="lecturas.html"><div class="arma-home-icon">??</div><div class="arma-home-text"><strong>LECTURAS</strong><span>VOLVER A VARIABLES</span></div></a><a class="arma-home-card" href="main.html"><div class="arma-home-icon"><img src="boton-de-inicio.png" alt="INICIO"></div><div class="arma-home-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></div></a></nav></section>
-<div id="state" class="status" role="status" aria-live="polite">Validando sesión y permiso de energía…</div>
-<section class="panel"><div class="filters"><label>CUENTA / FRONTERA CONCILIADA<select id="cuenta" disabled><option value="">Sin autorización confirmada</option></select></label><label>DESDE<input id="desde" type="date"></label><label>HASTA<input id="hasta" type="date"></label><button class="btn" id="consultar" disabled>CONSULTAR</button></div><p class="legend">EHMax observado = máximo consumo activo de una hora (kWh/1h) dentro del período seleccionado. Se contrasta con el mínimo informado, sin efectos regulatorios ni interpretación de capacidad contratada.</p></section>
+<div id="state" class="status" role="status" aria-live="polite">Validando conexión al Backend y sesión ARMA…</div>
+<div class="diagtools"><button type="button" class="btn" id="retry" aria-label="Reintentar conexión ENEL">REINTENTAR CONEXIÓN</button><a class="btn diaglink" href="https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec" target="_blank" rel="noopener noreferrer">COMPROBAR SERVICIO (SIN TOKEN)</a><span class="diagmsg">Un error de red no significa clave incorrecta ni permiso denegado.</span></div>
+<section class="panel"><div class="filters"><label>CUENTA / FRONTERA CONCILIADA<select id="cuenta" disabled><option value="">Pendiente de respuesta del servicio</option></select></label><label>DESDE<input id="desde" type="date"></label><label>HASTA<input id="hasta" type="date"></label><button class="btn" id="consultar" disabled>CONSULTAR</button></div><p class="legend">EHMax observado = máximo consumo activo de una hora (kWh/1h) dentro del período seleccionado. Se contrasta con el mínimo informado, sin efectos regulatorios ni interpretación de capacidad contratada.</p></section>
 <section class="panel"><div class="cards" id="cards"><div class="card">Ningún dato disponible hasta la autorización del Backend.</div></div></section>
 <section class="panel"><h3>TENDENCIA DE ENERGÍA ACTIVA (kWh/día)</h3><div class="legend">Los datos y las cuentas se reciben exclusivamente del Backend autenticado. El período en curso no se considera definitivo.</div><div class="chart" id="chart" aria-label="Gráfica de energía activa"></div></section>
 <section class="panel"><h3>DETALLE DE DÍAS CERRADOS</h3><div class="table-wrap"><table><thead><tr><th>FECHA</th><th>ACTIVA kWh</th><th>INDUCTIVA kVArh</th><th>CAPACITIVA kVArh</th><th>PENALIZADA kVArh</th><th>FP INFO.</th><th>CALIDAD</th></tr></thead><tbody id="rows"><tr><td colspan="7">Sin datos.</td></tr></tbody></table></div></section>
@@ -52,12 +54,33 @@ function sessionToken(){
 }
 function status(msg,kind=''){const el=$('state');el.textContent=msg;el.className='status '+kind}
 function number(v,d=2){if(v===null||v===undefined||v==='')return '—';let n=Number(v);return Number.isFinite(n)?n.toLocaleString('es-CO',{maximumFractionDigits:d,minimumFractionDigits:d}):'—'}
+function classifiedError(code,message){const x=new Error(message);x.code=code;return x;}
+function sleep(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
 async function request(action,other={}){
- const token=sessionToken();if(!token)throw new Error('SESIÓN NO DISPONIBLE. INICIE SESIÓN DESDE ARMA.');
- const res=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({...other,action,token}),cache:'no-store'});
- if(!res.ok)throw new Error('EL BACKEND NO RESPONDIÓ. HTTP '+res.status);
- const data=await res.json();if(!data || data.ok!==true)throw new Error(data?.error || data?.detail || 'PERMISO NO CONCEDIDO O MÓDULO NO ACTIVO');
- return data;
+ // El token JAMAS se coloca en una URL, registro, alerta de depuración ni mensaje de error.
+ const token=sessionToken();
+ if(!token)throw classifiedError('SIN_SESION_ARMA','No se encontró sesión ARMA en este origen. Inicie sesión desde INICIO.');
+ // Exclusivamente enelBootstrap y enelTrend, ambas de SOLO LECTURA.
+ if(!['enelBootstrap','enelTrend'].includes(action))throw classifiedError('ACCION_INVALIDA','Acción no autorizada');
+ for(let intento=1;intento<=2;intento++){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),intento===1?18000:30000);
+  try{
+   const res=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({...other,action,token}),cache:'no-store',redirect:'follow',credentials:'omit',signal:controller.signal});
+   if(!res.ok)throw classifiedError('HTTP_'+res.status,'HTTP '+res.status+' al contactar el servicio.');
+   let data;
+   try{data=await res.json();}catch(_){throw classifiedError('RESPUESTA_NO_JSON','El servicio devolvió respuesta no JSON; revise implementación/redirección de Apps Script.');}
+   if(!data||data.ok!==true)throw classifiedError('RECHAZO_BACKEND',String(data?.error||data?.detail||'ERROR_BACKEND'));
+   return data;
+  }catch(e){
+   if(e?.code)throw e; // Permisos/errores del servidor: NO confundir con red ni repetir.
+   const net=e instanceof TypeError || e?.name==='AbortError';
+   if(!net)throw classifiedError('ERROR_DESCONOCIDO','Error no clasificado de consulta (sin datos privados).');
+   if(intento===1){await sleep(1500);continue;}
+   throw classifiedError('RED_CORS_O_SERVICIO','El navegador no pudo recibir respuesta de Apps Script ('+(e?.name==='AbortError'?'tiempo agotado':'Failed to fetch')+'). Puede ser red, CORS, redirección, URL o acceso del despliegue. NO prueba que el usuario o la clave sean incorrectos.');
+  }finally{clearTimeout(timer);}
+ }
+ throw classifiedError('RED_CORS_O_SERVICIO','Comunicación sin confirmar.');
 }
 function renderCards(points,resp){
  const totals={p:0,qi:0,qc:0,qpi:0}; for(const row of points){for(const x of Object.keys(totals))totals[x]+=Number(row[x]||0)}
@@ -86,16 +109,21 @@ async function load(){
  }catch(e){status('CONSULTA NO DISPONIBLE: '+e.message,'bad')}finally{$('consultar').disabled=false}
 }
 async function bootstrap(){
- $('consultar').disabled=true;
+ $('consultar').disabled=true;$('retry').disabled=true;$('userPill').textContent='VALIDANDO CONEXIÓN';status('CONTACTANDO BACKEND…');
  try{const resp=await request('enelBootstrap');const accounts=Array.isArray(resp.cuentas)?resp.cuentas:[];if(!accounts.length)throw new Error('EL BACKEND NO DEVOLVIÓ CUENTAS AUTORIZADAS');
  cuentasMeta=new Map(accounts.map(item=>[String(item.cuenta),item]));$('cuenta').replaceChildren();
  for(const item of accounts){const option=document.createElement('option');option.value=String(item.cuenta);option.textContent=item.planta+' / '+item.frontera+' / CTA '+item.cuenta+' / EHMax mínimo '+number(item.ehmaxMinKwh,0)+' kWh';$('cuenta').append(option)}
  const corte=String(resp.corteValidado||'');if(!/^\d{4}-\d{2}-\d{2}$/.test(corte))throw new Error('FECHA DE CORTE NO VALIDADA');
  const to=new Date(corte+'T12:00:00Z'),start=new Date(to);start.setUTCDate(to.getUTCDate()-29);$('hasta').value=corte;$('desde').value=start.toISOString().slice(0,10);
  $('cuenta').disabled=false;$('consultar').disabled=false;$('userPill').textContent='ENEL // ACCESO PERMITIDO';status('SESIÓN VALIDADA. Tres cuentas conciliadas con frontera y planta; subestación pendiente. EHMax: referencia mínima, no multa ni capacidad contratada.','good');await load();
- }catch(e){status('ACCESO CERRADO: '+e.message+'. El módulo requiere backend y permiso ENEL; no se muestran datos privados.','bad')}
+ }catch(e){
+  $('userPill').textContent=e.code==='SIN_SESION_ARMA'?'SIN SESIÓN ARMA':e.code==='RED_CORS_O_SERVICIO'?'SIN CONEXIÓN API':'BACKEND SIN VALIDAR';
+  const head=e.code==='RED_CORS_O_SERVICIO'?'ERROR DE COMUNICACIÓN: ':e.code==='SIN_SESION_ARMA'?'SESIÓN ARMA NO ENCONTRADA: ':e.code==='RECHAZO_BACKEND'?'BACKEND NO AUTORIZÓ / NO PUDO CONSULTAR: ':'NO SE PUDO VALIDAR ENEL: ';
+  status(head+e.message,'bad');
+ }finally{$('retry').disabled=false;}
 }
-$('consultar').addEventListener('click',load);bootstrap();
+
+$('consultar').addEventListener('click',load);$('retry').addEventListener('click',bootstrap);bootstrap();
 </script>
 </body>
 </html>
