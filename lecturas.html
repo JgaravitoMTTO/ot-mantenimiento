@@ -141,9 +141,9 @@ return `<tr class="${cls}"><td>${esc(date(p.fechaDia||p.fecha))}</td><td>${raw}<
 function renderAlarms(j){const rows=(j.calculatedAlarms||j.alarms||[]);byId('alarms').innerHTML=rows.length?`<table class="table"><thead><tr><th>ALARMA</th><th>FECHA</th><th>ESTADO</th><th>VALOR</th><th>LÍMITES</th><th>OT</th><th>GESTIÓN</th></tr></thead><tbody>${rows.map(a=>`<tr class="alarm-row"><td>${esc(a.idAlarma)}</td><td>${esc(date(a.fecha))}</td><td>${esc(a.estado)}</td><td>${esc(a.valor)}</td><td>${esc(a.limiteInferior)} / ${esc(a.limiteSuperior)}</td><td>${esc(a.idOT||'—')}</td><td>${esc(a.estadoGestion)}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">SIN ALARMAS CALCULADAS PARA ESTA VARIABLE EN EL PERÍODO.</div>';}
 // === ARMA LECTURAS V02.3 CALIDAD DE DATOS + AJUSTE AUDITADO ===
 let lecV023AdjustId='';
-function lecV02BootKey(){return 'ARMA_LEC_R054_BOOT_'+lecV02TokenKey();}
+function lecV02BootKey(){return 'ARMA_LEC_R055_BOOT_'+lecV02TokenKey();}
 function lecV02TrendKey(id,from,to){
-  return 'ARMA_LEC_R054_TREND_'+lecV02TokenKey()+'_'+String(id||'')+'_'+String(from||'')+'_'+String(to||'');
+  return 'ARMA_LEC_R055_TREND_'+lecV02TokenKey()+'_'+String(id||'')+'_'+String(from||'')+'_'+String(to||'');
 }
 function lecV023Today(){return lecV022IsoLocal(new Date());}
 function rangeDates(){
