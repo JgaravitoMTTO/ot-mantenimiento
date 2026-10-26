@@ -66,8 +66,8 @@
 <div class="arma-home-icon"><img src="boton-de-inicio.png" alt="INICIO"></div>
 <div class="arma-home-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></div>
 </a>
-<a class="arma-home-card" href="energia.html" aria-label="VER ENERGIA ENEL">
-<div class="arma-home-icon">&#9889;</div><div class="arma-home-text"><strong>ENERGIA ENEL</strong><span>IR AL ANALISIS ELECTRICO</span></div></a></section>
+<button type="button" class="arma-home-card" style="cursor:pointer;text-align:left;font-family:inherit" onclick="ARMA_ENEL_R052_Update()" aria-label="ACTUALIZAR DESCARGA Y DATOS ENEL EN WINDOWS">
+<div class="arma-home-icon">&#9889;</div><div class="arma-home-text"><strong>ACTUALIZAR ENEL</strong><span>DESCARGAR Y SUBIR DATOS (PC WINDOWS)</span></div></button></section>
 <section id="summary" class="summary"></section>
 <div class="layout">
 <aside class="panel"><h3>VARIABLES AUTORIZADAS</h3><input id="varSearch" placeholder="BUSCAR VARIABLE, AM O PUNTO"><div id="variableList" class="variable-list"><div class="empty">CARGANDO...</div></div></aside>
@@ -138,9 +138,9 @@ return `<tr class="${cls}"><td>${esc(date(p.fechaDia||p.fecha))}</td><td>${raw}<
 function renderAlarms(j){const rows=(j.calculatedAlarms||j.alarms||[]);byId('alarms').innerHTML=rows.length?`<table class="table"><thead><tr><th>ALARMA</th><th>FECHA</th><th>ESTADO</th><th>VALOR</th><th>LÍMITES</th><th>OT</th><th>GESTIÓN</th></tr></thead><tbody>${rows.map(a=>`<tr class="alarm-row"><td>${esc(a.idAlarma)}</td><td>${esc(date(a.fecha))}</td><td>${esc(a.estado)}</td><td>${esc(a.valor)}</td><td>${esc(a.limiteInferior)} / ${esc(a.limiteSuperior)}</td><td>${esc(a.idOT||'—')}</td><td>${esc(a.estadoGestion)}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">SIN ALARMAS CALCULADAS PARA ESTA VARIABLE EN EL PERÍODO.</div>';}
 // === ARMA LECTURAS V02.3 CALIDAD DE DATOS + AJUSTE AUDITADO ===
 let lecV023AdjustId='';
-function lecV02BootKey(){return 'ARMA_LEC_V023_BOOT_'+lecV02TokenKey();}
+function lecV02BootKey(){return 'ARMA_LEC_V023_R052_BOOT_'+lecV02TokenKey();}
 function lecV02TrendKey(id,from,to){
-  return 'ARMA_LEC_V023_TREND_'+lecV02TokenKey()+'_'+String(id||'')+'_'+String(from||'')+'_'+String(to||'');
+  return 'ARMA_LEC_V023_R052_TREND_'+lecV02TokenKey()+'_'+String(id||'')+'_'+String(from||'')+'_'+String(to||'');
 }
 function lecV023Today(){return lecV022IsoLocal(new Date());}
 function rangeDates(){
@@ -312,6 +312,12 @@ async function lecV023SaveAdjustment(decision){
     lecV023CloseAdjust();await loadTrend({force:true,show:false});
     msg('DECISIÓN GUARDADA. AM_LECTURAS ORIGINAL NO FUE MODIFICADA.','CALIDAD DE DATOS');
   }catch(e){msg(e.message,'NO FUE POSIBLE GUARDAR AJUSTE')}finally{hideLoad();}
+}
+function ARMA_ENEL_R052_Update(){
+if(!confirm('ACTUALIZAR ENEL: LA DESCARGA Y SUBIDA SE EJECUTAN EN EL PC DE MANTENIMIENTO QUE TENGA INSTALADO EL AGENTE. CONTINUAR?'))return;
+if(!/Win/i.test(navigator.platform||'')){msg('ESTA FUNCION SOLO ESTA DISPONIBLE EN WINDOWS CON EL AGENTE LOCAL.','ACTUALIZACION ENEL');return;}
+location.href='arma-enel-r052://actualizar';
+setTimeout(()=>msg('SI WINDOWS NO OFRECIO ABRIR ARMA ENEL, INSTALE EL PROTOCOLO DEL PAQUETE R052. LOS DATOS SIGUEN SIENDO SOLO DE LECTURA EN ARMA.','AGENTE ENEL'),4500);
 }
 document.addEventListener('DOMContentLoaded',init);
 </script>
