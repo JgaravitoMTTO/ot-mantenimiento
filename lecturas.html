@@ -96,8 +96,8 @@ async function loadTrend(){if(!selectedId)return;try{const j=await api('lecturas
 // === ARMA LECTURAS V02 FAST CLIENT ===
 let lecV02LoaderTimer=null;
 function lecV02TokenKey(){const t=token();return t?String(t).slice(-18):'SIN_TOKEN';}
-function lecV02BootKey(){return 'ARMA_LEC_V022_BOOT_'+lecV02TokenKey();}
-function lecV02TrendKey(id,from,to){return 'ARMA_LEC_V022_TREND_'+lecV02TokenKey()+'_'+String(id||'')+'_'+String(from||'')+'_'+String(to||'');}
+function lecV02BootKey(){return 'ARMA_LEC_V022_R059_BOOT_'+lecV02TokenKey();}
+function lecV02TrendKey(id,from,to){return 'ARMA_LEC_V022_R059_TREND_'+lecV02TokenKey()+'_'+String(id||'')+'_'+String(from||'')+'_'+String(to||'');}
 function lecV02ReadCache(key,maxAge){try{const raw=localStorage.getItem(key)||'';if(!raw)return null;const x=JSON.parse(raw);if(!x||!x.data||Date.now()-Number(x.ts||0)>maxAge)return null;return x.data;}catch(e){return null;}}
 function lecV02WriteCache(key,data){try{localStorage.setItem(key,JSON.stringify({ts:Date.now(),data:data}));}catch(e){}}
 function lecV02DelayLoad(text){clearTimeout(lecV02LoaderTimer);lecV02LoaderTimer=setTimeout(function(){showLoad(text||'CARGANDO DATOS...');},450);}
@@ -138,9 +138,9 @@ return `<tr class="${cls}"><td>${esc(date(p.fechaDia||p.fecha))}</td><td>${raw}<
 function renderAlarms(j){const rows=(j.calculatedAlarms||j.alarms||[]);byId('alarms').innerHTML=rows.length?`<table class="table"><thead><tr><th>ALARMA</th><th>FECHA</th><th>ESTADO</th><th>VALOR</th><th>LÍMITES</th><th>OT</th><th>GESTIÓN</th></tr></thead><tbody>${rows.map(a=>`<tr class="alarm-row"><td>${esc(a.idAlarma)}</td><td>${esc(date(a.fecha))}</td><td>${esc(a.estado)}</td><td>${esc(a.valor)}</td><td>${esc(a.limiteInferior)} / ${esc(a.limiteSuperior)}</td><td>${esc(a.idOT||'—')}</td><td>${esc(a.estadoGestion)}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">SIN ALARMAS CALCULADAS PARA ESTA VARIABLE EN EL PERÍODO.</div>';}
 // === ARMA LECTURAS V02.3 CALIDAD DE DATOS + AJUSTE AUDITADO ===
 let lecV023AdjustId='';
-function lecV02BootKey(){return 'ARMA_LEC_V023_R052_BOOT_'+lecV02TokenKey();}
+function lecV02BootKey(){return 'ARMA_LEC_V023_R059_BOOT_'+lecV02TokenKey();}
 function lecV02TrendKey(id,from,to){
-  return 'ARMA_LEC_V023_R052_TREND_'+lecV02TokenKey()+'_'+String(id||'')+'_'+String(from||'')+'_'+String(to||'');
+  return 'ARMA_LEC_V023_R059_TREND_'+lecV02TokenKey()+'_'+String(id||'')+'_'+String(from||'')+'_'+String(to||'');
 }
 function lecV023Today(){return lecV022IsoLocal(new Date());}
 function rangeDates(){
@@ -319,6 +319,10 @@ if(!/Win/i.test(navigator.platform||'')){msg('ESTA FUNCION SOLO ESTA DISPONIBLE 
 location.href='arma-enel-r052://actualizar';
 setTimeout(()=>msg('SI WINDOWS NO OFRECIO ABRIR ARMA ENEL, INSTALE EL PROTOCOLO DEL PAQUETE R052. LOS DATOS SIGUEN SIENDO SOLO DE LECTURA EN ARMA.','AGENTE ENEL'),4500);
 }
+// R059: resumen independiente tras iniciar agua. Nunca bloquea el bootstrap original.
+async function armaR059RefreshSummary(){try{const j=await apiRaw('lecturasEnelResumen');if(!j||!Array.isArray(j.variables))return;for(const item of j.variables){const idx=variables.findIndex(v=>v.ID_VARIABLE===item.ID_VARIABLE);if(idx<0)continue;variables[idx]=Object.assign({},variables[idx],item);}renderList();if(window.bootStats){const original=Number(window.armaR059AguaCount||window.bootStats.lecturas||0);window.bootStats.lecturas=original+j.variables.reduce((s,v)=>s+Number(v.LECTURAS||0),0);paintSummary(window.bootStats);}}catch(e){console.warn('ARMA R059: resumen ENEL no disponible; agua intacta.');}}
+const armaR059BaseApply=lecV02ApplyBootstrap;lecV02ApplyBootstrap=function(j,c){window.armaR059AguaCount=Number((j.stats||{}).lecturas||0);armaR059BaseApply(j,c);setTimeout(armaR059RefreshSummary,0);};
+const armaR059BaseTrendRender=lecV02RenderTrend;lecV02RenderTrend=function(j){armaR059BaseTrendRender(j);if(!j||!j.variable||j.variable.FUENTE_DATOS!=='ENERGIA')return;renderList();const cards=byId('detail').querySelectorAll('.var-head .card strong');const v=j.variable,items=[v.ULTIMO_VALOR,v.VALOR_ANTERIOR,v.DIFERENCIA,v.PROMEDIO_DIARIO];for(let i=0;i<items.length&&i<cards.length;i++){cards[i].textContent=items[i]===null||items[i]===''?'SIN DATO':fmt(items[i],v.DECIMALES);}};
 document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
