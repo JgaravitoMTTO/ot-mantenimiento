@@ -50,6 +50,13 @@
 .arma-home-text span{font-size:10px;font-weight:950;color:#008c2e;letter-spacing:.45px;margin-top:6px;white-space:nowrap}
 @media(max-width:700px){.arma-home-card{width:100%;min-width:0}.arma-home-text strong{font-size:16px}.arma-home-text span{font-size:9.5px}}
 .arma-hero-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-left:auto;flex:0 0 auto}.arma-hero-actions .arma-home-card{flex:0 0 auto;min-width:250px}.arma-hero-actions .arma-home-card:focus-visible{outline:3px solid #fff;outline-offset:3px}@media(max-width:1250px){.arma-hero-actions{flex-wrap:wrap}.arma-hero-actions .arma-home-card{min-width:230px}}@media(max-width:700px){.arma-hero-actions{width:100%;margin-left:0;justify-content:flex-start}.arma-hero-actions .arma-home-card{width:100%;min-width:0}}
+.arma-r063-extremos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:9px 0}
+.arma-r063-extremos>div{border:1px solid #a9cfe9;border-left:4px solid #087ac5;border-radius:12px;padding:11px;background:#f2f9ff}
+.arma-r063-extremos span{display:block;font-size:9px;font-weight:950;color:#49637c}
+.arma-r063-extremos strong{display:block;margin:5px 0;font-size:18px;color:#00447c;overflow-wrap:anywhere}
+.arma-r063-extremos small{display:block;font-size:10px;color:#526880;font-weight:850}
+.arma-r063-status{color:#00447c;text-align:right;font-size:9px;font-weight:900;max-width:430px;line-height:1.35}
+@media(max-width:700px){.arma-r063-extremos{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -59,6 +66,16 @@
 <div class="adjust-info"><span>REPORTADO POR</span><strong id="adjReporter">—</strong></div><div class="adjust-info"><span>DILIGENCIADO</span><strong id="adjCreated">—</strong></div><div class="adjust-info"><span>REFERENCIA</span><strong id="adjRef">—</strong></div><div class="adjust-info"><span>VALOR AJUSTADO / PROPUESTO</span><input id="adjValue" type="number" step="any"></div>
 <div class="adjust-info full"><span>DIAGNÓSTICO ARMA</span><strong id="adjDiagnosis">—</strong></div><div class="full"><label>MOTIVO DE LA DECISIÓN</label><input id="adjReason" placeholder="EVIDENCIA / JUSTIFICACIÓN DEL AJUSTE"></div></div>
 <div class="adjust-actions"><button class="btn gray" onclick="lecV023CloseAdjust()">CANCELAR</button><button id="adjUndo" class="btn red" onclick="lecV023SaveAdjustment('ANULAR')">ANULAR DECISIÓN</button><button class="btn orange" onclick="lecV023SaveAdjustment('VALIDAR_ORIGINAL')">VALIDAR ORIGINAL / REINICIO REAL</button><button class="btn" onclick="lecV023SaveAdjustment('AJUSTAR')">APROBAR AJUSTE</button></div></div></div>
+<div id="armaR063Confirm" class="modal hidden" role="dialog" aria-modal="true" aria-label="CONFIRMAR ACTUALIZACION ENEL">
+<div class="box">
+<h3>A.R.M.A. | ACTUALIZAR ENEL</h3>
+<p>¿INICIAR LA DESCARGA Y ENVÍO DE DATOS EN EL AGENTE WINDOWS? ARMA CONFIRMARÁ CAMBIOS EN LA MATRIZ, NO EL ESTADO DEL PROCESO LOCAL.</p>
+<div style="display:flex;justify-content:flex-end;gap:10px">
+<button class="btn gray" onclick="armaR063CloseModal()">CANCELAR</button>
+<button class="btn" onclick="armaR063Launch()">CONTINUAR</button>
+</div>
+</div>
+</div>
 <header class="top"><div class="brand"><img src="logo_pelex.bmp" alt="PELEX"><img src="ARMA%20logo%202.png" alt="ARMA"></div><div class="title"><h1>VARIABLES Y LECTURAS</h1><span id="userPill" class="pill">VALIDANDO SESIÓN...</span></div></header>
 <main class="wrap">
 <section class="hero">
@@ -70,6 +87,7 @@
 </a>
 <button type="button" class="arma-home-card" style="cursor:pointer;text-align:left;font-family:inherit" onclick="ARMA_ENEL_R052_Update()" aria-label="ACTUALIZAR DESCARGA Y DATOS ENEL EN WINDOWS">
 <div class="arma-home-icon">&#9889;</div><div class="arma-home-text"><strong>ACTUALIZAR ENEL</strong><span>DESCARGAR Y SUBIR DATOS (PC WINDOWS)</span></div></button></div></section>
+<div id="armaR063Estado" class="arma-r063-status" role="status" aria-live="polite"></div>
 <section id="summary" class="summary"></section>
 <div class="layout">
 <aside class="panel"><h3>VARIABLES AUTORIZADAS</h3><input id="varSearch" placeholder="BUSCAR VARIABLE, AM O PUNTO"><div id="variableList" class="variable-list"><div class="empty">CARGANDO...</div></div></aside>
@@ -147,10 +165,10 @@ function lecV02TrendKey(id,from,to){
 function lecV023Today(){return lecV022IsoLocal(new Date());}
 function rangeDates(){
   const v=variables.find(x=>x.ID_VARIABLE===selectedId)||{};
-  return{desde:v.PRIMERA_FECHA||lecV023Today(),hasta:v.HOY||lecV023Today()};
+  return armaR063Range(v);
 }
 function detailShell(v){
-  const r={desde:v.PRIMERA_FECHA||lecV023Today(),hasta:v.HOY||lecV023Today()};
+  const r=armaR063Range(v);
   let h=`<div class="var-head"><h2>${esc(v.CODIGO_VARIABLE||v.ID_VARIABLE)} // ${esc(v.NOMBRE_VARIABLE)}</h2>`;
   h+=`<div class="meta">${esc(v.ID_AM)} // ${esc(v.AM_DESCRIPCION||'')} // ${esc(v.TIPO_VARIABLE)} // BASE: ${esc(v.BASE_ALARMA)} // ${esc(v.UNIDAD)}</div>`;
   h+=`<div class="cards"><div class="card"><span>ÚLTIMO CRUDO</span><strong>${fmt(v.ULTIMO_VALOR,v.DECIMALES)}</strong></div>`;
@@ -159,10 +177,11 @@ function detailShell(v){
   h+=`<div class="card"><span>PROM. DIARIO</span><strong>${fmt(v.PROMEDIO_DIARIO,v.DECIMALES)}</strong></div>`;
   h+=`<div class="card"><span>LÍMITES</span><strong>${esc(v.LIMITE_INFERIOR)} / ${esc(v.LIMITE_SUPERIOR)}</strong></div>`;
   h+=`<div class="card"><span>CALIDAD</span><strong>${Number(v.INCONSISTENCIAS||0)} PEND.</strong></div></div></div>`;
-  h+=`<div class="section selector"><div><label>DESDE</label><input id="from" type="date" min="${r.desde}" max="${r.hasta}" value="${r.desde}"></div>`;
-  h+=`<div><label>HASTA</label><input id="to" type="date" min="${r.desde}" max="${r.hasta}" value="${r.hasta}"></div>`;
+  h+=`<div class="section selector"><div><label>DESDE</label><input id="from" type="date" min="${v.PRIMERA_FECHA||r.desde}" max="${r.hasta}" value="${r.desde}"></div>`;
+  h+=`<div><label>HASTA</label><input id="to" type="date" min="${v.PRIMERA_FECHA||r.desde}" max="${r.hasta}" value="${r.hasta}"></div>`;
   h+=`<button class="btn" onclick="loadTrend({force:true,show:true})">ACTUALIZAR PERÍODO</button><button class="btn gray" onclick="allHistory()">TODO EL HISTÓRICO</button></div>`;
   h+=`<div id="qualityStrip" class="quality-strip"><div class="empty">EVALUANDO CALIDAD DE DATOS...</div></div>`;
+  h+=`<div id="armaR063Extremos" class="arma-r063-extremos"><div class="empty">CALCULANDO EXTREMOS DEL PERÍODO...</div></div>`;
   h+=`<div class="chart-panel"><div class="chart-head"><h3>TENDENCIA VS FECHA</h3><div class="legend">`;
   h+=`<span><i class="dot"></i>VALOR ANALIZADO</span><span><i class="dot red"></i>SOBRE LÍMITE</span>`;
   h+=`<span><i class="dot orange"></i>CÁLCULO INVÁLIDO</span><span><i class="dot avg"></i>DATO PROMEDIO</span>`;
@@ -193,7 +212,7 @@ function lecV02RenderTrend(j){
     byId('to').min=q.firstData||'';byId('to').max=q.today;
     if(byId('to').value>q.today)byId('to').value=q.today;
   }
-  lecV023RenderQuality(j);renderChart(j);renderHistory(j);renderAlarms(j);paintSummary(window.bootStats||{});
+  lecV023RenderQuality(j);renderChart(j);renderHistory(j);renderAlarms(j);armaR063Extremos(j);paintSummary(window.bootStats||{});
 }
 async function allHistory(){
   if(!selectedId)return;
@@ -315,16 +334,104 @@ async function lecV023SaveAdjustment(decision){
     msg('DECISIÓN GUARDADA. AM_LECTURAS ORIGINAL NO FUE MODIFICADA.','CALIDAD DE DATOS');
   }catch(e){msg(e.message,'NO FUE POSIBLE GUARDAR AJUSTE')}finally{hideLoad();}
 }
-function ARMA_ENEL_R052_Update(){
-if(!confirm('ACTUALIZAR ENEL: LA DESCARGA Y SUBIDA SE EJECUTAN EN EL PC DE MANTENIMIENTO QUE TENGA INSTALADO EL AGENTE. CONTINUAR?'))return;
-if(!/Win/i.test(navigator.platform||'')){msg('ESTA FUNCION SOLO ESTA DISPONIBLE EN WINDOWS CON EL AGENTE LOCAL.','ACTUALIZACION ENEL');return;}
-location.href='arma-enel-r052://actualizar';
-setTimeout(()=>msg('LA EJECUCION SE CONTROLA EN WINDOWS: CONFIRME EL AGENTE R061. AL FINALIZAR, RECARGUE LECTURAS PARA CONSULTAR EL CORTE VALIDADO.','AGENTE ENEL'),4500);
-}
+function ARMA_ENEL_R052_Update(){armaR063OpenModal();}
 // R059: resumen independiente tras iniciar agua. Nunca bloquea el bootstrap original.
-async function armaR059RefreshSummary(){try{const j=await apiRaw('lecturasEnelResumen');if(!j||!Array.isArray(j.variables))return;for(const item of j.variables){const idx=variables.findIndex(v=>v.ID_VARIABLE===item.ID_VARIABLE);if(idx<0)continue;variables[idx]=Object.assign({},variables[idx],item);}renderList();if(window.bootStats){const original=Number(window.armaR059AguaCount||window.bootStats.lecturas||0);window.bootStats.lecturas=original+j.variables.reduce((s,v)=>s+Number(v.LECTURAS||0),0);paintSummary(window.bootStats);}}catch(e){console.warn('ARMA R059: resumen ENEL no disponible; agua intacta.');}}
+async function armaR059RefreshSummary(){
+ try{
+  const j=await apiRaw('lecturasEnelResumen');
+  if(!j||!Array.isArray(j.variables))return;
+  armaR063Signature=armaR063SignatureFrom(j);
+  await armaR063ApplySummary(j);
+ }catch(e){console.warn('ARMA R063: resumen ENEL no disponible; agua intacta.');}
+}
 const armaR059BaseApply=lecV02ApplyBootstrap;lecV02ApplyBootstrap=function(j,c){window.armaR059AguaCount=Number((j.stats||{}).lecturas||0);armaR059BaseApply(j,c);setTimeout(armaR059RefreshSummary,0);};
 const armaR059BaseTrendRender=lecV02RenderTrend;lecV02RenderTrend=function(j){armaR059BaseTrendRender(j);if(!j||!j.variable||j.variable.FUENTE_DATOS!=='ENERGIA')return;renderList();const cards=byId('detail').querySelectorAll('.var-head .card strong');const v=j.variable,items=[v.ULTIMO_VALOR,v.VALOR_ANTERIOR,v.DIFERENCIA,v.PROMEDIO_DIARIO];for(let i=0;i<items.length&&i<cards.length;i++){cards[i].textContent=items[i]===null||items[i]===''?'SIN DATO':fmt(items[i],v.DECIMALES);}};
+// === ARMA R063 / periodo visible, extremos, actualizacion no intrusiva ===
+function armaR063Iso(v){return /^\d{4}-\d{2}-\d{2}$/.test(String(v||''))?String(v):'';}
+function armaR063Range(v){
+  v=v||{};
+  const hoy=lecV022IsoLocal(new Date());
+  let fin=armaR063Iso(v.HOY)||hoy;
+  if(fin>hoy)fin=hoy;
+  const d=new Date();
+  let inicio=lecV022IsoLocal(new Date(d.getFullYear(),d.getMonth()-1,1));
+  if(inicio>fin){const c=new Date(fin+'T12:00:00');inicio=lecV022IsoLocal(new Date(c.getFullYear(),c.getMonth()-1,1));}
+  const primera=armaR063Iso(v.PRIMERA_FECHA);
+  return {desde:primera&&inicio<primera?primera:inicio,hasta:fin};
+}
+function armaR063Extremos(j){
+  const box=byId('armaR063Extremos');if(!box)return;
+  const v=(j&&j.variable)||{};
+  const data=(j&&j.points||[]).filter(p=>lecV022Finite(p.baseValue));
+  if(!data.length){box.innerHTML='<div class="empty">SIN VALORES NUMÉRICOS EN EL PERÍODO ELEGIDO.</div>';return;}
+  const numero=p=>Number(p.baseValue);
+  let mayor=data[0],menor=data[0];
+  for(const p of data){if(numero(p)>numero(mayor))mayor=p;if(numero(p)<numero(menor))menor=p;}
+  const dec=Math.min(6,Math.max(0,Number(v.DECIMALES)||2));
+  const render=(p)=>'<strong>'+esc(numero(p).toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}))+'</strong><small>'+esc(date(p.fechaDia||p.fecha))+'</small>';
+  box.innerHTML='<div><span>MÁXIMO DEL PERÍODO</span>'+render(mayor)+'</div>'+
+    '<div><span>MÍNIMO DEL PERÍODO</span>'+render(menor)+'</div>'+
+    '<div><span>MUESTRAS EN RANGO</span><strong>'+data.length+'</strong><small>LECTURAS NUMÉRICAS</small></div>';
+}
+function armaR063Notice(s){const el=byId('armaR063Estado');if(el)el.textContent=s||'';}
+function armaR063OpenModal(){
+  if(!/Win/i.test(navigator.platform||'')){
+    msg('ESTA FUNCIÓN REQUIERE WINDOWS Y EL AGENTE LOCAL.','A.R.M.A. | ENEL');return;
+  }
+  byId('armaR063Confirm').classList.remove('hidden');
+}
+function armaR063CloseModal(){byId('armaR063Confirm').classList.add('hidden');}
+let armaR063PollTimer=null,armaR063PollEnds=0,armaR063Signature='';
+function armaR063SignatureFrom(j){
+  return (j&&j.variables||[]).map(x=>[x.ID_VARIABLE,x.CORTE_RESUMEN,x.LECTURAS,x.ULTIMO_VALOR,x.VALOR_ANTERIOR].join('|')).join('::');
+}
+function armaR063Launch(){
+  armaR063CloseModal();
+  armaR063Notice('AGENTE WINDOWS SOLICITADO. SIN CONFIRMACIÓN DE DESCARGA.');
+  // Inicio explícito de usuario. La web NO obtiene estado del proceso local.
+  location.href='arma-enel-r052://actualizar';
+  if(armaR063PollTimer)clearInterval(armaR063PollTimer);
+  armaR063PollEnds=Date.now()+10*60*1000;
+  armaR063PollTimer=setInterval(armaR063Poll,30000);
+  setTimeout(armaR063Poll,15000);
+}
+async function armaR063Poll(){
+  if(Date.now()>armaR063PollEnds){
+    clearInterval(armaR063PollTimer);armaR063PollTimer=null;
+    armaR063Notice('SIN CAMBIO NUEVO CONFIRMADO. REVISAR EL ESTADO DEL AGENTE WINDOWS.');return;
+  }
+  try{
+    const j=await apiRaw('lecturasEnelResumen');
+    const sig=armaR063SignatureFrom(j),changed=!!armaR063Signature&&sig!==armaR063Signature;
+    armaR063Signature=sig;
+    if(!changed)return;
+    await armaR063ApplySummary(j);
+    if(selectedId&&/^VAR-0000(0[2-9]|10)$/.test(selectedId)){
+      const f=byId('from'),t=byId('to');
+      const custom=f&&t&&f.dataset.armaR063Edit==='1';
+      if(f&&t&&!custom){const r=armaR063Range(variables.find(x=>x.ID_VARIABLE===selectedId));f.value=r.desde;t.value=r.hasta;}
+      await loadTrend({force:true,show:false});
+    }
+    armaR063Notice('NUEVOS VALORES DETECTADOS EN GOOGLE SHEETS. VARIABLES SINCRONIZADAS.');
+    clearInterval(armaR063PollTimer);armaR063PollTimer=null;
+  }catch(e){armaR063Notice('CONSULTA PENDIENTE: '+String(e.message||e).slice(0,70));}
+}
+async function armaR063ApplySummary(j){
+  if(!j||!Array.isArray(j.variables))return;
+  for(const x of j.variables){
+    const idx=variables.findIndex(v=>v.ID_VARIABLE===x.ID_VARIABLE);
+    if(idx>=0)variables[idx]=Object.assign({},variables[idx],x);
+  }
+  renderList();
+  const agua=Number(window.armaR059AguaCount||0);
+  if(window.bootStats){window.bootStats.lecturas=agua+j.variables.reduce((s,v)=>s+Number(v.LECTURAS||0),0);paintSummary(window.bootStats);}
+}
+// La posición del usuario se conserva si cambia el periodo manualmente.
+document.addEventListener('change',function(e){
+  if(e.target&&['from','to'].includes(e.target.id)){
+    const f=byId('from');if(f)f.dataset.armaR063Edit='1';
+  }
+});
 document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
