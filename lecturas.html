@@ -49,6 +49,7 @@
 .arma-home-text strong{font-size:17px;font-weight:1000;color:#002b66;letter-spacing:.2px}
 .arma-home-text span{font-size:10px;font-weight:950;color:#008c2e;letter-spacing:.45px;margin-top:6px;white-space:nowrap}
 @media(max-width:700px){.arma-home-card{width:100%;min-width:0}.arma-home-text strong{font-size:16px}.arma-home-text span{font-size:9.5px}}
+.arma-hero-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-left:auto;flex:0 0 auto}.arma-hero-actions .arma-home-card{flex:0 0 auto;min-width:250px}.arma-hero-actions .arma-home-card:focus-visible{outline:3px solid #fff;outline-offset:3px}@media(max-width:1250px){.arma-hero-actions{flex-wrap:wrap}.arma-hero-actions .arma-home-card{min-width:230px}}@media(max-width:700px){.arma-hero-actions{width:100%;margin-left:0;justify-content:flex-start}.arma-hero-actions .arma-home-card{width:100%;min-width:0}}
 </style>
 </head>
 <body>
@@ -62,12 +63,13 @@
 <main class="wrap">
 <section class="hero">
 <div><h2>ANÁLISIS DE LECTURAS</h2><p>HISTÓRICO, TENDENCIA, LÍMITES Y ALARMAS DE VARIABLES DE MANTENIMIENTO.</p></div>
+<div class="arma-hero-actions">
 <a class="arma-home-card" href="main.html" aria-label="VOLVER A ARMA">
 <div class="arma-home-icon"><img src="boton-de-inicio.png" alt="INICIO"></div>
 <div class="arma-home-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></div>
 </a>
 <button type="button" class="arma-home-card" style="cursor:pointer;text-align:left;font-family:inherit" onclick="ARMA_ENEL_R052_Update()" aria-label="ACTUALIZAR DESCARGA Y DATOS ENEL EN WINDOWS">
-<div class="arma-home-icon">&#9889;</div><div class="arma-home-text"><strong>ACTUALIZAR ENEL</strong><span>DESCARGAR Y SUBIR DATOS (PC WINDOWS)</span></div></button></section>
+<div class="arma-home-icon">&#9889;</div><div class="arma-home-text"><strong>ACTUALIZAR ENEL</strong><span>DESCARGAR Y SUBIR DATOS (PC WINDOWS)</span></div></button></div></section>
 <section id="summary" class="summary"></section>
 <div class="layout">
 <aside class="panel"><h3>VARIABLES AUTORIZADAS</h3><input id="varSearch" placeholder="BUSCAR VARIABLE, AM O PUNTO"><div id="variableList" class="variable-list"><div class="empty">CARGANDO...</div></div></aside>
@@ -317,7 +319,7 @@ function ARMA_ENEL_R052_Update(){
 if(!confirm('ACTUALIZAR ENEL: LA DESCARGA Y SUBIDA SE EJECUTAN EN EL PC DE MANTENIMIENTO QUE TENGA INSTALADO EL AGENTE. CONTINUAR?'))return;
 if(!/Win/i.test(navigator.platform||'')){msg('ESTA FUNCION SOLO ESTA DISPONIBLE EN WINDOWS CON EL AGENTE LOCAL.','ACTUALIZACION ENEL');return;}
 location.href='arma-enel-r052://actualizar';
-setTimeout(()=>msg('SI WINDOWS NO OFRECIO ABRIR ARMA ENEL, INSTALE EL PROTOCOLO DEL PAQUETE R052. LOS DATOS SIGUEN SIENDO SOLO DE LECTURA EN ARMA.','AGENTE ENEL'),4500);
+setTimeout(()=>msg('LA EJECUCION SE CONTROLA EN WINDOWS: CONFIRME EL AGENTE R061. AL FINALIZAR, RECARGUE LECTURAS PARA CONSULTAR EL CORTE VALIDADO.','AGENTE ENEL'),4500);
 }
 // R059: resumen independiente tras iniciar agua. Nunca bloquea el bootstrap original.
 async function armaR059RefreshSummary(){try{const j=await apiRaw('lecturasEnelResumen');if(!j||!Array.isArray(j.variables))return;for(const item of j.variables){const idx=variables.findIndex(v=>v.ID_VARIABLE===item.ID_VARIABLE);if(idx<0)continue;variables[idx]=Object.assign({},variables[idx],item);}renderList();if(window.bootStats){const original=Number(window.armaR059AguaCount||window.bootStats.lecturas||0);window.bootStats.lecturas=original+j.variables.reduce((s,v)=>s+Number(v.LECTURAS||0),0);paintSummary(window.bootStats);}}catch(e){console.warn('ARMA R059: resumen ENEL no disponible; agua intacta.');}}
