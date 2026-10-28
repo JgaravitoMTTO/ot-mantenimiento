@@ -47,6 +47,7 @@
 }
 </style>
 
+
 <!-- ARMA-GOT-V0742-VISUAL-BEGIN -->
 <style id="arma-got-v0742-visual-safe">
 /* ==========================================================================
@@ -942,4 +943,142 @@ if(document.readyState!=='loading')armaV0739StyleHero();
 })();
 </script>
 
+<!-- ARMA-GOT-R067-TRACE-BEGIN -->
+<script id="arma-ot-traza-r067">
+
+/* A.R.M.A. R067: visor integrado de causa e historial; SOLO LECTURA. */
+(function(){
+'use strict';
+if (window.ARMA_OT_R067_ACTIVO) return;
+window.ARMA_OT_R067_ACTIVO=true;
+var API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
+var root=null, selected='', lastRequest='', busy=false, cache={}, timer=0;
+function node(tag,txt,cls){var e=document.createElement(tag);if(txt!==null&&txt!==undefined)e.textContent=String(txt);if(cls)e.className=cls;return e;}
+function add(p,tag,txt,cls){var e=node(tag,txt,cls);p.appendChild(e);return e;}
+function escid(t){var m=String(t||'').match(/\bOT[_-]\d{1,12}\b/i);return m?m[0].toUpperCase().replace('-', '_'):'';}
+function session(){
+  var t=localStorage.getItem('ARMA_TOKEN')||sessionStorage.getItem('ARMA_TOKEN')||'';
+  if(!t)try{t=(JSON.parse(localStorage.getItem('ARMA_SESSION_CACHE')||'{}').token||'');}catch(_e){}
+  return t;
+}
+function activeId(){
+  var a=document.querySelectorAll('.item.sel,.close-item.sel,[aria-selected="true"],[data-id-ot].sel,[data-idot].sel');
+  for(var i=0;i<a.length;i++){
+    var x=escid(a[i].getAttribute('data-id-ot')||a[i].getAttribute('data-idot')||a[i].textContent);
+    if(x)return x;
+  }
+  var fields=document.querySelectorAll('.ot-detail-identity,.detail-panel-pro h2,.detail-panel-pro h3,[id*="selectedOT"],[id*="otDetail"]');
+  for(var j=0;j<fields.length;j++){var y=escid(fields[j].textContent);if(y)return y;}
+  return escid(new URLSearchParams(location.search).get('idOT'))||'';
+}
+function row(parent,label,val){var p=add(parent,'div',null,'arma67-row');add(p,'strong',label);add(p,'span',val===null||val===undefined||val===''?'—':val);return p;}
+function apiUrl(){return window.ARMA_OT_R067_API||window.ARMA_BACKEND_URL||window.ARMA_API_URL||API;}
+async function fetchTrace(id){
+  if(cache[id] && Date.now()-cache[id].at<30000)return cache[id].data;
+  var t=session();if(!t)throw Error('SESION_ARMA_NO_DISPONIBLE. Ingrese por ARMA.');
+  var ctrl=new AbortController();var tid=setTimeout(function(){ctrl.abort();},45000);
+  try{
+    var rsp=await fetch(apiUrl(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:'otTrazabilidadR067',token:t,idOT:id}),signal:ctrl.signal,cache:'no-store'});
+    if(!rsp.ok)throw Error('HTTP '+rsp.status);
+    var v=await rsp.json();if(!v||!v.ok)throw Error((v&&(v.error||v.detail))||'CONSULTA_NO_AUTORIZADA');
+    if(v.idOT!==id)throw Error('ID_OT_NO_COINCIDE');
+    cache[id]={data:v,at:Date.now()};return v;
+  }finally{clearTimeout(tid);}
+}
+function paint(data){
+  var dest=document.getElementById('arma67-body');dest.replaceChildren();
+  var head=add(dest,'div',null,'arma67-note');
+  row(head,'OT',data.idOT);row(head,'ESTADO ACTUAL',data.estado);
+  row(head,'CAUSA DEL TECNICO',data.causaTecnico||'SIN SOLICITUD REGISTRADA');
+  row(head,'FECHA SOLICITUD',data.fechaSolicitud);row(head,'SOLICITANTE',data.solicitante);
+  row(head,'SOLICITUDES',data.totalSolicitudes);row(head,'RESOLUCIONES',data.totalResoluciones);
+  add(dest,'h3','LÍNEA DE TIEMPO (MÁS RECIENTE PRIMERO)');
+  var hist=data.historial||[];
+  if(!hist.length)add(dest,'p','SIN EVENTOS REGISTRADOS.');
+  hist.forEach(function(h){var b=add(dest,'article',null,'arma67-event');
+    add(b,'b',(h.tipo||'EVENTO')+' · '+(h.fecha||'SIN FECHA'));
+    row(b,'ESTADO',(h.anterior||'—')+' ? '+(h.nuevo||'—'));
+    row(b,'RESPONSABLE',h.usuario);
+    if(h.justificacion)row(b,'JUSTIFICACIÓN',h.justificacion);
+    if(h.fechaReferencia)row(b,'FECHA REFERENCIA',h.fechaReferencia);
+  });
+  add(dest,'p',data.advertencia||'Solo se muestran cambios registrados.','arma67-muted');
+}
+async function consult(id,paintModal){
+  id=escid(id);if(!id||busy)return;
+  busy=true;
+  var status=document.getElementById('arma67-status');
+  if(paintModal)status.textContent='CONSULTANDO '+id+'...';
+  try{var data=await fetchTrace(id);
+    if(paintModal){paint(data);status.textContent='CONSULTA OK · '+data.totalEventos+' EVENTOS';}
+    else renderInline(data);
+  }catch(err){if(paintModal)status.textContent='ERROR: '+String(err.message||err);else renderInline({causaTecnico:'NO DISPONIBLE: '+String(err.message||err),idOT:id});}
+  finally{busy=false;}
+}
+function plannerBox(){
+  var tx=Array.prototype.slice.call(document.querySelectorAll('textarea'));
+  for(var i=0;i<tx.length;i++){
+    var field=tx[i];var nearby=(field.parentElement&&field.parentElement.parentElement?field.parentElement.parentElement.textContent:'').toUpperCase();
+    if(String(field.value||'').toUpperCase().indexOf('REPROGRAMACION:')>=0||nearby.indexOf('JUSTIFICACI')>=0&&nearby.indexOf('PROGRAMACI')>=0)return field;
+  }
+  return null;
+}
+function renderInline(d){
+  var tx=plannerBox();if(!tx)return;
+  var container=tx.closest('.form-group,.field,.form-field')||tx.parentElement;
+  if(!container||!container.parentElement)return;
+  var box=document.getElementById('arma67-inline');
+  if(!box){box=add(container.parentElement,'div',null,'arma67-inline');box.id='arma67-inline';container.parentElement.insertBefore(box,container);}
+  box.replaceChildren();add(box,'strong','CAUSA REPORTADA POR EL TÉCNICO · '+(d.idOT||''));
+  add(box,'p',d.causaTecnico||'SIN SOLICITUD DOCUMENTADA');
+  var link=add(box,'button','VER HISTORIAL COMPLETO','arma67-link');link.type='button';
+  link.addEventListener('click',function(){openModal(d.idOT);});
+}
+function openModal(id){
+  var overlay=document.getElementById('arma67-overlay');overlay.hidden=false;
+  document.getElementById('arma67-id').value=escid(id)||activeId()||'';
+  if(escid(document.getElementById('arma67-id').value))consult(document.getElementById('arma67-id').value,true);
+  else document.getElementById('arma67-id').focus();
+}
+function closeModal(){document.getElementById('arma67-overlay').hidden=true;}
+function sync(){
+  var id=activeId();if(!id)return;
+  selected=id;
+  var tx=plannerBox();if(!tx)return;
+  if(lastRequest===id&&document.getElementById('arma67-inline'))return;
+  if(busy)return;
+  lastRequest=id;consult(id,false);
+}
+function init(){
+  if(!document.body||document.getElementById('arma67-open'))return;
+  var css=node('style');css.textContent=
+  '#arma67-open{position:fixed;right:15px;bottom:18px;z-index:8001;padding:12px 16px;border:0;border-radius:12px;background:#07579d;color:#fff;font-weight:800;cursor:pointer;box-shadow:0 6px 24px #19345660}'+
+  '#arma67-overlay{position:fixed;inset:0;z-index:9001;background:#0b2038c9;display:flex;justify-content:center;align-items:center;padding:12px}#arma67-overlay[hidden]{display:none!important}'+
+  '#arma67-panel{background:#fff;color:#14345b;max-width:970px;width:97vw;max-height:93vh;overflow:auto;padding:20px;border-radius:16px;font:14px Segoe UI,Arial,sans-serif}'+
+  '.arma67-controls{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0}.arma67-controls input{padding:10px;flex:1;max-width:220px}.arma67-controls button,.arma67-link{padding:9px 13px;background:#0769bf;color:white;border:0;border-radius:8px;cursor:pointer}'+
+  '.arma67-note{background:#e9f4ff;border-left:5px solid #1375bf;padding:12px;border-radius:8px}.arma67-row{display:flex;gap:9px;white-space:pre-wrap;margin:5px 0;overflow-wrap:anywhere}.arma67-row strong{min-width:155px}'+
+  '.arma67-event{padding:10px;border:1px solid #d2e1f0;margin:8px 0;border-radius:8px}.arma67-inline{background:#fff7df;padding:12px;border:1px solid #e2b54d;border-radius:9px;margin:10px 0}.arma67-inline p{white-space:pre-wrap;margin:8px 0}.arma67-muted{color:#536779;font-size:12px}';
+  document.head.appendChild(css);
+  var btn=add(document.body,'button','HISTORIAL / CAUSA OT');btn.id='arma67-open';btn.type='button';btn.addEventListener('click',function(){openModal(selected);});
+  var ov=add(document.body,'div',null);ov.id='arma67-overlay';ov.hidden=true;
+  var p=add(ov,'section',null);p.id='arma67-panel';p.setAttribute('role','dialog');p.setAttribute('aria-modal','true');
+  add(p,'h2','A.R.M.A. · TRAZABILIDAD DE OT');add(p,'p','Consulta autorizada. No modifica programación ni estados.');
+  var bar=add(p,'div',null,'arma67-controls');var inp=add(bar,'input');inp.id='arma67-id';inp.placeholder='OT_5824';inp.setAttribute('aria-label','ID de OT');
+  var go=add(bar,'button','CONSULTAR');go.type='button';go.addEventListener('click',function(){consult(inp.value,true);});
+  var close=add(bar,'button','CERRAR');close.type='button';close.addEventListener('click',closeModal);
+  inp.addEventListener('keydown',function(ev){if(ev.key==='Enter')go.click();});
+  ov.addEventListener('click',function(ev){if(ev.target===ov)closeModal();});
+  document.addEventListener('keydown',function(ev){if(ev.key==='Escape')closeModal();});
+  var status=add(p,'div','Introduzca una OT o seleccione una en Gestión.');status.id='arma67-status';status.setAttribute('aria-live','polite');
+  var body=add(p,'div');body.id='arma67-body';
+  var mo=new MutationObserver(function(){clearTimeout(timer);timer=setTimeout(sync,550);});
+  mo.observe(document.body,{subtree:true,childList:true});
+  setTimeout(sync,1200);
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+
+</script>
+<!-- ARMA-GOT-R067-TRACE-END -->
 </body></html>
