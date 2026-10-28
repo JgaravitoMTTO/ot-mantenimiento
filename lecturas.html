@@ -76,6 +76,11 @@
 </div>
 </div>
 </div>
+<div id="armaR065EditModal" class="modal hidden" role="dialog" aria-modal="true"><div class="box"><h3>ADMINISTRAR VARIABLE / PLANTA MEL</h3>
+<label>NOMBRE DE VARIABLE</label><input id="armaR065EditNombre" maxlength="120">
+<label style="display:block;margin-top:12px">PLANTA DE MEL</label><select id="armaR065EditPlanta"></select>
+<p>SE MODIFICARAN SOLO EL NOMBRE Y LA ASOCIACION A PLANTA. SIN CAMBIAR DATOS, ORIGEN, MAGNITUD NI ALARMAS.</p>
+<div style="display:flex;justify-content:flex-end;gap:10px"><button class="btn gray" onclick="armaR065EditClose()">CANCELAR</button><button class="btn" onclick="armaR065EditSave()">GUARDAR</button></div></div></div>
 <header class="top"><div class="brand"><img src="logo_pelex.bmp" alt="PELEX"><img src="ARMA%20logo%202.png" alt="ARMA"></div><div class="title"><h1>VARIABLES Y LECTURAS</h1><span id="userPill" class="pill">VALIDANDO SESIÓN...</span></div></header>
 <main class="wrap">
 <section class="hero">
@@ -85,12 +90,12 @@
 <div class="arma-home-icon"><img src="boton-de-inicio.png" alt="INICIO"></div>
 <div class="arma-home-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></div>
 </a>
-<button type="button" class="arma-home-card" style="cursor:pointer;text-align:left;font-family:inherit" onclick="ARMA_ENEL_R052_Update()" aria-label="ACTUALIZAR DESCARGA Y DATOS ENEL EN WINDOWS">
+<button type="button" id="armaR065ENELButton" class="arma-home-card hidden" style="cursor:pointer;text-align:left;font-family:inherit" onclick="ARMA_ENEL_R052_Update()" aria-label="ACTUALIZAR DESCARGA Y DATOS ENEL EN WINDOWS">
 <div class="arma-home-icon">&#9889;</div><div class="arma-home-text"><strong>ACTUALIZAR ENEL</strong><span>DESCARGAR Y SUBIR DATOS (PC WINDOWS)</span></div></button></div></section>
 <div id="armaR063Estado" class="arma-r063-status" role="status" aria-live="polite"></div>
 <section id="summary" class="summary"></section>
 <div class="layout">
-<aside class="panel"><h3>VARIABLES AUTORIZADAS</h3><input id="varSearch" placeholder="BUSCAR VARIABLE, AM O PUNTO"><div id="variableList" class="variable-list"><div class="empty">CARGANDO...</div></div></aside>
+<aside class="panel"><h3>VARIABLES AUTORIZADAS</h3><label for="armaR065PlantaFiltro">FILTRAR POR PLANTA MEL</label><select id="armaR065PlantaFiltro" onchange="armaR065FilterChanged()"><option value="">TODAS LAS PLANTAS</option></select><input id="varSearch" placeholder="BUSCAR VARIABLE, AM O PUNTO"><button id="armaR065EditButton" class="btn hidden" type="button" onclick="armaR065EditOpen()" style="margin-top:9px;width:100%">EDITAR VARIABLE SELECCIONADA</button><div id="variableList" class="variable-list"><div class="empty">CARGANDO...</div></div></aside>
 <section class="panel" id="detail"><div class="empty">SELECCIONE UNA VARIABLE PARA GRAFICAR.</div></section>
 </div>
 <div class="footer">ARMA™ // LECTURAS // VARIABLES AM // ALARMAS POR LÍMITES // TRAZABILIDAD OT</div>
@@ -432,6 +437,69 @@ document.addEventListener('change',function(e){
     const f=byId('from');if(f)f.dataset.armaR063Edit='1';
   }
 });
+// ARMA R065 — catalogo MEL, filtros y administracion estrictamente ADMIN/SUPER_ADMIN.
+let armaR065Plants=[],armaR065CanManage=false;
+const armaR065RenderListBase=renderList;
+renderList=function(){
+ const p=byId('armaR065PlantaFiltro'),sel=p?p.value:'';
+ if(!sel){armaR065RenderListBase();return;}
+ const original=variables;
+ variables=original.filter(v=>String(v.ID_PLANTA_MEL||'')===sel);
+ try{armaR065RenderListBase();}finally{variables=original;}
+};
+function armaR065FilterChanged(){
+ renderList();const p=byId('armaR065PlantaFiltro').value;
+ if(p&&selectedId&&!(variables.find(v=>v.ID_VARIABLE===selectedId&&v.ID_PLANTA_MEL===p))){
+  const first=variables.find(v=>v.ID_PLANTA_MEL===p);
+  if(first)selectVariable(first.ID_VARIABLE);
+  else{selectedId='';byId('detail').innerHTML='<div class="empty">SIN VARIABLES EN ESTA PLANTA.</div>';paintSummary(window.bootStats||{});}
+ }
+}
+function armaR065Bootstrap(j){
+ armaR065Plants=Array.isArray(j.plantasLecturas)?j.plantasLecturas:[];
+ armaR065CanManage=!!(j.session&&j.session.canManageLecturas);
+ const oldValue=byId('armaR065PlantaFiltro').value;
+ byId('armaR065PlantaFiltro').innerHTML='<option value="">TODAS LAS PLANTAS</option>'+armaR065Plants.map(p=>'<option value="'+esc(p.id)+'">'+esc(p.nombre)+'</option>').join('');
+ if(armaR065Plants.some(p=>p.id===oldValue))byId('armaR065PlantaFiltro').value=oldValue;
+ byId('armaR065ENELButton').classList.toggle('hidden',!armaR065CanManage);
+ byId('armaR065EditButton').classList.toggle('hidden',!armaR065CanManage);
+ renderList();
+}
+function armaR065EditClose(){byId('armaR065EditModal').classList.add('hidden');}
+async function armaR065EditOpen(){
+ if(!armaR065CanManage||!selectedId)return;
+ try{
+  const resp=await apiRaw('lecturasPlantasAdminCatalog');armaR065Plants=resp.plantas||[];
+  const v=variables.find(x=>x.ID_VARIABLE===selectedId);if(!v)throw Error('VARIABLE_NO_EXISTE');
+  byId('armaR065EditNombre').value=v.NOMBRE_VARIABLE||'';
+  byId('armaR065EditPlanta').innerHTML=armaR065Plants.filter(p=>!v.PLANTA_ENEL_FISICA||norm(p.nombre)===norm(v.PLANTA_ENEL_FISICA)).map(p=>'<option value="'+esc(p.id)+'">'+esc(p.nombre)+'</option>').join('');
+  byId('armaR065EditPlanta').value=v.ID_PLANTA_MEL||'';
+  byId('armaR065EditModal').classList.remove('hidden');
+ }catch(e){msg(e.message,'NO SE PUEDE EDITAR');}
+}
+async function armaR065EditSave(){
+ if(!armaR065CanManage)return;
+ const id=selectedId,nombre=byId('armaR065EditNombre').value.trim(),idPlantaMel=byId('armaR065EditPlanta').value;
+ if(nombre.length<4||!idPlantaMel){msg('NOMBRE Y PLANTA VALIDOS REQUERIDOS','EDICION INVALIDA');return;}
+ try{
+  await apiRaw('lecturasVariablesAdminGuardar',{data:{idVariable:id,nombre,idPlantaMel}});
+  armaR065EditClose();localStorage.removeItem(lecV02BootKey());
+  const j=await apiRaw('lecturasBootstrap');lecV02WriteCache(lecV02BootKey(),j);
+  lecV02ApplyBootstrap(j,false);if(byId('armaR065PlantaFiltro').value&&!variables.some(v=>v.ID_VARIABLE===id&&v.ID_PLANTA_MEL===byId('armaR065PlantaFiltro').value))byId('armaR065PlantaFiltro').value='';await selectVariable(id);
+  msg('NOMBRE Y PLANTA GUARDADOS EN ARMA_DATA CON AUDITORIA.','VARIABLE ACTUALIZADA');
+ }catch(e){msg(e.message,'NO SE GUARDO LA EDICION');}
+}
+// Separacion: ocultar opcion no es seguridad. API comprueba rol antes de mostrar modal.
+ARMA_ENEL_R052_Update=async function(){
+ if(!armaR065CanManage)return;
+ try{await apiRaw('lecturasEnelManualAutorizar');armaR063OpenModal();}
+ catch(e){msg('OPERACION RESERVADA PARA ADMIN O SUPER_ADMIN.','ACCESO DENEGADO');}
+};
+// Nueva llave evita presentar bootstrap antiguo sin catalogo/rol.
+lecV02BootKey=function(){return 'ARMA_LEC_R065_BOOT_'+lecV02TokenKey();};
+lecV02TrendKey=function(id,from,to){return 'ARMA_LEC_R065_TREND_'+lecV02TokenKey()+'_'+String(id||'')+'_'+String(from||'')+'_'+String(to||'');};
+const armaR065BootstrapBase=lecV02ApplyBootstrap;
+lecV02ApplyBootstrap=function(j,c){armaR065BootstrapBase(j,c);armaR065Bootstrap(j);};
 document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
