@@ -52,6 +52,11 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
 .preliq-net{font-weight:950;color:#087a36}.preliq-warn{color:#9a3412;font-weight:950}.preliq-stale{background:#fff7ed}.preliq-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:10px 0}.preliq-kpi{border:1px solid var(--line);border-radius:13px;background:#f8fbff;padding:10px}.preliq-kpi span{display:block;font-size:9px;color:#64748b;font-weight:950}.preliq-kpi strong{display:block;font-size:18px;color:#003b80;margin-top:4px}
 .preliq-help{border-left:5px solid #0ea5e9;background:#eff8ff;color:#075985;border-radius:12px;padding:10px 12px;font-size:10px;font-weight:900;line-height:1.5;margin:10px 0}.preliq-source{border:1px solid #cfe2f4;background:#f8fbff;color:#17345d;border-radius:12px;padding:9px 11px;font-size:10px;font-weight:850;margin:8px 0 10px}
 @media(max-width:700px){.preliq-summary{grid-template-columns:1fr 1fr}.preliq-modal{width:98vw}.preliq-toolbar .field{min-width:0;width:100%}.preliq-toolbar{align-items:stretch}.preliq-toolbar .btn{width:100%}}
+/* ARMA R073 // NOVEDADES BAJO DEMANDA */
+.nov-periodo{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;padding:12px 14px;margin-bottom:12px;border:1px solid #cbdff3;background:linear-gradient(115deg,#f8fbff,#eaf3ff);border-radius:14px}
+.nov-periodo .nov-field{display:flex;flex-direction:column;gap:5px;min-width:142px;flex:1 1 165px}.nov-periodo label{font-size:11px;color:#06376b;font-weight:950}.nov-periodo input{width:100%;height:39px;border-radius:9px;border:1px solid #aac8e5;padding:8px;background:#fff;color:#032956;font-weight:800}
+.nov-periodo button{min-height:38px}.nov-periodo .nov-help{flex:1 0 100%;font-size:10px;color:#496582;font-weight:800}.novedad-card .dupe-tag{display:inline-flex;margin:6px 0 3px;padding:4px 9px;background:#fff2cf;border:1px solid #f9d88a;border-radius:999px;color:#844500;font-size:10px;font-weight:950}
+@media(max-width:700px){.nov-periodo .nov-field{flex-basis:100%}.nov-periodo button{flex:1}}
 /* ARMA R072 // ORDEN VISTA TURNOS // ADMIN Y SUPER_ADMIN */
 .order-panel{border:1px solid #bfdbfe;background:linear-gradient(115deg,#f6fbff,#eaf5ff);border-radius:14px;padding:11px 14px;margin:0 0 12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;box-shadow:0 5px 14px rgba(0,75,155,.07)}
 .order-panel .order-title{font-size:13px;font-weight:950;color:#002b66;letter-spacing:.2px}.order-panel .order-hint{font-size:11px;font-weight:780;color:#466480;line-height:1.45;margin-top:4px}
@@ -145,10 +150,17 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
     <section class="panel" id="novedadesPanel">
       <div class="panel-title"><h2>NOVEDADES DE TURNO</h2><div class="status" id="novedadesStatus">SIN CONSULTA</div></div>
       <div class="notice" style="margin-bottom:12px">LAS NOVEDADES SE GUARDAN EN ARMA_DATA / NOVEDADES_TURNOS PARA REPORTE A NOMINA Y TALENTO HUMANO.</div>
-      <div id="novedadesList" class="novedad-list"><div class="novedad-card">SIN NOVEDADES CARGADAS.</div></div>
+      <div class="nov-periodo" id="novedadesPeriodo">
+        <div class="nov-field"><label for="novFiltroDesde">DESDE</label><input id="novFiltroDesde" type="date" onchange="novedadesLimpiarVista()"></div>
+        <div class="nov-field"><label for="novFiltroHasta">HASTA</label><input id="novFiltroHasta" type="date" onchange="novedadesLimpiarVista()"></div>
+        <button class="btn" id="btnConsultarNovedades" type="button" onclick="loadNovedades()">CONSULTAR NOVEDADES</button>
+        <button class="btn gray" id="btnOcultarNovedades" type="button" onclick="novedadesLimpiarVista()">OCULTAR RESULTADOS</button>
+        <span class="nov-help">CONSULTA EXCLUSIVAMENTE POR DEMANDA. AL CAMBIAR DE MES SE LIMPIA LA VISTA. LOS REGISTROS HISTORICOS NO SE BORRAN.</span>
+      </div>
+      <div id="novedadesList" class="novedad-list"><div class="novedad-card">SELECCIONE EL PERIODO Y PULSE CONSULTAR NOVEDADES.</div></div>
     </section>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>TURNOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-10-31 14:50:06</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>TURNOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-10-31 15:41:05</span></div></footer>
 </main>
 
 <div id="armaDialog" class="arma-dialog-back" role="dialog" aria-modal="true" aria-labelledby="armaDialogTitle" aria-describedby="armaDialogMessage">
@@ -194,7 +206,7 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
       <div class="field full"><label>JUSTIFICACION / RAZON</label><textarea id="novJustificacion" placeholder="EXPLIQUE LA RAZON DE LA NOVEDAD, EXTRA, PERMISO O INCAPACIDAD"></textarea></div>
       <div class="field full"><label>SOPORTE PDF O IMAGEN</label><input id="novSoporte" type="file" accept="application/pdf,image/*"></div>
     </div>
-    <div class="modal-actions"><button class="btn gray" onclick="closeNovedad()">CANCELAR</button><button class="btn green" data-perm="BTN_TURNOS_REPORTAR_NOVEDAD" data-arma-access="BTN_TURNOS_REPORTAR_NOVEDAD" onclick="saveNovedad()">GUARDAR NOVEDAD</button></div>
+    <div class="modal-actions"><button class="btn gray" onclick="closeNovedad()">CANCELAR</button><button class="btn green" id="btnGuardarNovedadR073" data-perm="BTN_TURNOS_REPORTAR_NOVEDAD" data-arma-access="BTN_TURNOS_REPORTAR_NOVEDAD" onclick="saveNovedad()">GUARDAR NOVEDAD</button></div>
   </div>
 </div>
 <div id="preliqModal" class="modal-back">
@@ -307,7 +319,7 @@ function hideArmaLoader(){armaLoaderCount=Math.max(0,armaLoaderCount-1);if(armaL
 function readSessionCache(){try{let raw=localStorage.getItem('ARMA_SESSION_CACHE')||'';if(!raw)return null;let s=JSON.parse(raw);if(!s||!s.token)return null;if(Date.now()-Number(s.ts||0)>10*60*1000)return null;return s;}catch(e){return null;}}
 function writeSessionCache(){try{if(!armaSession||!armaSession.token)return;localStorage.setItem('ARMA_SESSION_CACHE',JSON.stringify({user:armaSession.user||'',nombre:armaSession.nombre||'',nivel:armaSession.nivel||'',token:armaSession.token||'',permissions:armaSession.permissions||{},ts:Date.now(),source:'TURNOS'}));}catch(e){}}
 function setSessionData(data,token){armaSession={user:data.user||'',nombre:data.nombre||data.user||'',nivel:data.nivel||'',permissions:data.permissions||{},token:token||data.token||armaSession.token||''};if(armaSession.token)localStorage.setItem('ARMA_TOKEN',armaSession.token);writeSessionCache();document.getElementById('userPill').textContent=(armaSession.nombre||armaSession.user)+' // '+armaSession.nivel;}
-async function startTurnosApp(){document.getElementById('loginWall').classList.add('hidden');document.getElementById('appArea').classList.remove('hidden');document.getElementById('btnNewTurno').classList.toggle('disabled',!hasPerm('BTN_TURNOS_CREAR_TURNO'));document.getElementById('btnNovedad').classList.toggle('disabled',!hasPerm('BTN_TURNOS_APROBAR_NOVEDADES'));document.getElementById('btnPreliq').classList.toggle('disabled',!hasPerm('BTN_TURNOS_APROBAR_NOVEDADES'));let q=document.getElementById('btnQnaTrace');if(q)q.classList.toggle('hidden',!canQnaTrace());applyTurnosPermissionUi();initDates();await loadTurnos();armaInitLazyNovedades();}
+async function startTurnosApp(){document.getElementById('loginWall').classList.add('hidden');document.getElementById('appArea').classList.remove('hidden');document.getElementById('btnNewTurno').classList.toggle('disabled',!hasPerm('BTN_TURNOS_CREAR_TURNO'));document.getElementById('btnNovedad').classList.toggle('disabled',!hasPerm('BTN_TURNOS_APROBAR_NOVEDADES'));document.getElementById('btnPreliq').classList.toggle('disabled',!hasPerm('BTN_TURNOS_APROBAR_NOVEDADES'));let q=document.getElementById('btnQnaTrace');if(q)q.classList.toggle('hidden',!canQnaTrace());applyTurnosPermissionUi();initDates();await loadTurnos();novedadesSyncDesdeTurnos();}
 async function api(action,payload,msg){
   payload=payload||{};payload.action=action;payload.token=armaSession.token||localStorage.getItem('ARMA_TOKEN')||'';
   showArmaLoader(msg||loaderMsg(action));
@@ -324,13 +336,14 @@ async function validateSession(){let token=localStorage.getItem('ARMA_TOKEN')||'
 let filters={FECHA_DESDE:document.getElementById('fechaDesde').value,FECHA_HASTA:document.getElementById('fechaHasta').value};let data=await api('listTurnosMatrix',{filters:filters},'CARGANDO TURNOS...');if(!data.ok){showLoginWall();return;}
 setSessionData(data,token);turnosData=data;recibirOrdenTurnos(data);document.getElementById('loginWall').classList.add('hidden');document.getElementById('appArea').classList.remove('hidden');
 document.getElementById('btnNewTurno').classList.toggle('disabled',!hasPerm('BTN_TURNOS_CREAR_TURNO'));document.getElementById('btnNovedad').classList.toggle('disabled',!hasPerm('BTN_TURNOS_REPORTAR_NOVEDAD'));
-document.getElementById('btnPreliq').classList.toggle('disabled',!hasPerm('BTN_TURNOS_APROBAR_NOVEDADES'));let q=document.getElementById('btnQnaTrace');if(q)q.classList.toggle('hidden',!canQnaTrace());applyTurnosPermissionUi();renderTurnos(data);setStatus('turnosStatus',(data.rows||[]).length+' DIAS // '+(data.columns||[]).length+' COLUMNAS');armaInitLazyNovedades();}catch(e){showLoginWall();}}
+document.getElementById('btnPreliq').classList.toggle('disabled',!hasPerm('BTN_TURNOS_APROBAR_NOVEDADES'));let q=document.getElementById('btnQnaTrace');if(q)q.classList.toggle('hidden',!canQnaTrace());applyTurnosPermissionUi();renderTurnos(data);setStatus('turnosStatus',(data.rows||[]).length+' DIAS // '+(data.columns||[]).length+' COLUMNAS');novedadesSyncDesdeTurnos();}catch(e){showLoginWall();}}
 function initDates(){
   let now=new Date();
   let first=new Date(now.getFullYear(),now.getMonth(),1);
   let last=new Date(now.getFullYear(),now.getMonth()+1,0);
   document.getElementById('fechaDesde').value=toISO(first);
   document.getElementById('fechaHasta').value=toISO(last);
+  novedadesSyncDesdeTurnos();
   let sel=document.getElementById('quickMonth');
   let opts='';
   for(let i=-2;i<=6;i++){
@@ -346,6 +359,7 @@ function initDates(){
     let y=Number(p[0]),m=Number(p[1])-1;
     document.getElementById('fechaDesde').value=toISO(new Date(y,m,1));
     document.getElementById('fechaHasta').value=toISO(new Date(y,m+1,0));
+    novedadesSyncDesdeTurnos();
     loadTurnos();
   });
 }
@@ -360,6 +374,7 @@ const holidayCache={};
 function isColombiaHolidayISO(iso){let d=parseISO(iso);let y=d.getFullYear();if(!holidayCache[y])holidayCache[y]=colombiaHolidaySet(y);return !!holidayCache[y][iso];}
 async function loadTurnos(){
   if(ordenTurnosDirty||countPending()>0){let aviso=(ordenTurnosDirty?'ORDEN DE PERSONAS SIN GUARDAR. ':'')+(countPending()>0?'CAMBIOS DE PROGRAMACION SIN GRABAR.':'')+' SI CONTINUA SE DESCARTARAN.';let ok=await armaConfirm(aviso,'CAMBIOS SIN GUARDAR','DESCARTAR Y CONTINUAR','VOLVER','WARNING');if(!ok)return;ordenTurnosDirty=false;pendingTurnoChanges={};updatePendingBar();actualizarOrdenTurnosUi();}
+  novedadesSyncDesdeTurnos();
   let filters={FECHA_DESDE:document.getElementById('fechaDesde').value,FECHA_HASTA:document.getElementById('fechaHasta').value};
   setStatus('turnosStatus','CARGANDO TURNOS '+filters.FECHA_DESDE+' A '+filters.FECHA_HASTA+'...');
   try{
@@ -550,10 +565,27 @@ function renderNovedadTipos(){let sel=document.getElementById('novTipo');let tip
 function openNovedad(){if(!hasPerm('BTN_TURNOS_REPORTAR_NOVEDAD')){armaAlert('NO TIENE PERMISO PARA REPORTAR NOVEDADES.','ACCESO NO AUTORIZADO','DANGER');return;}document.getElementById('novFecha').value=toISO(new Date());renderPersonOptions();renderNovedadTipos();document.getElementById('novHoras').value='';document.getElementById('novJustificacion').value='';document.getElementById('novSoporte').value='';document.getElementById('novedadModal').classList.add('show');}
 function closeNovedad(){document.getElementById('novedadModal').classList.remove('show');}
 function readSoporteFile(){return new Promise(resolve=>{let inp=document.getElementById('novSoporte');if(!inp||!inp.files||!inp.files[0]){resolve(null);return;}let file=inp.files[0];let reader=new FileReader();reader.onload=function(){let s=String(reader.result||'');let b64=s.indexOf(',')>=0?s.split(',')[1]:s;resolve({filename:file.name,mimeType:file.type||'application/octet-stream',dataBase64:b64});};reader.onerror=function(){resolve(null);};reader.readAsDataURL(file);});}
-async function saveNovedad(){let just=document.getElementById('novJustificacion').value.trim();if(!just){armaAlert('LA JUSTIFICACION ES OBLIGATORIA.','DATO REQUERIDO','WARNING');return;}setStatus('novedadesStatus','GUARDANDO NOVEDAD...');let soporte=await readSoporteFile();let data={FECHA_NOVEDAD:document.getElementById('novFecha').value,ID_PERSONA:document.getElementById('novPersona').value,TIPO_NOVEDAD:document.getElementById('novTipo').value,HORAS:document.getElementById('novHoras').value,JUSTIFICACION:just,SOPORTE:soporte};try{let res=await api('reportarNovedadTurno',{data:data});if(!res.ok){setStatus('novedadesStatus',res.error||'NO FUE POSIBLE GUARDAR');return;}closeNovedad();setStatus('novedadesStatus','NOVEDAD GUARDADA');loadNovedades();}catch(e){setStatus('novedadesStatus','ERROR DE CONEXION');}}
-let armaNovedadesLoaded=false;function armaInitLazyNovedades(){let box=document.getElementById('novedadesList');if(!box||armaNovedadesLoaded)return;if('IntersectionObserver' in window){let ob=new IntersectionObserver(function(es){if(es.some(e=>e.isIntersecting)){armaNovedadesLoaded=true;ob.disconnect();loadNovedades();}},{rootMargin:'250px'});ob.observe(box);}else{armaNovedadesLoaded=true;loadNovedades();}}
-async function loadNovedades(){if(!hasPerm('BTN_TURNOS_REPORTAR_NOVEDAD')&&!hasPerm('BTN_TURNOS_VER_NOVEDADES')&&!hasPerm('BTN_TURNOS_VER_TODO'))return;let filters={FECHA_DESDE:document.getElementById('fechaDesde').value,FECHA_HASTA:document.getElementById('fechaHasta').value};try{let data=await api('listNovedadesTurnos',{filters:filters});if(!data.ok){setStatus('novedadesStatus',data.error||'SIN NOVEDADES');return;}novedadesData=data;renderNovedades(data.rows||[]);setStatus('novedadesStatus',(data.count||0)+' NOVEDADES');}catch(e){setStatus('novedadesStatus','ERROR DE CONEXION');}}
-function renderNovedades(rows){let box=document.getElementById('novedadesList');if(!rows.length){box.innerHTML='<div class="novedad-card">SIN NOVEDADES PARA EL RANGO SELECCIONADO.</div>';return;}box.innerHTML=rows.slice().reverse().map(r=>'<div class="novedad-card"><strong>'+esc(r.FECHA_NOVEDAD)+' // '+esc(r.NOMBRE_PERSONA)+' // '+esc(r.TIPO_NOVEDAD)+'</strong><div class="meta">HORAS: '+esc(r.HORAS||'NA')+' // ESTADO: '+esc(r.ESTADO||'')+' // REPORTO: '+esc(r.REPORTADO_POR||'')+(r.SOPORTE_URL?' // <a href="'+esc(r.SOPORTE_URL)+'" target="_blank">VER SOPORTE</a>':'')+'</div><div>'+esc(r.JUSTIFICACION||'')+'</div></div>').join('');}
+let novGuardando=false,novPeriodoMatriz="",novConsultaSerie=0;
+function novedadesLimpiarVista(){novConsultaSerie++;novedadesData={rows:[],tipos:[]};let box=document.getElementById("novedadesList");if(box)box.innerHTML="<div class=\"novedad-card\">SELECCIONE EL PERIODO Y PULSE CONSULTAR NOVEDADES.</div>";setStatus("novedadesStatus","SIN CONSULTA");}
+function novedadesSyncDesdeTurnos(){let a=document.getElementById("fechaDesde"),b=document.getElementById("fechaHasta"),x=document.getElementById("novFiltroDesde"),y=document.getElementById("novFiltroHasta");if(!a||!b||!x||!y)return;let key=a.value+"|"+b.value;if(!a.value||!b.value||key===novPeriodoMatriz)return;novPeriodoMatriz=key;x.value=a.value;y.value=b.value;novedadesLimpiarVista();}
+async function saveNovedad(){if(novGuardando)return;let btn=document.getElementById("btnGuardarNovedadR073"),just=document.getElementById("novJustificacion").value.trim();if(!just){armaAlert("LA JUSTIFICACION ES OBLIGATORIA.","DATO REQUERIDO","WARNING");return;}
+  novGuardando=true;if(btn)btn.disabled=true;setStatus("novedadesStatus","GUARDANDO NOVEDAD...");
+  try{let soporte=await readSoporteFile();let data={FECHA_NOVEDAD:document.getElementById("novFecha").value,ID_PERSONA:document.getElementById("novPersona").value,TIPO_NOVEDAD:document.getElementById("novTipo").value,HORAS:document.getElementById("novHoras").value,JUSTIFICACION:just,SOPORTE:soporte};
+    let res=await api("reportarNovedadTurno",{data:data});if(!res.ok){setStatus("novedadesStatus",res.error||"NO SE GUARDO");await armaAlert(res.error||"NO FUE POSIBLE GUARDAR LA NOVEDAD","NOVEDAD NO GUARDADA","WARNING");return;}
+    closeNovedad();novedadesLimpiarVista();if(res.duplicate){setStatus("novedadesStatus","YA EXISTE: "+(res.idNovedad||""));await armaAlert("ESTA NOVEDAD YA ESTA REGISTRADA ("+(res.idNovedad||"SIN ID")+"). NO SE CREO OTRO REGISTRO.","DUPLICADO EVITADO","WARNING");}else{setStatus("novedadesStatus","NOVEDAD REGISTRADA");await armaAlert("NOVEDAD GUARDADA. USE CONSULTAR NOVEDADES PARA VER EL PERIODO.","REGISTRO CONFIRMADO","SUCCESS");}
+  }catch(e){setStatus("novedadesStatus","ERROR DE CONEXION: CONFIRME ANTES DE REINTENTAR");await armaAlert("NO SE CONFIRMO EL RESULTADO. CONSULTE EL PERIODO ANTES DE VOLVER A GUARDAR: "+(e&&e.message||e),"VERIFICAR ANTES DE REINTENTAR","WARNING");}
+  finally{novGuardando=false;if(btn)btn.disabled=false;}}
+function novCanon(s){return String(s==null?"":s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().replace(/\s+/g," ").toUpperCase();}
+function novKey(r){let h=String(r.HORAS==null?"":r.HORAS).trim().replace(",",".");if(h!==""&&Number.isFinite(Number(h)))h=String(Number(h));return [String(r.FECHA_NOVEDAD||"").slice(0,10),novCanon(r.ID_PERSONA),novCanon(r.TIPO_NOVEDAD),h,novCanon(r.JUSTIFICACION),novCanon(r.ESTADO)].join("|");}
+async function loadNovedades(){if(!hasPerm("BTN_TURNOS_REPORTAR_NOVEDAD")&&!hasPerm("BTN_TURNOS_VER_NOVEDADES")&&!hasPerm("BTN_TURNOS_VER_TODO"))return;
+  const a=document.getElementById("novFiltroDesde"),b=document.getElementById("novFiltroHasta"),desde=a?a.value:"",hasta=b?b.value:"";if(!desde||!hasta||desde>hasta){await armaAlert("SELECCIONE UN PERIODO VALIDO: DESDE Y HASTA.","PERIODO REQUERIDO","WARNING");return;}
+  const serie=++novConsultaSerie;setStatus("novedadesStatus","CONSULTANDO " + desde + " A " + hasta + "...");try{let data=await api("listNovedadesTurnos",{filters:{FECHA_DESDE:desde,FECHA_HASTA:hasta,R073_SOLO_PERIODO:true}});if(serie!==novConsultaSerie)return;
+    if(!data.ok){setStatus("novedadesStatus",data.error||"CONSULTA RECHAZADA");return;}novedadesData=data;let summary=renderNovedades(data.rows||[]);setStatus("novedadesStatus",summary.unique+" EVENTOS / "+summary.total+" REGISTROS");
+  }catch(e){if(serie===novConsultaSerie)setStatus("novedadesStatus","ERROR DE CONEXION");}}
+function renderNovedades(rows){let box=document.getElementById("novedadesList"),groups=new Map();(rows||[]).forEach(r=>{let key=novKey(r);if(!groups.has(key))groups.set(key,{r:r,n:0,ids:[]});let g=groups.get(key);g.n++;g.ids.push(r.ID_NOVEDAD||"");});
+  let unique=groups.size,total=(rows||[]).length;if(!box)return {unique:unique,total:total};if(!unique){box.innerHTML="<div class=\"novedad-card\">SIN NOVEDADES PARA EL PERIODO CONSULTADO.</div>";return {unique:0,total:0};}
+  box.innerHTML=Array.from(groups.values()).reverse().map(g=>{let r=g.r,badge=g.n>1?"<span class=\"dupe-tag\">"+g.n+" REGISTROS HISTORICOS SIMILARES · REVISAR EN SHEETS</span><br>":"";
+    return "<div class=\"novedad-card\"><strong>"+esc(r.FECHA_NOVEDAD)+" // "+esc(r.NOMBRE_PERSONA)+" // "+esc(r.TIPO_NOVEDAD)+"</strong><div>"+badge+"</div><div class=\"meta\">HORAS: "+esc(r.HORAS||"NA")+" // ESTADO: "+esc(r.ESTADO||"")+" // REPORTO: "+esc(r.REPORTADO_POR||"")+(r.SOPORTE_URL?" // <a href=\""+esc(r.SOPORTE_URL)+"\" target=\"_blank\">VER SOPORTE</a>":"")+"</div><div>"+esc(r.JUSTIFICACION||"")+"</div></div>";}).join("");return {unique:unique,total:total};}
 function preliqNum(v){let s=String(v==null?'':v).trim().replace(/\s/g,'').replace(',','.');let n=Number(s);return Number.isFinite(n)?n:0;}
 function preliqTimeOnly(v){let s=String(v||'').trim();return s.length>=19?s.slice(11,19):s;}
 function preliqDefaultPeriod(){let a=document.getElementById('preliqDesde'),b=document.getElementById('preliqHasta');if(!a||!b||a.value||b.value)return;let n=new Date(),y=n.getFullYear(),m=n.getMonth(),d=n.getDate(),x,z;if(d>15){x=new Date(y,m,1);z=new Date(y,m,15);}else{x=new Date(y,m-1,16);z=new Date(y,m,0);}a.value=toISO(x);b.value=toISO(z);}
@@ -634,7 +666,6 @@ function armaV12ApplyTurnos(data,token){
   let q=document.getElementById('btnQnaTrace');if(q)q.classList.toggle('hidden',!canQnaTrace());
   applyTurnosPermissionUi();renderTurnos(data);
   setStatus('turnosStatus',(data.rows||[]).length+' DIAS // '+(data.columns||[]).length+' COLUMNAS');
-  armaInitLazyNovedades();
 }
 async function validateSession(){
   const cachedSession=readSessionCache();const token=localStorage.getItem('ARMA_TOKEN')||(cachedSession&&cachedSession.token)||'';
