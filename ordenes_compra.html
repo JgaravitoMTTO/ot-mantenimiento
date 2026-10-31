@@ -36,6 +36,24 @@ dialog{border:0;border-radius:18px;width:min(760px,96vw);box-shadow:0 25px 70px 
 @media(max-width:800px){html{zoom:100%}.wrap{padding:9px}.top{position:relative}.title{text-align:left}.top{align-items:flex-start;flex-direction:column}.hero{align-items:flex-start;flex-direction:column}.filter-grid{grid-template-columns:1fr 1fr}.span-2{grid-column:span 2}.metrics{grid-template-columns:repeat(2,1fr)}.currency-cards{grid-template-columns:1fr}.report-meta{grid-template-columns:1fr 1fr}.oc-info{grid-template-columns:1fr}.oc-info>div:first-child{border-right:0;border-bottom:1px solid #9099a1}.oc-head{grid-template-columns:150px 1fr 150px}.oc-logo img{max-width:125px}.oc-title{font-size:21px}.oc-number strong{font-size:20px}}
 @media(max-width:600px){.filter-grid{grid-template-columns:1fr}.span-2,.filter-actions{grid-column:1}.filter-actions{justify-content:stretch}.filter-actions .btn{flex:1}.metrics{grid-template-columns:1fr 1fr}.btn,.field input,.field select,.field textarea{min-height:56px;font-size:16px}.chart-annual{grid-template-columns:1fr}.oc-head{grid-template-columns:1fr}.oc-logo,.oc-number{border:0;border-bottom:1px solid #9099a1}.oc-title{order:-1}.oc-bottom,.oc-foot{grid-template-columns:1fr}.notes{border-right:0;border-bottom:1px solid #9099a1}.oc-foot>div{border-right:0;border-bottom:1px solid #9099a1}.modal-grid{grid-template-columns:1fr}.wide{grid-column:1}.panel-tools{position:static}}
 @media print{.no-print{display:none!important}body *{visibility:hidden!important}.oc-document,.oc-document *{visibility:visible!important}.oc-document{position:absolute;left:0;top:0;width:100%;box-shadow:none;border:1px solid #555}.overlay{display:block!important;padding:0;background:#fff}.panel-tools,.trace{display:none!important}.doc-table{min-width:0}}
+/* ARMA R074: buscador historico de items de OC. Solo visual. */
+.oc-search-panel{padding:16px 20px;margin-bottom:16px;border-top:5px solid #16a05a;background:linear-gradient(125deg,#fff,#f8fcff)}
+.oc-search-flex{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}.oc-search-flex .field{flex:1 1 350px}
+.oc-search-flex .btn{min-width:175px}.oc-search-help{margin:7px 0 0;font-size:10px;font-weight:850;color:#667d95;line-height:1.5}
+.oc-search-dialog{width:min(1460px,97vw);height:min(870px,94vh);max-height:94vh;padding:0;display:flex;flex-direction:column;overflow:hidden;border:1px solid #c8dff1}
+.oc-search-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;background:linear-gradient(110deg,#003b80,#057ac5);color:#fff}
+.oc-search-heading h3{color:#fff;margin:0;font-size:18px}.oc-search-heading p{margin:4px 0 0;color:#e7f4ff;font-size:10px;font-weight:800}
+.oc-search-body{padding:16px 18px;overflow:auto;flex:1;min-height:0}.oc-search-controls{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-bottom:11px}
+.oc-search-controls .field{flex:1 1 330px}.oc-search-count{font-size:11px;font-weight:950;color:#24547e;margin:7px 0 13px}
+.oc-search-scroller{overflow:auto;max-height:calc(94vh - 260px);border:1px solid #d9e6f2;border-radius:12px}
+.oc-search-table{min-width:1140px;width:100%;border-collapse:collapse;font-size:11px}
+.oc-search-table th{position:sticky;top:0;background:#005b91;color:#fff;text-align:left;padding:11px 9px;white-space:nowrap;z-index:1}
+.oc-search-table td{padding:11px 9px;border-bottom:1px solid #e2edf6;vertical-align:top;text-transform:none}
+.oc-search-table tr:nth-child(even) td{background:#f7fbff}.oc-search-table td.oc-desc{min-width:320px;max-width:560px;font-weight:800;color:#072f5f;white-space:normal}
+.oc-search-table .oc-secondary{display:block;color:#637990;font-size:10px;margin-top:4px}
+.oc-search-footer{border-top:1px solid #e2edf6;padding:11px 18px;display:flex;justify-content:space-between;gap:10px;align-items:center;background:#f8fbff;flex-wrap:wrap}
+.oc-search-footer span{font-size:11px;font-weight:900;color:#255a88}
+@media(max-width:720px){.oc-search-panel{padding:13px}.oc-search-dialog{height:95vh;max-height:95vh}.oc-search-heading{padding:13px}.oc-search-heading h3{font-size:15px}.oc-search-controls .btn{flex:1}.oc-search-footer .btn{min-width:95px}.oc-search-scroller{max-height:calc(95vh - 230px)}}
 </style>
 </head>
 <body>
@@ -65,6 +83,11 @@ dialog{border:0;border-radius:18px;width:min(760px,96vw);box-shadow:0 25px 70px 
 <div class="filter-actions"><button class="btn gray" id="reset">RESTABLECER</button><button class="btn" id="refresh">BUSCAR</button></div>
 </div>
 </section>
+<section class="panel oc-search-panel" aria-label="Buscador de items en ordenes de compra">
+<div class="panel-head"><div><h3>BUSCADOR DE REPUESTOS Y MATERIALES POR DESCRIPCIÓN</h3><p>CONSULTA DOCUMENTAL EN TODAS LAS OC HISTÓRICAS · INDEPENDIENTE DEL PERÍODO Y DE LOS FILTROS DEL TABLERO.</p></div><span class="source-chip">DATAPEL · ÍTEMS OC</span></div>
+<div class="oc-search-flex"><div class="field"><label for="ocSearchQuick">PALABRA O DESCRIPCIÓN DEL ÍTEM</label><input id="ocSearchQuick" maxlength="100" placeholder="EJ. SENSOR, TERMOCUPLA, MOTOR" autocomplete="off"></div><button class="btn green" id="ocSearchOpen" type="button">BUSCAR EN ÍTEMS</button></div>
+<p class="oc-search-help">BUSCA PALABRAS DENTRO DE LA DESCRIPCIÓN REAL DEL ÍTEM. MUESTRA OC, ÍTEM, PROVEEDOR, COSTO UNITARIO Y TOTAL, CON ACCESO A LA OC DOCUMENTAL.</p>
+</section>
 <section class="analytics">
 <div class="card analytics-main"><div class="analytics-head"><div><h3>OC POR MES | TOTAL, MANTENIMIENTO Y SOLICITANTES</h3><p>TOTAL MES = TODAS LAS OC DEL PERIODO // TOTAL MANTENIMIENTO = SOLO DEPTO MANTENIMIENTO // SELECCIONE UNA TARJETA PARA VER VALORES // % MTTO VS TOTAL MES; SOLICITANTES VS TOTAL MTTO.</p></div><div class="currency-picker"><label>MONEDA</label><select id="chartCurrency"></select></div></div>
 <div class="chart-wrap"><canvas id="costChart"></canvas><div id="chartEmpty" class="chart-empty hidden">SIN DATOS DE MANTENIMIENTO PARA ESTA MONEDA / FILTRO</div><div id="chartTooltip" class="chart-tooltip"></div></div><div id="chartAnnualLegend" class="chart-annual"></div></div>
@@ -73,6 +96,12 @@ dialog{border:0;border-radius:18px;width:min(760px,96vw);box-shadow:0 25px 70px 
 <section class="card table-card"><div class="table-head"><strong>ÓRDENES EN EL FILTRO</strong><span id="rowCount">0 REGISTROS</span></div><div class="table-wrap"><table class="table"><thead><tr><th>TIPO</th><th>OC</th><th>FECHA</th><th>DEPARTAMENTO / USUARIO</th><th>PROVEEDOR</th><th>ÍTEMS</th><th>TOTAL OC</th><th>RECEPCIÓN</th><th>CENTRO DE COSTO</th><th>ASIGNACIÓN</th><th>ACCIÓN</th></tr></thead><tbody id="rows"></tbody></table></div></section>
 <div class="footer">ARMA™ // ÓRDENES DE COMPRA // DOCUMENTO + RECEPCIÓN + CENTRO DE COSTO // TRAZABILIDAD DATAPEL</div>
 </main>
+<div id="ocSearchModal" class="modal-shell hidden" role="dialog" aria-modal="true" aria-labelledby="ocSearchTitle" style="z-index:205">
+<div class="modal-box oc-search-dialog"><div class="oc-search-heading"><div><h3 id="ocSearchTitle">A.R.M.A. · COINCIDENCIAS EN ÍTEMS OC</h3><p>HISTÓRICO COMPLETO · CONSULTA DE SOLO LECTURA</p></div><button class="btn gray sm" type="button" id="ocSearchClose">CERRAR</button></div>
+<div class="oc-search-body"><div class="oc-search-controls"><div class="field"><label for="ocSearchTerm">DESCRIPCIÓN A BUSCAR</label><input id="ocSearchTerm" maxlength="100" placeholder="EJ. TERMOCUPLA"></div><button class="btn green" type="button" id="ocSearchGo">BUSCAR</button></div>
+<div id="ocSearchCount" class="oc-search-count" aria-live="polite">ESCRIBA AL MENOS 3 CARACTERES Y PULSE BUSCAR.</div>
+<div class="oc-search-scroller"><table class="oc-search-table"><thead><tr><th>DESCRIPCIÓN / CÓDIGO</th><th>OC / FECHA</th><th>ÍTEM</th><th>PROVEEDOR</th><th>CANT.</th><th>COSTO UNIT.</th><th>TOTAL ÍTEM</th><th>DOCUMENTO</th></tr></thead><tbody id="ocSearchRows"><tr><td colspan="8" class="empty">SIN CONSULTA TODAVÍA.</td></tr></tbody></table></div></div>
+<div class="oc-search-footer"><span id="ocSearchPageText">PÁGINA 1 DE 1</span><div style="display:flex;gap:8px"><button class="btn gray sm" id="ocSearchPrev" type="button" disabled>? ANTERIOR</button><button class="btn sm" id="ocSearchNext" type="button" disabled>SIGUIENTE ?</button></div></div></div></div>
 <div id="ocOverlay" class="overlay"><div class="oc-panel"><div class="panel-tools no-print"><button class="btn gray" onclick="closeOc()">CERRAR</button><button class="btn orange" id="assignOcBtn" onclick="startAssignOc()">ASIGNAR OC COMPLETA</button><button class="btn green" onclick="window.print()">IMPRIMIR / PDF</button></div><div id="ocDoc"></div><div id="trace" class="trace no-print"></div></div></div>
 <div id="assignDlg" class="modal-shell assign-shell hidden" role="dialog" aria-modal="true" aria-labelledby="assignTitle"><div class="modal-box" style="width:min(820px,96vw);max-height:92vh;overflow:auto"><h3 id="assignTitle">ASIGNAR ÍTEM DE OC A MÁQUINA / ACTIVO</h3><div id="assignInfo" class="trace-box"></div><div class="modal-grid"><div class="field wide"><label>CLASE DE COSTO</label><select id="mCostClass"><option value="MANTENIMIENTO">MANTENIMIENTO</option><option value="PROYECTO">PROYECTO / CENTRO DE COSTO</option></select></div><div class="field wide hidden" id="fProject"><label>PROYECTO DE COSTO</label><select id="mProject"><option value="">SELECCIONE PROYECTO...</option></select><div class="cost-class-note">EL PROYECTO DEFINE SU DESTINO MEL Y SOLO PUEDE ESTAR LIGADO A PLANTA O EQUIPO. <a class="project-link" href="costos_mantenimiento.html?projects=1">GESTIONAR PROYECTOS EN COSTOS</a>.</div></div><div class="field wide"><label>ACTIVO / MÁQUINA</label><select id="mAsset"></select></div><div class="field wide" id="fEntry"><label>RECEPCIÓN DATAPEL / CENTRO DE COSTO (OPCIONAL)</label><select id="mEntry"></select></div><div class="field" id="fQty"><label>CANTIDAD ASIGNADA</label><input id="mQty" type="number" step="any"></div><div class="field" id="fUnit"><label>UNIDAD</label><input id="mUnit"></div><div class="field" id="fUnitPrice"><label>VALOR UNITARIO OC</label><input id="mUnitPrice" readonly></div><div class="field" id="fVal"><label>VALOR ASIGNADO</label><input id="mVal" type="number" step="any"></div><div class="field"><label>OT ARMA OPCIONAL</label><input id="mOt" placeholder="EJ. OT_123"></div><div class="field" id="fMethod"><label>MÉTODO</label><select id="mMethod"><option value="OC_UNITARIO">OC UNITARIO</option><option value="MANUAL_CONFIRMADO">MANUAL CONFIRMADO</option><option value="SIN_VALOR">SIN VALOR</option></select></div><div class="field wide"><label>JUSTIFICACIÓN / DESTINO DEL GASTO</label><textarea id="mWhy"></textarea></div></div><div class="modal-actions"><button class="btn gray" type="button" onclick="closeAssignModal()">CANCELAR</button><button class="btn green" type="button" onclick="saveAssign()">CONTINUAR</button></div></div></div>
 <!-- ARMA OC V04.2 · MODALES ARMA SIN TOP-LAYER NATIVO · COSTO MTTO/PROYECTO · DEEPLINK OC -->
@@ -204,6 +233,62 @@ $('refresh').onclick=refresh;$('dep').addEventListener('change',render);$('usr')
 $('period').addEventListener('change',async()=>{if($('period').value!=='CUSTOM'){applyPeriod($('period').value);await refresh()}});$('from').addEventListener('change',()=>{$('period').value='CUSTOM'});$('to').addEventListener('change',()=>{$('period').value='CUSTOM'});
 $('reset').onclick=async()=>{$('period').value='CUSTOM';$('type').value='';$('nro').value='';$('prov').value='';$('dep').value='MANTENIMIENTO';$('usr').value='';$('rec').value='';$('cc').value='';$('asig').value='';initialPeriodReady=false;$('from').value='';$('to').value='';await refresh()};window.addEventListener('resize',()=>{if(state)drawCostChart(maintenanceAnalytics())});
 if(!token()){location.href='main.html'}else{applyProveedorLink();refresh().then(openOcFromQueryOnce);}
+// ARMA OC R074 - BUSQUEDA DE ITEMS POR DESCRIPCION, TODOS LOS PERIODOS.
+const armaOcSearchState={termino:'',pagina:1,paginas:1,busy:false};
+function armaOcSearchOpen(){
+  $('ocSearchTerm').value=$('ocSearchQuick').value.trim();
+  $('ocSearchModal').classList.remove('hidden');
+  setTimeout(()=>$('ocSearchTerm').focus(),30);
+  if($('ocSearchTerm').value.trim().length>=3) armaOcSearchConsultar(1);
+}
+function armaOcSearchClose(){ $('ocSearchModal').classList.add('hidden'); }
+function armaOcSearchRows(rows){
+  const tb=$('ocSearchRows');
+  if(!rows.length){tb.innerHTML='<tr><td colspan="8" class="empty">NO SE ENCONTRARON ÍTEMS PARA ESTA DESCRIPCIÓN.</td></tr>';return;}
+  tb.innerHTML=rows.map(r=>{
+    const codigo=String(r.COD_MP||''),oc=norm(r.TIPO_OC)==='INTERNACIONAL'?'I-'+String(r.NRO_OC):String(r.NRO_OC);
+    return `<tr><td class="oc-desc">${esc(r.DESCRIPCION)}<span class="oc-secondary">CÓDIGO MATERIAL ${esc(codigo||'—')}</span></td>`+
+      `<td><b>${esc(oc)}</b> · ${esc(r.ANO_OC)}<span class="oc-secondary">${esc(r.FECHA_OC||'FECHA NO DISPONIBLE')}</span></td>`+
+      `<td><b>${esc(r.NMR_ITM)}</b></td>`+
+      `<td>${esc(r.PROVEEDOR||'SIN CABECERA DE OC')}${r.SIN_CABECERA?'<span class="oc-secondary">VERIFICAR FUENTE</span>':''}</td>`+
+      `<td>${fmtNum(r.CANTIDAD)}</td><td>${money(r.COSTO_UNITARIO,r.MONEDA)}</td><td><b>${money(r.COSTO_TOTAL_ITEM,r.MONEDA)}</b></td>`+
+      `<td><button type="button" class="btn sm" data-oc-search-open="1" data-type="${esc(r.TIPO_OC)}" data-year="${esc(r.ANO_OC)}" data-number="${esc(r.NRO_OC)}">VER OC</button></td></tr>`;
+  }).join('');
+}
+async function armaOcSearchConsultar(page){
+  if(armaOcSearchState.busy)return;
+  const q=$('ocSearchTerm').value.trim();
+  if(q.length<3){msg('ESCRIBA AL MENOS 3 CARACTERES PARA BUSCAR.','BUSCADOR DE ÍTEMS OC');return;}
+  if(q.length>100){msg('LA BÚSQUEDA ADMITE MÁXIMO 100 CARACTERES.','BUSCADOR DE ÍTEMS OC');return;}
+  armaOcSearchState.busy=true;
+  $('ocSearchGo').disabled=true;
+  try{
+    showLoad('BUSCANDO ÍTEMS EN OC HISTÓRICAS...','CONSULTANDO DESCRIPCIONES DOCUMENTALES DATAPEL. NO SE MODIFICAN LAS OC.');
+    await nextPaint();
+    const res=await api('comprasBuscarItemsR074',{texto:q,pagina:page,tamanoPagina:40});
+    armaOcSearchState.termino=q;
+    armaOcSearchState.pagina=Number(res.pagina||1);
+    armaOcSearchState.paginas=Number(res.paginas||1);
+    $('ocSearchQuick').value=q;
+    $('ocSearchCount').textContent=`${fmtNum(res.total)} COINCIDENCIA(S) EN TODO EL HISTÓRICO. MOSTRANDO ${((res.pagina-1)*res.tamanoPagina)+((res.resultados||[]).length?1:0)}–${Math.min(res.total,res.pagina*res.tamanoPagina)}.`;
+    $('ocSearchPageText').textContent=`PÁGINA ${res.pagina} DE ${res.paginas}`;
+    $('ocSearchPrev').disabled=res.pagina<=1;
+    $('ocSearchNext').disabled=res.pagina>=res.paginas;
+    armaOcSearchRows(res.resultados||[]);
+  }catch(e){msg(e.message||String(e),'NO FUE POSIBLE BUSCAR ÍTEMS OC');}
+  finally{armaOcSearchState.busy=false;$('ocSearchGo').disabled=false;hideLoad();}
+}
+$('ocSearchOpen').addEventListener('click',armaOcSearchOpen);
+$('ocSearchQuick').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();armaOcSearchOpen()}});
+$('ocSearchGo').addEventListener('click',()=>armaOcSearchConsultar(1));
+$('ocSearchTerm').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();armaOcSearchConsultar(1)}});
+$('ocSearchClose').addEventListener('click',armaOcSearchClose);
+$('ocSearchModal').addEventListener('click',e=>{if(e.target===$('ocSearchModal'))armaOcSearchClose()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('ocSearchModal').classList.contains('hidden')){e.preventDefault();armaOcSearchClose()}});
+$('ocSearchPrev').addEventListener('click',()=>armaOcSearchConsultar(armaOcSearchState.pagina-1));
+$('ocSearchNext').addEventListener('click',()=>armaOcSearchConsultar(armaOcSearchState.pagina+1));
+$('ocSearchRows').addEventListener('click',e=>{const btn=e.target.closest('[data-oc-search-open]');if(!btn)return;armaOcSearchClose();openOc(btn.dataset.type,btn.dataset.year,btn.dataset.number)});
+// FIN ARMA OC R074
 </script>
 </body>
 </html>
