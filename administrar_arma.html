@@ -1,6 +1,6 @@
 ﻿<!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>A.R.M.A. | ADMINISTRAR ARMA · R069.3</title><link rel="manifest" href="manifest.webmanifest"><script src="arma-pwa-navigation.js" defer></script>
+<title>A.R.M.A. | ADMINISTRAR ARMA · R069.5</title><link rel="manifest" href="manifest.webmanifest"><script src="arma-pwa-navigation.js" defer></script>
 <style>
 :root{--navy:#053972;--blue:#0864b4;--cyan:#0093d1;--bg:#edf4fb;--line:#d7e5f3;--txt:#133862;--muted:#697f97;--green:#168849;--orange:#d48009;--red:#bd2734}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:Segoe UI,Arial,sans-serif;text-transform:uppercase}button,a{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}.hidden{display:none!important}
@@ -117,17 +117,17 @@ function enelR069Gate(yes){enelR069Allowed=!!yes;['enelR069Refresh','enelRotate'
 function enelR069Status(t,level=''){const e=el('enelR069State');e.textContent=t;e.className='enel-status '+level;}
 async function enelR069Load(){if(!enelR069Allowed||enelR069Busy)return;enelR069Busy=true;el('enelR069Refresh').disabled=true;enelR069Status('CONSULTANDO FUENTE ENEL EN GOOGLE SHEETS...');try{const j=await api('enelAdminHealthR069',{},45000);el('enelLastIngest').textContent=j.lastAcceptedAt||'SIN INGESTA ACEPTADA';el('enelCut').textContent=j.cut||'SIN CORTE VERIFICADO';el('enelScheduler').textContent='NO VISIBLE DESDE SHEETS';const c=j.recentAccepted===true;let t='HOJA ENEL: '+(j.ingestasPresent?'DISPONIBLE':'AUSENTE')+' · INGESTAS EN REGISTRO: '+(j.ingestasTotal??'—')+'\n';t+='ÚLTIMO LOTE: '+(j.lastAcceptedAt||'SIN CONFIRMACIÓN')+' · '+(j.lastAcceptedRows??0)+' REGISTROS DE DÍAS/FRONTERAS';t+='\nSCHEDULER WINDOWS: SIN TELEMETRÍA REMOTA. REQUIERE VALIDACIÓN LOCAL EN EL SERVIDOR.';enelR069Status(t,c?'good':'bad');}catch(e){enelR069Status('MONITOR ENEL NO DISPONIBLE: '+String(e.message||e)+'\nNO INTERPRETAR COMO DESCARGA FALLIDA NI MODIFICAR OTROS SISTEMAS.','bad')}finally{enelR069Busy=false;el('enelR069Refresh').disabled=!enelR069Allowed;}}
 async function enelR069Protocol(kind){if(!enelR069Allowed)return;const map={rotate:{url:'arma-enel-r0692-rotar://abrir',title:'ACTUALIZAR DPAPI LOCAL',text:'PRIMERO cambie la contraseña en el portal oficial ENEL. El botón invoca el agente local R069.3 (debe instalarse primero, solo en este PC y la misma cuenta Windows). En PowerShell ingrese usuario y contraseña vigentes de ENEL; se guardan exclusivamente en DPAPI local. Si no abre nada, instale el puente R069.3 y repita. No modifica la contraseña en el portal ni actualiza otros equipos.'},manual:{url:'arma-enel-r052://actualizar',title:'DESCARGA MANUAL EN ESTE PC',text:'Activa el protocolo R052 instalado en ESTA cuenta Windows. Confirme la operación en el equipo local; después verifique la ingesta y el corte ENEL.'},program:{url:'arma-enel-r069-programar://abrir',title:'PROGRAMAR EN ESTE SERVIDOR',text:'Solo desde el computador servidor, con su cuenta Windows ENEL y después de una descarga manual integral exitosa. Se solicitará confirmación local y contraseña de WINDOWS. No se instalará ninguna tarea a distancia.'}};const x=map[kind];if(!x)return;const yes=await modal(x.title,x.text+'\n\n¿ABRIR PROTOCOLO LOCAL?',true);if(!yes)return;const a=document.createElement('a');a.href=x.url;a.style.display='none';document.body.appendChild(a);a.click();a.remove();}
-async function enelR069Guide(){await modal('NET · ENEL R069.3 · PC / SERVIDOR','1. Para cambiar clave en este PC: instalar primero el PUENTE LOCAL R069.3 con ENEL_R0693_Instalar_Boton_Clave.ps1 -Instalar, bajo la cuenta Windows que usa ENEL.\n2. En el PC servidor instalar R065 CORE conservador (sin sobrescribir R047) y scripts R069; no copiar .dpapi.\n3. Aprovisionar DPAPI de ENEL y HMAC receptor por canal secreto autorizado bajo MISMA cuenta Windows ejecutora.\n4. Probar R064.1 y ejecutar descarga+ingesta R061 manual.\n5. El puente de cambio de clave R069.3 NO instala el scheduler. Para programación futura en servidor siga la guía R069 completa y valide previamente el ciclo. No confundir ambas instalaciones.\n6. Comprobar Task Scheduler y el corte/ingesta en esta página.\nNo es posible instalar tareas Windows desde HTML de GitHub Pages sin agente local; tampoco se deben publicar claves en Drive.');}
+async function enelR069Guide(){await modal('NET · ENEL R069.5 · PC / SERVIDOR','1. Para cambiar clave en este PC: instalar primero el PUENTE LOCAL con ARMA_ENEL_R0695_REPARAR_Y_ACTUALIZAR_CLAVE.cmd, bajo la cuenta Windows que usa ENEL.\n2. En el PC servidor instalar R065 CORE conservador (sin sobrescribir R047) y scripts R069; no copiar .dpapi.\n3. Aprovisionar DPAPI de ENEL y HMAC receptor por canal secreto autorizado bajo MISMA cuenta Windows ejecutora.\n4. Probar R064.1 y ejecutar descarga+ingesta R061 manual.\n5. El puente de cambio de clave R069.5 NO instala el scheduler. Para programación futura en servidor siga la guía R069 completa y valide previamente el ciclo. No confundir ambas instalaciones.\n6. Comprobar Task Scheduler y el corte/ingesta en esta página.\nNo es posible instalar tareas Windows desde HTML de GitHub Pages sin agente local; tampoco se deben publicar claves en Drive.');}
 el('enelR069Refresh').onclick=()=>enelR069Load();el('enelRotate').onclick=()=>enelR069Protocol('rotate');el('enelManual').onclick=()=>enelR069Protocol('manual');el('enelPlan').onclick=()=>enelR069Protocol('program');el('enelGuide').onclick=enelR069Guide;
 (async()=>{try{if(!token())return;const j=await api('armaAdminBootstrap',{},45000);if(!j||j.ok!==true||String(j.nivel||'').toUpperCase()!=='SUPER_ADMIN'){enelR069Status('SOLO SUPER_ADMIN ARMA PUEDE CONSULTAR ESTE PANEL.','bad');return;}enelR069Gate(true);await enelR069Load();}catch(err){enelR069Status('PERMISO NO VALIDADO: '+String(err.message||err),'bad')}})();
-/* A.R.D.A.N. R069.3 - Panel ENEL en Administrar ARMA.
+/* A.R.D.A.N. R069.5 - Panel ENEL en Administrar ARMA.
    Sin secretos. Acciones locales fijas. Backend R069.1 permanece intacto. */
 (function(){
  'use strict';
- const paquete='ARMA_ENEL_R0693_INSTALADOR_PC.zip';
+ const paquete='ARMA_ENEL_R0695_REPARAR_Y_ACTUALIZAR_CLAVE.cmd';
  const acciones={
   clave:{scheme:'arma-enel-r0693-clave://abrir',titulo:'ACTUALIZAR CLAVE ENEL · ESTE PC',descripcion:'Primero cambiar la clave en el portal oficial ENEL y probar el acceso. Después el agente local solicitará la credencial, sin enviarla a ARMA web. Solo actualiza DPAPI del usuario Windows actual.'},
-  manual:{scheme:'arma-enel-r0693-manual://abrir',titulo:'DESCARGA MANUAL ENEL · ESTE PC',descripcion:'Ejecuta el verificador R061 y el ciclo local de descarga + ingesta. Requiere Node, Python, Playwright, receptor HMAC y credencial DPAPI correctamente configurados.'},
+  manual:{scheme:'arma-enel-r052://actualizar',titulo:'DESCARGA MANUAL ENEL · ESTE PC',descripcion:'Ejecuta el verificador R061 y el ciclo local de descarga + ingesta. Requiere Node, Python, Playwright, receptor HMAC y credencial DPAPI correctamente configurados.'},
   activar:{scheme:'arma-enel-r0693-activar://abrir',titulo:'ACTIVAR AUTOMÁTICA · ESTE PC',descripcion:'Crea o habilita la tarea local ARMA_ENEL_R065_DIARIO a las 03:30 solo después de una descarga manual reciente OK. La primera creación solicita la contraseña de WINDOWS en una consola local. No cambia tareas en otros computadores.'},
   desactivar:{scheme:'arma-enel-r0693-desactivar://abrir',titulo:'DESHABILITAR AUTOMÁTICA · ESTE PC',descripcion:'Deshabilita futuras ejecuciones de la tarea diaria ENEL del computador donde está abierto ARMA. No detiene una descarga ya en marcha ni afecta otras tareas.'},
   estado:{scheme:'arma-enel-r0693-estado://abrir',titulo:'ESTADO DEL AGENTE · ESTE PC',descripcion:'Abre un diagnóstico local de identidad Windows, DPAPI, tarea programada y último resultado R061. No equivale al estado remoto del servidor.'}
@@ -147,26 +147,22 @@ el('enelR069Refresh').onclick=()=>enelR069Load();el('enelRotate').onclick=()=>en
   const link=document.createElement('a');link.href=url;link.style.display='none';
   document.body.appendChild(link);link.click();link.remove();
  }
- async function ejecutar(tipo){
-  try{
-   await autorizado();
-   const a=acciones[tipo];if(!a)throw Error('ACCIÓN DESCONOCIDA');
-   const si=await dialogo(a.titulo,a.descripcion+'\n\nRequiere instalar previamente el agente local R069.3 en ESTE PC y con el mismo usuario Windows del robot.\n¿ABRIR CONTROL LOCAL?',true);
-   if(si)abrirProtocolo(a.scheme);
-  }catch(e){await dialogo('ARMA ENEL · NO INICIADO',String(e.message||e),false)}
+ function ejecutar(tipo){
+  if(!enelR069Allowed||!token()){window.alert('SESIÓN NO VALIDADA PARA ENEL. Inicie desde MAIN y recargue.');return}
+  const a=acciones[tipo];if(!a)return;
+  // El protocolo se abre en el MISMO gesto de clic: no await ni modal antes de navegar.
+  // Las confirmaciones de operación se hacen en el agente local Windows.
+  window.location.href=a.scheme;
  }
- async function instalar(){
-  try{
-   await autorizado();
-   const ok=await dialogo('INSTALAR ARMA ENEL · ESTE PC','El navegador descargará un archivo ZIP. Por restricciones de Windows, ninguna web puede instalar PowerShell o Task Scheduler silenciosamente.\n\nPASOS: 1) Extraer en DESCARGAS; 2) abrir la carpeta extraída; 3) ejecutar 01_INSTALAR_EN_ESTE_PC.cmd; 4) escribir INSTALAR en consola. El puente quedará registrado para el usuario Windows actual.\n\nLos archivos originales R047/R061 no se sobrescriben. ¿DESCARGAR INSTALADOR?',true);
-   if(!ok)return;
-   const probe=await fetch(paquete,{method:'HEAD',cache:'no-store'});
-   if(!probe.ok)throw Error('ZIP NO PUBLICADO EN GITHUB PAGES: falta copiar '+paquete+' al repositorio y publicarlo.');
-   const a=document.createElement('a');a.href=paquete;a.download=paquete;document.body.appendChild(a);a.click();a.remove();
-  }catch(e){await dialogo('INSTALADOR NO DISPONIBLE',String(e.message||e),false)}
+ function instalar(){
+  if(!enelR069Allowed||!token()){window.alert('SESIÓN NO VALIDADA PARA ENEL.');return}
+  // Descarga directa sin confirmaciones JS: el navegador NO ejecuta instaladores.
+  const a=document.createElement('a');a.href=paquete;a.download=paquete;
+  document.body.appendChild(a);a.click();a.remove();
+  enelR069Status('DESCARGA DEL INSTALADOR R069.5 SOLICITADA. ABRE DESCARGAS Y EJECUTA EL .CMD UNA SOLA VEZ. DESPUÉS EL BOTÓN CLAVE ABRIRÁ EL ASISTENTE LOCAL.','warn');
  }
  async function guia(){
-  await dialogo('ENEL R069.3 · USO EN CUALQUIER PC','1. INSTALAR EN ESTE PC: descarga ZIP y exige una sola ejecución local de 01_INSTALAR_EN_ESTE_PC.cmd.\n2. Antes de usar descargas: configurar credenciales ENEL vía DPAPI, clave HMAC del receptor y dependencias Node/Python/Playwright EN ESTE usuario Windows.\n3. CAMBIAR CLAVE: primero cambiar y probar en portal ENEL; luego actualizar DPAPI desde la página.\n4. DESCARGA MANUAL: correr ciclo R061, confirmar recepción real en Sheets.\n5. ACTIVAR: crea o habilita tarea local, previa descarga OK.\n6. DESHABILITAR: inhabilita tarea local, preserva configuración.\n7. ESTADO: muestra información de ESTE PC.\nIMPORTANTE: Abrir esta página en PC distinto NO permite controlar un servidor remoto. Para eso se requiere un agente permanente en el servidor y una cola autenticada de órdenes por HTTPS saliente.',false);
+  await dialogo('ENEL R069.5 · USO','1. INSTALAR EN ESTE PC: descarga un solo .CMD, SIN ZIP NI EXTRACCIÓN. Debes ejecutarlo una vez desde Descargas. No es posible ejecutarlo automáticamente desde navegador.\n2. Al ejecutar el CMD se registra el puente y abre inmediatamente el cambio de credencial ENEL en DPAPI (si ya cambiaste la clave en portal).\n3. CAMBIAR CLAVE: desde la HTML abre el asistente local una vez instalado.\n4. DESCARGA MANUAL: usa el protocolo R052 previamente operativo, sin modificarlo. Disponible en cada PC donde esté instalado el motor.\n5. AUTOMÁTICA: activa/desactiva la tarea ENEL solo en el servidor designado, después de validar un ciclo manual OK.\n6. MONITOR: consulta las hojas ENEL en línea, no el estado del PC.\n7. Cada usuario Windows mantiene su propio DPAPI; no compartas contraseñas en ARMA, Drive o GitHub.',false);
  }
  function init(){
   const panel=qs('#enelR069'),buttons=qs('#enelR069 .enel-actions');
@@ -175,17 +171,17 @@ el('enelR069Refresh').onclick=()=>enelR069Load();el('enelRotate').onclick=()=>en
    const b=document.createElement('button');b.type='button';b.id=id;b.className='btn '+cls;b.textContent=texto;
    b.onclick=callback;buttons.appendChild(b);
   };
-  add('enelR0693Instalar','INSTALAR EN ESTE PC','secondary',instalar);
+  add('enelR0693Instalar','INSTALAR Y CAMBIAR CLAVE · ESTE PC','secondary',instalar);
   add('enelR0693Desactivar','DESHABILITAR DESCARGA DIARIA · ESTE PC','danger',()=>ejecutar('desactivar'));
   add('enelR0693Estado','ESTADO DE ESTE PC','secondary',()=>ejecutar('estado'));
   const rot=qs('#enelRotate'),man=qs('#enelManual'),prog=qs('#enelPlan'),guide=qs('#enelGuide');
   if(rot){rot.textContent='ACTUALIZAR CLAVE DPAPI · ESTE PC';rot.onclick=()=>ejecutar('clave')}
   if(man){man.textContent='DESCARGA MANUAL · ESTE PC';man.onclick=()=>ejecutar('manual')}
   if(prog){prog.textContent='ACTIVAR DESCARGA DIARIA · ESTE PC';prog.onclick=()=>ejecutar('activar')}
-  if(guide){guide.textContent='GUÍA DE INSTALACIÓN R069.3';guide.onclick=guia}
+  if(guide){guide.textContent='GUÍA DE INSTALACIÓN R069.5';guide.onclick=guia}
   buttons.style.gridTemplateColumns='repeat(3,minmax(0,1fr))';
   const notice=document.createElement('div');notice.className='enel-note';
-  notice.textContent='R069.3 · CONTROL LOCAL POR PC. Instalación inicial: descargar y ejecutar instalador una vez por usuario Windows. El monitoreo ENEL en Sheets es remoto, pero activar/desactivar Scheduler se hace en el computador local. Sin control remoto del servidor todavía.';
+  notice.textContent='R069.5 · INSTALACIÓN INICIAL: DESCARGA UN SOLO .CMD Y EJECÚTALO UNA VEZ. CAMBIO DPAPI LOCAL; DESCARGA MANUAL R052 EN CADA PC PREPARADO. AUTOMÁTICA SOLO EN SERVIDOR. LOS VALORES DE ENEL SE CONSULTAN EN SHEETS.';
   buttons.insertAdjacentElement('afterend',notice);
   const style=document.createElement('style');
   style.textContent='@media(max-width:1000px){#enelR069 .enel-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}}@media(max-width:650px){#enelR069 .enel-actions{grid-template-columns:1fr!important}}';
