@@ -51,6 +51,7 @@
 
 
 
+
 <!-- ARMA-GOT-V0742-VISUAL-BEGIN -->
 <style id="arma-got-v0742-visual-safe">
 /* ==========================================================================
@@ -949,6 +950,8 @@ if(document.readyState!=='loading')armaV0739StyleHero();
 
 
 
+
+
 <!-- ARMA-GOT-R067-TRACE-BEGIN -->
 <script id="arma-ot-traza-r067">
 
@@ -1107,6 +1110,95 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 .arma70-status{font-weight:750;margin:10px 0;color:#15568b}
 .arma70-nav{justify-content:center;padding:12px}.arma70-nav button:disabled{background:#a3b4c4;cursor:default}
 @media(max-width:650px){.arma70-panel{padding:12px}.arma70-header h2{font-size:16px}.arma70-row-head{flex-wrap:wrap}}
+</style>
+
+<style id="arma-got-r071-hero-clean">
+/* ARMA R071 / GOT V07.45 | PRESENTACION EXCLUSIVA DE DOS BOTONES. */
+/* No cambia DOM, onclick, event listeners, rutas, funciones ni datos. */
+.hero-actions{gap:10px!important;align-items:center!important}
+#btnPlanner,#btnTechnicalClose{
+  box-sizing:border-box!important;
+  position:relative!important;
+  display:flex!important;
+  flex:0 1 284px!important;
+  width:auto!important;
+  min-width:240px!important;
+  max-width:310px!important;
+  min-height:76px!important;
+  padding:12px 15px!important;
+  gap:12px!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  border:1px solid #d3e2ef!important;
+  border-radius:16px!important;
+  background:linear-gradient(145deg,#fff,#f3f8ff)!important;
+  color:#073b70!important;
+  box-shadow:0 8px 18px rgba(0,42,90,.12)!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-align:left!important;
+  white-space:normal!important;
+  cursor:pointer!important;
+  transition:transform .15s ease,box-shadow .15s ease!important;
+}
+/* Los hijos originales se ocultan VISUALMENTE, sin eliminarlos. */
+#btnPlanner > *,#btnTechnicalClose > *{display:none!important}
+#btnPlanner::before,#btnTechnicalClose::before{
+  content:""!important;
+  position:static!important;
+  display:block!important;
+  width:49px!important;
+  height:49px!important;
+  flex:0 0 49px!important;
+  border:0!important;
+  border-radius:13px!important;
+  background-color:#e9f3ff!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+  background-size:34px 34px!important;
+  box-shadow:inset 0 0 0 1px #d5e6f7!important;
+}
+#btnPlanner::before{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20x%3D%2210%22%20y%3D%2210%22%20width%3D%2228%22%20height%3D%2231%22%20rx%3D%224%22%20fill%3D%22none%22%20stroke%3D%22%2307599F%22%20stroke-width%3D%222.8%22%2F%3E%3Crect%20x%3D%2217%22%20y%3D%226%22%20width%3D%2214%22%20height%3D%228%22%20rx%3D%223%22%20fill%3D%22%2307599F%22%2F%3E%3Cpath%20d%3D%22m17%2025%204%204%2010-11M17%2035h13%22%20fill%3D%22none%22%20stroke%3D%22%23168E62%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E")!important}
+#btnTechnicalClose::before{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cpath%20d%3D%22M24%205%2038%2011v12c0%2010-7%2017-14%2021-7-4-14-11-14-21V11z%22%20fill%3D%22none%22%20stroke%3D%22%2307599F%22%20stroke-width%3D%222.9%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22m17%2024%205%205%2010-11%22%20fill%3D%22none%22%20stroke%3D%22%23168E62%22%20stroke-width%3D%223.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E")!important}
+#btnPlanner::after,#btnTechnicalClose::after{
+  position:static!important;
+  display:block!important;
+  width:auto!important;
+  height:auto!important;
+  min-width:0!important;
+  flex:1 1 auto!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  background:none!important;
+  color:#073b70!important;
+  font:800 13.5px/1.25 Segoe UI,Arial,sans-serif!important;
+  letter-spacing:.15px!important;
+  text-transform:uppercase!important;
+  white-space:normal!important;
+  text-shadow:none!important;
+}
+#btnPlanner::after{content:"ASISTENTE DE PLANEACIÓN"!important}
+#btnTechnicalClose::after{content:"CIERRE TÉCNICO"!important}
+#btnPlanner:hover,#btnTechnicalClose:hover{
+  transform:translateY(-2px)!important;
+  box-shadow:0 12px 26px rgba(0,42,90,.2)!important;
+  border-color:#bcd3e9!important;
+}
+#btnPlanner:focus-visible,#btnTechnicalClose:focus-visible{
+  outline:3px solid #31a1e0!important;
+  outline-offset:3px!important;
+}
+@media(min-width:1120px){.hero-actions{flex-wrap:nowrap!important}}
+@media(max-width:900px){
+  #btnPlanner,#btnTechnicalClose{flex:1 1 220px!important;max-width:none!important}
+}
+@media(max-width:700px){
+  #btnPlanner,#btnTechnicalClose{width:100%!important;min-width:0!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #btnPlanner,#btnTechnicalClose{transition:none!important}
+}
 </style>
 
 <script id="arma-ot-r070-todas">
