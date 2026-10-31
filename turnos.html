@@ -52,6 +52,15 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
 .preliq-net{font-weight:950;color:#087a36}.preliq-warn{color:#9a3412;font-weight:950}.preliq-stale{background:#fff7ed}.preliq-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:10px 0}.preliq-kpi{border:1px solid var(--line);border-radius:13px;background:#f8fbff;padding:10px}.preliq-kpi span{display:block;font-size:9px;color:#64748b;font-weight:950}.preliq-kpi strong{display:block;font-size:18px;color:#003b80;margin-top:4px}
 .preliq-help{border-left:5px solid #0ea5e9;background:#eff8ff;color:#075985;border-radius:12px;padding:10px 12px;font-size:10px;font-weight:900;line-height:1.5;margin:10px 0}.preliq-source{border:1px solid #cfe2f4;background:#f8fbff;color:#17345d;border-radius:12px;padding:9px 11px;font-size:10px;font-weight:850;margin:8px 0 10px}
 @media(max-width:700px){.preliq-summary{grid-template-columns:1fr 1fr}.preliq-modal{width:98vw}.preliq-toolbar .field{min-width:0;width:100%}.preliq-toolbar{align-items:stretch}.preliq-toolbar .btn{width:100%}}
+/* ARMA R072 // ORDEN VISTA TURNOS // ADMIN Y SUPER_ADMIN */
+.order-panel{border:1px solid #bfdbfe;background:linear-gradient(115deg,#f6fbff,#eaf5ff);border-radius:14px;padding:11px 14px;margin:0 0 12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;box-shadow:0 5px 14px rgba(0,75,155,.07)}
+.order-panel .order-title{font-size:13px;font-weight:950;color:#002b66;letter-spacing:.2px}.order-panel .order-hint{font-size:11px;font-weight:780;color:#466480;line-height:1.45;margin-top:4px}
+.order-panel .order-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.order-panel .order-actions button{min-height:36px}.order-state{display:inline-flex;border-radius:999px;background:#dbeafe;color:#06457b;padding:7px 11px;font-size:10px;font-weight:900}
+.order-panel .order-state.dirty{background:#fff1ca;color:#874300}.order-panel .order-state.saved{background:#dcfce7;color:#166534}
+#turnosHead th.person-head{position:sticky}#turnosHead .col-order-actions{display:flex;gap:6px;align-items:center;justify-content:center;margin:1px 0 5px}
+#turnosHead .col-order-btn{width:28px;height:24px;min-height:24px;line-height:1;padding:0;border:1px solid rgba(255,255,255,.4);border-radius:7px;background:rgba(255,255,255,.16);color:#fff;font-size:15px;font-weight:950;cursor:pointer}
+#turnosHead .col-order-btn:hover{background:#fff;color:#004b9b}#turnosHead th.person-head.order-draggable{cursor:grab}#turnosHead th.person-head.order-over{outline:3px dashed #a3e635;outline-offset:-4px}
+@media(max-width:700px){.order-panel{align-items:stretch}.order-panel .order-actions{display:grid;grid-template-columns:1fr 1fr;width:100%}.order-panel .order-actions .order-state{grid-column:1/-1}.order-panel .order-actions button{font-size:12px!important;min-height:38px!important}#turnosHead .col-order-btn{width:32px;height:26px;font-size:14px!important;min-height:26px!important}}
   </style>
 </head>
 <body>
@@ -125,6 +134,10 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
         </div>
         <div class="planner-help"><label class="planner-check"><input id="toolOverwrite" type="checkbox"> SOBRESCRIBIR TURNOS EXISTENTES</label><span id="plannerHelpText">PUNTUAL: CLIC EN UNA CELDA PARA ABRIR VENTANA. DIRECTA: ESCRIBA EN LA CELDA Y PRESIONE ENTER. PINTAR: SELECCIONE UN TURNO Y HAGA CLIC EN VARIAS CELDAS.</span></div>
       </div>
+      <div id="ordenTurnosPanel" class="order-panel hidden" aria-label="ORDENAR PERSONAS EN LA MATRIZ">
+        <div><div class="order-title">ORDEN DE COLUMNAS · ADMINISTRACION</div><div class="order-hint">MUEVA PERSONAS CON LAS FLECHAS O ARRASTRE SU ENCABEZADO. SOLO CAMBIA LA VISTA; NO MUEVE COLUMNAS EN GOOGLE SHEETS.</div></div>
+        <div class="order-actions"><span id="ordenTurnosState" class="order-state">ORDEN ORIGINAL</span><button id="btnGuardarOrden" type="button" class="btn green" onclick="guardarOrdenTurnos()" disabled>GUARDAR ORDEN</button><button id="btnDeshacerOrden" type="button" class="btn gray" onclick="deshacerOrdenTurnos()" disabled>DESHACER ORDEN</button></div>
+      </div>
       <div class="pending-toolbar"><strong id="pendingCount">0 CAMBIOS PENDIENTES</strong><div class="pending-actions"><button class="btn green" id="btnCommitTurnos" type="button" data-perm="BTN_TURNOS_GRABAR_PROGRAMACION" data-arma-access="BTN_TURNOS_GRABAR_PROGRAMACION" onclick="guardarProgramacion()" disabled>GRABAR PROGRAMACION</button><button class="btn gray" id="btnDiscardTurnos" type="button" data-perm="BTN_TURNOS_DESCARTAR_CAMBIOS" data-arma-access="BTN_TURNOS_DESCARTAR_CAMBIOS" onclick="descartarCambios()" disabled>DESCARTAR CAMBIOS</button></div></div>
       <div class="table-wrap"><table id="turnosTable"><thead id="turnosHead"><tr><th>FECHA</th><th>DIA</th></tr></thead><tbody id="turnosRows"><tr><td colspan="2">SIN DATOS CARGADOS</td></tr></tbody></table></div>
     </section>
@@ -135,7 +148,7 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
       <div id="novedadesList" class="novedad-list"><div class="novedad-card">SIN NOVEDADES CARGADAS.</div></div>
     </section>
   </section>
-  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>TURNOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-10-03 08:54:06</span></div></footer>
+  <footer class="footer"><div class="footer-card"><span>ARMA&trade;</span><span class="footer-sep">//</span><span>TURNOS</span><span class="footer-sep">//</span><span>ARMA DATA EN LINEA</span><span class="footer-sep">//</span><span>GENERADO: 2026-10-31 14:50:06</span></div></footer>
 </main>
 
 <div id="armaDialog" class="arma-dialog-back" role="dialog" aria-modal="true" aria-labelledby="armaDialogTitle" aria-describedby="armaDialogMessage">
@@ -237,6 +250,8 @@ td{border-bottom:1px solid var(--line);border-right:1px solid #eef2f7;padding:8p
 const ARMA_API_URL='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
 let armaSession={user:'',nombre:'',nivel:'',permissions:{},token:''};
 let turnosData={columns:[],rows:[],turnos:[]};
+let ordenTurnosDirty=false,ordenTurnosSaving=false,ordenTurnosRevision="",ordenTurnosSchema="",ordenTurnosOriginalKeys=[],ordenTurnosDragKey="";
+function puedeOrdenarTurnos(){let n=String(armaSession.nivel||"").trim().toUpperCase();return n==="ADMIN"||n==="SUPER_ADMIN";}
 let editCtx=null;
 let pendingTurnoChanges={};
 let currentEditMode='PUNTUAL';
@@ -307,7 +322,7 @@ function setStatus(id,txt){let el=document.getElementById(id);if(el)el.textConte
 function showLoginWall(){armaLoaderCount=0;hideArmaLoader();document.getElementById('loginWall').classList.remove('hidden');document.getElementById('appArea').classList.add('hidden');document.getElementById('userPill').textContent='SESION NO VALIDADA';}
 async function validateSession(){let token=localStorage.getItem('ARMA_TOKEN')||'';if(!token){showLoginWall();return;}try{initDates();
 let filters={FECHA_DESDE:document.getElementById('fechaDesde').value,FECHA_HASTA:document.getElementById('fechaHasta').value};let data=await api('listTurnosMatrix',{filters:filters},'CARGANDO TURNOS...');if(!data.ok){showLoginWall();return;}
-setSessionData(data,token);turnosData=data;document.getElementById('loginWall').classList.add('hidden');document.getElementById('appArea').classList.remove('hidden');
+setSessionData(data,token);turnosData=data;recibirOrdenTurnos(data);document.getElementById('loginWall').classList.add('hidden');document.getElementById('appArea').classList.remove('hidden');
 document.getElementById('btnNewTurno').classList.toggle('disabled',!hasPerm('BTN_TURNOS_CREAR_TURNO'));document.getElementById('btnNovedad').classList.toggle('disabled',!hasPerm('BTN_TURNOS_REPORTAR_NOVEDAD'));
 document.getElementById('btnPreliq').classList.toggle('disabled',!hasPerm('BTN_TURNOS_APROBAR_NOVEDADES'));let q=document.getElementById('btnQnaTrace');if(q)q.classList.toggle('hidden',!canQnaTrace());applyTurnosPermissionUi();renderTurnos(data);setStatus('turnosStatus',(data.rows||[]).length+' DIAS // '+(data.columns||[]).length+' COLUMNAS');armaInitLazyNovedades();}catch(e){showLoginWall();}}
 function initDates(){
@@ -344,13 +359,14 @@ function colombiaHolidaySet(y){let s={};function add(d){s[toISO(d)]=true;}functi
 const holidayCache={};
 function isColombiaHolidayISO(iso){let d=parseISO(iso);let y=d.getFullYear();if(!holidayCache[y])holidayCache[y]=colombiaHolidaySet(y);return !!holidayCache[y][iso];}
 async function loadTurnos(){
-  if(countPending()>0){let ok=await armaConfirm('HAY CAMBIOS PENDIENTES SIN GRABAR. SI CONTINUA, SE DESCARTARAN.','CAMBIOS SIN GRABAR','CONTINUAR','VOLVER','WARNING');if(!ok)return;pendingTurnoChanges={};updatePendingBar();}
+  if(ordenTurnosDirty||countPending()>0){let aviso=(ordenTurnosDirty?'ORDEN DE PERSONAS SIN GUARDAR. ':'')+(countPending()>0?'CAMBIOS DE PROGRAMACION SIN GRABAR.':'')+' SI CONTINUA SE DESCARTARAN.';let ok=await armaConfirm(aviso,'CAMBIOS SIN GUARDAR','DESCARTAR Y CONTINUAR','VOLVER','WARNING');if(!ok)return;ordenTurnosDirty=false;pendingTurnoChanges={};updatePendingBar();actualizarOrdenTurnosUi();}
   let filters={FECHA_DESDE:document.getElementById('fechaDesde').value,FECHA_HASTA:document.getElementById('fechaHasta').value};
   setStatus('turnosStatus','CARGANDO TURNOS '+filters.FECHA_DESDE+' A '+filters.FECHA_HASTA+'...');
   try{
     let data=await api('listTurnosMatrix',{filters:filters});
     if(!data.ok){setStatus('turnosStatus',data.error||'ERROR');return;}
     turnosData=data;
+    recibirOrdenTurnos(data);
     renderTurnos(data);
     setStatus('turnosStatus',(data.rows||[]).length+' DIAS // '+(data.columns||[]).length+' COLUMNAS // '+(data.desde||filters.FECHA_DESDE)+' A '+(data.hasta||filters.FECHA_HASTA));
   }catch(e){setStatus('turnosStatus','ERROR DE CONEXION');}
@@ -366,11 +382,30 @@ function turnoRoleLabel(tipo){let t=String(tipo||'').trim().toUpperCase();return
 function isSecurityColumn(columnOrKey){return turnoColumnType(columnOrKey)==='SEGURIDAD';}
 function isValidSecurityTurn(value){return SECURITY_TURN_OPTIONS.indexOf(String(value||'').trim().toUpperCase())>=0;}
 function renderSecurityTurnOptions(selected){let current=String(selected||'').trim().toUpperCase();let valid=isValidSecurityTurn(current);let opts='<option value="" disabled '+(valid?'':'selected')+'>SELECCIONE...</option>';SECURITY_TURN_OPTIONS.forEach(v=>{opts+='<option value="'+esc(v)+'" '+(v===current?'selected':'')+'>'+esc(v)+'</option>';});return opts;}
+function recibirOrdenTurnos(data){ordenTurnosRevision=String(data.ordenRevision||"");ordenTurnosSchema=String(data.ordenSchema||"");ordenTurnosOriginalKeys=(data.columns||[]).map(c=>c.key);ordenTurnosDirty=false;actualizarOrdenTurnosUi();}
+function actualizarOrdenTurnosUi(){let admin=puedeOrdenarTurnos(),p=document.getElementById("ordenTurnosPanel"),s=document.getElementById("ordenTurnosState"),g=document.getElementById("btnGuardarOrden"),d=document.getElementById("btnDeshacerOrden");if(p)p.classList.toggle("hidden",!admin);if(s){s.textContent=ordenTurnosDirty?"ORDEN SIN GUARDAR":"ORDEN GUARDADO / SIN CAMBIOS";s.className="order-state "+(ordenTurnosDirty?"dirty":"saved");}if(g)g.disabled=!admin||!ordenTurnosDirty||ordenTurnosSaving;if(d)d.disabled=!admin||!ordenTurnosDirty||ordenTurnosSaving;}
+function marcarOrdenTurnos(){ordenTurnosDirty=(turnosData.columns||[]).some((c,i)=>c.key!==ordenTurnosOriginalKeys[i]);actualizarOrdenTurnosUi();renderTurnos(turnosData);}
+function moverColumnaTurno(key,delta){if(!puedeOrdenarTurnos()||ordenTurnosSaving)return;let a=turnosData.columns||[],i=a.findIndex(c=>c.key===key),j=i+delta;if(i<0||j<0||j>=a.length)return;let t=a[i];a[i]=a[j];a[j]=t;marcarOrdenTurnos();}
+function arrastrarColumnaTurno(key,target){if(!puedeOrdenarTurnos()||ordenTurnosSaving||!key||!target||key===target)return;let a=turnosData.columns||[],i=a.findIndex(c=>c.key===key),j=a.findIndex(c=>c.key===target);if(i<0||j<0)return;let obj=a.splice(i,1)[0];j=a.findIndex(c=>c.key===target);a.splice(j,0,obj);marcarOrdenTurnos();}
+function conectarArrastreTurnos(){if(!puedeOrdenarTurnos())return;document.querySelectorAll("#turnosHead th[data-orden-key]").forEach(th=>{th.draggable=true;th.addEventListener("dragstart",e=>{ordenTurnosDragKey=th.dataset.ordenKey;e.dataTransfer.effectAllowed="move";e.dataTransfer.setData("text/plain",ordenTurnosDragKey);});th.addEventListener("dragover",e=>{e.preventDefault();th.classList.add("order-over");});th.addEventListener("dragleave",()=>th.classList.remove("order-over"));th.addEventListener("drop",e=>{e.preventDefault();th.classList.remove("order-over");arrastrarColumnaTurno(ordenTurnosDragKey,th.dataset.ordenKey);ordenTurnosDragKey="";});th.addEventListener("dragend",()=>{ordenTurnosDragKey="";document.querySelectorAll("#turnosHead .order-over").forEach(n=>n.classList.remove("order-over"));});});}
+function deshacerOrdenTurnos(){if(!puedeOrdenarTurnos()||ordenTurnosSaving||!ordenTurnosDirty)return;let rank={};ordenTurnosOriginalKeys.forEach((k,i)=>rank[k]=i);turnosData.columns.sort((a,b)=>(rank[a.key]??9999)-(rank[b.key]??9999));marcarOrdenTurnos();}
+async function guardarOrdenTurnos(){if(!puedeOrdenarTurnos()){await armaAlert("SOLO ADMIN Y SUPER_ADMIN PUEDEN ORDENAR COLUMNAS.","ACCESO NO AUTORIZADO","DANGER");return;}if(!ordenTurnosDirty)return;
+  let ok=await armaConfirm("SE GUARDARA EL ORDEN VISUAL PARA TODOS LOS USUARIOS. LOS TURNOS Y LAS COLUMNAS FISICAS EN SHEETS NO SE MODIFICAN.","GUARDAR ORDEN DE PERSONAS","GUARDAR","CANCELAR","WARNING");if(!ok)return;
+  ordenTurnosSaving=true;actualizarOrdenTurnosUi();try{let keys=(turnosData.columns||[]).map(c=>c.key);let r=await api("saveTurnosColumnOrderR072",{keys:keys,expectedRevision:ordenTurnosRevision,expectedSchema:ordenTurnosSchema},"GUARDANDO ORDEN DE PERSONAS...");
+  if(!r.ok){ordenTurnosSaving=false;actualizarOrdenTurnosUi();await armaAlert((r.error||"ERROR AL GUARDAR")+". "+(r.detail||"VERIFIQUE SI OTRA PERSONA CAMBIO EL ORDEN Y RECARGUE TURNOS."),"ORDEN NO GUARDADO","WARNING");return;}
+  ordenTurnosRevision=String(r.ordenRevision||"");ordenTurnosOriginalKeys=keys.slice();ordenTurnosDirty=false;ordenTurnosSaving=false;actualizarOrdenTurnosUi();setStatus("turnosStatus","ORDEN DE PERSONAS GUARDADO // TURNOS INTACTOS");
+  }catch(e){ordenTurnosSaving=false;actualizarOrdenTurnosUi();await armaAlert("NO SE GUARDO EL ORDEN: "+(e&&e.message||e),"ERROR DE CONEXION","DANGER");}}
 function renderTurnos(data){
   let cols=data.columns||[];
   let rows=data.rows||[];
-  let head='<tr><th class="sticky-col">FECHA</th><th class="day-head">DIA</th>'+cols.map(function(c){let tipo=turnoColumnType(c);let headClass=tipo==='SEGURIDAD'?'security-head':'maintenance-head';return '<th class="person-head '+headClass+'" title="'+esc(c.idPersona||tipo)+'"><div class="person-head-inner"><span class="person-name">'+esc(c.nombre)+'</span><span class="person-role">'+esc(turnoRoleLabel(tipo))+'</span></div></th>';}).join('')+'</tr>';
+  let head=`<tr><th class="sticky-col">FECHA</th><th class="day-head">DIA</th>`+cols.map(function(c){
+    let tipo=turnoColumnType(c),headClass=tipo==="SEGURIDAD"?"security-head":"maintenance-head";
+    let admin=puedeOrdenarTurnos(),nav=admin?`<div class="col-order-actions"><button type="button" class="col-order-btn" title="MOVER A LA IZQUIERDA" aria-label="MOVER A LA IZQUIERDA" data-dir="-1">&#8592;</button><button type="button" class="col-order-btn" title="MOVER A LA DERECHA" aria-label="MOVER A LA DERECHA" data-dir="1">&#8594;</button></div>`:"";
+    return `<th class="person-head ${headClass}${admin?" order-draggable":""}" data-orden-key="${esc(c.key)}" title="${esc(c.idPersona||tipo)}"><div class="person-head-inner">${nav}<span class="person-name">${esc(c.nombre)}</span><span class="person-role">${esc(turnoRoleLabel(tipo))}</span></div></th>`;
+  }).join("")+"</tr>";
   document.getElementById('turnosHead').innerHTML=head;
+  document.querySelectorAll("#turnosHead .col-order-btn").forEach(b=>b.addEventListener("click",e=>{e.stopPropagation();let th=b.closest("th[data-orden-key]");if(th)moverColumnaTurno(th.dataset.ordenKey,Number(b.dataset.dir));}));
+  conectarArrastreTurnos();
   if(rows.length===0){document.getElementById('turnosRows').innerHTML='<tr><td colspan="'+(cols.length+2)+'">SIN TURNOS PARA EL RANGO O PERMISOS ACTUALES</td></tr>';renderPersonOptions();updatePendingBar();updatePlannerOptions();return;}
   let body=rows.map(function(r){let hol=isColombiaHolidayISO(r.fecha);let rowCls=(r.today?'today-row ':'')+(hol?'holiday-row':'');let dia=esc(r.dia)+(hol?' <span class="holiday-badge">FESTIVO CO</span>':'');return '<tr class="'+rowCls+'"><td class="sticky-col"><strong>'+esc(r.fecha)+'</strong></td><td>'+dia+'</td>'+cols.map(function(c){return cellHtml(r,c,getOriginalTurnoValue(r,c),getDisplayTurnoValue(r,c));}).join('')+'</tr>';}).join('');
   document.getElementById('turnosRows').innerHTML=body;
