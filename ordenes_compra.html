@@ -54,6 +54,32 @@ dialog{border:0;border-radius:18px;width:min(760px,96vw);box-shadow:0 25px 70px 
 .oc-search-footer{border-top:1px solid #e2edf6;padding:11px 18px;display:flex;justify-content:space-between;gap:10px;align-items:center;background:#f8fbff;flex-wrap:wrap}
 .oc-search-footer span{font-size:11px;font-weight:900;color:#255a88}
 @media(max-width:720px){.oc-search-panel{padding:13px}.oc-search-dialog{height:95vh;max-height:95vh}.oc-search-heading{padding:13px}.oc-search-heading h3{font-size:15px}.oc-search-controls .btn{flex:1}.oc-search-footer .btn{min-width:95px}.oc-search-scroller{max-height:calc(95vh - 230px)}}
+/* ARMA R075 - Exportación de resultados de ítems sin librerías externas */
+.oc-search-export{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.oc-search-export .btn{min-height:40px;font-size:10px;letter-spacing:.2px}
+.oc-search-export-note{display:block;color:#60778f;font-size:9px;font-weight:800;line-height:1.45;margin-top:6px}
+#ocSearchPrintSheet{display:none}
+@media(max-width:720px){.oc-search-export{width:100%}.oc-search-export .btn{flex:1;min-width:140px}}
+@media print{
+ @page{size:A4 landscape;margin:10mm}
+ html{zoom:100%!important}
+ body.oc-r075-print-mode{margin:0!important;background:#fff!important;color:#142c45!important;text-transform:none!important}
+ body.oc-r075-print-mode > *:not(#ocSearchPrintSheet){display:none!important}
+ body.oc-r075-print-mode #ocSearchPrintSheet,body.oc-r075-print-mode #ocSearchPrintSheet *{visibility:visible!important}
+ body.oc-r075-print-mode #ocSearchPrintSheet{display:block!important;position:static!important;width:100%!important;box-shadow:none!important;background:#fff!important;font-family:Arial,sans-serif!important;text-transform:none!important}
+ #ocSearchPrintSheet h1{font-size:17pt;margin:0 0 5mm;color:#003b80}
+ #ocSearchPrintSheet .r075-meta{font-size:9pt;margin-bottom:5mm;color:#34536f}
+ #ocSearchPrintSheet table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:7.4pt}
+ #ocSearchPrintSheet thead{display:table-header-group}
+ #ocSearchPrintSheet th{background:#dceaf8!important;color:#002b66!important;padding:5px 4px;text-align:left;border:1px solid #9cbbd6;font-weight:bold}
+ #ocSearchPrintSheet td{padding:4px;border:1px solid #b8cbde;vertical-align:top;overflow-wrap:anywhere;white-space:normal}
+ #ocSearchPrintSheet tr{break-inside:avoid;page-break-inside:avoid}
+ #ocSearchPrintSheet th:nth-child(1){width:23%}
+ #ocSearchPrintSheet th:nth-child(5){width:16%}
+ #ocSearchPrintSheet th:nth-child(8),#ocSearchPrintSheet th:nth-child(9){width:10%}
+ #ocSearchPrintSheet .r075-num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+ #ocSearchPrintSheet .r075-note{font-size:8pt;color:#526777;margin-top:5mm}
+}
 </style>
 </head>
 <body>
@@ -101,7 +127,8 @@ dialog{border:0;border-radius:18px;width:min(760px,96vw);box-shadow:0 25px 70px 
 <div class="oc-search-body"><div class="oc-search-controls"><div class="field"><label for="ocSearchTerm">DESCRIPCIÓN A BUSCAR</label><input id="ocSearchTerm" maxlength="100" placeholder="EJ. TERMOCUPLA"></div><button class="btn green" type="button" id="ocSearchGo">BUSCAR</button></div>
 <div id="ocSearchCount" class="oc-search-count" aria-live="polite">ESCRIBA AL MENOS 3 CARACTERES Y PULSE BUSCAR.</div>
 <div class="oc-search-scroller"><table class="oc-search-table"><thead><tr><th>DESCRIPCIÓN / CÓDIGO</th><th>OC / FECHA</th><th>ÍTEM</th><th>PROVEEDOR</th><th>CANT.</th><th>COSTO UNIT.</th><th>TOTAL ÍTEM</th><th>DOCUMENTO</th></tr></thead><tbody id="ocSearchRows"><tr><td colspan="8" class="empty">SIN CONSULTA TODAVÍA.</td></tr></tbody></table></div></div>
-<div class="oc-search-footer"><span id="ocSearchPageText">PÁGINA 1 DE 1</span><div style="display:flex;gap:8px"><button class="btn gray sm" id="ocSearchPrev" type="button" disabled>? ANTERIOR</button><button class="btn sm" id="ocSearchNext" type="button" disabled>SIGUIENTE ?</button></div></div></div></div>
+<div class="oc-search-footer"><span id="ocSearchPageText">PÁGINA 1 DE 1</span><div class="oc-search-export"><button class="btn green sm" type="button" id="ocSearchExcel" disabled>EXCEL · CSV</button><button class="btn sm" type="button" id="ocSearchPrint" disabled>IMPRIMIR / PDF</button></div><div class="oc-search-export"><button class="btn gray sm" id="ocSearchPrev" type="button" disabled>? ANTERIOR</button><button class="btn sm" id="ocSearchNext" type="button" disabled>SIGUIENTE ?</button></div></div></div></div>
+<div id="ocSearchPrintSheet" aria-hidden="true"></div>
 <div id="ocOverlay" class="overlay"><div class="oc-panel"><div class="panel-tools no-print"><button class="btn gray" onclick="closeOc()">CERRAR</button><button class="btn orange" id="assignOcBtn" onclick="startAssignOc()">ASIGNAR OC COMPLETA</button><button class="btn green" onclick="window.print()">IMPRIMIR / PDF</button></div><div id="ocDoc"></div><div id="trace" class="trace no-print"></div></div></div>
 <div id="assignDlg" class="modal-shell assign-shell hidden" role="dialog" aria-modal="true" aria-labelledby="assignTitle"><div class="modal-box" style="width:min(820px,96vw);max-height:92vh;overflow:auto"><h3 id="assignTitle">ASIGNAR ÍTEM DE OC A MÁQUINA / ACTIVO</h3><div id="assignInfo" class="trace-box"></div><div class="modal-grid"><div class="field wide"><label>CLASE DE COSTO</label><select id="mCostClass"><option value="MANTENIMIENTO">MANTENIMIENTO</option><option value="PROYECTO">PROYECTO / CENTRO DE COSTO</option></select></div><div class="field wide hidden" id="fProject"><label>PROYECTO DE COSTO</label><select id="mProject"><option value="">SELECCIONE PROYECTO...</option></select><div class="cost-class-note">EL PROYECTO DEFINE SU DESTINO MEL Y SOLO PUEDE ESTAR LIGADO A PLANTA O EQUIPO. <a class="project-link" href="costos_mantenimiento.html?projects=1">GESTIONAR PROYECTOS EN COSTOS</a>.</div></div><div class="field wide"><label>ACTIVO / MÁQUINA</label><select id="mAsset"></select></div><div class="field wide" id="fEntry"><label>RECEPCIÓN DATAPEL / CENTRO DE COSTO (OPCIONAL)</label><select id="mEntry"></select></div><div class="field" id="fQty"><label>CANTIDAD ASIGNADA</label><input id="mQty" type="number" step="any"></div><div class="field" id="fUnit"><label>UNIDAD</label><input id="mUnit"></div><div class="field" id="fUnitPrice"><label>VALOR UNITARIO OC</label><input id="mUnitPrice" readonly></div><div class="field" id="fVal"><label>VALOR ASIGNADO</label><input id="mVal" type="number" step="any"></div><div class="field"><label>OT ARMA OPCIONAL</label><input id="mOt" placeholder="EJ. OT_123"></div><div class="field" id="fMethod"><label>MÉTODO</label><select id="mMethod"><option value="OC_UNITARIO">OC UNITARIO</option><option value="MANUAL_CONFIRMADO">MANUAL CONFIRMADO</option><option value="SIN_VALOR">SIN VALOR</option></select></div><div class="field wide"><label>JUSTIFICACIÓN / DESTINO DEL GASTO</label><textarea id="mWhy"></textarea></div></div><div class="modal-actions"><button class="btn gray" type="button" onclick="closeAssignModal()">CANCELAR</button><button class="btn green" type="button" onclick="saveAssign()">CONTINUAR</button></div></div></div>
 <!-- ARMA OC V04.2 · MODALES ARMA SIN TOP-LAYER NATIVO · COSTO MTTO/PROYECTO · DEEPLINK OC -->
@@ -268,7 +295,10 @@ async function armaOcSearchConsultar(page){
     const res=await api('comprasBuscarItemsR074',{texto:q,pagina:page,tamanoPagina:40});
     armaOcSearchState.termino=q;
     armaOcSearchState.pagina=Number(res.pagina||1);
-    armaOcSearchState.paginas=Number(res.paginas||1);
+    armaOcSearchState.paginas=Number(res.paginas||1);    armaOcSearchState.total=Number(res.total||0);
+    armaOcSearchState.consultado=true;
+    armaOcR075SyncButtons();
+
     $('ocSearchQuick').value=q;
     $('ocSearchCount').textContent=`${fmtNum(res.total)} COINCIDENCIA(S) EN TODO EL HISTÓRICO. MOSTRANDO ${((res.pagina-1)*res.tamanoPagina)+((res.resultados||[]).length?1:0)}–${Math.min(res.total,res.pagina*res.tamanoPagina)}.`;
     $('ocSearchPageText').textContent=`PÁGINA ${res.pagina} DE ${res.paginas}`;
@@ -276,7 +306,7 @@ async function armaOcSearchConsultar(page){
     $('ocSearchNext').disabled=res.pagina>=res.paginas;
     armaOcSearchRows(res.resultados||[]);
   }catch(e){msg(e.message||String(e),'NO FUE POSIBLE BUSCAR ÍTEMS OC');}
-  finally{armaOcSearchState.busy=false;$('ocSearchGo').disabled=false;hideLoad();}
+  finally{armaOcSearchState.busy=false;$('ocSearchGo').disabled=false;armaOcR075SyncButtons();hideLoad();}
 }
 $('ocSearchOpen').addEventListener('click',armaOcSearchOpen);
 $('ocSearchQuick').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();armaOcSearchOpen()}});
@@ -288,7 +318,122 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('ocSearchModal')
 $('ocSearchPrev').addEventListener('click',()=>armaOcSearchConsultar(armaOcSearchState.pagina-1));
 $('ocSearchNext').addEventListener('click',()=>armaOcSearchConsultar(armaOcSearchState.pagina+1));
 $('ocSearchRows').addEventListener('click',e=>{const btn=e.target.closest('[data-oc-search-open]');if(!btn)return;armaOcSearchClose();openOc(btn.dataset.type,btn.dataset.year,btn.dataset.number)});
-// FIN ARMA OC R074
+// FIN ARMA OC R074// ARMA R075 - Exportación completa de búsqueda R074, sin cambiar Backend.
+const ARMA_OC_R075_MAX_FILAS=1000;
+function armaOcR075SyncButtons(){
+  const term=$('ocSearchTerm').value.trim();
+  const valid=term.length>=3&&term===armaOcSearchState.termino&&armaOcSearchState.consultado===true&&Number(armaOcSearchState.total)>0;
+  $('ocSearchExcel').disabled=armaOcSearchState.busy||!valid;
+  $('ocSearchPrint').disabled=armaOcSearchState.busy||!valid;
+}
+async function armaOcR075ObtenerTodos(){
+  const q=$('ocSearchTerm').value.trim();
+  if(q.length<3||q!==armaOcSearchState.termino||!armaOcSearchState.consultado){
+    throw new Error('PRIMERO PULSE BUSCAR CON LA DESCRIPCIÓN ACTUAL.');
+  }
+  const batch=50;
+  const first=await api('comprasBuscarItemsR074',{texto:q,pagina:1,tamanoPagina:batch});
+  const total=Number(first.total||0),pages=Number(first.paginas||0);
+  if(!Number.isInteger(total)||total<0||!Number.isInteger(pages)||pages<1)throw new Error('R075_RESPUESTA_INCOMPLETA');
+  if(total===0)throw new Error('NO HAY COINCIDENCIAS PARA EXPORTAR.');
+  if(total>ARMA_OC_R075_MAX_FILAS){
+    throw new Error('LA BÚSQUEDA TIENE '+fmtNum(total)+' COINCIDENCIAS. POR ESTABILIDAD, LA EXPORTACIÓN ADMITE HASTA '+fmtNum(ARMA_OC_R075_MAX_FILAS)+'. ESPECIFIQUE MÁS PALABRAS Y BUSQUE DE NUEVO.');
+  }
+  const rows=[...(first.resultados||[])];
+  for(let page=2;page<=pages;page++){
+    $('loadSub').textContent='RECOPILANDO COINCIDENCIAS '+Math.min(rows.length,total)+' / '+total+' · PÁGINA '+page+' DE '+pages+'.';
+    await nextPaint();
+    const res=await api('comprasBuscarItemsR074',{texto:q,pagina:page,tamanoPagina:batch});
+    if(Number(res.total)!==total||Number(res.paginas)!==pages||Number(res.pagina)!==page){
+      throw new Error('LA FUENTE DE OC CAMBIÓ DURANTE LA CONSULTA. REPITA LA BÚSQUEDA ANTES DE EXPORTAR.');
+    }
+    rows.push(...(res.resultados||[]));
+  }
+  if(rows.length!==total){
+    throw new Error('EXPORTACIÓN INCOMPLETA: SE RECIBIERON '+rows.length+' DE '+total+' COINCIDENCIAS. NO SE GENERÓ ARCHIVO PARCIAL.');
+  }
+  if($('ocSearchTerm').value.trim()!==q){throw new Error('LA DESCRIPCIÓN CAMBIÓ DURANTE LA EXPORTACIÓN. REPITA LA CONSULTA.');}
+  return {texto:q,total,rows};
+}
+function armaOcR075CsvCell(v){
+  let s=String(v==null?'':v).replace(/[\r\n\t]+/g,' ').trim();
+  // Evita que Excel evalúe como fórmula descripciones o proveedores de origen externo.
+  if(/^[=+\-@]/.test(s))s="'"+s;
+  return '"'+s.replace(/"/g,'""')+'"';
+}
+function armaOcR075NumCsv(v){
+  const n=Number(v);
+  if(!Number.isFinite(n))return '""';
+  return String(n).replace('.',',');
+}
+function armaOcR075Excel(data){
+  const fields=['DESCRIPCIÓN','CÓDIGO MATERIAL','TIPO OC','AÑO OC','NÚMERO OC','NÚMERO ÍTEM','FECHA OC','PROVEEDOR','CANTIDAD','MONEDA','COSTO UNITARIO','COSTO TOTAL ÍTEM'];
+  const created=new Date().toLocaleString('es-CO',{timeZone:'America/Bogota'});
+  const csv=['sep=;',
+    ['A.R.M.A. · BUSCADOR DE ÍTEMS OC'].map(armaOcR075CsvCell).join(';'),
+    ['TÉRMINO',data.texto,'COINCIDENCIAS',data.total,'FECHA COLOMBIA',created].map(armaOcR075CsvCell).join(';'),
+    fields.map(armaOcR075CsvCell).join(';')];
+  data.rows.forEach(r=>csv.push([
+    armaOcR075CsvCell(r.DESCRIPCION),armaOcR075CsvCell(r.COD_MP),
+    armaOcR075CsvCell(r.TIPO_OC),armaOcR075CsvCell(r.ANO_OC),
+    armaOcR075CsvCell(r.NRO_OC),armaOcR075CsvCell(r.NMR_ITM),
+    armaOcR075CsvCell(r.FECHA_OC),armaOcR075CsvCell(r.PROVEEDOR),
+    armaOcR075NumCsv(r.CANTIDAD),armaOcR075CsvCell(r.MONEDA),
+    armaOcR075NumCsv(r.COSTO_UNITARIO),armaOcR075NumCsv(r.COSTO_TOTAL_ITEM)
+  ].join(';')));
+  const blob=new Blob(['\uFEFF'+csv.join('\r\n')+'\r\n'],{type:'text/csv;charset=utf-8;'});
+  const safe=data.texto.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'_').slice(0,35)||'BUSQUEDA';
+  const filename='ARMA_OC_ITEMS_'+safe+'_'+new Date().toISOString().slice(0,10)+'.csv';
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),30000);
+}
+function armaOcR075Print(data){
+  const date=new Date().toLocaleString('es-CO',{timeZone:'America/Bogota'});
+  const headers=['DESCRIPCIÓN / CÓDIGO','OC / AÑO','ÍTEM','FECHA','PROVEEDOR','CANT.','MONEDA','COSTO UNIT.','TOTAL ÍTEM'];
+  const rows=data.rows.map(r=>{
+    const numero=(norm(r.TIPO_OC)==='INTERNACIONAL'?'I-':'')+String(r.NRO_OC||'');
+    const vals=[esc(r.DESCRIPCION)+'<br><small>COD. '+esc(r.COD_MP||'—')+'</small>',
+      esc(numero)+' / '+esc(r.ANO_OC),esc(r.NMR_ITM),esc(r.FECHA_OC),
+      esc(r.PROVEEDOR||'SIN CABECERA'),fmtNum(r.CANTIDAD),esc(r.MONEDA||'COP'),
+      esc(money(r.COSTO_UNITARIO,r.MONEDA)),esc(money(r.COSTO_TOTAL_ITEM,r.MONEDA))];
+    return '<tr>'+vals.map((v,i)=>'<td'+(i===5||i>=7?' class="r075-num"':'')+'>'+v+'</td>').join('')+'</tr>';
+  }).join('');
+  $('ocSearchPrintSheet').innerHTML='<h1>A.R.M.A. | REPORTE DE ÍTEMS EN ÓRDENES DE COMPRA</h1>'+
+    '<div class="r075-meta"><b>DESCRIPCIÓN:</b> '+esc(data.texto)+' &nbsp; | &nbsp; <b>COINCIDENCIAS:</b> '+data.total+
+    ' &nbsp; | &nbsp; <b>CONSULTA:</b> '+esc(date)+' (COLOMBIA)</div>'+
+    '<table><thead><tr>'+headers.map(x=>'<th>'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<p class="r075-note">FUENTE: ARMA_DATAPEL_DATA / ÍTEMS OC. LOS VALORES RESPETAN LA MONEDA ORIGINAL; NO SE SUMAN MONEDAS DIFERENTES. DOCUMENTO DE CONSULTA, NO MODIFICA COMPRAS.</p>';
+  document.body.classList.add('oc-r075-print-mode');
+  const restore=()=>{document.body.classList.remove('oc-r075-print-mode');$('ocSearchPrintSheet').innerHTML='';};
+  window.addEventListener('afterprint',restore,{once:true});
+  setTimeout(()=>{if(document.body.classList.contains('oc-r075-print-mode'))restore();},120000);
+  window.print();
+}
+async function armaOcR075Export(mode){
+  if(armaOcSearchState.busy)return;
+  armaOcSearchState.busy=true;
+  ['ocSearchExcel','ocSearchPrint','ocSearchGo','ocSearchPrev','ocSearchNext'].forEach(id=>$(id).disabled=true);
+  try{
+    showLoad('PREPARANDO REPORTE DE ÍTEMS OC...','CONSULTANDO TODAS LAS PÁGINAS DE COINCIDENCIAS.');
+    await nextPaint();
+    const data=await armaOcR075ObtenerTodos();
+    if(mode==='csv')armaOcR075Excel(data);else armaOcR075Print(data);
+  }catch(e){msg(e.message||String(e),'EXPORTACIÓN DE ÍTEMS OC NO COMPLETADA');}
+  finally{
+    armaOcSearchState.busy=false;
+    $('ocSearchGo').disabled=false;
+    $('ocSearchPrev').disabled=armaOcSearchState.pagina<=1;
+    $('ocSearchNext').disabled=armaOcSearchState.pagina>=armaOcSearchState.paginas;
+    armaOcR075SyncButtons();
+    hideLoad();
+  }
+}
+$('ocSearchExcel').addEventListener('click',()=>armaOcR075Export('csv'));
+$('ocSearchPrint').addEventListener('click',()=>armaOcR075Export('print'));
+$('ocSearchTerm').addEventListener('input',armaOcR075SyncButtons);
+// FIN ARMA OC R075
+
 </script>
 </body>
 </html>
