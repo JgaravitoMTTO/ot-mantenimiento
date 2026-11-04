@@ -95,7 +95,7 @@
 <div id="armaR063Estado" class="arma-r063-status" role="status" aria-live="polite"></div>
 <section id="summary" class="summary"></section>
 <div class="layout">
-<aside class="panel"><h3>VARIABLES AUTORIZADAS</h3><label for="armaR065PlantaFiltro">FILTRAR POR PLANTA MEL</label><select id="armaR065PlantaFiltro" onchange="armaR065FilterChanged()"><option value="">TODAS LAS PLANTAS</option></select><input id="varSearch" placeholder="BUSCAR VARIABLE, AM O PUNTO"><button id="armaR065EditButton" class="btn hidden" type="button" onclick="armaR065EditOpen()" style="margin-top:9px;width:100%">EDITAR VARIABLE SELECCIONADA</button><div id="variableList" class="variable-list"><div class="empty">CARGANDO...</div></div></aside>
+<aside class="panel"><h3>VARIABLES AUTORIZADAS</h3><label for="armaR065PlantaFiltro">VER VARIABLES POR PLANTA MEL</label><select id="armaR065PlantaFiltro" onchange="armaR065FilterChanged()"><option value="__ALL_VARIABLES__">TODAS LAS VARIABLES</option><option value="">TODAS LAS PLANTAS</option><option value="__UNASSIGNED__">SIN ASIGNAR</option></select><input id="varSearch" placeholder="BUSCAR VARIABLE, AM O PUNTO"><button id="armaR065EditButton" class="btn hidden" type="button" onclick="armaR065EditOpen()" style="margin-top:9px;width:100%">EDITAR VARIABLE SELECCIONADA</button><div id="variableList" class="variable-list"><div class="empty">CARGANDO...</div></div></aside>
 <section class="panel" id="detail"><div class="empty">SELECCIONE UNA VARIABLE PARA GRAFICAR.</div></section>
 </div>
 <div class="footer">ARMA™ // LECTURAS // VARIABLES AM // ALARMAS POR LÍMITES // TRAZABILIDAD OT</div>
@@ -439,28 +439,36 @@ document.addEventListener('change',function(e){
 });
 // ARMA R065 — catalogo MEL, filtros y administracion estrictamente ADMIN/SUPER_ADMIN.
 let armaR065Plants=[],armaR065CanManage=false;
+// R082: LOS FILTROS SON VISUALES. NO MODIFICAN ALCANCE NI PERMISOS DEL BACKEND.
+function armaR082MatchesPlant(v,sel){
+ const id=String(v&&v.ID_PLANTA_MEL||'').trim();
+ if(sel==='__ALL_VARIABLES__')return true;
+ if(sel==='__UNASSIGNED__')return !id;
+ if(!sel)return !!id;
+ return id===sel;
+}
 const armaR065RenderListBase=renderList;
 renderList=function(){
- const p=byId('armaR065PlantaFiltro'),sel=p?p.value:'';
- if(!sel){armaR065RenderListBase();return;}
+ const p=byId('armaR065PlantaFiltro'),sel=p?p.value:'__ALL_VARIABLES__';
  const original=variables;
- variables=original.filter(v=>String(v.ID_PLANTA_MEL||'')===sel);
+ variables=original.filter(v=>armaR082MatchesPlant(v,sel));
  try{armaR065RenderListBase();}finally{variables=original;}
 };
 function armaR065FilterChanged(){
  renderList();const p=byId('armaR065PlantaFiltro').value;
- if(p&&selectedId&&!(variables.find(v=>v.ID_VARIABLE===selectedId&&v.ID_PLANTA_MEL===p))){
-  const first=variables.find(v=>v.ID_PLANTA_MEL===p);
-  if(first)selectVariable(first.ID_VARIABLE);
-  else{selectedId='';byId('detail').innerHTML='<div class="empty">SIN VARIABLES EN ESTA PLANTA.</div>';paintSummary(window.bootStats||{});}
+ if(!selectedId||!variables.some(v=>v.ID_VARIABLE===selectedId&&armaR082MatchesPlant(v,p))){
+  const first=variables.find(v=>armaR082MatchesPlant(v,p));
+  if(first){void selectVariable(first.ID_VARIABLE);}
+  else{selectedId='';trend=null;byId('detail').innerHTML='<div class="empty">SIN VARIABLES PARA ESTE FILTRO.</div>';paintSummary(window.bootStats||{});}
  }
 }
 function armaR065Bootstrap(j){
  armaR065Plants=Array.isArray(j.plantasLecturas)?j.plantasLecturas:[];
  armaR065CanManage=!!(j.session&&j.session.canManageLecturas);
  const oldValue=byId('armaR065PlantaFiltro').value;
- byId('armaR065PlantaFiltro').innerHTML='<option value="">TODAS LAS PLANTAS</option>'+armaR065Plants.map(p=>'<option value="'+esc(p.id)+'">'+esc(p.nombre)+'</option>').join('');
- if(armaR065Plants.some(p=>p.id===oldValue))byId('armaR065PlantaFiltro').value=oldValue;
+ byId('armaR065PlantaFiltro').innerHTML='<option value="__ALL_VARIABLES__">TODAS LAS VARIABLES</option><option value="">TODAS LAS PLANTAS</option><option value="__UNASSIGNED__">SIN ASIGNAR</option>'+armaR065Plants.map(p=>'<option value="'+esc(p.id)+'">'+esc(p.nombre)+'</option>').join('');
+ if(Array.from(byId('armaR065PlantaFiltro').options).some(o=>o.value===oldValue))byId('armaR065PlantaFiltro').value=oldValue;
+ else byId('armaR065PlantaFiltro').value='__ALL_VARIABLES__';
  byId('armaR065ENELButton').classList.toggle('hidden',!armaR065CanManage);
  byId('armaR065EditButton').classList.toggle('hidden',!armaR065CanManage);
  renderList();
@@ -485,7 +493,7 @@ async function armaR065EditSave(){
   await apiRaw('lecturasVariablesAdminGuardar',{data:{idVariable:id,nombre,idPlantaMel}});
   armaR065EditClose();localStorage.removeItem(lecV02BootKey());
   const j=await apiRaw('lecturasBootstrap');lecV02WriteCache(lecV02BootKey(),j);
-  lecV02ApplyBootstrap(j,false);if(byId('armaR065PlantaFiltro').value&&!variables.some(v=>v.ID_VARIABLE===id&&v.ID_PLANTA_MEL===byId('armaR065PlantaFiltro').value))byId('armaR065PlantaFiltro').value='';await selectVariable(id);
+  lecV02ApplyBootstrap(j,false);if(!variables.some(v=>v.ID_VARIABLE===id&&armaR082MatchesPlant(v,byId('armaR065PlantaFiltro').value))){byId('armaR065PlantaFiltro').value='__ALL_VARIABLES__';renderList();}await selectVariable(id);
   msg('NOMBRE Y PLANTA GUARDADOS EN ARMA_DATA CON AUDITORIA.','VARIABLE ACTUALIZADA');
  }catch(e){msg(e.message,'NO SE GUARDO LA EDICION');}
 }
@@ -496,10 +504,10 @@ ARMA_ENEL_R052_Update=async function(){
  catch(e){msg('OPERACION RESERVADA PARA ADMIN O SUPER_ADMIN.','ACCESO DENEGADO');}
 };
 // Nueva llave evita presentar bootstrap antiguo sin catalogo/rol.
-lecV02BootKey=function(){return 'ARMA_LEC_R065_BOOT_'+lecV02TokenKey();};
+lecV02BootKey=function(){return 'ARMA_LEC_R082_BOOT_'+lecV02TokenKey();};
 lecV02TrendKey=function(id,from,to){return 'ARMA_LEC_R065_TREND_'+lecV02TokenKey()+'_'+String(id||'')+'_'+String(from||'')+'_'+String(to||'');};
 const armaR065BootstrapBase=lecV02ApplyBootstrap;
-lecV02ApplyBootstrap=function(j,c){armaR065BootstrapBase(j,c);armaR065Bootstrap(j);};
+lecV02ApplyBootstrap=function(j,c){armaR065BootstrapBase(j,c);armaR065Bootstrap(j);armaR065FilterChanged();};
 document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
