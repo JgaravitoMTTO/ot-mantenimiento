@@ -247,6 +247,7 @@ textarea{min-height:78px;resize:vertical}
               <div class="field"><label>DECIMALES</label><input id="variableDecimals" type="number" min="0" max="6" value="2"></div>
               <div class="field"><label>LIMITE INFERIOR</label><input id="variableLow" type="number" step="any"></div>
               <div class="field"><label>LIMITE SUPERIOR</label><input id="variableHigh" type="number" step="any"></div>
+              <div class="field"><label>PLANTA MEL DE LA VARIABLE *</label><select id="variablePlant" required><option value="">SELECCIONE PLANTA MEL</option></select></div>
               <div class="field"><label>FUENTE DE DATOS</label><select id="variableSource"><option>MANUAL</option><option>ENERGIA</option><option>DATAPEL</option><option>OTRA</option></select></div>
               <div class="field"><label>CLAVE EXTERNA</label><input id="variableExternalKey" placeholder="IDENTIFICADOR, NO CONTRASENA"></div>
               <div class="field full"><label>OBSERVACION VARIABLE</label><textarea id="variableObs"></textarea></div>
@@ -286,11 +287,11 @@ textarea{min-height:78px;resize:vertical}
       </div>
     </section>
   </div>
-  <div class="footer">ARMA // ACTIVIDADES AM // VARIABLES Y LECTURAS // DATOS EN LINEA // GENERADO: 2026-10-03 22:21:06</div>
+  <div class="footer">ARMA // ACTIVIDADES AM // VARIABLES Y LECTURAS // DATOS EN LINEA // GENERADO: 2026-11-04 17:42:35</div>
 </main>
 <script>
 const API='https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
-const AM_CLIENT_CACHE_BASE='ARMA_AM_FAST_CLIENT_V04_VARIABLES';
+const AM_CLIENT_CACHE_BASE='ARMA_AM_R082_CLIENT_V01_PLANTAS';
 const AM_CLIENT_CACHE_MAX_AGE=43200000;
 const AM_REQUEST_TIMEOUT=25000;
 let session=null;
@@ -302,6 +303,7 @@ let details={};
 let detailOrder=[];
 let variables=[];
 let selectedVariableId='';
+let armaR082Plants=[],armaR082PlantsReady=false;
 let requestSequence=0;
 let loaderCount=0;
 let filterTimer=0;
@@ -446,6 +448,27 @@ function applyCatalog(){
   fillSelect('fLila',catalog.lila||[],true);
   fillSelect('esp',catalog.especialidades||[])
 }
+// R082: LAS PLANTAS VIENEN DEL CATALOGO MEL ACTIVO, NO DE TEXTO LIBRE.
+function armaR082RenderPlants(value,physical){
+  const sel=byId('variablePlant');if(!sel)return;
+  const previous=String(value==null?sel.value:value);
+  const eligible=armaR082Plants.filter(p=>!physical||normalize(p.nombre)===normalize(physical));
+  sel.innerHTML='<option value="">SELECCIONE PLANTA MEL</option>'+eligible.map(p=>'<option value="'+esc(p.id)+'">'+esc(p.nombre)+'</option>').join('');
+  if(eligible.some(p=>String(p.id)===previous))sel.value=previous;else sel.value='';
+}
+async function armaR082LoadPlants(){
+  armaR082PlantsReady=false;armaR082Plants=[];
+  if(!has('BTN_AM_GESTIONAR_VARIABLES')){armaR082RenderPlants('');applyPerms();return;}
+  try{
+    const r=await api('armaR082PlantasCatalogo',{}, {dedupe:true});
+    armaR082Plants=Array.isArray(r.plantas)?r.plantas:[];
+    armaR082PlantsReady=armaR082Plants.length>0;
+    if(!armaR082PlantsReady)throw Error('SIN PLANTAS MEL ACTIVAS');
+    const current=variables.find(v=>String(v.ID_VARIABLE)===String(selectedVariableId));
+    armaR082RenderPlants(current&&current.ID_PLANTA_MEL||'',current&&current.PLANTA_ENEL_FISICA||'');
+  }catch(e){armaR082RenderPlants('');msg('CATALOGO DE PLANTAS NO DISPONIBLE: '+e.message+'. VERIFIQUE ANEXO BACKEND R082 Y PERMISOS.','PLANTAS MEL');}
+  applyPerms();
+}
 function currentFilteredRows(){
   const query=normalize(byId('q').value);
   const state=normalize(byId('fEstado').value);
@@ -477,7 +500,7 @@ function applyPerms(){
   const currentVariable=variables.find(function(v){return String(v.ID_VARIABLE)===String(selectedVariableId)});
   const canReading=!!selectedId&&!!selectedVariableId&&has('BTN_AM_REGISTRAR_LECTURA')&&normalize(currentVariable&&currentVariable.ESTADO_VARIABLE)!=='INACTIVO';
   byId('btnNewVariable').disabled=!canVariable;
-  byId('btnSaveVariable').disabled=!canVariable;
+  byId('btnSaveVariable').disabled=!canVariable||!armaR082PlantsReady;
   byId('btnToggleVariable').disabled=!canVariable||!selectedVariableId;
   byId('btnSaveReading').disabled=!canReading
 }
@@ -529,6 +552,7 @@ function clearVariableForm(){
   byId('variableType').value='INCREMENTAL';byId('variableAlarmBase').value='PROMEDIO_DIARIO';
   byId('variableDecimals').value='2';byId('variableLow').value='';byId('variableHigh').value='';
   byId('variableSource').value='MANUAL';byId('variableExternalKey').value='';byId('variableObs').value='';
+  armaR082RenderPlants('','');
   renderVariableSummary(null);applyPerms()
 }
 function renderVariableSummary(variable){
@@ -556,12 +580,13 @@ function setVariableForm(variable){
   byId('variableHigh').value=variable.LIMITE_SUPERIOR==null?'':variable.LIMITE_SUPERIOR;
   byId('variableSource').value=variable.FUENTE_DATOS||'MANUAL';
   byId('variableExternalKey').value=variable.CLAVE_EXTERNA||'';byId('variableObs').value=variable.OBSERVACION||'';
+  armaR082RenderPlants(variable.ID_PLANTA_MEL||'',variable.PLANTA_ENEL_FISICA||'');
   renderVariableSummary(variable);applyPerms()
 }
 function renderVariables(preferredId){
   const select=byId('variableSelect');
   select.innerHTML=variables.length?variables.map(function(variable){
-    return '<option value="'+esc(variable.ID_VARIABLE)+'">'+esc(variable.CODIGO_VARIABLE)+' // '+esc(variable.NOMBRE_VARIABLE)+(normalize(variable.ESTADO_VARIABLE)==='INACTIVO'?' [INACTIVA]':'')+'</option>'
+    return '<option value="'+esc(variable.ID_VARIABLE)+'">'+esc(variable.CODIGO_VARIABLE)+' // '+esc(variable.NOMBRE_VARIABLE)+' // '+esc(variable.PLANTA_NOMBRE||'SIN ASIGNAR')+(normalize(variable.ESTADO_VARIABLE)==='INACTIVO'?' [INACTIVA]':'')+'</option>'
   }).join(''):'<option value="">SIN VARIABLES ASOCIADAS</option>';
   const target=preferredId||selectedVariableId||(variables[0]&&variables[0].ID_VARIABLE)||'';
   if(target&&variables.some(function(v){return String(v.ID_VARIABLE)===String(target)}))select.value=target;
@@ -569,11 +594,13 @@ function renderVariables(preferredId){
   if(variable)setVariableForm(variable);else clearVariableForm()
 }
 function collectVariable(){
-  return{ID_VARIABLE:selectedVariableId,ID_AM:selectedId,CODIGO_VARIABLE:byId('variableCode').value,NOMBRE_VARIABLE:byId('variableName').value,UNIDAD:byId('variableUnit').value,TIPO_VARIABLE:byId('variableType').value,BASE_ALARMA:byId('variableAlarmBase').value,LIMITE_INFERIOR:byId('variableLow').value,LIMITE_SUPERIOR:byId('variableHigh').value,DECIMALES:byId('variableDecimals').value,FUENTE_DATOS:byId('variableSource').value,CLAVE_EXTERNA:byId('variableExternalKey').value,OBSERVACION:byId('variableObs').value}
+  return{ID_VARIABLE:selectedVariableId,ID_AM:selectedId,CODIGO_VARIABLE:byId('variableCode').value,NOMBRE_VARIABLE:byId('variableName').value,UNIDAD:byId('variableUnit').value,TIPO_VARIABLE:byId('variableType').value,BASE_ALARMA:byId('variableAlarmBase').value,LIMITE_INFERIOR:byId('variableLow').value,LIMITE_SUPERIOR:byId('variableHigh').value,DECIMALES:byId('variableDecimals').value,FUENTE_DATOS:byId('variableSource').value,CLAVE_EXTERNA:byId('variableExternalKey').value,OBSERVACION:byId('variableObs').value,ID_PLANTA_MEL:byId('variablePlant').value}
 }
 async function saveVariable(){
   if(!selectedId)return msg('GUARDE O SELECCIONE PRIMERO UNA AM');
-  try{const response=await api('saveAMVariable',{data:collectVariable()},{busy:true,busyText:'GUARDANDO VARIABLE'});
+  if(!armaR082PlantsReady)return msg('NO SE HA CARGADO EL CATALOGO DE PLANTAS MEL.');
+  if(!byId('variablePlant').value)return msg('ASIGNE UNA PLANTA MEL ANTES DE GUARDAR LA VARIABLE.');
+  try{const response=await api('armaR082GuardarVariableConPlanta',{data:collectVariable()},{busy:true,busyText:'GUARDANDO VARIABLE Y PLANTA'});
     const variable=response.variable||{};const index=variables.findIndex(function(v){return String(v.ID_VARIABLE)===String(variable.ID_VARIABLE)});
     if(index>=0)variables[index]=variable;else variables.push(variable);selectedVariableId=String(variable.ID_VARIABLE||'');renderVariables(selectedVariableId);
     if(details[selectedId])details[selectedId].variables=variables;persistClientCache();msg(response.message+' // '+selectedVariableId,'VARIABLE GUARDADA')
@@ -766,6 +793,7 @@ async function bootstrap(){
     catalog=response.catalog||{};
     rows=response.list&&Array.isArray(response.list.rows)?response.list.rows:[];
     applyCatalog();
+    await armaR082LoadPlants();
     if(selectedId){
       const keep=rows.find(function(row){return String(row.ID_AM||'')===selectedId});
       if(keep)setBaseFields(keep);
