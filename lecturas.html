@@ -57,6 +57,20 @@
 .arma-r063-extremos small{display:block;font-size:10px;color:#526880;font-weight:850}
 .arma-r063-status{color:#00447c;text-align:right;font-size:9px;font-weight:900;max-width:430px;line-height:1.35}
 @media(max-width:700px){.arma-r063-extremos{grid-template-columns:1fr}}
+/* === ARMA R084 // ACCESOS VISUALES ENEL Y ACUEDUCTO // SOLO UI === */
+.arma-hero-actions{gap:10px;align-items:center;flex-wrap:wrap}
+.arma-r084-utilities{display:flex;align-items:center;gap:9px;flex:0 0 auto}
+.arma-r084-service{appearance:none;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:140px;min-height:86px;padding:9px 10px;border:1px solid rgba(255,255,255,.75);border-radius:17px;background:linear-gradient(180deg,#fff 0%,#f3f9ff 100%);color:#003866;text-decoration:none;box-shadow:0 9px 23px rgba(0,21,49,.19);cursor:pointer;font-family:inherit;transition:transform .17s ease,box-shadow .17s ease}
+.arma-r084-service:before{content:"";position:absolute;inset:0 0 auto;height:5px;border-radius:17px 17px 0 0;background:linear-gradient(90deg,#ff5616,#fa3186,#097dea,#47b85a)}
+.arma-r084-water:before{background:linear-gradient(90deg,#006aa5,#00b6d6,#5ed9dc)}
+.arma-r084-service:hover{transform:translateY(-3px);box-shadow:0 15px 30px rgba(0,21,49,.24)}
+.arma-r084-service:focus-visible{outline:3px solid #fef08a;outline-offset:3px}
+.arma-r084-logo{display:flex;align-items:center;justify-content:center;width:100%;height:43px;line-height:1}
+.arma-r084-logo svg{display:block;width:100%;height:100%;overflow:visible}
+.arma-r084-action{display:block;font-size:9px;letter-spacing:1.05px;font-weight:1000;color:#264e77;white-space:nowrap}
+.arma-r084-water .arma-r084-action{color:#087ca7}
+@media(max-width:1050px){.arma-hero-actions{width:100%;justify-content:flex-start;margin-left:0}.arma-r084-utilities{flex:1 0 auto}.arma-r084-service{width:135px}}
+@media(max-width:700px){.arma-hero-actions{display:grid;grid-template-columns:1fr;width:100%}.arma-hero-actions .arma-home-card{width:100%;min-width:0}.arma-r084-utilities{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.arma-r084-service{width:100%;min-width:0;min-height:87px}}
 </style>
 </head>
 <body>
@@ -90,8 +104,27 @@
 <div class="arma-home-icon"><img src="boton-de-inicio.png" alt="INICIO"></div>
 <div class="arma-home-text"><strong>INICIO</strong><span>VOLVER A ARMA</span></div>
 </a>
-<button type="button" id="armaR065ENELButton" class="arma-home-card hidden" style="cursor:pointer;text-align:left;font-family:inherit" onclick="ARMA_ENEL_R052_Update()" aria-label="ACTUALIZAR DESCARGA Y DATOS ENEL EN WINDOWS">
-<div class="arma-home-icon">&#9889;</div><div class="arma-home-text"><strong>ACTUALIZAR ENEL</strong><span>DESCARGAR Y SUBIR DATOS (PC WINDOWS)</span></div></button></div></section>
+<div class="arma-r084-utilities" role="group" aria-label="SERVICIOS EXTERNOS">
+<button type="button" id="armaR065ENELButton" class="arma-r084-service arma-r084-enel hidden" onclick="ARMA_ENEL_R052_Update()" title="ACTUALIZAR DATOS ENEL EN EL AGENTE WINDOWS" aria-label="ENEL: ACTUALIZAR DATOS MEDIANTE EL AGENTE WINDOWS, SOLO USUARIOS AUTORIZADOS">
+<span class="arma-r084-logo" aria-hidden="true">
+<svg viewBox="0 0 150 50" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="armaR084EnelG" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#fd5315"/><stop offset=".37" stop-color="#f12a83"/><stop offset=".70" stop-color="#087ee6"/><stop offset="1" stop-color="#29a95d"/></linearGradient></defs>
+<text x="7" y="39" style="text-transform:lowercase" font-family="Segoe UI,Arial,sans-serif" font-weight="850" font-size="47" letter-spacing="-3" fill="url(#armaR084EnelG)">enel</text>
+</svg></span>
+<span class="arma-r084-action">ACTUALIZAR</span>
+</button>
+<a id="armaR084EAABLink" class="arma-r084-service arma-r084-water" href="https://www.acueducto.com.co/wps/portal/EAB2/Home/atencion-al-usuario/programacion_cortes" target="_blank" rel="noopener noreferrer" data-arma-browser="1" title="CONSULTAR CORTES PROGRAMADOS DEL ACUEDUCTO DE BOGOTA" aria-label="ACUEDUCTO DE BOGOTA: ABRIR PROGRAMACION OFICIAL DE CORTES EN UNA NUEVA PESTANA">
+<span class="arma-r084-logo" aria-hidden="true">
+<svg viewBox="0 0 156 50" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<g fill="none" stroke="#078ec2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="14" r="8"/><circle cx="41" cy="14" r="8"/><path d="M10 24Q29 19 49 24M11 26Q4 35 11 42M48 26Q56 35 48 42M18 31Q30 38 41 31"/></g>
+<text x="61" y="28" style="text-transform:lowercase" font-family="Segoe UI,Arial,sans-serif" font-weight="800" font-size="16" letter-spacing="-.7" fill="#087eb5">acueducto</text>
+<text x="62" y="41" font-family="Segoe UI,Arial,sans-serif" font-weight="800" font-size="10" letter-spacing="1.1" fill="#397c9d">BOGOTA</text>
+</svg></span>
+<span class="arma-r084-action">VER CORTES</span>
+</a>
+</div>
+</div>
+</section>
 <div id="armaR063Estado" class="arma-r063-status" role="status" aria-live="polite"></div>
 <section id="summary" class="summary"></section>
 <div class="layout">
