@@ -286,6 +286,17 @@ select.mel-readonly-field:disabled{opacity:1!important;color:#42546b!important;b
 .mel-readonly-field[data-arma-ro-readonly="1"]{pointer-events:none!important}
 textarea.mel-readonly-field[readonly]{resize:none!important}
 .mel-readonly-active .form-section{background:#f8fafc!important}
+/* MEL R086 - DNI SERIADO / POSICION ITEM */
+.dni-r086-panel{border:2px solid #88c7f8;background:#f7fcff}
+.dni-r086-current{padding:14px;border:1px solid #bce1fc;border-radius:12px;background:#eaf7ff;font-size:14px;font-weight:800;line-height:1.5;margin-bottom:12px}
+.dni-r086-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:10px 0}
+.dni-r086-status{font-size:11px;font-weight:800;color:#0a5685}.dni-r086-status.warning{color:#b45309}
+.dni-r086-history-wrap{padding:12px;border:1px solid #d7e7f8;border-radius:10px;margin:12px 0;background:white}
+.dni-r086-history{padding:5px 0;border-bottom:1px solid #edf3fc;font-size:11px;color:#42607a}
+.dni-r086-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:8px 0 11px}
+.dni-r086-panel h4{margin:20px 0 6px}.dni-r086-panel small{color:#526b89;font-weight:750;line-height:1.4}
+@media(max-width:950px){.dni-r086-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.dni-r086-grid{grid-template-columns:1fr}.dni-r086-controls{flex-direction:column;align-items:stretch}}
 </style>
 </head>
 <body>
@@ -477,7 +488,24 @@ textarea.mel-readonly-field[readonly]{resize:none!important}
           </div>
         </div>
       </form>
-
+<section id="melR086Panel" class="form-section dni-r086-panel" style="display:none">
+  <h4>ACTIVO FISICO / DNI INSTALADO EN ESTA POSICION</h4>
+  <div id="melR086Current" class="dni-r086-current">NO CONSULTADO</div>
+  <div class="dni-r086-controls"><button class="btn" type="button" id="melR086Reload">ACTUALIZAR DNI</button><span id="melR086Status" class="dni-r086-status"></span></div>
+  <div class="dni-r086-history-wrap"><strong>INSTALACIONES HISTORICAS DE LA POSICION</strong><div id="melR086History">SIN CONSULTA</div></div>
+  <div id="melR086Write" style="display:none">
+    <h4>ALTA DE ACTIVO FISICO CON DNI INMUTABLE</h4>
+    <div class="dni-r086-grid"><select id="melR086Type"><option value="">TIPO / CLASE</option></select><input id="melR086Name" placeholder="NOMBRE DE LA UNIDAD FISICA"><input id="melR086Maker" placeholder="FABRICANTE"><input id="melR086Model" placeholder="MODELO"><input id="melR086Serial" placeholder="SERIE FABRICANTE"></div>
+    <button type="button" class="btn green" id="melR086CreateBtn">CREAR DNI FISICO</button>
+    <h4>MOVIMIENTO CONTROLADO / CAMBIO DE UNIDAD</h4>
+    <div class="dni-r086-grid"><select id="melR086Dni"><option value="">SELECCIONE DNI</option></select><select id="melR086Operation"><option value="APROBAR_ALTA">APROBAR ALTA</option><option value="INSTALAR">INSTALAR</option><option value="REEMPLAZAR">REEMPLAZAR / ANTERIOR A AVERIADOS</option><option value="RETIRAR_AVERIADO">RETIRAR A AVERIADOS</option><option value="ENVIAR_TALLER">ENVIAR A TALLER</option><option value="MARCAR_REPARADO">REPARACION FINALIZADA</option><option value="LIBERAR_ALMACEN">LIBERAR A ALMACEN</option><option value="BAJA">BAJA DEFINITIVA</option></select><input id="melR086Ot" placeholder="ID OT (SOPORTE)"><input id="melR086Bt" placeholder="ID BT / RT (SOPORTE)"><input id="melR086Oc" placeholder="OC: TIPO|ANO|NUMERO"><input id="melR086Storage" placeholder="UBICACION ALMACEN"><input id="melR086Evidence" placeholder="RESULTADO DE PRUEBAS TECNICAS / ACTA"><input id="melR086Note" placeholder="OBSERVACION / MOTIVO"></div>
+    <button type="button" class="btn" id="melR086MoveBtn">CONFIRMAR MOVIMIENTO</button>
+    <h4>EVENTO DE FALLA DEL DNI INSTALADO</h4>
+    <div class="dni-r086-grid"><input id="melR086Symptom" placeholder="SINTOMA OBSERVADO"><select id="melR086Modo"><option value="">MODO (PELEX)</option></select><select id="melR086Mecanismo"><option value="">MECANISMO (PELEX)</option></select><select id="melR086Deteccion"><option value="">DETECCION (PELEX)</option></select></div>
+    <button type="button" class="btn gray" id="melR086FailBtn">REGISTRAR FALLA / DIAGNOSTICO SOSPECHADO</button>
+  </div>
+  <small>EL ITEM ES LA UBICACION TECNICA; EL DNI ES LA UNIDAD FISICA. MODOS Y DETECCION: CATALOGO INTERNO PELEX, NO CODIGOS ISO VALIDOS HASTA REVISION.</small>
+</section>
       <div class="form-actions">
         <button id="btnCancel" type="button" class="btn gray">DESCARTAR</button>
         <button id="btnSave" type="button" class="btn green" data-perm="BTN_MEL_EDITAR" data-arma-access="BTN_MEL_EDITAR">GUARDAR ACTIVO</button>
@@ -485,7 +513,7 @@ textarea.mel-readonly-field[readonly]{resize:none!important}
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-09-13 16:28:52</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-11-06 07:47:38</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -568,10 +596,10 @@ let melDefaultPath = [];
 let melSelectedPath = [];
 let melHierarchySelections = {};
 let melHierarchyOptions = {};
-const MEL_LEVELS = ['EMPRESA','PLANTA','AREA','SISTEMA','SUBSISTEMA','EQUIPO','SUBEQUIPO','COMPONENTE_MANTENIBLE'];
-const MEL_CASCADE_LEVELS = ['EMPRESA','PLANTA','AREA','SISTEMA','SUBSISTEMA','EQUIPO','SUBEQUIPO'];
-const MEL_LEVEL_LABELS = {EMPRESA:'EMPRESA',PLANTA:'PLANTA',AREA:'AREA',SISTEMA:'SISTEMA',SUBSISTEMA:'SUBSISTEMA',EQUIPO:'LINEA / EQUIPO',SUBEQUIPO:'SUBEQUIPO'};
-const MEL_LEVEL_FIELDS = {PLANTA:'PLANTA',AREA:'AREA',SISTEMA:'SISTEMA',SUBSISTEMA:'SUBSISTEMA',EQUIPO:'LINEA_EQUIPO',SUBEQUIPO:'SUBEQUIPO',COMPONENTE_MANTENIBLE:'COMPONENTE'};
+const MEL_LEVELS = ['EMPRESA','PLANTA','AREA','SISTEMA','SUBSISTEMA','EQUIPO','SUBEQUIPO','COMPONENTE','ITEM_MANTENIBLE'];
+const MEL_CASCADE_LEVELS = ['EMPRESA','PLANTA','AREA','SISTEMA','SUBSISTEMA','EQUIPO','SUBEQUIPO','COMPONENTE'];
+const MEL_LEVEL_LABELS = {EMPRESA:'EMPRESA',PLANTA:'PLANTA',AREA:'AREA',SISTEMA:'SISTEMA',SUBSISTEMA:'SUBSISTEMA',EQUIPO:'LINEA / EQUIPO',SUBEQUIPO:'SUBEQUIPO',COMPONENTE:'COMPONENTE'};
+const MEL_LEVEL_FIELDS = {PLANTA:'PLANTA',AREA:'AREA',SISTEMA:'SISTEMA',SUBSISTEMA:'SUBSISTEMA',EQUIPO:'LINEA_EQUIPO',SUBEQUIPO:'SUBEQUIPO',COMPONENTE:'COMPONENTE'};
 
 function esc(v) {
   return String(v == null ? "" : v).replace(/[&<>"']/g, function(m) { return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[m]; });
@@ -750,7 +778,7 @@ function fillCatalogSelect(id, type) {
 }
 function renderCatalogos() {
   const levels = (melCatalogos.MEL_NIVEL_JERARQUIA || []).map(x => x.valor || x.codigo).filter(Boolean);
-  const fallback = ["EMPRESA","PLANTA","AREA","SISTEMA","SUBSISTEMA","EQUIPO","SUBEQUIPO","COMPONENTE MANTENIBLE"];
+  const fallback = MEL_LEVELS;
   fillSelect(document.getElementById("filterNivel"), ["TODOS"].concat(levels.length ? levels : fallback), true);
   fillSelect(document.getElementById("nivelSelect"), levels.length ? levels : fallback, false);
   Object.keys(MEL_ISO_CATALOG_MAP).forEach(function(type) {
@@ -1269,9 +1297,12 @@ function setForm(row) {
 }
 // === MEL v11.1: indice jerarquico local y detalle bajo demanda ===
 function melNormLevel(v) {
-  const n = melGeoNorm(v).replace(/[\s\-\/]+/g, '_');
+  let n = String(v == null ? '' : v).trim().toUpperCase();
+  try { n = n.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); } catch(e) {}
+  n = n.replace(/[\s\-\/]+/g, '_').replace(/_+/g, '_');
   if (n === 'SUB_EQUIPO') return 'SUBEQUIPO';
-  if (n === 'COMPONENTE' || n === 'ITEM_MANTENIBLE') return 'COMPONENTE_MANTENIBLE';
+  if (n === 'SUB_SISTEMA') return 'SUBSISTEMA';
+  if (n === 'COMPONENTE_MANTENIBLE') return 'COMPONENTE';
   return n;
 }
 function melLevelIndex(v) {
@@ -1635,7 +1666,7 @@ function melHierarchyRender() {
   if (targetIndex === 0) {
     state.textContent = 'EMPRESA RAIZ';
     state.classList.add('ok');
-  } else if (deepest && melLevelIndex(deepest.NIVEL_DE_JERARQUIA) === targetIndex - 1) {
+  } else if (deepest && (melLevelIndex(deepest.NIVEL_DE_JERARQUIA) === targetIndex - 1 || (melNormLevel(document.getElementById('nivelSelect').value) === 'EQUIPO' && melNormLevel(deepest.NIVEL_DE_JERARQUIA) === 'SISTEMA'))) {
     state.textContent = 'RUTA VALIDADA';
     state.classList.add('ok');
   } else {
@@ -2077,6 +2108,106 @@ document.getElementById('btnCatalogClear').addEventListener('click', melCatalogF
 document.getElementById('catalogType').addEventListener('change', function(){melCatalogFormClear();renderCatalogAdminList();});
 document.getElementById('nivelSelect').addEventListener('change', melOnLevelChange);
 document.getElementById('btnCaptureGeo').addEventListener('click', capturePlantLocation);
+/* ARMA MEL R086 - panel contextual DNI. No modifica funciones históricas MEL */
+let melR086CurrentItem = '';
+let melR086Data = null;
+let melR086Busy = false;
+const melR086OriginalSetForm = setForm;
+setForm = function(row,path) {
+  melR086OriginalSetForm(row,path);
+  const n = row && melNormLevel(row.NIVEL_DE_JERARQUIA);
+  const panel = document.getElementById('melR086Panel');
+  if (!panel) return;
+  const active = n === 'ITEM_MANTENIBLE' && !creatingNew;
+  panel.style.display = active ? 'block' : 'none';
+  const id = active ? String(row.ID_ACTIVO||'') : '';
+  if (id !== melR086CurrentItem) {
+    melR086CurrentItem = id;
+    melR086Data = null;
+    document.getElementById('melR086Status').textContent = active ? 'UBICACIÓN TÉCNICA SELECCIONADA. CARGUE SU HISTORIAL DNI.' : '';
+    if (active) melR086Load();
+  }
+};
+function melR086Select(el,rows,pick,label){
+  const old=el.value;el.innerHTML='<option value="">SELECCIONE...</option>';
+  (rows||[]).forEach(function(r){const v=pick(r),o=document.createElement('option');o.value=v;o.textContent=label(r);el.appendChild(o);});
+  if(Array.from(el.options).some(o=>o.value===old))el.value=old;
+}
+function melR086UiMessage(message,warn){
+  const el=document.getElementById('melR086Status');if(!el)return;
+  el.textContent=String(message||'');el.classList.toggle('warning',!!warn);
+}
+async function melR086Load(){
+  if(!melR086CurrentItem||melR086Busy)return;
+  const id=melR086CurrentItem;melR086UiMessage('CONSULTANDO DNI E HISTORIAL...');
+  try{
+    const res=await apiWithTimeout('melDniFicha',{idItem:id},18000);
+    if(!res.ok)throw new Error(res.error||'ERROR_CONSULTA_DNI');
+    if(id!==melR086CurrentItem)return;
+    melR086Data=res;
+    const installed=res.installed;
+    document.getElementById('melR086Current').innerHTML=installed
+      ? '<b>ACTIVO INSTALADO:</b> '+esc(installed.fisico.CODIGO_INTERNO||installed.fisico.ID_COMPONENTE)+' // '+esc(installed.fisico.NOMBRE_COMPONENTE||'')+'<br><small>'+esc(installed.fisico.ID_COMPONENTE||'')+' · INICIO: '+esc(installed.instalacion.FECHA_INSTALACION||'')+'</small>'
+      : '<b>POSICIÓN LIBRE:</b> SIN DNI INSTALADO';
+    const fleet=res.fleet||[];
+    melR086Select(document.getElementById('melR086Dni'),fleet,x=>x.fisico.ID_COMPONENTE,x=>(x.fisico.CODIGO_INTERNO||x.fisico.ID_COMPONENTE)+' // '+(x.fisico.NOMBRE_COMPONENTE||'')+' ['+(x.custodia.ESTADO_LOGISTICO||'')+' / '+(x.custodia.CONDICION_TECNICA||'')+']');
+    const types=res.types||[];melR086Select(document.getElementById('melR086Type'),types,x=>x.ID_TIPO_COMPONENTE,x=>x.NOMBRE_TIPO+' ('+x.ID_TIPO_COMPONENTE+')');
+    const h=res.history||[];document.getElementById('melR086History').innerHTML=h.length?h.map(x=>'<div class="dni-r086-history">'+esc(x.ID_COMPONENTE)+' · '+esc(x.FECHA_INSTALACION||'')+' ? '+esc(x.FECHA_RETIRO||'EN SERVICIO')+'</div>').join(''):'SIN INSTALACIONES REGISTRADAS';
+    const cat=res.suggestions||[];
+    const grouped={MODO:[],MECANISMO:[],DETECCION:[]};cat.forEach(x=>{const k=String(x.TIPO_CATALOGO||'').toUpperCase();if(grouped[k])grouped[k].push(x);});
+    [['MODO','melR086Modo'],['MECANISMO','melR086Mecanismo'],['DETECCION','melR086Deteccion']].forEach(([key,el])=>melR086Select(document.getElementById(el),grouped[key],x=>x.CODIGO_PELEX,x=>x.DENOMINACION+' [PELEX - '+x.ESTADO_VALIDACION+']'));
+    document.getElementById('melR086Write').style.display=res.canWrite?'block':'none';
+    melR086UiMessage('DNI CARGADOS · '+fleet.length+' ACTIVO(S) EN PLANTA · '+h.length+' INSTALACIÓN(ES) HISTÓRICAS');
+  }catch(e){melR086UiMessage('NO DISPONIBLE: '+String(e.message||e),true);}
+}
+async function melR086Create(){
+  if(!melR086CurrentItem||melR086Busy)return;
+  const type=document.getElementById('melR086Type').value;
+  const name=document.getElementById('melR086Name').value.trim();
+  if(!type||!name){melR086UiMessage('INDIQUE TIPO Y NOMBRE DEL ACTIVO FÍSICO',true);return;}
+  if(!window.confirm('CREAR UN DNI INMUTABLE PARA ESTA UNIDAD FÍSICA? LA ALTA QUEDA PENDIENTE DE ACEPTACIÓN TÉCNICA.'))return;
+  melR086Busy=true;try{
+    const data={ID_ITEM_MEL:melR086CurrentItem,ID_TIPO_COMPONENTE:type,NOMBRE_COMPONENTE:name,FABRICANTE:document.getElementById('melR086Maker').value,MODELO:document.getElementById('melR086Model').value,SERIE:document.getElementById('melR086Serial').value};
+    const raw=JSON.stringify(data),key='ARMA_MEL_R086_ALTA_PENDIENTE';
+    let pending=null;try{pending=JSON.parse(localStorage.getItem(key)||'null');}catch(e){}
+    if(pending&&pending.data===raw){data.ID_OPERACION=pending.id;}else{data.ID_OPERACION=melR086OpId();localStorage.setItem(key,JSON.stringify({data:raw,id:data.ID_OPERACION}));}
+    const r=await apiWithTimeout('melDniCrear',{data:data},23000);if(!r.ok)throw Error(r.error||'ERROR_ALTA_DNI');
+    localStorage.removeItem(key);
+    melR086UiMessage('CREADO '+r.dni+' / '+r.idComponente+' · PENDIENTE DE VERIFICACIÓN');
+  }catch(err){melR086UiMessage('ERROR AL CREAR: '+err.message+' — VERIFIQUE ANTES DE REPETIR, PARA EVITAR DOS DNI',true);}
+  finally{melR086Busy=false;await melR086Load();}
+}
+function melR086OpId(){
+  if(window.crypto&&crypto.randomUUID)return 'DNIOP-'+crypto.randomUUID();
+  return 'DNIOP-'+Date.now()+'-'+Math.random().toString(36).slice(2,12);
+}
+async function melR086Move(){
+  if(!melR086CurrentItem||melR086Busy)return;
+  const t=document.getElementById('melR086Operation').value,id=document.getElementById('melR086Dni').value;
+  const current=melR086Data&&melR086Data.installed;
+  const phys=(t==='RETIRAR_AVERIADO'?current&&current.fisico.ID_COMPONENTE:id);
+  if(!phys){melR086UiMessage('SELECCIONE EL DNI CORRESPONDIENTE',true);return;}
+  if(!window.confirm('CONFIRMAR MOVIMIENTO '+t+' PARA '+phys+'? SE CONSERVARÁ EL HISTORIAL.'))return;
+  const data={ID_OPERACION:melR086OpId(),TIPO_MOVIMIENTO:t,ID_COMPONENTE:phys,ID_ITEM_MEL:melR086CurrentItem,ID_OT:document.getElementById('melR086Ot').value.trim(),ID_BT:document.getElementById('melR086Bt').value.trim(),ID_OC:document.getElementById('melR086Oc').value.trim(),SOPORTE_TECNICO:document.getElementById('melR086Evidence').value.trim(),OBSERVACION:document.getElementById('melR086Note').value.trim(),UBICACION_DETALLE:document.getElementById('melR086Storage').value.trim()};
+  melR086Busy=true;try{
+    const r=await apiWithTimeout('melDniOperacion',{data:data},28000);if(!r.ok)throw Error(r.error||'ERROR_MOVIMIENTO');
+    melR086UiMessage('MOVIMIENTO REGISTRADO: '+r.message);
+  }catch(err){melR086UiMessage('MOVIMIENTO SIN CONFIRMAR: '+err.message+'; NO REPITA SIN VERIFICAR ESTADO',true);}
+  finally{melR086Busy=false;await melR086Load();}
+}
+async function melR086Failure(){
+  if(!melR086CurrentItem||melR086Busy||!melR086Data||!melR086Data.installed)return;
+  const d={ID_ITEM_MEL:melR086CurrentItem,ID_COMPONENTE:melR086Data.installed.fisico.ID_COMPONENTE,ID_OT:document.getElementById('melR086Ot').value.trim(),ID_BT:document.getElementById('melR086Bt').value.trim(),SINTOMA:document.getElementById('melR086Symptom').value.trim(),MODO_CODIGO:document.getElementById('melR086Modo').value,MECANISMO_CODIGO:document.getElementById('melR086Mecanismo').value,DETECCION_CODIGO:document.getElementById('melR086Deteccion').value,OBSERVACION:document.getElementById('melR086Note').value};
+  if(!d.SINTOMA){melR086UiMessage('DESCRIBA EL SÍNTOMA',true);return;}
+  if(!window.confirm('REGISTRAR FALLA PARA EL DNI INSTALADO? EL DIAGNÓSTICO INICIA COMO SOSPECHADO.'))return;
+  melR086Busy=true;try{const r=await apiWithTimeout('melDniRegistrarFalla',{data:d},22000);if(!r.ok)throw Error(r.error||'ERROR_FALLA');melR086UiMessage('FALLA '+r.idFalla+' REGISTRADA COMO SOSPECHADA');}
+  catch(e){melR086UiMessage('REGISTRO NO CONFIRMADO: '+e.message,true);}
+  finally{melR086Busy=false;await melR086Load();}
+}
+document.getElementById('melR086Reload').addEventListener('click',melR086Load);
+document.getElementById('melR086CreateBtn').addEventListener('click',melR086Create);
+document.getElementById('melR086MoveBtn').addEventListener('click',melR086Move);
+document.getElementById('melR086FailBtn').addEventListener('click',melR086Failure);
 init();
 </script>
 </body>
