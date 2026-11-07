@@ -297,6 +297,18 @@ textarea.mel-readonly-field[readonly]{resize:none!important}
 .dni-r086-panel h4{margin:20px 0 6px}.dni-r086-panel small{color:#526b89;font-weight:750;line-height:1.4}
 @media(max-width:950px){.dni-r086-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.dni-r086-grid{grid-template-columns:1fr}.dni-r086-controls{flex-direction:column;align-items:stretch}}
+/* R089 CANDIDATO VISUAL ARMA: NAVEGACION, CONTRASTE Y MOVIL */
+:root{--blue:#003b7a;--blue2:#0076d7;--green:#43b52f;--bg:#eef4fa;--line:#d2e3f2;--shadow:0 12px 29px rgba(0,43,92,.10)}
+.top-global{border-bottom:5px solid #0076d7;box-shadow:0 6px 18px rgba(0,43,92,.08)}.hero{border-bottom:4px solid #43b52f;background:linear-gradient(125deg,#002b66,#005bb0 65%,#058dd0);border-radius:20px}
+.main{max-width:1800px;margin:auto}.action-row{gap:10px}.action-card{border-radius:15px;border:1px solid #d4e4f2;border-left:5px solid #0076d7;box-shadow:0 7px 20px rgba(0,43,92,.085)}.action-card.green{border-left-color:#46b532}
+.panel,.asset-summary-panel{border-radius:18px;border-color:#d3e2ef;box-shadow:0 9px 22px rgba(0,43,92,.075)}.form-section{border-radius:14px;background:linear-gradient(180deg,#fff,#f9fcff)}
+.form-section h4,.panel-title h3{color:#003b7a}.tree-row:hover{background:#e9f5ff}.tree-row.selected{background:#e8f9e8;border-color:#42b82f}
+.btn{background:linear-gradient(135deg,#0b86e0,#004c98);border-radius:11px;box-shadow:0 5px 13px rgba(0,60,130,.17)}.btn.green{background:linear-gradient(135deg,#25c65c,#3aa72d)}.btn.gray{background:linear-gradient(135deg,#8595a9,#5f7189)}
+input,select,textarea{border:1px solid #c7ddee;border-radius:11px;min-height:42px;padding:10px 12px}input:focus,select:focus,textarea:focus{outline:2px solid #75c5f3;outline-offset:1px}
+.detail-head{background:linear-gradient(110deg,#f3faff,#fff);border-top:4px solid #0783d4}.selected-name{color:#002f67}.summary-right .btn{border-radius:11px}
+.media-modal-toolbar{border-bottom:4px solid #0d8ed1}.catalog-modal-card,.media-modal-card{border-radius:18px}.footer{border-left:5px solid #47b636}
+@media(max-width:900px){html{zoom:100%}.top-global{position:relative;height:auto;min-height:90px;flex-wrap:wrap;gap:10px}.action-row{position:static!important;grid-template-columns:repeat(2,minmax(0,1fr))}.asset-summary-panel{position:static!important}.workspace{grid-template-columns:1fr}}
+@media(max-width:700px){.top-global{padding:10px}.brand{gap:10px}.main{padding:9px}.hero{padding:15px}.hero h2{font-size:23px}.action-row{grid-template-columns:1fr}.action-card{min-height:62px}.panel{padding:12px}.detail-head{grid-template-columns:1fr!important}.selected-name{font-size:24px!important}.btn,button,input,select,textarea{min-height:48px;font-size:16px!important}}
 </style>
 </head>
 <body>
@@ -513,7 +525,7 @@ textarea.mel-readonly-field[readonly]{resize:none!important}
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-11-06 21:08:04</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-11-06 23:55:02</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -1815,7 +1827,7 @@ async function saveAsset(){
       melV136Saving=true;showLoader('VERIFICANDO CREACION ANTERIOR...');
       try{const prev=await melV136VerifyCreated(pending.data,pending.existingIds||[],pending.clientKey||'');if(prev){melV136DraftClear();const pid=prev.ID_ACTIVO||melAssetKey(prev);toast('ACTIVO YA CREADO Y CONFIRMADO: '+pid);hideLoader();melV136Saving=false;loadMEL(pid,false,true);return;}}
       finally{hideLoader();melV136Saving=false;}
-      if(!window.confirm('A.R.M.A. NO ENCONTRO CONFIRMACION DEL INTENTO ANTERIOR.\n\nLOS DATOS SIGUEN PROTEGIDOS.\n\n¿DESEA ENVIAR NUEVAMENTE LA CREACION?'))return;
+      if(!window.confirm('A.R.M.A. NO ENCONTRO CONFIRMACION DEL INTENTO ANTERIOR.\n\nLOS DATOS SIGUEN PROTEGIDOS.\n\nDESEA ENVIAR NUEVAMENTE LA CREACION?'))return;
     }
     const existingIds=Object.keys(melNodeMap||{}).filter(Boolean);
     const currentDraft=melV136DraftRead();
@@ -2050,7 +2062,7 @@ async function saveAsset(){
         const prev=await melV136VerifyCreated(pending.data,pending.existingIds||[],pending.clientKey||'');
         if(prev){const pid=prev.ID_ACTIVO||melAssetKey(prev);melV136DraftClear();toast('ACTIVO YA CREADO Y CONFIRMADO: '+pid);hideLoader();melV136Saving=false;await selectAsset(pid,false);return;}
       }finally{hideLoader();melV136Saving=false;}
-      if(!window.confirm('A.R.M.A. NO ENCONTRO CONFIRMACION DEL INTENTO ANTERIOR.\n\nLOS DATOS SIGUEN PROTEGIDOS.\n\n¿DESEA ENVIAR NUEVAMENTE LA CREACION?'))return;
+      if(!window.confirm('A.R.M.A. NO ENCONTRO CONFIRMACION DEL INTENTO ANTERIOR.\n\nLOS DATOS SIGUEN PROTEGIDOS.\n\nDESEA ENVIAR NUEVAMENTE LA CREACION?'))return;
     }
     const existingIds=Object.keys(melNodeMap||{}).filter(Boolean),currentDraft=melV136DraftRead(),clientKey=melV137EnsureKey(currentDraft);
     melV136DraftSave(data,'PENDING_CONFIRMATION',existingIds,'',clientKey);melV136Saving=true;showLoader('CREANDO ACTIVO...');
@@ -2108,7 +2120,7 @@ document.getElementById('btnCatalogClear').addEventListener('click', melCatalogF
 document.getElementById('catalogType').addEventListener('change', function(){melCatalogFormClear();renderCatalogAdminList();});
 document.getElementById('nivelSelect').addEventListener('change', melOnLevelChange);
 document.getElementById('btnCaptureGeo').addEventListener('click', capturePlantLocation);
-/* ARMA MEL R086 - panel contextual DNI. No modifica funciones históricas MEL */
+/* ARMA MEL R086 - panel contextual DNI. No modifica funciones historicas MEL */
 let melR086CurrentItem = '';
 let melR086Data = null;
 let melR086Busy = false;
@@ -2124,7 +2136,7 @@ setForm = function(row,path) {
   if (id !== melR086CurrentItem) {
     melR086CurrentItem = id;
     melR086Data = null;
-    document.getElementById('melR086Status').textContent = active ? 'UBICACIÓN TÉCNICA SELECCIONADA. CARGUE SU HISTORIAL DNI.' : '';
+    document.getElementById('melR086Status').textContent = active ? 'UBICACION TECNICA SELECCIONADA. CARGUE SU HISTORIAL DNI.' : '';
     if (active) melR086Load();
   }
 };
@@ -2147,25 +2159,25 @@ async function melR086Load(){
     melR086Data=res;
     const installed=res.installed;
     document.getElementById('melR086Current').innerHTML=installed
-      ? '<b>ACTIVO INSTALADO:</b> '+esc(installed.fisico.CODIGO_INTERNO||installed.fisico.ID_COMPONENTE)+' // '+esc(installed.fisico.NOMBRE_COMPONENTE||'')+'<br><small>'+esc(installed.fisico.ID_COMPONENTE||'')+' · INICIO: '+esc(installed.instalacion.FECHA_INSTALACION||'')+'</small>'
-      : '<b>POSICIÓN LIBRE:</b> SIN IAF INSTALADO';
+      ? '<b>ACTIVO INSTALADO:</b> '+esc(installed.fisico.CODIGO_INTERNO||installed.fisico.ID_COMPONENTE)+' // '+esc(installed.fisico.NOMBRE_COMPONENTE||'')+'<br><small>'+esc(installed.fisico.ID_COMPONENTE||'')+'  INICIO: '+esc(installed.instalacion.FECHA_INSTALACION||'')+'</small>'
+      : '<b>POSICION LIBRE:</b> SIN IAF INSTALADO';
     const fleet=res.fleet||[];
     melR086Select(document.getElementById('melR086Dni'),fleet,x=>x.fisico.ID_COMPONENTE,x=>(x.fisico.CODIGO_INTERNO||x.fisico.ID_COMPONENTE)+' // '+(x.fisico.NOMBRE_COMPONENTE||'')+' ['+(x.custodia.ESTADO_LOGISTICO||'')+' / '+(x.custodia.CONDICION_TECNICA||'')+']');
     const types=res.types||[];melR086Select(document.getElementById('melR086Type'),types,x=>x.ID_TIPO_COMPONENTE,x=>x.NOMBRE_TIPO+' ('+x.ID_TIPO_COMPONENTE+')');
-    const h=res.history||[];document.getElementById('melR086History').innerHTML=h.length?h.map(x=>'<div class="dni-r086-history">'+esc(x.ID_COMPONENTE)+' · '+esc(x.FECHA_INSTALACION||'')+' ? '+esc(x.FECHA_RETIRO||'EN SERVICIO')+'</div>').join(''):'SIN INSTALACIONES REGISTRADAS';
+    const h=res.history||[];document.getElementById('melR086History').innerHTML=h.length?h.map(x=>'<div class="dni-r086-history">'+esc(x.ID_COMPONENTE)+'  '+esc(x.FECHA_INSTALACION||'')+' ? '+esc(x.FECHA_RETIRO||'EN SERVICIO')+'</div>').join(''):'SIN INSTALACIONES REGISTRADAS';
     const cat=res.suggestions||[];
     const grouped={MODO:[],MECANISMO:[],DETECCION:[]};cat.forEach(x=>{const k=String(x.TIPO_CATALOGO||'').toUpperCase();if(grouped[k])grouped[k].push(x);});
     [['MODO','melR086Modo'],['MECANISMO','melR086Mecanismo'],['DETECCION','melR086Deteccion']].forEach(([key,el])=>melR086Select(document.getElementById(el),grouped[key],x=>x.CODIGO_PELEX,x=>x.DENOMINACION+' [PELEX - '+x.ESTADO_VALIDACION+']'));
     document.getElementById('melR086Write').style.display=res.canWrite?'block':'none';
-    melR086UiMessage('IAF CARGADOS · '+fleet.length+' ACTIVO(S) EN PLANTA · '+h.length+' INSTALACIÓN(ES) HISTÓRICAS');
+    melR086UiMessage('IAF CARGADOS  '+fleet.length+' ACTIVO(S) EN PLANTA  '+h.length+' INSTALACION(ES) HISTORICAS');
   }catch(e){melR086UiMessage('NO DISPONIBLE: '+String(e.message||e),true);}
 }
 async function melR086Create(){
   if(!melR086CurrentItem||melR086Busy)return;
   const type=document.getElementById('melR086Type').value;
   const name=document.getElementById('melR086Name').value.trim();
-  if(!type||!name){melR086UiMessage('INDIQUE TIPO Y NOMBRE DEL ACTIVO FÍSICO',true);return;}
-  if(!window.confirm('CREAR UN DNI INMUTABLE PARA ESTA UNIDAD FÍSICA? LA ALTA QUEDA PENDIENTE DE ACEPTACIÓN TÉCNICA.'))return;
+  if(!type||!name){melR086UiMessage('INDIQUE TIPO Y NOMBRE DEL ACTIVO FISICO',true);return;}
+  if(!window.confirm('CREAR UN DNI INMUTABLE PARA ESTA UNIDAD FISICA? LA ALTA QUEDA PENDIENTE DE ACEPTACION TECNICA.'))return;
   melR086Busy=true;try{
     const data={ID_ITEM_MEL:melR086CurrentItem,ID_TIPO_COMPONENTE:type,NOMBRE_COMPONENTE:name,FABRICANTE:document.getElementById('melR086Maker').value,MODELO:document.getElementById('melR086Model').value,SERIE:document.getElementById('melR086Serial').value};
     const raw=JSON.stringify(data),key='ARMA_MEL_R086_ALTA_PENDIENTE';
@@ -2173,8 +2185,8 @@ async function melR086Create(){
     if(pending&&pending.data===raw){data.ID_OPERACION=pending.id;}else{data.ID_OPERACION=melR086OpId();localStorage.setItem(key,JSON.stringify({data:raw,id:data.ID_OPERACION}));}
     const r=await apiWithTimeout('melDniCrear',{data:data},23000);if(!r.ok)throw Error(r.error||'ERROR_ALTA_DNI');
     localStorage.removeItem(key);
-    melR086UiMessage('CREADO '+r.dni+' / '+r.idComponente+' · PENDIENTE DE VERIFICACIÓN');
-  }catch(err){melR086UiMessage('ERROR AL CREAR: '+err.message+' — VERIFIQUE ANTES DE REPETIR, PARA EVITAR DOS DNI',true);}
+    melR086UiMessage('CREADO '+r.dni+' / '+r.idComponente+'  PENDIENTE DE VERIFICACION');
+  }catch(err){melR086UiMessage('ERROR AL CREAR: '+err.message+'  VERIFIQUE ANTES DE REPETIR, PARA EVITAR DOS DNI',true);}
   finally{melR086Busy=false;await melR086Load();}
 }
 function melR086OpId(){
@@ -2187,7 +2199,7 @@ async function melR086Move(){
   const current=melR086Data&&melR086Data.installed;
   const phys=(t==='RETIRAR_AVERIADO'?current&&current.fisico.ID_COMPONENTE:id);
   if(!phys){melR086UiMessage('SELECCIONE EL DNI CORRESPONDIENTE',true);return;}
-  if(!window.confirm('CONFIRMAR MOVIMIENTO '+t+' PARA '+phys+'? SE CONSERVARÁ EL HISTORIAL.'))return;
+  if(!window.confirm('CONFIRMAR MOVIMIENTO '+t+' PARA '+phys+'? SE CONSERVARA EL HISTORIAL.'))return;
   const data={ID_OPERACION:melR086OpId(),TIPO_MOVIMIENTO:t,ID_COMPONENTE:phys,ID_ITEM_MEL:melR086CurrentItem,ID_OT:document.getElementById('melR086Ot').value.trim(),ID_BT:document.getElementById('melR086Bt').value.trim(),ID_OC:document.getElementById('melR086Oc').value.trim(),SOPORTE_TECNICO:document.getElementById('melR086Evidence').value.trim(),OBSERVACION:document.getElementById('melR086Note').value.trim(),UBICACION_DETALLE:document.getElementById('melR086Storage').value.trim()};
   melR086Busy=true;try{
     const r=await apiWithTimeout('melDniOperacion',{data:data},28000);if(!r.ok)throw Error(r.error||'ERROR_MOVIMIENTO');
@@ -2198,8 +2210,8 @@ async function melR086Move(){
 async function melR086Failure(){
   if(!melR086CurrentItem||melR086Busy||!melR086Data||!melR086Data.installed)return;
   const d={ID_ITEM_MEL:melR086CurrentItem,ID_COMPONENTE:melR086Data.installed.fisico.ID_COMPONENTE,ID_OT:document.getElementById('melR086Ot').value.trim(),ID_BT:document.getElementById('melR086Bt').value.trim(),SINTOMA:document.getElementById('melR086Symptom').value.trim(),MODO_CODIGO:document.getElementById('melR086Modo').value,MECANISMO_CODIGO:document.getElementById('melR086Mecanismo').value,DETECCION_CODIGO:document.getElementById('melR086Deteccion').value,OBSERVACION:document.getElementById('melR086Note').value};
-  if(!d.SINTOMA){melR086UiMessage('DESCRIBA EL SÍNTOMA',true);return;}
-  if(!window.confirm('REGISTRAR FALLA PARA EL DNI INSTALADO? EL DIAGNÓSTICO INICIA COMO SOSPECHADO.'))return;
+  if(!d.SINTOMA){melR086UiMessage('DESCRIBA EL SINTOMA',true);return;}
+  if(!window.confirm('REGISTRAR FALLA PARA EL DNI INSTALADO? EL DIAGNOSTICO INICIA COMO SOSPECHADO.'))return;
   melR086Busy=true;try{const r=await apiWithTimeout('melDniRegistrarFalla',{data:d},22000);if(!r.ok)throw Error(r.error||'ERROR_FALLA');melR086UiMessage('FALLA '+r.idFalla+' REGISTRADA COMO SOSPECHADA');}
   catch(e){melR086UiMessage('REGISTRO NO CONFIRMADO: '+e.message,true);}
   finally{melR086Busy=false;await melR086Load();}
