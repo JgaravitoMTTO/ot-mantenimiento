@@ -521,8 +521,8 @@ body.arma-logged .alarm-center-card{display:flex}
           <span class='btn-text'>MATRIZ DE CRITICIDAD</span>
         </a>
         <a class='arma-btn green arma-secured arma-locked' data-perm='BTN_COMPONENTES' href='componentes_repuestos.html' data-arma-window='ARMA_MODULO_COMPONENTES_REPUESTOS_HTML' target='ARMA_MODULO_COMPONENTES_REPUESTOS_HTML' title='GESTION E INVENTARIO DE ITEMS NO MANTENIBLES O DE REPUESTOS'>
-          <span class='btn-icon btn-icon-img'><img src='cartulina.png' alt='COMPONENTES Y REPUESTOS'></span>
-          <span class='btn-text'>COMPONENTES Y REPUESTOS</span>
+          <span class='btn-icon btn-icon-img'><img src='cartulina.png' alt='GESTION DE ITEMS Y REPUESTOS'></span>
+          <span class='btn-text'>GESTION DE ITEMS Y REPUESTOS</span>
         </a>
         <a class='arma-btn blue arma-secured arma-locked' data-perm='BTN_HOJAS_VIDA' href='hoja_vida.html' data-arma-window='ARMA_HOJA_VIDA' target='ARMA_HOJA_VIDA' title='HISTORIAL POR EQUIPO O ACTIVO'>
           <span class='btn-icon btn-icon-img'><img src='contrato.png' alt='HOJA DE VIDA DE EQUIPOS'></span>
@@ -688,6 +688,10 @@ body.arma-logged .alarm-center-card{display:flex}
           <span class='btn-icon'>IG</span>
           <span class='btn-text'>INDICADORES DE GESTION</span>
         </a>
+        <a class='arma-btn green arma-secured arma-locked' data-login-required='1' data-perm='' href='#arma-escanear' title='ESCANEAR CÓDIGOS IAF Y MEL DESDE CELULAR CON SESIÓN ACTIVA'>
+          <span class='btn-icon'>QR</span>
+          <span class='btn-text'>ESCANEAR QR</span>
+        </a>
       </div>
     </div>
   </section>
@@ -698,7 +702,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-11-04 21:07:11</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-11-06 21:09:50</span></div>
   </footer>
 </main>
 </div>
@@ -765,6 +769,12 @@ body.arma-logged .alarm-center-card{display:flex}
   </div>
 </div>
 
+<div id="armaR087QrModal" aria-hidden="true" style="display:none;position:fixed;inset:0;z-index:99990;align-items:center;justify-content:center;background:rgba(1,15,34,.88);padding:10px">
+<div style="width:min(96vw,650px);max-height:94vh;overflow:auto;background:#fff;border:3px solid #0070c8;border-radius:18px;padding:16px;text-align:left;color:#003b7a;font-family:Arial,sans-serif"><div style="display:flex;justify-content:space-between;align-items:center"><h2>ESCANEAR IAF / MEL</h2><button id="armaR087QrCerrar" type="button" style="padding:10px">CERRAR</button></div>
+<p>ESCANEE EL CÓDIGO DE LA PLACA O EL QR MEL. CUALQUIER USUARIO CON SESIÓN ACTIVA PUEDE CONSULTAR LA IDENTIFICACIÓN BÁSICA.</p><div id="armaR087QrReader" style="width:min(100%,410px);min-height:180px;margin:auto"></div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin:12px 0"><button type="button" id="armaR087QrCamera">INICIAR CÁMARA</button><button type="button" id="armaR087QrStop">DETENER</button><label for="armaR087QrFile" style="padding:8px;border:1px solid #ccc;cursor:pointer">LEER FOTO QR</label><input type="file" accept="image/*" id="armaR087QrFile" style="max-width:180px"></div>
+<div style="display:flex;gap:7px"><input id="armaR087QrInput" placeholder="IAF-000001 O PLX-..." style="flex:1;min-width:80px;padding:10px"><button id="armaR087QrSubmit" type="button">CONSULTAR</button></div><p id="armaR087QrStatus" role="status"></p><pre id="armaR087QrResult" style="white-space:pre-wrap;font-size:16px"></pre>
+<a id="armaR087QrLink" style="display:none;background:#0869c5;color:#fff;padding:12px;border-radius:9px;text-decoration:none;font-weight:bold" href="#" rel="noopener">ABRIR FICHA DEL ACTIVO</a><p style="font-size:12px">EL QR NO CONTIENE CREDENCIALES. LA CÁMARA REQUIERE HTTPS Y PERMISOS DEL NAVEGADOR. EN SIN CONEXIÓN USE IDENTIFICACIÓN IMPRESA.</p></div></div>
 <script>
 const ARMA_API_URL = 'https://script.google.com/macros/s/AKfycbyuMMeKzICtFnCnMA3xfmBj9hR1KHklRXytrod5Cj6FVOjjUBrem6bf7JW_Omd68X1FEQ/exec';
 // ARMA R083 EAAB: consulta publica de un resultado semanal precalculado en Apps Script.
@@ -1977,6 +1987,33 @@ document.addEventListener('DOMContentLoaded',function(){
   document.addEventListener('click',function(){const u=document.getElementById('userCard');if(u)u.classList.remove('open');});
   armaMainV14Init();
   armaAlarmInit();
+});
+/* R087 MAIN / HERRAMIENTAS / ESCANEAR — Todos los usuarios autenticados */
+let armaR087QrInstance=null,armaR087QrRunning=false,armaR087QrPending=false;
+function armaR087El(id){return document.getElementById(id);}
+function armaR087QrOpen(){if(!armaSession||!armaSession.token){armaOpenLogin();return;}const m=armaR087El('armaR087QrModal');m.style.display='flex';m.setAttribute('aria-hidden','false');armaR087El('armaR087QrInput').focus();}
+async function armaR087QrStop(){try{if(armaR087QrRunning&&armaR087QrInstance)await armaR087QrInstance.stop();}catch(e){}armaR087QrRunning=false;try{if(armaR087QrInstance)armaR087QrInstance.clear();}catch(e){}}
+async function armaR087QrClose(){await armaR087QrStop();const m=armaR087El('armaR087QrModal');m.style.display='none';m.setAttribute('aria-hidden','true');}
+async function armaR087QrLoadLib(){if(window.Html5Qrcode)return true;let el=document.getElementById('armaR087QrLib');if(!el){el=document.createElement('script');el.id='armaR087QrLib';el.src='https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';el.crossOrigin='anonymous';document.head.appendChild(el);}return new Promise(ok=>{if(window.Html5Qrcode)return ok(true);el.addEventListener('load',()=>ok(!!window.Html5Qrcode),{once:true});el.addEventListener('error',()=>ok(false),{once:true});setTimeout(()=>ok(!!window.Html5Qrcode),12000);});}
+async function armaR087QrStart(){armaR087QrOpen();const status=armaR087El('armaR087QrStatus');status.textContent='INICIANDO CÁMARA. AUTORICE SU USO EN EL NAVEGADOR...';if(!(await armaR087QrLoadLib())){status.textContent='NO SE PUDO CARGAR LA LECTURA POR CÁMARA. USE FOTO O INGRESO MANUAL CON INTERNET.';return;}try{if(!armaR087QrInstance)armaR087QrInstance=new Html5Qrcode('armaR087QrReader',{verbose:false});if(armaR087QrRunning)return;await armaR087QrInstance.start({facingMode:'environment'},{fps:10,qrbox:{width:230,height:230}},async(value)=>{await armaR087QrStop();armaR087El('armaR087QrInput').value=value;armaR087QrResolve(value);},()=>{});armaR087QrRunning=true;status.textContent='APUNTE EL QR DENTRO DEL RECUADRO.';}catch(e){status.textContent='CÁMARA NO DISPONIBLE: '+String(e.message||e)+'; PRUEBE FOTO O CÓDIGO MANUAL.';}}
+async function armaR087QrFromFile(input){const file=input&&input.files&&input.files[0];if(!file)return;armaR087QrOpen();const status=armaR087El('armaR087QrStatus');await armaR087QrStop();if(!(await armaR087QrLoadLib())){status.textContent='NO SE PUDO LEER LA FOTO SIN EL MOTOR QR. USE EL CÓDIGO MANUAL.';return;}try{if(!armaR087QrInstance)armaR087QrInstance=new Html5Qrcode('armaR087QrReader',{verbose:false});const value=await armaR087QrInstance.scanFile(file,true);armaR087El('armaR087QrInput').value=value;await armaR087QrResolve(value);}catch(e){status.textContent='EL ARCHIVO NO CONTIENE UN QR LEGIBLE: '+String(e.message||e).slice(0,150);}finally{input.value='';}}
+function armaR087QrNormalize(raw){let s=String(raw||'').trim();if(s.length>900)throw Error('QR_DEMASIADO_LARGO');try{const u=new URL(s);if(u.protocol!=='https:'||u.hostname!=='jgaravitomtto.github.io'||!u.pathname.startsWith('/ot-mantenimiento/'))throw Error('QR_DE_OTRO_SITIO_NO_PERMITIDO');s=u.searchParams.get('armaqr')||u.searchParams.get('iaf')||u.searchParams.get('armaid')||'';}catch(e){if(/^https?:\/\//i.test(s))throw Error('QR_NO_PERTENECE_A_ARMA');}const legacy=s.match(/ID ACTIVO:\s*(PLX-[0-9A-Z-]+)/i);if(legacy)s=legacy[1];return s.trim();}
+async function armaR087QrResolve(raw){armaR087QrOpen();if(armaR087QrPending)return;armaR087QrPending=true;const status=armaR087El('armaR087QrStatus'),answer=armaR087El('armaR087QrResult');answer.textContent='';try{const code=armaR087QrNormalize(raw||armaR087El('armaR087QrInput').value);if(!code)throw Error('ESCANEE UN QR O DIGITE IAF/TAG/ID MEL');status.textContent='CONSULTANDO ARMA...';const d=await armaApi('armaR087ResolverQR',{token:armaSession.token,codigo:code});if(!d||!d.ok)throw Error((d&&d.error)||'SIN RESULTADO');const ficha=d.ficha||{},detalle=(d.tipo==='IAF'?[
+ ['ID TÉCNICO',ficha.idInterno],['CLASE',ficha.clase],['FABRICANTE',ficha.fabricante],['MODELO',ficha.modelo],['SERIE',ficha.serie],['REFERENCIA',ficha.referencia],['ESPECIFICACIÓN',ficha.especificacion],['PLANTA CUSTODIA',ficha.planta],['POSICIÓN MEL',ficha.idPosicion],['INSTALACIONES HISTÓRICAS',ficha.totalInstalaciones],['FALLAS REGISTRADAS',ficha.totalFallas]]:
+ [['TAG',ficha.tag],['NIVEL MEL',ficha.nivel],['PADRE',ficha.padre],['RUTA',ficha.ruta],['PLANTA',ficha.planta],['CLASE ISO',ficha.clase],['TIPO ISO',ficha.tipoEquipo],['FABRICANTE',ficha.fabricante],['MODELO',ficha.modelo],['SERIE',ficha.serie]]).filter(r=>r[1]!==''&&r[1]!=null).map(r=>r[0]+': '+r[1]).join('\n');
+answer.textContent=(d.tipo==='IAF'?'FICHA DE ÍTEM FÍSICO / ':'FICHA DE UBICACIÓN MEL / ')+d.codigo+'\n'+d.nombre+'\n'+(d.estado||'')+' '+(d.condicion||'')+'\n'+(d.ubicacion||'')+(detalle?'\n\n'+detalle:'');const link=armaR087El('armaR087QrLink');const url=new URL(d.url);if(url.hostname!=='jgaravitomtto.github.io')throw Error('ENLACE_NO_AUTORIZADO');link.href=url.href;link.style.display='inline-flex';status.textContent='FICHA LOCALIZADA. LA EDICIÓN EXIGE PERMISOS.';}catch(e){status.textContent='NO SE PUDO RESOLVER: '+String(e.message||e);armaR087El('armaR087QrLink').style.display='none';}finally{armaR087QrPending=false;}}
+function armaR087QrDeepLink(){try{const q=new URLSearchParams(location.search).get('armaqr');if(!q||!armaSession||!armaSession.token)return;const key='ARMA_R087_QR_HANDLED_'+q;if(sessionStorage.getItem(key)==='1')return;sessionStorage.setItem(key,'1');armaR087QrOpen();armaR087El('armaR087QrInput').value=q;armaR087QrResolve(q);}catch(e){}}
+const armaR087OriginalSetSession=armaSetSession;
+armaSetSession=function(data){armaR087OriginalSetSession(data);setTimeout(armaR087QrDeepLink,350);};
+document.addEventListener('DOMContentLoaded',function(){
+ const b=document.querySelector('a[href="#arma-escanear"]');if(b)b.addEventListener('click',function(e){e.preventDefault();if(!b.classList.contains('arma-locked'))armaR087QrOpen();});
+ armaR087El('armaR087QrCerrar').addEventListener('click',armaR087QrClose);
+ armaR087El('armaR087QrCamera').addEventListener('click',armaR087QrStart);
+ armaR087El('armaR087QrStop').addEventListener('click',armaR087QrStop);
+ armaR087El('armaR087QrFile').addEventListener('change',function(){armaR087QrFromFile(this);});
+ armaR087El('armaR087QrSubmit').addEventListener('click',()=>armaR087QrResolve());
+ armaR087El('armaR087QrInput').addEventListener('keydown',e=>{if(e.key==='Enter')armaR087QrResolve();});
+ setTimeout(armaR087QrDeepLink,1500);
 });
 </script>
 </body>
