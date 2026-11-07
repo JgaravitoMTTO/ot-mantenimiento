@@ -489,22 +489,22 @@ textarea.mel-readonly-field[readonly]{resize:none!important}
         </div>
       </form>
 <section id="melR086Panel" class="form-section dni-r086-panel" style="display:none">
-  <h4>ACTIVO FISICO / DNI INSTALADO EN ESTA POSICION</h4>
+  <h4>IAF INSTALADO EN ESTA POSICION</h4>
   <div id="melR086Current" class="dni-r086-current">NO CONSULTADO</div>
-  <div class="dni-r086-controls"><button class="btn" type="button" id="melR086Reload">ACTUALIZAR DNI</button><span id="melR086Status" class="dni-r086-status"></span></div>
+  <div class="dni-r086-controls"><button class="btn" type="button" id="melR086Reload">ACTUALIZAR IAF</button><span id="melR086Status" class="dni-r086-status"></span></div>
   <div class="dni-r086-history-wrap"><strong>INSTALACIONES HISTORICAS DE LA POSICION</strong><div id="melR086History">SIN CONSULTA</div></div>
   <div id="melR086Write" style="display:none">
-    <h4>ALTA DE ACTIVO FISICO CON DNI INMUTABLE</h4>
-    <div class="dni-r086-grid"><select id="melR086Type"><option value="">TIPO / CLASE</option></select><input id="melR086Name" placeholder="NOMBRE DE LA UNIDAD FISICA"><input id="melR086Maker" placeholder="FABRICANTE"><input id="melR086Model" placeholder="MODELO"><input id="melR086Serial" placeholder="SERIE FABRICANTE"></div>
-    <button type="button" class="btn green" id="melR086CreateBtn">CREAR DNI FISICO</button>
+    <h4>IDENTIDAD FISICA / ALTA DESDE GESTION DE ITEMS Y REPUESTOS</h4>
+    <div class="dni-r086-grid" style="display:none"><select id="melR086Type"><option value="">TIPO / CLASE</option></select><input id="melR086Name" placeholder="NOMBRE DE LA UNIDAD FISICA"><input id="melR086Maker" placeholder="FABRICANTE"><input id="melR086Model" placeholder="MODELO"><input id="melR086Serial" placeholder="SERIE FABRICANTE"></div>
+    <button type="button" class="btn green" id="melR086CreateBtn">CREAR IAF / GESTION DE ITEMS</button>
     <h4>MOVIMIENTO CONTROLADO / CAMBIO DE UNIDAD</h4>
-    <div class="dni-r086-grid"><select id="melR086Dni"><option value="">SELECCIONE DNI</option></select><select id="melR086Operation"><option value="APROBAR_ALTA">APROBAR ALTA</option><option value="INSTALAR">INSTALAR</option><option value="REEMPLAZAR">REEMPLAZAR / ANTERIOR A AVERIADOS</option><option value="RETIRAR_AVERIADO">RETIRAR A AVERIADOS</option><option value="ENVIAR_TALLER">ENVIAR A TALLER</option><option value="MARCAR_REPARADO">REPARACION FINALIZADA</option><option value="LIBERAR_ALMACEN">LIBERAR A ALMACEN</option><option value="BAJA">BAJA DEFINITIVA</option></select><input id="melR086Ot" placeholder="ID OT (SOPORTE)"><input id="melR086Bt" placeholder="ID BT / RT (SOPORTE)"><input id="melR086Oc" placeholder="OC: TIPO|ANO|NUMERO"><input id="melR086Storage" placeholder="UBICACION ALMACEN"><input id="melR086Evidence" placeholder="RESULTADO DE PRUEBAS TECNICAS / ACTA"><input id="melR086Note" placeholder="OBSERVACION / MOTIVO"></div>
+    <div class="dni-r086-grid"><select id="melR086Dni"><option value="">SELECCIONE IAF</option></select><select id="melR086Operation"><option value="APROBAR_ALTA">APROBAR ALTA</option><option value="INSTALAR">INSTALAR</option><option value="REEMPLAZAR">REEMPLAZAR / ANTERIOR A AVERIADOS</option><option value="RETIRAR_AVERIADO">RETIRAR A AVERIADOS</option><option value="ENVIAR_TALLER">ENVIAR A TALLER</option><option value="MARCAR_REPARADO">REPARACION FINALIZADA</option><option value="LIBERAR_ALMACEN">LIBERAR A ALMACEN</option><option value="BAJA">BAJA DEFINITIVA</option></select><input id="melR086Ot" placeholder="ID OT (SOPORTE)"><input id="melR086Bt" placeholder="ID BT / RT (SOPORTE)"><input id="melR086Oc" placeholder="OC: TIPO|ANO|NUMERO"><input id="melR086Storage" placeholder="UBICACION ALMACEN"><input id="melR086Evidence" placeholder="RESULTADO DE PRUEBAS TECNICAS / ACTA"><input id="melR086Note" placeholder="OBSERVACION / MOTIVO"></div>
     <button type="button" class="btn" id="melR086MoveBtn">CONFIRMAR MOVIMIENTO</button>
-    <h4>EVENTO DE FALLA DEL DNI INSTALADO</h4>
+    <h4>EVENTO DE FALLA DEL IAF INSTALADO</h4>
     <div class="dni-r086-grid"><input id="melR086Symptom" placeholder="SINTOMA OBSERVADO"><select id="melR086Modo"><option value="">MODO (PELEX)</option></select><select id="melR086Mecanismo"><option value="">MECANISMO (PELEX)</option></select><select id="melR086Deteccion"><option value="">DETECCION (PELEX)</option></select></div>
     <button type="button" class="btn gray" id="melR086FailBtn">REGISTRAR FALLA / DIAGNOSTICO SOSPECHADO</button>
   </div>
-  <small>EL ITEM ES LA UBICACION TECNICA; EL DNI ES LA UNIDAD FISICA. MODOS Y DETECCION: CATALOGO INTERNO PELEX, NO CODIGOS ISO VALIDOS HASTA REVISION.</small>
+  <small>EL ITEM ES LA UBICACION TECNICA; EL IAF ES LA UNIDAD FISICA. MODOS Y DETECCION: CATALOGO INTERNO PELEX, NO CODIGOS ISO VALIDOS HASTA REVISION.</small>
 </section>
       <div class="form-actions">
         <button id="btnCancel" type="button" class="btn gray">DESCARTAR</button>
@@ -513,7 +513,7 @@ textarea.mel-readonly-field[readonly]{resize:none!important}
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-11-06 07:47:38</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-11-06 21:08:04</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -1027,7 +1027,7 @@ function renderAssetSummary(row){
   document.getElementById('selectedName').textContent = name;
   document.getElementById('selectedSub').innerHTML = row ? ('<div class="asset-line"><span class="asset-label">TAG:</span><span class="asset-value">'+esc(tag)+'</span><span class="asset-label">// ID ACTIVO:</span><span class="asset-value">'+esc(id)+'</span></div><div class="asset-line"><span class="asset-label">JERARQUIA:</span><span class="asset-value">'+esc(jer)+'</span><span class="asset-label">// PADRE:</span><span class="asset-value">'+esc(padre)+'</span></div><div class="asset-line"><span class="asset-label">PLANTA:</span><span class="asset-value">'+esc(planta)+'</span></div>') : 'SELECCIONE UN ACTIVO DEL ARBOL O CREE UNO NUEVO.';
   const qr = document.getElementById('assetQr');
-  const qtxt = row ? melSummaryText(row) : 'NO_ASSET';
+  const qtxt = row ? 'https://jgaravitomtto.github.io/ot-mantenimiento/main.html?armaqr=' + encodeURIComponent('MEL:'+String(row.ID_ACTIVO||'')) : 'NO_ASSET';
   qr.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=8&data=' + encodeURIComponent(qtxt);
 }
 function updateSummaryActionState(row) {
@@ -2148,7 +2148,7 @@ async function melR086Load(){
     const installed=res.installed;
     document.getElementById('melR086Current').innerHTML=installed
       ? '<b>ACTIVO INSTALADO:</b> '+esc(installed.fisico.CODIGO_INTERNO||installed.fisico.ID_COMPONENTE)+' // '+esc(installed.fisico.NOMBRE_COMPONENTE||'')+'<br><small>'+esc(installed.fisico.ID_COMPONENTE||'')+' · INICIO: '+esc(installed.instalacion.FECHA_INSTALACION||'')+'</small>'
-      : '<b>POSICIÓN LIBRE:</b> SIN DNI INSTALADO';
+      : '<b>POSICIÓN LIBRE:</b> SIN IAF INSTALADO';
     const fleet=res.fleet||[];
     melR086Select(document.getElementById('melR086Dni'),fleet,x=>x.fisico.ID_COMPONENTE,x=>(x.fisico.CODIGO_INTERNO||x.fisico.ID_COMPONENTE)+' // '+(x.fisico.NOMBRE_COMPONENTE||'')+' ['+(x.custodia.ESTADO_LOGISTICO||'')+' / '+(x.custodia.CONDICION_TECNICA||'')+']');
     const types=res.types||[];melR086Select(document.getElementById('melR086Type'),types,x=>x.ID_TIPO_COMPONENTE,x=>x.NOMBRE_TIPO+' ('+x.ID_TIPO_COMPONENTE+')');
@@ -2157,7 +2157,7 @@ async function melR086Load(){
     const grouped={MODO:[],MECANISMO:[],DETECCION:[]};cat.forEach(x=>{const k=String(x.TIPO_CATALOGO||'').toUpperCase();if(grouped[k])grouped[k].push(x);});
     [['MODO','melR086Modo'],['MECANISMO','melR086Mecanismo'],['DETECCION','melR086Deteccion']].forEach(([key,el])=>melR086Select(document.getElementById(el),grouped[key],x=>x.CODIGO_PELEX,x=>x.DENOMINACION+' [PELEX - '+x.ESTADO_VALIDACION+']'));
     document.getElementById('melR086Write').style.display=res.canWrite?'block':'none';
-    melR086UiMessage('DNI CARGADOS · '+fleet.length+' ACTIVO(S) EN PLANTA · '+h.length+' INSTALACIÓN(ES) HISTÓRICAS');
+    melR086UiMessage('IAF CARGADOS · '+fleet.length+' ACTIVO(S) EN PLANTA · '+h.length+' INSTALACIÓN(ES) HISTÓRICAS');
   }catch(e){melR086UiMessage('NO DISPONIBLE: '+String(e.message||e),true);}
 }
 async function melR086Create(){
@@ -2205,9 +2205,11 @@ async function melR086Failure(){
   finally{melR086Busy=false;await melR086Load();}
 }
 document.getElementById('melR086Reload').addEventListener('click',melR086Load);
-document.getElementById('melR086CreateBtn').addEventListener('click',melR086Create);
+function melR087AbrirGestion(){if(!melR086CurrentItem)return;location.href='componentes_repuestos.html?item_mel='+encodeURIComponent(melR086CurrentItem);}
+document.getElementById('melR086CreateBtn').addEventListener('click',melR087AbrirGestion);
 document.getElementById('melR086MoveBtn').addEventListener('click',melR086Move);
 document.getElementById('melR086FailBtn').addEventListener('click',melR086Failure);
+const melR087BaseInit=init;init=async function(){await melR087BaseInit();const id=new URLSearchParams(location.search).get('armaid');if(id)await selectAsset(id,true);};
 init();
 </script>
 </body>
