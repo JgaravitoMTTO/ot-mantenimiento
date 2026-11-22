@@ -525,7 +525,7 @@ input,select,textarea{border:1px solid #c7ddee;border-radius:11px;min-height:42p
     </section>
   </section>
 
-  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-11-06 23:55:02</div>
+  <div class="footer">ARMA&trade; // MEL EQUIPOS // ARMA DATA EN LINEA // GENERADO: 2026-11-21 23:00:23</div>
 </main>
 
 <div id="loader" class="loader hidden"><div class="loader-card"><div class="spinner"></div><strong id="loaderText">CARGANDO...</strong></div></div>
@@ -622,11 +622,11 @@ function toast(msg) { const t = document.getElementById("toast"); t.textContent 
 function getCachedSession() {
   try {
     const raw = localStorage.getItem(ARMA_SESSION_CACHE_KEY);
-    if (!raw) return null;
+    if (!raw) {const tok=localStorage.getItem('ARMA_TOKEN')||'';return tok?{token:tok,user:'',permissions:{},__pendingValidation:true}:null;}
     const obj = JSON.parse(raw);
-    if (!obj || !obj.token) return null;
-    return obj;
-  } catch(e) { return null; }
+    if (!obj || !obj.token) {const tok=localStorage.getItem('ARMA_TOKEN')||'';return tok?{token:tok,user:'',permissions:{},__pendingValidation:true}:null;}
+    const tok=localStorage.getItem('ARMA_TOKEN')||'';if(tok&&String(obj.token)!==tok)return {token:tok,user:'',permissions:{},__pendingValidation:true};return obj;
+  } catch(e) {const tok=localStorage.getItem('ARMA_TOKEN')||'';return tok?{token:tok,user:'',permissions:{},__pendingValidation:true}:null;}
 }
 async function api(action, payload, signal) {
   payload = payload || {};
@@ -1941,7 +1941,7 @@ function melDetailCachePut(id,res){
 function melV140ApplyBoot(data,focusId,initialFast,fromCache){
   if(!data||!data.ok)throw new Error((data&&data.error)||'ERROR_BOOTSTRAP_MEL');
   if(!fromCache){
-    armaSession=Object.assign(armaSession||{},{user:data.user||((armaSession||{}).user),nombre:data.nombre||((armaSession||{}).nombre)||data.user,nivel:data.nivel||((armaSession||{}).nivel),permissions:data.permissions||((armaSession||{}).permissions)||{}});
+    armaSession=Object.assign(armaSession||{},{user:data.user||'',nombre:data.nombre||data.user||'',nivel:data.nivel||'',permissions:data.permissions||{},__pendingValidation:false});
     try{localStorage.setItem(ARMA_SESSION_CACHE_KEY,JSON.stringify(armaSession));}catch(e){}
   }
   melV140Generation=String(data.generation||melV140Generation||'');
@@ -1969,7 +1969,7 @@ function melV140ApplyBoot(data,focusId,initialFast,fromCache){
 
 async function loadMEL(focusId,initialFast,silent){
   const initial=initialFast===true;
-  const cached=initial?melV140BootRead():null;
+  const cached=(initial&&armaSession&&!armaSession.__pendingValidation)?melV140BootRead():null;
   if(cached&&cached.data){
     try{
       melV140BootSource='LOCAL_CACHE';
@@ -1988,7 +1988,7 @@ async function loadMEL(focusId,initialFast,silent){
     melV140BootSource='BACKEND';
     await melV140ApplyBoot(data,focusId,initial,false);
     melV140BootWrite(data);
-  }catch(err){toast('ERROR CARGANDO MEL: '+err.message);}
+  }catch(err){if(armaSession&&armaSession.__pendingValidation){document.getElementById('userPill').textContent='SESION SIN VALIDAR // VUELVA A MAIN';}toast('ERROR CARGANDO MEL: '+err.message);}
   finally{if(!silent)hideLoader();}
 }
 
