@@ -702,7 +702,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-11-21 21:21:41</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-11-21 21:50:59</span></div>
   </footer>
 </main>
 </div>
@@ -821,27 +821,31 @@ function armaEaabRender(j){
   corte.forEach(c=>{const card=document.createElement('div');card.style.marginBottom='10px';add(card,'span',c.planta+' / '+c.barrio);add(card,'strong','CORTE DE AGUA PROGRAMADO');add(card,'p','FECHA: '+c.fecha+'  |  INICIO: '+c.horaInicio+'  |  DURACION: '+c.duracionHoras+' HORAS');add(card,'p','TRABAJO: '+c.tipoTrabajo);add(card,'p','SECTOR: '+(c.lugar||'VER PUBLICACION OFICIAL'));box.appendChild(card);});
   b.hidden=false;
 }
+// R094: una consulta por dia local Bogota, compartida entre pestanas via localStorage.
+const ARMA_EAAB_UI_CACHE_KEY='ARMA_EAAB_MAIN_R094_DAILY';
 let armaEaabChecking=false;
+function armaEaabToday(){
+  const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/Bogota',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());const d={};p.forEach(x=>d[x.type]=x.value);return d.year+'-'+d.month+'-'+d.day;
+}
+function armaEaabCached(){
+  try{const x=JSON.parse(localStorage.getItem(ARMA_EAAB_UI_CACHE_KEY)||'null');return x&&x.day===armaEaabToday()&&x.response?x.response:null;}catch(e){return null;}
+}
 async function armaEaabStart(){
-  const banner=document.getElementById('armaEaabAviso');
-  if(banner)banner.hidden=true;
+  const cached=armaEaabCached();if(cached){armaEaabRender(cached);return;}
   if(armaEaabChecking||document.visibilityState==='hidden')return;
   armaEaabChecking=true;
   const controller=new AbortController(),tm=setTimeout(function(){controller.abort();},16000);
-  try {
-    const response=await fetch(ARMA_API_URL,{method:'POST',cache:'no-store',
-      headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body:JSON.stringify({action:'eaabCortesEstado'}),signal:controller.signal});
+  try{
+    const response=await fetch(ARMA_API_URL,{method:'POST',cache:'no-store',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'eaabCortesEstado'}),signal:controller.signal});
     if(!response.ok)throw new Error('HTTP_'+response.status);
     const j=await response.json();armaEaabRender(j);
-  }catch(e){
-    armaEaabRender(null);
-    // Error no equivale a ausencia de corte: no afirmar ausencia ni mostrar positivos no verificados.
-    console.warn('R083 EAAB no disponible',String(e&&e.message||e).slice(0,70));
-  }finally {clearTimeout(tm);armaEaabChecking=false;}
+    if(j&&j.ok===true&&j.fechaBogota===armaEaabToday()&&j.estado!=='SIN_VERIFICAR'){try{localStorage.setItem(ARMA_EAAB_UI_CACHE_KEY,JSON.stringify({day:armaEaabToday(),response:j}));}catch(e){}}
+  }catch(e){armaEaabRender(null);console.warn('R094 EAAB consulta no disponible',String(e&&e.message||e).slice(0,70));}
+  finally{clearTimeout(tm);armaEaabChecking=false;}
 }
-window.addEventListener('load',function(){armaEaabStart();setInterval(armaEaabStart,20*60*1000);});
-document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')armaEaabStart();});
+window.addEventListener('load',function(){armaEaabStart();setInterval(function(){if(document.visibilityState==='visible'&&!armaEaabCached()){armaEaabStart();}},60*60*1000);});
+// Volver a MAIN NO dispara nueva peticion; solo re-render desde cache vigente.
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'){const c=armaEaabCached();if(c)armaEaabRender(c);else document.getElementById('armaEaabAviso').hidden=true;}});
 const ARMA_VISITOR_PERMISSIONS = {};
 let armaSession = {user:'VISITANTE', nombre:'VISITANTE', nivel:'INICIAR SESION', token:'', permissions:ARMA_VISITOR_PERMISSIONS};
 const ARMA_CHANNEL_NAME='ARMA_CONTROL_CHANNEL';
