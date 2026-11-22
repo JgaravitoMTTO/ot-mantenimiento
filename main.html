@@ -702,7 +702,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-11-21 23:46:12</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-11-22 00:05:14</span></div>
   </footer>
 </main>
 </div>
@@ -933,6 +933,19 @@ function armaRestoreSessionCache(){
   armaUpdateUserCard();
   const level=document.getElementById('userLevelText');if(level)level.textContent='VALIDANDO ACCESO';
   armaApplyPermissions();return true;
+}
+function armaMainR0962RestoreRecentSession(){
+  try{
+    const token=String(localStorage.getItem('ARMA_TOKEN')||'');if(!token)return false;
+    const cached=armaV13AuthCacheRead();
+    if(!cached||String(cached.token||'')!==token||!cached.user||cached.authenticated===false)return false;
+    window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false; // Se conserva la barrera ADMIN hasta obtener confirmacion LIVE.
+    armaSession={user:cached.user,nombre:cached.nombre||cached.user,nivel:cached.nivel||'USUARIO VALIDADO',token:token,permissions:cached.permissions||{}};
+    armaV13AuthValidated=false; // Se solicita revalidacion no bloqueante siempre.
+    armaUpdateUserCard();armaApplyPermissions();
+    window.ARMA_MAIN_R0962_FAST_MODE='RECENT_AUTH_CACHE';
+    return true;
+  }catch(e){return false;}
 }
 function armaConsumeInternalReturn(){
   try{
@@ -1871,7 +1884,7 @@ armaLogin=async function(){
     if(data&&data.ok){
       armaV13AuthValidated=true;
       armaSetSession(data);
-      if(data.token){window.ARMA_MAIN_LIVE_AUTH_VERIFIED=true;armaApplyPermissions();} // R096.1: login confirmado por Backend.
+      if(data.token){window.ARMA_MAIN_LIVE_AUTH_VERIFIED=true;armaApplyPermissions();armaV13AuthCacheWrite(armaSession);} // R096.2: login confirmado, cache de esta pestana.
       armaV13AuthLastRefresh=Date.now();
       armaCloseLogin();
       document.getElementById('loginPass').value='';
@@ -1934,6 +1947,7 @@ armaSetVisitor=function(clearStored){window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;r
 const armaMainV155BaseSetSession=armaSetSession;
 armaSetSession=function(data){window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;const r=armaMainV155BaseSetSession(data);armaApplyPermissions();return r;};
 armaRequireAdminPerm=function(perm){
+  if(window.ARMA_MAIN_LIVE_AUTH_VERIFIED!==true){alert('VALIDANDO PERMISOS DE ADMINISTRACION.');return false;}
   if(!armaRequireSession())return false;
   const p=armaNormalizePerms(armaSession.permissions);
   if(armaIsSuperAdmin() || p[String(perm||'').toUpperCase()]===true)return true;
@@ -1991,7 +2005,7 @@ document.addEventListener('visibilitychange',function(){
 /* === ARMA MAIN V16.2 SHARED SESSION BRIDGE - BASELINE ESTABLE === */
 function armaMainV161RefreshSharedSessionCache(){
   try{
-    if(!armaSession||!armaSession.token)return false;
+    if(!armaSession||!armaSession.token||window.ARMA_MAIN_LIVE_AUTH_VERIFIED!==true)return false;
     localStorage.setItem('ARMA_TOKEN',armaSession.token);
     localStorage.setItem('ARMA_SESSION_CACHE',JSON.stringify({user:armaSession.user||'',nombre:armaSession.nombre||armaSession.user||'',nivel:armaSession.nivel||'',token:armaSession.token,permissions:armaSession.permissions||{},ts:Date.now(),source:'MAIN_V16_2_SHARED_BRIDGE'}));
     return true;
@@ -2009,26 +2023,48 @@ armaOpenChildWindow=function(url,targetName){if(String(url||'').toLowerCase().in
 document.addEventListener('DOMContentLoaded',function(){
   const internalReturn=armaConsumeInternalReturn();
   const token=String(localStorage.getItem('ARMA_TOKEN')||'');
-  const restored=armaRestoreSessionCache();
-  if(!restored&&token){
-    const c=armaV13AuthCacheRead();
-    const verifiedCache=!!(c&&String(c.token||'')===token);
-    armaSession={user:verifiedCache?(c.user||'USUARIO'):'USUARIO',nombre:verifiedCache?(c.nombre||c.user||'USUARIO'):'VALIDANDO SESION',nivel:'VALIDANDO ACCESO',token:'',permissions:{}};
-    armaUpdateUserCard();const l=document.getElementById('userLevelText');if(l)l.textContent='VALIDANDO ACCESO';armaApplyPermissions();
-  }else if(!token){armaRenderVisitor();}
-  // R096.1: no se llama armaSetSession con la cache local: permisos siempre requieren Backend.
+  window.ARMA_MAIN_R0962_FAST_MODE='PENDING';
+  const recent=armaMainR0962RestoreRecentSession();
+  if(!recent){
+    const restored=armaRestoreSessionCache();
+    window.ARMA_MAIN_R0962_FAST_MODE=restored?'PRESENTATION_ONLY':'NO_RECENT_CACHE';
+    if(!restored&&token){
+      armaSession={user:'USUARIO',nombre:'VALIDANDO SESION',nivel:'VALIDANDO ACCESO',token:'',permissions:{}};
+      armaUpdateUserCard();const l=document.getElementById('userLevelText');if(l)l.textContent='VALIDANDO ACCESO';armaApplyPermissions();
+    }else if(!token){armaRenderVisitor();}
+  }
+  // R096.2: el usuario previamente validado ya es visible. La red NO bloquea el regreso.
+  window.ARMA_MAIN_R0962_IDENTITY_MS=Math.round(performance.now()); // Solo metrica, no guarda credenciales.
   const cachedDash=armaV13DashboardCacheRead();if(cachedDash)armaApplyDashboard(cachedDash);
-  setTimeout(armaHideBootSplash,internalReturn?80:180);
+  setTimeout(armaHideBootSplash,internalReturn?40:160);
   armaPWAInit();armaStartMainPresence();updateDateCard();setInterval(updateDateCard,60000);
-  const authInit=armaV13RefreshAuth(true); // PRIORIDAD 1: autenticar, sin EAAB ni dashboard competidores.
+  // Inicializacion local independiente del tiempo de respuesta de authBootstrap.
+  if(!cachedDash){setTimeout(function(){armaV13RefreshDashboard(false);},550);}else if(armaV13DashboardNeedsNetwork()||!!((cachedDash.kpis||{}).snapshotStale)){setTimeout(function(){armaV13RefreshDashboard(true);},1800);}
+  setTimeout(function(){armaV12PrefetchPages();armaPWARegisterServiceWorker();},250);
+  const authInit=armaV13RefreshAuth(true); // Revalidacion EN SEGUNDO PLANO, no es barrera visual.
   Promise.resolve(authInit).then(function(ok){
-    if(!ok&&localStorage.getItem('ARMA_TOKEN')&&!window.ARMA_MAIN_LIVE_AUTH_VERIFIED){const l=document.getElementById('userLevelText');if(l)l.textContent='SESION NO VERIFICADA';armaApplyPermissions();}
-  }).catch(function(e){console.warn('ARMA R096.1 inicio auth',e);}).finally(function(){
-    // PRIORIDAD 2: indicadores y precarga. PRIORIDAD 3: EAAB con cache diaria y sin alterar permisos.
-    if(!cachedDash){armaV13RefreshDashboard(false);}else if(armaV13DashboardNeedsNetwork()||!!((cachedDash.kpis||{}).snapshotStale)){setTimeout(function(){armaV13RefreshDashboard(true);},900);}
-    setTimeout(function(){armaV12PrefetchPages();armaPWARegisterServiceWorker();},500);
+    window.ARMA_MAIN_R0962_AUTH_MS=Math.round(performance.now());
+    if(!ok&&localStorage.getItem('ARMA_TOKEN')&&!window.ARMA_MAIN_LIVE_AUTH_VERIFIED){
+      // Error transitorio: mantener solo nombre visible, retirar permisos cacheados.
+      const name=String(armaSession.nombre||armaSession.user||'VALIDANDO SESION');
+      armaSession={user:'USUARIO',nombre:name,nivel:'SESION NO VERIFICADA',token:'',permissions:{}};
+      armaUpdateUserCard();const l=document.getElementById('userLevelText');if(l)l.textContent='SESION NO VERIFICADA';armaApplyPermissions();
+    }
+  }).catch(function(e){console.warn('ARMA R096.2 auth no bloqueante',e);}).finally(function(){
+    // EAAB es auxiliar: solo empieza cuando finaliza la primera revalidacion.
     window.ARMA_MAIN_R0961_EAAB_ALLOWED=true;
-    setTimeout(function(){armaEaabStart();},1200);
+    setTimeout(function(){armaEaabStart();},200);
+  });
+  // Sin esperar red, dibujar aviso EAAB desde cache diario cuando exista.
+  const eaabLocal=armaEaabCached();if(eaabLocal)armaEaabRender(eaabLocal);
+  // Logout o cambio de usuario desde otra pestana: invalidar estado local sin reescribir storage.
+  window.addEventListener('storage',function(e){
+    if(e.key!=='ARMA_TOKEN')return;
+    const current=String(localStorage.getItem('ARMA_TOKEN')||'');
+    if(!current||(armaSession&&armaSession.token&&String(armaSession.token)!==current)){
+      window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;armaV13AuthValidated=false;
+      armaRenderVisitor();window.ARMA_MAIN_R0962_FAST_MODE='INVALIDATED_BY_STORAGE';
+    }
   });
   // Recuperacion ante retorno de red/foco: nunca usar cache para desbloquear permisos.
   window.addEventListener('online',function(){if(localStorage.getItem('ARMA_TOKEN')&&!window.ARMA_MAIN_LIVE_AUTH_VERIFIED)setTimeout(function(){armaV13RefreshAuth(true);},350);});
