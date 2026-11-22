@@ -476,7 +476,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </section>
   </div>
   <section id='armaEaabAviso' class='arma-eaab-alert' role='status' aria-live='polite' hidden>
-    <div class='arma-eaab-alert-copy'><span>PLANTA 2 / GRANJAS DE TECHO</span><strong>CORTE PROGRAMADO - POR FAVOR VERIFICAR</strong><p>COINCIDENCIA EN LA PROGRAMACION SEMANAL PUBLICADA POR EL ACUEDUCTO DE BOGOTA. CONFIRME FECHA Y SECTOR.</p></div>
+    <div class='arma-eaab-alert-copy' id='armaEaabDetalles'></div>
     <a href='https://www.acueducto.com.co/wps/portal/EAB2/Home/atencion-al-usuario/programacion_cortes' target='_blank' rel='noopener noreferrer' data-arma-browser='1'>VER PROGRAMACION OFICIAL</a>
   </section>
   <section class='kpis'>
@@ -702,7 +702,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-11-06 23:52:09</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-11-21 21:21:41</span></div>
   </footer>
 </main>
 </div>
@@ -811,14 +811,20 @@ function armaEaabWeekKey(){
   return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');
 }
 function armaEaabRender(j){
-  const b=document.getElementById('armaEaabAviso');if(!b)return;
-  b.dataset.semana=j&&j.semana||'';
-  b.hidden=!(j&&j.ok===true&&j.estado==='CORTE_PROGRAMADO'&&j.semana===armaEaabWeekKey());
+  const b=document.getElementById('armaEaabAviso'),box=document.getElementById('armaEaabDetalles');if(!b||!box)return;
+  b.hidden=true;box.replaceChildren();
+  const fm=new Intl.DateTimeFormat('en-US',{timeZone:'America/Bogota',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());const dp={};fm.forEach(p=>dp[p.type]=p.value);const hoy=dp.year+'-'+dp.month+'-'+dp.day;
+  if(!j||j.ok!==true||j.estado!=='CORTE_PROGRAMADO'||j.fechaBogota!==hoy||!Array.isArray(j.cortes))return;
+  const add=(node,tag,txt)=>{const e=document.createElement(tag);e.textContent=String(txt||'');node.appendChild(e);return e;};
+  const corte=j.cortes.filter(c=>c&&/^\d{4}-\d{2}-\d{2}$/.test(c.fecha||'')&&c.fecha>=hoy&&c.planta&&c.barrio&&c.horaInicio&&Number(c.duracionHoras)>0&&c.tipoTrabajo);
+  if(!corte.length)return;
+  corte.forEach(c=>{const card=document.createElement('div');card.style.marginBottom='10px';add(card,'span',c.planta+' / '+c.barrio);add(card,'strong','CORTE DE AGUA PROGRAMADO');add(card,'p','FECHA: '+c.fecha+'  |  INICIO: '+c.horaInicio+'  |  DURACION: '+c.duracionHoras+' HORAS');add(card,'p','TRABAJO: '+c.tipoTrabajo);add(card,'p','SECTOR: '+(c.lugar||'VER PUBLICACION OFICIAL'));box.appendChild(card);});
+  b.hidden=false;
 }
 let armaEaabChecking=false;
 async function armaEaabStart(){
   const banner=document.getElementById('armaEaabAviso');
-  if(banner&&banner.dataset.semana&&banner.dataset.semana!==armaEaabWeekKey())banner.hidden=true;
+  if(banner)banner.hidden=true;
   if(armaEaabChecking||document.visibilityState==='hidden')return;
   armaEaabChecking=true;
   const controller=new AbortController(),tm=setTimeout(function(){controller.abort();},16000);
@@ -829,6 +835,7 @@ async function armaEaabStart(){
     if(!response.ok)throw new Error('HTTP_'+response.status);
     const j=await response.json();armaEaabRender(j);
   }catch(e){
+    armaEaabRender(null);
     // Error no equivale a ausencia de corte: no afirmar ausencia ni mostrar positivos no verificados.
     console.warn('R083 EAAB no disponible',String(e&&e.message||e).slice(0,70));
   }finally {clearTimeout(tm);armaEaabChecking=false;}
