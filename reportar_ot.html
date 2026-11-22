@@ -257,5 +257,77 @@ segmentSeed=function(){const existing=(selected&&Array.isArray(selected.executio
 openOT=async function(id){selectedId=id;document.querySelectorAll('.ot').forEach(function(x){x.classList.toggle('sel',x.dataset.ot===String(id))});const row=rot717Row(id);if(row&&row.executionSuggestion&&row.executionSuggestion.valid)rot714WriteScheduleCache(id,row.executionSuggestion);const schedulePromise=rot717ScheduleReady(id,row);const env=rot712DetailEnvelope(id);let j=env&&env.data||cachedDetail(id)||null;if(j){const s=await schedulePromise;if(s)j.executionSuggestion=s;cacheDetail(id,j);renderDetail(j);if(env&&env.age<ROT712_DETAIL_TRUST&&rot712GenerationVerified&&rot712SameDetailGen(j))return}else rot7DetailSkeleton(id);const t0=performance.now();try{const pair=await Promise.all([rot714ReadDetail(id),schedulePromise]);const fresh=pair[0],s=pair[1];if(fresh&&fresh.ok){rot712ApplyGenerations(fresh,true);if(s)fresh.executionSuggestion=s;cacheDetail(id,fresh);rot7WriteDetail(id,fresh);renderDetail(fresh);if(fresh.performance)console.info('ARMA techOTGet',id,Math.round(performance.now()-t0)+'ms',fresh.performance)}}catch(e){if(!j)msg(e.message,'NO FUE POSIBLE ABRIR OT')}};
 document.addEventListener('DOMContentLoaded',rot712Init);
 </script>
+<style id="arma-r092-style">
+#armaR092Pending{background:#fff8e9;border:2px solid #edb954;border-radius:18px;padding:16px;margin:12px 0;color:#6b4308}
+#armaR092Pending h3{margin:0 0 8px;color:#805000}.armaR092-entry{background:#fff;border:1px solid #efcf91;border-radius:10px;margin:7px 0;padding:10px;display:flex;align-
+items:center;justify-content:space-between;gap:10px}
+#armaR092Card{background:#fff8e9;border:2px solid #e8ad37;border-radius:16px;padding:16px;margin:14px 0;color:#283b55}
+#armaR092Card h3{color:#804600;margin:0 0 8px}#armaR092Card label{display:block;font-weight:900;font-size:12px;margin:12px 0 5px}#armaR092Card textarea{width:100%;min-hei
+ght:95px}#armaR092Card .armaR092-reading{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:center;margin:8px 0;padding:9px;background:white;border-radius:10
+px}#armaR092Card button,#armaR092Pending button{background:#0659a3;color:#fff;border:0;border-radius:10px;padding:11px 14px;font-weight:900;cursor:pointer}
+#armaR092Card .r092-badge{display:inline-block;background:#c77b09;color:white;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:900}
+@media(max-width:650px){#armaR092Card .armaR092-reading{grid-template-columns:1fr}.armaR092-entry{flex-direction:column;align-items:stretch}}
+</style>
+<script id="arma-r092-revision">
+(function(){'use strict';
+let lastId='',seq=0;
+const el=id=>document.getElementById(id);
+const safe=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function apiR(action,p={}){return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,token:token()},p)
+),cache:'no-store'}).then(r=>r.json()).then(j=>{if(!j.ok)throw Error(j.detail||j.error||'ERROR');return j;});}
+async function loadPending(){
+  let host=el('armaR092Pending');if(!host){host=document.createElement('div');host.id='armaR092Pending';const list=el('otList');if(list&&list.parentElement)list.parentEle
+ment.insertBefore(host,list);else return;}
+  host.innerHTML='<h3>OT DEVUELTAS POR DOCUMENTACION</h3><div>CONSULTANDO...</div>';
+  try{const j=await apiR('techOTRevisionPending');const rows=j.rows||[];
+    host.innerHTML='<h3>OT DEVUELTAS POR DOCUMENTACION ('+rows.length+')</h3>'+(rows.length?rows.map(r=>'<div class="armaR092-entry"><div><strong>'+safe(r.idOT)+'</strong
+> // '+safe(r.descripcion)+'<br><small>MOTIVO: '+safe(r.motivo)+'</small></div><button type="button" data-r092="'+safe(r.idOT)+'">CORREGIR</button></div>').join(''):'<p>S
+IN DEVOLUCIONES PENDIENTES.</p>');
+    host.querySelectorAll('[data-r092]').forEach(b=>b.onclick=()=>openReturned(b.dataset.r092));
+  }catch(e){host.innerHTML='<h3>OT DEVUELTAS POR DOCUMENTACION</h3><p>NO SE PUDO CONSULTAR: '+safe(e.message||e)+'</p>';}
+}
+async function openReturned(id){
+  lastId=id;try{const j=await apiR('techOTRevisionGet',{idOT:id});
+    if(typeof openOT==='function')await openOT(id);
+    paintRevision(j);
+  }catch(e){alert('ARMA: '+String(e.message||e));}
+}
+function paintRevision(j){
+  const dest=el('detail');if(!dest||!j)return;
+  const old=el('armaR092Card');if(old)old.remove();
+  const card=document.createElement('section');card.id='armaR092Card';
+  card.innerHTML='<span class="r092-badge">DOCUMENTACION DEVUELTA</span><h3>SUBSANAR DOCUMENTACION - '+safe(j.idOT)+'</h3><p><b>MOTIVO DE PLANEACION:</b> '+safe(j.motivo)
++'</p><p>SOLO EL EJECUTOR ORIGINAL PUEDE CORREGIR. LOS REGISTROS ANTERIORES SE CONSERVAN.</p>'+ 
+  '<label>ACTIVIDAD REALIZADA CORREGIDA *</label><textarea id="r092report"></textarea>'+ 
+  '<label>OBSERVACION GENERAL CORREGIDA</label><textarea id="r092obs"></textarea>'+ 
+  '<h4>LECTURAS REGISTRADAS</h4><div id="r092readings"></div>'+ 
+  '<label>JUSTIFICACION DEL CAMBIO *</label><textarea id="r092motivo" placeholder="EXPLIQUE QUE SE CORRIGIO Y POR QUE"></textarea>'+ 
+  '<button type="button" id="r092save">GUARDAR CORRECCION Y RETORNAR A REVISION OTD</button><p id="r092state" role="status"></p>';
+  dest.prepend(card);el('r092report').value=j.reporte||'';el('r092obs').value=j.observacion||'';
+  const c=el('r092readings');c.innerHTML=(j.readings||[]).map(r=>'<div class="armaR092-reading" data-id="'+safe(r.idLectura)+'"><div><strong>'+safe(r.idVariable)+'</stron
+g><br><small>'+safe(r.idLectura)+'</small><br>VALOR ORIGINAL: '+safe(r.original)+(r.ajustada?'<br>VALOR AJUSTADO VIGENTE: '+safe(r.valorVigente):'')+'</div><div><label>VA
+LOR CORREGIDO (DEJAR VACIO SI NO CAMBIA)</label><input type="number" step="any" class="r092value" placeholder="SIN CAMBIOS"></div></div>').join('')||'<p>NO HAY LECTURAS A
+SOCIADAS.</p>';
+  el('r092save').onclick=saveRevision;
+}
+async function saveRevision(){
+  const btn=el('r092save'),status=el('r092state');if(!btn||btn.disabled)return;
+  const cambios=[...document.querySelectorAll('#r092readings .armaR092-reading')].filter(x=>x.querySelector('.r092value').value.trim()!=='').map(x=>({idLectura:x.dataset.
+id,valor:x.querySelector('.r092value').value}));
+  const data={reporte:el('r092report').value,observacion:el('r092obs').value,justificacion:el('r092motivo').value,ajustes:cambios,requestId:'REV-'+(crypto.randomUUID?cryp
+to.randomUUID():Date.now()+'-'+Math.random().toString(16).slice(2))};
+  if(data.reporte.trim().length<8||data.justificacion.trim().length<8){status.textContent='COMPLETE EL REPORTE Y LA JUSTIFICACION (MINIMO 8 CARACTERES).';return;}
+  if(!confirm('CONFIRMAR CORRECCION DOCUMENTAL? LOS VALORES ORIGINALES SE CONSERVAN Y LA OT REGRESARA A OTD.'))return;
+  btn.disabled=true;status.textContent='REGISTRANDO CORRECCION Y TRAZABILIDAD...';
+  try{const j=await apiR('techOTRevisionSave',{idOT:lastId,data});status.textContent='CORRECCION CONFIRMADA // '+safe(j.idOT)+' // '+safe(j.estado);if(typeof detailCache!
+=='undefined')detailCache.clear();setTimeout(()=>{loadPending();if(typeof loadList==='function')loadList(1);},400);}
+  catch(e){status.textContent='ERROR: '+String(e.message||e)+' // NO REPITA SIN REVISAR ESTADO';btn.disabled=false;}
+}
+// Anular solo el cache visual del detalle ante una devolucion ya existente.
+function start(){loadPending();const btn=el('stateFilter');if(btn)btn.addEventListener('change',()=>setTimeout(loadPending,350));}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
+})();
+</script>
+
 </body>
 </html>
