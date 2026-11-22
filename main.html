@@ -702,7 +702,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-11-22 00:05:14</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-11-22 00:32:25</span></div>
   </footer>
 </main>
 </div>
@@ -810,43 +810,87 @@ function armaEaabWeekKey(){
   const dow=(d.getUTCDay()+6)%7;d.setUTCDate(d.getUTCDate()-dow);
   return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');
 }
-function armaEaabRender(j){
-  const b=document.getElementById('armaEaabAviso'),box=document.getElementById('armaEaabDetalles');if(!b||!box)return;
-  b.hidden=true;box.replaceChildren();
-  const fm=new Intl.DateTimeFormat('en-US',{timeZone:'America/Bogota',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());const dp={};fm.forEach(p=>dp[p.type]=p.value);const hoy=dp.year+'-'+dp.month+'-'+dp.day;
-  if(!j||j.ok!==true||j.estado!=='CORTE_PROGRAMADO'||j.fechaBogota!==hoy||!Array.isArray(j.cortes))return;
-  const add=(node,tag,txt)=>{const e=document.createElement(tag);e.textContent=String(txt||'');node.appendChild(e);return e;};
-  const corte=j.cortes.filter(c=>c&&/^\d{4}-\d{2}-\d{2}$/.test(c.fecha||'')&&c.fecha>=hoy&&c.planta&&c.barrio&&c.horaInicio&&Number(c.duracionHoras)>0&&c.tipoTrabajo);
-  if(!corte.length)return;
-  corte.forEach(c=>{const card=document.createElement('div');card.style.marginBottom='10px';add(card,'span',c.planta+' / '+c.barrio);add(card,'strong','CORTE DE AGUA PROGRAMADO');add(card,'p','FECHA: '+c.fecha+'  |  INICIO: '+c.horaInicio+'  |  DURACION: '+c.duracionHoras+' HORAS');add(card,'p','TRABAJO: '+c.tipoTrabajo);add(card,'p','SECTOR: '+(c.lugar||'VER PUBLICACION OFICIAL'));box.appendChild(card);});
-  b.hidden=false;
-}
-// R094: una consulta por dia local Bogota, compartida entre pestanas via localStorage.
+// ARMA R096.3 EAAB: sin perder aviso por cambio de dia, sin presentar como actual un positivo obsoleto.
 const ARMA_EAAB_UI_CACHE_KEY='ARMA_EAAB_MAIN_R094_DAILY';
-let armaEaabChecking=false;
+const ARMA_EAAB_RETRY_KEY='ARMA_EAAB_MAIN_R0963_LAST_TRY';
+const ARMA_EAAB_RETRY_MS=20*60*1000;
+let armaEaabChecking=false,armaEaabObservedDay='';
 function armaEaabToday(){
   const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/Bogota',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());const d={};p.forEach(x=>d[x.type]=x.value);return d.year+'-'+d.month+'-'+d.day;
 }
-function armaEaabCached(){
-  try{const x=JSON.parse(localStorage.getItem(ARMA_EAAB_UI_CACHE_KEY)||'null');return x&&x.day===armaEaabToday()&&x.response?x.response:null;}catch(e){return null;}
+function armaEaabYesterday(){const d=new Date(armaEaabToday()+'T12:00:00Z');d.setUTCDate(d.getUTCDate()-1);return d.toISOString().slice(0,10);}
+// R096.4: SIN_PROGRAMACION_ACTUAL NO es un negativo concluyente si hay aviso de ayer.
+function armaEaabVerified(j){return !!(j&&j.ok===true&&['CORTE_PROGRAMADO','SIN_COINCIDENCIA'].includes(j.estado));}
+function armaEaabBogotaMinutes(){const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/Bogota',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());const o={};p.forEach(x=>o[x.type]=x.value);return Number(o.hour)*60+Number(o.minute);}
+function armaEaabIsMorningVerified(j){return !!(j&&/^\d{4}-\d{2}-\d{2}T(0[6-9]|1[0-9]|2[0-3]):/.test(String(j.fechaConsulta||'')));}
+function armaEaabMorningRefreshDue(e){return !!(e&&e.day===armaEaabToday()&&armaEaabBogotaMinutes()>=6*60+20&&e.phase!=='DAY');}
+function armaEaabReadEnvelope(){
+  try{const e=JSON.parse(localStorage.getItem(ARMA_EAAB_UI_CACHE_KEY)||'null');return e&&e.day&&e.response&&e.response.fechaBogota===e.day&&armaEaabVerified(e.response)?e:null;}catch(_e){return null;}
+}
+function armaEaabCached(){const e=armaEaabReadEnvelope();return e&&e.day===armaEaabToday()&&!armaEaabMorningRefreshDue(e)?e.response:null;}
+function armaEaabPreviousPositive(){
+  const e=armaEaabReadEnvelope();if(!e||e.day!==armaEaabYesterday()||e.response.estado!=='CORTE_PROGRAMADO')return null;
+  if(e.ts&&(!Number.isFinite(Number(e.ts))||Date.now()-Number(e.ts)>30*60*60*1000||Number(e.ts)>Date.now()+5*60*1000))return null;
+  return e.response;
+}
+function armaEaabCutActive(c,hoy){
+  if(!c||!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(c.fecha||'')||!c.planta||!c.barrio||!c.horaInicio||!(Number(c.duracionHoras)>0)||!c.tipoTrabajo)return false;
+  if(c.fecha>=hoy)return true;
+  const m=String(c.horaInicio).toUpperCase().replace(/\./g,'').match(/(\d{1,2}):(\d{2})\s*(AM|PM)/);if(!m)return false;
+  const hh=(Number(m[1])%12)+(m[3]==='PM'?12:0);const start=Date.parse(c.fecha+'T'+String(hh).padStart(2,'0')+':'+m[2]+':00-05:00');
+  return Number.isFinite(start)&&Date.now()>=start&&Date.now()<start+Number(c.duracionHoras)*3600000;
+}
+function armaEaabRender(j,options){
+  const b=document.getElementById('armaEaabAviso'),box=document.getElementById('armaEaabDetalles');if(!b||!box)return;
+  b.hidden=true;box.replaceChildren();
+  const hoy=armaEaabToday(),pending=!!(options&&options.pending),sameDay=!!(options&&options.sameDay);
+  if(!j||j.ok!==true||j.estado!=='CORTE_PROGRAMADO'||!Array.isArray(j.cortes)||(pending?j.fechaBogota!==armaEaabYesterday():j.fechaBogota!==hoy))return;
+  const add=(node,tag,txt)=>{const e=document.createElement(tag);e.textContent=String(txt||'');node.appendChild(e);return e;};
+  const cortes=j.cortes.filter(c=>armaEaabCutActive(c,hoy));if(!cortes.length)return;
+  if(pending){add(box,'span','ULTIMO AVISO CONOCIDO - VERIFICACION DE HOY PENDIENTE');add(box,'p','ULTIMA CONSULTA: '+String(j.fechaConsulta||j.fechaBogota||'FECHA NO DISPONIBLE')+' (BOGOTA). CONFIRMAR CAMBIOS EN EAAB.');}
+  if(sameDay){add(box,'span','VERIFICADO EN MADRUGADA - PENDIENTE SEGUNDA REVISION 06:00 APROX');}
+  cortes.forEach(c=>{const card=document.createElement('div');card.style.marginBottom='10px';add(card,'span',c.planta+' / '+c.barrio);add(card,'strong',pending?'CORTE REPORTADO - PENDIENTE DE REVALIDACION':'CORTE DE AGUA PROGRAMADO');add(card,'p','FECHA: '+c.fecha+'  |  INICIO: '+c.horaInicio+'  |  DURACION: '+c.duracionHoras+' HORAS');add(card,'p','TRABAJO: '+c.tipoTrabajo);add(card,'p','SECTOR: '+(c.lugar||'VER PUBLICACION OFICIAL'));box.appendChild(card);});
+  b.hidden=false;
+}
+function armaEaabPaintLocal(){
+  const env=armaEaabReadEnvelope();if(env&&env.day===armaEaabToday()){armaEaabRender(env.response,{sameDay:armaEaabMorningRefreshDue(env)});window.ARMA_MAIN_R0964_EAAB_ESTADO_UI='VALIDADO_HOY_'+env.response.estado;return;}
+  const prior=armaEaabPreviousPositive()||window.ARMA_MAIN_R0964_ULTIMO_BACKEND;
+  if(prior&&prior.fechaBogota===armaEaabYesterday()&&Array.isArray(prior.cortes)){armaEaabRender(Object.assign({ok:true},prior),{pending:true});window.ARMA_MAIN_R0964_EAAB_ESTADO_UI='PENDIENTE_REVALIDACION';return;}
+  armaEaabRender(null);window.ARMA_MAIN_R0964_EAAB_ESTADO_UI='SIN_AVISO_VERIFICADO';
+}
+function armaEaabMayRetry(day){
+  try{const e=JSON.parse(localStorage.getItem(ARMA_EAAB_RETRY_KEY)||'null');if(e&&e.day===day&&Date.now()-Number(e.ts||0)>=0&&Date.now()-Number(e.ts||0)<ARMA_EAAB_RETRY_MS)return false;localStorage.setItem(ARMA_EAAB_RETRY_KEY,JSON.stringify({day:day,ts:Date.now()}));}catch(_e){}return true;
 }
 async function armaEaabStart(){
-  const cached=armaEaabCached();if(cached){armaEaabRender(cached);return;}
+  const current=armaEaabCached();if(current){armaEaabRender(current);return;}
+  armaEaabPaintLocal(); // Primero preservar el aviso previo con estado explicitamente provisional.
   if(armaEaabChecking||document.visibilityState==='hidden')return;
-  armaEaabChecking=true;
-  const controller=new AbortController(),tm=setTimeout(function(){controller.abort();},16000);
+  const requestDay=armaEaabToday();if(!armaEaabMayRetry(requestDay))return;
+  armaEaabChecking=true;const controller=new AbortController(),tm=setTimeout(function(){controller.abort();},16000);
   try{
     const response=await fetch(ARMA_API_URL,{method:'POST',cache:'no-store',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'eaabCortesEstado'}),signal:controller.signal});
     if(!response.ok)throw new Error('HTTP_'+response.status);
-    const j=await response.json();armaEaabRender(j);
-    if(j&&j.ok===true&&j.fechaBogota===armaEaabToday()&&j.estado!=='SIN_VERIFICAR'){try{localStorage.setItem(ARMA_EAAB_UI_CACHE_KEY,JSON.stringify({day:armaEaabToday(),response:j}));}catch(e){}}
-  }catch(e){armaEaabRender(null);console.warn('R094 EAAB consulta no disponible',String(e&&e.message||e).slice(0,70));}
+    const j=await response.json(),day=armaEaabToday();
+    if(armaEaabVerified(j)&&j.fechaBogota===day){
+      const phase=armaEaabIsMorningVerified(j)?'DAY':'NIGHT';
+      try{localStorage.setItem(ARMA_EAAB_UI_CACHE_KEY,JSON.stringify({day:day,ts:Date.now(),phase:phase,response:j}));}catch(_e){}
+      window.ARMA_MAIN_R0964_ULTIMO_BACKEND=null;armaEaabRender(j,{sameDay:armaEaabBogotaMinutes()>=6*60+20&&phase!=='DAY'});window.ARMA_MAIN_R0964_EAAB_ESTADO_UI='VALIDADO_HOY_'+j.estado;
+    }else{
+      const old=j&&j.ultimoAviso;
+      if(old&&old.pendienteRevalidacion===true&&old.fechaBogota===armaEaabYesterday()){window.ARMA_MAIN_R0964_ULTIMO_BACKEND=old;}
+      armaEaabPaintLocal();window.ARMA_MAIN_R0964_EAAB_RESPUESTA='NO_VERIFICADA_O_FECHA_DISTINTA';
+    }
+  }catch(e){armaEaabPaintLocal();window.ARMA_MAIN_R0963_EAAB_RESPUESTA='ERROR_CONSULTA';console.warn('R096.3 EAAB: respuesta sin validacion actual',String(e&&e.message||e).slice(0,70));}
   finally{clearTimeout(tm);armaEaabChecking=false;}
 }
-window.addEventListener('load',function(){setInterval(function(){if(document.visibilityState==='visible'&&!armaEaabCached()){armaEaabStart();}},60*60*1000);});
-// Volver a MAIN NO dispara nueva peticion; solo re-render desde cache vigente.
 window.ARMA_MAIN_R0961_EAAB_ALLOWED=false;
-document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'){const c=armaEaabCached();if(c)armaEaabRender(c);else{document.getElementById('armaEaabAviso').hidden=true;if(window.ARMA_MAIN_R0961_EAAB_ALLOWED)armaEaabStart();}}});
+armaEaabObservedDay=armaEaabToday();
+window.addEventListener('load',function(){
+  setInterval(function(){const day=armaEaabToday();if(day!==armaEaabObservedDay){armaEaabObservedDay=day;armaEaabPaintLocal();if(window.ARMA_MAIN_R0961_EAAB_ALLOWED)armaEaabStart();}},60000);
+  setInterval(function(){if(document.visibilityState==='visible'&&!armaEaabCached()&&window.ARMA_MAIN_R0961_EAAB_ALLOWED)armaEaabStart();},10*60*1000);
+});
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'){armaEaabObservedDay=armaEaabToday();armaEaabPaintLocal();if(!armaEaabCached()&&window.ARMA_MAIN_R0961_EAAB_ALLOWED)armaEaabStart();}});
+window.addEventListener('storage',function(e){if(e.key===ARMA_EAAB_UI_CACHE_KEY)armaEaabPaintLocal();});
 const ARMA_VISITOR_PERMISSIONS = {};
 let armaSession = {user:'VISITANTE', nombre:'VISITANTE', nivel:'INICIAR SESION', token:'', permissions:ARMA_VISITOR_PERMISSIONS};
 const ARMA_CHANNEL_NAME='ARMA_CONTROL_CHANNEL';
@@ -2055,8 +2099,8 @@ document.addEventListener('DOMContentLoaded',function(){
     window.ARMA_MAIN_R0961_EAAB_ALLOWED=true;
     setTimeout(function(){armaEaabStart();},200);
   });
-  // Sin esperar red, dibujar aviso EAAB desde cache diario cuando exista.
-  const eaabLocal=armaEaabCached();if(eaabLocal)armaEaabRender(eaabLocal);
+  // R096.3: al cambiar el dia, no perder un positivo anterior sin advertencia.
+  armaEaabPaintLocal();
   // Logout o cambio de usuario desde otra pestana: invalidar estado local sin reescribir storage.
   window.addEventListener('storage',function(e){
     if(e.key!=='ARMA_TOKEN')return;
