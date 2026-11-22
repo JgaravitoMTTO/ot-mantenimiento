@@ -702,7 +702,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-11-21 21:50:59</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-11-21 22:54:15</span></div>
   </footer>
 </main>
 </div>
@@ -907,7 +907,7 @@ function armaApplyPermissions(){
 }
 function armaWriteSessionCache(){
   try{
-    if(!armaSession||!armaSession.token){localStorage.removeItem('ARMA_SESSION_CACHE');return;}
+    if(!armaSession||!armaSession.token)return; // R095: solo logout/invalidacion confirmada elimina la sesion compartida.
     localStorage.setItem('ARMA_SESSION_CACHE',JSON.stringify({
       user:armaSession.user||'',nombre:armaSession.nombre||'',nivel:armaSession.nivel||'',
       token:armaSession.token||'',permissions:armaSession.permissions||{},ts:Date.now(),source:'MAIN'
@@ -1993,7 +1993,7 @@ function armaMainV161RefreshSharedSessionCache(){
   }catch(e){return false;}
 }
 const armaMainV161BaseOpenChildWindow=armaOpenChildWindow;
-armaOpenChildWindow=function(url,targetName){armaMainV161RefreshSharedSessionCache();return armaMainV161BaseOpenChildWindow(url,targetName);};
+armaOpenChildWindow=function(url,targetName){if(armaSession&&armaSession.token){armaMainV161RefreshSharedSessionCache();}return armaMainV161BaseOpenChildWindow(url,targetName);};
 window.addEventListener('focus',function(){armaMainV161RefreshSharedSessionCache();});
 document.addEventListener('visibilitychange',function(){if(!document.hidden)armaMainV161RefreshSharedSessionCache();});
 /* === FIN MAIN V16.2 SHARED SESSION BRIDGE === */
@@ -2003,7 +2003,7 @@ armaOpenChildWindow=function(url,targetName){if(String(url||'').toLowerCase().in
 /* === FIN DATAPEL STATEFUL HTML R020.14 === */
 document.addEventListener('DOMContentLoaded',function(){
   const internalReturn=armaConsumeInternalReturn();
-  const restored=armaRestoreSessionCache();if(!restored)armaRenderVisitor();
+  const restored=armaRestoreSessionCache();if(!restored){armaRenderVisitor();if(localStorage.getItem('ARMA_TOKEN')){const u=document.getElementById('userNameText'),l=document.getElementById('userLevelText');if(u)u.textContent='VALIDANDO SESION';if(l)l.textContent='COMPROBANDO ACCESO';}}
   const cachedAuth=armaV13AuthCacheRead();if(cachedAuth&&restored){cachedAuth.token=localStorage.getItem('ARMA_TOKEN')||'';armaSetSession(cachedAuth);}
   const cachedDash=armaV13DashboardCacheRead();if(cachedDash)armaApplyDashboard(cachedDash);
   setTimeout(armaHideBootSplash,internalReturn?40:220);
