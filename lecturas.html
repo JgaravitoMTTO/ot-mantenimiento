@@ -71,6 +71,13 @@
 .arma-r084-water .arma-r084-action{color:#087ca7}
 @media(max-width:1050px){.arma-hero-actions{width:100%;justify-content:flex-start;margin-left:0}.arma-r084-utilities{flex:1 0 auto}.arma-r084-service{width:135px}}
 @media(max-width:700px){.arma-hero-actions{display:grid;grid-template-columns:1fr;width:100%}.arma-hero-actions .arma-home-card{width:100%;min-width:0}.arma-r084-utilities{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.arma-r084-service{width:100%;min-width:0;min-height:87px}}
+.arma-r104-water-group{display:flex;flex-direction:column;gap:4px;flex:0 0 auto;min-width:0}
+.arma-r104-water-group .arma-r084-service{width:140px}
+.arma-r104-refresh{appearance:none;border:1px solid #b8e6fa;border-radius:8px;background:#e8f7ff;color:#005b8a;font:950 9px Segoe UI,Arial,sans-serif;letter-spacing:.35px;min-height:26px;padding:4px 6px;cursor:pointer;white-space:nowrap}
+.arma-r104-refresh:hover{background:#fff}.arma-r104-refresh:focus-visible{outline:3px solid #fef08a;outline-offset:2px}.arma-r104-refresh:disabled{opacity:.65;cursor:wait}
+.arma-r104-status{font-size:10px;color:#00447c;font-weight:850;margin:0 0 8px;text-align:right;overflow-wrap:anywhere}
+@media(max-width:1050px){.arma-r104-water-group .arma-r084-service{width:135px}}
+@media(max-width:700px){.arma-r104-water-group{width:100%}.arma-r104-water-group .arma-r084-service{width:100%;min-width:0}.arma-r104-refresh{min-height:40px;font-size:10px}}
 </style>
 </head>
 <body>
@@ -113,6 +120,8 @@
 </svg></span>
 <span class="arma-r084-action">ACTUALIZAR</span>
 </button>
+<div class="arma-r104-water-group">
+<button type="button" id="armaR104EAABRefresh" class="arma-r104-refresh hidden" onclick="armaR104RefreshEAAB()" title="CONSULTAR AHORA LA PUBLICACION OFICIAL EAAB">&#8635; FORZAR CONSULTA</button>
 <a id="armaR084EAABLink" class="arma-r084-service arma-r084-water" href="https://www.acueducto.com.co/wps/portal/EAB2/Home/atencion-al-usuario/programacion_cortes" target="_blank" rel="noopener noreferrer" data-arma-browser="1" title="CONSULTAR CORTES PROGRAMADOS DEL ACUEDUCTO DE BOGOTA" aria-label="ACUEDUCTO DE BOGOTA: ABRIR PROGRAMACION OFICIAL DE CORTES EN UNA NUEVA PESTANA">
 <span class="arma-r084-logo" aria-hidden="true">
 <svg viewBox="0 0 156 50" focusable="false" xmlns="http://www.w3.org/2000/svg">
@@ -124,8 +133,10 @@
 </a>
 </div>
 </div>
+</div>
 </section>
 <div id="armaR063Estado" class="arma-r063-status" role="status" aria-live="polite"></div>
+<div id="armaR104EAABStatus" class="arma-r104-status hidden" role="status" aria-live="polite"></div>
 <section id="summary" class="summary"></section>
 <div class="layout">
 <aside class="panel"><h3>VARIABLES AUTORIZADAS</h3><label for="armaR065PlantaFiltro">VER VARIABLES POR PLANTA MEL</label><select id="armaR065PlantaFiltro" onchange="armaR065FilterChanged()"><option value="__ALL_VARIABLES__">TODAS LAS VARIABLES</option><option value="">TODAS LAS PLANTAS</option><option value="__UNASSIGNED__">SIN ASIGNAR</option></select><input id="varSearch" placeholder="BUSCAR VARIABLE, AM O PUNTO"><button id="armaR065EditButton" class="btn hidden" type="button" onclick="armaR065EditOpen()" style="margin-top:9px;width:100%">EDITAR VARIABLE SELECCIONADA</button><div id="variableList" class="variable-list"><div class="empty">CARGANDO...</div></div></aside>
@@ -541,6 +552,56 @@ lecV02BootKey=function(){return 'ARMA_LEC_R082_BOOT_'+lecV02TokenKey();};
 lecV02TrendKey=function(id,from,to){return 'ARMA_LEC_R065_TREND_'+lecV02TokenKey()+'_'+String(id||'')+'_'+String(from||'')+'_'+String(to||'');};
 const armaR065BootstrapBase=lecV02ApplyBootstrap;
 lecV02ApplyBootstrap=function(j,c){armaR065BootstrapBase(j,c);armaR065Bootstrap(j);armaR065FilterChanged();};
+// R104 EAAB: consulta real bajo demanda, sin bloquear graficas ni ENEL.
+let armaR104LiveToken='',armaR104Busy=false;
+function armaR104Notice(text){const el=byId('armaR104EAABStatus');el.textContent=text;el.classList.toggle('hidden',!text);}
+function armaR104Today(){const p=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Bogota',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());const d={};p.forEach(x=>d[x.type]=x.value);return d.year+'-'+d.month+'-'+d.day;}
+function armaR104SyncMain(j){
+  if(!j||j.ok!==true||j.ejecutada!==true||j.fechaBogota!==armaR104Today()||!['CORTE_PROGRAMADO','SIN_COINCIDENCIA'].includes(j.estado))return false;
+  if(!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(String(j.fechaConsulta||''))||!String(j.fechaConsulta).startsWith(j.fechaBogota+'T'))return false;
+  if(!Array.isArray(j.cortes)||(j.estado==='CORTE_PROGRAMADO'&&!j.cortes.length)||(j.estado==='SIN_COINCIDENCIA'&&j.cortes.length))return false;
+  try{
+    const key='ARMA_EAAB_MAIN_R094_DAILY';let prev=null;
+    try{prev=JSON.parse(localStorage.getItem(key)||'null');}catch(ignore){}
+    if(prev&&prev.day===j.fechaBogota&&prev.response&&prev.response.ok===true&&['CORTE_PROGRAMADO','SIN_COINCIDENCIA'].includes(prev.response.estado)&&String(prev.response.fechaConsulta||'')>j.fechaConsulta)return true;
+    const phase=/^\d{4}-\d{2}-\d{2}T(0[6-9]|1[0-9]|2[0-3]):/.test(j.fechaConsulta)?'DAY':'NIGHT';
+    localStorage.setItem(key,JSON.stringify({day:j.fechaBogota,ts:Date.now(),phase:phase,response:j}));
+    return true;
+  }catch(ignore){return false;}
+}
+async function armaR104RefreshEAAB(){
+  const b=byId('armaR104EAABRefresh'),t=token();
+  if(armaR104Busy||!armaR065CanManage||!t||t!==armaR104LiveToken)return;
+  armaR104Busy=true;b.disabled=true;b.setAttribute('aria-busy','true');b.textContent='CONSULTANDO...';
+  armaR104Notice('EAAB: CONSULTANDO PUBLICACION OFICIAL, PLANTAS 1 Y 2...');
+  const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),90000);
+  try{
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'eaabCortesActualizarManual',token:t}),cache:'no-store',signal:ctl.signal});
+    if(!r.ok)throw Error('HTTP_'+r.status);
+    const j=await r.json();if(token()!==t||armaR104LiveToken!==t)return;
+    if(!j||j.ok!==true||j.ejecutada!==true){
+      const e=String(j&&j.error||'RESPUESTA_NO_CONFIRMADA');
+      const retry=Number(j&&j.retryAfterSeconds)||0;
+      const text=e==='EAAB_ACCESO_DENEGADO'?'ACCESO DENEGADO.':e==='ACCION_NO_RECONOCIDA'?'BACKEND R104 NO DISPONIBLE.':e+(retry>0?' // REINTENTAR EN '+retry+' S.':'');
+      armaR104Notice('EAAB: '+text);msg(text,'A.R.M.A. | EAAB');return;
+    }
+    const stamp=String(j.fechaConsulta||'').replace('T',' ')+' (BOGOTA)';
+    if(j.fechaBogota!==armaR104Today()){armaR104Notice('EAAB: FECHA DE CONSULTA NO VIGENTE.');return;}
+    const verified=['CORTE_PROGRAMADO','SIN_COINCIDENCIA'].includes(j.estado);
+    const synced=verified&&armaR104SyncMain(j);
+    let text='';
+    if(j.estado==='CORTE_PROGRAMADO'&&Array.isArray(j.cortes)&&j.cortes.length){
+      text=j.cortes.map(c=>[c.planta,c.barrio,c.fecha,c.horaInicio,c.duracionHoras+' H',c.tipoTrabajo].join(' / ')).join(' | ');
+    }else if(j.estado==='SIN_COINCIDENCIA'&&Array.isArray(j.cortes)&&!j.cortes.length){text='SIN COINCIDENCIAS PARA PLANTA 1 Y PLANTA 2 EN LA PUBLICACION CONSULTADA.';}
+    else{text='NO SE PUDO CONFIRMAR LA PROGRAMACION ACTUAL: '+String(j.estado||'ESTADO DESCONOCIDO')+'. SE CONSERVA EL ULTIMO RESULTADO VERIFICADO; NO EQUIVALE A AUSENCIA DE CORTES.';}
+    armaR104Notice('EAAB: '+stamp+' // '+String(j.estado||'NO VERIFICADO')+(synced?' // MAIN SINCRONIZADO':''));
+    msg(stamp+' // '+text+(verified&&!synced?' // NO SE CONFIRMO SINCRONIZACION LOCAL DE MAIN.':''),'A.R.M.A. | ACUEDUCTO');
+  }catch(e){if(token()===t){const text='RESULTADO NO CONFIRMADO. LA CONSULTA PUEDE CONTINUAR EN EL SERVIDOR. NO SE ALTERO LA CACHE LOCAL.';armaR104Notice('EAAB: '+text);msg(text,'A.R.M.A. | EAAB');}}
+  finally{clearTimeout(tm);armaR104Busy=false;b.disabled=false;b.removeAttribute('aria-busy');b.textContent='? FORZAR CONSULTA';}
+}
+const armaR104BootstrapBase=lecV02ApplyBootstrap;
+lecV02ApplyBootstrap=function(j,c){armaR104BootstrapBase(j,c);if(c!==true){armaR104LiveToken=armaR065CanManage?token():'';byId('armaR104EAABRefresh').classList.toggle('hidden',!armaR104LiveToken);}};
+window.addEventListener('storage',function(e){if(e.key==='ARMA_TOKEN'||e.key==='ARMA_SESSION_CACHE'){if(token()!==armaR104LiveToken){armaR104LiveToken='';byId('armaR104EAABRefresh').classList.add('hidden');armaR104Notice('');}}});
 document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
