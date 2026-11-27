@@ -37,6 +37,7 @@ html{zoom:75%;}@media(max-width:900px){html{zoom:100%;}}
 body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:#eef3f9;color:var(--text);text-transform:uppercase}
 .boot-splash{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(238,245,249,.58);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);transition:opacity .55s ease,visibility .55s ease}
 .boot-splash.hide{opacity:0;visibility:hidden;pointer-events:none}
+html.arma-r1021-return #armaBootSplash{display:none!important}
 .boot-card{width:min(760px,90vw);border-radius:30px;background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(231,245,255,.94));box-shadow:0 30px 90px rgba(0,35,75,.30);border:1px solid rgba(0,92,178,.18);text-align:center;position:relative;overflow:hidden}
 .boot-card:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(0,148,255,.22),transparent 44%);pointer-events:none;z-index:1}
 .boot-banner-wrap{height:255px;background:#002f68;position:relative;overflow:hidden}
@@ -331,6 +332,25 @@ body.arma-logged .alarm-center-card{display:flex}
 .arma-eaab-alert a{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;padding:11px 14px;border-radius:12px;background:#9a3412;color:white;font-size:11px;text-decoration:none;font-weight:950}.arma-eaab-alert a:hover{background:#7c2d12}@media(max-width:750px){.arma-eaab-alert{flex-direction:column;align-items:stretch}.arma-eaab-alert a{white-space:normal}.arma-eaab-alert-copy strong{font-size:17px}}
 
   </style>
+<script>
+(function(){
+  var mode='navigate',flag=false,seen=false,internal=false,ref=null;
+  try{var entries=performance.getEntriesByType('navigation');if(entries.length)mode=entries[0].type;else if(performance.navigation){mode=performance.navigation.type===1?'reload':performance.navigation.type===2?'back_forward':'navigate';}}catch(e){}
+  try{flag=sessionStorage.getItem('ARMA_PWA_RETURN_MAIN')==='1';sessionStorage.removeItem('ARMA_PWA_RETURN_MAIN');seen=sessionStorage.getItem('ARMA_R1021_MAIN_SEEN')==='1';}catch(e){}
+  try{if(document.referrer)ref=new URL(document.referrer);}catch(e){}
+  var base='/ot-mantenimiento/';
+  var inside=!!(ref&&ref.origin===location.origin&&ref.pathname.indexOf(base)===0);
+  var fromMain=inside&&/\/main\.html$/i.test(ref.pathname);
+  var fromPortal=inside&&/\/public\.html$/i.test(ref.pathname);
+  var fromModule=inside&&!fromMain&&!fromPortal;
+  if(mode==='back_forward'&&seen){internal=true;}
+  else if(mode!=='reload'&&!fromPortal&&(!ref||inside)){internal=fromModule||(!fromMain&&flag);}
+  window.ARMA_MAIN_R1021_INTERNAL_RETURN=!!internal;
+  window.ARMA_MAIN_R1021_BOOT_MODE=internal?'INTERNAL_RETURN':'COLD_START';
+  if(internal)document.documentElement.classList.add('arma-r1021-return');
+  try{sessionStorage.setItem('ARMA_R1021_MAIN_SEEN','1');}catch(e){}
+})();
+</script>
 </head>
 <body>
 <div id='armaBootSplash' class='boot-splash' aria-live='polite'>
@@ -702,7 +722,7 @@ body.arma-logged .alarm-center-card{display:flex}
     </a>
   </section>
   <footer class='footer footer-home'>
-    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-11-22 00:32:25</span></div>
+    <div class='footer-card'><span class='footer-brand'>ARMA&trade;</span><span class='footer-sep'>//</span><span>Usuario Autorizado: PELEX S.A.S.</span><span class='footer-sep'>//</span><span>GENERADO: 2026-11-27 17:54:13</span></div>
   </footer>
 </main>
 </div>
@@ -945,7 +965,7 @@ function armaApplyPermissions(){
   document.querySelectorAll('.arma-secured').forEach(function(el){
     var key=(el.getAttribute('data-perm')||'').toUpperCase();
     var loginRequired=(el.getAttribute('data-login-required')==='1');
-    var allowed=superAdmin ? !!armaSession.token : (key ? !!perms[key] : (loginRequired ? !!armaSession.token : false));
+    var tokenOK=!!armaSession.token&&String(localStorage.getItem('ARMA_TOKEN')||'')===String(armaSession.token);var allowed=tokenOK&&(superAdmin||(key ? !!perms[key] : loginRequired));
     if(allowed){el.classList.remove('arma-locked');el.setAttribute('aria-disabled','false');}
     else{el.classList.add('arma-locked');el.setAttribute('aria-disabled','true');}
   });
@@ -978,27 +998,20 @@ function armaRestoreSessionCache(){
   const level=document.getElementById('userLevelText');if(level)level.textContent='VALIDANDO ACCESO';
   armaApplyPermissions();return true;
 }
-function armaMainR0962RestoreRecentSession(){
+function armaMainR0962RestoreRecentSession(internalReturn){
   try{
     const token=String(localStorage.getItem('ARMA_TOKEN')||'');if(!token)return false;
-    const cached=armaV13AuthCacheRead();
+    const cached=armaV13AuthCacheRead(internalReturn);
     if(!cached||String(cached.token||'')!==token||!cached.user||cached.authenticated===false)return false;
-    window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false; // Se conserva la barrera ADMIN hasta obtener confirmacion LIVE.
+    window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;window.ARMA_MAIN_R102_CACHED_MENU=true;
     armaSession={user:cached.user,nombre:cached.nombre||cached.user,nivel:cached.nivel||'USUARIO VALIDADO',token:token,permissions:cached.permissions||{}};
     armaV13AuthValidated=false; // Se solicita revalidacion no bloqueante siempre.
     armaUpdateUserCard();armaApplyPermissions();
-    window.ARMA_MAIN_R0962_FAST_MODE='RECENT_AUTH_CACHE';
+    window.ARMA_MAIN_R0962_FAST_MODE='R102_VERIFIED_MENU_CACHE';
     return true;
   }catch(e){return false;}
 }
-function armaConsumeInternalReturn(){
-  try{
-    var flag=sessionStorage.getItem('ARMA_PWA_RETURN_MAIN')==='1';
-    if(flag){sessionStorage.removeItem('ARMA_PWA_RETURN_MAIN');return true;}
-    if(document.referrer){var ref=new URL(document.referrer);return ref.origin===location.origin&&ref.pathname.indexOf('/ot-mantenimiento/')===0&&!/\/main\.html$/i.test(ref.pathname);}
-  }catch(e){}
-  return false;
-}
+function armaConsumeInternalReturn(){return window.ARMA_MAIN_R1021_INTERNAL_RETURN===true;}
 function armaUpdateUserCard(){
   var nameEl=document.getElementById('userNameText'); var lvlEl=document.getElementById('userLevelText');
   if(nameEl){nameEl.textContent=(armaSession.nombre||armaSession.user||'VISITANTE');}
@@ -1465,8 +1478,29 @@ function armaSetSession(data){
 function armaSetVisitor(clearStored){
   armaV13AuthValidated=false;if(clearStored!==false){localStorage.removeItem('ARMA_TOKEN');localStorage.removeItem('ARMA_SESSION_CACHE');try{sessionStorage.removeItem('ARMA_V13_AUTH_BOOT');sessionStorage.removeItem('ARMA_V13_DASH_PHONE');sessionStorage.removeItem('ARMA_V13_DASH_PC');localStorage.removeItem('ARMA_R17_DASH_PHONE');localStorage.removeItem('ARMA_R17_DASH_PC');localStorage.removeItem('ARMA_R17_DASH_LAST_NET');Object.keys(sessionStorage).filter(function(k){return k.indexOf('ARMA_GEO_WELCOME_')===0||k.indexOf('ARMA_SCOPE_WARM_R813_')===0||k.indexOf('ARMA_SCOPE_WARM_R814_')===0;}).forEach(function(k){sessionStorage.removeItem(k);});}catch(e){}}armaRenderVisitor();
 }
-function armaV13AuthCacheWrite(session){try{sessionStorage.setItem('ARMA_V13_AUTH_BOOT',JSON.stringify({ts:Date.now(),session:session}));}catch(e){}}
-function armaV13AuthCacheRead(){try{const raw=sessionStorage.getItem('ARMA_V13_AUTH_BOOT')||'';if(!raw)return null;const x=JSON.parse(raw);if(!x||Date.now()-Number(x.ts||0)>300000)return null;return x.session||null;}catch(e){return null;}}
+const ARMA_R102_MENU_KEY='ARMA_R102_VERIFIED_MENU',ARMA_R102_MENU_MAX_MS=86400000;
+function armaR102CacheCandidate(raw,token){
+  try{const x=JSON.parse(raw||'null'),s=x&&x.session,age=Date.now()-Number(x&&x.ts);
+    if(!x||!Number.isFinite(age)||age<0||age>ARMA_R102_MENU_MAX_MS||!s||!token||String(s.token||'')!==token||!s.user||!s.nivel||/^(PUBLICO|VISITANTE)$/i.test(s.nivel)||s.authenticated===false||!s.permissions||typeof s.permissions!=='object'||Array.isArray(s.permissions))return null;
+    if(s.expiresAt){const exp=Date.parse(s.expiresAt);if(Number.isFinite(exp)&&exp<=Date.now())return null;}
+    return x;
+  }catch(e){return null;}
+}
+function armaV13AuthCacheWrite(session){
+  try{const token=String(localStorage.getItem('ARMA_TOKEN')||'');if(!session||!token||String(session.token||'')!==token)return;
+    const s={user:session.user,nombre:session.nombre||session.user,nivel:session.nivel,token:token,permissions:session.permissions,authenticated:true,expiresAt:session.expiresAt||null};
+    const raw=JSON.stringify({ts:Date.now(),session:s});if(!armaR102CacheCandidate(raw,token))return;
+    try{sessionStorage.setItem('ARMA_V13_AUTH_BOOT',raw);}catch(e){}
+    try{localStorage.setItem(ARMA_R102_MENU_KEY,raw);}catch(e){}
+  }catch(e){}
+}
+function armaR102ClearMenuCache(shared){try{sessionStorage.removeItem('ARMA_V13_AUTH_BOOT');}catch(e){}if(shared){try{localStorage.removeItem(ARMA_R102_MENU_KEY);}catch(e){}}}
+function armaV13AuthCacheRead(internalReturn){
+  const token=String(localStorage.getItem('ARMA_TOKEN')||'');if(!token)return null;let a=null,b=null;
+  try{a=armaR102CacheCandidate(sessionStorage.getItem('ARMA_V13_AUTH_BOOT'),token);}catch(e){}
+  if(internalReturn){try{b=armaR102CacheCandidate(localStorage.getItem(ARMA_R102_MENU_KEY),token);}catch(e){}}
+  const x=a&&b?(Number(a.ts)>=Number(b.ts)?a:b):(a||b);return x?x.session:null;
+}
 function armaV13DashboardCacheKey(){return armaIsPhoneDevice()?'ARMA_R17_DASH_PHONE':'ARMA_R17_DASH_PC';}
 function armaV13DashboardCacheWrite(data){try{localStorage.setItem(armaV13DashboardCacheKey(),JSON.stringify({ts:Date.now(),data:data}));localStorage.setItem('ARMA_R17_DASH_LAST_NET',String(Date.now()));}catch(e){}}
 function armaV13DashboardCacheEnvelope(){try{const raw=localStorage.getItem(armaV13DashboardCacheKey())||'';if(!raw)return null;const x=JSON.parse(raw);if(!x||!x.data)return null;if(Date.now()-Number(x.ts||0)>3600000)return null;return x;}catch(e){return null;}}
@@ -1801,7 +1835,7 @@ function armaMainV150ApplyPulse(data,reason){
 async function armaMainV150Pulse(reason,force){
   if(!armaSession||!armaSession.token||document.hidden||navigator.onLine===false)return false;
   if(!force&&Date.now()-armaMainV150LastPulseAt<30000)return true;if(armaMainV150PulsePromise)return armaMainV150PulsePromise;
-  armaMainV150PulsePromise=armaApi('mainPulse',{token:armaSession.token,reason:String(reason||'TIMER')}).then(function(d){return armaMainV150ApplyPulse(d,reason);}).catch(function(e){console.warn('ARMA mainPulse',e);return false;}).finally(function(){armaMainV150PulsePromise=null;});
+  const pulseToken=String(armaSession.token);armaMainV150PulsePromise=armaApi('mainPulse',{token:pulseToken,reason:String(reason||'TIMER')}).then(function(d){if(armaMainV151LogoutBusy||String(localStorage.getItem('ARMA_TOKEN')||'')!==pulseToken||String(armaSession.token||'')!==pulseToken)return false;return armaMainV150ApplyPulse(d,reason);}).catch(function(e){console.warn('ARMA mainPulse',e);return false;}).finally(function(){armaMainV150PulsePromise=null;});
   return armaMainV150PulsePromise;
 }
 function armaMainV150PulseInit(){
@@ -1928,7 +1962,7 @@ armaLogin=async function(){
     if(data&&data.ok){
       armaV13AuthValidated=true;
       armaSetSession(data);
-      if(data.token){window.ARMA_MAIN_LIVE_AUTH_VERIFIED=true;armaApplyPermissions();armaV13AuthCacheWrite(armaSession);} // R096.2: login confirmado, cache de esta pestana.
+      if(data.token){window.ARMA_MAIN_LIVE_AUTH_VERIFIED=true;window.ARMA_MAIN_R102_CACHED_MENU=false;armaApplyPermissions();armaV13AuthCacheWrite(Object.assign({},armaSession,{expiresAt:data.expiresAt||null}));}
       armaV13AuthLastRefresh=Date.now();
       armaCloseLogin();
       document.getElementById('loginPass').value='';
@@ -1950,15 +1984,16 @@ armaLogin=async function(){
 /* === FIN MAIN V15.2 === */
 /* === ARMA MAIN V15.4 CLEAN SESSION + PERMISSIONS === */
 const armaMainV154BaseRefreshAuth=armaV13RefreshAuth;
+let armaR102AuthToken='',armaR102AuthSerial=0;
 armaV13RefreshAuth=async function(force){
-  if(!force&&Date.now()-armaV13AuthLastRefresh<240000)return true;if(armaV13AuthPromise)return armaV13AuthPromise;
-  const token=localStorage.getItem('ARMA_TOKEN')||'';
+  const token=String(localStorage.getItem('ARMA_TOKEN')||'');if(!force&&window.ARMA_MAIN_LIVE_AUTH_VERIFIED&&String(armaSession.token||'')===token&&Date.now()-armaV13AuthLastRefresh<240000)return true;if(armaV13AuthPromise&&armaR102AuthToken===token)return armaV13AuthPromise;
+  const serial=++armaR102AuthSerial;armaR102AuthToken=token;
   armaV13AuthPromise=armaApi('authBootstrap',{token:token}).then(function(data){
-    if(String(localStorage.getItem('ARMA_TOKEN')||'')!==token)return false; // R096.1: respuesta obsoleta por login/logout cruzado.
+    if(serial!==armaR102AuthSerial||String(localStorage.getItem('ARMA_TOKEN')||'')!==token||(token&&armaMainV151LogoutBusy))return false;
     if(data&&data.ok){armaV13AuthLastRefresh=Date.now();return armaApplyAuthBootstrap(data,token);}
     if(token&&data&&(data.sessionInvalid===true||data.authenticated===false)){armaSetVisitor(true);return false;}
     console.warn('ARMA authBootstrap transitorio conservando sesion',data||{});return false;
-  }).catch(function(e){console.warn('ARMA authBootstrap red transitoria conservando sesion',e);return false;}).finally(function(){armaV13AuthPromise=null;});
+  }).catch(function(e){console.warn('ARMA authBootstrap red transitoria conservando sesion',e);return false;}).finally(function(){if(serial===armaR102AuthSerial)armaV13AuthPromise=null;});
   return armaV13AuthPromise;
 };
 const armaMainV154BaseApplyPulse=armaMainV150ApplyPulse;
@@ -1969,27 +2004,27 @@ armaMainV150ApplyPulse=function(data,reason){
 };
 /* === FIN MAIN V15.4 === */
 /* === ARMA MAIN V15.5 SUPERADMIN GUARD === */
-window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;
+window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;window.ARMA_MAIN_R102_CACHED_MENU=false;
 const armaMainV155BaseApplyPermissions=armaApplyPermissions;
 armaApplyPermissions=function(){
   armaMainV155BaseApplyPermissions();
   document.querySelectorAll('[data-perm="BTN_ADMIN_ARMA"]').forEach(function(el){
-    const allowed=window.ARMA_MAIN_LIVE_AUTH_VERIFIED===true && armaIsSuperAdmin();
+    const tokenOK=!!armaSession.token&&String(localStorage.getItem('ARMA_TOKEN')||'')===String(armaSession.token);const allowed=tokenOK&&((window.ARMA_MAIN_LIVE_AUTH_VERIFIED===true&&armaIsSuperAdmin())||(window.ARMA_MAIN_R102_CACHED_MENU===true&&String(armaSession.nivel||'').toUpperCase()==='SUPER_ADMIN'));
     if(allowed){el.classList.remove('arma-locked');el.setAttribute('aria-disabled','false');}
     else{el.classList.add('arma-locked');el.setAttribute('aria-disabled','true');}
   });
 };
 const armaMainV155BaseApplyAuthBootstrap=armaApplyAuthBootstrap;
 armaApplyAuthBootstrap=function(data,token){
-  window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;
+  window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;window.ARMA_MAIN_R102_CACHED_MENU=false;
   const ok=armaMainV155BaseApplyAuthBootstrap(data,token);
   if(ok===true){window.ARMA_MAIN_LIVE_AUTH_VERIFIED=true;armaApplyPermissions();}
   return ok;
 };
 const armaMainV155BaseSetVisitor=armaSetVisitor;
-armaSetVisitor=function(clearStored){window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;return armaMainV155BaseSetVisitor(clearStored);};
+armaSetVisitor=function(clearStored){window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;window.ARMA_MAIN_R102_CACHED_MENU=false;armaR102ClearMenuCache(clearStored!==false);return armaMainV155BaseSetVisitor(clearStored);};
 const armaMainV155BaseSetSession=armaSetSession;
-armaSetSession=function(data){window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;const r=armaMainV155BaseSetSession(data);armaApplyPermissions();return r;};
+armaSetSession=function(data){window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;window.ARMA_MAIN_R102_CACHED_MENU=false;const r=armaMainV155BaseSetSession(data);armaApplyPermissions();return r;};
 armaRequireAdminPerm=function(perm){
   if(window.ARMA_MAIN_LIVE_AUTH_VERIFIED!==true){alert('VALIDANDO PERMISOS DE ADMINISTRACION.');return false;}
   if(!armaRequireSession())return false;
@@ -2049,8 +2084,8 @@ document.addEventListener('visibilitychange',function(){
 /* === ARMA MAIN V16.2 SHARED SESSION BRIDGE - BASELINE ESTABLE === */
 function armaMainV161RefreshSharedSessionCache(){
   try{
-    if(!armaSession||!armaSession.token||window.ARMA_MAIN_LIVE_AUTH_VERIFIED!==true)return false;
-    localStorage.setItem('ARMA_TOKEN',armaSession.token);
+    if(!armaSession||!armaSession.token||window.ARMA_MAIN_LIVE_AUTH_VERIFIED!==true||String(localStorage.getItem('ARMA_TOKEN')||'')!==String(armaSession.token))return false;
+    // R102: nunca volver a escribir un token anterior desde un MAIN abierto.
     localStorage.setItem('ARMA_SESSION_CACHE',JSON.stringify({user:armaSession.user||'',nombre:armaSession.nombre||armaSession.user||'',nivel:armaSession.nivel||'',token:armaSession.token,permissions:armaSession.permissions||{},ts:Date.now(),source:'MAIN_V16_2_SHARED_BRIDGE'}));
     return true;
   }catch(e){return false;}
@@ -2068,7 +2103,7 @@ document.addEventListener('DOMContentLoaded',function(){
   const internalReturn=armaConsumeInternalReturn();
   const token=String(localStorage.getItem('ARMA_TOKEN')||'');
   window.ARMA_MAIN_R0962_FAST_MODE='PENDING';
-  const recent=armaMainR0962RestoreRecentSession();
+  const recent=armaMainR0962RestoreRecentSession(internalReturn);
   if(!recent){
     const restored=armaRestoreSessionCache();
     window.ARMA_MAIN_R0962_FAST_MODE=restored?'PRESENTATION_ONLY':'NO_RECENT_CACHE';
@@ -2080,7 +2115,8 @@ document.addEventListener('DOMContentLoaded',function(){
   // R096.2: el usuario previamente validado ya es visible. La red NO bloquea el regreso.
   window.ARMA_MAIN_R0962_IDENTITY_MS=Math.round(performance.now()); // Solo metrica, no guarda credenciales.
   const cachedDash=armaV13DashboardCacheRead();if(cachedDash)armaApplyDashboard(cachedDash);
-  setTimeout(armaHideBootSplash,internalReturn?40:160);
+  // R102.1: splash depende exclusivamente del tipo de navegacion, nunca de la cache auth.
+  if(internalReturn){const splash=document.getElementById('armaBootSplash');if(splash)splash.remove();}else setTimeout(armaHideBootSplash,160);
   armaPWAInit();armaStartMainPresence();updateDateCard();setInterval(updateDateCard,60000);
   // Inicializacion local independiente del tiempo de respuesta de authBootstrap.
   if(!cachedDash){setTimeout(function(){armaV13RefreshDashboard(false);},550);}else if(armaV13DashboardNeedsNetwork()||!!((cachedDash.kpis||{}).snapshotStale)){setTimeout(function(){armaV13RefreshDashboard(true);},1800);}
@@ -2088,9 +2124,9 @@ document.addEventListener('DOMContentLoaded',function(){
   const authInit=armaV13RefreshAuth(true); // Revalidacion EN SEGUNDO PLANO, no es barrera visual.
   Promise.resolve(authInit).then(function(ok){
     window.ARMA_MAIN_R0962_AUTH_MS=Math.round(performance.now());
-    if(!ok&&localStorage.getItem('ARMA_TOKEN')&&!window.ARMA_MAIN_LIVE_AUTH_VERIFIED){
+    if(!ok&&String(localStorage.getItem('ARMA_TOKEN')||'')===token&&token&&!window.ARMA_MAIN_LIVE_AUTH_VERIFIED){
       // Error transitorio: mantener solo nombre visible, retirar permisos cacheados.
-      const name=String(armaSession.nombre||armaSession.user||'VALIDANDO SESION');
+      window.ARMA_MAIN_R102_CACHED_MENU=false;const name=String(armaSession.nombre||armaSession.user||'VALIDANDO SESION');
       armaSession={user:'USUARIO',nombre:name,nivel:'SESION NO VERIFICADA',token:'',permissions:{}};
       armaUpdateUserCard();const l=document.getElementById('userLevelText');if(l)l.textContent='SESION NO VERIFICADA';armaApplyPermissions();
     }
@@ -2103,16 +2139,17 @@ document.addEventListener('DOMContentLoaded',function(){
   armaEaabPaintLocal();
   // Logout o cambio de usuario desde otra pestana: invalidar estado local sin reescribir storage.
   window.addEventListener('storage',function(e){
-    if(e.key!=='ARMA_TOKEN')return;
+    if(e.key!=='ARMA_TOKEN'&&e.key!==null)return;
     const current=String(localStorage.getItem('ARMA_TOKEN')||'');
-    if(!current||(armaSession&&armaSession.token&&String(armaSession.token)!==current)){
-      window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;armaV13AuthValidated=false;
+    if(!current||String(armaSession.token||'')!==current){
+      window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;window.ARMA_MAIN_R102_CACHED_MENU=false;armaV13AuthValidated=false;armaR102ClearMenuCache(false);
       armaRenderVisitor();window.ARMA_MAIN_R0962_FAST_MODE='INVALIDATED_BY_STORAGE';
     }
+    if(current){armaMainV151LogoutBusy=false;armaV13RefreshAuth(true);}
   });
-  // Recuperacion ante retorno de red/foco: nunca usar cache para desbloquear permisos.
-  window.addEventListener('online',function(){if(localStorage.getItem('ARMA_TOKEN')&&!window.ARMA_MAIN_LIVE_AUTH_VERIFIED)setTimeout(function(){armaV13RefreshAuth(true);},350);});
-  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&localStorage.getItem('ARMA_TOKEN')&&!window.ARMA_MAIN_LIVE_AUTH_VERIFIED)armaV13RefreshAuth(true);});
+  // R102: revalidar al retornar a MAIN, sin desactivar menu mientras la red responde.
+  let armaR102LastResume=0;function armaR102Resume(){if(document.hidden)return;const current=String(localStorage.getItem('ARMA_TOKEN')||'');if(!current||String(armaSession.token||'')!==current){window.ARMA_MAIN_LIVE_AUTH_VERIFIED=false;window.ARMA_MAIN_R102_CACHED_MENU=false;armaV13AuthValidated=false;armaR102ClearMenuCache(false);armaRenderVisitor();}if(current&&!armaMainV151LogoutBusy&&Date.now()-armaR102LastResume>1000){armaR102LastResume=Date.now();armaV13RefreshAuth(true);}}
+  window.addEventListener('focus',armaR102Resume);document.addEventListener('visibilitychange',armaR102Resume);window.addEventListener('pageshow',function(e){if(e.persisted)armaR102Resume();});window.addEventListener('online',function(){armaR102LastResume=0;armaR102Resume();});
   armaMainV150PulseInit();
   document.body.addEventListener('click',function(e){const locked=e.target.closest('.arma-locked');if(locked){e.preventDefault();alert('DEBE INICIAR SESION PARA ACCEDER A ESTE MODULO.');}});
   document.body.addEventListener('click',function(e){const a=e.target.closest('a[data-arma-window]');if(a&&!a.classList.contains('arma-locked')){e.preventDefault();armaOpenChildWindow(a.getAttribute('href'),a.getAttribute('data-arma-window'));}});
