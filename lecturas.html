@@ -594,6 +594,11 @@ async function armaR104RefreshEAAB(){
       text=j.cortes.map(c=>[c.planta,c.barrio,c.fecha,c.horaInicio,c.duracionHoras+' H',c.tipoTrabajo].join(' / ')).join(' | ');
     }else if(j.estado==='SIN_COINCIDENCIA'&&Array.isArray(j.cortes)&&!j.cortes.length){text='SIN COINCIDENCIAS PARA PLANTA 1 Y PLANTA 2 EN LA PUBLICACION CONSULTADA.';}
     else{text='NO SE PUDO CONFIRMAR LA PROGRAMACION ACTUAL: '+String(j.estado||'ESTADO DESCONOCIDO')+'. SE CONSERVA EL ULTIMO RESULTADO VERIFICADO; NO EQUIVALE A AUSENCIA DE CORTES.';}
+    const rango=j.publicacionDesde&&j.publicacionHasta?' // PUBLICACION '+j.publicacionDesde+' A '+j.publicacionHasta:'';
+    const diag=j.manualVersion==='R105'?' // FILAS VALIDAS: '+Number(j.filasValidas||0)+' / INVALIDAS: '+Number(j.filasInvalidas||0)+' / BLOQUES INCOMPLETOS: '+Number(j.bloquesIncompletos||0):'';
+    if(j.motivo==='COINCIDENCIAS_CONFIRMADAS_REVISION_PARCIAL')text+=' // REVISION PARCIAL: NO SE CERTIFICA AUSENCIA DE OTROS CORTES.';
+    if(j.estado==='SIN_PROGRAMACION_ACTUAL')text='NO HAY PUBLICACION VIGENTE VERIFICABLE. NO EQUIVALE A AUSENCIA DE CORTES.';
+    text+=rango+diag;
     armaR104Notice('EAAB: '+stamp+' // '+String(j.estado||'NO VERIFICADO')+(synced?' // MAIN SINCRONIZADO':''));
     msg(stamp+' // '+text+(verified&&!synced?' // NO SE CONFIRMO SINCRONIZACION LOCAL DE MAIN.':''),'A.R.M.A. | ACUEDUCTO');
   }catch(e){if(token()===t){const text='RESULTADO NO CONFIRMADO. LA CONSULTA PUEDE CONTINUAR EN EL SERVIDOR. NO SE ALTERO LA CACHE LOCAL.';armaR104Notice('EAAB: '+text);msg(text,'A.R.M.A. | EAAB');}}
